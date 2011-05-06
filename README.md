@@ -1,0 +1,93 @@
+# PHP Token Reflection #
+
+In short, this library emulates the PHP reflection model using the tokenized PHP source.
+
+## Brief history
+
+Everything started with [ApiGen](https://github.com/nette/apigen). It is a pretty cool tool for generating documentation. It uses docblocks and... yes, reflection. It makes perfectly sense, because reflection is - besides other things - a great tool for generating documentation, however it has its limitations by design. The biggest one is that you have to include/require the described source. It means that:
+* the described source affects the generator's environment,
+* it is very memory-consuming,
+* you have to include sources of all libraries (you cannot generate documentation of a Zend Framework based application without having at least a big part of the ZF loaded as well).
+
+One day we thought to ourselves: "Would it be possible to emulate reflection using just the tokenized source? Well, why not." And that was the beginning of our library.
+
+## Some technical info
+
+The basic concept is, that any reflection is possible to process the particular part of the token array describing the reflected element. It is also able to find out if there are any child elements (a class reflection is able to find method definitions in the source, for example), create their reflections and pass the appropriate part of the token array to them.
+
+This concept allows us to keep the parser code relatively simple and easily maintainable. And we are able to to create all reflections in a single pass. That is absolutely crucial for the performance of the library.
+
+All reflection instances are being kept in a [TokenReflection\\Broker](https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/library/TokenReflection/Broker.php) instance and all reflections know the broker that created them. This is very important, because a class reflection, for example, holds all its constants, methods and properties reflections instantiated inside, however it knows absolutely nothing about its parent class or the interfaces it implements. It knows just their fully qualified names. So when you call ```$reflectionClass->getParentClass();```, the class reflection asks the Broker for a reflection of a class by its name and returns it.
+
+An interesting thing happens when there is a parent class defined but it was not processed (in other words, you ask the Broker for a class that it does not know). It still returns a reflection! Yes, we do have reflections for classes that do not exist! COOL!
+
+There are reflections for file (\*), file-namespace (\*), namespace, class, function/method, constant, property and parameter. You will not normally get in touch with those marked with an asterisk but they are used internally.
+
+**ReflectionFile** is the topmost structure in our reflection tree. It gets the whole tokenized source and tries to find namespaces there. If it does, it creates ReflectionFileNamespace instances and passes them the appropriate part of the tokens array. If not, it creates a single pseudo-namespace (called no-namespace) a passes the whole tokenized source to it.
+
+**ReflectionFileNamespace** gets the namespace definition from the file, finds out its name, other aliased namespaces and tries to find any defined constants, functions and classes. If it finds any, it creates their reflections and passes them the appropriate parts of the tokens array.
+
+**ReflectionNamespace** is a similar (in name) yet quite different (in meaning) structure. It is a unique structure for every namespace and it holds all constants, functions and classes from this particular namespace inside. In fact, it is a simple container. It also is not created directly by any parent reflection, but the Broker creates it.
+
+Why do we need two separate classes? Because namespaces can be split into many files and in each file it can have individual namespace aliases. And those have to be taken into consideration when resolving parent class/interface names. It means that a ReflectionFileNamespace is created for every namespace in every file and it parses its contents, resolves fully qualified names of all classes, their parents and interfaces. Later, the Broker takes all ReflectionFileNamespace instances of the same namespace and merges them into a single ReflectionNameaspace instance.
+
+**ReflectionClass**, **ReflectionFunction**, **ReflectionMethod**, **ReflectionParameter** and **ReflectionProperty** work the same way like their internal reflection namesakes.
+
+**ReflectionConstants** is our addition to the reflection model. There is not much it can do - it can return its name, value (we will speak about values later) and how it was defined.
+
+(Almost) all reflection classes share a common base class, that defines some common functionality and interface. This means that our reflection model is much more unified than the internal one.
+
+There are reflections for the tokenized source (those mentioned above), but also descendants of the internal reflection that implement our additional features (they both use the same interface). They represent the PHP's internal classes, functions, ... So when you ask the Broker for an internal class, it returns a [TokenReflection\\Php\\ReflectionClass](https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/library/TokenReflection/Php/ReflectionClass.php) instance that encapsulates the internal reflection functionality and adds our features. And there is also the [TokenReflection\\Php\\ReflectionConstant](https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/library/TokenReflection/Php/ReflectionConstant.php) class that has no parent in the internal reflection model.
+
+## Remarks
+
+From the beginning we tried to be as compatible as possible with the internal reflection (including things like returning the interface list in the same - pretty weird - order). However there are situations where it is just impossible.
+
+Generally, we are not able to implement the entire functionality that handles attribute/constant/parameter values. We are able to parse the value definition (in return, this is something the internal reflection cannot) and are able to do ```eval(...)``` to get the value. Yes, that sucks. Moreover, the value may be defined using a constant name. And that constant may not exist. And that would mean a fatal error in ```eval(...)```.
+
+We do not support constants declared using the define() function. We will implement support for names defined using a single string and simple values, but there is no way to implement support for something like
+```
+define('CONSTANT', $a ? 1 : 0);
+```
+
+The same problem (not knowing the context - more precisely not having a context at all) means that we are unable to parse classes defined conditionally:
+```
+if (!class_exists('RuntimeException')) {
+	class RuntimeException extends Exception {}
+}
+```
+
+We have discussed how to solve this problem, we had several possibilities but every one of them had some side effects that were hardly acceptable for us (the most important problem is that the generated documentation depends on the current generator's scope). Eventually we have decided to completely ignore such definitions until there is a better and more stable solution.
+
+From the beginning we expected the library to be slower than using the internal reflection. More specifically, the actual usage will probably be not much slower, but it requires some time to parse sources and prepare reflection objects. However it was very hard to make any estimates. We compared the speed with the ApiGen's internal loader, that has to have some logic as well (to include files in the correct order for example) and to be honest, the first version that somehow parsed our testing library without any error was horribly slow (so slow that it was almost unusable). So we started profiling, refactoring and optimizing. And we were able to increase the parse speed about 6 times. Unfortunatelly, some nice solutions have to be removed in favor of faster solutions (for example, originally there was a single ArrayIterator instance for each file and every reflection got a LimitIterator instance as their token stream; that was a clean but pretty slow solution).
+
+## Usage
+
+To be able to work with reflections you have to let the library parse the source code first. That is what [TokenReflection\\Broker](https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/library/TokenReflection/Broker.php) does. It walks through the given directories, tokenizes PHP sources and caches reflection objects. Moreover, you cannot just instantiate a reflection class. You have to ask the Broker for the reflection. And once you have a reflection instance, everything works as expected :)
+
+```php
+<?php
+namespace TokenReflection;
+
+$broker = new TokenReflection\\Broker(new TokenReflection\\Broker\\Backend\\Memory());
+$broker->processDirectory('~/lib/Zend_Framework');
+
+$class = $broker->getClass('Zend_Version'); // returns a TokenReflection\\ReflectionClass instance
+$class = $broker->getClass('Exception');    // returns a TokenReflection\\Php\\ReflectionClass instance
+$class = $broker->getClass('Nonexistent');  // returns a TokenReflection\\Dummy\\ReflectionClass instance
+
+$function = $broker->getFunction(...);
+$constant = $broker->getConstant(...);
+```
+
+## Todo
+
+* Getting a list of a class/method/function static variables.
+* Ignore conditionally created structures.
+* ...
+
+## Current status
+
+From the beginning we have tested our work using simple unit tests and some real source. We have decided, that once we are able to generate documentation for [Zend Framework](https://github.com/zendframework), [Doctrine](https://github.com/doctrine/doctrine2), [Nella](https://github.com/nella/framework), [Nette](https://github.com/nette/nette) and [Jyxo PHP Libraries](https://github.com/jyxo/php) using our [ApiGen fork](https://github.com/Andrewsville/apigen), we will publish the first public version.
+
+And here we are :)
