@@ -70,15 +70,15 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
-	 * Parses the token stream.
+	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionFileNamespace
+	 * @return \TokenReflection\ReflectionConstant
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return parent::parse($tokenStream, $parent)
+		return $this
 			->parseName($tokenStream)
 			->parseValue($tokenStream, $parent);
 	}
@@ -111,6 +111,31 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
+	 * Find the appropriate docblock.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @return \TokenReflection\ReflectionConstant
+	 */
+	protected function parseDocComment(Stream $tokenStream)
+	{
+		static $skipped = array(T_WHITESPACE, T_COMMENT, T_CONST);
+
+		$position = $tokenStream->key() - 1;
+		while ($position > 0 && in_array($tokenStream->getType($position), $skipped)) {
+			$position--;
+		}
+
+		if ($tokenStream->is(T_DOC_COMMENT, $position)) {
+			$token = $tokenStream[$position];
+			$this->docComment = $token[1];
+		} else {
+			$this->docComment = false;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Parses the constant value.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
@@ -126,11 +151,15 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 		$tokenStream->skipWhitespaces();
 
 		static $acceptedStrings = array('true', 'false', 'null');
+		static $acceptedTokens = array('-', '+', T_STRING, T_CONSTANT_ENCAPSED_STRING, T_DNUMBER, T_LNUMBER, T_DOUBLE_COLON);
 
 		$evalValue = true;
-		while ($tokenStream->valid()) {
+		while (null !== ($type = $tokenStream->getType())) {
 			$value = $tokenStream->getTokenValue();
-			if ($tokenStream->is(T_STRING) && !in_array(strtolower($value), $acceptedStrings)) {
+
+			if (!in_array($type, $acceptedTokens)) {
+				break;
+			} elseif ($tokenStream->is(T_STRING) && !in_array(strtolower($value), $acceptedStrings)) {
 				$evalValue = false;
 			}
 
@@ -138,8 +167,8 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 			$tokenStream->next();
 		}
 
-		if (',' === $value || ';' === $value) {
-			$this->valueDefinition = trim(substr($this->valueDefinition, 0, -1));
+		if (null !== $type && (',' === $value || ';' === $value)) {
+			$this->valueDefinition = trim($this->valueDefinition);
 		} else {
 			throw new RuntimeException(sprintf('Invalid value definition: "%s".', $this->valueDefinition));
 		}

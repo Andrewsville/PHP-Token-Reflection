@@ -339,11 +339,11 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
-	 * Parses the token stream.
+	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionFileNamespace
+	 * @return \TokenReflection\ReflectionParameter
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
@@ -435,7 +435,37 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 		if ($tokenStream->is('=')) {
 			$tokenStream->skipWhitespaces();
 
-			$this->defaultValueDefinition = Stream::tokensToCode(array_slice($tokenStream->getArrayCopy(), $tokenStream->key()));
+			$level = 0;
+			while (null !== ($type = $tokenStream->getType())) {
+				switch ($type) {
+					case ')':
+						if (0 === $level) {
+							break 2;
+						}
+					case '}':
+					case ']':
+						$level--;
+						break;
+					case '(':
+					case '{':
+					case '[':
+						$level++;
+						break;
+					case ',':
+						if (0 === $level) {
+							break 2;
+						}
+				}
+
+				$this->defaultValueDefinition .= $tokenStream->getTokenValue();
+				$tokenStream->next();
+			}
+
+			if (',' === $type) {
+				$tokenStream->next();
+			} elseif (')' !== $type) {
+				throw new RuntimeException('Parameter default value definition is not terminated properly');
+			}
 
 			if (self::$parseValueDefinitions) {
 				// Následuje husťárna (a fucking awesomness follows)

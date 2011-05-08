@@ -79,38 +79,45 @@ class ReflectionFile implements IReflection
 			return;
 		}
 
-		static $breakers = array(T_CLASS, T_INTERFACE, T_FUNCTION, T_CONST, T_IF);
-
-		while (null !== ($type = $this->tokenStream->getType())) {
-			if (in_array($type, $breakers)) {
-				break;
-			}
-
-			if (T_NAMESPACE === $type) {
-				$namespace = new ReflectionFileNamespace($this->tokenStream->getNamespaceStream(), $this->broker, $this);
-				$this->namespaces[] = $namespace;
-			}
-
+		if (!$this->tokenStream->is(T_OPEN_TAG)) {
+			$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
+		} else {
 			$this->tokenStream->skipWhitespaces();
-		}
 
-		if (empty($this->namespaces)) {
-			// No namespaces at all -> assume the "none" pseudo-namespace
-			// Find the right beginning of the namespace (considering file level docblocks)
-			for ($nsStart = 0; $nsStart <= $this->tokenStream->key(); $nsStart++) {
-				if ($this->tokenStream->is(T_OPEN_TAG, $nsStart)) {
-					break;
+			while (null !== ($type = $this->tokenStream->getType())) {
+				switch ($type) {
+					case T_WHITESPACE:
+					case T_DOC_COMMENT:
+					case T_COMMENT:
+						break;
+					case T_DECLARE:
+						$this->tokenStream
+							->skipWhitespaces()
+							->findMatchingBracket()
+							->skipWhitespaces()
+							->skipWhitespaces(); // Intentionally twice
+						break;
+					case T_NAMESPACE:
+						break 2;
+					default:
+						$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
+						return $this;
+				}
+
+				$this->tokenStream->skipWhitespaces();
+			}
+
+			while (null !== ($type = $this->tokenStream->getType())) {
+				if (T_NAMESPACE === $type) {
+					$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
+				} else {
+					$this->tokenStream->skipWhitespaces();
 				}
 			}
-
-			while (null !== ($this->tokenStream->getType($nsStart + 1)) && T_DOC_COMMENT === $this->tokenStream->getType($nsStart) && T_WHITESPACE === $type) {
-				$nsStart += 2;
-			}
-
-			$tokens = $this->tokenStream->getArrayCopy();
-			$namespace = new ReflectionFileNamespace(new Stream(array_slice($tokens, $nsStart), $this->tokenStream->getFileName()), $this->broker, $this);
-			$this->namespaces[] = $namespace;
 		}
+
+
+		return $this;
 	}
 
 	/**

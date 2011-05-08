@@ -75,15 +75,15 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	}
 
 	/**
-	 * Parses the token stream.
+	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionFileNamespace
+	 * @return \TokenReflection\ReflectionFunction
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return parent::parse($tokenStream, $parent)
+		return $this
 			->parseReturnsReference($tokenStream)
 			->parseName($tokenStream);
 	}
