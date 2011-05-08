@@ -334,15 +334,15 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Parses the token stream.
+	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionFileNamespace
+	 * @return \TokenReflection\ReflectionProperty
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return parent::parse($tokenStream, $parent)
+		return $this
 			->parseModifiers($tokenStream, $parent)
 			->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
@@ -383,18 +383,41 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 			return $this;
 		}
 
-		$lastType = $tokenStream->getType(count($tokenStream) - 1);
-		if (';' !== $lastType && ',' !== $lastType) {
+		if ('=' === $type) {
+			$tokenStream->skipWhitespaces();
+		}
+
+		$level = 0;
+		while (null !== ($type = $tokenStream->getType())) {
+			switch ($type) {
+				case ',':
+					if (0 !== $level) {
+						break;
+					}
+				case ';':
+					break 2;
+				case ')':
+				case ']':
+				case '}':
+					$level--;
+					break;
+				case '(':
+				case '{':
+				case '[':
+					$level++;
+
+			}
+
+			$this->defaultValueDefinition .= $tokenStream->getTokenValue();
+			$tokenStream->next();
+
+		}
+
+		if (',' === $type) {
+			$tokenStream->next();
+		} elseif (';' !== $type) {
 			throw new RuntimeException('Property definition is not terminated properly');
 		}
-
-		if ('=' !== $type) {
-			throw new RuntimeException(sprintf('Unexpected token %s; "=" expected.', $tokenStream->getTokenName()));
-		}
-
-		$tokenStream->skipWhitespaces();
-
-		$this->defaultValueDefinition = Stream::tokensToCode(array_slice($tokenStream->getArrayCopy(), $tokenStream->key(), -1));
 
 		if (self::$parseValueDefinitions) {
 			// Následuje husťárna (a fucking awesomness follows)

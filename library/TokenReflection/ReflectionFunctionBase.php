@@ -227,7 +227,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionBase
 	 */
-	final protected function parseChildren(Stream $tokenStream)
+	final protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
 		return $this
 			->parseParameters($tokenStream)
@@ -246,20 +246,24 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 			throw new RuntimeException('Could not determine parameters start');
 		}
 
+		static $accepted = array(T_NS_SEPARATOR, T_STRING, T_ARRAY, T_VARIABLE, '&');
+
 		$tokenStream->skipWhitespaces();
 
 		while (null !== ($type = $tokenStream->getType()) && ')' !== $type) {
-			if (T_VARIABLE === $type) {
-				$parameter = new ReflectionParameter($tokenStream->getParameterStream(), $this->getBroker(), $this);
+			if (in_array($type, $accepted)) {
+				$parameter = new ReflectionParameter($tokenStream, $this->getBroker(), $this);
 				$this->parameters[] = $parameter;
 			}
 
 			if ($tokenStream->is(')')) {
 				break;
-			} else {
-				$tokenStream->skipWhitespaces();
 			}
+
+			$tokenStream->skipWhitespaces();
 		}
+
+		$tokenStream->skipWhitespaces();
 
 		return $this;
 	}
@@ -272,7 +276,16 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 */
 	final protected function parseStaticVariables(Stream $tokenStream)
 	{
-		// @todo
+		$type = $tokenStream->getType();
+		if ('{' === $type) {
+			// @todo finding static variables
+			$tokenStream->findMatchingBracket()->next();
+		} elseif (';' === $type) {
+			$tokenStream->next();
+		} else {
+			throw new RuntimeException(sprintf('Unexpected token found: %s', $type));
+		}
+
 		return $this;
 	}
 
@@ -295,7 +308,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 		if ('&' === $type) {
 			$this->returnsReference = true;
 			$tokenStream->skipWhitespaces();
-		} elseif (!T_STRING === $type) {
+		} elseif (T_STRING !== $type) {
 			throw new RuntimeException(sprintf('Unexpected token type: %s', $tokenStream->getTokenName()));
 		}
 

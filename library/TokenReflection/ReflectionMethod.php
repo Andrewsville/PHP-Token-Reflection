@@ -365,15 +365,15 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
-	 * Parses the token stream.
+	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionFileNamespace
+	 * @return \TokenReflection\ReflectionMethod
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return parent::parse($tokenStream, $parent)
+		return $this
 			->parseBaseModifiers($tokenStream)
 			->parseReturnsReference($tokenStream)
 			->parseName($tokenStream)
@@ -416,7 +416,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$tokenStream->skipWhitespaces();
 		}
 
-		if (!($this->modifiers & InternalReflectionMethod::IS_PRIVATE) && !($this->modifiers & InternalReflectionMethod::IS_PROTECTED)) {
+		if (!($this->modifiers & (InternalReflectionMethod::IS_PRIVATE | InternalReflectionMethod::IS_PROTECTED))) {
 			$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
 		}
 

@@ -57,7 +57,7 @@ abstract class ReflectionBase implements IReflection
 	 *
 	 * @var string|false
 	 */
-	private $docComment;
+	protected $docComment;
 
 	/**
 	 * Parsed docblock definition.
@@ -96,10 +96,16 @@ abstract class ReflectionBase implements IReflection
 		$this->broker = $broker;
 		$this->filename = $tokenStream->getFileName();
 
+		if (!$this instanceof ReflectionParameter) {
+			$this->parseDocComment($tokenStream);
+		}
+
 		return $this
 			->processParent($parent)
+			->parseStartLine($tokenStream)
 			->parse($tokenStream, $parent)
-			->parseChildren($tokenStream);
+			->parseChildren($tokenStream, $parent)
+			->parseEndLine($tokenStream);
 	}
 
 	/**
@@ -118,27 +124,23 @@ abstract class ReflectionBase implements IReflection
 	 * Parses child reflection objects from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Reflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
 	 */
-	protected function parseChildren(Stream $tokenStream)
+	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
 		// to be defined in child classes
 		return $this;
 	}
 
 	/**
-	 * Parses the token stream.
+	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\Reflection $parent Parent reflection object
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
-	{
-		return $this
-			->parseDocComment($tokenStream)
-			->parseBoundaries($tokenStream);
-	}
+	protected abstract function parse(Stream $tokenStream, IReflection $parent);
 
 	/**
 	 * Find the appropriate docblock.
@@ -146,34 +148,46 @@ abstract class ReflectionBase implements IReflection
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionBase
 	 */
-	private function parseDocComment(Stream $tokenStream)
+	protected function parseDocComment(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_DOC_COMMENT)) {
-			$this->docComment = false;
+		$position = $tokenStream->key();
+		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
+			$token = $tokenStream[$position - 1];
+			$this->docComment = $token[1];
+		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
+			$token = $tokenStream[$position - 2];
+			$this->docComment = $token[1];
 		} else {
-			$this->docComment = $tokenStream->getTokenValue();
-			$tokenStream->skipWhitespaces();
+			$this->docComment = false;
 		}
 
 		return $this;
 	}
 
 	/**
-	 * Find definition line boundaries in the source file.
+	 * Saves the first line number.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream $tokenStream Token susbtream
 	 * @return \TokenReflection\ReflectionBase
 	 */
-	private function parseBoundaries(Stream $tokenStream)
+	private final function parseStartLine(Stream $tokenStream)
 	{
-		$this->startLine = $tokenStream[0][2];
-		if ($this->docComment) {
-			$this->startLine += substr_count($this->docComment, "\n") + 1;
-		}
+		$token = $tokenStream->current();
+		$this->startLine = $token[2];
 
-		if ($last = count($tokenStream)) {
-			$this->endLine = $tokenStream[--$last][2] + substr_count($tokenStream[$last][1], "\n");
-		}
+		return $this;
+	}
+
+	/**
+	 * Saves the end line number.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token susbtream
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	private final function parseEndLine(Stream $tokenStream)
+	{
+		$token = $tokenStream->current();
+		$this->endLine = $token[2];
 
 		return $this;
 	}

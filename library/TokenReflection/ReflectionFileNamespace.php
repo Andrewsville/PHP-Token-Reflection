@@ -116,7 +116,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	}
 
 	/**
-	 * Parses the token stream.
+	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
@@ -124,7 +124,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return parent::parse($tokenStream, $parent)
+		return $this
 			->parseName($tokenStream)
 			->parseAliases($tokenStream);
 	}
@@ -135,23 +135,34 @@ class ReflectionFileNamespace extends ReflectionBase
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 */
-	protected function parseChildren(Stream $tokenStream)
+	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
+		$level = 1;
+
 		while (true) {
 			switch ($tokenStream->getType()) {
+				case '{':
+					$level++;
+					$tokenStream->skipWhitespaces();
+					break;
+				case '}':
+					$level--;
+					$tokenStream->skipWhitespaces();
+					break $level > 0 ? 1 : 2;
 				case null:
+				case T_NAMESPACE:
 					break 2;
+				case T_ABSTRACT:
+				case T_FINAL:
 				case T_CLASS:
 				case T_INTERFACE:
-					$stream = $tokenStream->getClassStream();
-					$class = new ReflectionClass($stream, $this->getBroker(), $this);
+					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
 					$this->classes[$class->getName()] = $class;
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces();
 					while ($tokenStream->is(T_STRING)) {
-						$stream = $tokenStream->getConstantStream();
-						$constant = new ReflectionConstant($stream, $this->getBroker(), $this);
+						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
 						$tokenStream->skipWhitespaces();
 					}
@@ -159,18 +170,32 @@ class ReflectionFileNamespace extends ReflectionBase
 				case T_FUNCTION:
 					static $skipped = array(T_WHITESPACE, T_COMMENT, T_DOC_COMMENT);
 
-					$position = $tokenStream->key();
-					while (in_array($type = $tokenStream->getType($position + 1), $skipped)) {
+					$position = $tokenStream->key() + 1;
+					while (in_array($type = $tokenStream->getType($position), $skipped)) {
 						$position++;
 					}
 					if ('(' === $type) {
+						$tokenStream->seek($position);
+
 						// Skipping anonymous functions
-						$tokenStream->skipWhitespaces();
+						$tokenStream
+							->findMatchingBracket()
+							->skipWhiteSpaces();
+
+						if ($tokenStream->is(T_USE)) {
+							$tokenStream
+								->skipWhitespaces()
+								->findMatchingBracket()
+								->skipWhitespaces();
+						}
+
+						$tokenStream
+							->findMatchingBracket()
+							->skipWhitespaces();
 						continue;
 					}
 
-					$stream = $tokenStream->getFunctionStream();
-					$function = new ReflectionFunction($stream, $this->getBroker(), $this);
+					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
 					$this->functions[$function->getName()] = $function;
 					break;
 				default:
