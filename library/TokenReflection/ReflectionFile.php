@@ -74,7 +74,7 @@ class ReflectionFile implements IReflection
 	 */
 	private function parse()
 	{
-		if (count($this->tokenStream) <= 1) {
+		if ($this->tokenStream->count() <= 1) {
 			// No PHP content
 			return;
 		}

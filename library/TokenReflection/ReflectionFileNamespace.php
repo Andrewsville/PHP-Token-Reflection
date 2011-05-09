@@ -175,10 +175,10 @@ class ReflectionFileNamespace extends ReflectionBase
 						$position++;
 					}
 					if ('(' === $type) {
-						$tokenStream->seek($position);
-
 						// Skipping anonymous functions
+
 						$tokenStream
+							->seek($position)
 							->findMatchingBracket()
 							->skipWhiteSpaces();
 
@@ -192,6 +192,7 @@ class ReflectionFileNamespace extends ReflectionBase
 						$tokenStream
 							->findMatchingBracket()
 							->skipWhitespaces();
+
 						continue;
 					}
 

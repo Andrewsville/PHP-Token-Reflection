@@ -235,11 +235,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 			'[' => ']'
 		);
 
-		$position = $this->position;
-
-		if (!isset($this->tokens[$position])) {
+		if (!$this->valid()) {
 			throw new InvalidArgumentException('Out of array');
 		}
+
+		$position = $this->position;
 
 		$bracket = $this->contents[$this->position];
 

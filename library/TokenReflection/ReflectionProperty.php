@@ -360,8 +360,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 			throw new RuntimeException(sprintf('Unexpected token %s; T_VARIABLE expected', $tokenStream->getTokenName()));
 		}
 
-		$token = $tokenStream->current();
-		$this->name = substr($token[1], 1);
+		$this->name = substr($tokenStream->getTokenValue(), 1);
 
 		$tokenStream->skipWhitespaces();
 
