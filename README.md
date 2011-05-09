@@ -62,7 +62,7 @@ if (!class_exists('RuntimeException')) {
 
 We have discussed how to solve this problem, we had several possibilities but every one of them had some side effects that were hardly acceptable for us (the most important problem is that the generated documentation depends on the current generator's scope). Eventually we have decided to completely ignore such definitions until there is a better and more stable solution.
 
-From the beginning we expected the library to be slower than using the internal reflection. More specifically, the actual usage will probably be not much slower, but it requires some time to parse sources and prepare reflection objects. However it was very hard to make any estimates. We compared the speed with the ApiGen's internal loader, that has to have some logic as well (to include files in the correct order for example) and to be honest, the first version that somehow parsed our testing library without any error was horribly slow (so slow that it was almost unusable). So we started profiling, refactoring and optimizing. And we were able to increase the parse speed about 6 times. Unfortunatelly, some nice solutions have to be removed in favor of faster solutions (for example, originally there was a single ArrayIterator instance for each file and every reflection got a LimitIterator instance as their token stream; that was a clean but pretty slow solution).
+Currently we have made some significant performance improvements and according to our benchmarks, our parse stage is actually faster than the Nette\RobotLoader used in the original ApiGen to include parsed files in the correct order.
 
 ## Usage
 
