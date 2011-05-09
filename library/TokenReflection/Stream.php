@@ -79,7 +79,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 
 		static $checkLines;
 		if (null === $checkLines) {
-			 $checkLines = array_fill_keys(array(T_COMMENT, T_WHITESPACE, T_DOC_COMMENT, T_INLINE_HTML, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING), true);
+			 $checkLines = array_flip(array(T_COMMENT, T_WHITESPACE, T_DOC_COMMENT, T_INLINE_HTML, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING));
 		}
 
 		foreach ($stream as $position => $token) {

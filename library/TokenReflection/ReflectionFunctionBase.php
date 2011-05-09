@@ -246,12 +246,15 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 			throw new RuntimeException('Could not determine parameters start');
 		}
 
-		static $accepted = array(T_NS_SEPARATOR, T_STRING, T_ARRAY, T_VARIABLE, '&');
+		static $accepted;
+		if (null === $accepted) {
+			$accepted = array_flip(array(T_NS_SEPARATOR, T_STRING, T_ARRAY, T_VARIABLE, '&'));
+		}
 
 		$tokenStream->skipWhitespaces();
 
 		while (null !== ($type = $tokenStream->getType()) && ')' !== $type) {
-			if (in_array($type, $accepted)) {
+			if (isset($accepted[$type])) {
 				$parameter = new ReflectionParameter($tokenStream, $this->getBroker(), $this);
 				$this->parameters[] = $parameter;
 			}

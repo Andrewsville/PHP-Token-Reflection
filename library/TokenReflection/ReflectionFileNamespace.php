@@ -137,6 +137,11 @@ class ReflectionFileNamespace extends ReflectionBase
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
+		static $skipped;
+		if (null === $skipped) {
+			$skipped = array_flip(array(T_WHITESPACE, T_COMMENT, T_DOC_COMMENT));
+		}
+
 		$level = 1;
 
 		while (true) {
@@ -168,10 +173,8 @@ class ReflectionFileNamespace extends ReflectionBase
 					}
 					break;
 				case T_FUNCTION:
-					static $skipped = array(T_WHITESPACE, T_COMMENT, T_DOC_COMMENT);
-
 					$position = $tokenStream->key() + 1;
-					while (in_array($type = $tokenStream->getType($position), $skipped)) {
+					while (isset($skipped[$type = $tokenStream->getType($position)])) {
 						$position++;
 					}
 					if ('(' === $type) {
