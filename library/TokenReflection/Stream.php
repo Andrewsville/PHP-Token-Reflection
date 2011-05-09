@@ -15,12 +15,12 @@
 
 namespace TokenReflection;
 
-use ArrayIterator, InvalidArgumentException, RuntimeException;
+use SeekableIterator, Countable, ArrayAccess, InvalidArgumentException, RuntimeException;
 
 /**
  * Token stream iterator.
  */
-class Stream extends ArrayIterator
+class Stream implements SeekableIterator, Countable, ArrayAccess
 {
 	/**
 	 * Token source file name.
@@ -28,6 +28,41 @@ class Stream extends ArrayIterator
 	 * @var string
 	 */
 	private $filename = 'unknown';
+
+	/**
+	 * Cache of token types.
+	 *
+	 * @var array
+	 */
+	private $types = array();
+
+	/**
+	 * Cache of token contents.
+	 *
+	 * @var array
+	 */
+	private $contents = array();
+
+	/**
+	 * Tokens storage.
+	 *
+	 * @var array
+	 */
+	private $tokens = array();
+
+	/**
+	 * Internal pointer.
+	 *
+	 * @var integer
+	 */
+	private $position = 0;
+
+	/**
+	 * Token stream size.
+	 *
+	 * @var integer
+	 */
+	private $count = 0;
 
 	/**
 	 * Constructor.
@@ -40,19 +75,43 @@ class Stream extends ArrayIterator
 	 */
 	public function __construct(array $stream, $filename)
 	{
-		parent::__construct($stream);
 		$this->filename = $filename;
+
+		static $checkLines;
+		if (null === $checkLines) {
+			 $checkLines = array_flip(array(T_COMMENT, T_WHITESPACE, T_DOC_COMMENT, T_INLINE_HTML, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING));
+		}
+
+		foreach ($stream as $position => $token) {
+			if (is_array($token)) {
+				list($this->types[], $this->contents[]) = $token;
+				$this->tokens[] = $token;
+			} else {
+				$this->types[] = $token;
+				$this->contents[] = $token;
+
+				$previous = $this->tokens[$position - 1];
+				$line = $previous[2];
+				if (isset($checkLines[$previous[0]])) {
+					$line += substr_count($previous[1], "\n");
+				}
+
+				$this->tokens[] = array($token, $token, $line);
+			}
+		}
+
+		$this->count = count($stream);
 	}
 
 	/**
-	 * Returns the current token value.
+	 * Checks of there is a token with the given index.
 	 *
-	 * @return stirng
+	 * @param integer $offset Token index
+	 * @return boolean
 	 */
-	public function getTokenValue()
+	public function offsetExists($offset)
 	{
-		$token = $this->current();
-		return $token[1];
+		return isset($this->tokens[$offset]);
 	}
 
 	/**
@@ -68,6 +127,17 @@ class Stream extends ArrayIterator
 	}
 
 	/**
+	 * Returns a token at the given index.
+	 *
+	 * @param integer $offset Token index
+	 * @return mixed
+	 */
+	public function offsetGet($offset)
+	{
+		return isset($this->contents[$offset]) ? $this->contents[$offset] : null;
+	}
+
+	/**
 	 * Sets a value of a particular token.
 	 *
 	 * Unsupported
@@ -78,6 +148,80 @@ class Stream extends ArrayIterator
 	public function offsetSet($offset, $value)
 	{
 		throw new Exception('Setting token values is not supported.', Exception::UNSUPPORTED);
+	}
+
+	/**
+	 * Returns the current internal pointer value.
+	 *
+	 * @return integer
+	 */
+	public function key()
+	{
+		return $this->position;
+	}
+
+	/**
+	 * Advances the internal pointer.
+	 *
+	 * @return \TokenReflection\Stream
+	 */
+	public function next()
+	{
+		$this->position++;
+		return $this;
+	}
+
+	/**
+	 * Sets the internal pointer to zero.
+	 *
+	 * @return \TokenReflection\Stream
+	 */
+	public function rewind()
+	{
+		$this->position = 0;
+		return $this;
+	}
+
+	/**
+	 * Returns the current token.
+	 *
+	 * @return array|null
+	 */
+	public function current()
+	{
+		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position] : null;
+	}
+
+	/**
+	 * Checks if there is a token on the current position.
+	 *
+	 * @return boolean
+	 */
+	public function valid()
+	{
+		return isset($this->tokens[$this->position]);
+	}
+
+	/**
+	 * Returns the number of tokens in the stream.
+	 *
+	 * @return integer
+	 */
+	public function count()
+	{
+		return $this->count;
+	}
+
+	/**
+	 * Sets the internal pointer to the given value.
+	 *
+	 * @param integer $position New position
+	 * @return \TokenReflection\Stream
+	 */
+	public function seek($position)
+	{
+		$this->position = (int) $position;
+		return $this;
 	}
 
 	/**
@@ -105,8 +249,13 @@ class Stream extends ArrayIterator
 			'[' => ']'
 		);
 
-		$position = $this->key();
-		$bracket = $this->getType();
+		if (!$this->valid()) {
+			throw new InvalidArgumentException('Out of array');
+		}
+
+		$position = $this->position;
+
+		$bracket = $this->contents[$this->position];
 
 		if (isset($brackets[$bracket])) {
 			$searching = $brackets[$bracket];
@@ -115,18 +264,19 @@ class Stream extends ArrayIterator
 		}
 
 		$level = 0;
-		while (null !== ($type = $this->getType())) {
-			if ($bracket === $type || ($searching === '}' && (T_CURLY_OPEN === $type || T_DOLLAR_OPEN_CURLY_BRACES === $type))) {
-				$level++;
-			} elseif ($searching === $type) {
+		while (isset($this->tokens[$this->position])) {
+			$type = $this->types[$this->position];
+			if ($searching === $type) {
 				$level--;
+			} elseif ($bracket === $type || ($searching === '}' && (T_CURLY_OPEN === $type || T_DOLLAR_OPEN_CURLY_BRACES === $type))) {
+				$level++;
 			}
 
 			if (0 === $level) {
 				return $this;
 			}
 
-			$this->next();
+			$this->position++;
 		}
 
 		throw new RuntimeException(sprintf('Could not find the matching bracket "%s" of the bracket at position [%d] in file [%s]', $searching, $position, $this->filename));
@@ -140,13 +290,13 @@ class Stream extends ArrayIterator
 	 */
 	public function skipWhitespaces($startAtNext = true)
 	{
-		if ($this->valid() && $startAtNext) {
-			$this->next();
+		if ($startAtNext && isset($this->tokens[$this->position])) {
+			$this->position++;
 		}
-		while (true) {
-			$type = $this->getType();
-			if ($type === T_WHITESPACE || $type === T_COMMENT) {
-				$this->next();
+
+		while (isset($this->types[$this->position])) {
+			if (T_WHITESPACE === $this->types[$this->position] || T_COMMENT === $this->types[$this->position]) {
+				$this->position++;
 				continue;
 			}
 
@@ -177,11 +327,25 @@ class Stream extends ArrayIterator
 	public function getType($position = -1)
 	{
 		if (-1 === $position) {
-			$token = $this->current();
-			return $token[0];
-		} else {
-			return isset($this[$position]) ? $this[$position][0] : null;
+			$position = $this->position;
 		}
+
+		return isset($this->types[$position]) ? $this->types[$position] : null;
+	}
+
+	/**
+	 * Returns the current token value.
+	 *
+	 * @param integer $position Token position; if none given, consider the current iteration position
+	 * @return stirng
+	 */
+	public function getTokenValue($position = -1)
+	{
+		if (-1 === $position) {
+			$position = $this->position;
+		}
+
+		return isset($this->contents[$position]) ? $this->contents[$position] : null;
 	}
 
 	/**
@@ -193,7 +357,7 @@ class Stream extends ArrayIterator
 	public function getTokenName($position = -1)
 	{
 		$type = $this->getType($position);
-		return @token_name($type) ?: $type;
+		return token_name($type) ?: $type;
 	}
 
 	/**
@@ -203,25 +367,17 @@ class Stream extends ArrayIterator
 	 */
 	public function __toString()
 	{
-		return self::tokensToCode($this->getArrayCopy());
+		return self::tokensToCode($this->contents);
 	}
 
 	/**
 	 * Converts a token array or iterator to the appropriate source code.
 	 *
-	 * @param array|\Traversable $tokens Token array
+	 * @param array $tokens Token array
 	 * @return string
 	 */
-	public static function tokensToCode($tokens)
+	public static function tokensToCode(array $tokens = array())
 	{
-		if (!is_array($tokens) && (!is_object($tokens) || !$tokens instanceof Traversable)) {
-			throw new InvalidArgumentException('You have to provide an array or an iterateable list of tokens');
-		}
-
-		$source = '';
-		foreach ($tokens as $token) {
-			$source .= $token[1];
-		}
-		return $source;
+		return implode('', $tokens);
 	}
 }

@@ -366,8 +366,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 			throw new RuntimeException('Could not find the parameter variable definition');
 		}
 
-		$token = $tokenStream->current();
-		$this->name = substr($token[1], 1);
+		$this->name = substr($tokenStream->getTokenValue(), 1);
 
 		$tokenStream->skipWhitespaces();
 
@@ -391,8 +390,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 		} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
 			$className = '';
 			do {
-				$token = $tokenStream->current();
-				$className .= $token[1];
+				$className .= $tokenStream->getTokenValue();
 
 				$tokenStream->skipWhitespaces();
 				$type = $tokenStream->getType();

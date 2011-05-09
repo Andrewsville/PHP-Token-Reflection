@@ -1188,12 +1188,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						break 2;
 				}
 
-				$tokenStream->next();
+				$tokenStream->skipWhitespaces();
 			}
 
 			$this->interfaces[] = self::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
-
-			$tokenStream->skipWhitespaces(false);
 
 			$type = $tokenStream->getType();
 			if ('{' === $type) {

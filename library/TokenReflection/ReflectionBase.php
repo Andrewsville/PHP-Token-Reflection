@@ -89,7 +89,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	public final function __construct(Stream $tokenStream, Broker $broker, IReflection $parent)
 	{
-		if (0 === count($tokenStream)) {
+		if (0 === $tokenStream->count()) {
 			throw new Exception('Reflection token stream must not be empty');
 		}
 
@@ -151,12 +151,10 @@ abstract class ReflectionBase implements IReflection
 	protected function parseDocComment(Stream $tokenStream)
 	{
 		$position = $tokenStream->key();
-		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
-			$token = $tokenStream[$position - 1];
-			$this->docComment = $token[1];
-		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
-			$token = $tokenStream[$position - 2];
-			$this->docComment = $token[1];
+		if ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
+			$this->docComment = $tokenStream->getTokenValue($position - 2);
+		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
+			$this->docComment = $tokenStream->getTokenValue($position - 1);
 		} else {
 			$this->docComment = false;
 		}
