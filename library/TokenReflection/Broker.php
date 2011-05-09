@@ -109,27 +109,7 @@ class Broker
 				throw new Exception('File is not readable', Exception::FILE_NOT_READABLE);
 			}
 
-			$contents = str_replace(array("\r\n", "\r"), "\n", $contents);
-
-			static $checkLines = array(T_COMMENT, T_WHITESPACE, T_DOC_COMMENT, T_INLINE_HTML, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING);
-			$actualLine = 0;
-			$tmp = null;
-
-			$tokens = @token_get_all($contents);
-			foreach ($tokens as $index => $token) {
-				if (!is_array($token)) {
-					if (0 === $index) {
-						throw new RuntimeException('The first token has to be a complete one.');
-					}
-
-					$tokens[$index] = array($token, $token, $actualLine);
-				} else {
-					$actualLine = $token[2];
-					if (in_array($token[0], $checkLines)) {
-						$actualLine += substr_count($token[1], "\n", $tmp);
-					}
-				}
-			}
+			$tokens = @token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents));
 		}
 
 		$reflectionFile = new ReflectionFile($realName, $tokens, $this);

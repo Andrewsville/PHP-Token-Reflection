@@ -76,17 +76,31 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	public function __construct(array $stream, $filename)
 	{
 		$this->filename = $filename;
-		$this->tokens = $stream;
+
+		static $checkLines;
+		if (null === $checkLines) {
+			 $checkLines = array_fill_keys(array(T_COMMENT, T_WHITESPACE, T_DOC_COMMENT, T_INLINE_HTML, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING), true);
+		}
+
+		foreach ($stream as $position => $token) {
+			if (is_array($token)) {
+				list($this->types[], $this->contents[]) = $token;
+				$this->tokens[] = $token;
+			} else {
+				$this->types[] = $token;
+				$this->contents[] = $token;
+
+				$previous = $this->tokens[$position - 1];
+				$line = $previous[2];
+				if (isset($checkLines[$previous[0]])) {
+					$line += substr_count($previous[1], "\n");
+				}
+
+				$this->tokens[] = array($token, $token, $line);
+			}
+		}
+
 		$this->count = count($stream);
-
-		$types = array();
-		$contents = array();
-		array_walk($this->tokens, function($token) use(&$types, &$contents) {
-			list($types[], $contents[]) = $token;
-		});
-
-		$this->types = $types;
-		$this->contents = $contents;
 	}
 
 	/**
