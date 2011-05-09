@@ -4,7 +4,8 @@ In short, this library emulates the PHP reflection model using the tokenized PHP
 
 ## Brief history
 
-Everything started with [ApiGen](https://github.com/nette/apigen). It is a pretty cool tool for generating documentation. It uses docblocks and... yes, reflection. It makes perfectly sense, because reflection is - besides other things - a great tool for generating documentation, however it has its limitations by design. The biggest one is that you have to include/require the described source. It means that:
+Everything started with [ApiGen](https://github.com/nette/apigen). It is a pretty cool tool for generating documentation. It uses docblocks and... yes, reflection. It makes perfect sense, because reflection is - besides other things - a great tool for generating documentation, however it has its limitations by design. The biggest one is that you have to include/require the described source. It means that:
+
 * the described source affects the generator's environment,
 * it is very memory-consuming,
 * you have to include sources of all libraries (you cannot generate documentation of a Zend Framework based application without having at least a big part of the ZF loaded as well).
@@ -46,11 +47,13 @@ From the beginning we tried to be as compatible as possible with the internal re
 Generally, we are not able to implement the entire functionality that handles attribute/constant/parameter values. We are able to parse the value definition (in return, this is something the internal reflection cannot) and are able to do ```eval(...)``` to get the value. Yes, that sucks. Moreover, the value may be defined using a constant name. And that constant may not exist. And that would mean a fatal error in ```eval(...)```.
 
 We do not support constants declared using the define() function. We will implement support for names defined using a single string and simple values, but there is no way to implement support for something like
+
 ```
 define('CONSTANT', $a ? 1 : 0);
 ```
 
 The same problem (not knowing the context - more precisely not having a context at all) means that we are unable to parse classes defined conditionally:
+
 ```
 if (!class_exists('RuntimeException')) {
 	class RuntimeException extends Exception {}
@@ -69,12 +72,12 @@ To be able to work with reflections you have to let the library parse the source
 <?php
 namespace TokenReflection;
 
-$broker = new TokenReflection\\Broker(new TokenReflection\\Broker\\Backend\\Memory());
+$broker = new TokenReflection\Broker(new TokenReflection\Broker\Backend\Memory());
 $broker->processDirectory('~/lib/Zend_Framework');
 
-$class = $broker->getClass('Zend_Version'); // returns a TokenReflection\\ReflectionClass instance
-$class = $broker->getClass('Exception');    // returns a TokenReflection\\Php\\ReflectionClass instance
-$class = $broker->getClass('Nonexistent');  // returns a TokenReflection\\Dummy\\ReflectionClass instance
+$class = $broker->getClass('Zend_Version'); // returns a TokenReflection\ReflectionClass instance
+$class = $broker->getClass('Exception');    // returns a TokenReflection\Php\ReflectionClass instance
+$class = $broker->getClass('Nonexistent');  // returns a TokenReflection\Dummy\ReflectionClass instance
 
 $function = $broker->getFunction(...);
 $constant = $broker->getConstant(...);
@@ -84,6 +87,7 @@ $constant = $broker->getConstant(...);
 
 * Getting a list of a class/method/function static variables.
 * Ignore conditionally created structures.
+* Export and __toString support
 * ...
 
 ## Current status
