@@ -62,7 +62,7 @@ if (!class_exists('RuntimeException')) {
 
 We have discussed how to solve this problem, we had several possibilities but every one of them had some side effects that were hardly acceptable for us (the most important problem is that the generated documentation depends on the current generator's scope). Eventually we have decided to completely ignore such definitions until there is a better and more stable solution.
 
-Currently we have made some significant performance improvements and according to our benchmarks, our parse stage is actually faster than the Nette\RobotLoader used in the original ApiGen to include parsed files in the correct order.
+Currently we have made some significant performance improvements and according to our benchmarks, our parse stage is actually faster than the Nette\\RobotLoader used in the original ApiGen to include parsed files in the correct order.
 
 ## Usage
 
@@ -72,7 +72,7 @@ To be able to work with reflections you have to let the library parse the source
 <?php
 namespace TokenReflection;
 
-$broker = new TokenReflection\Broker(new TokenReflection\Broker\Backend\Memory());
+$broker = new Broker(new Broker\Backend\Memory());
 $broker->processDirectory('~/lib/Zend_Framework');
 
 $class = $broker->getClass('Zend_Version'); // returns a TokenReflection\ReflectionClass instance
