@@ -99,7 +99,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getParentClass()
 	{
 		$parent = parent::getParentClass();
-		return $parent ? self::create($parent, $this->broker) : $parent;
+		return $parent ? self::create($parent, $this->broker) : null;
 	}
 
 	/**
@@ -110,7 +110,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getParentClassName()
 	{
 		$parent = $this->getParentClass();
-		return $parent ? $parent->getName() : $parent;
+		return $parent ? $parent->getName() : null;
 	}
 
 	/**
