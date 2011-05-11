@@ -6,9 +6,8 @@
 
 	<title>PHP Token Reflection | File ReflectionFunction.php</title>
 
-	<script type="text/javascript" src="resources/combined.js?649939912"></script>
-	<script type="text/javascript" src="allclasses.js?1831876188"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?221562766" /></head>
+	<script type="text/javascript" src="resources/combined.js?4162569229"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?4129133156" /></head>
 
 <body>
 <div id="main">
@@ -29,13 +28,16 @@
 			<li><a href="namespace-TokenReflection.Broker.html">TokenReflection\Broker</a>
 					<ul>
 			<li><a href="namespace-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a>
-					</ul></li>
+					</li>
+
+						</ul></li>
 			<li><a href="namespace-TokenReflection.Dummy.html">TokenReflection\Dummy</a>
 					</li>
 
 			<li><a href="namespace-TokenReflection.Php.html">TokenReflection\Php</a>
-					</ul></li>
-			</ul></li>
+					</li>
+
+						</ul></li>
 		</ul>
 
 		<h3>Classes</h3>
@@ -58,13 +60,16 @@
 		<li><a href="namespace-TokenReflection.html" title="Summary of TokenReflection">Namespace</a></li>
 		<li><a href="TokenReflection.ReflectionFunction.html" title="Summary of TokenReflection\ReflectionFunction">Class</a></li>
 	</ul>
+	<ul>
+		<li><a href="tree.html" title="Tree view of classes, interfaces and exceptions">Tree</a></li>		<li><a href="deprecated.html" title="List of deprecated elements">Deprecated</a></li>
+	</ul>
 </div>
 
 <pre><code><a href="#1" id="1" class="l">  1: </a><span class="xlang">&lt;?php</span>
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Development version
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0beta1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -137,15 +142,15 @@
 <a href="#75" id="75" class="l"> 75: </a>    }
 <a href="#76" id="76" class="l"> 76: </a>
 <a href="#77" id="77" class="l"> 77: </a>    <span class="php-comment">/**
-</span><a href="#78" id="78" class="l"> 78: </a><span class="php-comment">     * Parses the token stream.
+</span><a href="#78" id="78" class="l"> 78: </a><span class="php-comment">     * Parses reflected element metadata from the token stream.
 </span><a href="#79" id="79" class="l"> 79: </a><span class="php-comment">     *
 </span><a href="#80" id="80" class="l"> 80: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
 </span><a href="#81" id="81" class="l"> 81: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#82" id="82" class="l"> 82: </a><span class="php-comment">     * @return \TokenReflection\ReflectionFileNamespace
+</span><a href="#82" id="82" class="l"> 82: </a><span class="php-comment">     * @return \TokenReflection\ReflectionFunction
 </span><a href="#83" id="83" class="l"> 83: </a><span class="php-comment">     */</span>
 <a href="#84" id="84" class="l"> 84: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parse(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
 <a href="#85" id="85" class="l"> 85: </a>    {
-<a href="#86" id="86" class="l"> 86: </a>        <span class="php-keyword1">return</span> parent::parse(<span class="php-var">$tokenStream</span>, <span class="php-var">$parent</span>)
+<a href="#86" id="86" class="l"> 86: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>
 <a href="#87" id="87" class="l"> 87: </a>            -&gt;parseReturnsReference(<span class="php-var">$tokenStream</span>)
 <a href="#88" id="88" class="l"> 88: </a>            -&gt;parseName(<span class="php-var">$tokenStream</span>);
 <a href="#89" id="89" class="l"> 89: </a>    }

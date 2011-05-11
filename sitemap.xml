@@ -7,9 +7,6 @@
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/package-None.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/package-PHP.html</loc>
-</url>
-<url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.html</loc>
 </url>
 <url>
@@ -23,30 +20,6 @@
 </url>
 <url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.Php.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ArrayIterator.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ReflectionClass.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ReflectionExtension.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ReflectionFunction.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ReflectionFunctionAbstract.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ReflectionMethod.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ReflectionParameter.html</loc>
-</url>
-<url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/ReflectionProperty.html</loc>
 </url>
 <url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Broker.html</loc>

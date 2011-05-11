@@ -6,9 +6,8 @@
 
 	<title>PHP Token Reflection | File ReflectionParameter.php</title>
 
-	<script type="text/javascript" src="resources/combined.js?649939912"></script>
-	<script type="text/javascript" src="allclasses.js?1831876188"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?221562766" /></head>
+	<script type="text/javascript" src="resources/combined.js?4162569229"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?4129133156" /></head>
 
 <body>
 <div id="main">
@@ -29,13 +28,16 @@
 			<li><a href="namespace-TokenReflection.Broker.html">TokenReflection\Broker</a>
 					<ul>
 			<li><a href="namespace-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a>
-					</ul></li>
+					</li>
+
+						</ul></li>
 			<li><a href="namespace-TokenReflection.Dummy.html">TokenReflection\Dummy</a>
 					</li>
 
 			<li><a href="namespace-TokenReflection.Php.html">TokenReflection\Php</a>
-					</ul></li>
-			</ul></li>
+					</li>
+
+						</ul></li>
 		</ul>
 
 		<h3>Classes</h3>
@@ -58,13 +60,16 @@
 		<li><a href="namespace-TokenReflection.html" title="Summary of TokenReflection">Namespace</a></li>
 		<li><a href="TokenReflection.ReflectionParameter.html" title="Summary of TokenReflection\ReflectionParameter">Class</a></li>
 	</ul>
+	<ul>
+		<li><a href="tree.html" title="Tree view of classes, interfaces and exceptions">Tree</a></li>		<li><a href="deprecated.html" title="List of deprecated elements">Deprecated</a></li>
+	</ul>
 </div>
 
 <pre><code><a href="#1" id="1" class="l">  1: </a><span class="xlang">&lt;?php</span>
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Development version
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0beta1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -401,11 +406,11 @@
 <a href="#339" id="339" class="l">339: </a>    }
 <a href="#340" id="340" class="l">340: </a>
 <a href="#341" id="341" class="l">341: </a>    <span class="php-comment">/**
-</span><a href="#342" id="342" class="l">342: </a><span class="php-comment">     * Parses the token stream.
+</span><a href="#342" id="342" class="l">342: </a><span class="php-comment">     * Parses reflected element metadata from the token stream.
 </span><a href="#343" id="343" class="l">343: </a><span class="php-comment">     *
 </span><a href="#344" id="344" class="l">344: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
 </span><a href="#345" id="345" class="l">345: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#346" id="346" class="l">346: </a><span class="php-comment">     * @return \TokenReflection\ReflectionFileNamespace
+</span><a href="#346" id="346" class="l">346: </a><span class="php-comment">     * @return \TokenReflection\ReflectionParameter
 </span><a href="#347" id="347" class="l">347: </a><span class="php-comment">     */</span>
 <a href="#348" id="348" class="l">348: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parse(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
 <a href="#349" id="349" class="l">349: </a>    {
@@ -428,107 +433,135 @@
 <a href="#366" id="366" class="l">366: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> RuntimeException(<span class="php-quote">'Could not find the parameter variable definition'</span>);
 <a href="#367" id="367" class="l">367: </a>        }
 <a href="#368" id="368" class="l">368: </a>
-<a href="#369" id="369" class="l">369: </a>        <span class="php-var">$token</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
-<a href="#370" id="370" class="l">370: </a>        <span class="php-var">$this</span>-&gt;name = <span class="php-keyword2">substr</span>(<span class="php-var">$token</span>[<span class="php-num">1</span>], <span class="php-num">1</span>);
-<a href="#371" id="371" class="l">371: </a>
-<a href="#372" id="372" class="l">372: </a>        <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
-<a href="#373" id="373" class="l">373: </a>
-<a href="#374" id="374" class="l">374: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#375" id="375" class="l">375: </a>    }
-<a href="#376" id="376" class="l">376: </a>
-<a href="#377" id="377" class="l">377: </a>    <span class="php-comment">/**
-</span><a href="#378" id="378" class="l">378: </a><span class="php-comment">     * Parses the value type constraint.
-</span><a href="#379" id="379" class="l">379: </a><span class="php-comment">     *
-</span><a href="#380" id="380" class="l">380: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
-</span><a href="#381" id="381" class="l">381: </a><span class="php-comment">     * @return \TokenReflection\ReflectionParameter
-</span><a href="#382" id="382" class="l">382: </a><span class="php-comment">     */</span>
-<a href="#383" id="383" class="l">383: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parseConstraint(Stream <span class="php-var">$tokenStream</span>)
-<a href="#384" id="384" class="l">384: </a>    {
-<a href="#385" id="385" class="l">385: </a>        <span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>();
-<a href="#386" id="386" class="l">386: </a>
-<a href="#387" id="387" class="l">387: </a>        <span class="php-keyword1">if</span> (T_ARRAY === <span class="php-var">$type</span>) {
-<a href="#388" id="388" class="l">388: </a>            <span class="php-var">$this</span>-&gt;valueConstraint = self::ARRAY_CONSTRAINT;
-<a href="#389" id="389" class="l">389: </a>            <span class="php-var">$this</span>-&gt;originalValueConstraint = self::ARRAY_CONSTRAINT;
-<a href="#390" id="390" class="l">390: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
-<a href="#391" id="391" class="l">391: </a>        } <span class="php-keyword1">elseif</span> (T_STRING === <span class="php-var">$type</span> || T_NS_SEPARATOR === <span class="php-var">$type</span>) {
-<a href="#392" id="392" class="l">392: </a>            <span class="php-var">$className</span> = <span class="php-quote">''</span>;
-<a href="#393" id="393" class="l">393: </a>            <span class="php-keyword1">do</span> {
-<a href="#394" id="394" class="l">394: </a>                <span class="php-var">$token</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
-<a href="#395" id="395" class="l">395: </a>                <span class="php-var">$className</span> .= <span class="php-var">$token</span>[<span class="php-num">1</span>];
-<a href="#396" id="396" class="l">396: </a>
-<a href="#397" id="397" class="l">397: </a>                <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
-<a href="#398" id="398" class="l">398: </a>                <span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>();
-<a href="#399" id="399" class="l">399: </a>            } <span class="php-keyword1">while</span> (T_STRING === <span class="php-var">$type</span> || T_NS_SEPARATOR === <span class="php-var">$type</span>);
-<a href="#400" id="400" class="l">400: </a>
-<a href="#401" id="401" class="l">401: </a>            <span class="php-keyword1">if</span> (<span class="php-quote">''</span> === <span class="php-keyword2">ltrim</span>(<span class="php-var">$className</span>, <span class="php-quote">'\\'</span>)) {
-<a href="#402" id="402" class="l">402: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> RuntimeException(<span class="php-quote">'Invalid value constraint definition'</span>);
-<a href="#403" id="403" class="l">403: </a>            }
-<a href="#404" id="404" class="l">404: </a>
-<a href="#405" id="405" class="l">405: </a>            <span class="php-var">$this</span>-&gt;originalValueConstraint = <span class="php-var">$className</span>;
-<a href="#406" id="406" class="l">406: </a>        }
-<a href="#407" id="407" class="l">407: </a>
-<a href="#408" id="408" class="l">408: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#409" id="409" class="l">409: </a>    }
-<a href="#410" id="410" class="l">410: </a>
-<a href="#411" id="411" class="l">411: </a>    <span class="php-comment">/**
-</span><a href="#412" id="412" class="l">412: </a><span class="php-comment">     * Parses if parameter value is passed by reference.
-</span><a href="#413" id="413" class="l">413: </a><span class="php-comment">     *
-</span><a href="#414" id="414" class="l">414: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
-</span><a href="#415" id="415" class="l">415: </a><span class="php-comment">     * @return \TokenReflection\ReflectionParameter
-</span><a href="#416" id="416" class="l">416: </a><span class="php-comment">     */</span>
-<a href="#417" id="417" class="l">417: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parsePassedByReference(Stream <span class="php-var">$tokenStream</span>)
-<a href="#418" id="418" class="l">418: </a>    {
-<a href="#419" id="419" class="l">419: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">'&amp;'</span>)) {
-<a href="#420" id="420" class="l">420: </a>            <span class="php-var">$this</span>-&gt;passedByReference = <span class="php-keyword1">true</span>;
-<a href="#421" id="421" class="l">421: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
-<a href="#422" id="422" class="l">422: </a>        }
-<a href="#423" id="423" class="l">423: </a>
-<a href="#424" id="424" class="l">424: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#425" id="425" class="l">425: </a>    }
-<a href="#426" id="426" class="l">426: </a>
-<a href="#427" id="427" class="l">427: </a>    <span class="php-comment">/**
-</span><a href="#428" id="428" class="l">428: </a><span class="php-comment">     * Parses the parameter default value.
-</span><a href="#429" id="429" class="l">429: </a><span class="php-comment">     *
-</span><a href="#430" id="430" class="l">430: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
-</span><a href="#431" id="431" class="l">431: </a><span class="php-comment">     * @return \TokenReflection\ReflectionParameter
-</span><a href="#432" id="432" class="l">432: </a><span class="php-comment">     */</span>
-<a href="#433" id="433" class="l">433: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parseDefaultValue(Stream <span class="php-var">$tokenStream</span>)
-<a href="#434" id="434" class="l">434: </a>    {
-<a href="#435" id="435" class="l">435: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">'='</span>)) {
-<a href="#436" id="436" class="l">436: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
-<a href="#437" id="437" class="l">437: </a>
-<a href="#438" id="438" class="l">438: </a>            <span class="php-var">$this</span>-&gt;defaultValueDefinition = Stream::tokensToCode(<span class="php-keyword2">array_slice</span>(<span class="php-var">$tokenStream</span>-&gt;getArrayCopy(), <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">key</span>()));
-<a href="#439" id="439" class="l">439: </a>
-<a href="#440" id="440" class="l">440: </a>            <span class="php-keyword1">if</span> (self::<span class="php-var">$parseValueDefinitions</span>) {
-<a href="#441" id="441" class="l">441: </a>                <span class="php-comment">// Následuje husťárna (a fucking awesomness follows)
-</span><a href="#442" id="442" class="l">442: </a>                <span class="php-var">$this</span>-&gt;defaultValue = @<span class="php-keyword1">eval</span>(<span class="php-quote">'return '</span> . <span class="php-var">$this</span>-&gt;defaultValueDefinition . <span class="php-quote">';'</span>);
-<a href="#443" id="443" class="l">443: </a>            }
-<a href="#444" id="444" class="l">444: </a>        }
-<a href="#445" id="445" class="l">445: </a>
-<a href="#446" id="446" class="l">446: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#447" id="447" class="l">447: </a>    }
-<a href="#448" id="448" class="l">448: </a>
-<a href="#449" id="449" class="l">449: </a>    <span class="php-comment">/**
-</span><a href="#450" id="450" class="l">450: </a><span class="php-comment">     * Sets if the default value definitions should be parsed.
-</span><a href="#451" id="451" class="l">451: </a><span class="php-comment">     *
-</span><a href="#452" id="452" class="l">452: </a><span class="php-comment">     * @param boolean $parse Should be definitions parsed
-</span><a href="#453" id="453" class="l">453: </a><span class="php-comment">     */</span>
-<a href="#454" id="454" class="l">454: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> setParseValueDefinitions(<span class="php-var">$parse</span>)
-<a href="#455" id="455" class="l">455: </a>    {
-<a href="#456" id="456" class="l">456: </a>        self::<span class="php-var">$parseValueDefinitions</span> = (bool) <span class="php-var">$parse</span>;
-<a href="#457" id="457" class="l">457: </a>    }
-<a href="#458" id="458" class="l">458: </a>
-<a href="#459" id="459" class="l">459: </a>    <span class="php-comment">/**
-</span><a href="#460" id="460" class="l">460: </a><span class="php-comment">     * Returns if the default value definitions should be parsed.
-</span><a href="#461" id="461" class="l">461: </a><span class="php-comment">     *
-</span><a href="#462" id="462" class="l">462: </a><span class="php-comment">     * @return boolean
-</span><a href="#463" id="463" class="l">463: </a><span class="php-comment">     */</span>
-<a href="#464" id="464" class="l">464: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> getParseValueDefinitions()
-<a href="#465" id="465" class="l">465: </a>    {
-<a href="#466" id="466" class="l">466: </a>        <span class="php-keyword1">return</span> self::<span class="php-var">$parseValueDefinitions</span>;
-<a href="#467" id="467" class="l">467: </a>    }
-<a href="#468" id="468" class="l">468: </a>}
-<a href="#469" id="469" class="l">469: </a></code></pre>
+<a href="#369" id="369" class="l">369: </a>        <span class="php-var">$this</span>-&gt;name = <span class="php-keyword2">substr</span>(<span class="php-var">$tokenStream</span>-&gt;getTokenValue(), <span class="php-num">1</span>);
+<a href="#370" id="370" class="l">370: </a>
+<a href="#371" id="371" class="l">371: </a>        <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#372" id="372" class="l">372: </a>
+<a href="#373" id="373" class="l">373: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#374" id="374" class="l">374: </a>    }
+<a href="#375" id="375" class="l">375: </a>
+<a href="#376" id="376" class="l">376: </a>    <span class="php-comment">/**
+</span><a href="#377" id="377" class="l">377: </a><span class="php-comment">     * Parses the value type constraint.
+</span><a href="#378" id="378" class="l">378: </a><span class="php-comment">     *
+</span><a href="#379" id="379" class="l">379: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
+</span><a href="#380" id="380" class="l">380: </a><span class="php-comment">     * @return \TokenReflection\ReflectionParameter
+</span><a href="#381" id="381" class="l">381: </a><span class="php-comment">     */</span>
+<a href="#382" id="382" class="l">382: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parseConstraint(Stream <span class="php-var">$tokenStream</span>)
+<a href="#383" id="383" class="l">383: </a>    {
+<a href="#384" id="384" class="l">384: </a>        <span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>();
+<a href="#385" id="385" class="l">385: </a>
+<a href="#386" id="386" class="l">386: </a>        <span class="php-keyword1">if</span> (T_ARRAY === <span class="php-var">$type</span>) {
+<a href="#387" id="387" class="l">387: </a>            <span class="php-var">$this</span>-&gt;valueConstraint = self::ARRAY_CONSTRAINT;
+<a href="#388" id="388" class="l">388: </a>            <span class="php-var">$this</span>-&gt;originalValueConstraint = self::ARRAY_CONSTRAINT;
+<a href="#389" id="389" class="l">389: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#390" id="390" class="l">390: </a>        } <span class="php-keyword1">elseif</span> (T_STRING === <span class="php-var">$type</span> || T_NS_SEPARATOR === <span class="php-var">$type</span>) {
+<a href="#391" id="391" class="l">391: </a>            <span class="php-var">$className</span> = <span class="php-quote">''</span>;
+<a href="#392" id="392" class="l">392: </a>            <span class="php-keyword1">do</span> {
+<a href="#393" id="393" class="l">393: </a>                <span class="php-var">$className</span> .= <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
+<a href="#394" id="394" class="l">394: </a>
+<a href="#395" id="395" class="l">395: </a>                <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#396" id="396" class="l">396: </a>                <span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>();
+<a href="#397" id="397" class="l">397: </a>            } <span class="php-keyword1">while</span> (T_STRING === <span class="php-var">$type</span> || T_NS_SEPARATOR === <span class="php-var">$type</span>);
+<a href="#398" id="398" class="l">398: </a>
+<a href="#399" id="399" class="l">399: </a>            <span class="php-keyword1">if</span> (<span class="php-quote">''</span> === <span class="php-keyword2">ltrim</span>(<span class="php-var">$className</span>, <span class="php-quote">'\\'</span>)) {
+<a href="#400" id="400" class="l">400: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> RuntimeException(<span class="php-quote">'Invalid value constraint definition'</span>);
+<a href="#401" id="401" class="l">401: </a>            }
+<a href="#402" id="402" class="l">402: </a>
+<a href="#403" id="403" class="l">403: </a>            <span class="php-var">$this</span>-&gt;originalValueConstraint = <span class="php-var">$className</span>;
+<a href="#404" id="404" class="l">404: </a>        }
+<a href="#405" id="405" class="l">405: </a>
+<a href="#406" id="406" class="l">406: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#407" id="407" class="l">407: </a>    }
+<a href="#408" id="408" class="l">408: </a>
+<a href="#409" id="409" class="l">409: </a>    <span class="php-comment">/**
+</span><a href="#410" id="410" class="l">410: </a><span class="php-comment">     * Parses if parameter value is passed by reference.
+</span><a href="#411" id="411" class="l">411: </a><span class="php-comment">     *
+</span><a href="#412" id="412" class="l">412: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
+</span><a href="#413" id="413" class="l">413: </a><span class="php-comment">     * @return \TokenReflection\ReflectionParameter
+</span><a href="#414" id="414" class="l">414: </a><span class="php-comment">     */</span>
+<a href="#415" id="415" class="l">415: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parsePassedByReference(Stream <span class="php-var">$tokenStream</span>)
+<a href="#416" id="416" class="l">416: </a>    {
+<a href="#417" id="417" class="l">417: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">'&amp;'</span>)) {
+<a href="#418" id="418" class="l">418: </a>            <span class="php-var">$this</span>-&gt;passedByReference = <span class="php-keyword1">true</span>;
+<a href="#419" id="419" class="l">419: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#420" id="420" class="l">420: </a>        }
+<a href="#421" id="421" class="l">421: </a>
+<a href="#422" id="422" class="l">422: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#423" id="423" class="l">423: </a>    }
+<a href="#424" id="424" class="l">424: </a>
+<a href="#425" id="425" class="l">425: </a>    <span class="php-comment">/**
+</span><a href="#426" id="426" class="l">426: </a><span class="php-comment">     * Parses the parameter default value.
+</span><a href="#427" id="427" class="l">427: </a><span class="php-comment">     *
+</span><a href="#428" id="428" class="l">428: </a><span class="php-comment">     * @param \TokenReflection\Stream $tokenStream Token substream
+</span><a href="#429" id="429" class="l">429: </a><span class="php-comment">     * @return \TokenReflection\ReflectionParameter
+</span><a href="#430" id="430" class="l">430: </a><span class="php-comment">     */</span>
+<a href="#431" id="431" class="l">431: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parseDefaultValue(Stream <span class="php-var">$tokenStream</span>)
+<a href="#432" id="432" class="l">432: </a>    {
+<a href="#433" id="433" class="l">433: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">'='</span>)) {
+<a href="#434" id="434" class="l">434: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#435" id="435" class="l">435: </a>
+<a href="#436" id="436" class="l">436: </a>            <span class="php-var">$level</span> = <span class="php-num">0</span>;
+<a href="#437" id="437" class="l">437: </a>            <span class="php-keyword1">while</span> (<span class="php-keyword1">null</span> !== (<span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>())) {
+<a href="#438" id="438" class="l">438: </a>                <span class="php-keyword1">switch</span> (<span class="php-var">$type</span>) {
+<a href="#439" id="439" class="l">439: </a>                    <span class="php-keyword1">case</span> <span class="php-quote">')'</span>:
+<a href="#440" id="440" class="l">440: </a>                        <span class="php-keyword1">if</span> (<span class="php-num">0</span> === <span class="php-var">$level</span>) {
+<a href="#441" id="441" class="l">441: </a>                            <span class="php-keyword1">break</span> <span class="php-num">2</span>;
+<a href="#442" id="442" class="l">442: </a>                        }
+<a href="#443" id="443" class="l">443: </a>                    <span class="php-keyword1">case</span> <span class="php-quote">'}'</span>:
+<a href="#444" id="444" class="l">444: </a>                    <span class="php-keyword1">case</span> <span class="php-quote">']'</span>:
+<a href="#445" id="445" class="l">445: </a>                        <span class="php-var">$level</span>--;
+<a href="#446" id="446" class="l">446: </a>                        <span class="php-keyword1">break</span>;
+<a href="#447" id="447" class="l">447: </a>                    <span class="php-keyword1">case</span> <span class="php-quote">'('</span>:
+<a href="#448" id="448" class="l">448: </a>                    <span class="php-keyword1">case</span> <span class="php-quote">'{'</span>:
+<a href="#449" id="449" class="l">449: </a>                    <span class="php-keyword1">case</span> <span class="php-quote">'['</span>:
+<a href="#450" id="450" class="l">450: </a>                        <span class="php-var">$level</span>++;
+<a href="#451" id="451" class="l">451: </a>                        <span class="php-keyword1">break</span>;
+<a href="#452" id="452" class="l">452: </a>                    <span class="php-keyword1">case</span> <span class="php-quote">','</span>:
+<a href="#453" id="453" class="l">453: </a>                        <span class="php-keyword1">if</span> (<span class="php-num">0</span> === <span class="php-var">$level</span>) {
+<a href="#454" id="454" class="l">454: </a>                            <span class="php-keyword1">break</span> <span class="php-num">2</span>;
+<a href="#455" id="455" class="l">455: </a>                        }
+<a href="#456" id="456" class="l">456: </a>                }
+<a href="#457" id="457" class="l">457: </a>
+<a href="#458" id="458" class="l">458: </a>                <span class="php-var">$this</span>-&gt;defaultValueDefinition .= <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
+<a href="#459" id="459" class="l">459: </a>                <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#460" id="460" class="l">460: </a>            }
+<a href="#461" id="461" class="l">461: </a>
+<a href="#462" id="462" class="l">462: </a>            <span class="php-keyword1">if</span> (<span class="php-quote">','</span> === <span class="php-var">$type</span>) {
+<a href="#463" id="463" class="l">463: </a>                <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#464" id="464" class="l">464: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-quote">')'</span> !== <span class="php-var">$type</span>) {
+<a href="#465" id="465" class="l">465: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> RuntimeException(<span class="php-quote">'Parameter default value definition is not terminated properly'</span>);
+<a href="#466" id="466" class="l">466: </a>            }
+<a href="#467" id="467" class="l">467: </a>
+<a href="#468" id="468" class="l">468: </a>            <span class="php-keyword1">if</span> (self::<span class="php-var">$parseValueDefinitions</span>) {
+<a href="#469" id="469" class="l">469: </a>                <span class="php-comment">// Následuje husťárna (a fucking awesomness follows)
+</span><a href="#470" id="470" class="l">470: </a>                <span class="php-var">$this</span>-&gt;defaultValue = @<span class="php-keyword1">eval</span>(<span class="php-quote">'return '</span> . <span class="php-var">$this</span>-&gt;defaultValueDefinition . <span class="php-quote">';'</span>);
+<a href="#471" id="471" class="l">471: </a>            }
+<a href="#472" id="472" class="l">472: </a>        }
+<a href="#473" id="473" class="l">473: </a>
+<a href="#474" id="474" class="l">474: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#475" id="475" class="l">475: </a>    }
+<a href="#476" id="476" class="l">476: </a>
+<a href="#477" id="477" class="l">477: </a>    <span class="php-comment">/**
+</span><a href="#478" id="478" class="l">478: </a><span class="php-comment">     * Sets if the default value definitions should be parsed.
+</span><a href="#479" id="479" class="l">479: </a><span class="php-comment">     *
+</span><a href="#480" id="480" class="l">480: </a><span class="php-comment">     * @param boolean $parse Should be definitions parsed
+</span><a href="#481" id="481" class="l">481: </a><span class="php-comment">     */</span>
+<a href="#482" id="482" class="l">482: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> setParseValueDefinitions(<span class="php-var">$parse</span>)
+<a href="#483" id="483" class="l">483: </a>    {
+<a href="#484" id="484" class="l">484: </a>        self::<span class="php-var">$parseValueDefinitions</span> = (bool) <span class="php-var">$parse</span>;
+<a href="#485" id="485" class="l">485: </a>    }
+<a href="#486" id="486" class="l">486: </a>
+<a href="#487" id="487" class="l">487: </a>    <span class="php-comment">/**
+</span><a href="#488" id="488" class="l">488: </a><span class="php-comment">     * Returns if the default value definitions should be parsed.
+</span><a href="#489" id="489" class="l">489: </a><span class="php-comment">     *
+</span><a href="#490" id="490" class="l">490: </a><span class="php-comment">     * @return boolean
+</span><a href="#491" id="491" class="l">491: </a><span class="php-comment">     */</span>
+<a href="#492" id="492" class="l">492: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> getParseValueDefinitions()
+<a href="#493" id="493" class="l">493: </a>    {
+<a href="#494" id="494" class="l">494: </a>        <span class="php-keyword1">return</span> self::<span class="php-var">$parseValueDefinitions</span>;
+<a href="#495" id="495" class="l">495: </a>    }
+<a href="#496" id="496" class="l">496: </a>}
+<a href="#497" id="497" class="l">497: </a></code></pre>
 
 		<div id="footer">
 			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville" class="gravatar"><img src="http://gravatar.com/avatar/b2acbf0c8af3bdb2a57176d954ff8ba1?s=12" alt="Andrewsville" /></a>&amp;<a href="http://github.com/kukulich" class="gravatar"><img src="http://gravatar.com/avatar/d106644a59a117503d480ec2edf48368?s=12" alt="Kukulich" /></a> <a href="http://github.com/Andrewsville/apigen">ApiGen</a>, a fork of the original <a href="http://github.com/nette/apigen">tool</a>.<br />
