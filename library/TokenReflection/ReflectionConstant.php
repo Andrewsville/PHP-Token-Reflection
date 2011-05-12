@@ -152,7 +152,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 		static $acceptedStrings, $acceptedTokens;
 		if (null === $acceptedStrings) {
 			$acceptedStrings = array_flip(array('true', 'false', 'null'));
-			$acceptedTokens = array_flip(array('-', '+', T_STRING, T_CONSTANT_ENCAPSED_STRING, T_DNUMBER, T_LNUMBER, T_DOUBLE_COLON));
+			$acceptedTokens = array_flip(array('-', '+', T_STRING, T_NS_SEPARATOR, T_CONSTANT_ENCAPSED_STRING, T_DNUMBER, T_LNUMBER, T_DOUBLE_COLON));
 		}
 
 		$evalValue = true;
