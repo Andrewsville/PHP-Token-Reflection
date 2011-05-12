@@ -23,16 +23,20 @@ class ReflectionAnnotation
 	/**
 	 * Main description annotation identifier.
 	 *
+	 * White space at the beginning on purpose.
+	 *
 	 * @var string
 	 */
-	const SHORT_DESCRIPTION = 'short_description';
+	const SHORT_DESCRIPTION = ' short_description';
 
 	/**
 	 * Sub description annotation identifier.
 	 *
+	 * White space at the beginning on purpose.
+	 *
 	 * @var string
 	 */
-	const LONG_DESCRIPTION = 'long_description';
+	const LONG_DESCRIPTION = ' long_description';
 
 	/**
 	 * Parses reflection object documentation.
@@ -42,58 +46,43 @@ class ReflectionAnnotation
 	 */
 	public static function parse(ReflectionBase $reflection)
 	{
+		static $emptyResult = array();
+
 		$docblock = $reflection->getInheritedDocComment();
 
 		if (false === $docblock) {
-			return array();
+			return $emptyResult;
 		}
 
-		// Preprocess docblock
-		$docblock = trim(preg_replace(array('~^/\s*\*\*~', '~\*/$~'), '', $docblock));
-		$docblock = array_map(function($line) {
-			return preg_replace('~^\\s*\\*\\s*~', '', trim($line), 1);
-		}, explode("\n", $docblock));
-
 		// Parse docblock
-		$result = array();
+		$result = $emptyResult;
 		$name = self::SHORT_DESCRIPTION;
-		foreach ($docblock as $line) {
-			if (preg_match('~^@\\s*([\\S]+)\\s*(.*)~', $line, $matches)) {
-				if (!isset($result['PARAMS'])) {
-					$result['PARAMS'] = array();
-				}
+		$docblock = trim(preg_replace(array('~^/\\s*\\*\\*~', '~\\*/$~'), '', $docblock));
+		foreach (explode("\n", $docblock) as $line) {
+			$line = preg_replace('~^\\*\\s*~', '', trim($line));
 
-				$name = strtolower($matches[1]);
+			// End of short description
+			if ('' === $line && self::SHORT_DESCRIPTION === $name) {
+				$name = self::LONG_DESCRIPTION;
+				continue;
+			}
 
-				if (!isset($result['PARAMS'][$name])) {
-					$result['PARAMS'][$name] = array();
-				}
-				$result['PARAMS'][$name][] = $matches[2];
-			} else {
-				if (empty($line)) {
-					if (self::SHORT_DESCRIPTION === $name) {
-						// End of main description
-						$name = self::LONG_DESCRIPTION;
-						continue;
-					} else {
-						$line = "\n";
-					}
-				}
+			// @annotation
+			if (preg_match('~^@([\\S]+)\\s*(.*)~', $line, $matches)) {
+				$name = $matches[1];
+				$result[$name][] = $matches[2];
+				continue;
+			}
 
-				if (self::SHORT_DESCRIPTION === $name || self::LONG_DESCRIPTION === $name) {
-					if (!isset($result[$name])) {
-						$result[$name] = $line;
-					} else {
-						$result[$name] .= "\n" . $line;
-					}
+			// Continuation
+			if (self::SHORT_DESCRIPTION === $name || self::LONG_DESCRIPTION === $name) {
+				if (!isset($result[$name])) {
+					$result[$name] = $line;
 				} else {
-					if (is_array($result['PARAMS'][$name])) {
-						$index = count($result['PARAMS'][$name]) - 1;
-						$result['PARAMS'][$name][$index] .= ' ' . trim($line);
-					} else {
-						$result['PARAMS'][$name] .= ' ' . trim($line);
-					}
+					$result[$name] .= "\n" . $line;
 				}
+			} else {
+				$result[$name][count($result[$name]) - 1] .= "\n" . $line;
 			}
 		}
 

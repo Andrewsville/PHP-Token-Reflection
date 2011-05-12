@@ -357,14 +357,6 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Parses docblock annotations.
-	 */
-	private function parseAnnotations()
-	{
-		$this->parsedDocComment = ReflectionAnnotation::parse($this);
-	}
-
-	/**
 	 * Returns the package name.
 	 *
 	 * @return string
@@ -382,19 +374,16 @@ abstract class ReflectionBase implements IReflection
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @param boolean $forceArray Always return values as array
 	 * @return string|array|null
 	 */
 	final public function getAnnotation($name)
 	{
-		$name = strtolower($name);
-
 		$params = $this->getAnnotations();
 		if (isset($params[$name])) {
 			return $params[$name];
 		}
 
-		return isset($this->parsedDocComment[$name]) ? $this->parsedDocComment[$name] : null;
+		return null;
 	}
 
 	/**
@@ -405,14 +394,8 @@ abstract class ReflectionBase implements IReflection
 	 */
 	final public function hasAnnotation($name)
 	{
-		$name = strtolower($name);
-
 		$params = $this->getAnnotations();
-		if (isset($params[$name])) {
-			return true;
-		}
-
-		return isset($this->parsedDocComment[$name]);
+		return isset($params[$name]);
 	}
 
 	/**
@@ -423,10 +406,10 @@ abstract class ReflectionBase implements IReflection
 	final public function getAnnotations()
 	{
 		if (null === $this->parsedDocComment) {
-			$this->parseAnnotations();
+			$this->parsedDocComment = ReflectionAnnotation::parse($this);
 		}
 
-		return isset($this->parsedDocComment['PARAMS']) ? $this->parsedDocComment['PARAMS'] : array();
+		return $this->parsedDocComment;
 	}
 
 	/**
