@@ -126,9 +126,9 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 		}
 
 		if ($tokenStream->is(T_DOC_COMMENT, $position)) {
-			$this->docComment = $tokenStream->getTokenValue($position);
+			$this->docComment = new ReflectionAnnotation($tokenStream->getTokenValue($position));
 		} else {
-			$this->docComment = false;
+			$this->docComment = new ReflectionAnnotation();
 		}
 
 		return $this;
