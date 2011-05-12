@@ -81,6 +81,20 @@ abstract class ReflectionBase implements IReflection
 	private $filename;
 
 	/**
+	 * Start position in the file token stream.
+	 *
+	 * @var integer
+	 */
+	private $startPosition;
+
+	/**
+	 * End position in the file token stream.
+	 *
+	 * @var integer
+	 */
+	private $endPosition;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
@@ -173,6 +187,8 @@ abstract class ReflectionBase implements IReflection
 		$token = $tokenStream->current();
 		$this->startLine = $token[2];
 
+		$this->startPosition = $tokenStream->key();
+
 		return $this;
 	}
 
@@ -186,6 +202,8 @@ abstract class ReflectionBase implements IReflection
 	{
 		$token = $tokenStream->current();
 		$this->endLine = $token[2];
+
+		$this->endPosition = $tokenStream->key();
 
 		return $this;
 	}
@@ -226,6 +244,26 @@ abstract class ReflectionBase implements IReflection
 	public function getEndLine()
 	{
 		return $this->endLine;
+	}
+
+	/**
+	 * Returns the start position in the file token stream.
+	 *
+	 * @return integer;
+	 */
+	public function getStartPosition()
+	{
+		return $this->startPosition;
+	}
+
+	/**
+	 * Returns the end position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getEndPosition()
+	{
+		return $this->endPosition;
 	}
 
 	/**
