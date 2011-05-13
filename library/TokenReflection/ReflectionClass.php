@@ -655,7 +655,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function hasConstant($name)
 	{
-		$constants = $this->getConstants();
+		$constants = $this->getConstantReflections();
 		return isset($constants[$name]);
 	}
 
