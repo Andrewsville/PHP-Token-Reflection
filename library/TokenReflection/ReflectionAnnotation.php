@@ -201,5 +201,33 @@ class ReflectionAnnotation
 				$value = trim($value);
 			});
 		}
+
+		$this->mergeTemplates();
+	}
+
+	/**
+	 * Merges templates with the current docblock.
+	 */
+	private function mergeTemplates()
+	{
+		foreach ($this->templates as $template) {
+			foreach ($template->getAnnotations() as $name => $value) {
+				if ($name === self::LONG_DESCRIPTION) {
+					// Long description
+					if (isset($this->annotations[self::LONG_DESCRIPTION])) {
+						$this->annotations[self::LONG_DESCRIPTION] = $value . "\n" . $this->annotations[self::LONG_DESCRIPTION];
+					} else {
+						$this->annotations[self::LONG_DESCRIPTION] = $value;
+					}
+				} elseif ($name !== self::SHORT_DESCRIPTION) {
+					// Tags; short description is not inherited
+					if (isset($this->annotations[$name])) {
+						$this->annotations[$name] = array_merge($this->annotations[$name], $value);
+					} else {
+						$this->annotations[$name] = $value;
+					}
+				}
+			}
+		}
 	}
 }
