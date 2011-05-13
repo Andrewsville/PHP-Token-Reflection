@@ -83,13 +83,6 @@ $function = $broker->getFunction(...);
 $constant = $broker->getConstant(...);
 ```
 
-## Todo
-
-* Getting a list of a class/method/function static variables.
-* Ignore conditionally created structures.
-* Export and __toString support
-* ...
-
 ## Current status
 
 From the beginning we have tested our work using simple unit tests and some real source. We have decided, that once we are able to generate documentation for [Zend Framework](https://github.com/zendframework), [Doctrine](https://github.com/doctrine/doctrine2), [Nella](https://github.com/nella/framework), [Nette](https://github.com/nette/nette) and [Jyxo PHP Libraries](https://github.com/jyxo/php) using our [ApiGen fork](https://github.com/Andrewsville/apigen), we will publish the first public version.
