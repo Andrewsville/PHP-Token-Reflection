@@ -146,6 +146,16 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		while (true) {
 			switch ($tokenStream->getType()) {
+				case T_COMMENT:
+				case T_DOC_COMMENT:
+					$docblock = $tokenStream->getTokenValue();
+					if (preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $docblock)) {
+						array_unshift($this->docblockTemplates, new ReflectionAnnotation($docblock));
+					} elseif (self::DOCBLOCK_TEMPLATE_END === $docblock) {
+						array_shift($this->docblockTemplates);
+					}
+					$tokenStream->next();
+					break;
 				case '}':
 					$tokenStream->next();
 					break 2;
@@ -180,7 +190,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					while ($tokenStream->is(T_STRING)) {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
-						$tokenStream->skipWhitespaces();
+						if ($tokenStream->is(',')) {
+							$tokenStream->skipWhitespaces();
+						} else {
+							$tokenStream->next();
+						}
 					}
 					break;
 				case T_VAR:
@@ -189,7 +203,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					$this->properties[$property->getName()] = $property;
 					break;
 				default:
-					$tokenStream->skipWhitespaces();
+					$tokenStream->next();
 			}
 		}
 

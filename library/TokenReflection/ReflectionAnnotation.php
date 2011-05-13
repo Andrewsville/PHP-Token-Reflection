@@ -41,6 +41,13 @@ class ReflectionAnnotation
 	const LONG_DESCRIPTION = ' long_description';
 
 	/**
+	 * List of applied templates.
+	 *
+	 * @var array
+	 */
+	private $templates = array();
+
+	/**
 	 * Parsed annotations.
 	 *
 	 * @var array
@@ -121,6 +128,26 @@ class ReflectionAnnotation
 	}
 
 	/**
+	 * Sets Docblock templates.
+	 *
+	 * @param array $templates Docblock templates
+	 * @return \TokenReflection\ReflectionAnnotation
+	 */
+	public function setTemplates(array $templates)
+	{
+		foreach ($templates as $template) {
+			if (!$template instanceof ReflectionAnnotation) {
+				throw new RuntimeException(sprintf(
+					'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
+					is_object($template) ? get_class($template) : gettype($template)
+				));
+			}
+		}
+
+		$this->templates = $templates;
+	}
+
+	/**
 	 * Parses reflection object documentation.
 	 */
 	private function parse()
@@ -130,7 +157,16 @@ class ReflectionAnnotation
 		if (false !== $this->docComment) {
 			// Parse docblock
 			$name = self::SHORT_DESCRIPTION;
-			$docblock = trim(preg_replace(array('~^/\\*\\*~', '~\\*/$~'), '', $this->docComment));
+			$docblock = trim(preg_replace(
+				array(
+					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
+					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
+					'~^/\\*\\*~',
+					'~\\*/$~'
+				),
+				'',
+				$this->docComment
+			));
 			foreach (explode("\n", $docblock) as $line) {
 				$line = preg_replace('~^\\*\\s*~', '', trim($line));
 

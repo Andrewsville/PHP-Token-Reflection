@@ -146,13 +146,23 @@ class ReflectionFileNamespace extends ReflectionBase
 
 		while (true) {
 			switch ($tokenStream->getType()) {
+				case T_COMMENT:
+				case T_DOC_COMMENT:
+					$docblock = $tokenStream->getTokenValue();
+					if (preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $docblock)) {
+						array_unshift($this->docblockTemplates, new ReflectionAnnotation($docblock));
+					} elseif (self::DOCBLOCK_TEMPLATE_END === $docblock) {
+						array_shift($this->docblockTemplates);
+					}
+					$tokenStream->next();
+					break;
 				case '{':
 					$level++;
 					$tokenStream->skipWhitespaces();
 					break;
 				case '}':
 					$level--;
-					$tokenStream->skipWhitespaces();
+					$tokenStream->next();
 					break $level > 0 ? 1 : 2;
 				case null:
 				case T_NAMESPACE:
@@ -169,7 +179,11 @@ class ReflectionFileNamespace extends ReflectionBase
 					while ($tokenStream->is(T_STRING)) {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
-						$tokenStream->skipWhitespaces();
+						if ($tokenStream->is(',')) {
+							$tokenStream->skipWhitespaces();
+						} else {
+							$tokenStream->next();
+						}
 					}
 					break;
 				case T_FUNCTION:
@@ -194,7 +208,7 @@ class ReflectionFileNamespace extends ReflectionBase
 
 						$tokenStream
 							->findMatchingBracket()
-							->skipWhitespaces();
+							->next();
 
 						continue;
 					}
@@ -203,7 +217,7 @@ class ReflectionFileNamespace extends ReflectionBase
 					$this->functions[$function->getName()] = $function;
 					break;
 				default:
-					$tokenStream->skipWhitespaces();
+					$tokenStream->next();
 			}
 		}
 
