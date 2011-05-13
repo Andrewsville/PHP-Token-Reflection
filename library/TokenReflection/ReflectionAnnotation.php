@@ -87,6 +87,8 @@ class ReflectionAnnotation
 		}
 
 		array_walk_recursive($result, function(&$value) {
+			// {@*} is a placeholder for */ (phpDocumentor compatibility)
+			$value = str_replace('{@*}', '*/', $value);
 			$value = trim($value);
 		});
 
