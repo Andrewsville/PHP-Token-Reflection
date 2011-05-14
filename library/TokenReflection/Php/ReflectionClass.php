@@ -444,6 +444,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
 	 */
 	public function implementsInterface($interface) {
 		if (is_object($interface)) {
@@ -465,6 +466,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Method name
 	 * @return \TokenReflection\Php\ReflectionMethod
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
 	 */
 	public function getMethod($name)
 	{
@@ -482,6 +484,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\Php\ReflectionProperty
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
 	 */
 	public function getProperty($name)
 	{
@@ -708,6 +711,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * @param \ReflectionClass Internal reflection instance
 	 * @param \TokenReflection\Broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionClass
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

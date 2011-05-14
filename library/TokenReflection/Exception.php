@@ -20,7 +20,7 @@ use Exception as InternalException;
 /**
  * Library exception.
  */
-class Exception extends InternalException
+abstract class Exception extends InternalException
 {
 	/**#@+
 	 * The requested operation is not supported.

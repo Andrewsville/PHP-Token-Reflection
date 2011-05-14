@@ -39,4 +39,19 @@ class Parse extends TokenReflection\Exception
 	 * The requested directory does not exist.
 	 */
 	const DIR_DOES_NOT_EXIST = 12;
+
+	/**
+	 * An invalid parent reflection object was provided.
+	 */
+	const INVALID_PARENT = 13;
+
+	/**
+	 * Unable to parse the reflection object.
+	 */
+	const PARSE_ELEMENT_ERROR = 14;
+
+	/**
+	 * Unable to parse element children.
+	 */
+	const PARSE_CHILDREN_ERROR = 15;
 }

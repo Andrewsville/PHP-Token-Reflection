@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use RuntimeException;
+use TokenReflection\Exception;
 
 /**
  * Basic abstract TokenReflection class.
@@ -121,23 +121,42 @@ abstract class ReflectionBase implements IReflection
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @throws \TokenReflection\Exception\Parse If the token stream is empty
+	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
 	 */
 	public final function __construct(Stream $tokenStream, Broker $broker, IReflection $parent)
 	{
 		if (0 === $tokenStream->count()) {
-			throw new Exception('Reflection token stream must not be empty');
+			throw new Exception\Runtime('Reflection token stream must not be empty.', Exception\Runtime::INVALID_ARGUMENT);
 		}
 
 		$this->broker = $broker;
 		$this->filename = $tokenStream->getFileName();
 
-		return $this
-			->processParent($parent)
-			->parseStartLine($tokenStream)
-			->parseDocComment($tokenStream, $parent)
-			->parse($tokenStream, $parent)
-			->parseChildren($tokenStream, $parent)
-			->parseEndLine($tokenStream);
+		try {
+			$this
+				->processParent($parent)
+				->parseStartLine($tokenStream)
+				->parseDocComment($tokenStream, $parent)
+				->parse($tokenStream, $parent);
+		} catch (Exception $e) {
+			$message = 'Could not parse %s.';
+			if (null !== $this->name) {
+				$message = sprintf($message, get_class($this) . ' ' . $this->getName());
+			} else {
+				$message = sprintf($message, get_class($this));
+			}
+
+			throw new Exception\Parse($message, Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		}
+
+		try {
+			$this->parseChildren($tokenStream, $parent);
+		} catch (Exception $e) {
+			throw new Exception\Parse(sprintf('Could not parse %s %s child elements.', get_class($this), $this->getName()), Exception\Parse::PARSE_CHILDREN_ERROR, $e);
+		}
+
+		return $this->parseEndLine($tokenStream);
 	}
 
 	/**
@@ -528,6 +547,7 @@ abstract class ReflectionBase implements IReflection
 	 * @param \TokenReflection\IReflection $object Reflection object
 	 * @param string $key Variable name
 	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested parameter does not exist
 	 */
 	final public static function get(IReflection $object, $key)
 	{
@@ -546,7 +566,7 @@ abstract class ReflectionBase implements IReflection
 			}
 		}
 
-		throw new RuntimeException(sprintf('Cannot read property %s', $key));
+		throw new Exception\Runtime(sprintf('Cannot read %s "%s" property "%s".', get_class($object), $object->getName(), $key), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**

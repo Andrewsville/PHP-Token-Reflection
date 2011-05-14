@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use RuntimeException;
+use TokenReflection\Exception;
 
 /**
  * Tokenized namespace reflection.
@@ -83,6 +83,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param string $className Class name
 	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\Exception\Runtime If the requested class reflection does not exist
 	 */
 	public function getClass($className)
 	{
@@ -92,7 +93,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		if (!isset($this->classes[$className])) {
-			throw new Exception(sprintf('Class %s does not exist', $className), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('Class "%s" does not exist.', $className), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return $this->classes[$className];
@@ -135,6 +136,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param string $functionName Function name
 	 * @return \TokenReflection\ReflectionFunction
+	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist
 	 */
 	public function getFunction($functionName)
 	{
@@ -144,7 +146,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		if (!isset($this->functions[$functionName])) {
-			throw new Exception(sprintf('Function %s does not exist', $functionName), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('Function "%s" does not exist.', $functionName), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return $this->functions[$functionName];
@@ -187,6 +189,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param string $constantName Constant name
 	 * @return \TokenReflection\ReflectionConstant
+	 * @throws \TokenReflection\Exception\Runtime If the required constant does not exist
 	 */
 	public function getConstant($constantName)
 	{
@@ -196,7 +199,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		if (!isset($this->constants[$constantName])) {
-			throw new Exception(sprintf('Constant %s does not exist', $constantName), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('Constant "%s" does not exist.', $constantName), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return $this->constants[$constantName];
@@ -293,13 +296,16 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Adds a namespace part from a file.
 	 *
 	 * @param \TokenReflection\ReflectionFileNamespace $namespace Namespace part
+	 * @throws \TokenReflection\Exception\Runtime If one of classes form the namespace are already defined
+	 * @throws \TokenReflection\Exception\Runtime If one of functions form the namespace are already defined
+	 * @throws \TokenReflection\Exception\Runtime If one of constants form the namespace are already defined
 	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
 		$classes = $namespace->getClasses();
 		foreach ($this->classes as $className => $reflection) {
 			if (isset($classes[$className])) {
-				throw new RuntimeException(sprintf('Class %s was defined multiple times', $className));
+				throw new Exception\Runtime(sprintf('Class "%s" is already defined; in file "%s".', $className, $classes[$className]->getFileName()), Exception\Runtime::ALREADY_EXISTS);
 			}
 		}
 		$this->classes = array_merge($this->classes, $classes);
@@ -307,7 +313,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$functions = $namespace->getFunctions();
 		foreach ($this->functions as $functionName => $reflection) {
 			if (isset($functions[$functionName])) {
-				throw new RuntimeException(sprintf('Function %s was defined multiple times', $functionName));
+				throw new Exception\Runtime(sprintf('Function "%s" is already defined; in file "%s".', $functionName, $functions[$functionName]->getFileName()), Exception\Runtime::ALREADY_EXISTS);
 			}
 		}
 		$this->functions = array_merge($this->functions, $functions);
@@ -315,7 +321,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$constants = $namespace->getConstants();
 		foreach ($this->constants as $constantName => $reflection) {
 			if (isset($constants[$constantName])) {
-				throw new RuntimeException(sprintf('Constant %s was defined multiple times', $constantName));
+				throw new Exception\Runtime(sprintf('Constant "%s" is already defined; in file "%s".', $constantName, $constants[$constantName]->getFileName()), Exception\Runtime::ALREADY_EXISTS);
 			}
 		}
 		$this->constants = array_merge($this->constants, $constants);

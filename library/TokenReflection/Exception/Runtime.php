@@ -28,5 +28,20 @@ class Runtime extends TokenReflection\Exception
 	 *
 	 * @var integer
 	 */
-	const TOKEN_STREAM_STORING_TURNED_OFF = 13;
+	const TOKEN_STREAM_STORING_TURNED_OFF = 20;
+
+	/**
+	 * Invalid argument was provided.
+	 */
+	const INVALID_ARGUMENT = 21;
+
+	/**
+	 * The requested values/action is not accessible.
+	 */
+	const NOT_ACCESSBILE = 22;
+
+	/**
+	 * The provided reflection already exists.
+	 */
+	const ALREADY_EXISTS = 23;
 }

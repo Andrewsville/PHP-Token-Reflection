@@ -16,8 +16,8 @@
 namespace TokenReflection\Php;
 use TokenReflection;
 
-use TokenReflection\Broker, Reflector, ReflectionExtension as InternalReflectionExtension;
-use RuntimeException;
+use TokenReflection\Broker, TokenReflection\Exception;
+use Reflector, ReflectionExtension as InternalReflectionExtension;
 
 /**
  * Reflection of a not tokenized but defined extension.
@@ -252,13 +252,14 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 * @param \ReflectionExtension Internal reflection instance
 	 * @param \TokenReflection\Broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionExtension
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionExtension) {
-			throw new RuntimeException(sprintf('Invalid reflection instance provided (%s), ReflectionExtension expected.', get_class($internalReflection)));
+			throw new Exception\Runtime(sprintf('Invalid reflection instance provided: "%s", ReflectionExtension expected.', get_class($internalReflection)), Exception\Runtime::INVALID_ARGUMENT);
 		}
 
 		if (!isset($cache[$internalReflection->getName()])) {
