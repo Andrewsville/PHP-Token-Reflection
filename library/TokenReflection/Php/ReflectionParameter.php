@@ -16,9 +16,8 @@
 namespace TokenReflection\Php;
 use TokenReflection;
 
-use TokenReflection\Broker;
+use TokenReflection\Broker, TokenReflection\Exception;
 use Reflector, ReflectionParameter as InternalReflectionParameter, ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
-use RuntimeException;
 
 /**
  * Reflection of a not tokenized but defined class parameter.
@@ -244,13 +243,14 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 * @param \ReflectionParamter Internal reflection instance
 	 * @param \TokenReflection\Broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionParameter
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionParameter) {
-			throw new RuntimeException(sprintf('Invalid reflection instance provided (%s), ReflectionParameter expected.', get_class($internalReflection)));
+			throw new Exception\Runtime(sprintf('Invalid reflection instance provided: "%s", ReflectionParameter expected.', get_class($internalReflection)), Exception\Runtime::INVALID_ARGUMENT);
 		}
 
 		$class = $internalReflection->getDeclaringClass();

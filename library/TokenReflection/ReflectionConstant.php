@@ -55,6 +55,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -63,7 +64,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 		} elseif ($parent instanceof ReflectionClass) {
 			$this->declaringClassName = $parent->getName();
 		} else {
-			throw new RuntimeException(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace or TokenReflection\ReflectionClass, %s given.', get_class($parent)));
+			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace or TokenReflection\ReflectionClass, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
 		}
 
 		return parent::processParent($parent);
@@ -88,26 +89,31 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionConstant
+	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if ($tokenStream->is(T_CONST)) {
+		try {
+			if ($tokenStream->is(T_CONST)) {
+				$tokenStream->skipWhitespaces();
+			}
+
+			if (!$tokenStream->is(T_STRING)) {
+				throw new Exception\Parse('The constant name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			if (null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
+				$this->name = $tokenStream->getTokenValue();
+			} else {
+				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
+			}
+
 			$tokenStream->skipWhitespaces();
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse constant name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-
-		if (!$tokenStream->is(T_STRING)) {
-			throw new RuntimeException('Could not determine the constant name');
-		}
-
-		if (null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
-			$this->name = $tokenStream->getTokenValue();
-		} else {
-			$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
-		}
-
-		$tokenStream->skipWhitespaces();
-
-		return $this;
 	}
 
 	/**
@@ -153,58 +159,63 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionConstant
+	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined
 	 */
 	private function parseValue(Stream $tokenStream, IReflection $parent)
 	{
-		if (!$tokenStream->is('=')) {
-			throw new RuntimeException('Could not find the value definition start');
-		}
-
-		$tokenStream->skipWhitespaces();
-
-		static $acceptedStrings, $acceptedTokens;
-		if (null === $acceptedStrings) {
-			$acceptedStrings = array_flip(array('true', 'false', 'null'));
-			$acceptedTokens = array_flip(array('-', '+', T_STRING, T_NS_SEPARATOR, T_CONSTANT_ENCAPSED_STRING, T_DNUMBER, T_LNUMBER, T_DOUBLE_COLON));
-		}
-
-		$evalValue = true;
-		while (null !== ($type = $tokenStream->getType())) {
-			$value = $tokenStream->getTokenValue();
-
-			if (!isset($acceptedTokens[$type])) {
-				break;
-			} elseif ($tokenStream->is(T_STRING) && !isset($acceptedStrings[strtolower($value)])) {
-				$evalValue = false;
+		try {
+			if (!$tokenStream->is('=')) {
+				throw new Exception\Parse('Could not find the definition start.', Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
-			$this->valueDefinition .= $value;
-			$tokenStream->next();
-		}
+			$tokenStream->skipWhitespaces();
 
-		if (null !== $type && (',' === $value || ';' === $value)) {
-			$this->valueDefinition = trim($this->valueDefinition);
-		} else {
-			throw new RuntimeException(sprintf('Invalid value definition: "%s".', $this->valueDefinition));
-		}
+			static $acceptedStrings, $acceptedTokens;
+			if (null === $acceptedStrings) {
+				$acceptedStrings = array_flip(array('true', 'false', 'null'));
+				$acceptedTokens = array_flip(array('-', '+', T_STRING, T_NS_SEPARATOR, T_CONSTANT_ENCAPSED_STRING, T_DNUMBER, T_LNUMBER, T_DOUBLE_COLON));
+			}
 
-		if ($evalValue) {
-			$this->value = eval(sprintf('return %s;', $this->valueDefinition));
-		} else {
-			// Another constant's name
-			if ('\\' !== $this->valueDefinition{0}) {
-				$namespaceName = $this->namespaceName ?: $parent->getNamespaceName();
-				if ($pos = strpos($this->valueDefinition, '::')) {
-					$className = substr($this->valueDefinition, 0, $pos);
-					$this->valueDefinition = ReflectionBase::resolveClassFQN($className, $parent->getNamespaceAliases(), $namespaceName)
-						. substr($this->valueDefinition, $pos);
-				} elseif(ReflectionNamespace::NO_NAMESPACE_NAME !== $namespaceName) {
-					$this->valueDefinition = $namespaceName . '\\' . $this->valueDefinition;
+			$evalValue = true;
+			while (null !== ($type = $tokenStream->getType())) {
+				$value = $tokenStream->getTokenValue();
+
+				if (!isset($acceptedTokens[$type])) {
+					break;
+				} elseif ($tokenStream->is(T_STRING) && !isset($acceptedStrings[strtolower($value)])) {
+					$evalValue = false;
+				}
+
+				$this->valueDefinition .= $value;
+				$tokenStream->next();
+			}
+
+			if (null !== $type && (',' === $value || ';' === $value)) {
+				$this->valueDefinition = trim($this->valueDefinition);
+			} else {
+				throw new Exception\Parse(sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			if ($evalValue) {
+				$this->value = eval(sprintf('return %s;', $this->valueDefinition));
+			} else {
+				// Another constant's name
+				if ('\\' !== $this->valueDefinition{0}) {
+					$namespaceName = $this->namespaceName ?: $parent->getNamespaceName();
+					if ($pos = strpos($this->valueDefinition, '::')) {
+						$className = substr($this->valueDefinition, 0, $pos);
+						$this->valueDefinition = ReflectionBase::resolveClassFQN($className, $parent->getNamespaceAliases(), $namespaceName)
+							. substr($this->valueDefinition, $pos);
+					} elseif(ReflectionNamespace::NO_NAMESPACE_NAME !== $namespaceName) {
+						$this->valueDefinition = $namespaceName . '\\' . $this->valueDefinition;
+					}
 				}
 			}
-		}
 
-		return $this;
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse constant value.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		}
 	}
 
 	/**

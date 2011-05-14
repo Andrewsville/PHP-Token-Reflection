@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use RuntimeException;
+use TokenReflection\Exception;
 
 /**
  * Tokenized function reflection.
@@ -64,11 +64,12 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 *
 	 * @param mixed $args Function parameter values
 	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist
 	 */
 	public function invokeArgs(array $args = array())
 	{
 		if (!function_exists($this->getName())) {
-			throw new RuntimeException('Function %s is not defined in the current scope.', $this->getName());
+			throw new Exception\Runtime(sprintf('Could not invoke function "%s"; function is not defined.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return call_user_func_array($this->getName(), $args);
@@ -93,11 +94,12 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
 	 */
 	protected function processParent(IReflection $parent)
 	{
 		if (!$parent instanceof ReflectionFileNamespace) {
-			throw new RuntimeException(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace, %s given.', get_class($parent)));
+			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
 		}
 
 		$this->namespaceName = $parent->getName();

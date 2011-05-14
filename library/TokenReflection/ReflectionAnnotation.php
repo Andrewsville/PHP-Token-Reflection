@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use RuntimeException;
+use TokenReflection\Exception;
 
 /**
  * Docblock parser.
@@ -132,15 +132,19 @@ class ReflectionAnnotation
 	 *
 	 * @param array $templates Docblock templates
 	 * @return \TokenReflection\ReflectionAnnotation
+	 * @throws \TokenReflection\Exception\Runtime If an invalid annotation template was provided
 	 */
 	public function setTemplates(array $templates)
 	{
 		foreach ($templates as $template) {
 			if (!$template instanceof ReflectionAnnotation) {
-				throw new RuntimeException(sprintf(
-					'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
-					is_object($template) ? get_class($template) : gettype($template)
-				));
+				throw new Exception\Runtime(
+					sprintf(
+						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
+						is_object($template) ? get_class($template) : gettype($template)
+					),
+					Exception\Runtime::INVALID_ARGUMENT
+				);
 			}
 		}
 

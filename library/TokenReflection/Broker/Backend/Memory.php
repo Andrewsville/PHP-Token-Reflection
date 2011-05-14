@@ -16,8 +16,7 @@
 namespace TokenReflection\Broker\Backend;
 use TokenReflection;
 
-use TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
-use InvalidArgumentException, RuntimeException, TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
 
 /**
  * Memory broker backend.
@@ -66,6 +65,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $namespaceName Namespace name
 	 * @return \TokenReflection\IReflectionNamespace
+	 * @throws \TokenReflection\Exception\Runtime If the requested namespace does not exist
 	 */
 	public function getNamespace($namespaceName)
 	{
@@ -75,7 +75,7 @@ class Memory implements Broker\Backend
 
 		$namespaceName = ltrim($namespaceName, '\\');
 		if (!isset($this->namespaces[$namespaceName])) {
-			throw new Exception(sprintf('Namespace %s does not exist.', $namespaceName), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('Namespace %s does not exist.', $namespaceName), TokenReflection\Exception::DOES_NOT_EXIST);
 		}
 
 		return $this->namespaces[$namespaceName];
@@ -103,7 +103,7 @@ class Memory implements Broker\Backend
 			);
 
 			return $ns->getClass($className);
-		} catch (Exception $e) {
+		} catch (TokenReflection\Exception $e) {
 			if (isset($declared[$className])) {
 				$reflection = new Php\ReflectionClass($className, $this->broker);
 				if ($reflection->isInternal()) {
@@ -119,7 +119,8 @@ class Memory implements Broker\Backend
 	 * Returns a reflection object of a function (FQN expected).
 	 *
 	 * @param string $functionName Function name
-	 * @return \TokenReflection\IReflectionFunction|null
+	 * @return \TokenReflection\IReflectionFunction
+	 * @throws \TokenReflection\Exception\Runtime If the requested function does not exist
 	 */
 	public function getFunction($functionName)
 	{
@@ -138,10 +139,12 @@ class Memory implements Broker\Backend
 			);
 
 			return $ns->getFunction($functionName);
-		} catch (Exception $e) {
-			return isset($declared[$functionName])
-				? new Php\ReflectionFunction($functionName, $this->broker)
-				: null;
+		} catch (TokenReflection\Exception $e) {
+			if (isset($declared[$functionName])) {
+				return new Php\ReflectionFunction($functionName, $this->broker);
+			}
+
+			throw new Exception\Runtime(sprintf('Function %s does not exist.', $functionName), 0, $e);
 		}
 	}
 
@@ -149,7 +152,8 @@ class Memory implements Broker\Backend
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
 	 * @param string $constantName Constant name
-	 * @return \TokenReflection\IReflectionConstant|null
+	 * @return \TokenReflection\IReflectionConstant
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstant($constantName)
 	{
@@ -165,8 +169,8 @@ class Memory implements Broker\Backend
 
 			try {
 				return $this->getClass($className)->getConstantReflection($constantName);
-			} catch (Exception $e) {
-				return null;
+			} catch (TokenReflection\Exception $e) {
+				throw new Exception\Runtime(sprintf('Constant %s does not exist.', $constantName), 0, $e);
 			}
 		}
 
@@ -180,9 +184,13 @@ class Memory implements Broker\Backend
 			}
 
 			return $ns->getConstant($constantName);
-		} catch (Exception $e) {
+		} catch (TokenReflection\Exception $e) {
 			$reflection = new Php\ReflectionConstant($constantName, $declared[$constantName], $this->broker);
-			return $reflection->isInternal() ? $reflection : null;
+			if ($reflection->isInternal()) {
+				return $reflection;
+			}
+
+			throw new Exception\Runtime(sprintf('Constant %s does not exist.', $constantName), 0, $e);
 		}
 	}
 
@@ -200,11 +208,12 @@ class Memory implements Broker\Backend
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @return \ArrayIterator
+	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed
 	 */
 	public function getFileTokens($fileName)
 	{
 		if (!$this->isFileProcessed($fileName)) {
-			throw new InvalidArgumentException(sprintf('File %s was not processed', $fileName));
+			throw new Exception\Runtime(sprintf('The requested file %s was not processed.', $fileName), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return $this->tokenStreams[$fileName];
@@ -301,13 +310,9 @@ class Memory implements Broker\Backend
 
 		foreach ($allClasses[self::TOKENIZED_CLASSES] as $className => $class) {
 			foreach (array_merge($class->getParentClasses(), $class->getInterfaces()) as $parent) {
-				if ($parent->isTokenized()) {
-					if (!isset($allClasses[self::TOKENIZED_CLASSES][$parent->getName()])) {
-						throw new RuntimeException(sprintf('Class %s should be tokenized', $parent->getName()));
-					}
-				} elseif ($parent->isInternal()) {
+				if ($parent->isInternal()) {
 					$allClasses[self::INTERNAL_CLASSES][$parent->getName()] = $parent;
-				} else {
+				} elseif (!$parent->isTokenized()) {
 					$allClasses[self::NONEXISTENT_CLASSES][$parent->getName()] = $parent;
 				}
 			}

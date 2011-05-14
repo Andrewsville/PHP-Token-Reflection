@@ -342,22 +342,22 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$token->invoke(new \Exception(), 1, 2);
-			$this->fail('Expected exception InvalidArgumentException.');
+			$this->fail('Expected exception TokenReflection\Exception.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('InvalidArgumentException', $e);
+			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
 
 		try {
 			$token->invokeArgs(new \Exception(), array(1, 2));
-			$this->fail('Expected exception InvalidArgumentException.');
+			$this->fail('Expected exception TokenReflection\Exception.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('InvalidArgumentException', $e);
+			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
 
 		$internal = $rfl->internal->getMethod('protectedInvoke');
@@ -365,22 +365,22 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$token->invoke($object, 1, 2);
-			$this->fail('Expected exception RuntimeException.');
+			$this->fail('Expected exception TokenReflection\Exception.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('RuntimeException', $e);
+			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
 
 		try {
 			$token->invokeArgs($object, array(1, 2));
-			$this->fail('Expected exception RuntimeException.');
+			$this->fail('Expected exception TokenReflection\Exception.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('RuntimeException', $e);
+			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
 
 		$this->assertEquals($internal->setAccessible(true), $token->setAccessible(true));

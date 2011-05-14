@@ -16,7 +16,7 @@
 namespace TokenReflection\Php;
 use TokenReflection;
 
-use TokenReflection\Broker, Reflector, TokenReflection\Exception;
+use TokenReflection\Broker, TokenReflection\Exception, Reflector;
 
 /**
  * Reflection of a not tokenized but defined constant.
