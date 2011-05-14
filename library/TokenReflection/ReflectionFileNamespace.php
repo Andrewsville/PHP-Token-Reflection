@@ -142,8 +142,6 @@ class ReflectionFileNamespace extends ReflectionBase
 			$skipped = array_flip(array(T_WHITESPACE, T_COMMENT, T_DOC_COMMENT));
 		}
 
-		$level = 1;
-
 		while (true) {
 			switch ($tokenStream->getType()) {
 				case T_COMMENT:
@@ -157,13 +155,9 @@ class ReflectionFileNamespace extends ReflectionBase
 					$tokenStream->next();
 					break;
 				case '{':
-					$level++;
-					$tokenStream->skipWhitespaces();
+					$tokenStream->findMatchingBracket()->next();
 					break;
 				case '}':
-					$level--;
-					$tokenStream->next();
-					break $level > 0 ? 1 : 2;
 				case null:
 				case T_NAMESPACE:
 					break 2;
