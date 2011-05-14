@@ -48,13 +48,12 @@ class ReflectionFile implements IReflection
 	 *
 	 * Assigns a filename and the token stream.
 	 *
-	 * @param string $filename File name
-	 * @param array $tokenStream Token stream
+	 * @param \TokenReflection\Stream $tokenStream Token stream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
-	public function __construct($filename, array $tokenStream, Broker $broker)
+	public function __construct(Stream $tokenStream, Broker $broker)
 	{
-		$this->tokenStream = new Stream($tokenStream, $filename);
+		$this->tokenStream = $tokenStream;
 		$this->broker = $broker;
 		$this->parse();
 	}
