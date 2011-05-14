@@ -173,6 +173,7 @@ class ReflectionFileNamespace extends ReflectionBase
 				case T_INTERFACE:
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
 					$this->classes[$class->getName()] = $class;
+					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces();
@@ -215,6 +216,7 @@ class ReflectionFileNamespace extends ReflectionBase
 
 					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
 					$this->functions[$function->getName()] = $function;
+					$tokenStream->next();
 					break;
 				default:
 					$tokenStream->next();

@@ -146,6 +146,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		while (true) {
 			switch ($tokenStream->getType()) {
+				case null:
+					break 2;
 				case T_COMMENT:
 				case T_DOC_COMMENT:
 					$docblock = $tokenStream->getTokenValue();
@@ -159,23 +161,27 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				case '}':
 					$tokenStream->next();
 					break 2;
-				case null:
-					break 2;
 				case T_PUBLIC:
 				case T_PRIVATE:
 				case T_PROTECTED:
 				case T_STATIC:
+				case T_VAR:
 				case T_VARIABLE:
 					static $searching = array(T_VARIABLE, T_FUNCTION);
 
-					$position = $tokenStream->key();
-					while (null !== ($type = $tokenStream->getType($position++)) && !in_array($type, $searching)) {
-						$position++;
+					if (T_VAR === $tokenStream->getType()) {
+						$tokenStream->skipWhitespaces();
+					} else {
+						$position = $tokenStream->key();
+						while (null !== ($type = $tokenStream->getType($position++)) && !in_array($type, $searching)) {
+							$position++;
+						}
 					}
 
 					if (T_VARIABLE === $type) {
 						$property = new ReflectionProperty($tokenStream, $this->getBroker(), $this);
 						$this->properties[$property->getName()] = $property;
+						$tokenStream->next();
 						break;
 					}
 					// Break missing on purpose
@@ -184,6 +190,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				case T_FUNCTION:
 					$method = new ReflectionMethod($tokenStream, $this->getBroker(), $this);
 					$this->methods[$method->getName()] = $method;
+					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces();
@@ -196,11 +203,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							$tokenStream->next();
 						}
 					}
-					break;
-				case T_VAR:
-				case T_VARIABLE:
-					$property = new ReflectionProperty($tokenStream, $this->getBroker(), $this);
-					$this->properties[$property->getName()] = $property;
 					break;
 				default:
 					$tokenStream->next();
