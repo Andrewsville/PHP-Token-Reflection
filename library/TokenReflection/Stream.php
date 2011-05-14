@@ -367,17 +367,28 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 */
 	public function __toString()
 	{
-		return self::tokensToCode($this->contents);
+		return $this->getSource();
 	}
 
 	/**
-	 * Converts a token array or iterator to the appropriate source code.
+	 * Returns the original source code.
 	 *
-	 * @param array $tokens Token array
 	 * @return string
 	 */
-	public static function tokensToCode(array $tokens = array())
+	public function getSource()
 	{
-		return implode('', $tokens);
+		return implode('', $this->contents);
+	}
+
+	/**
+	 * Returns a part of the source code.
+	 *
+	 * @param mixed $start Start offset
+	 * @param mixed $end End offset
+	 * @return string
+	 */
+	public function getSourcePart($start, $end = null)
+	{
+		return implode('', array_slice($this->contents, $start, null !== $end ? $end - $start + 1 : null));
 	}
 }

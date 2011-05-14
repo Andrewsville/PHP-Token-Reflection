@@ -131,13 +131,10 @@ abstract class ReflectionBase implements IReflection
 		$this->broker = $broker;
 		$this->filename = $tokenStream->getFileName();
 
-		if (!$this instanceof ReflectionParameter) {
-			$this->parseDocComment($tokenStream, $parent);
-		}
-
 		return $this
 			->processParent($parent)
 			->parseStartLine($tokenStream)
+			->parseDocComment($tokenStream, $parent)
 			->parse($tokenStream, $parent)
 			->parseChildren($tokenStream, $parent)
 			->parseEndLine($tokenStream);
@@ -186,21 +183,29 @@ abstract class ReflectionBase implements IReflection
 	 */
 	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
 	{
+		if ($this instanceof ReflectionParameter) {
+			return $this;
+		}
+
 		$position = $tokenStream->key();
 		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
 			$value = $tokenStream->getTokenValue($position - 1);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
 				$this->docComment = new ReflectionAnnotation($value);
+				$this->startPosition--;
 			}
 		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
 			$value = $tokenStream->getTokenValue($position - 2);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
 				$this->docComment = new ReflectionAnnotation($value);
+				$this->startPosition -= 2;
 			}
 		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
 			$this->docComment = new ReflectionAnnotation($tokenStream->getTokenValue($position - 1));
+			$this->startPosition--;
 		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
 			$this->docComment = new ReflectionAnnotation($tokenStream->getTokenValue($position - 2));
+			$this->startPosition -= 2;
 		}
 
 		if (null === $this->docComment) {
@@ -388,25 +393,6 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Outputs the reflection subject source code.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		$tokens = $this->broker->getFileTokens($this->filename);
-		if (null !== $tokens && $tokens instanceof Stream) {
-			$tokens = iterator_to_array($tokens);
-		} else {
-			return '';
-		}
-
-		return array_reduce($tokens, function($output, $token) {
-			return $output . $token[1];
-		}, '');
-	}
-
-	/**
 	 * Returns the appropriate docblock definition.
 	 *
 	 * @return string|false
@@ -491,6 +477,16 @@ abstract class ReflectionBase implements IReflection
 	final public function getAnnotations()
 	{
 		return $this->docComment->getAnnotations();
+	}
+
+	/**
+	 * Returns the appropriate source code part.
+	 *
+	 * @return string
+	 */
+	public function getSource()
+	{
+		return $this->broker->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
 	}
 
 	/**

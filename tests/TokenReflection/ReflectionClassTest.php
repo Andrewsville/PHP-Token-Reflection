@@ -543,4 +543,66 @@ class ReflectionClassTest extends Test
 		$this->assertEquals($rfl->internal->getShortName(), $rfl->token->getShortName());
 		$this->assertEquals($this->getClassName('noNamespace'), $rfl->token->getShortName());
 	}
+
+	public function testPropertyGetSource()
+	{
+		static $expected = array(
+			'publicStatic' => 'public static $publicStatic = true;',
+			'privateStatic' => 'private static $privateStatic = \'something\';',
+			'protectedStatic' => 'protected static $protectedStatic = 1;',
+			'public' => 'public $public = false;',
+			'protected' => 'protected $protected = 0;',
+			'private' => 'private $private = \'\';'
+		);
+
+		$rfl = $this->getClassReflection('properties')->token;
+		foreach ($expected as $propertyName => $source) {
+			$this->assertSame($source, $rfl->getProperty($propertyName)->getSource());
+		}
+	}
+
+	public function testMethodGetSource()
+	{
+		static $expected = array(
+			'protectedStaticFunction' => "protected static function protectedStaticFunction()\n	{\n	}",
+			'protectedFunction' => "protected function protectedFunction()\n	{\n	}",
+			'publicStaticFunction' => "public static function publicStaticFunction()\n	{\n	}"
+		);
+
+		$rfl = $this->getClassReflection('methods')->token;
+		foreach ($expected as $methodName => $source) {
+			$this->assertSame($source, $rfl->getMethod($methodName)->getSource());
+		}
+	}
+
+	public function testConstantGetSource()
+	{
+		static $expected = array(
+			'PARENT' => 'PARENT = \'parent\';',
+			'STRING' => 'STRING = \'string\';',
+			'FLOAT' => 'FLOAT = 1.1;',
+			'BOOLEAN' => 'BOOLEAN = true;'
+		);
+
+		$rfl = $this->getClassReflection('constants')->token;
+		foreach ($expected as $constantName => $source) {
+			$this->assertSame($source, $rfl->getConstantReflection($constantName)->getSource());
+		}
+	}
+
+	public function testClassGetSource()
+	{
+		static $expected = array(
+			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n	public function __construct()\n	{\n	}\n\n	public function __destruct()\n	{\n	}\n\n	public final function publicFinalFunction()\n	{\n	}\n\n	public static function publicStaticFunction()\n	{\n	}\n\n	private static function privateStaticFunction()\n	{\n	}\n\n	public function publicFunction()\n	{\n	}\n\n	private function privateFunction()\n	{\n	}\n}",
+			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n	const STRING = 'string';\n	const INTEGER = 1;\n	const FLOAT = 1.1;\n	const BOOLEAN = true;\n}",
+			'docComment' => "/**\n * TokenReflection_Test_ClassDocComment.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */\nclass TokenReflection_Test_ClassDocComment\n{\n}"
+		);
+
+		foreach ($expected as $className => $source) {
+			$this->assertSame(
+				$source,
+				$this->getClassReflection($className)->token->getSource()
+			);
+		}
+	}
 }

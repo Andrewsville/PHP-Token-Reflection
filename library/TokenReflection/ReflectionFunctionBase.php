@@ -282,7 +282,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 		$type = $tokenStream->getType();
 		if ('{' === $type) {
 			// @todo finding static variables
-			$tokenStream->findMatchingBracket()->next();
+			$tokenStream->findMatchingBracket();
 		} elseif (';' !== $type) {
 			throw new RuntimeException(sprintf('Unexpected token found: %s', $type));
 		}

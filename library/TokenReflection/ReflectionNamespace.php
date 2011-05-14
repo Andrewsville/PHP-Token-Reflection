@@ -333,6 +333,16 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
+	 * Returns the appropriate source code part.
+	 *
+	 * Impossible for namespaces.
+	 */
+	public function getSource()
+	{
+		throw new \RuntimeException('Cannot export source code of a namespace.');
+	}
+
+	/**
 	 * Exports a reflected object.
 	 *
 	 * @param string $argument Reflection object name
