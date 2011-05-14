@@ -15,7 +15,8 @@
 
 namespace TokenReflection;
 
-use SeekableIterator, Countable, ArrayAccess, InvalidArgumentException, RuntimeException;
+use TokenReflection\Exception;
+use SeekableIterator, Countable, ArrayAccess;
 
 /**
  * Token stream iterator.
@@ -120,10 +121,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 * Unsupported.
 	 *
 	 * @param integer $offset Position
+	 * @throws \TokenReflection\Exception\Runtime Unsupported
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new Exception('Removing of tokens from the stream is not supported.', Exception::UNSUPPORTED);
+		throw new Exception\Runtime('Removing of tokens from the stream is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
@@ -144,10 +146,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 *
 	 * @param integer $offset Position
 	 * @param mixed $value Value
+	 * @throws \TokenReflection\Exception\Runtime Unsupported
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new Exception('Setting token values is not supported.', Exception::UNSUPPORTED);
+		throw new Exception\Runtime('Setting token values is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
@@ -238,8 +241,9 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 * Returns the position of the token with the matching bracket.
 	 *
 	 * @return \TokenReflection\Stream
-	 * @throws \InvalidArgumentException If there is no bracket at the given position
-	 * @throws \RuntimeException If the matching bracket could not be found
+	 * @throws \TokenReflection\Exception\Runtime If out of the array
+	 * @throws \TokenReflection\Exception\Runtime If there is no brancket at the current position
+	 * @throws \TokenReflection\Exception\Runtime If the matching bracket could not be found
 	 */
 	public function findMatchingBracket()
 	{
@@ -250,7 +254,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 		);
 
 		if (!$this->valid()) {
-			throw new InvalidArgumentException('Out of array');
+			throw new Exception\Runtime('Out of array.', Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$position = $this->position;
@@ -260,7 +264,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 		if (isset($brackets[$bracket])) {
 			$searching = $brackets[$bracket];
 		} else {
-			throw new InvalidArgumentException(sprintf('There is no usable bracket at position [%d] in file [%s]', $this->key(), $this->filename));
+			throw new Exception\Runtime(sprintf('There is no usable bracket at position "%d" in file "%s".', $position, $this->filename), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$level = 0;
@@ -279,7 +283,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 			$this->position++;
 		}
 
-		throw new RuntimeException(sprintf('Could not find the matching bracket "%s" of the bracket at position [%d] in file [%s]', $searching, $position, $this->filename));
+		throw new Exception\Runtime(sprintf('Could not find the end bracket "%s" of the bracket at position "%d" in file "%s".', $searching, $position, $this->filename), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
