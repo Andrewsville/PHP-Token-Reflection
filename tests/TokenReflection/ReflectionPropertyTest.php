@@ -27,6 +27,55 @@ class ReflectionPropertyTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	public function testCommentTemplate()
+	{
+		static $expected = array(
+			'public1' => array( // Template definition
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => 'Long description.',
+				'var' => array('string')
+			),
+			'public2' => array( // No own docblock -> using template
+				ReflectionAnnotation::LONG_DESCRIPTION => 'Long description.',
+				'var' => array('string')
+			),
+			'public3' => array( // Another template to the stack plus using the previuos template
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Another short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nAnother long description.",
+				'var' => array('array', 'string')
+			),
+			'public4' => array( // Own short description, inheriting the rest from the two templates
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Own short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nAnother long description.",
+				'var' => array('array', 'string')
+			),
+			// Template end -> remove the second template from the stack
+			'public5' => array(
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Another own short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nOwn long description.",
+				'var' => array('integer', 'string')
+			),
+			// Template end -> remove the first template from the stack
+			'public6' => array(
+				// No annotations
+			),
+			'public7' => array(
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Outside of template.',
+				'var' => array('boolean')
+			),
+		);
+
+		$rfl = $this->getClassReflection('docCommentTemplate')->token;
+
+		foreach ($expected as $name => $annotations) {
+			$property = $rfl->getProperty($name);
+			$this->assertEquals($annotations, $property->getAnnotations());
+			if (empty($annotations)) {
+				$this->assertFalse($property->getDocComment());
+			}
+		}
+	}
+
 	public function testAccessible()
 	{
 		$rfl = $this->getClassReflection('accessible');
