@@ -13,24 +13,20 @@
  * @author Jaroslav Hanslík <kukulich@kukulich.cz>
  */
 
-namespace TokenReflection;
-
-use Exception as InternalException;
+namespace TokenReflection\Exception;
+use TokenReflection;
 
 /**
- * Library exception.
+ * Runtime exception.
+ *
+ * Thrown while using reflection objects.
  */
-class Exception extends InternalException
+class Runtime extends TokenReflection\Exception
 {
 	/**#@+
-	 * The requested operation is not supported.
+	 * Token streams are not being stored.
 	 *
 	 * @var integer
 	 */
-	const UNSUPPORTED = 1;
-
-	/**
-	 * The requested object does not exist.
-	 */
-	const DOES_NOT_EXIST = 2;
+	const TOKEN_STREAM_STORING_TURNED_OFF = 13;
 }
