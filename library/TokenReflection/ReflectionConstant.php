@@ -114,9 +114,10 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 * Find the appropriate docblock.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection
 	 * @return \TokenReflection\ReflectionConstant
 	 */
-	protected function parseDocComment(Stream $tokenStream)
+	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
 	{
 		static $skipped = array(T_WHITESPACE, T_COMMENT, T_CONST);
 
@@ -126,9 +127,21 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 		}
 
 		if ($tokenStream->is(T_DOC_COMMENT, $position)) {
-			$this->docComment = $tokenStream->getTokenValue($position);
-		} else {
-			$this->docComment = false;
+			$value = $tokenStream->getTokenValue($position);
+			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
+				$this->docComment = new ReflectionAnnotation($value);
+			}
+
+			$templates = $parent->getDocblockTemplates();
+			if (!empty($templates) && $this->docComment->getDocComment() === $templates[0]->getDocComment()) {
+				$this->docComment->setTemplates(array_slice($templates, 1));
+			} else {
+				$this->docComment->setTemplates($templates);
+			}
+		}
+
+		if (null === $this->docComment) {
+			$this->docComment = $this->docComment = new ReflectionAnnotation();
 		}
 
 		return $this;

@@ -25,6 +25,20 @@ use RuntimeException;
 abstract class ReflectionBase implements IReflection
 {
 	/**
+	 * Docblock template start.
+	 *
+	 * @var string
+	 */
+	const DOCBLOCK_TEMPLATE_START = '/**#@+';
+
+	/**
+	 * Docblock template end.
+	 *
+	 * @var string
+	 */
+	const DOCBLOCK_TEMPLATE_END = '/**#@-*/';
+
+	/**
 	 * Class method cache.
 	 *
 	 * @var array
@@ -55,7 +69,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Docblock definition.
 	 *
-	 * @var string|false
+	 * @var \TokenReflection\ReflectionAnnotation|false
 	 */
 	protected $docComment;
 
@@ -95,6 +109,13 @@ abstract class ReflectionBase implements IReflection
 	private $endPosition;
 
 	/**
+	 * Stack of actual docblock templates.
+	 *
+	 * @var array
+	 */
+	protected $docblockTemplates = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
@@ -111,7 +132,7 @@ abstract class ReflectionBase implements IReflection
 		$this->filename = $tokenStream->getFileName();
 
 		if (!$this instanceof ReflectionParameter) {
-			$this->parseDocComment($tokenStream);
+			$this->parseDocComment($tokenStream, $parent);
 		}
 
 		return $this
@@ -160,20 +181,52 @@ abstract class ReflectionBase implements IReflection
 	 * Find the appropriate docblock.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection
 	 * @return \TokenReflection\ReflectionBase
 	 */
-	protected function parseDocComment(Stream $tokenStream)
+	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
 	{
 		$position = $tokenStream->key();
-		if ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
-			$this->docComment = $tokenStream->getTokenValue($position - 2);
-		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
-			$this->docComment = $tokenStream->getTokenValue($position - 1);
-		} else {
-			$this->docComment = false;
+		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
+			$value = $tokenStream->getTokenValue($position - 1);
+			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
+				$this->docComment = new ReflectionAnnotation($value);
+			}
+		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
+			$value = $tokenStream->getTokenValue($position - 2);
+			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
+				$this->docComment = new ReflectionAnnotation($value);
+			}
+		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
+			$this->docComment = new ReflectionAnnotation($tokenStream->getTokenValue($position - 1));
+		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
+			$this->docComment = new ReflectionAnnotation($tokenStream->getTokenValue($position - 2));
+		}
+
+		if (null === $this->docComment) {
+			$this->docComment = $this->docComment = new ReflectionAnnotation();
+		}
+
+		if ($parent instanceof ReflectionBase) {
+			$templates = $parent->getDocblockTemplates();
+			if (!empty($templates) && $this->docComment->getDocComment() === $templates[0]->getDocComment()) {
+				$this->docComment->setTemplates(array_slice($templates, 1));
+			} else {
+				$this->docComment->setTemplates($templates);
+			}
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Returns the stack of docblock templates.
+	 *
+	 * @return array
+	 */
+	protected function getDocblockTemplates()
+	{
+		return $this->docblockTemplates;
 	}
 
 	/**
@@ -360,7 +413,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	public function getDocComment()
 	{
-		return $this->docComment;
+		return $this->docComment->getDocComment();
 	}
 
 	/**
@@ -416,12 +469,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	final public function getAnnotation($name)
 	{
-		$params = $this->getAnnotations();
-		if (isset($params[$name])) {
-			return $params[$name];
-		}
-
-		return null;
+		return $this->docComment->getAnnotation($name);
 	}
 
 	/**
@@ -432,8 +480,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	final public function hasAnnotation($name)
 	{
-		$params = $this->getAnnotations();
-		return isset($params[$name]);
+		return $this->docComment->hasAnnotation($name);
 	}
 
 	/**
@@ -443,11 +490,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	final public function getAnnotations()
 	{
-		if (null === $this->parsedDocComment) {
-			$this->parsedDocComment = ReflectionAnnotation::parse($this);
-		}
-
-		return $this->parsedDocComment;
+		return $this->docComment->getAnnotations();
 	}
 
 	/**

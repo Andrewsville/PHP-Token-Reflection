@@ -15,6 +15,8 @@
 
 namespace TokenReflection;
 
+use RuntimeException;
+
 /**
  * Docblock parser.
  */
@@ -39,59 +41,193 @@ class ReflectionAnnotation
 	const LONG_DESCRIPTION = ' long_description';
 
 	/**
-	 * Parses reflection object documentation.
+	 * List of applied templates.
 	 *
-	 * @param ReflectionBase $reflection Reflection object
+	 * @var array
+	 */
+	private $templates = array();
+
+	/**
+	 * Parsed annotations.
+	 *
+	 * @var array
+	 */
+	private $annotations;
+
+	/**
+	 * Element docblock.
+	 *
+	 * False if none.
+	 *
+	 * @var string|false
+	 */
+	private $docComment;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param string|false $docComment Docblock definition
+	 */
+	public function __construct($docComment = null)
+	{
+		$this->docComment = $docComment ?: false;
+	}
+
+	/**
+	 * Returns the docblock.
+	 *
+	 * @return string|false
+	 */
+	public function getDocComment()
+	{
+		return $this->docComment;
+	}
+
+	/**
+	 * Returns if the current docblock contains the requrested annotation.
+	 *
+	 * @param string $annotation Annotation name
+	 * @return boolean
+	 */
+	public function hasAnnotation($annotation)
+	{
+		if (null === $this->annotations) {
+			$this->parse();
+		}
+
+		return isset($this->annotations[$annotation]);
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $annotation Annotation name
+	 * @return string|array|null
+	 */
+	public function getAnnotation($annotation)
+	{
+		if (null === $this->annotations) {
+			$this->parse();
+		}
+
+		return isset($this->annotations[$annotation]) ? $this->annotations[$annotation] : null;
+	}
+
+	/**
+	 * Returns all parsed annotations.
+	 *
 	 * @return array
 	 */
-	public static function parse(ReflectionBase $reflection)
+	public function getAnnotations()
 	{
-		static $emptyResult = array();
-
-		$docblock = $reflection->getInheritedDocComment();
-
-		if (false === $docblock) {
-			return $emptyResult;
+		if (null === $this->annotations) {
+			$this->parse();
 		}
 
-		// Parse docblock
-		$result = $emptyResult;
-		$name = self::SHORT_DESCRIPTION;
-		$docblock = trim(preg_replace(array('~^/\\s*\\*\\*~', '~\\*/$~'), '', $docblock));
-		foreach (explode("\n", $docblock) as $line) {
-			$line = preg_replace('~^\\*\\s*~', '', trim($line));
+		return $this->annotations;
+	}
 
-			// End of short description
-			if ('' === $line && self::SHORT_DESCRIPTION === $name) {
-				$name = self::LONG_DESCRIPTION;
-				continue;
+	/**
+	 * Sets Docblock templates.
+	 *
+	 * @param array $templates Docblock templates
+	 * @return \TokenReflection\ReflectionAnnotation
+	 */
+	public function setTemplates(array $templates)
+	{
+		foreach ($templates as $template) {
+			if (!$template instanceof ReflectionAnnotation) {
+				throw new RuntimeException(sprintf(
+					'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
+					is_object($template) ? get_class($template) : gettype($template)
+				));
 			}
+		}
 
-			// @annotation
-			if (preg_match('~^@([\\S]+)\\s*(.*)~', $line, $matches)) {
-				$name = $matches[1];
-				$result[$name][] = $matches[2];
-				continue;
-			}
+		$this->templates = $templates;
+	}
 
-			// Continuation
-			if (self::SHORT_DESCRIPTION === $name || self::LONG_DESCRIPTION === $name) {
-				if (!isset($result[$name])) {
-					$result[$name] = $line;
-				} else {
-					$result[$name] .= "\n" . $line;
+	/**
+	 * Parses reflection object documentation.
+	 */
+	private function parse()
+	{
+		$this->annotations = array();
+
+		if (false !== $this->docComment) {
+			// Parse docblock
+			$name = self::SHORT_DESCRIPTION;
+			$docblock = trim(preg_replace(
+				array(
+					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
+					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
+					'~^/\\*\\*~',
+					'~\\*/$~'
+				),
+				'',
+				$this->docComment
+			));
+			foreach (explode("\n", $docblock) as $line) {
+				$line = preg_replace('~^\\*\\s*~', '', trim($line));
+
+				// End of short description
+				if ('' === $line && self::SHORT_DESCRIPTION === $name) {
+					$name = self::LONG_DESCRIPTION;
+					continue;
 				}
-			} else {
-				$result[$name][count($result[$name]) - 1] .= "\n" . $line;
+
+				// @annotation
+				if (preg_match('~^@([\\S]+)\\s*(.*)~', $line, $matches)) {
+					$name = $matches[1];
+					$this->annotations[$name][] = $matches[2];
+					continue;
+				}
+
+				// Continuation
+				if (self::SHORT_DESCRIPTION === $name || self::LONG_DESCRIPTION === $name) {
+					if (!isset($this->annotations[$name])) {
+						$this->annotations[$name] = $line;
+					} else {
+						$this->annotations[$name] .= "\n" . $line;
+					}
+				} else {
+					$this->annotations[$name][count($this->annotations[$name]) - 1] .= "\n" . $line;
+				}
 			}
+
+			array_walk_recursive($this->annotations, function(&$value) {
+				// {@*} is a placeholder for */ (phpDocumentor compatibility)
+				$value = str_replace('{@*}', '*/', $value);
+				$value = trim($value);
+			});
 		}
 
-		array_walk_recursive($result, function(&$value) {
-			// {@*} is a placeholder for */ (phpDocumentor compatibility)
-			$value = str_replace('{@*}', '*/', $value);
-			$value = trim($value);
-		});
+		$this->mergeTemplates();
+	}
 
-		return $result;
+	/**
+	 * Merges templates with the current docblock.
+	 */
+	private function mergeTemplates()
+	{
+		foreach ($this->templates as $template) {
+			foreach ($template->getAnnotations() as $name => $value) {
+				if ($name === self::LONG_DESCRIPTION) {
+					// Long description
+					if (isset($this->annotations[self::LONG_DESCRIPTION])) {
+						$this->annotations[self::LONG_DESCRIPTION] = $value . "\n" . $this->annotations[self::LONG_DESCRIPTION];
+					} else {
+						$this->annotations[self::LONG_DESCRIPTION] = $value;
+					}
+				} elseif ($name !== self::SHORT_DESCRIPTION) {
+					// Tags; short description is not inherited
+					if (isset($this->annotations[$name])) {
+						$this->annotations[$name] = array_merge($this->annotations[$name], $value);
+					} else {
+						$this->annotations[$name] = $value;
+					}
+				}
+			}
+		}
 	}
 }
