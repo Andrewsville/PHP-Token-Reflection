@@ -14,7 +14,6 @@
  */
 
 namespace TokenReflection;
-use TokenReflection;
 
 use TokenReflection\Broker, ArrayIterator, RecursiveDirectoryIterator, RecursiveIteratorIterator;
 use RuntimeException;
