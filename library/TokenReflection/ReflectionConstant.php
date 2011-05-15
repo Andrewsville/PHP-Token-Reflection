@@ -125,30 +125,16 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 */
 	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
 	{
-		static $skipped = array(T_WHITESPACE, T_COMMENT, T_CONST);
-
 		$position = $tokenStream->key() - 1;
-		while ($position > 0 && in_array($tokenStream->getType($position), $skipped)) {
+		while ($position > 0 && !$tokenStream->is(T_CONST, $position)) {
 			$position--;
 		}
 
-		if ($tokenStream->is(T_DOC_COMMENT, $position)) {
-			$value = $tokenStream->getTokenValue($position);
-			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
-				$this->docComment = new ReflectionAnnotation($value);
-			}
+		$actual = $tokenStream->key();
 
-			$templates = $parent->getDocblockTemplates();
-			if (!empty($templates) && $this->docComment->getDocComment() === $templates[0]->getDocComment()) {
-				$this->docComment->setTemplates(array_slice($templates, 1));
-			} else {
-				$this->docComment->setTemplates($templates);
-			}
-		}
+		parent::parseDocComment($tokenStream->seek($position), $parent);
 
-		if (null === $this->docComment) {
-			$this->docComment = $this->docComment = new ReflectionAnnotation();
-		}
+		$tokenStream->seek($actual);
 
 		return $this;
 	}

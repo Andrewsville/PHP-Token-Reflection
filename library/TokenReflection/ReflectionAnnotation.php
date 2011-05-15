@@ -214,7 +214,11 @@ class ReflectionAnnotation
 	 */
 	private function mergeTemplates()
 	{
-		foreach ($this->templates as $template) {
+		foreach ($this->templates as $index => $template) {
+			if (0 === $index && $template->getDocComment() === $this->docComment) {
+				continue;
+			}
+
 			foreach ($template->getAnnotations() as $name => $value) {
 				if ($name === self::LONG_DESCRIPTION) {
 					// Long description

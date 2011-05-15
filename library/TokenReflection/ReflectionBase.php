@@ -232,12 +232,7 @@ abstract class ReflectionBase implements IReflection
 		}
 
 		if ($parent instanceof ReflectionBase) {
-			$templates = $parent->getDocblockTemplates();
-			if (!empty($templates) && $this->docComment->getDocComment() === $templates[0]->getDocComment()) {
-				$this->docComment->setTemplates(array_slice($templates, 1));
-			} else {
-				$this->docComment->setTemplates($templates);
-			}
+			$this->docComment->setTemplates($parent->getDocblockTemplates());
 		}
 
 		return $this;
