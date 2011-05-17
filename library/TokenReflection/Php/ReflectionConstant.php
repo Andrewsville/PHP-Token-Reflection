@@ -230,7 +230,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? null : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**
@@ -240,7 +240,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 */
 	public function inNamespace()
 	{
-		return null !== $this->getNamespaceName();
+		return '' !== $this->getNamespaceName();
 	}
 
 	/**

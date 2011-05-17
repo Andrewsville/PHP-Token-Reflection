@@ -240,7 +240,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		}
 
 		$parent = $this->getDeclaringClass()->getParentClass();
-		if (null !== $parent && $parent->hasProperty($this->getName())) {
+		if (false !== $parent && $parent->hasProperty($this->getName())) {
 			return $parent->getProperty($this->getName())->getInheritedDocComment();
 		}
 

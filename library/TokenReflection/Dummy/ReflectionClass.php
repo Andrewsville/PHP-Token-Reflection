@@ -165,13 +165,13 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * Returns null - everything is user defined.
+	 * Returns false - everything is user defined.
 	 *
-	 * @return null
+	 * @return false
 	 */
 	public function getExtensionName()
 	{
-		return null;
+		return false;
 	}
 
 	/**
@@ -412,7 +412,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getNamespaceName()
 	{
-		return null;
+		return '';
 	}
 
 	/**

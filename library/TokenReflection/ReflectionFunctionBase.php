@@ -74,7 +74,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 */
 	public function inNamespace()
 	{
-		return null !== $this->getNamespaceName();
+		return '' !== $this->getNamespaceName();
 	}
 
 	/**
@@ -84,7 +84,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? null : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**

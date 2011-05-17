@@ -437,7 +437,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? null : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**
@@ -450,7 +450,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$className = $this->getParentClassName();
 
 		if (null === $className) {
-			return null;
+			return false;
 		}
 
 		return $this->getBroker()->getClass($className);
@@ -464,7 +464,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getParentClasses()
 	{
 		$parent = $this->getParentClass();
-		if (null === $parent) {
+		if (false === $parent) {
 			return array();
 		}
 
@@ -479,7 +479,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getParentClassNameList()
 	{
 		$parent = $this->getParentClass();
-		if (null === $parent) {
+		if (false === $parent) {
 			return array();
 		}
 
@@ -904,7 +904,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$parent = $this->getParentClass();
-		return null === $parent ? false : $parent->isSubclassOf($class);
+		return false === $parent ? false : $parent->isSubclassOf($class);
 	}
 
 	/**

@@ -353,13 +353,13 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * Returns null - everything is user defined.
+	 * Returns false - everything is user defined.
 	 *
-	 * @return null
+	 * @return false
 	 */
 	public function getExtensionName()
 	{
-		return null;
+		return false;
 	}
 
 	/**

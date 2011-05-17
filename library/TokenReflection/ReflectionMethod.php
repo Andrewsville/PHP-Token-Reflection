@@ -148,7 +148,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		$parent = $this->getDeclaringClass()->getParentClass();
-		if (null !== $parent && $parent->hasMethod($this->getName())) {
+		if (false !== $parent && $parent->hasMethod($this->getName())) {
 			return $parent->getMethod($this->getName())->getInheritedDocComment();
 		}
 
@@ -165,7 +165,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		if (!$this->modifiersComplete &&  !($this->modifiers & (self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT))) {
 			$declaringClass = $this->getDeclaringClass();
 			$parentClass = $declaringClass->getParentClass();
-			if (null !== $parentClass) {
+			if (false !== $parentClass) {
 				$parentClassMethods = $parentClass->getMethods();
 				// Access level changed
 				if ($this->modifiers & InternalReflectionMethod::IS_PUBLIC) {

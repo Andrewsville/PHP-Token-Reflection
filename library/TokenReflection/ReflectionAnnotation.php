@@ -270,13 +270,13 @@ class ReflectionAnnotation
 		$parentReflection = null;
 		if ($this->reflection instanceof ReflectionClass) {
 			$parentClass = $this->reflection->getParentClass();
-			if (null !== $parentClass && $parentClass->isTokenized()) {
+			if (false !== $parentClass && $parentClass->isTokenized()) {
 				// Process parent only if tokenized; internal and dummy classes have no docblocks
 				$parentReflection = $parentClass;
 			}
 		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 			$parentClass = $this->reflection->getDeclaringClass()->getParentClass();
-			if (null !== $parentClass && $parentClass->isTokenized()) {
+			if (false !== $parentClass && $parentClass->isTokenized()) {
 				// Process parent only if tokenized;
 				// internal and dummy classes' methods and properties have no docblocks
 				try {

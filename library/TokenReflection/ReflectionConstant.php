@@ -286,7 +286,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? null : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**
@@ -296,7 +296,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 */
 	public function inNamespace()
 	{
-		return null !== $this->getNamespaceName();
+		return '' !== $this->getNamespaceName();
 	}
 
 	/**
