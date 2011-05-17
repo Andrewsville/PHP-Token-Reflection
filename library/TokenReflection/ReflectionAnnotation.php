@@ -64,12 +64,21 @@ class ReflectionAnnotation
 	private $docComment;
 
 	/**
+	 * Parent reflection object.
+	 *
+	 * @var \TokenReflection\ReflectionBase
+	 */
+	private $reflection;
+
+	/**
 	 * Constructor.
 	 *
+	 * @param \TokenReflection\ReflectionBase $reflection Parent reflection object
 	 * @param string|false $docComment Docblock definition
 	 */
-	public function __construct($docComment = null)
+	public function __construct(ReflectionBase $reflection, $docComment = null)
 	{
+		$this->reflection = $reflection;
 		$this->docComment = $docComment ?: false;
 	}
 
@@ -206,7 +215,20 @@ class ReflectionAnnotation
 			});
 		}
 
+		// Merge docblock templates
 		$this->mergeTemplates();
+
+		// Process docblock inheritance if needed
+		$willInherit = false === $this->docComment;
+		if (!$willInherit && isset($this->annotations[self::SHORT_DESCRIPTION])) {
+			$willInherit = false !== strpos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}');
+		}
+		if (!$willInherit && isset($this->annotations[self::LONG_DESCRIPTION])) {
+			$willInherit = false !== strpos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}');
+		}
+		if ($willInherit) {
+			$this->inheritAnnotations();
+		}
 	}
 
 	/**
@@ -235,6 +257,60 @@ class ReflectionAnnotation
 						$this->annotations[$name] = $value;
 					}
 				}
+			}
+		}
+	}
+
+	/**
+	 * Inherits annotations from parent classes/methods/properties if needed.
+	 */
+	private function inheritAnnotations()
+	{
+		// Find the reflection to inherit from
+		$parentReflection = null;
+		if ($this->reflection instanceof ReflectionClass) {
+			$parentClass = $this->reflection->getParentClass();
+			if (null !== $parentClass && $parentClass->isTokenized()) {
+				// Process parent only if tokenized; internal and dummy classes have no docblocks
+				$parentReflection = $parentClass;
+			}
+		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
+			$parentClass = $this->reflection->getDeclaringClass()->getParentClass();
+			if (null !== $parentClass && $parentClass->isTokenized()) {
+				// Process parent only if tokenized;
+				// internal and dummy classes' methods and properties have no docblocks
+				try {
+					if ($this->reflection instanceof ReflectionMethod) {
+						$parentReflection = $parentClass->getMethod($this->reflection->getName());
+					} else {
+						$parentReflection = $parentClass->getProperty($this->reflection->getName());
+					}
+				} catch (Exception\Runtime $e) {
+					// No usable parent reflection object exists
+				}
+			}
+		}
+
+		if (false === $this->docComment) {
+			if (null !== $parentReflection) {
+				// No documentation -> inherit everything
+				$this->annotations = $parentReflection->getAnnotations();
+			}
+		} else {
+			// Place parent short and long descriptions on defined positions
+			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && false !== strpos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
+				$this->annotations[self::SHORT_DESCRIPTION] = str_replace(
+					'{@inheritdoc}',
+					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::SHORT_DESCRIPTION),
+					$this->annotations[self::SHORT_DESCRIPTION]
+				);
+			}
+			if (isset($this->annotations[self::LONG_DESCRIPTION]) && false !== strpos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}')) {
+				$this->annotations[self::LONG_DESCRIPTION] = str_replace(
+					'{@inheritdoc}',
+					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::LONG_DESCRIPTION),
+					$this->annotations[self::LONG_DESCRIPTION]
+				);
 			}
 		}
 	}
