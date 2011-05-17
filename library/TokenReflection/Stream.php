@@ -238,6 +238,26 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	}
 
 	/**
+	 * Finds the position of the token of the given type.
+	 *
+	 * @return \TokenReflection\Stream|false
+	 */
+	public function find($type)
+	{
+		$actual = $this->position;
+		while (isset($this->tokens[$this->position])) {
+			if ($type === $this->types[$this->position]) {
+				return $this;
+			}
+
+			$this->position++;
+		}
+
+		$this->position = $actual;
+		return false;
+	}
+
+	/**
 	 * Returns the position of the token with the matching bracket.
 	 *
 	 * @return \TokenReflection\Stream
