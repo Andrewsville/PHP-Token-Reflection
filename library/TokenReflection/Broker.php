@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -14,10 +14,9 @@
  */
 
 namespace TokenReflection;
-use TokenReflection;
 
-use TokenReflection\Broker, ArrayIterator, RecursiveDirectoryIterator, RecursiveIteratorIterator;
-use RuntimeException;
+use TokenReflection\Broker, TokenReflection\Exception;
+use RecursiveDirectoryIterator, RecursiveIteratorIterator;
 
 /**
  * Reflection broker.
@@ -92,13 +91,14 @@ class Broker
 	 *
 	 * @param string $filename Filename
 	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception If the requested file does not exist
+	 * @throws \TokenReflection\Exception\Parse If the requested file could not be processed
 	 */
 	public function processFile($filename)
 	{
+		try {
 		$realName = realpath($filename);
 		if (false === $realName) {
-			throw new Exception(sprintf('File %s does not exist', $filename), Exception::FILE_DOES_NOT_EXIST);
+				throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
 		}
 
 		if ($this->backend->isFileProcessed($realName)) {
@@ -106,13 +106,13 @@ class Broker
 		} else {
 			$contents = @file_get_contents($filename);
 			if (false === $contents) {
-				throw new Exception('File is not readable', Exception::FILE_NOT_READABLE);
+					throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
 			}
 
-			$tokens = @token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents));
+			$tokens = new Stream(@token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents)), $realName);
 		}
 
-		$reflectionFile = new ReflectionFile($realName, $tokens, $this);
+		$reflectionFile = new ReflectionFile($tokens, $this);
 		if (!$this->backend->isFileProcessed($realName)) {
 			$this->backend->addFile($reflectionFile);
 
@@ -126,6 +126,9 @@ class Broker
 			}
 		}
 		return $reflectionFile;
+		} catch (Exception $e) {
+			throw new Exception\Parse(sprintf('Could not process file %s.', $filename), 0, $e);
+	}
 	}
 
 	/**
@@ -133,13 +136,14 @@ class Broker
 	 *
 	 * @param string $path Directora path
 	 * @return array
-	 * @throws \TokenReflection\Exception If the requested directory does not exist
+	 * @throws \TokenReflection\Exception\Parse If the requested directory could not be processed
 	 */
 	public function processDirectory($path)
 	{
+		try {
 		$realPath = realpath($path);
 		if (false === $realPath) {
-			throw new Exception(sprintf('Directory %s does not exist', $path), Exception::FILE_DOES_NOT_EXIST);
+				throw new Exception\Parse('Directory does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
 		}
 
 		$result = array();
@@ -150,6 +154,9 @@ class Broker
 		}
 
 		return $result;
+		} catch (Exception $e) {
+			throw new Exception\Parse(sprintf('Could not process directory %s.', $path), 0, $e);
+	}
 	}
 
 	/**
@@ -239,15 +246,20 @@ class Broker
 	 * Returns an array of tokens from a processed file.
 	 *
 	 * @param string $fileName File name
-	 * @return array
+	 * @return \TokenReflection\Stream|null
+	 * @throws \TokenReflection\Exception\Runtime If there is no stored token stream for the provided filename
 	 */
 	public function getFileTokens($fileName)
 	{
-		if (!$this->backend->getStoringTokenStreams) {
-			throw new RuntimeException('Token streams storing is turned off.');
-		}
+		try {
+			if (!$this->backend->getStoringTokenStreams()) {
+				throw new Exception\Runtime('Token streams storing is turned off.', Exception\Runtime::TOKEN_STREAM_STORING_TURNED_OFF);
+			}
 
-		return $this->backend->getFileTokens($fileName);
+			return $this->backend->getFileTokens($fileName);
+		} catch (Exception $e) {
+			throw new Exception\Runtime(sprintf('Could not retrieve token stream for file %s.', $fileName), 0, $e);
+		}
 	}
 
 	/**

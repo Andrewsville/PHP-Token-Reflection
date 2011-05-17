@@ -12,14 +12,14 @@ class ReflectionConstantTest extends Test
 	{
 		$token = $this->getConstantTokenReflection('lines');
 
-		$this->assertEquals(5, $token->getStartLine());
-		$this->assertEquals(5, $token->getEndLine());
+		$this->assertSame(5, $token->getStartLine());
+		$this->assertSame(5, $token->getEndLine());
 	}
 
 	public function testComment()
 	{
 		$token = $this->getConstantTokenReflection('docComment');
-		$this->assertEquals("/**\n\t * This is a constant.\n\t */", $token->getDocComment());
+		$this->assertSame("/**\n\t * This is a constant.\n\t */", $token->getDocComment());
 
 		$token = $this->getConstantTokenReflection('noComment');
 		$this->assertFalse($token->getDocComment());
@@ -31,7 +31,7 @@ class ReflectionConstantTest extends Test
 		foreach ($constants as $type => $value) {
 			$test = 'type' . ucfirst($type);
 			$token = $this->getConstantTokenReflection($test);
-			$this->assertEquals($this->getClassInternalReflection($test)->getConstant($this->getConstantName($test)), $token->getValue());
+			$this->assertSame($this->getClassInternalReflection($test)->getConstant($this->getConstantName($test)), $token->getValue());
 			$this->assertSame($value, $token->getValue());
 		}
 	}
@@ -45,8 +45,8 @@ class ReflectionConstantTest extends Test
 		$this->assertSame('constant-in-namespace', $token->getValue());
 
 		$this->assertTrue($token->inNamespace());
-		$this->assertEquals('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE', $token->getName());
-		$this->assertEquals('CONSTANT_IN_NAMESPACE', $token->getShortName());
+		$this->assertSame('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE', $token->getName());
+		$this->assertSame('CONSTANT_IN_NAMESPACE', $token->getShortName());
 
 		$this->assertNull($token->getDeclaringClassName());
 		$this->assertNull($token->getClass());
@@ -55,12 +55,12 @@ class ReflectionConstantTest extends Test
 		$token = $this->getConstantTokenReflection('noNamespace');
 
 		$this->assertFalse($token->inNamespace());
-		$this->assertEquals('NO_NAMESPACE', $token->getName());
-		$this->assertEquals('NO_NAMESPACE', $token->getShortName());
+		$this->assertSame('NO_NAMESPACE', $token->getName());
+		$this->assertSame('NO_NAMESPACE', $token->getShortName());
 
-		$this->assertEquals('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClassName());
-		$this->assertEquals('TokenReflection_Test_ConstantNoNamespace', $token->getClass());
-		$this->assertEquals('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClass()->getName());
+		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClassName());
+		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getClass());
+		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClass()->getName());
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 	}
 }

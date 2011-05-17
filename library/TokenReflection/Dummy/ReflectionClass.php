@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -165,13 +165,13 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * Returns null - everything is user defined.
+	 * Returns false - everything is user defined.
 	 *
-	 * @return null
+	 * @return false
 	 */
 	public function getExtensionName()
 	{
-		return null;
+		return false;
 	}
 
 	/**
@@ -272,11 +272,12 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a constant value.
 	 *
 	 * @param string $name Constant name
-	 * @return mixed|false
+	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstant($name)
 	{
-		throw new Exception(sprintf('Constant "%s" is not defined in class "%s"', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('There is no constant "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -284,11 +285,11 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string $name Constant name
 	 * @return \TokenReflection\ReflectionConstant|null
-	 * @throws \TokenReflection\Exception If the requested constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstantReflection($name)
 	{
-		return array();
+		throw new Exception\Runtime(sprintf('There is no constant "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -376,10 +377,11 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string $name Method name
 	 * @return \TokenReflection\ReflectionMethod
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
 	 */
 	public function getMethod($name)
 	{
-		throw new Exception(sprintf('There is no method %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('There is no method "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -410,7 +412,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getNamespaceName()
 	{
-		return null;
+		return '';
 	}
 
 	/**
@@ -469,10 +471,11 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\ReflectionProperty
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
 	 */
 	public function getProperty($name)
 	{
-		throw new Exception(sprintf('There is no property %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('There is no property "%s" in class "%s".', $name, $this->name), Exception::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -491,10 +494,11 @@ class ReflectionClass implements IReflectionClass
 	 * @param string $name Property name
 	 * @param mixed $default Default value
 	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
 	 */
 	public function getStaticPropertyValue($name, $default = null)
 	{
-		throw new Exception(sprintf('There is no static property %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -620,17 +624,18 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
 	 */
 	public function implementsInterface($interface) {
 		if (is_object($interface)) {
 			if (!$interface instanceof IReflectionClass) {
-				throw new InvalidArgumentException('Parameter must be a string or an instance of class reflection');
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
 			}
 
 			$interfaceName = $interface->getName();
 
 			if (!$interface->isInterface()) {
-				throw new RuntimeException(sprintf('%s is not an interface.', $interfaceName));
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
 			}
 		}
 
@@ -683,11 +688,12 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param object $object Instance
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
 	 */
 	public function isInstance($object)
 	{
 		if (!is_object($object)) {
-			throw new Exception(sprintf('A class instance must be provided (%s set)', gettype($object)));
+			throw new Exception\Runtime(sprintf('Parameter must be a class instance, "%s" provided.', gettype($object)), Exception\Runtime::INVALID_ARGUMENT);
 		}
 
 		return $this->name === get_class($object) || is_subclass_of($object, $this->name);
@@ -892,11 +898,12 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param array $args Array of constructor parameters
 	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the required class does not exist
 	 */
 	public function newInstanceArgs(array $args = array())
 	{
 		if (!class_exists($this->name, true)) {
-			throw new Exception(sprintf('Could not create an instance of class %s; class not found', $this->name));
+			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; class does not exist.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$reflection = new InternalReflectionClass($this->name);
@@ -908,9 +915,10 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
-		throw new Exception(sprintf('There is no static property %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 }

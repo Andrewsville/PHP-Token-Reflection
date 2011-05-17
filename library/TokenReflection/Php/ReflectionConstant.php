@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -16,7 +16,7 @@
 namespace TokenReflection\Php;
 use TokenReflection;
 
-use TokenReflection\Broker, Reflector, TokenReflection\Exception;
+use TokenReflection\Broker, TokenReflection\Exception, Reflector;
 
 /**
  * Reflection of a not tokenized but defined constant.
@@ -230,7 +230,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? null : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**
@@ -240,7 +240,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 */
 	public function inNamespace()
 	{
-		return null !== $this->getNamespaceName();
+		return '' !== $this->getNamespaceName();
 	}
 
 	/**

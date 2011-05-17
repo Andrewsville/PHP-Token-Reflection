@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -15,8 +15,8 @@
 
 namespace TokenReflection;
 
+use TokenReflection\Exception;
 use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty;
-use RuntimeException, InvalidArgumentException;
 
 /**
  * Tokenized class reflection.
@@ -108,11 +108,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
 	 */
 	protected function processParent(IReflection $parent)
 	{
 		if (!$parent instanceof ReflectionFileNamespace) {
-			throw new RuntimeException(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace, %s given.', get_class($parent)));
+			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
 		}
 
 		$this->namespaceName = $parent->getName();
@@ -146,26 +147,42 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		while (true) {
 			switch ($tokenStream->getType()) {
+				case null:
+					break 2;
+				case T_COMMENT:
+				case T_DOC_COMMENT:
+					$docblock = $tokenStream->getTokenValue();
+					if (preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $docblock)) {
+						array_unshift($this->docblockTemplates, new ReflectionAnnotation($this, $docblock));
+					} elseif (self::DOCBLOCK_TEMPLATE_END === $docblock) {
+						array_shift($this->docblockTemplates);
+					}
+					$tokenStream->next();
+					break;
 				case '}':
 					$tokenStream->next();
-					break 2;
-				case null:
 					break 2;
 				case T_PUBLIC:
 				case T_PRIVATE:
 				case T_PROTECTED:
 				case T_STATIC:
+				case T_VAR:
 				case T_VARIABLE:
 					static $searching = array(T_VARIABLE, T_FUNCTION);
 
-					$position = $tokenStream->key();
-					while (null !== ($type = $tokenStream->getType($position++)) && !in_array($type, $searching)) {
-						$position++;
+					if (T_VAR === $tokenStream->getType()) {
+						$tokenStream->skipWhitespaces();
+					} else {
+						$position = $tokenStream->key();
+						while (null !== ($type = $tokenStream->getType($position++)) && !in_array($type, $searching)) {
+							$position++;
+						}
 					}
 
 					if (T_VARIABLE === $type) {
 						$property = new ReflectionProperty($tokenStream, $this->getBroker(), $this);
 						$this->properties[$property->getName()] = $property;
+						$tokenStream->next();
 						break;
 					}
 					// Break missing on purpose
@@ -174,22 +191,22 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				case T_FUNCTION:
 					$method = new ReflectionMethod($tokenStream, $this->getBroker(), $this);
 					$this->methods[$method->getName()] = $method;
+					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces();
 					while ($tokenStream->is(T_STRING)) {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
-						$tokenStream->skipWhitespaces();
+						if ($tokenStream->is(',')) {
+							$tokenStream->skipWhitespaces();
+						} else {
+							$tokenStream->next();
+						}
 					}
 					break;
-				case T_VAR:
-				case T_VARIABLE:
-					$property = new ReflectionProperty($tokenStream, $this->getBroker(), $this);
-					$this->properties[$property->getName()] = $property;
-					break;
 				default:
-					$tokenStream->skipWhitespaces();
+					$tokenStream->next();
 			}
 		}
 
@@ -201,13 +218,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Constant name
 	 * @return mixed|false
+	 * @throws \TokenReflection\Exception\Runtime On error
 	 */
 	public function getConstant($name)
 	{
 		try {
 			return $this->getConstantReflection($name)->getValue();
-		} catch (Exception $e) {
-			if ($e->getCode() === Exception::DOES_NOT_EXIST) {
+		} catch (Exception\Runtime $e) {
+			if ($e->getCode() === Exception\Runtime::DOES_NOT_EXIST) {
 				return false;
 			}
 
@@ -220,7 +238,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Constant name
 	 * @return \TokenReflection\ReflectionConstant|null
-	 * @throws \TokenReflection\Exception If the requested constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstantReflection($name)
 	{
@@ -230,7 +248,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			return $constants[$name];
 		}
 
-		throw new Exception(sprintf('Constant "%s" is not defined in class "%s"', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('There is no constant "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -300,13 +318,19 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getDefaultProperties()
 	{
+		static $accessLevels = array(InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PRIVATE, InternalReflectionProperty::IS_PROTECTED);
+
 		$defaults = array();
-		foreach ($this->getProperties() as $name => $property) {
-			if ($property instanceof ReflectionProperty) {
-				$defaults[$name] = $property->getDefaultValue();
+		$properties = $this->getProperties();
+		foreach (array(true, false) as $static) {
+			foreach ($accessLevels as $level) {
+				foreach ($properties as $name => $property) {
+					if ($property->isStatic() === $static && ($property->getModifiers() & $level)) {
+						$defaults[$name] = $property->getDefaultValue();
+					}
+				}
 			}
 		}
-
 		return $defaults;
 	}
 
@@ -361,12 +385,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Method name
 	 * @return \TokenReflection\ReflectionMethod
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
 	 */
 	public function getMethod($name)
 	{
 		$methods = $this->getMethods();
 		if (!isset($methods[$name])) {
-			throw new Exception(sprintf('There is no method %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('There is no method "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return $methods[$name];
@@ -418,7 +443,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? null : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**
@@ -431,7 +456,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$className = $this->getParentClassName();
 
 		if (null === $className) {
-			return null;
+			return false;
 		}
 
 		return $this->getBroker()->getClass($className);
@@ -445,7 +470,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getParentClasses()
 	{
 		$parent = $this->getParentClass();
-		if (null === $parent) {
+		if (false === $parent) {
 			return array();
 		}
 
@@ -460,7 +485,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getParentClassNameList()
 	{
 		$parent = $this->getParentClass();
-		if (null === $parent) {
+		if (false === $parent) {
 			return array();
 		}
 
@@ -488,7 +513,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$properties = $this->getOwnProperties($filter);
 
 		if (null !== $this->parentClassName) {
-			$properties = array_merge($this->getParentClass()->getProperties($filter), $properties);
+			foreach ($this->getParentClass()->getProperties($filter) as $name => $property) {
+				if (!isset($properties[$name])) {
+					$properties[$name] = $property;
+				}
+			}
 		}
 
 		return $properties;
@@ -499,12 +528,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\ReflectionProperty
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
 	 */
 	public function getProperty($name)
 	{
 		$properties = $this->getProperties();
 		if (!isset($properties[$name])) {
-			throw new Exception(sprintf('There is no property %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('There is no property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return $properties[$name];
@@ -548,12 +578,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param string $name Property name
 	 * @param mixed $default Default value
 	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
 	 */
 	public function getStaticPropertyValue($name, $default = null)
 	{
 		$properties = $this->getProperties(InternalReflectionProperty::IS_STATIC);
 		if (!isset($properties[$name])) {
-			throw new Exception(sprintf('There is no static property %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$property = $properties[$name];
@@ -563,7 +595,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		if (!$property->isPublic() && !$property->isAccessible()) {
-			throw new Exception('Only public or accessible properties can return thier values');
+			throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
 		}
 
 		return $property->getDefaultValue();
@@ -655,7 +687,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function hasConstant($name)
 	{
-		$constants = $this->getConstants();
+		$constants = $this->getConstantReflections();
 		return isset($constants[$name]);
 	}
 
@@ -721,22 +753,23 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
 	 */
 	public function implementsInterface($interface) {
 		if (is_object($interface)) {
 			if ($interface instanceof InternalReflectionClass || $interface instanceof IReflectionClass) {
 				$interfaceName = $interface->getName();
 			} else {
-				throw new InvalidArgumentException('Parameter must be a string or an instance of class reflection');
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
 			}
 
 			if (!$interface->isInterface()) {
-				throw new RuntimeException(sprintf('%s is not an interface.', $interfaceName));
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($interface);
 			if (!$reflection->isInterface()) {
-				throw new RuntimeException(sprintf('%s is not an interface.', $interface));
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interface), Exception\Runtime::INVALID_ARGUMENT);
 			}
 
 			$interfaceName = $interface;
@@ -780,11 +813,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param object $object Instance
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
 	 */
 	public function isInstance($object)
 	{
 		if (!is_object($object)) {
-			throw new Exception(sprintf('A class instance must be provided (%s set)', gettype($object)));
+			throw new Exception\Runtime(sprintf('Parameter must be a class instance, "%s" provided.', gettype($object)), Exception\Runtime::INVALID_ARGUMENT);
 		}
 
 		return $this->name === get_class($object) || is_subclass_of($object, $this->name);
@@ -863,12 +897,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string|object $class Class name or reflection object
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not a reflection class instance
 	 */
 	public function isSubclassOf($class)
 	{
 		if (is_object($class)) {
 			if (!$class instanceof InternalReflectionClass && !$class instanceof IReflectionClass) {
-				throw new InvalidArgumentException('Parameter must be a string or an instance of class reflection');
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($class)), Exception\Runtime::INVALID_ARGUMENT);
 			}
 
 			$class = $class->getName();
@@ -879,7 +914,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$parent = $this->getParentClass();
-		return null === $parent ? false : $parent->isSubclassOf($class);
+		return false === $parent ? false : $parent->isSubclassOf($class);
 	}
 
 	/**
@@ -1029,11 +1064,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param array $args Array of constructor parameters
 	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the required class does not exist
 	 */
 	public function newInstanceArgs(array $args = array())
 	{
 		if (!class_exists($this->name, true)) {
-			throw new Exception(sprintf('Could not create an instance of class %s; class not found', $this->name));
+			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; class does not exist.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$reflection = new InternalReflectionClass($this->name);
@@ -1045,17 +1081,19 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
 		$properties = $this->getProperties(InternalReflectionProperty::IS_STATIC);
 		if (!isset($properties[$name])) {
-			throw new Exception(sprintf('There is no static property %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$reflectionProperty = $properties[$name];
 		if (!$reflectionProperty->isPublic() && !$reflectionProperty->isAccessible()) {
-			throw new Exception(sprintf('Cannot set property value; property %s is not public nor set accessible.', $name));
+			throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
 		}
 
 		$reflectionProperty->setDefaultValue($value);
@@ -1066,31 +1104,36 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\Exception\Parse If class modifiers could not be parsed
 	 */
 	private function parseModifiers(Stream $tokenStream)
 	{
-		while (true) {
-			switch ($tokenStream->getType()) {
-				case null:
-					break 2;
-				case T_ABSTRACT:
-					$this->modifiers = InternalReflectionClass::IS_EXPLICIT_ABSTRACT;
-					break;
-				case T_FINAL:
-					$this->modifiers = InternalReflectionClass::IS_FINAL;
-					break;
-				case T_INTERFACE:
-					$this->modifiers = self::IS_INTERFACE;
-					// break missing on purpose
-				case T_CLASS:
-					$tokenStream->skipWhitespaces();
-					break 2;
+		try {
+			while (true) {
+				switch ($tokenStream->getType()) {
+					case null:
+						break 2;
+					case T_ABSTRACT:
+						$this->modifiers = InternalReflectionClass::IS_EXPLICIT_ABSTRACT;
+						break;
+					case T_FINAL:
+						$this->modifiers = InternalReflectionClass::IS_FINAL;
+						break;
+					case T_INTERFACE:
+						$this->modifiers = self::IS_INTERFACE;
+						// break missing on purpose
+					case T_CLASS:
+						$tokenStream->skipWhitespaces();
+						break 2;
+				}
+
+				$tokenStream->skipWhitespaces();
 			}
 
-			$tokenStream->skipWhitespaces();
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse class modifiers.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-
-		return $this;
 	}
 
 	/**
@@ -1098,22 +1141,27 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_STRING)) {
-			throw new RuntimeException('The class name could not be determined');
+		try {
+			if (!$tokenStream->is(T_STRING)) {
+				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			if ($this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
+				$this->name = $tokenStream->getTokenValue();
+			} else {
+				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
+			}
+
+			$tokenStream->skipWhitespaces();
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse class name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-
-		if ($this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
-			$this->name = $tokenStream->getTokenValue();
-		} else {
-			$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
-		}
-
-		$tokenStream->skipWhitespaces();
-
-		return $this;
 	}
 
 	/**
@@ -1122,6 +1170,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\Exception\Parse If parent class name could not be parsed
 	 */
 	private function parseParent(Stream $tokenStream, ReflectionBase $parent = null)
 	{
@@ -1129,26 +1178,30 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			return $this;
 		}
 
-		$tokenStream->skipWhitespaces();
+		try {
+			$tokenStream->skipWhitespaces();
 
-		$parentClassName = '';
-		while (true) {
-			switch ($tokenStream->getType()) {
-				case T_STRING:
-				case T_NS_SEPARATOR:
-					$parentClassName .= $tokenStream->getTokenValue();
-					break;
-				default:
-					break 2;
+			$parentClassName = '';
+			while (true) {
+				switch ($tokenStream->getType()) {
+					case T_STRING:
+					case T_NS_SEPARATOR:
+						$parentClassName .= $tokenStream->getTokenValue();
+						break;
+					default:
+						break 2;
+				}
+
+				$tokenStream->next();
 			}
+			$tokenStream->skipWhitespaces();
 
-			$tokenStream->next();
+			$this->parentClassName = self::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse parent class name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-		$tokenStream->skipWhitespaces();
-
-		$this->parentClassName = self::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
-
-		return $this;
 	}
 
 	/**
@@ -1167,6 +1220,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\Exception\Parse On error while parsing interfaces
 	 */
 	private function parseInterfaces(Stream $tokenStream, ReflectionBase $parent = null)
 	{
@@ -1174,33 +1228,37 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			return $this;
 		}
 
-		while (true) {
-			$interfaceName = '';
-
-			$tokenStream->skipWhitespaces();
+		try {
 			while (true) {
-				switch ($tokenStream->getType()) {
-					case T_STRING:
-					case T_NS_SEPARATOR:
-						$interfaceName .= $tokenStream->getTokenValue();
-						break;
-					default:
-						break 2;
-				}
+				$interfaceName = '';
 
 				$tokenStream->skipWhitespaces();
+				while (true) {
+					switch ($tokenStream->getType()) {
+						case T_STRING:
+						case T_NS_SEPARATOR:
+							$interfaceName .= $tokenStream->getTokenValue();
+							break;
+						default:
+							break 2;
+					}
+
+					$tokenStream->skipWhitespaces();
+				}
+
+				$this->interfaces[] = self::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
+
+				$type = $tokenStream->getType();
+				if ('{' === $type) {
+					break;
+				} elseif (',' !== $type) {
+					throw new Exception\Parse(sprintf('Invalid token found: "%s", expected "{" or ";".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+				}
 			}
 
-			$this->interfaces[] = self::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
-
-			$type = $tokenStream->getType();
-			if ('{' === $type) {
-				break;
-			} elseif (',' !== $type) {
-				throw new RuntimeException(sprintf('Invalid token found: "%s"', $tokenStream->getTokenName()));
-			}
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse implemented interfaces.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-
-		return $this;
 	}
 }

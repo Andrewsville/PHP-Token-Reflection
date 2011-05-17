@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -15,6 +15,8 @@
 
 namespace TokenReflection;
 
+use TokenReflection\Exception;
+
 /**
  * Docblock parser.
  */
@@ -23,84 +25,293 @@ class ReflectionAnnotation
 	/**
 	 * Main description annotation identifier.
 	 *
+	 * White space at the beginning on purpose.
+	 *
 	 * @var string
 	 */
-	const SHORT_DESCRIPTION = 'short_description';
+	const SHORT_DESCRIPTION = ' short_description';
 
 	/**
 	 * Sub description annotation identifier.
 	 *
+	 * White space at the beginning on purpose.
+	 *
 	 * @var string
 	 */
-	const LONG_DESCRIPTION = 'long_description';
+	const LONG_DESCRIPTION = ' long_description';
+
+	/**
+	 * List of applied templates.
+	 *
+	 * @var array
+	 */
+	private $templates = array();
+
+	/**
+	 * Parsed annotations.
+	 *
+	 * @var array
+	 */
+	private $annotations;
+
+	/**
+	 * Element docblock.
+	 *
+	 * False if none.
+	 *
+	 * @var string|false
+	 */
+	private $docComment;
+
+	/**
+	 * Parent reflection object.
+	 *
+	 * @var \TokenReflection\ReflectionBase
+	 */
+	private $reflection;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param \TokenReflection\ReflectionBase $reflection Parent reflection object
+	 * @param string|false $docComment Docblock definition
+	 */
+	public function __construct(ReflectionBase $reflection, $docComment = null)
+	{
+		$this->reflection = $reflection;
+		$this->docComment = $docComment ?: false;
+	}
+
+	/**
+	 * Returns the docblock.
+	 *
+	 * @return string|false
+	 */
+	public function getDocComment()
+	{
+		return $this->docComment;
+	}
+
+	/**
+	 * Returns if the current docblock contains the requrested annotation.
+	 *
+	 * @param string $annotation Annotation name
+	 * @return boolean
+	 */
+	public function hasAnnotation($annotation)
+	{
+		if (null === $this->annotations) {
+			$this->parse();
+		}
+
+		return isset($this->annotations[$annotation]);
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $annotation Annotation name
+	 * @return string|array|null
+	 */
+	public function getAnnotation($annotation)
+	{
+		if (null === $this->annotations) {
+			$this->parse();
+		}
+
+		return isset($this->annotations[$annotation]) ? $this->annotations[$annotation] : null;
+	}
+
+	/**
+	 * Returns all parsed annotations.
+	 *
+	 * @return array
+	 */
+	public function getAnnotations()
+	{
+		if (null === $this->annotations) {
+			$this->parse();
+		}
+
+		return $this->annotations;
+	}
+
+	/**
+	 * Sets Docblock templates.
+	 *
+	 * @param array $templates Docblock templates
+	 * @return \TokenReflection\ReflectionAnnotation
+	 * @throws \TokenReflection\Exception\Runtime If an invalid annotation template was provided
+	 */
+	public function setTemplates(array $templates)
+	{
+		foreach ($templates as $template) {
+			if (!$template instanceof ReflectionAnnotation) {
+				throw new Exception\Runtime(
+					sprintf(
+						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
+						is_object($template) ? get_class($template) : gettype($template)
+					),
+					Exception\Runtime::INVALID_ARGUMENT
+				);
+			}
+		}
+
+		$this->templates = $templates;
+	}
 
 	/**
 	 * Parses reflection object documentation.
-	 *
-	 * @param ReflectionBase $reflection Reflection object
-	 * @return array
 	 */
-	public static function parse(ReflectionBase $reflection)
+	private function parse()
 	{
-		$docblock = $reflection->getInheritedDocComment();
+		$this->annotations = array();
 
-		if (false === $docblock) {
-			return array();
-		}
+		if (false !== $this->docComment) {
+			// Parse docblock
+			$name = self::SHORT_DESCRIPTION;
+			$docblock = trim(preg_replace(
+				array(
+					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
+					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
+					'~^/\\*\\*~',
+					'~\\*/$~'
+				),
+				'',
+				$this->docComment
+			));
+			foreach (explode("\n", $docblock) as $line) {
+				$line = preg_replace('~^\\*\\s*~', '', trim($line));
 
-		// Preprocess docblock
-		$docblock = trim(preg_replace(array('~^/\s*\*\*~', '~\*/$~'), '', $docblock));
-		$docblock = array_map(function($line) {
-			return preg_replace('~^\\s*\\*\\s*~', '', trim($line), 1);
-		}, explode("\n", $docblock));
-
-		// Parse docblock
-		$result = array();
-		$name = self::SHORT_DESCRIPTION;
-		foreach ($docblock as $line) {
-			if (preg_match('~^@\\s*([\\S]+)\\s*(.*)~', $line, $matches)) {
-				if (!isset($result['PARAMS'])) {
-					$result['PARAMS'] = array();
+				// End of short description
+				if ('' === $line && self::SHORT_DESCRIPTION === $name) {
+					$name = self::LONG_DESCRIPTION;
+					continue;
 				}
 
-				$name = strtolower($matches[1]);
-
-				if (!isset($result['PARAMS'][$name])) {
-					$result['PARAMS'][$name] = array();
-				}
-				$result['PARAMS'][$name][] = $matches[2];
-			} else {
-				if (empty($line)) {
-					if (self::SHORT_DESCRIPTION === $name) {
-						// End of main description
-						$name = self::LONG_DESCRIPTION;
-						continue;
-					} else {
-						$line = "\n";
-					}
+				// @annotation
+				if (preg_match('~^@([\\S]+)\\s*(.*)~', $line, $matches)) {
+					$name = $matches[1];
+					$this->annotations[$name][] = $matches[2];
+					continue;
 				}
 
+				// Continuation
 				if (self::SHORT_DESCRIPTION === $name || self::LONG_DESCRIPTION === $name) {
-					if (!isset($result[$name])) {
-						$result[$name] = $line;
+					if (!isset($this->annotations[$name])) {
+						$this->annotations[$name] = $line;
 					} else {
-						$result[$name] .= "\n" . $line;
+						$this->annotations[$name] .= "\n" . $line;
 					}
 				} else {
-					if (is_array($result['PARAMS'][$name])) {
-						$index = count($result['PARAMS'][$name]) - 1;
-						$result['PARAMS'][$name][$index] .= ' ' . trim($line);
+					$this->annotations[$name][count($this->annotations[$name]) - 1] .= "\n" . $line;
+				}
+			}
+
+			array_walk_recursive($this->annotations, function(&$value) {
+				// {@*} is a placeholder for */ (phpDocumentor compatibility)
+				$value = str_replace('{@*}', '*/', $value);
+				$value = trim($value);
+			});
+		}
+
+		// Merge docblock templates
+		$this->mergeTemplates();
+
+		// Process docblock inheritance if needed
+		$willInherit = false === $this->docComment;
+		if (!$willInherit && isset($this->annotations[self::SHORT_DESCRIPTION])) {
+			$willInherit = false !== strpos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}');
+		}
+		if (!$willInherit && isset($this->annotations[self::LONG_DESCRIPTION])) {
+			$willInherit = false !== strpos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}');
+		}
+		if ($willInherit) {
+			$this->inheritAnnotations();
+		}
+	}
+
+	/**
+	 * Merges templates with the current docblock.
+	 */
+	private function mergeTemplates()
+	{
+		foreach ($this->templates as $index => $template) {
+			if (0 === $index && $template->getDocComment() === $this->docComment) {
+				continue;
+			}
+
+			foreach ($template->getAnnotations() as $name => $value) {
+				if ($name === self::LONG_DESCRIPTION) {
+					// Long description
+					if (isset($this->annotations[self::LONG_DESCRIPTION])) {
+						$this->annotations[self::LONG_DESCRIPTION] = $value . "\n" . $this->annotations[self::LONG_DESCRIPTION];
 					} else {
-						$result['PARAMS'][$name] .= ' ' . trim($line);
+						$this->annotations[self::LONG_DESCRIPTION] = $value;
+					}
+				} elseif ($name !== self::SHORT_DESCRIPTION) {
+					// Tags; short description is not inherited
+					if (isset($this->annotations[$name])) {
+						$this->annotations[$name] = array_merge($this->annotations[$name], $value);
+					} else {
+						$this->annotations[$name] = $value;
 					}
 				}
 			}
 		}
+	}
 
-		array_walk_recursive($result, function(&$value) {
-			$value = trim($value);
-		});
+	/**
+	 * Inherits annotations from parent classes/methods/properties if needed.
+	 */
+	private function inheritAnnotations()
+	{
+		// Find the reflection to inherit from
+		$parentReflection = null;
+		if ($this->reflection instanceof ReflectionClass) {
+			$parentClass = $this->reflection->getParentClass();
+			if (false !== $parentClass && $parentClass->isTokenized()) {
+				// Process parent only if tokenized; internal and dummy classes have no docblocks
+				$parentReflection = $parentClass;
+			}
+		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
+			$parentClass = $this->reflection->getDeclaringClass()->getParentClass();
+			if (false !== $parentClass && $parentClass->isTokenized()) {
+				// Process parent only if tokenized;
+				// internal and dummy classes' methods and properties have no docblocks
+				try {
+					if ($this->reflection instanceof ReflectionMethod) {
+						$parentReflection = $parentClass->getMethod($this->reflection->getName());
+					} else {
+						$parentReflection = $parentClass->getProperty($this->reflection->getName());
+					}
+				} catch (Exception\Runtime $e) {
+					// No usable parent reflection object exists
+				}
+			}
+		}
 
-		return $result;
+		if (false === $this->docComment) {
+			if (null !== $parentReflection) {
+				// No documentation -> inherit everything
+				$this->annotations = $parentReflection->getAnnotations();
+			}
+		} else {
+			// Place parent short and long descriptions on defined positions
+			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && false !== strpos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
+				$this->annotations[self::SHORT_DESCRIPTION] = str_replace(
+					'{@inheritdoc}',
+					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::SHORT_DESCRIPTION),
+					$this->annotations[self::SHORT_DESCRIPTION]
+				);
+			}
+			if (isset($this->annotations[self::LONG_DESCRIPTION]) && false !== strpos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}')) {
+				$this->annotations[self::LONG_DESCRIPTION] = str_replace(
+					'{@inheritdoc}',
+					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::LONG_DESCRIPTION),
+					$this->annotations[self::LONG_DESCRIPTION]
+				);
+			}
+		}
 	}
 }

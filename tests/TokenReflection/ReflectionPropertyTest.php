@@ -12,19 +12,96 @@ class ReflectionPropertyTest extends Test
 	{
 		$token = $this->getPropertyTokenReflection('lines');
 
-		$this->assertEquals(5, $token->getStartLine());
-		$this->assertEquals(5, $token->getEndLine());
+		$this->assertSame(5, $token->getStartLine());
+		$this->assertSame(5, $token->getEndLine());
 	}
 
 	public function testComment()
 	{
 		$rfl = $this->getPropertyReflection('docComment');
-		$this->assertEquals($rfl->internal->getDocComment(), $rfl->token->getDocComment());
-		$this->assertEquals("/**\n\t * This is a property.\n\t */", $rfl->token->getDocComment());
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame("/**\n\t * This is a property.\n\t */", $rfl->token->getDocComment());
 
 		$rfl = $this->getPropertyReflection('noComment');
-		$this->assertEquals($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
+	}
+
+	public function testDocCommentInheritance()
+	{
+		require_once $this->getFilePath('docCommentInheritance');
+		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
+
+		$grandParent = new \stdClass();
+		$grandParent->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyDocCommentInheritanceGrandParent');
+
+		$parent = new \stdClass();
+		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyDocCommentInheritanceParent');
+
+		$rfl = new \stdClass();
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyDocCommentInheritance');
+
+		$this->assertSame($parent->token->getProperty('param1')->getAnnotations(), $rfl->token->getProperty('param1')->getAnnotations());
+		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getProperty('param1')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame('Protected1 long. Private1 long.', $rfl->token->getProperty('param1')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$this->assertSame($parent->token->getProperty('param2')->getAnnotations(), $rfl->token->getProperty('param2')->getAnnotations());
+		$this->assertSame($grandParent->token->getProperty('param2')->getAnnotations(), $rfl->token->getProperty('param2')->getAnnotations());
+
+		$this->assertSame('Public3 Protected3  short.', $rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertNull($rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$this->assertSame(array(), $rfl->token->getProperty('param4')->getAnnotations());
+		$this->assertNull($rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+	}
+
+	public function testCommentTemplate()
+	{
+		static $expected = array(
+			'public1' => array( // Template definition
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => 'Long description.',
+				'var' => array('string')
+			),
+			'public2' => array( // No own docblock -> using template
+				ReflectionAnnotation::LONG_DESCRIPTION => 'Long description.',
+				'var' => array('string')
+			),
+			'public3' => array( // Another template to the stack plus using the previuos template
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Another short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nAnother long description.",
+				'var' => array('array', 'string')
+			),
+			'public4' => array( // Own short description, inheriting the rest from the two templates
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Own short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nAnother long description.",
+				'var' => array('array', 'string')
+			),
+			// Template end -> remove the second template from the stack
+			'public5' => array(
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Another own short description.',
+				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nOwn long description.",
+				'var' => array('integer', 'string')
+			),
+			// Template end -> remove the first template from the stack
+			'public6' => array(
+				// No annotations
+			),
+			'public7' => array(
+				ReflectionAnnotation::SHORT_DESCRIPTION => 'Outside of template.',
+				'var' => array('boolean')
+			),
+		);
+
+		$rfl = $this->getClassReflection('docCommentTemplate')->token;
+
+		foreach ($expected as $name => $annotations) {
+			$property = $rfl->getProperty($name);
+			$this->assertSame($annotations, $property->getAnnotations());
+			if (empty($annotations)) {
+				$this->assertFalse($property->getDocComment());
+			}
+		}
 	}
 
 	public function testAccessible()
@@ -47,34 +124,34 @@ class ReflectionPropertyTest extends Test
 				$this->assertInstanceOf('TokenReflection\Exception', $e);
 			}
 
-			$this->assertEquals($internal->setAccessible(true), $token->setAccessible(true));
+			$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));
 			$this->assertNull($token->setAccessible(true));
 
-			$this->assertEquals($internal->getValue($object), $token->getValue($object));
+			$this->assertSame($internal->getValue($object), $token->getValue($object));
 			$this->assertTrue($token->getValue($object));
 
-			$this->assertEquals($internal->setValue($object, false), $token->setValue($object, false));
+			$this->assertSame($internal->setValue($object, false), $token->setValue($object, false));
 			$this->assertNull($token->setValue($object, false));
 
-			$this->assertEquals($internal->getValue($object), $token->getValue($object));
+			$this->assertSame($internal->getValue($object), $token->getValue($object));
 			$this->assertFalse($token->getValue($object));
 		}
 
 		$internal = $rfl->internal->getProperty('public');
 		$token = $rfl->token->getProperty('public');
 
-		$this->assertEquals($internal->getValue($object), $token->getValue($object));
+		$this->assertSame($internal->getValue($object), $token->getValue($object));
 		$this->assertTrue($token->getValue($object));
 
-		$this->assertEquals($internal->setValue($object, false), $token->setValue($object, false));
+		$this->assertSame($internal->setValue($object, false), $token->setValue($object, false));
 		$this->assertNull($token->setValue($object, false));
 
-		$this->assertEquals($internal->getValue($object), $token->getValue($object));
+		$this->assertSame($internal->getValue($object), $token->getValue($object));
 		$this->assertFalse($token->getValue($object));
 
-		$this->assertEquals($internal->setAccessible(false), $token->setAccessible(false));
+		$this->assertSame($internal->setAccessible(false), $token->setAccessible(false));
 		$this->assertNull($token->setAccessible(false));
-		$this->assertEquals($internal->getValue($object), $token->getValue($object));
+		$this->assertSame($internal->getValue($object), $token->getValue($object));
 	}
 
 	public function testDeclaringClass()
@@ -85,10 +162,10 @@ class ReflectionPropertyTest extends Test
 			$internal = $rfl->internal->getProperty($property);
 			$token = $rfl->token->getProperty($property);
 
-			$this->assertEquals($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
-			$this->assertEquals('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClass()->getName());
-			$this->assertEquals('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClassName());
-			$this->assertEquals('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getClass());
+			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
+			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClass()->getName());
+			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClassName());
+			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getClass());
 			$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}
@@ -99,8 +176,8 @@ class ReflectionPropertyTest extends Test
 
 		$token = $this->getPropertyTokenReflection('default');
 		$this->assertTrue($token->isDefault());
-		$this->assertEquals('default', $token->getDefaultValue());
-		$this->assertEquals("'default'", $token->getDefaultValueDefinition());
+		$this->assertSame('default', $token->getDefaultValue());
+		$this->assertSame("'default'", $token->getDefaultValueDefinition());
 
 		$token = $this->getPropertyTokenReflection('noDefault');
 		$this->assertFalse($token->isDefault());
@@ -121,39 +198,30 @@ class ReflectionPropertyTest extends Test
 			$internal = $rfl->internal->getProperty($name);
 			$token = $rfl->token->getProperty($name);
 
-			$this->assertEquals($internal->$method(), $internal->$method());
+			$this->assertSame($internal->$method(), $internal->$method());
 			$this->assertTrue($token->$method());
-			$this->assertEquals($internal->isStatic(), $internal->isStatic());
+			$this->assertSame($internal->isStatic(), $internal->isStatic());
 			$this->assertFalse($token->isStatic());
-			$this->assertEquals($internal->getModifiers(), $token->getModifiers());
-			$this->assertEquals(constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
+			$this->assertSame($internal->getModifiers(), $token->getModifiers());
+			$this->assertSame(constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
 
 			$internal = $rfl->internal->getProperty($opposite);
 			$token = $rfl->token->getProperty($opposite);
 
-			$this->assertEquals($internal->$method(), $internal->$method());
+			$this->assertSame($internal->$method(), $internal->$method());
 			$this->assertFalse($token->$method());
-			$this->assertEquals($internal->getModifiers(), $token->getModifiers());
+			$this->assertSame($internal->getModifiers(), $token->getModifiers());
 
 			$internal = $rfl->internal->getProperty($staticName);
 			$token = $rfl->token->getProperty($staticName);
 
-			$this->assertEquals($internal->$method(), $internal->$method());
+			$this->assertSame($internal->$method(), $internal->$method());
 			$this->assertTrue($token->$method());
-			$this->assertEquals($internal->isStatic(), $internal->isStatic());
+			$this->assertSame($internal->isStatic(), $internal->isStatic());
 			$this->assertTrue($token->isStatic());
-			$this->assertEquals($internal->getModifiers(), $token->getModifiers());
-			$this->assertEquals(\ReflectionProperty::IS_STATIC | constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
+			$this->assertSame($internal->getModifiers(), $token->getModifiers());
+			$this->assertSame(\ReflectionProperty::IS_STATIC | constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
 		}
-
-		// Shadow
-		$rfl = $this->getPropertyReflection('shadow');
-//		$this->assertEquals($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-
-		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionProperty('TokenReflection_Test_PropertyShadowParent', 'shadow');
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyShadowParent')->getProperty('shadow');
-//		$this->assertEquals($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 	}
 
 	public function testTypes()
@@ -166,7 +234,7 @@ class ReflectionPropertyTest extends Test
 			$className = $this->getClassName($test);
 			$object = new $className();
 
-			$this->assertEquals($rfl->internal->getValue($object), $rfl->token->getValue($object));
+			$this->assertSame($rfl->internal->getValue($object), $rfl->token->getValue($object));
 			$this->assertSame($value, $rfl->token->getValue($object));
 		}
 	}

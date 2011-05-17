@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -24,7 +24,8 @@ interface IReflectionClass extends IReflection
 	 * Returns a constant value.
 	 *
 	 * @param string $name Constant name
-	 * @return mixed|false
+	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstant($name);
 
@@ -33,6 +34,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param string $name Constant name
 	 * @return \TokenReflection\IReflectionConstant
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstantReflection($name);
 
@@ -168,6 +170,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param string $name Method name
 	 * @return \TokenReflection\IReflectionMethod
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
 	 */
 	public function getMethod($name);
 
@@ -250,6 +253,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\ReflectionProperty
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
 	 */
 	public function getProperty($name);
 
@@ -273,6 +277,8 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Property name
 	 * @param mixed $default Default value
 	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
 	 */
 	public function getStaticPropertyValue($name, $default = null);
 
@@ -329,6 +335,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If an invalid object was provided as interface
 	 */
 	public function implementsInterface($interface);
 
@@ -358,6 +365,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param object $object Instance
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
 	 */
 	public function isInstance($object);
 
@@ -465,6 +473,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param array $args Array of constructor parameters
 	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the required class does not exist
 	 */
 	public function newInstanceArgs(array $args = array());
 
@@ -473,6 +482,8 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
 	 */
 	public function setStaticPropertyValue($name, $value);
 }

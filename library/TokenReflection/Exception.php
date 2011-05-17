@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -20,61 +20,17 @@ use Exception as InternalException;
 /**
  * Library exception.
  */
-class Exception extends InternalException
+abstract class Exception extends InternalException
 {
-	/**
-	 * Exception type - the requested operation is not supported.
+	/**#@+
+	 * The requested operation is not supported.
 	 *
 	 * @var integer
 	 */
-	const UNSUPPORTED = -1;
+	const UNSUPPORTED = 1;
 
 	/**
-	 * Exception type - the processed source is invalid.
-	 *
-	 * @var integer
+	 * The requested object does not exist.
 	 */
-	const INVALID_SOURCE = 0;
-
-	/**
-	 * Exception type - the requested file does not exist.
-	 *
-	 * @var integer
-	 */
-	const FILE_DOES_NOT_EXIST = 1;
-
-	/**
-	 * Exception type - the requested file is not readable.
-	 *
-	 * @var integer
-	 */
-	const FILE_NOT_READABLE = 2;
-
-	/**
-	 * Exception type - the requested directory does not exist.
-	 *
-	 * @var integer
-	 */
-	const DIR_DOES_NOT_EXIST = 3;
-
-	/**
-	 * Exception type - no backend was set.
-	 *
-	 * @var integer
-	 */
-	const NO_BACKEND_SET = 5;
-
-	/**
-	 * Exception type - the reflection class could not be unserialized.
-	 *
-	 * @var integer
-	 */
-	const UNSERIALIZATION_ERROR = 10;
-
-	/**
-	 * Exception type - the requested reflection object does not exist.
-	 *
-	 * @var integer
-	 */
-	const DOES_NOT_EXIST = 15;
+	const DOES_NOT_EXIST = 2;
 }

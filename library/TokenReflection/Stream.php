@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -15,7 +15,8 @@
 
 namespace TokenReflection;
 
-use SeekableIterator, Countable, ArrayAccess, InvalidArgumentException, RuntimeException;
+use TokenReflection\Exception;
+use SeekableIterator, Countable, ArrayAccess;
 
 /**
  * Token stream iterator.
@@ -120,10 +121,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 * Unsupported.
 	 *
 	 * @param integer $offset Position
+	 * @throws \TokenReflection\Exception\Runtime Unsupported
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new Exception('Removing of tokens from the stream is not supported.', Exception::UNSUPPORTED);
+		throw new Exception\Runtime('Removing of tokens from the stream is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
@@ -144,10 +146,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 *
 	 * @param integer $offset Position
 	 * @param mixed $value Value
+	 * @throws \TokenReflection\Exception\Runtime Unsupported
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new Exception('Setting token values is not supported.', Exception::UNSUPPORTED);
+		throw new Exception\Runtime('Setting token values is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
@@ -235,11 +238,32 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	}
 
 	/**
+	 * Finds the position of the token of the given type.
+	 *
+	 * @return \TokenReflection\Stream|false
+	 */
+	public function find($type)
+	{
+		$actual = $this->position;
+		while (isset($this->tokens[$this->position])) {
+			if ($type === $this->types[$this->position]) {
+				return $this;
+			}
+
+			$this->position++;
+		}
+
+		$this->position = $actual;
+		return false;
+	}
+
+	/**
 	 * Returns the position of the token with the matching bracket.
 	 *
 	 * @return \TokenReflection\Stream
-	 * @throws \InvalidArgumentException If there is no bracket at the given position
-	 * @throws \RuntimeException If the matching bracket could not be found
+	 * @throws \TokenReflection\Exception\Runtime If out of the array
+	 * @throws \TokenReflection\Exception\Runtime If there is no brancket at the current position
+	 * @throws \TokenReflection\Exception\Runtime If the matching bracket could not be found
 	 */
 	public function findMatchingBracket()
 	{
@@ -250,7 +274,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 		);
 
 		if (!$this->valid()) {
-			throw new InvalidArgumentException('Out of array');
+			throw new Exception\Runtime('Out of array.', Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$position = $this->position;
@@ -260,7 +284,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 		if (isset($brackets[$bracket])) {
 			$searching = $brackets[$bracket];
 		} else {
-			throw new InvalidArgumentException(sprintf('There is no usable bracket at position [%d] in file [%s]', $this->key(), $this->filename));
+			throw new Exception\Runtime(sprintf('There is no usable bracket at position "%d" in file "%s".', $position, $this->filename), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		$level = 0;
@@ -279,7 +303,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 			$this->position++;
 		}
 
-		throw new RuntimeException(sprintf('Could not find the matching bracket "%s" of the bracket at position [%d] in file [%s]', $searching, $position, $this->filename));
+		throw new Exception\Runtime(sprintf('Could not find the end bracket "%s" of the bracket at position "%d" in file "%s".', $searching, $position, $this->filename), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -367,17 +391,28 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 */
 	public function __toString()
 	{
-		return self::tokensToCode($this->contents);
+		return $this->getSource();
 	}
 
 	/**
-	 * Converts a token array or iterator to the appropriate source code.
+	 * Returns the original source code.
 	 *
-	 * @param array $tokens Token array
 	 * @return string
 	 */
-	public static function tokensToCode(array $tokens = array())
+	public function getSource()
 	{
-		return implode('', $tokens);
+		return implode('', $this->contents);
+	}
+
+	/**
+	 * Returns a part of the source code.
+	 *
+	 * @param mixed $start Start offset
+	 * @param mixed $end End offset
+	 * @return string
+	 */
+	public function getSourcePart($start, $end = null)
+	{
+		return implode('', array_slice($this->contents, $start, null !== $end ? $end - $start + 1 : null));
 	}
 }

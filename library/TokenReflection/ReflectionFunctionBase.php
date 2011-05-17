@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0beta1
+ * Version 1.0 beta 2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use RuntimeException;
+use TokenReflection\Exception;
 
 /**
  * Base abstract class for tokenized function and method.
@@ -74,7 +74,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 */
 	public function inNamespace()
 	{
-		return null !== $this->getNamespaceName();
+		return '' !== $this->getNamespaceName();
 	}
 
 	/**
@@ -84,7 +84,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? null : $this->namespaceName;
+		return null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**
@@ -128,6 +128,8 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @param integer|string $parameter Parameter name or position
 	 * @return \TokenReflection\ReflectionParameter
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position
 	 */
 	public function getParameter($parameter)
 	{
@@ -135,7 +137,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 			if (isset($this->parameters[$parameter])) {
 				return $this->parameters[$parameter];
 			} else {
-				throw new Exception(sprintf('There is no parameter at position %d', $parameter), Exception::DOES_NOT_EXIST);
+				throw new Exception\Runtime(sprintf('There is no parameter at position "%d" in function/method "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
 			}
 		} else {
 			foreach ($this->parameters as $reflection) {
@@ -144,7 +146,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 				}
 			}
 
-			throw new Exception(sprintf('There is no parameter %s', $parameter), Exception::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('There is no parameter "%s" in function/method "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
 		}
 	}
 
@@ -207,18 +209,23 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionMethod
+	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_STRING)) {
-			throw new RuntimeException('Could not determine the method/function name');
+		try {
+			if (!$tokenStream->is(T_STRING)) {
+				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			$this->name = $tokenStream->getTokenValue();
+
+			$tokenStream->skipWhitespaces();
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse function/method name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-
-		$this->name = $tokenStream->getTokenValue();
-
-		$tokenStream->skipWhitespaces();
-
-		return $this;
 	}
 
 	/**
@@ -239,36 +246,42 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
+	 * @throws \TokenReflection\Exception\Parse If parameters could not be parsed
+	 *
 	 */
 	final protected function parseParameters(Stream $tokenStream)
 	{
-		if (!$tokenStream->is('(')) {
-			throw new RuntimeException('Could not determine parameters start');
-		}
-
-		static $accepted;
-		if (null === $accepted) {
-			$accepted = array_flip(array(T_NS_SEPARATOR, T_STRING, T_ARRAY, T_VARIABLE, '&'));
-		}
-
-		$tokenStream->skipWhitespaces();
-
-		while (null !== ($type = $tokenStream->getType()) && ')' !== $type) {
-			if (isset($accepted[$type])) {
-				$parameter = new ReflectionParameter($tokenStream, $this->getBroker(), $this);
-				$this->parameters[] = $parameter;
+		try {
+			if (!$tokenStream->is('(')) {
+				throw new Exception\Parse('Could find the start token.', Exception\Parse::PARSE_CHILDREN_ERROR);
 			}
 
-			if ($tokenStream->is(')')) {
-				break;
+			static $accepted;
+			if (null === $accepted) {
+				$accepted = array_flip(array(T_NS_SEPARATOR, T_STRING, T_ARRAY, T_VARIABLE, '&'));
 			}
 
 			$tokenStream->skipWhitespaces();
+
+			while (null !== ($type = $tokenStream->getType()) && ')' !== $type) {
+				if (isset($accepted[$type])) {
+					$parameter = new ReflectionParameter($tokenStream, $this->getBroker(), $this);
+					$this->parameters[] = $parameter;
+				}
+
+				if ($tokenStream->is(')')) {
+					break;
+				}
+
+				$tokenStream->skipWhitespaces();
+			}
+
+			$tokenStream->skipWhitespaces();
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse(sprintf('Could not parse function/method "%s" parameters.', $this->name), Exception\Parse::PARSE_CHILDREN_ERROR, $e);
 		}
-
-		$tokenStream->skipWhitespaces();
-
-		return $this;
 	}
 
 	/**
@@ -276,20 +289,23 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
+	 * @throws \TokenReflection\Exception\Parse If static variables could not be parsed
 	 */
 	final protected function parseStaticVariables(Stream $tokenStream)
 	{
-		$type = $tokenStream->getType();
-		if ('{' === $type) {
-			// @todo finding static variables
-			$tokenStream->findMatchingBracket()->next();
-		} elseif (';' === $type) {
-			$tokenStream->next();
-		} else {
-			throw new RuntimeException(sprintf('Unexpected token found: %s', $type));
-		}
+		try {
+			$type = $tokenStream->getType();
+			if ('{' === $type) {
+				// @todo finding static variables
+				$tokenStream->findMatchingBracket();
+			} elseif (';' !== $type) {
+				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+			}
 
-		return $this;
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse(sprintf('Could not parse function/method "%s" static variables.', $this->name), Exception\Parse::PARSE_CHILDREN_ERROR, $e);
+		}
 	}
 
 	/**
@@ -297,24 +313,29 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
+	 * @throws \TokenReflection\Exception\Parse If could not be determined if the function\method returns its value by reference
 	 */
 	final protected function parseReturnsReference(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_FUNCTION)) {
-			throw new RuntimeException('Could not find the function keyword.');
-		}
+		try {
+			if (!$tokenStream->is(T_FUNCTION)) {
+				throw new Exception\Parse('Could not find the function keyword.', Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
 
-		$tokenStream->skipWhitespaces();
-
-		$type = $tokenStream->getType();
-
-		if ('&' === $type) {
-			$this->returnsReference = true;
 			$tokenStream->skipWhitespaces();
-		} elseif (T_STRING !== $type) {
-			throw new RuntimeException(sprintf('Unexpected token type: %s', $tokenStream->getTokenName()));
-		}
 
-		return $this;
+			$type = $tokenStream->getType();
+
+			if ('&' === $type) {
+				$this->returnsReference = true;
+				$tokenStream->skipWhitespaces();
+			} elseif (T_STRING !== $type) {
+				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			return $this;
+		} catch (Exception\Parse $e) {
+			throw new Exception\Parse('Could not determine if the function\method returns its value by reference.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		}
 	}
 }
