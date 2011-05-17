@@ -62,11 +62,11 @@ class ReflectionClassTest extends Test
 			}
 		}
 
-//		$this->assertSame($rfl->internal->getDefaultProperties(), $rfl->token->getDefaultProperties());
-//		$this->assertSame(array('publicStatic' => true, 'protectedStatic' => 1, 'privateStatic' => 'something', 'public' => false, 'protected' => 0, 'private' => ''), $rfl->token->getDefaultProperties());
+		$this->assertSame($rfl->internal->getDefaultProperties(), $rfl->token->getDefaultProperties());
+		$this->assertSame(array('publicStatic' => true, 'privateStatic' => 'something', 'protectedStatic' => 1, 'public' => false, 'private' => '', 'protected' => 0), $rfl->token->getDefaultProperties());
 
-//		$this->assertSame($rfl->internal->getStaticProperties(), $rfl->token->getStaticProperties());
-//		$this->assertSame(array('publicStatic' => true, 'protectedStatic' => 1, 'privateStatic' => 'something'), $rfl->token->getStaticProperties());
+		$this->assertSame($rfl->internal->getStaticProperties(), $rfl->token->getStaticProperties());
+		$this->assertSame(array('publicStatic' => true, 'privateStatic' => 'something', 'protectedStatic' => 1), $rfl->token->getStaticProperties());
 
 		$properties = array('public', 'publicStatic', 'protectedStatic', 'protectedStatic', 'private', 'privateStatic');
 		foreach ($properties as $property) {
@@ -202,7 +202,7 @@ class ReflectionClassTest extends Test
 		}
 
 		$this->assertSame($rfl->internal->getDefaultProperties(), $rfl->token->getDefaultProperties());
-//		$this->assertSame(array('publicOne' => true, 'publicTwo' => false, 'protectedOne' => 1, 'protectedTwo' => 0, 'privateOne' => 'something', 'privateTwo' => ''), $rfl->token->getDefaultProperties());
+		$this->assertSame(array('protectedOne' => 1, 'protectedTwo' => 0, 'publicOne' => true, 'publicTwo' => false, 'privateOne' => 'something', 'privateTwo' => ''), $rfl->token->getDefaultProperties());
 
 		$this->assertSame($rfl->internal->getStaticProperties(), $rfl->token->getStaticProperties());
 		$this->assertSame(array('protectedOne' => 1, 'protectedTwo' => 0), $rfl->token->getStaticProperties());
@@ -223,21 +223,25 @@ class ReflectionClassTest extends Test
 		$rfl = $this->getClassReflection('publicConstructor');
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertTrue($rfl->token->isInstantiable());
-		// $this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+// Not yet in the internal reflection
+//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
 		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('privateConstructor');
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
-		// $this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+// Not yet in the internal reflection
+//		 $this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
 		$this->assertFalse($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('publicClone');
-		// $this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+// Not yet in the internal reflection
+//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
 		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('privateClone');
-		// $this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+// Not yet in the internal reflection
+//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
 		$this->assertFalse($rfl->token->isCloneable());
 	}
 

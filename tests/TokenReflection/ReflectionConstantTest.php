@@ -54,7 +54,7 @@ class ReflectionConstantTest extends Test
 
 		$token = $this->getConstantTokenReflection('noNamespace');
 
-//		$this->assertFalse($token->inNamespace());
+		$this->assertFalse($token->inNamespace());
 		$this->assertSame('NO_NAMESPACE', $token->getName());
 		$this->assertSame('NO_NAMESPACE', $token->getShortName());
 

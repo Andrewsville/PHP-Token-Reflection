@@ -318,13 +318,19 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getDefaultProperties()
 	{
+		static $accessLevels = array(InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PRIVATE, InternalReflectionProperty::IS_PROTECTED);
+
 		$defaults = array();
-		foreach ($this->getProperties() as $name => $property) {
-			if ($property instanceof ReflectionProperty) {
-				$defaults[$name] = $property->getDefaultValue();
+		$properties = $this->getProperties();
+		foreach (array(true, false) as $static) {
+			foreach ($accessLevels as $level) {
+				foreach ($properties as $name => $property) {
+					if ($property->isStatic() === $static && ($property->getModifiers() & $level)) {
+						$defaults[$name] = $property->getDefaultValue();
+					}
+				}
 			}
 		}
-
 		return $defaults;
 	}
 
@@ -507,7 +513,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$properties = $this->getOwnProperties($filter);
 
 		if (null !== $this->parentClassName) {
-			$properties = array_merge($this->getParentClass()->getProperties($filter), $properties);
+			foreach ($this->getParentClass()->getProperties($filter) as $name => $property) {
+				if (!isset($properties[$name])) {
+					$properties[$name] = $property;
+				}
+			}
 		}
 
 		return $properties;

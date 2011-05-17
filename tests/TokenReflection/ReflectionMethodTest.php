@@ -294,20 +294,20 @@ class ReflectionMethodTest extends Test
 		$rfl->internal = $class->getMethod('inNamespace');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection\Test\MethodInNamespace')->getMethod('inNamespace');
 
-//		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
-//		$this->assertFalse($rfl->token->inNamespace());
-//		$this->assertSame($rfl->internal->getNamespaceName(), $rfl->token->getNamespaceName());
-//		$this->assertSame('', $rfl->token->getNamespaceName());
+		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
+		$this->assertFalse($rfl->token->inNamespace());
+		$this->assertSame($rfl->internal->getNamespaceName(), $rfl->token->getNamespaceName());
+		$this->assertSame('', $rfl->token->getNamespaceName());
 		$this->assertSame($rfl->internal->getName(), $rfl->token->getName());
 		$this->assertSame('inNamespace', $rfl->token->getName());
 		$this->assertSame($rfl->internal->getShortName(), $rfl->token->getShortName());
 		$this->assertSame('inNamespace', $rfl->token->getShortName());
 
 		$rfl = $this->getMethodReflection('noNamespace');
-//		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
-//		$this->assertFalse($rfl->token->inNamespace());
-//		$this->assertSame($rfl->internal->getNamespaceName(), $rfl->token->getNamespaceName());
-//		$this->assertSame('', $rfl->token->getNamespaceName());
+		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
+		$this->assertFalse($rfl->token->inNamespace());
+		$this->assertSame($rfl->internal->getNamespaceName(), $rfl->token->getNamespaceName());
+		$this->assertSame('', $rfl->token->getNamespaceName());
 		$this->assertSame($rfl->internal->getName(), $rfl->token->getName());
 		$this->assertSame($this->getMethodName('noNamespace'), $rfl->token->getName());
 		$this->assertSame($rfl->internal->getShortName(), $rfl->token->getShortName());

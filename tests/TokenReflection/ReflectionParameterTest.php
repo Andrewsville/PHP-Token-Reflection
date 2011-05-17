@@ -85,7 +85,7 @@ class ReflectionParameterTest extends Test
 		$rfl = $this->getParameterReflection('class');
 		$this->assertSame($rfl->internal->getClass()->getName(), $rfl->token->getClass()->getName());
 		$this->assertSame('Exception', $rfl->token->getClass()->getName());
-//		$this->assertSame('Exception', $rfl->token->getClassName());
+		$this->assertSame('Exception', $rfl->token->getClassName());
 		$this->assertInstanceOf('TokenReflection\IReflectionClass', $rfl->token->getClass());
 
 		$rfl = $this->getParameterReflection('noClass');
