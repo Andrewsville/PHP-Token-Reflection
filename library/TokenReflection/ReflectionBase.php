@@ -210,25 +210,25 @@ abstract class ReflectionBase implements IReflection
 		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
 			$value = $tokenStream->getTokenValue($position - 1);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
-				$this->docComment = new ReflectionAnnotation($value);
+				$this->docComment = new ReflectionAnnotation($this, $value);
 				$this->startPosition--;
 			}
 		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
 			$value = $tokenStream->getTokenValue($position - 2);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
-				$this->docComment = new ReflectionAnnotation($value);
+				$this->docComment = new ReflectionAnnotation($this, $value);
 				$this->startPosition -= 2;
 			}
 		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
-			$this->docComment = new ReflectionAnnotation($tokenStream->getTokenValue($position - 1));
+			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 1));
 			$this->startPosition--;
 		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
-			$this->docComment = new ReflectionAnnotation($tokenStream->getTokenValue($position - 2));
+			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 2));
 			$this->startPosition -= 2;
 		}
 
 		if (null === $this->docComment) {
-			$this->docComment = $this->docComment = new ReflectionAnnotation();
+			$this->docComment = $this->docComment = new ReflectionAnnotation($this);
 		}
 
 		if ($parent instanceof ReflectionBase) {

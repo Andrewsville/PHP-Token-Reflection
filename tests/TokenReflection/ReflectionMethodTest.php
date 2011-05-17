@@ -28,6 +28,34 @@ class ReflectionMethodTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	public function testDocCommentInheritance()
+	{
+		require_once $this->getFilePath('docCommentInheritance');
+		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
+
+		$grandParent = new \stdClass();
+		$grandParent->token = $this->getBroker()->getClass('TokenReflection_Test_MethodDocCommentInheritanceGrandParent');
+
+		$parent = new \stdClass();
+		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_MethodDocCommentInheritanceParent');
+
+		$rfl = new \stdClass();
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_MethodDocCommentInheritance');
+
+		$this->assertSame($parent->token->getMethod('method1')->getAnnotations(), $rfl->token->getMethod('method1')->getAnnotations());
+		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getMethod('method1')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame('Protected1 long. Private1 long.', $rfl->token->getMethod('method1')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$this->assertSame($parent->token->getMethod('method2')->getAnnotations(), $rfl->token->getMethod('method2')->getAnnotations());
+		$this->assertSame($grandParent->token->getMethod('method2')->getAnnotations(), $rfl->token->getMethod('method2')->getAnnotations());
+
+		$this->assertSame('Public3 Protected3  short.', $rfl->token->getMethod('method3')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertNull($rfl->token->getMethod('method3')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$this->assertSame(array(), $rfl->token->getMethod('method4')->getAnnotations());
+		$this->assertNull($rfl->token->getMethod('method4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+	}
+
 	public function testStaticVariables()
 	{
 		/**

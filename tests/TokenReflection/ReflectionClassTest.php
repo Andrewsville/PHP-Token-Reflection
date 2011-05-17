@@ -515,6 +515,30 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	public function testDocCommentInheritance()
+	{
+		require_once $this->getFilePath('docCommentInheritance');
+		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
+
+		$parent = new \stdClass();
+		$parent->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
+		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
+		$this->assertSame($parent->internal->getDocComment(), $parent->token->getDocComment());
+
+		$rfl = new \stdClass();
+		$rfl->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame('My Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame('Long description. Phew, that was long.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$rfl = new \stdClass();
+		$rfl->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame($parent->token->getAnnotations(), $rfl->token->getAnnotations());
+	}
+
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');

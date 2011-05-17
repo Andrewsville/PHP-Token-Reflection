@@ -150,7 +150,7 @@ class ReflectionFileNamespace extends ReflectionBase
 				case T_DOC_COMMENT:
 					$docblock = $tokenStream->getTokenValue();
 					if (preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $docblock)) {
-						array_unshift($this->docblockTemplates, new ReflectionAnnotation($docblock));
+						array_unshift($this->docblockTemplates, new ReflectionAnnotation($this, $docblock));
 					} elseif (self::DOCBLOCK_TEMPLATE_END === $docblock) {
 						array_shift($this->docblockTemplates);
 					}
