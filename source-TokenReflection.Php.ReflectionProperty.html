@@ -2,12 +2,14 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.0 beta; http://apigen.org" />	<meta name="robots" content="noindex" />
-
-	<title>PHP Token Reflection | File Php/ReflectionProperty.php</title>
+	<meta name="generator" content="ApiGen 2.0 beta" />
+	<meta name="robots" content="noindex" />
+	<title>File Php/ReflectionProperty.php | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?4162569229"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?4129133156" /></head>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3606076025" />
+
+</head>
 
 <body>
 <div id="main">
@@ -16,27 +18,29 @@
 		<a href="index.html">Overview</a>
 
 		<h3>Packages</h3>
-		<ul>			<li class="all"><a href="index.html#packages">All</a></li>
+		<ul>
+			<li class="all"><a href="index.html#packages">All</a></li>
 			<li class="active"><a href="package-None.html">None</a></li>
-
 		</ul>
 
 		<h3>Namespaces</h3>
-		<ul>			<li class="all"><a href="index.html#namespaces">All</a></li>
+		<ul>
+			<li class="all"><a href="index.html#namespaces">All</a></li>
 			<li><a href="namespace-TokenReflection.html">TokenReflection</a>
 					<ul>
 			<li class="active"><a href="namespace-TokenReflection.Php.html">TokenReflection\Php</a>
 					</li>
-
 						</ul></li>
 		</ul>
 
+		<hr />
+
 		<h3>Classes</h3>
 		<ul>
-			<li class="all"><a href="allclasses.html#classes">All</a></li>			<li class="all"><a href="package-None.html#classes">All in package None</a></li>
+			<li class="all"><a href="allclasses.html#classes">All</a></li>
+			<li class="all"><a href="package-None.html#classes">All in package None</a></li>
 			<li class="all"><a href="namespace-TokenReflection.Php.html#classes">All in namespace TokenReflection\Php</a></li>
 			<li class="active"><a href="TokenReflection.Php.ReflectionProperty.html">ReflectionProperty</a></li>
-
 		</ul>
 
 
@@ -44,6 +48,7 @@
 </div>
 <div id="rightWrapper">
 	<div id="right">
+
 <div id="navigation">
 	<ul>
 		<li><a href="index.html" title="Summary of all packages">Overview</a></li>
@@ -52,7 +57,8 @@
 		<li><a href="TokenReflection.Php.ReflectionProperty.html" title="Summary of TokenReflection\Php\ReflectionProperty">Class</a></li>
 	</ul>
 	<ul>
-		<li><a href="tree.html" title="Tree view of classes, interfaces and exceptions">Tree</a></li>		<li><a href="deprecated.html" title="List of deprecated elements">Deprecated</a></li>
+		<li><a href="tree.html" title="Tree view of classes, interfaces and exceptions">Tree</a></li>
+		<li><a href="deprecated.html" title="List of deprecated elements">Deprecated</a></li>
 	</ul>
 </div>
 
@@ -60,7 +66,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0beta1
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0 beta 2
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -74,8 +80,8 @@
 <a href="#16" id="16" class="l"> 16: </a><span class="php-keyword1">namespace</span> TokenReflection\Php;
 <a href="#17" id="17" class="l"> 17: </a><span class="php-keyword1">use</span> TokenReflection;
 <a href="#18" id="18" class="l"> 18: </a>
-<a href="#19" id="19" class="l"> 19: </a><span class="php-keyword1">use</span> TokenReflection\Broker, Reflector, ReflectionProperty as InternalReflectionProperty;
-<a href="#20" id="20" class="l"> 20: </a><span class="php-keyword1">use</span> RuntimeException;
+<a href="#19" id="19" class="l"> 19: </a><span class="php-keyword1">use</span> TokenReflection\Broker, TokenReflection\Exception;
+<a href="#20" id="20" class="l"> 20: </a><span class="php-keyword1">use</span> Reflector, ReflectionProperty as InternalReflectionProperty;
 <a href="#21" id="21" class="l"> 21: </a>
 <a href="#22" id="22" class="l"> 22: </a><span class="php-comment">/**
 </span><a href="#23" id="23" class="l"> 23: </a><span class="php-comment"> * Reflection of a not tokenized but defined function/method property.
@@ -308,27 +314,28 @@
 </span><a href="#250" id="250" class="l">250: </a><span class="php-comment">     * @param \ReflectionProperty Internal reflection instance
 </span><a href="#251" id="251" class="l">251: </a><span class="php-comment">     * @param \TokenReflection\Broker Reflection broker instance
 </span><a href="#252" id="252" class="l">252: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionProperty
-</span><a href="#253" id="253" class="l">253: </a><span class="php-comment">     */</span>
-<a href="#254" id="254" class="l">254: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
-<a href="#255" id="255" class="l">255: </a>    {
-<a href="#256" id="256" class="l">256: </a>        <span class="php-keyword1">static</span> <span class="php-var">$cache</span> = <span class="php-keyword1">array</span>();
-<a href="#257" id="257" class="l">257: </a>
-<a href="#258" id="258" class="l">258: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionProperty) {
-<a href="#259" id="259" class="l">259: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Invalid reflection instance provided (%s), ReflectionProperty expected.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$internalReflection</span>)));
-<a href="#260" id="260" class="l">260: </a>        }
-<a href="#261" id="261" class="l">261: </a>
-<a href="#262" id="262" class="l">262: </a>        <span class="php-var">$key</span> = <span class="php-var">$internalReflection</span>-&gt;getDeclaringClass()-&gt;getName() . <span class="php-quote">'::'</span> . <span class="php-var">$internalReflection</span>-&gt;getName();
-<a href="#263" id="263" class="l">263: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$cache</span>[<span class="php-var">$key</span>])) {
-<a href="#264" id="264" class="l">264: </a>            <span class="php-var">$cache</span>[<span class="php-var">$key</span>] = <span class="php-keyword1">new</span> self(<span class="php-var">$internalReflection</span>-&gt;getDeclaringClass()-&gt;getName(), <span class="php-var">$internalReflection</span>-&gt;getName(), <span class="php-var">$broker</span>);
-<a href="#265" id="265" class="l">265: </a>        }
-<a href="#266" id="266" class="l">266: </a>
-<a href="#267" id="267" class="l">267: </a>        <span class="php-keyword1">return</span> <span class="php-var">$cache</span>[<span class="php-var">$key</span>];
-<a href="#268" id="268" class="l">268: </a>    }
-<a href="#269" id="269" class="l">269: </a>}
-<a href="#270" id="270" class="l">270: </a></code></pre>
+</span><a href="#253" id="253" class="l">253: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
+</span><a href="#254" id="254" class="l">254: </a><span class="php-comment">     */</span>
+<a href="#255" id="255" class="l">255: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
+<a href="#256" id="256" class="l">256: </a>    {
+<a href="#257" id="257" class="l">257: </a>        <span class="php-keyword1">static</span> <span class="php-var">$cache</span> = <span class="php-keyword1">array</span>();
+<a href="#258" id="258" class="l">258: </a>
+<a href="#259" id="259" class="l">259: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionProperty) {
+<a href="#260" id="260" class="l">260: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Invalid reflection instance provided: &quot;%s&quot;, ReflectionProperty expected.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$internalReflection</span>)), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#261" id="261" class="l">261: </a>        }
+<a href="#262" id="262" class="l">262: </a>
+<a href="#263" id="263" class="l">263: </a>        <span class="php-var">$key</span> = <span class="php-var">$internalReflection</span>-&gt;getDeclaringClass()-&gt;getName() . <span class="php-quote">'::'</span> . <span class="php-var">$internalReflection</span>-&gt;getName();
+<a href="#264" id="264" class="l">264: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$cache</span>[<span class="php-var">$key</span>])) {
+<a href="#265" id="265" class="l">265: </a>            <span class="php-var">$cache</span>[<span class="php-var">$key</span>] = <span class="php-keyword1">new</span> self(<span class="php-var">$internalReflection</span>-&gt;getDeclaringClass()-&gt;getName(), <span class="php-var">$internalReflection</span>-&gt;getName(), <span class="php-var">$broker</span>);
+<a href="#266" id="266" class="l">266: </a>        }
+<a href="#267" id="267" class="l">267: </a>
+<a href="#268" id="268" class="l">268: </a>        <span class="php-keyword1">return</span> <span class="php-var">$cache</span>[<span class="php-var">$key</span>];
+<a href="#269" id="269" class="l">269: </a>    }
+<a href="#270" id="270" class="l">270: </a>}
+<a href="#271" id="271" class="l">271: </a></code></pre>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville" class="gravatar"><img src="http://gravatar.com/avatar/b2acbf0c8af3bdb2a57176d954ff8ba1?s=12" alt="Andrewsville" /></a>&amp;<a href="http://github.com/kukulich" class="gravatar"><img src="http://gravatar.com/avatar/d106644a59a117503d480ec2edf48368?s=12" alt="Kukulich" /></a> <a href="http://github.com/Andrewsville/apigen">ApiGen</a>, a fork of the original <a href="http://github.com/nette/apigen">tool</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>
