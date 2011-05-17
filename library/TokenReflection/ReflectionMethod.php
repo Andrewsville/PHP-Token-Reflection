@@ -100,6 +100,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $accessible = false;
 
 	/**
+	 * Determines if modifiers are complete.
+	 *
+	 * @var boolean
+	 */
+	private $modifiersComplete = false;
+
+	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return \TokenReflection\ReflectionClass
@@ -155,8 +162,9 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	public function getModifiers()
 	{
-		if (!($this->modifiers & (self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT))) {
-			$parentClass = $this->getDeclaringClass()->getParentClass();
+		if (!$this->modifiersComplete &&  !($this->modifiers & (self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT))) {
+			$declaringClass = $this->getDeclaringClass();
+			$parentClass = $declaringClass->getParentClass();
 			if (null !== $parentClass) {
 				$parentClassMethods = $parentClass->getMethods();
 				// Access level changed
@@ -169,6 +177,15 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 				// Implemented abstract
 				if (isset($parentClassMethods[$this->name]) && ($parentClassMethods[$this->name]->getModifiers() & (self::IS_IMPLEMENTED_ABSTRACT | InternalReflectionMethod::IS_ABSTRACT))) {
 					$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+				}
+			}
+
+			// Set if modifiers definition is complete
+			$this->modifiersComplete = true;
+			foreach ($declaringClass->getParentClasses() as $parentClass) {
+				if ($parentClass instanceof Dummy\ReflectionClass) {
+					$this->modifiersComplete = false;
+					break;
 				}
 			}
 		}
