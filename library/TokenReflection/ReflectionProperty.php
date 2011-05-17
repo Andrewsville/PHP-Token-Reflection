@@ -24,16 +24,6 @@ use ReflectionProperty as InternalReflectionProperty, ReflectionClass as Interna
 class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 {
 	/**
-	 * Property redeclares a parent's private property.
-	 *
-	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l146
-	 * ZEND_ACC_SHADOW
-	 *
-	 * @var integer
-	 */
-	const IS_SHADOW = 0x20000;
-
-	/**
 	 * Defines if the default value definitions should be parsed (eval-ed).
 	 *
 	 * @var boolean
@@ -112,16 +102,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 */
 	public function getModifiers()
 	{
-		if (!($this->modifiers & self::IS_SHADOW)) {
-			$parentClass = $this->getDeclaringClass()->getParentClass();
-			if (null !== $parentClass) {
-				$parentClassProperties = $parentClass->getProperties(InternalReflectionProperty::IS_PRIVATE);
-				if (isset($parentClassProperties[$this->name])) {
-					$this->modifiers |= self::IS_SHADOW;
-				}
-			}
-		}
-
 		return $this->modifiers;
 	}
 

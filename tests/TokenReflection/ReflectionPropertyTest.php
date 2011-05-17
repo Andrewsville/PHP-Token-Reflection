@@ -194,15 +194,6 @@ class ReflectionPropertyTest extends Test
 			$this->assertEquals($internal->getModifiers(), $token->getModifiers());
 			$this->assertEquals(\ReflectionProperty::IS_STATIC | constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
 		}
-
-		// Shadow
-		$rfl = $this->getPropertyReflection('shadow');
-//		$this->assertEquals($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-
-		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionProperty('TokenReflection_Test_PropertyShadowParent', 'shadow');
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyShadowParent')->getProperty('shadow');
-//		$this->assertEquals($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 	}
 
 	public function testTypes()
