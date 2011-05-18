@@ -115,10 +115,10 @@ class ReflectionClass implements IReflectionClass
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return ReflectionBase::exists($this, $key);
 	}
-
 
 	/**
 	 * Returns the file name the reflection object is defined in.
@@ -249,7 +249,6 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @param boolean $forceArray Always return values as array
 	 * @return string|array|null
 	 */
 	public function getAnnotation($name)
@@ -272,7 +271,6 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a constant value.
 	 *
 	 * @param string $name Constant name
-	 * @return mixed
 	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstant($name)
@@ -284,7 +282,6 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
-	 * @return \TokenReflection\ReflectionConstant|null
 	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstantReflection($name)
@@ -376,7 +373,6 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a method reflection.
 	 *
 	 * @param string $name Method name
-	 * @return \TokenReflection\ReflectionMethod
 	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
 	 */
 	public function getMethod($name)
@@ -470,7 +466,6 @@ class ReflectionClass implements IReflectionClass
 	 * Return a property reflections.
 	 *
 	 * @param string $name Property name
-	 * @return \TokenReflection\ReflectionProperty
 	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
 	 */
 	public function getProperty($name)
@@ -493,7 +488,6 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @param mixed $default Default value
-	 * @return mixed
 	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
 	 */
 	public function getStaticPropertyValue($name, $default = null)
@@ -626,7 +620,8 @@ class ReflectionClass implements IReflectionClass
 	 * @return boolean
 	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
 	 */
-	public function implementsInterface($interface) {
+	public function implementsInterface($interface)
+	{
 		if (is_object($interface)) {
 			if (!$interface instanceof IReflectionClass) {
 				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
@@ -773,7 +768,7 @@ class ReflectionClass implements IReflectionClass
 	public function getDirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
 				return false;
 			}
@@ -800,7 +795,7 @@ class ReflectionClass implements IReflectionClass
 	public function getIndirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
 				return false;
 			}
@@ -831,7 +826,7 @@ class ReflectionClass implements IReflectionClass
 		}
 
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->implementsInterface($that)) {
 				return false;
 			}
@@ -862,7 +857,7 @@ class ReflectionClass implements IReflectionClass
 		}
 
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->implementsInterface($that)) {
 				return false;
 			}
@@ -884,8 +879,9 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
-	 * Use any number of constructor paramters as function parameters.
+	 * Use any number of constructor parameters as function parameters.
 	 *
+	 * @param mixed $args
 	 * @return object
 	 */
 	public function newInstance($args)

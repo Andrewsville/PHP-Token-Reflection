@@ -197,7 +197,8 @@ class Memory implements Broker\Backend
 	/**
 	 * Returns if the given file was already processed.
 	 *
-	 * @retun boolean
+	 * @param string $fileName File name
+	 * @return boolean
 	 */
 	public function isFileProcessed($fileName)
 	{
@@ -207,6 +208,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
+	 * @param string $fileName File name
 	 * @return \ArrayIterator
 	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed
 	 */
@@ -224,6 +226,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param \TokenReflection\ReflectionFile $file File reflection object
 	 * @param boolean $storeTokenStream Store the token stream
+	 * @return \TokenReflection\Broker\Backend\Memory
 	 */
 	public function addFile(TokenReflection\ReflectionFile $file, $storeTokenStream = true)
 	{
@@ -249,6 +252,7 @@ class Memory implements Broker\Backend
 	 * Sets the reflection broker instance.
 	 *
 	 * @param \TokenReflection\Broker $broker Reflection broker
+	 * @return \TokenReflection\Broker\Backend\Memory
 	 */
 	public function setBroker(Broker $broker)
 	{
@@ -269,7 +273,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Sets if token streams are stored in the backend.
 	 *
-	 * @param boolean $store;
+	 * @param boolean $store
 	 * @return \TokenReflection\Broker\Backend
 	 */
 	public function setStoringTokenStreams($store)

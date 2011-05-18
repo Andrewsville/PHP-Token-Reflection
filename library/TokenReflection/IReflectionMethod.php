@@ -61,6 +61,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * Calls the method on an given instance.
 	 *
 	 * @param object $object Class instance
+	 * @param mixed $args
 	 * @return mixed
 	 */
 	public function invoke($object, $args);

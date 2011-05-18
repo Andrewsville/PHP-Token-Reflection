@@ -238,7 +238,8 @@ class ReflectionFile implements IReflection
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return ReflectionBase::exists($this, $key);
 	}
 }

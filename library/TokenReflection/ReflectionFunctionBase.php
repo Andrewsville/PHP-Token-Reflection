@@ -105,7 +105,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	public function getNumberOfRequiredParameters()
 	{
 		$count = 0;
-		array_walk($this->parameters, function(ReflectionParameter $parameter) use(&$count) {
+		array_walk($this->parameters, function(ReflectionParameter $parameter) use (&$count) {
 			if (!$parameter->isOptional()) {
 				$count++;
 			}
@@ -134,11 +134,10 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	public function getParameter($parameter)
 	{
 		if (is_numeric($parameter)) {
-			if (isset($this->parameters[$parameter])) {
-				return $this->parameters[$parameter];
-			} else {
+			if (!isset($this->parameters[$parameter])) {
 				throw new Exception\Runtime(sprintf('There is no parameter at position "%d" in function/method "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
 			}
+			return $this->parameters[$parameter];
 		} else {
 			foreach ($this->parameters as $reflection) {
 				if ($reflection->getName() === $parameter) {
@@ -232,6 +231,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 * Parses child reflection objects from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
 	 */
 	final protected function parseChildren(Stream $tokenStream, IReflection $parent)

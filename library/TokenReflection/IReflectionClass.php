@@ -464,6 +464,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * Use any number of constructor parameters as function parameters.
 	 *
+	 * @param mixed $args
 	 * @return object
 	 */
 	public function newInstance($args);

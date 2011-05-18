@@ -113,7 +113,8 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
@@ -126,7 +127,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	{
 		if (null === $this->classes) {
 			$broker = $this->broker;
-			$this->classes = array_map(function($className) use($broker) {
+			$this->classes = array_map(function($className) use ($broker) {
 				return $broker->getClass($className);
 			}, $this->getClassNames());
 		}
@@ -155,7 +156,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	{
 		if (null === $this->constants) {
 			$broker = $this->broker;
-			$this->constants = array_map(function($constantName) use($broker) {
+			$this->constants = array_map(function($constantName) use ($broker) {
 				return $broker->getConstant($constantName);
 			}, array_keys($this->getConstants()));
 		}
@@ -196,7 +197,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	{
 		if (null === $this->functions) {
 			$broker = $this->broker;
-			$this->classes = array_map(function($functionName) use($broker) {
+			$this->classes = array_map(function($functionName) use ($broker) {
 				return $broker->getFunction($functionName);
 			}, array_keys(parent::getFunctions()));
 		}
@@ -249,8 +250,8 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionExtension Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \ReflectionClass $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionExtension
 	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */

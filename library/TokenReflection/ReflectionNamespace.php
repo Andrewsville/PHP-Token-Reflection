@@ -342,6 +342,8 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Returns the appropriate source code part.
 	 *
 	 * Impossible for namespaces.
+	 *
+	 * @throws \TokenReflection\Exception\RuntimeException
 	 */
 	public function getSource()
 	{
@@ -377,7 +379,8 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return ReflectionBase::exists($this, $key);
 	}
 }

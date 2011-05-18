@@ -28,8 +28,8 @@ interface IReflection extends TokenReflection\IReflection
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \Reflector Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \Reflector $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\IReflection
 	 */
 	public static function create(Reflector $internalReflection, TokenReflection\Broker $broker);

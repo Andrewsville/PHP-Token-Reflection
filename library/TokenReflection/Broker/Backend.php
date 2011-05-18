@@ -79,6 +79,7 @@ interface Backend
 	/**
 	 * Returns if the given file was already processed.
 	 *
+	 * @param string $fileName File name
 	 * @retun boolean
 	 */
 	public function isFileProcessed($fileName);
@@ -86,6 +87,7 @@ interface Backend
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
+	 * @param string $fileName File name
 	 * @return \ArrayIterator
 	 */
 	public function getFileTokens($fileName);
@@ -116,7 +118,7 @@ interface Backend
 	/**
 	 * Sets if token streams are stored in the backend.
 	 *
-	 * @param boolean $store;
+	 * @param boolean $store
 	 * @return \TokenReflection\Broker\Backend
 	 */
 	public function setStoringTokenStreams($store);

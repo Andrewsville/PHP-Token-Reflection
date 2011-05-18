@@ -108,6 +108,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
 	 */
 	protected function processParent(IReflection $parent)
@@ -141,7 +142,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Parses child reflection objects from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @return \TokenReflection\ReflectionBase
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionClass
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
@@ -207,6 +209,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					break;
 				default:
 					$tokenStream->next();
+					break;
 			}
 		}
 
@@ -375,7 +378,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$broker = $this->getBroker();
-		return array_combine($interfaceNames, array_map(function($interfaceName) use($broker) {
+		return array_combine($interfaceNames, array_map(function($interfaceName) use ($broker) {
 			return $broker->getClass($interfaceName);
 		}, $interfaceNames));
 	}
@@ -406,7 +409,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getMethods($filter = null)
 	{
 		$methods = $this->getOwnMethods($filter);
-
 		if (null !== $this->parentClassName) {
 			$methods = array_merge($this->getParentClass()->getMethods($filter), $methods);
 		}
@@ -454,7 +456,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getParentClass()
 	{
 		$className = $this->getParentClassName();
-
 		if (null === $className) {
 			return false;
 		}
@@ -614,7 +615,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$broker = $this->getBroker();
-		return array_combine($interfaceNames, array_map(function($interfaceName) use($broker) {
+		return array_combine($interfaceNames, array_map(function($interfaceName) use ($broker) {
 			return $broker->getClass($interfaceName);
 		}, $interfaceNames));
 	}
@@ -630,7 +631,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$methods = $this->methods;
 
 		if (null !== $filter) {
-			$methods = array_filter($methods, function(ReflectionMethod $method) use($filter) {
+			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
 				return (bool) ($method->getModifiers() & $filter);
 			});
 		}
@@ -649,7 +650,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$properties = $this->properties;
 
 		if (null !== $filter) {
-			$properties = array_filter($properties, function(ReflectionProperty $property) use($filter) {
+			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
@@ -757,11 +758,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function implementsInterface($interface) {
 		if (is_object($interface)) {
-			if ($interface instanceof InternalReflectionClass || $interface instanceof IReflectionClass) {
-				$interfaceName = $interface->getName();
-			} else {
+			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
 				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
 			}
+
+			$interfaceName = $interface->getName();
 
 			if (!$interface->isInterface()) {
 				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
@@ -925,7 +926,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getDirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
 				return false;
 			}
@@ -952,7 +953,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getIndirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
 				return false;
 			}
@@ -983,7 +984,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
 			if (!$class->implementsInterface($that)) {
 				return false;
 			}
@@ -1014,7 +1015,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
 			if (!$class->implementsInterface($that)) {
 				return false;
 			}
@@ -1052,6 +1053,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * Use any number of constructor paramters as function parameters.
 	 *
+	 * @param mixed $args
 	 * @return object
 	 */
 	public function newInstance($args)
@@ -1125,6 +1127,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					case T_CLASS:
 						$tokenStream->skipWhitespaces();
 						break 2;
+					default:
+						break;
 				}
 
 				$tokenStream->skipWhitespaces();

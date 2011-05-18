@@ -81,7 +81,8 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the property value for a particular class instance.
 	 *
-	 * @return mixed;
+	 * @param object $object
+	 * @return mixed
 	 */
 	public function getValue($object);
 
@@ -142,7 +143,7 @@ interface IReflectionProperty extends IReflection
 	public function setAccessible($accessible);
 
 	/**
-	 * Sets value of a property for a particular class instnace.
+	 * Sets value of a property for a particular class instance.
 	 *
 	 * @param object $object Class instance
 	 * @param mixed $value Poperty value
