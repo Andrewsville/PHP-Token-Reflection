@@ -16,7 +16,7 @@
 namespace TokenReflection\Broker\Backend;
 use TokenReflection;
 
-use TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
+use TokenReflection\Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
 
 /**
  * Memory broker backend.
@@ -212,11 +212,16 @@ class Memory implements Broker\Backend
 	 */
 	public function getFileTokens($fileName)
 	{
-		if (!$this->isFileProcessed($fileName)) {
-			throw new Exception\Runtime(sprintf('The requested file %s was not processed.', $fileName), Exception\Runtime::DOES_NOT_EXIST);
+		if ($this->isFileProcessed($fileName)) {
+			return $this->tokenStreams[$fileName];
 		}
 
-		return $this->tokenStreams[$fileName];
+		$contents = @file_get_contents($fileName);
+		if (false === $contents) {
+			throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
+		}
+
+		return new Stream(@token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents)), $fileName);
 	}
 
 	/**

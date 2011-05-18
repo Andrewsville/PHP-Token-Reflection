@@ -252,10 +252,6 @@ class Broker
 	public function getFileTokens($fileName)
 	{
 		try {
-			if (!$this->backend->getStoringTokenStreams()) {
-				throw new Exception\Runtime('Token streams storing is turned off.', Exception\Runtime::TOKEN_STREAM_STORING_TURNED_OFF);
-			}
-
 			return $this->backend->getFileTokens($fileName);
 		} catch (Exception $e) {
 			throw new Exception\Runtime(sprintf('Could not retrieve token stream for file %s.', $fileName), 0, $e);
