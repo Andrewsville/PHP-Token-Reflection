@@ -246,16 +246,6 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
-	}
-
-	/**
 	 * Returns a reflection of the declaring class.
 	 *
 	 * @return \TokenReflection\ReflectionClass|null

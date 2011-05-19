@@ -28,15 +28,6 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	public function getDeclaringClass();
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * Apigen compatibility.
-	 *
-	 * @return string
-	 */
-	public function getClass();
-
-	/**
 	 * Returns the declaring class name.
 	 *
 	 * @return string

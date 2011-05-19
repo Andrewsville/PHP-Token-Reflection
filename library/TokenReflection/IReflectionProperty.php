@@ -30,15 +30,6 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the name of the declaring class.
 	 *
-	 * Apigen compatibility.
-	 *
-	 * @return string
-	 */
-	public function getClass();
-
-	/**
-	 * Returns the name of the declaring class.
-	 *
 	 * @return string
 	 */
 	public function getDeclaringClassName();
@@ -96,7 +87,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the property default value.
 	 *
-	 * @return mixed;
+	 * @return mixed
 	 */
 	public function getDefaultValue();
 

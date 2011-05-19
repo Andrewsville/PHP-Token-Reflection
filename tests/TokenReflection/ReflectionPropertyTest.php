@@ -165,7 +165,6 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClassName());
-			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getClass());
 			$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}

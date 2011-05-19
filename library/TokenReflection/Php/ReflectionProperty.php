@@ -99,18 +99,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * Apigen compatibility.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
-	}
-
-	/**
 	 * Returns the appropriate docblock definition.
 	 *
 	 * @return string|false

@@ -76,16 +76,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
-	}
-
-	/**
 	 * Returns a reflection of the declaring class.
 	 *
 	 * @return \TokenReflection\ReflectionClass
@@ -118,7 +108,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Returns the property default value.
 	 *
-	 * @return mixed;
+	 * @return mixed
 	 */
 	public function getDefaultValue()
 	{

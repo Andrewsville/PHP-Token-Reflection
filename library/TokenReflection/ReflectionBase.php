@@ -321,7 +321,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns the start position in the file token stream.
 	 *
-	 * @return integer;
+	 * @return integer
 	 */
 	public function getStartPosition()
 	{
