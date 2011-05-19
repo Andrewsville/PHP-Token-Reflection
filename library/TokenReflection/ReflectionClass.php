@@ -344,6 +344,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getInterfaceNames()
 	{
+		if ($this->isInterface()) {
+			return $this->getParentClassNameList();
+		}
+
 		$parentClass = $this->getParentClass();
 
 		$names = $parentClass ? $parentClass->getInterfaceNames() : array();
@@ -985,7 +989,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		$that = $this->name;
 		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
-			if (!$class->implementsInterface($that)) {
+			if ($class->isInterface() || !$class->implementsInterface($that)) {
 				return false;
 			}
 
@@ -1016,7 +1020,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		$that = $this->name;
 		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
-			if (!$class->implementsInterface($that)) {
+			if ($class->isInterface() || !$class->implementsInterface($that)) {
 				return false;
 			}
 
