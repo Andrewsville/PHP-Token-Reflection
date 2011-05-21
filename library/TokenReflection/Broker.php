@@ -273,4 +273,24 @@ class Broker
 	{
 		return $this->backend->getClasses($types);
 	}
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions()
+	{
+		return $this->backend->getFunctions();
+	}
+
+	/**
+	 * Returns all constants from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getConstants()
+	{
+		return $this->backend->getConstants();
+	}
 }

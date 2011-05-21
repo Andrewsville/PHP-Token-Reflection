@@ -40,6 +40,20 @@ class Memory implements Broker\Backend
 	private $allClasses;
 
 	/**
+	 * All tokenized functions cache.
+	 *
+	 * @var array
+	 */
+	private $allFunctions;
+
+	/**
+	 * All tokenized constants cache.
+	 *
+	 * @var array
+	 */
+	private $allConstants;
+
+	/**
 	 * Token streams storage.
 	 *
 	 * @var array
@@ -243,8 +257,10 @@ class Memory implements Broker\Backend
 			$this->tokenStreams[$file->getName()] = $file->getTokenStream();
 		}
 
-		// Reset the all-classes-cache
+		// Reset all-*-cache
 		$this->allClasses = null;
+		$this->allFunctions = null;
+		$this->allConstants = null;
 		return $this;
 	}
 
@@ -344,5 +360,43 @@ class Memory implements Broker\Backend
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions()
+	{
+		if (null === $this->allFunctions) {
+			$this->allFunctions = array();
+			foreach ($this->namespaces as $namespace) {
+				foreach ($namespace->getFunctions() as $function) {
+					$this->allFunctions[$function->getName()] = $function;
+				}
+			}
+		}
+
+		return $this->allFunctions;
+	}
+
+	/**
+	 * Returns all constants from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getConstants()
+	{
+		if (null === $this->allConstants) {
+			$this->allConstants = array();
+			foreach ($this->namespaces as $namespace) {
+				foreach ($namespace->getConstants() as $constant) {
+					$this->allConstants[$constant->getName()] = $constant;
+				}
+			}
+		}
+
+		return $this->allConstants;
 	}
 }
