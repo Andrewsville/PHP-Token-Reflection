@@ -79,7 +79,8 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
@@ -103,7 +104,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		if (null === $this->parameters) {
 			$broker = $this->broker;
 			$parent = $this;
-			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use($broker, $parent) {
+			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
 				return ReflectionParameter::create($parameter, $broker, $parent);
 			}, parent::getParameters());
 		}
@@ -124,11 +125,11 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		$parameters = $this->getParameters();
 
 		if (is_numeric($parameter)) {
-			if (isset($parameters[$parameter])) {
-				return $parameters[$parameter];
-			} else {
+			if (!isset($parameters[$parameter])) {
 				throw new Exception\Runtime(sprintf('There is no parameter at position "%d" in function "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
 			}
+
+			return $parameters[$parameter];
 		} else {
 			foreach ($parameters as $reflection) {
 				if ($reflection->getName() === $parameter) {
@@ -164,7 +165,6 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @param boolean $forceArray Always return values as array
 	 * @return string|array|null
 	 */
 	public function getAnnotation($name)
@@ -196,8 +196,8 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionFunction Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \ReflectionClass $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionFunction
 	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */

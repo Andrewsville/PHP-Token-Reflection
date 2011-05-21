@@ -127,16 +127,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
-	}
-
-	/**
 	 * Returns the docblock definition of the method or its parent.
 	 *
 	 * @return string|false
@@ -197,6 +187,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * Calls the method on an given instance.
 	 *
 	 * @param object $object Class instance
+	 * @param mixed $args
 	 * @return mixed
 	 */
 	public function invoke($object, $args)
@@ -323,11 +314,11 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Sets a method to be accessible or not.
 	 *
-	 * @return boolean
+	 * @param boolean $accessible
 	 */
 	public function setAccessible($accessible)
 	{
-		$this->accessible = $accessible;
+		$this->accessible = (bool) $accessible;
 	}
 
 	/**
@@ -433,6 +424,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 					case T_FUNCTION:
 					case null:
 						break 2;
+					default:
+						break;
 				}
 
 				$tokenStream->skipWhitespaces();

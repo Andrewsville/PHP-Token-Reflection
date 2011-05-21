@@ -73,7 +73,8 @@ class Broker
 	 * @param \TokenReflection\Broker\Backend $backend Broker backend instance
 	 * @param boolean $storingTokenStream Determines if token streams should by stored in backend
 	 */
-	public function __construct(Broker\Backend $backend, $storingTokenStream = true) {
+	public function __construct(Broker\Backend $backend, $storingTokenStream = true)
+	{
 		$this->cache = array(
 			self::CACHE_CLASS => array(),
 			self::CACHE_CONSTANT => array(),
@@ -89,46 +90,46 @@ class Broker
 	/**
 	 * Parses a file a returns the appropriate reflection object.
 	 *
-	 * @param string $filename Filename
+	 * @param string $fileName Filename
 	 * @return \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the requested file could not be processed
 	 */
-	public function processFile($filename)
+	public function processFile($fileName)
 	{
 		try {
-		$realName = realpath($filename);
-		if (false === $realName) {
+			$realName = realpath($fileName);
+			if (false === $realName) {
 				throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
-		}
-
-		if ($this->backend->isFileProcessed($realName)) {
-			$tokens = $this->backend->getFileTokens($realName);
-		} else {
-			$contents = @file_get_contents($filename);
-			if (false === $contents) {
-					throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
 			}
 
-			$tokens = new Stream(@token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents)), $realName);
-		}
+			if ($this->backend->isFileProcessed($realName)) {
+				$tokens = $this->backend->getFileTokens($realName);
+			} else {
+				$contents = @file_get_contents($realName);
+				if (false === $contents) {
+					throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
+				}
 
-		$reflectionFile = new ReflectionFile($tokens, $this);
-		if (!$this->backend->isFileProcessed($realName)) {
-			$this->backend->addFile($reflectionFile);
+				$tokens = new Stream(@token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents)), $realName);
+			}
 
-			// Clear the cache - leave only tokenized reflections
-			foreach ($this->cache as $type => $cached) {
-				if (!empty($cached)) {
-					$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
-						return $reflection->isTokenized();
-					});
+			$reflectionFile = new ReflectionFile($tokens, $this);
+			if (!$this->backend->isFileProcessed($realName)) {
+				$this->backend->addFile($reflectionFile);
+
+				// Clear the cache - leave only tokenized reflections
+				foreach ($this->cache as $type => $cached) {
+					if (!empty($cached)) {
+						$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
+							return $reflection->isTokenized();
+						});
+					}
 				}
 			}
-		}
-		return $reflectionFile;
+			return $reflectionFile;
 		} catch (Exception $e) {
-			throw new Exception\Parse(sprintf('Could not process file %s.', $filename), 0, $e);
-	}
+			throw new Exception\Parse(sprintf('Could not process file %s.', $fileName), 0, $e);
+		}
 	}
 
 	/**
@@ -141,22 +142,22 @@ class Broker
 	public function processDirectory($path)
 	{
 		try {
-		$realPath = realpath($path);
-		if (false === $realPath) {
+			$realPath = realpath($path);
+			if (false === $realPath) {
 				throw new Exception\Parse('Directory does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
-		}
-
-		$result = array();
-		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
-			if ($entry->isFile()) {
-				$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
 			}
-		}
 
-		return $result;
+			$result = array();
+			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
+				if ($entry->isFile()) {
+					$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
+				}
+			}
+
+			return $result;
 		} catch (Exception $e) {
 			throw new Exception\Parse(sprintf('Could not process directory %s.', $path), 0, $e);
-	}
+		}
 	}
 
 	/**
@@ -261,11 +262,31 @@ class Broker
 	/**
 	 * Returns all classes from all namespaces.
 	 *
-	 * @param integer $type Returned class types (multiple values may be OR-ed)
+	 * @param integer $types Returned class types (multiple values may be OR-ed)
 	 * @return array
 	 */
 	public function getClasses($types = Broker\Backend::TOKENIZED_CLASSES)
 	{
 		return $this->backend->getClasses($types);
+	}
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions()
+	{
+		return $this->backend->getFunctions();
+	}
+
+	/**
+	 * Returns all constants from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getConstants()
+	{
+		return $this->backend->getConstants();
 	}
 }

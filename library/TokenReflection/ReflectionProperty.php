@@ -76,16 +76,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
-	}
-
-	/**
 	 * Returns a reflection of the declaring class.
 	 *
 	 * @return \TokenReflection\ReflectionClass
@@ -118,7 +108,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Returns the property default value.
 	 *
-	 * @return mixed;
+	 * @return mixed
 	 */
 	public function getDefaultValue()
 	{
@@ -128,7 +118,8 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Returns the property value for a particular class instance.
 	 *
-	 * @return mixed;
+	 * @param object $object
+	 * @return mixed
 	 * @throws \TokenReflection\Exception\Runtime If it is not possible to return the property value
 	 */
 	public function getValue($object)
@@ -391,7 +382,9 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 					case '{':
 					case '[':
 						$level++;
-
+						break;
+					default:
+						break;
 				}
 
 				$this->defaultValueDefinition .= $tokenStream->getTokenValue();
@@ -406,7 +399,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 			}
 
 			if (self::$parseValueDefinitions) {
-				// Následuje husťárna (a fucking awesomness follows)
+				// A fucking awesomness follows
 				$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
 			}
 

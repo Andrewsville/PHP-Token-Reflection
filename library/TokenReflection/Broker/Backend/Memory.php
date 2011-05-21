@@ -40,6 +40,20 @@ class Memory implements Broker\Backend
 	private $allClasses;
 
 	/**
+	 * All tokenized functions cache.
+	 *
+	 * @var array
+	 */
+	private $allFunctions;
+
+	/**
+	 * All tokenized constants cache.
+	 *
+	 * @var array
+	 */
+	private $allConstants;
+
+	/**
 	 * Token streams storage.
 	 *
 	 * @var array
@@ -197,7 +211,8 @@ class Memory implements Broker\Backend
 	/**
 	 * Returns if the given file was already processed.
 	 *
-	 * @retun boolean
+	 * @param string $fileName File name
+	 * @return boolean
 	 */
 	public function isFileProcessed($fileName)
 	{
@@ -207,6 +222,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
+	 * @param string $fileName File name
 	 * @return \ArrayIterator
 	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed
 	 */
@@ -229,6 +245,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param \TokenReflection\ReflectionFile $file File reflection object
 	 * @param boolean $storeTokenStream Store the token stream
+	 * @return \TokenReflection\Broker\Backend\Memory
 	 */
 	public function addFile(TokenReflection\ReflectionFile $file, $storeTokenStream = true)
 	{
@@ -245,8 +262,10 @@ class Memory implements Broker\Backend
 			$this->tokenStreams[$file->getName()] = $file->getTokenStream();
 		}
 
-		// Reset the all-classes-cache
+		// Reset all-*-cache
 		$this->allClasses = null;
+		$this->allFunctions = null;
+		$this->allConstants = null;
 		return $this;
 	}
 
@@ -254,6 +273,7 @@ class Memory implements Broker\Backend
 	 * Sets the reflection broker instance.
 	 *
 	 * @param \TokenReflection\Broker $broker Reflection broker
+	 * @return \TokenReflection\Broker\Backend\Memory
 	 */
 	public function setBroker(Broker $broker)
 	{
@@ -274,7 +294,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Sets if token streams are stored in the backend.
 	 *
-	 * @param boolean $store;
+	 * @param boolean $store
 	 * @return \TokenReflection\Broker\Backend
 	 */
 	public function setStoringTokenStreams($store)
@@ -345,5 +365,43 @@ class Memory implements Broker\Backend
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions()
+	{
+		if (null === $this->allFunctions) {
+			$this->allFunctions = array();
+			foreach ($this->namespaces as $namespace) {
+				foreach ($namespace->getFunctions() as $function) {
+					$this->allFunctions[$function->getName()] = $function;
+				}
+			}
+		}
+
+		return $this->allFunctions;
+	}
+
+	/**
+	 * Returns all constants from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getConstants()
+	{
+		if (null === $this->allConstants) {
+			$this->allConstants = array();
+			foreach ($this->namespaces as $namespace) {
+				foreach ($namespace->getConstants() as $constant) {
+					$this->allConstants[$constant->getName()] = $constant;
+				}
+			}
+		}
+
+		return $this->allConstants;
 	}
 }

@@ -36,8 +36,8 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Constructor.
 	 *
-	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass Defining class
-	 * @param string $className Property name
+	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass $class Defining class
+	 * @param string $propertyName Property name
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
 	public function __construct($class, $propertyName, Broker $broker)
@@ -73,7 +73,8 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
@@ -95,18 +96,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getDeclaringClassName()
 	{
 		return $this->getDeclaringClass()->getName();
-	}
-
-	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * Apigen compatibility.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
 	}
 
 	/**
@@ -163,7 +152,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @param boolean $forceArray Always return values as array
 	 * @return string|array|null
 	 */
 	public function getAnnotation($name)
@@ -247,8 +235,8 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionProperty Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \ReflectionClass $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionProperty
 	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */

@@ -28,7 +28,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 *
 	 * @var string
 	 */
-	private $filename = 'unknown';
+	private $fileName = 'unknown';
 
 	/**
 	 * Cache of token types.
@@ -71,12 +71,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 * Creates a token substream.
 	 *
 	 * @param array $stream Base stream
-	 * @param string $filename File name
-	 * @return \TokenReflection\Stream
+	 * @param string $fileName File name
 	 */
-	public function __construct(array $stream, $filename)
+	public function __construct(array $stream, $fileName)
 	{
-		$this->filename = $filename;
+		$this->fileName = $fileName;
 
 		static $checkLines;
 		if (null === $checkLines) {
@@ -234,12 +233,13 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 */
 	public function getFileName()
 	{
-		return $this->filename;
+		return $this->fileName;
 	}
 
 	/**
 	 * Finds the position of the token of the given type.
 	 *
+	 * @param integer|string $type Token type
 	 * @return \TokenReflection\Stream|false
 	 */
 	public function find($type)
@@ -281,11 +281,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 
 		$bracket = $this->contents[$this->position];
 
-		if (isset($brackets[$bracket])) {
-			$searching = $brackets[$bracket];
-		} else {
-			throw new Exception\Runtime(sprintf('There is no usable bracket at position "%d" in file "%s".', $position, $this->filename), Exception\Runtime::DOES_NOT_EXIST);
+		if (!isset($brackets[$bracket])) {
+			throw new Exception\Runtime(sprintf('There is no usable bracket at position "%d" in file "%s".', $position, $this->fileName), Exception\Runtime::DOES_NOT_EXIST);
 		}
+
+		$searching = $brackets[$bracket];
 
 		$level = 0;
 		while (isset($this->tokens[$this->position])) {
@@ -303,7 +303,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 			$this->position++;
 		}
 
-		throw new Exception\Runtime(sprintf('Could not find the end bracket "%s" of the bracket at position "%d" in file "%s".', $searching, $position, $this->filename), Exception\Runtime::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('Could not find the end bracket "%s" of the bracket at position "%d" in file "%s".', $searching, $position, $this->fileName), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**

@@ -176,11 +176,11 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 				$tokenStream->next();
 			}
 
-			if (null !== $type && (',' === $value || ';' === $value)) {
-				$this->valueDefinition = trim($this->valueDefinition);
-			} else {
+			if (null === $type || (',' !== $value && ';' !== $value)) {
 				throw new Exception\Parse(sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
+
+			$this->valueDefinition = trim($this->valueDefinition);
 
 			if ($evalValue) {
 				$this->value = eval(sprintf('return %s;', $this->valueDefinition));
@@ -243,16 +243,6 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	public function getDeclaringClassName()
 	{
 		return $this->declaringClassName;
-	}
-
-	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
 	}
 
 	/**

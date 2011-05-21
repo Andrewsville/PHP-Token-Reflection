@@ -43,7 +43,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Constructor.
 	 *
-	 * @param string|array Defining function/method
+	 * @param string|array $function Defining function/method
 	 * @param string $paramName Parameter name
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \ReflectionFunctionAbstract $parent Parent reflection object
@@ -102,7 +102,8 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
@@ -240,8 +241,8 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionParamter Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \ReflectionClass $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionParameter
 	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */

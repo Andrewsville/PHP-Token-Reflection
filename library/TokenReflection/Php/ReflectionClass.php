@@ -121,7 +121,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getParentClasses()
 	{
 		$broker = $this->broker;
-		return array_map(function($className) use($broker) {
+		return array_map(function($className) use ($broker) {
 			return $broker->getClass($className);
 		}, $this->getParentClassNameList());
 	}
@@ -213,7 +213,8 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
@@ -241,6 +242,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	/**
 	 * Returns methods declared by this class, not its parents.
 	 *
+	 * @param integer $filter
 	 * @return array
 	 */
 	public function getOwnMethods($filter = null)
@@ -266,6 +268,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	/**
 	 * Returns properties declared by this class, not its parents.
 	 *
+	 * @param integer $filter
 	 * @return array
 	 */
 	public function getOwnProperties($filter = null)
@@ -320,7 +323,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	{
 		if (null === $this->properties) {
 			$broker = $this->broker;
-			$this->properties = array_map(function(InternalReflectionProperty $property) use($broker) {
+			$this->properties = array_map(function(InternalReflectionProperty $property) use ($broker) {
 				return ReflectionProperty::create($property, $broker);
 			}, parent::getProperties());
 		}
@@ -328,7 +331,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		if (null === $filter) {
 			return $this->properties;
 		} else {
-			return array_filter($this->properties, function(ReflectionProperty $property) use($filter) {
+			return array_filter($this->properties, function(ReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
@@ -344,7 +347,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	{
 		if (null === $this->methods) {
 			$broker = $this->broker;
-			$this->methods = array_map(function(InternalReflectionMethod $method) use($broker) {
+			$this->methods = array_map(function(InternalReflectionMethod $method) use ($broker) {
 				return ReflectionMethod::create($method, $broker);
 			}, parent::getMethods());
 		}
@@ -352,7 +355,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		if (null === $filter) {
 			return $this->methods;
 		} else {
-			return array_filter($this->methods, function(ReflectionMethod $method) use($filter) {
+			return array_filter($this->methods, function(ReflectionMethod $method) use ($filter) {
 				return (bool) ($method->getModifiers() & $filter);
 			});
 		}
@@ -431,7 +434,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	{
 		if (null === $this->interfaces) {
 			$broker = $this->broker;
-			$this->interfaces = array_map(function($interfaceName) use($broker) {
+			$this->interfaces = array_map(function($interfaceName) use ($broker) {
 				return $broker->getClass($interfaceName);
 			}, $this->getInterfaceNames());
 		}
@@ -539,7 +542,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @param boolean $forceArray Always return values as array
 	 * @return string|array|null
 	 */
 	public function getAnnotation($name)
@@ -597,7 +599,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getDirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
 				return false;
 			}
@@ -624,7 +626,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getIndirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
 				return false;
 			}
@@ -655,7 +657,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		}
 
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->implementsInterface($that)) {
 				return false;
 			}
@@ -686,7 +688,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		}
 
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use($that) {
+		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
 			if (!$class->implementsInterface($that)) {
 				return false;
 			}
@@ -708,8 +710,8 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionClass Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \ReflectionClass $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionClass
 	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */

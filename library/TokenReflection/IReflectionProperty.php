@@ -30,15 +30,6 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the name of the declaring class.
 	 *
-	 * Apigen compatibility.
-	 *
-	 * @return string
-	 */
-	public function getClass();
-
-	/**
-	 * Returns the name of the declaring class.
-	 *
 	 * @return string
 	 */
 	public function getDeclaringClassName();
@@ -81,7 +72,8 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the property value for a particular class instance.
 	 *
-	 * @return mixed;
+	 * @param object $object
+	 * @return mixed
 	 */
 	public function getValue($object);
 
@@ -95,7 +87,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the property default value.
 	 *
-	 * @return mixed;
+	 * @return mixed
 	 */
 	public function getDefaultValue();
 
@@ -142,7 +134,7 @@ interface IReflectionProperty extends IReflection
 	public function setAccessible($accessible);
 
 	/**
-	 * Sets value of a property for a particular class instnace.
+	 * Sets value of a property for a particular class instance.
 	 *
 	 * @param object $object Class instance
 	 * @param mixed $value Poperty value

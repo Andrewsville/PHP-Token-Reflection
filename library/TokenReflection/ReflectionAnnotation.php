@@ -158,6 +158,8 @@ class ReflectionAnnotation
 		}
 
 		$this->templates = $templates;
+
+		return $this;
 	}
 
 	/**

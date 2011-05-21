@@ -43,7 +43,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Constructor.
 	 *
-	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass Defining class
+	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass $class Defining class
 	 * @param string $methodName Method name
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
@@ -80,7 +80,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
@@ -94,7 +95,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		if (null === $this->parameters) {
 			$broker = $this->broker;
 			$parent = $this;
-			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use($broker, $parent) {
+			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
 				return ReflectionParameter::create($parameter, $broker, $parent);
 			}, parent::getParameters());
 		}
@@ -134,11 +135,11 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		$parameters = $this->getParameters();
 
 		if (is_numeric($parameter)) {
-			if (isset($parameters[$parameter])) {
-				return $parameters[$parameter];
-			} else {
+			if (!isset($parameters[$parameter])) {
 				throw new Exception\Runtime(sprintf('There is no parameter at position "%d" in method "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
 			}
+
+			return $parameters[$parameter];
 		} else {
 			foreach ($parameters as $reflection) {
 				if ($reflection->getName() === $parameter) {
@@ -171,16 +172,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
-	 */
-	public function getClass()
-	{
-		return $this->getDeclaringClassName();
-	}
-
-	/**
 	 * Returns parsed docblock.
 	 *
 	 * @return array
@@ -194,7 +185,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @param boolean $forceArray Always return values as array
 	 * @return string|array|null
 	 */
 	public function getAnnotation($name)
@@ -236,8 +226,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionMethod Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \ReflectionClass $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\IReflection
 	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 	 */

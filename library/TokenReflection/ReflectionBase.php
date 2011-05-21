@@ -92,7 +92,7 @@ abstract class ReflectionBase implements IReflection
 	 *
 	 * @var string
 	 */
-	private $filename;
+	private $fileName;
 
 	/**
 	 * Start position in the file token stream.
@@ -131,7 +131,7 @@ abstract class ReflectionBase implements IReflection
 		}
 
 		$this->broker = $broker;
-		$this->filename = $tokenStream->getFileName();
+		$this->fileName = $tokenStream->getFileName();
 
 		try {
 			$this
@@ -156,7 +156,7 @@ abstract class ReflectionBase implements IReflection
 			throw new Exception\Parse(sprintf('Could not parse %s %s child elements.', get_class($this), $this->getName()), Exception\Parse::PARSE_CHILDREN_ERROR, $e);
 		}
 
-		return $this->parseEndLine($tokenStream);
+		$this->parseEndLine($tokenStream);
 	}
 
 	/**
@@ -167,7 +167,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	protected function processParent(IReflection $parent)
 	{
-		// to be defined in child classes
+		// To be defined in child classes
 		return $this;
 	}
 
@@ -180,7 +180,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
-		// to be defined in child classes
+		// To be defined in child classes
 		return $this;
 	}
 
@@ -283,7 +283,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Parses the reflection object name.
 	 *
-	 * @param \TokenReflection\Stream Token substream
+	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionBase
 	 */
 	abstract protected function parseName(Stream $tokenStream);
@@ -295,7 +295,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	public function getFileName()
 	{
-		return $this->filename;
+		return $this->fileName;
 	}
 
 	/**
@@ -321,7 +321,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns the start position in the file token stream.
 	 *
-	 * @return integer;
+	 * @return integer
 	 */
 	public function getStartPosition()
 	{
@@ -520,7 +520,8 @@ abstract class ReflectionBase implements IReflection
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return self::exists($this, $key);
 	}
 
@@ -534,6 +535,7 @@ abstract class ReflectionBase implements IReflection
 	public static function export($argument, $return = false)
 	{
 		// @todo
+		return '';
 	}
 
 	/**
@@ -571,7 +573,8 @@ abstract class ReflectionBase implements IReflection
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public static function exists(IReflection $object, $key) {
+	final public static function exists(IReflection $object, $key)
+	{
 		try {
 			self::get($object, $key);
 			return true;

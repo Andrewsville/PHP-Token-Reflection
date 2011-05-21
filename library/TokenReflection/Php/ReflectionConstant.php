@@ -162,7 +162,8 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key) {
+	final public function __isset($key)
+	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
@@ -180,7 +181,6 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @param boolean $forceArray Always return values as array
 	 * @return string|array|null
 	 */
 	public function getAnnotation($name)
@@ -343,8 +343,8 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 *
 	 * Not supported for constants since there is no internal constant reflection.
 	 *
-	 * @param \Reflector Internal reflection instance
-	 * @param \TokenReflection\Broker Reflection broker instance
+	 * @param \ReflectionClass $internalReflection Internal reflection instance
+	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return null
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)

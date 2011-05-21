@@ -141,7 +141,6 @@ class ReflectionMethodTest extends Test
 			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_MethodDeclaringClass' .  $class, $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_MethodDeclaringClass' .  $class, $token->getDeclaringClassName());
-			$this->assertSame('TokenReflection_Test_MethodDeclaringClass' .  $class, $token->getClass());
 			$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}

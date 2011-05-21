@@ -197,13 +197,13 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	public function getDeclaringFunction()
 	{
 		if (null !== $this->declaringClassName) {
-			// method parameter
+			// Method parameter
 			$class = $this->getBroker()->getClass($this->declaringClassName);
 			if (null !== $class) {
 				return $class->getMethod($this->declaringFunctionName);
 			}
 		} else {
-			// function parameter
+			// Function parameter
 			return $this->getBroker()->getFunction($this->declaringFunctionName);
 		}
 	}
@@ -478,6 +478,9 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 							if (0 === $level) {
 								break 2;
 							}
+							break;
+						default:
+							break;
 					}
 
 					$this->defaultValueDefinition .= $tokenStream->getTokenValue();
@@ -491,7 +494,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 				}
 
 				if (self::$parseValueDefinitions) {
-					// Následuje husťárna (a fucking awesomness follows)
+					// A fucking awesomness follows
 					$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
 				}
 			}

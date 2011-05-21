@@ -49,7 +49,6 @@ class ReflectionConstantTest extends Test
 		$this->assertSame('CONSTANT_IN_NAMESPACE', $token->getShortName());
 
 		$this->assertNull($token->getDeclaringClassName());
-		$this->assertNull($token->getClass());
 		$this->assertNull($token->getDeclaringClass());
 
 		$token = $this->getConstantTokenReflection('noNamespace');
@@ -59,7 +58,6 @@ class ReflectionConstantTest extends Test
 		$this->assertSame('NO_NAMESPACE', $token->getShortName());
 
 		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClassName());
-		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getClass());
 		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClass()->getName());
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 	}

@@ -134,6 +134,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	 * Parses child reflection objects from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 * @throws \TokenReflection\Exception\Parse If child elements could not be parsed
 	 */
@@ -216,6 +217,7 @@ class ReflectionFileNamespace extends ReflectionBase
 					break;
 				default:
 					$tokenStream->next();
+					break;
 			}
 		}
 
@@ -225,7 +227,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses the namespace name.
 	 *
-	 * @param \TokenReflection\Stream Token substream
+	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 * @throws \TokenReflection\Exception\Parse If the namespace name could not be determined
 	 */
@@ -289,74 +291,74 @@ class ReflectionFileNamespace extends ReflectionBase
 			$aliases = array();
 
 			while (true) {
-				if ($tokenStream->is(T_USE)) {
-					while (true) {
-						$namespaceName = '';
-						$alias = null;
+				if (!$tokenStream->is(T_USE)) {
+					break;
+				}
 
+				while (true) {
+					$namespaceName = '';
+					$alias = null;
+
+					$tokenStream->skipWhitespaces();
+
+					while (true) {
+						switch ($tokenStream->getType()) {
+							case T_STRING:
+							case T_NS_SEPARATOR:
+								$namespaceName .= $tokenStream->getTokenValue();
+								break;
+							default:
+								break 2;
+						}
+						$tokenStream->next();
+					}
+					$namespaceName = ltrim($namespaceName, '\\');
+
+					if (empty($namespaceName)) {
+						throw new Exception\Parse('Imported namespace name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
+					} elseif ('\\' === substr($namespaceName, -1)) {
+						throw new Exception\Parse(sprintf('Invalid namespace name "%s".', $namespaceName), Exception\Parse::PARSE_ELEMENT_ERROR);
+					}
+
+					$tokenStream->skipWhitespaces(false);
+
+					if ($tokenStream->is(T_AS)) {
+						// Alias defined
 						$tokenStream->skipWhitespaces();
 
-						while (true) {
-							switch ($tokenStream->getType()) {
-								case T_STRING:
-								case T_NS_SEPARATOR:
-									$namespaceName .= $tokenStream->getTokenValue();
-									break;
-								default:
-									break 2;
-							}
-							$tokenStream->next();
-						}
-						$namespaceName = ltrim($namespaceName, '\\');
-
-						if (empty($namespaceName)) {
-							throw new Exception\Parse('Imported namespace name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
-						} elseif ('\\' === substr($namespaceName, -1)) {
-							throw new Exception\Parse(sprintf('Invalid namespace name "%s".', $namespaceName), Exception\Parse::PARSE_ELEMENT_ERROR);
+						if (!$tokenStream->is(T_STRING)) {
+							throw new Exception\Parse(sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), Exception\Parse::PARSE_ELEMENT_ERROR);
 						}
 
-						$tokenStream->skipWhitespaces(false);
+						$alias = $tokenStream->getTokenValue();
 
-						if ($tokenStream->is(T_AS)) {
-							// Alias defined
-							$tokenStream->skipWhitespaces();
-
-							if (!$tokenStream->is(T_STRING)) {
-								throw new Exception\Parse(sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), Exception\Parse::PARSE_ELEMENT_ERROR);
-							}
-
-							$alias = $tokenStream->getTokenValue();
-
-							$tokenStream->skipWhitespaces();
+						$tokenStream->skipWhitespaces();
+					} else {
+						// No explicit alias
+						if (false !== ($pos = strrpos($namespaceName, '\\'))) {
+							$alias = substr($namespaceName, $pos + 1);
 						} else {
-							// No explicit alias
-							if (false !== ($pos = strrpos($namespaceName, '\\'))) {
-								$alias = substr($namespaceName, $pos + 1);
-							} else {
-								$alias = $namespaceName;
-							}
+							$alias = $namespaceName;
 						}
-
-						if (isset($aliases[$alias])) {
-							throw new Exception\Parse(sprintf('Namespace alias "%s" already defined.', $alias), Exception\Parse::PARSE_ELEMENT_ERROR);
-						}
-
-						$aliases[$alias] = $namespaceName;
-
-						$type = $tokenStream->getType();
-						if (';' === $type) {
-							// Next "use" definition
-							$tokenStream->skipWhitespaces();
-							continue 2;
-						} elseif (',' === $type) {
-							// Next namespace in the current "use" definition
-							continue;
-						}
-
-						throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 					}
-				} else {
-					break;
+
+					if (isset($aliases[$alias])) {
+						throw new Exception\Parse(sprintf('Namespace alias "%s" already defined.', $alias), Exception\Parse::PARSE_ELEMENT_ERROR);
+					}
+
+					$aliases[$alias] = $namespaceName;
+
+					$type = $tokenStream->getType();
+					if (';' === $type) {
+						// Next "use" definition
+						$tokenStream->skipWhitespaces();
+						continue 2;
+					} elseif (',' === $type) {
+						// Next namespace in the current "use" definition
+						continue;
+					}
+
+					throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 				}
 			}
 
