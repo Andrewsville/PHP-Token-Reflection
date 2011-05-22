@@ -51,6 +51,13 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	private $valueDefinition = '';
 
 	/**
+	 * Imported namespace/class aliases.
+	 *
+	 * @var array
+	 */
+	private $aliases = array();
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
@@ -61,6 +68,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	{
 		if ($parent instanceof ReflectionFileNamespace) {
 			$this->namespaceName = $parent->getName();
+			$this->aliases = $parent->getAliases();
 		} elseif ($parent instanceof ReflectionClass) {
 			$this->declaringClassName = $parent->getName();
 		} else {
@@ -302,5 +310,15 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 		}
 
 		return $name;
+	}
+
+	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return $this->aliases;
 	}
 }
