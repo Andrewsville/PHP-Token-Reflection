@@ -24,24 +24,19 @@ use TokenReflection;
 class Runtime extends TokenReflection\Exception
 {
 	/**#@+
-	 * Token streams are not being stored.
+	 * Invalid argument was provided.
 	 *
 	 * @var integer
 	 */
-	const TOKEN_STREAM_STORING_TURNED_OFF = 20;
-
-	/**
-	 * Invalid argument was provided.
-	 */
-	const INVALID_ARGUMENT = 21;
+	const INVALID_ARGUMENT = 20;
 
 	/**
 	 * The requested values/action is not accessible.
 	 */
-	const NOT_ACCESSBILE = 22;
+	const NOT_ACCESSBILE = 21;
 
 	/**
 	 * The provided reflection already exists.
 	 */
-	const ALREADY_EXISTS = 23;
+	const ALREADY_EXISTS = 22;
 }

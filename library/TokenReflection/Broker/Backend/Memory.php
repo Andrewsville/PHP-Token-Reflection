@@ -16,7 +16,7 @@
 namespace TokenReflection\Broker\Backend;
 use TokenReflection;
 
-use TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
+use TokenReflection\Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
 
 /**
  * Memory broker backend.
@@ -216,33 +216,33 @@ class Memory implements Broker\Backend
 	 */
 	public function isFileProcessed($fileName)
 	{
-		return isset($this->tokenStreams[$fileName]);
+		return isset($this->tokenStreams[realpath($fileName)]);
 	}
 
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return \ArrayIterator
+	 * @return \TokenReflection\Stream
 	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed
 	 */
 	public function getFileTokens($fileName)
 	{
-		if (!$this->isFileProcessed($fileName)) {
-			throw new Exception\Runtime(sprintf('The requested file %s was not processed.', $fileName), Exception\Runtime::DOES_NOT_EXIST);
+		$realName = realpath($fileName);
+		if (!isset($this->tokenStreams[$realName])) {
+			throw new Exception\Runtime(sprintf('File "%s" was not processed yet.', $fileName), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
-		return $this->tokenStreams[$fileName];
+		return true === $this->tokenStreams[$realName] ? new Stream($realName) : $this->tokenStreams[$realName];
 	}
 
 	/**
 	 * Adds a file to the backend storage.
 	 *
 	 * @param \TokenReflection\ReflectionFile $file File reflection object
-	 * @param boolean $storeTokenStream Store the token stream
 	 * @return \TokenReflection\Broker\Backend\Memory
 	 */
-	public function addFile(TokenReflection\ReflectionFile $file, $storeTokenStream = true)
+	public function addFile(TokenReflection\ReflectionFile $file)
 	{
 		foreach ($file->getNamespaces() as $fileNamespace) {
 			$namespaceName = $fileNamespace->getName();
@@ -253,9 +253,7 @@ class Memory implements Broker\Backend
 			$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 		}
 
-		if ($this->storingTokenStreams) {
-			$this->tokenStreams[$file->getName()] = $file->getTokenStream();
-		}
+		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $file->getTokenStream() : true;
 
 		// Reset all-*-cache
 		$this->allClasses = null;

@@ -105,12 +105,7 @@ class Broker
 			if ($this->backend->isFileProcessed($realName)) {
 				$tokens = $this->backend->getFileTokens($realName);
 			} else {
-				$contents = @file_get_contents($realName);
-				if (false === $contents) {
-					throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
-				}
-
-				$tokens = new Stream(@token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents)), $realName);
+				$tokens = new Stream($realName);
 			}
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
@@ -253,10 +248,6 @@ class Broker
 	public function getFileTokens($fileName)
 	{
 		try {
-			if (!$this->backend->getStoringTokenStreams()) {
-				throw new Exception\Runtime('Token streams storing is turned off.', Exception\Runtime::TOKEN_STREAM_STORING_TURNED_OFF);
-			}
-
 			return $this->backend->getFileTokens($fileName);
 		} catch (Exception $e) {
 			throw new Exception\Runtime(sprintf('Could not retrieve token stream for file %s.', $fileName), 0, $e);

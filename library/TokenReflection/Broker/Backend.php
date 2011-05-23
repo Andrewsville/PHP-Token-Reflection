@@ -80,7 +80,7 @@ interface Backend
 	 * Returns if the given file was already processed.
 	 *
 	 * @param string $fileName File name
-	 * @retun boolean
+	 * @return boolean
 	 */
 	public function isFileProcessed($fileName);
 
