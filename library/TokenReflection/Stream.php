@@ -315,23 +315,15 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	/**
 	 * Skips whitespaces and comments next to the current position.
 	 *
-	 * @param boolean $startAtNext Start with the next token
 	 * @return \TokenReflection\Stream
 	 */
-	public function skipWhitespaces($startAtNext = true)
+	public function skipWhitespaces()
 	{
-		if ($startAtNext && isset($this->tokens[$this->position])) {
+		static $skipped = array(T_WHITESPACE, T_COMMENT);
+
+		do {
 			$this->position++;
-		}
-
-		while (isset($this->types[$this->position])) {
-			if (T_WHITESPACE === $this->types[$this->position] || T_COMMENT === $this->types[$this->position]) {
-				$this->position++;
-				continue;
-			}
-
-			break;
-		}
+		} while (isset($this->types[$this->position]) && in_array($this->types[$this->position], $skipped));
 
 		return $this;
 	}

@@ -314,7 +314,7 @@ class ReflectionFileNamespace extends ReflectionBase
 							default:
 								break 2;
 						}
-						$tokenStream->next();
+						$tokenStream->skipWhitespaces();
 					}
 					$namespaceName = ltrim($namespaceName, '\\');
 
@@ -323,8 +323,6 @@ class ReflectionFileNamespace extends ReflectionBase
 					} elseif ('\\' === substr($namespaceName, -1)) {
 						throw new Exception\Parse(sprintf('Invalid namespace name "%s".', $namespaceName), Exception\Parse::PARSE_ELEMENT_ERROR);
 					}
-
-					$tokenStream->skipWhitespaces(false);
 
 					if ($tokenStream->is(T_AS)) {
 						// Alias defined
