@@ -148,7 +148,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
 		while (true) {
-			switch ($tokenStream->getType()) {
+			switch ($type = $tokenStream->getType()) {
 				case null:
 					break 2;
 				case T_COMMENT:
@@ -172,16 +172,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				case T_VARIABLE:
 					static $searching = array(T_VARIABLE, T_FUNCTION);
 
-					if (T_VAR === $tokenStream->getType()) {
-						$tokenStream->skipWhitespaces();
-					} else {
+					if (T_VAR !== $tokenStream->getType()) {
 						$position = $tokenStream->key();
 						while (null !== ($type = $tokenStream->getType($position++)) && !in_array($type, $searching)) {
 							$position++;
 						}
 					}
 
-					if (T_VARIABLE === $type) {
+					if (T_VARIABLE === $type || T_VAR === $type) {
 						$property = new ReflectionProperty($tokenStream, $this->getBroker(), $this);
 						$this->properties[$property->getName()] = $property;
 						$tokenStream->next();
