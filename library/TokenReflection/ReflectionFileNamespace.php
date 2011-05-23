@@ -255,7 +255,7 @@ class ReflectionFileNamespace extends ReflectionBase
 						break 2;
 				}
 
-				$tokenStream->next();
+				$tokenStream->skipWhitespaces();
 			}
 
 			$name = ltrim($name, '\\');
@@ -264,9 +264,13 @@ class ReflectionFileNamespace extends ReflectionBase
 				$this->name = ReflectionNamespace::NO_NAMESPACE_NAME;
 			} else {
 				$this->name = $name;
-
-				$tokenStream->skipWhitespaces();
 			}
+
+			if (!$tokenStream->is(';') && !$tokenStream->is('{')) {
+				throw new Exception\Parse(sprintf('Invalid namespace name end: "%s", expecting ";" or "{".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			$tokenStream->skipWhitespaces();
 
 			return $this;
 		} catch (Exception $e) {
