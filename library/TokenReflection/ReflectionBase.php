@@ -494,6 +494,13 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	abstract public function getNamespaceAliases();
+
+	/**
 	 * Returns the appropriate source code part.
 	 *
 	 * @return string

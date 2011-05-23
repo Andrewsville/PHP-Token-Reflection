@@ -68,7 +68,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	{
 		if ($parent instanceof ReflectionFileNamespace) {
 			$this->namespaceName = $parent->getName();
-			$this->aliases = $parent->getAliases();
+			$this->aliases = $parent->getNamespaceAliases();
 		} elseif ($parent instanceof ReflectionClass) {
 			$this->declaringClassName = $parent->getName();
 		} else {
@@ -319,6 +319,6 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 */
 	public function getNamespaceAliases()
 	{
-		return $this->aliases;
+		return null === $this->declaringClassName ? $this->aliases : $this->getDeclaringClass()->getNamespaceAliases();
 	}
 }

@@ -95,7 +95,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	 *
 	 * @return array
 	 */
-	public function getAliases()
+	public function getNamespaceAliases()
 	{
 		return $this->aliases;
 	}

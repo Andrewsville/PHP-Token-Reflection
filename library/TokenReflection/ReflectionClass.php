@@ -118,7 +118,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$this->namespaceName = $parent->getName();
-		$this->aliases = $parent->getAliases();
+		$this->aliases = $parent->getNamespaceAliases();
 		return parent::processParent($parent);
 	}
 

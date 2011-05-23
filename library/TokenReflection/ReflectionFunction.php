@@ -103,7 +103,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 		}
 
 		$this->namespaceName = $parent->getName();
-		$this->aliases = $parent->getAliases();
+		$this->aliases = $parent->getNamespaceAliases();
 		return parent::processParent($parent);
 	}
 

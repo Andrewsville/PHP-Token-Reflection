@@ -332,6 +332,16 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return $this->getDeclaringClass()->getNamespaceAliases();
+	}
+
+	/**
 	 * Returns the method prototype.
 	 *
 	 * @return \TokenReflection\ReflectionMethod

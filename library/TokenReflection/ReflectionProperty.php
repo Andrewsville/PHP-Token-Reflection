@@ -305,6 +305,16 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return $this->getDeclaringClass()->getNamespaceAliases();
+	}
+
+	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
