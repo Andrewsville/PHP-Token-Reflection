@@ -70,12 +70,18 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 *
 	 * Creates a token substream.
 	 *
-	 * @param array $stream Base stream
 	 * @param string $fileName File name
 	 */
-	public function __construct(array $stream, $fileName)
+	public function __construct($fileName)
 	{
 		$this->fileName = $fileName;
+
+		$contents = @file_get_contents($fileName);
+		if (false === $contents) {
+			throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
+		}
+
+		$stream = @token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents));
 
 		static $checkLines;
 		if (null === $checkLines) {

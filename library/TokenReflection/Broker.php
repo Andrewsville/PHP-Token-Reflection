@@ -105,12 +105,7 @@ class Broker
 			if ($this->backend->isFileProcessed($realName)) {
 				$tokens = $this->backend->getFileTokens($realName);
 			} else {
-				$contents = @file_get_contents($realName);
-				if (false === $contents) {
-					throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
-				}
-
-				$tokens = new Stream(@token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents)), $realName);
+				$tokens = new Stream($realName);
 			}
 
 			$reflectionFile = new ReflectionFile($tokens, $this);

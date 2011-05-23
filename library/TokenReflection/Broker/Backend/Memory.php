@@ -223,21 +223,16 @@ class Memory implements Broker\Backend
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return \ArrayIterator
+	 * @return \TokenReflection\Stream
 	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed
 	 */
 	public function getFileTokens($fileName)
 	{
-		if ($this->isFileProcessed($fileName)) {
-			return $this->tokenStreams[$fileName];
+		if (!$this->isFileProcessed($fileName)) {
+			throw new Exception\Runtime('File %s was not processed yet.', Exception\Runtime::DOES_NOT_EXIST);
 		}
 
-		$contents = @file_get_contents($fileName);
-		if (false === $contents) {
-			throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
-		}
-
-		return new Stream(@token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents)), $fileName);
+		return null === $this->tokenStreams[$fileName] ? new Stream($fileName) : $this->tokenStreams[$fileName];
 	}
 
 	/**
@@ -258,9 +253,7 @@ class Memory implements Broker\Backend
 			$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 		}
 
-		if ($this->storingTokenStreams) {
-			$this->tokenStreams[$file->getName()] = $file->getTokenStream();
-		}
+		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $file->getTokenStream() : null;
 
 		// Reset all-*-cache
 		$this->allClasses = null;
