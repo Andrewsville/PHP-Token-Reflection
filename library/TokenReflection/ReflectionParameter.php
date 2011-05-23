@@ -487,9 +487,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 					$tokenStream->next();
 				}
 
-				if (',' === $type) {
-					$tokenStream->next();
-				} elseif (')' !== $type) {
+				if (')' !== $type && ',' !== $type) {
 					throw new Exception\Parse(sprintf('The property default value is not terminated properly. Expected "," or ")", "%s" found.', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 				}
 

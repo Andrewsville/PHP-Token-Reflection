@@ -381,7 +381,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	public function getTokenName($position = -1)
 	{
 		$type = $this->getType($position);
-		return token_name($type) ?: $type;
+		return is_string($type) ? $type : token_name($type);
 	}
 
 	/**
