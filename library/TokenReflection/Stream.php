@@ -74,7 +74,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 */
 	public function __construct($fileName)
 	{
-		$this->fileName = $fileName;
+		$this->fileName = realpath($fileName);
 
 		$contents = @file_get_contents($fileName);
 		if (false === $contents) {
