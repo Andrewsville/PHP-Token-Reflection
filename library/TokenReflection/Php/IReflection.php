@@ -26,6 +26,13 @@ use Reflector;
 interface IReflection extends TokenReflection\IReflection
 {
 	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases();
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \Reflector $internalReflection Internal reflection instance
