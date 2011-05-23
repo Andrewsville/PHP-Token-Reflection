@@ -229,7 +229,7 @@ class Memory implements Broker\Backend
 	public function getFileTokens($fileName)
 	{
 		if (!$this->isFileProcessed($fileName)) {
-			throw new Exception\Runtime('File %s was not processed yet.', Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\Runtime(sprintf('File "%s" was not processed yet.', $fileName), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
 		return null === $this->tokenStreams[$fileName] ? new Stream($fileName) : $this->tokenStreams[$fileName];
