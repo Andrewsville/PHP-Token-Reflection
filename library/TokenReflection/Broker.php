@@ -91,10 +91,11 @@ class Broker
 	 * Parses a file a returns the appropriate reflection object.
 	 *
 	 * @param string $fileName Filename
-	 * @return \TokenReflection\ReflectionFile
+	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
+	 * @return boolean|\TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the given file could not be processed
 	 */
-	public function processFile($fileName)
+	public function processFile($fileName, $returnReflectionFile = false)
 	{
 		try {
 			if ($this->backend->isFileProcessed($fileName)) {
@@ -116,7 +117,7 @@ class Broker
 					}
 				}
 			}
-			return $reflectionFile;
+			return $returnReflectionFile ? $reflectionFile : true;
 		} catch (Exception $e) {
 			throw new Exception\Parse(sprintf('Could not process file %s.', $fileName), 0, $e);
 		}
@@ -126,10 +127,11 @@ class Broker
 	 * Processes a PHAR archive.
 	 *
 	 * @param string $fileName Archive filename.
-	 * @return array
+	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
+	 * @return boolean|array of \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the given archive could not be processed
 	 */
-	public function processPhar($fileName)
+	public function processPhar($fileName, $returnReflectionFile = false)
 	{
 		try {
 			if (!is_file($fileName)) {
@@ -143,11 +145,11 @@ class Broker
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new \Phar($fileName)) as $entry) {
 				if ($entry->isFile()) {
-					$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
+					$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
 				}
 			}
 
-			return $result;
+			return $returnReflectionFile ? $result : true;
 		} catch (\Exception $e) {
 			throw new Exception\Parse(sprintf('Could not process PHAR archive %s.', $fileName), 0, $e);
 		}
@@ -157,10 +159,11 @@ class Broker
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
 	 * @param string $path Directora path
-	 * @return array
+	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
+	 * @return boolean|array of \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed
 	 */
-	public function processDirectory($path)
+	public function processDirectory($path, $returnReflectionFile = false)
 	{
 		try {
 			if (!is_dir($realPath)) {
@@ -170,11 +173,11 @@ class Broker
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
 				if ($entry->isFile()) {
-					$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
+					$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
 				}
 			}
 
-			return $result;
+			return $returnReflectionFile ? $result : true;
 		} catch (Exception $e) {
 			throw new Exception\Parse(sprintf('Could not process directory %s.', $path), 0, $e);
 		}
@@ -184,17 +187,18 @@ class Broker
 	 * Process a file, directory or a PHAR archive.
 	 *
 	 * @param string $path Path
-	 * @return array|\TokenReflection\ReflectionFile
+	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
+	 * @return boolean|array|\TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the target could not be processed
 	 */
-	public function process($path)
+	public function process($path, $returnReflectionFile = false)
 	{
 		if (is_dir($path)) {
-			return $this->processDirectory($path);
+			return $this->processDirectory($path, $returnReflectionFile);
 		} elseif (is_file($path)) {
 			if (preg_match('~\\.phar$~i', $path)) {
 				try {
-					return $this->processPhar($path);
+					return $this->processPhar($path, $returnReflectionFile);
 				} catch (Exception\Parse $e) {
 					if (!($ex = $e->getPrevious()) || !($ex instanceof \UnexpectedValueException)) {
 						throw $e;
@@ -202,7 +206,7 @@ class Broker
 				}
 			}
 
-			return $this->processFile($path);
+			return $this->processFile($path, $returnReflectionFile);
 		} else {
 			throw new Exception\Parse(sprintf('Could not process target %s; target does not exist.', $path));
 		}
