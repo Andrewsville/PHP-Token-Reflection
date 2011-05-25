@@ -92,24 +92,19 @@ class Broker
 	 *
 	 * @param string $fileName Filename
 	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the requested file could not be processed
+	 * @throws \TokenReflection\Exception\Parse If the given file could not be processed
 	 */
 	public function processFile($fileName)
 	{
 		try {
-			$realName = realpath($fileName);
-			if (false === $realName) {
-				throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
-			}
-
-			if ($this->backend->isFileProcessed($realName)) {
-				$tokens = $this->backend->getFileTokens($realName);
+			if ($this->backend->isFileProcessed($fileName)) {
+				$tokens = $this->backend->getFileTokens($fileName);
 			} else {
-				$tokens = new Stream($realName);
+				$tokens = new Stream($fileName);
 			}
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
-			if (!$this->backend->isFileProcessed($realName)) {
+			if (!$this->backend->isFileProcessed($fileName)) {
 				$this->backend->addFile($reflectionFile);
 
 				// Clear the cache - leave only tokenized reflections
@@ -128,17 +123,47 @@ class Broker
 	}
 
 	/**
+	 * Processes a PHAR archive.
+	 *
+	 * @param string $fileName Archive filename.
+	 * @return array
+	 * @throws \TokenReflection\Exception\Parse If the given archive could not be processed
+	 */
+	public function processPhar($fileName)
+	{
+		try {
+			if (!is_file($fileName)) {
+				throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
+			}
+
+			if (!class_exists('Phar', false)) {
+				throw new Exception\Parse('The PHAR PHP extension is not loaded.', Exception\Parse::UNSUPPORTED);
+			}
+
+			$result = array();
+			foreach (new RecursiveIteratorIterator(new \Phar($fileName)) as $entry) {
+				if ($entry->isFile()) {
+					$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
+				}
+			}
+
+			return $result;
+		} catch (\Exception $e) {
+			throw new Exception\Parse(sprintf('Could not process PHAR archive %s.', $fileName), 0, $e);
+		}
+	}
+
+	/**
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
 	 * @param string $path Directora path
 	 * @return array
-	 * @throws \TokenReflection\Exception\Parse If the requested directory could not be processed
+	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed
 	 */
 	public function processDirectory($path)
 	{
 		try {
-			$realPath = realpath($path);
-			if (false === $realPath) {
+			if (!is_dir($realPath)) {
 				throw new Exception\Parse('Directory does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
 			}
 
@@ -152,6 +177,34 @@ class Broker
 			return $result;
 		} catch (Exception $e) {
 			throw new Exception\Parse(sprintf('Could not process directory %s.', $path), 0, $e);
+		}
+	}
+
+	/**
+	 * Process a file, directory or a PHAR archive.
+	 *
+	 * @param string $path Path
+	 * @return array|\TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\Parse If the target could not be processed
+	 */
+	public function process($path)
+	{
+		if (is_dir($path)) {
+			return $this->processDirectory($path);
+		} elseif (is_file($path)) {
+			if (preg_match('~\\.phar$~i', $path)) {
+				try {
+					return $this->processPhar($path);
+				} catch (Exception\Parse $e) {
+					if (!($ex = $e->getPrevious()) || !($ex instanceof \UnexpectedValueException)) {
+						throw $e;
+					}
+				}
+			}
+
+			return $this->processFile($path);
+		} else {
+			throw new Exception\Parse(sprintf('Could not process target %s; target does not exist.', $path));
 		}
 	}
 
@@ -283,5 +336,20 @@ class Broker
 	public function getConstants()
 	{
 		return $this->backend->getConstants();
+	}
+
+	/**
+	 * Returns a real system path.
+	 *
+	 * @param string $path Source path
+	 * @return string|false
+	 */
+	public static function getRealPath($path)
+	{
+		if (0 === strpos($path, 'phar://')) {
+			return is_file($path) || is_dir($path) ? $path : false;
+		} else {
+			return realpath($path);
+		}
 	}
 }

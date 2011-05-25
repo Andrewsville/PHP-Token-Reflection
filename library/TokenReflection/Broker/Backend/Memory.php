@@ -216,7 +216,7 @@ class Memory implements Broker\Backend
 	 */
 	public function isFileProcessed($fileName)
 	{
-		return isset($this->tokenStreams[realpath($fileName)]);
+		return isset($this->tokenStreams[Broker::getRealPath($fileName)]);
 	}
 
 	/**
@@ -228,7 +228,7 @@ class Memory implements Broker\Backend
 	 */
 	public function getFileTokens($fileName)
 	{
-		$realName = realpath($fileName);
+		$realName = Broker::getRealPath($fileName);
 		if (!isset($this->tokenStreams[$realName])) {
 			throw new Exception\Runtime(sprintf('File "%s" was not processed yet.', $fileName), Exception\Runtime::DOES_NOT_EXIST);
 		}

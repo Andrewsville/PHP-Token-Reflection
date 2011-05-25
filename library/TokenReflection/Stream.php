@@ -74,9 +74,13 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	 */
 	public function __construct($fileName)
 	{
-		$this->fileName = realpath($fileName);
+		$this->fileName = Broker::getRealPath($fileName);
 
-		$contents = @file_get_contents($fileName);
+		if (false === $this->fileName) {
+			throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
+		}
+
+		$contents = file_get_contents($this->fileName);
 		if (false === $contents) {
 			throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
 		}
