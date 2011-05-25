@@ -137,4 +137,18 @@ interface Backend
 	 * @return array
 	 */
 	public function getClasses($type = Backend::TOKENIZED_CLASSES);
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions();
+
+	/**
+	 * Returns all constants from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getConstants();
 }
