@@ -28,13 +28,6 @@ use RuntimeException, TokenReflection\Exception;
 class ReflectionClass extends InternalReflectionClass implements IReflection, TokenReflection\IReflectionClass
 {
 	/**
-	 * Internal classes pseudo-package name.
-	 *
-	 * @var string
-	 */
-	const PACKAGE_INTERNAL = 'PHP';
-
-	/**
 	 * Reflection broker.
 	 *
 	 * @var \TokenReflection\Broker
@@ -184,16 +177,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getParentClassNameList()
 	{
 		return class_parents($this->getName());
-	}
-
-	/**
-	 * Returns the package name.
-	 *
-	 * @return string
-	 */
-	public function getPackageName()
-	{
-		return $this->isInternal() ? self::PACKAGE_INTERNAL : TokenReflection\ReflectionClass::PACKAGE_NONE;
 	}
 
 	/**

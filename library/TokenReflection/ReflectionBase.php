@@ -448,20 +448,6 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Returns the package name.
-	 *
-	 * @return string
-	 */
-	public function getPackageName()
-	{
-		if ($package = $this->getAnnotation('package')) {
-			return $package[0];
-		}
-
-		return ReflectionClass::PACKAGE_NONE;
-	}
-
-	/**
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name

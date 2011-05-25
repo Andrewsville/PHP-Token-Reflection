@@ -24,13 +24,6 @@ use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalRe
 class ReflectionClass extends ReflectionBase implements IReflectionClass
 {
 	/**
-	 * Other classes pseudo-package name.
-	 *
-	 * @var string
-	 */
-	const PACKAGE_NONE = 'None';
-
-	/**
 	 * Modifier for determining if the reflected object is an interface.
 	 *
 	 * @var integer

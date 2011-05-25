@@ -25,13 +25,6 @@ use ReflectionClass as InternalReflectionClass, TokenReflection\Exception;
 class ReflectionClass implements IReflectionClass
 {
 	/**
-	 * Nonexistent classes pseudo-package name.
-	 *
-	 * @var string
-	 */
-	const PACKAGE_NONE = 'None';
-
-	/**
 	 * Reflection broker.
 	 *
 	 * @var \TokenReflection\Broker
@@ -86,16 +79,6 @@ class ReflectionClass implements IReflectionClass
 	public function getBroker()
 	{
 		return $this->broker;
-	}
-
-	/**
-	 * Returns the package name.
-	 *
-	 * @return string
-	 */
-	public function getPackageName()
-	{
-		return self::PACKAGE_NONE;
 	}
 
 	/**
