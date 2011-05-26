@@ -31,20 +31,6 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	private $fileName = 'unknown';
 
 	/**
-	 * Cache of token types.
-	 *
-	 * @var array
-	 */
-	private $types = array();
-
-	/**
-	 * Cache of token contents.
-	 *
-	 * @var array
-	 */
-	private $contents = array();
-
-	/**
 	 * Tokens storage.
 	 *
 	 * @var array
@@ -94,12 +80,8 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 
 		foreach ($stream as $position => $token) {
 			if (is_array($token)) {
-				list($this->types[], $this->contents[]) = $token;
 				$this->tokens[] = $token;
 			} else {
-				$this->types[] = $token;
-				$this->contents[] = $token;
-
 				$previous = $this->tokens[$position - 1];
 				$line = $previous[2];
 				if (isset($checkLines[$previous[0]])) {
@@ -145,7 +127,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 */
 	public function offsetGet($offset)
 	{
-		return isset($this->contents[$offset]) ? $this->contents[$offset] : null;
+		return isset($this->tokens[$offset]) ? $this->tokens[$offset] : null;
 	}
 
 	/**
@@ -256,7 +238,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	{
 		$actual = $this->position;
 		while (isset($this->tokens[$this->position])) {
-			if ($type === $this->types[$this->position]) {
+			if ($type === $this->tokens[$this->position][0]) {
 				return $this;
 			}
 
@@ -289,7 +271,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 
 		$position = $this->position;
 
-		$bracket = $this->contents[$this->position];
+		$bracket = $this->tokens[$this->position][0];
 
 		if (!isset($brackets[$bracket])) {
 			throw new Exception\Runtime(sprintf('There is no usable bracket at position "%d" in file "%s".', $position, $this->fileName), Exception\Runtime::DOES_NOT_EXIST);
@@ -299,7 +281,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 
 		$level = 0;
 		while (isset($this->tokens[$this->position])) {
-			$type = $this->types[$this->position];
+			$type = $this->tokens[$this->position][0];
 			if ($searching === $type) {
 				$level--;
 			} elseif ($bracket === $type || ($searching === '}' && (T_CURLY_OPEN === $type || T_DOLLAR_OPEN_CURLY_BRACES === $type))) {
@@ -327,7 +309,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 
 		do {
 			$this->position++;
-		} while (isset($this->types[$this->position]) && in_array($this->types[$this->position], $skipped));
+		} while (isset($this->tokens[$this->position]) && in_array($this->tokens[$this->position][0], $skipped));
 
 		return $this;
 	}
@@ -356,7 +338,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 			$position = $this->position;
 		}
 
-		return isset($this->types[$position]) ? $this->types[$position] : null;
+		return isset($this->tokens[$position]) ? $this->tokens[$position][0] : null;
 	}
 
 	/**
@@ -371,7 +353,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 			$position = $this->position;
 		}
 
-		return isset($this->contents[$position]) ? $this->contents[$position] : null;
+		return isset($this->tokens[$position]) ? $this->tokens[$position][1] : null;
 	}
 
 	/**
@@ -403,7 +385,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 */
 	public function getSource()
 	{
-		return implode('', $this->contents);
+		return $this->getSourcePart();
 	}
 
 	/**
@@ -413,9 +395,16 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * @param mixed $end End offset
 	 * @return string
 	 */
-	public function getSourcePart($start, $end = null)
+	public function getSourcePart($start = null, $end = null)
 	{
-		return implode('', array_slice($this->contents, $start, null !== $end ? $end - $start + 1 : null));
+		$start = (int) $start;
+		$end = null === $end ? ($this->count - 1) : (int) $end;
+
+		$source = '';
+		for ($i = $start; $i <= $end; $i++) {
+			$source .= $this->tokens[$i][1];
+		}
+		return $source;
 	}
 
 	/**
