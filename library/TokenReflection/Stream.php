@@ -16,12 +16,12 @@
 namespace TokenReflection;
 
 use TokenReflection\Exception;
-use SeekableIterator, Countable, ArrayAccess;
+use SeekableIterator, Countable, ArrayAccess, Serializable;
 
 /**
  * Token stream iterator.
  */
-class Stream implements SeekableIterator, Countable, ArrayAccess
+class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 {
 	/**
 	 * Token source file name.
@@ -416,5 +416,37 @@ class Stream implements SeekableIterator, Countable, ArrayAccess
 	public function getSourcePart($start, $end = null)
 	{
 		return implode('', array_slice($this->contents, $start, null !== $end ? $end - $start + 1 : null));
+	}
+
+	/**
+	 * Stream serialization.
+	 *
+	 * @return string
+	 */
+	public function serialize()
+	{
+		return serialize(array($this->fileName, $this->tokens));
+	}
+
+	/**
+	 * Restores the stream from the serialized state.
+	 *
+	 * @param string $serialized Serialized form
+	 * @throws \TokenReflection\Exception\Runtime On unserialization error
+	 */
+	public function unserialize($serialized)
+	{
+		$data = @unserialize($serialized);
+		if (false === $data) {
+			throw new Exception\Runtime('Could not deserialize the serialized data.', Exception\Runtime::SERIALIZATION_ERROR);
+		}
+		if (2 !== count($data) || !is_string($data[0]) || !is_array($data[1])) {
+			throw new Exception\Runtime('Invalid serialization data.', Exception\Runtime::SERIALIZATION_ERROR);
+		}
+
+		$this->fileName = $data[0];
+		$this->tokens = $data[1];
+		$this->count = count($this->tokens);
+		$this->position = 0;
 	}
 }

@@ -39,4 +39,9 @@ class Runtime extends TokenReflection\Exception
 	 * The provided reflection already exists.
 	 */
 	const ALREADY_EXISTS = 22;
+
+	/**
+	 * There was a problem with (un)serialization of the Stream.
+	 */
+	const SERIALIZATION_ERROR = 23;
 }
