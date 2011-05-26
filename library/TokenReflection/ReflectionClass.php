@@ -155,7 +155,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					$tokenStream->next();
 					break;
 				case '}':
-					$tokenStream->next();
 					break 2;
 				case T_PUBLIC:
 				case T_PRIVATE:
