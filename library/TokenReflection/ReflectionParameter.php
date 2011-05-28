@@ -106,6 +106,10 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function allowsNull()
 	{
+		if (($this->isArray() || null !== $this->getOriginalClassName()) && 'null' !== strtolower($this->defaultValueDefinition)) {
+			return false;
+		}
+
 		return true;
 	}
 

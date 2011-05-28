@@ -22,15 +22,17 @@ class ReflectionParameterTest extends Test
 		}
 	}
 
-	public function testNull()
+	public function testAllowsNull()
 	{
-		$rfl = $this->getParameterReflection('null');
-		$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
-		$this->assertTrue($rfl->token->allowsNull());
+		foreach (array('Class', 'Array') as $type) {
+			$rfl = $this->getParameterReflection('null' . $type);
+			$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
+			$this->assertTrue($rfl->token->allowsNull());
 
-		$rfl = $this->getParameterReflection('noNull');
-		$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
-		$this->assertTrue($rfl->token->allowsNull());
+			$rfl = $this->getParameterReflection('noNull' . $type);
+			$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
+			$this->assertFalse($rfl->token->allowsNull());
+		}
 	}
 
 	public function testOptional()
