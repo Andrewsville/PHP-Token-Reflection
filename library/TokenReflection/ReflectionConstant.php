@@ -15,8 +15,6 @@
 
 namespace TokenReflection;
 
-use RuntimeException;
-
 /**
  * Tokenized constant reflection.
  */
@@ -246,7 +244,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Returns the name of the declaring class.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getDeclaringClassName()
 	{
@@ -270,7 +268,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Returns the docblock definition of the constant.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -298,7 +296,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
-	 * Returns the unqualified name.
+	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */

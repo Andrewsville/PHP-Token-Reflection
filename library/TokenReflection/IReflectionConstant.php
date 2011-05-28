@@ -42,7 +42,7 @@ interface IReflectionConstant extends IReflection
 	public function getNamespaceName();
 
 	/**
-	 * Returns if the function/method is defined within a namespace.
+	 * Returns if the constant is defined within a namespace.
 	 *
 	 * @return boolean
 	 */
@@ -65,14 +65,14 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getDocComment();
 
 	/**
 	 * Returns the docblock definition of the constant.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment();
 
@@ -98,7 +98,7 @@ interface IReflectionConstant extends IReflection
 	public function getFileName();
 
 	/**
-	 * Returns the unqualified name.
+	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */

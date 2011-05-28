@@ -346,7 +346,7 @@ class Broker
 	 * Returns a real system path.
 	 *
 	 * @param string $path Source path
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public static function getRealPath($path)
 	{

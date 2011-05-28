@@ -14,13 +14,13 @@
  */
 
 namespace TokenReflection\Php;
-use TokenReflection;
 
+use TokenReflection;
 use TokenReflection\Broker, TokenReflection\Exception;
 use Reflector, ReflectionProperty as InternalReflectionProperty;
 
 /**
- * Reflection of a not tokenized but defined function/method property.
+ * Reflection of a not tokenized but defined class property.
  *
  * Descendant of the internal reflection with additional features.
  */
@@ -101,7 +101,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return boolean
 	 */
 	public function getDocComment()
 	{
@@ -111,7 +111,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns the docblock definition of the property or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -121,21 +121,21 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getStartLine()
 	{
-		return false;
+		return null;
 	}
 
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getEndLine()
 	{
-		return false;
+		return null;
 	}
 
 	/**
@@ -152,7 +152,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @return string|array|null
+	 * @return null
 	 */
 	public function getAnnotation($name)
 	{

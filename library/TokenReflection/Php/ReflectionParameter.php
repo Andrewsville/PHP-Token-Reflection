@@ -14,13 +14,13 @@
  */
 
 namespace TokenReflection\Php;
-use TokenReflection;
 
+use TokenReflection;
 use TokenReflection\Broker, TokenReflection\Exception;
 use Reflector, ReflectionParameter as InternalReflectionParameter, ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
 
 /**
- * Reflection of a not tokenized but defined class parameter.
+ * Reflection of a not tokenized but defined method/function parameter.
  *
  * Descendant of the internal reflection with additional features.
  */
@@ -110,7 +110,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return \TokenReflection\Php\IReflectionClass
+	 * @return \TokenReflection\Php\IReflectionClass|null
 	 */
 	public function getDeclaringClass()
 	{
@@ -149,11 +149,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 		$class = $this->getDeclaringClass();
 		$function = parent::getDeclaringFunction();
 
-		if ($class) {
-			return $class->getMethod($function->getName());
-		} else {
-			return ReflectionFunction::create($function, $this->broker);
-		}
+		return $class ? $class->getMethod($function->getName()) : ReflectionFunction::create($function, $this->broker);
 	}
 
 	/**
@@ -170,7 +166,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the part of the source code defining the paramter default value.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getDefaultValueDefinition()
 	{
@@ -181,7 +177,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return boolean
 	 */
 	public function getDocComment()
 	{
@@ -191,7 +187,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the docblock definition of the parameter.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -201,21 +197,21 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getStartLine()
 	{
-		return false;
+		return null;
 	}
 
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getEndLine()
 	{
-		return false;
+		return null;
 	}
 
 	/**

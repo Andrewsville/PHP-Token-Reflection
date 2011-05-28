@@ -44,7 +44,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the declaring function name.
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 	public function getDeclaringFunctionName();
 
@@ -121,14 +121,14 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getDocComment();
 
 	/**
 	 * Returns the docblock definition of the parameter.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment();
 

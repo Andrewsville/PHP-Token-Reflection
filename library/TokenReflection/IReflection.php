@@ -21,7 +21,7 @@ namespace TokenReflection;
 interface IReflection
 {
 	/**
-	 * Returns the reflection subject name.
+	 * Returns the name (FQN).
 	 *
 	 * @return string
 	 */

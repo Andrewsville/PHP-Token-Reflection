@@ -14,6 +14,7 @@
  */
 
 namespace TokenReflection\Exception;
+
 use TokenReflection;
 
 /**

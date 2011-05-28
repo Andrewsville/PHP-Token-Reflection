@@ -14,14 +14,12 @@
  */
 
 namespace TokenReflection\Php;
-use TokenReflection;
 
+use TokenReflection;
 use TokenReflection\Broker, TokenReflection\Exception, Reflector;
 
 /**
  * Reflection of a not tokenized but defined constant.
- *
- * Descendant of the internal reflection with additional features.
  */
 class ReflectionConstant implements IReflection, TokenReflection\IReflectionConstant
 {
@@ -35,7 +33,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Name of the declaring class.
 	 *
-	 * @var String
+	 * @var string
 	 */
 	private $declaringClassName;
 
@@ -116,7 +114,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
-	 * Returns the constant name.
+	 * Returns the name.
 	 *
 	 * @return string
 	 */
@@ -181,7 +179,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @return string|array|null
+	 * @return null
 	 */
 	public function getAnnotation($name)
 	{
@@ -216,7 +214,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns the declaring class name.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getDeclaringClassName()
 	{
@@ -256,7 +254,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return boolean
 	 */
 	public function getDocComment()
 	{
@@ -266,7 +264,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns the docblock definition of the constant.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -276,35 +274,35 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getStartLine()
 	{
-		return false;
+		return null;
 	}
 
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getEndLine()
 	{
-		return false;
+		return null;
 	}
 
 	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
-	 * @return string
+	 * @return null
 	 */
 	public function getFileName()
 	{
-		return false;
+		return null;
 	}
 
 	/**
-	 * Returns the unqualified name.
+	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */

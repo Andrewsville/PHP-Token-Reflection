@@ -14,8 +14,8 @@
  */
 
 namespace TokenReflection\Php;
-use TokenReflection;
 
+use TokenReflection;
 use Reflector;
 
 /**

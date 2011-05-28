@@ -21,7 +21,7 @@ namespace TokenReflection;
 interface IReflectionExtension extends IReflection
 {
 	/**
-	 * Returns classes defined by this extension.
+	 * Returns a class reflection.
 	 *
 	 * @param string $name Class name
 	 * @return \TokenReflection\IReflectionClass|null
@@ -29,7 +29,7 @@ interface IReflectionExtension extends IReflection
 	public function getClass($name);
 
 	/**
-	 * Returns classes defined by this extension.
+	 * Returns reflections of classes defined by this extension.
 	 *
 	 * @return array
 	 */
@@ -51,7 +51,7 @@ interface IReflectionExtension extends IReflection
 	public function getConstantReflection($name);
 
 	/**
-	 * Returns reflections of defined constants.
+	 * Returns reflections of constants defined by this extension.
 	 *
 	 * This method has this name just for consistence with the rest of reflection.
 	 *
@@ -69,7 +69,7 @@ interface IReflectionExtension extends IReflection
 	public function getConstant($name);
 
 	/**
-	 * Returns values of defined constants.
+	 * Returns values of constants defined by this extension.
 	 *
 	 * This method exists just for consistence with the rest of reflection.
 	 *
@@ -86,7 +86,7 @@ interface IReflectionExtension extends IReflection
 	public function getFunction($name);
 
 	/**
-	 * Returns functions defined by this extension.
+	 * Returns reflections of functions defined by this extension.
 	 *
 	 * @return array
 	 */

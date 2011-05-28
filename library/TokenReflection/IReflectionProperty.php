@@ -37,14 +37,14 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getDocComment();
 
 	/**
 	 * Returns the docblock definition of the property or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment();
 

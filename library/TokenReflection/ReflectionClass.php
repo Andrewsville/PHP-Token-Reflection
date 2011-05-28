@@ -210,7 +210,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Returns a constant value.
 	 *
 	 * @param string $name Constant name
-	 * @return mixed|false
+	 * @return mixed|boolean
 	 * @throws \TokenReflection\Exception\Runtime On error
 	 */
 	public function getConstant($name)
@@ -230,7 +230,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
-	 * @return \TokenReflection\ReflectionConstant|null
+	 * @return \TokenReflection\ReflectionConstant
 	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
 	 */
 	public function getConstantReflection($name)
@@ -245,7 +245,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns an array of constant values.
+	 * Returns constant values.
 	 *
 	 * @return array
 	 */
@@ -257,7 +257,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns an array of constant reflections.
+	 * Returns constant reflections.
 	 *
 	 * @return array
 	 */
@@ -324,6 +324,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				}
 			}
 		}
+
 		return $defaults;
 	}
 
@@ -397,7 +398,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Returns method reflections.
 	 *
-	 * @param integer $filter Method filter
+	 * @param integer $filter Methods filter
 	 * @return array
 	 */
 	public function getMethods($filter = null)
@@ -445,7 +446,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return \TokenReflection\ReflectionClass|null
+	 * @return \TokenReflection\ReflectionClass|boolean
 	 */
 	public function getParentClass()
 	{
@@ -490,7 +491,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Returns the parent class name.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getParentClassName()
 	{
@@ -498,9 +499,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns class properties.
+	 * Returns property reflections.
 	 *
-	 * @param integer $filter Property types
+	 * @param integer $filter Properties filter
 	 * @return array
 	 */
 	public function getProperties($filter = null)
@@ -519,7 +520,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Return a property reflections.
+	 * Return a property reflection.
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\ReflectionProperty
@@ -536,7 +537,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns the unqualified name.
+	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */
@@ -597,7 +598,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns interfaces implemented by this class, not its parents.
+	 * Returns reflections of interfaces implemented by this class, not its parents.
 	 *
 	 * @return array
 	 */
@@ -615,9 +616,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns methods declared by this class, not its parents.
+	 * Returns reflections of methods declared by this class, not its parents.
 	 *
-	 * @param integer $filter Method filter
+	 * @param integer $filter Methods filter
 	 * @return array
 	 */
 	public function getOwnMethods($filter = null)
@@ -634,7 +635,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns properties declared by this class, not its parents.
+	 * Returns reflections of properties declared by this class, not its parents.
 	 *
 	 * @param integer $filter Properties filter
 	 * @return array
@@ -721,7 +722,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns if the class implements the given property.
+	 * Returns if the class defines the given property.
 	 *
 	 * @param string $name Property name
 	 * @return boolean
@@ -733,7 +734,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns if the class (and not its parents) implements the given property.
+	 * Returns if the class (and not its parents) defines the given property.
 	 *
 	 * @param string $name Property name
 	 * @return boolean
@@ -1031,7 +1032,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Returns the docblock definition of the class or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -1045,7 +1046,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
-	 * Use any number of constructor paramters as function parameters.
+	 * Use any number of constructor parameters as function parameters.
 	 *
 	 * @param mixed $args
 	 * @return object

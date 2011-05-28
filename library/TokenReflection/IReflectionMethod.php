@@ -23,14 +23,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return \TokenReflection\IReflectionClass
+	 * @return \TokenReflection\IReflectionClass|null
 	 */
 	public function getDeclaringClass();
 
 	/**
 	 * Returns the declaring class name.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getDeclaringClassName();
 

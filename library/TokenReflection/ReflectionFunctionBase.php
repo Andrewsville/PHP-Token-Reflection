@@ -44,14 +44,14 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	protected $namespaceName;
 
 	/**
-	 * Determines if the function returns its value as reference.
+	 * Determines if the function/method returns its value as reference.
 	 *
 	 * @var boolean
 	 */
 	private $returnsReference = false;
 
 	/**
-	 * Parameters array.
+	 * Parameters.
 	 *
 	 * @var array
 	 */
@@ -114,7 +114,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
-	 * Returns an array of parameters.
+	 * Returns parameters.
 	 *
 	 * @return array
 	 */
@@ -160,7 +160,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
-	 * Returns if the method is a closure.
+	 * Returns if the function/method is a closure.
 	 *
 	 * @return boolean
 	 */
@@ -170,7 +170,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
-	 * Returns if the method returns its value as reference.
+	 * Returns if the function/method returns its value as reference.
 	 *
 	 * @return boolean
 	 */
@@ -180,7 +180,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
-	 * Returns the method/function FQN.
+	 * Returns the name (FQN).
 	 *
 	 * @return string
 	 */
@@ -194,7 +194,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
-	 * Returns the method/function UQN.
+	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */

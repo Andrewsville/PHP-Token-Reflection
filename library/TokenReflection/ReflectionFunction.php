@@ -30,7 +30,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	private $aliases = array();
 
 	/**
-	 * Returns if the method is is disabled via the disable_functions directive.
+	 * Returns if the function is is disabled via the disable_functions directive.
 	 *
 	 * @return boolean
 	 */
@@ -42,7 +42,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * Returns the docblock definition of the function.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{

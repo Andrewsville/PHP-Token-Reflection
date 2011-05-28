@@ -14,8 +14,8 @@
  */
 
 namespace TokenReflection\Broker\Backend;
-use TokenReflection;
 
+use TokenReflection;
 use TokenReflection\Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
 
 /**

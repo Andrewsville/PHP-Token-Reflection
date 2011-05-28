@@ -59,7 +59,7 @@ class ReflectionAnnotation
 	 *
 	 * False if none.
 	 *
-	 * @var string|false
+	 * @var string|boolean
 	 */
 	private $docComment;
 
@@ -74,9 +74,9 @@ class ReflectionAnnotation
 	 * Constructor.
 	 *
 	 * @param \TokenReflection\ReflectionBase $reflection Parent reflection object
-	 * @param string|false $docComment Docblock definition
+	 * @param string|boolean $docComment Docblock definition
 	 */
-	public function __construct(ReflectionBase $reflection, $docComment = null)
+	public function __construct(ReflectionBase $reflection, $docComment = false)
 	{
 		$this->reflection = $reflection;
 		$this->docComment = $docComment ?: false;
@@ -85,7 +85,7 @@ class ReflectionAnnotation
 	/**
 	 * Returns the docblock.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getDocComment()
 	{

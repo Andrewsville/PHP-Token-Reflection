@@ -14,8 +14,8 @@
  */
 
 namespace TokenReflection\Dummy;
-use TokenReflection;
 
+use TokenReflection;
 use TokenReflection\Broker, TokenReflection\IReflectionClass, TokenReflection\ReflectionBase;
 use ReflectionClass as InternalReflectionClass, TokenReflection\Exception;
 
@@ -51,7 +51,7 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns the class name (FQN).
+	 * Returns the name (FQN).
 	 *
 	 * @return string
 	 */
@@ -61,7 +61,7 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns the class UQN.
+	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */
@@ -106,7 +106,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
-	 * @return string
+	 * @return null
 	 */
 	public function getFileName()
 	{
@@ -116,7 +116,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getStartLine()
 	{
@@ -126,7 +126,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return null
 	 */
 	public function getEndLine()
 	{
@@ -135,8 +135,6 @@ class ReflectionClass implements IReflectionClass
 
 	/**
 	 * Returns the PHP extension reflection.
-	 *
-	 * Returns null - everything is user defined.
 	 *
 	 * @return null
 	 */
@@ -148,9 +146,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * Returns false - everything is user defined.
-	 *
-	 * @return false
+	 * @return boolean
 	 */
 	public function getExtensionName()
 	{
@@ -190,7 +186,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return boolean
 	 */
 	public function getDocComment()
 	{
@@ -200,7 +196,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the docblock definition of the class or its parent.
 	 *
-	 * @return string|false
+	 * @return boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -232,7 +228,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @return string|array|null
+	 * @return null
 	 */
 	public function getAnnotation($name)
 	{
@@ -305,7 +301,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the class constructor reflection.
 	 *
-	 * @return \TokenReflection\ReflectionMethod|null
+	 * @return null
 	 */
 	public function getConstructor()
 	{
@@ -315,7 +311,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the class desctructor reflection.
 	 *
-	 * @return \TokenReflection\ReflectionMethod|null
+	 * @return null
 	 */
 	public function getDestructor()
 	{
@@ -366,7 +362,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns method reflections.
 	 *
-	 * @param integer $filter Method filter
+	 * @param integer $filter Methods filter
 	 * @return array
 	 */
 	public function getMethods($filter = null)
@@ -397,7 +393,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return \TokenReflection\ReflectionClass|null
+	 * @return null
 	 */
 	public function getParentClass()
 	{
@@ -427,7 +423,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return \TokenReflection\ReflectionClass
+	 * @return null
 	 */
 	public function getParentClassName()
 	{
@@ -501,7 +497,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns methods declared by this class, not its parents.
 	 *
-	 * @param integer $filter Method filter
+	 * @param integer $filter Methods filter
 	 * @return array
 	 */
 	public function getOwnMethods($filter = null)

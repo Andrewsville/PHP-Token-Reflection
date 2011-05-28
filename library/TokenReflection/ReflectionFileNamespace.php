@@ -51,7 +51,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	private $constants = array();
 
 	/**
-	 * Returns an array of all class reflections.
+	 * Returns class reflections.
 	 *
 	 * @return array
 	 */
@@ -61,7 +61,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	}
 
 	/**
-	 * Returns all function reflections.
+	 * Returns function reflections.
 	 *
 	 * @return array
 	 */
@@ -71,7 +71,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	}
 
 	/**
-	 * Returns all constant reflections.
+	 * Returns constant reflections.
 	 *
 	 * @return array
 	 */
@@ -83,7 +83,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Returns the docblock definition of the namespace.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{

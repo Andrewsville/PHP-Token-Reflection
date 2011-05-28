@@ -69,7 +69,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Docblock definition.
 	 *
-	 * @var \TokenReflection\ReflectionAnnotation|false
+	 * @var \TokenReflection\ReflectionAnnotation|boolean
 	 */
 	protected $docComment;
 
@@ -81,7 +81,7 @@ abstract class ReflectionBase implements IReflection
 	private $parsedDocComment;
 
 	/**
-	 * Object name (UQN).
+	 * Object name (FQN).
 	 *
 	 * @var string
 	 */
@@ -228,7 +228,7 @@ abstract class ReflectionBase implements IReflection
 		}
 
 		if (null === $this->docComment) {
-			$this->docComment = $this->docComment = new ReflectionAnnotation($this);
+			$this->docComment = new ReflectionAnnotation($this);
 		}
 
 		if ($parent instanceof ReflectionBase) {
@@ -249,7 +249,7 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Saves the first line number.
+	 * Saves the start line number.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token susbtream
 	 * @return \TokenReflection\ReflectionBase
@@ -341,7 +341,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns the PHP extension reflection.
 	 *
-	 * Returns null - everything is user defined.
+	 * Alwyas returns null - everything is user defined.
 	 *
 	 * @return null
 	 */
@@ -353,9 +353,9 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * Returns false - everything is user defined.
+	 * Alwyas returns false - everything is user defined.
 	 *
-	 * @return false
+	 * @return boolean
 	 */
 	public function getExtensionName()
 	{
@@ -397,7 +397,7 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Returns the reflection object name.
+	 * Returns the name (FQN).
 	 *
 	 * @return string
 	 */
@@ -409,7 +409,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getDocComment()
 	{

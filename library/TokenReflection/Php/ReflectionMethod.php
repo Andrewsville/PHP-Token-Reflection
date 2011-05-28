@@ -14,8 +14,8 @@
  */
 
 namespace TokenReflection\Php;
-use TokenReflection;
 
+use TokenReflection;
 use TokenReflection\Broker, TokenReflection\Exception;
 use Reflector, ReflectionMethod as InternalReflectionMethod, ReflectionParameter as InternalReflectionParameter;
 
@@ -106,7 +106,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Returns the docblock definition of the method or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -185,7 +185,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name
-	 * @return string|array|null
+	 * @return null
 	 */
 	public function getAnnotation($name)
 	{

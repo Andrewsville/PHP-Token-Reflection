@@ -23,14 +23,14 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getDocComment();
 
 	/**
 	 * Returns the docblock definition of the function/method or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment();
 
@@ -91,14 +91,14 @@ interface IReflectionFunctionBase extends IReflection
 	public function getNumberOfRequiredParameters();
 
 	/**
-	 * Returns function parameters.
+	 * Returns function/method parameters.
 	 *
 	 * @return array
 	 */
 	public function getParameters();
 
 	/**
-	 * Returns a particular function/method parameter.
+	 * Returns a function/method parameter.
 	 *
 	 * @param integer|string $parameter Parameter name or position
 	 * @return \TokenReflection\IReflectionParameter
@@ -120,21 +120,21 @@ interface IReflectionFunctionBase extends IReflection
 	public function inNamespace();
 
 	/**
-	 * Returns if the method is a closure.
+	 * Returns if the function/method is a closure.
 	 *
 	 * @return boolean
 	 */
 	public function isClosure();
 
 	/**
-	 * Returns if the method is deprecated.
+	 * Returns if the function/method is deprecated.
 	 *
 	 * @return boolean
 	 */
 	public function isDeprecated();
 
 	/**
-	 * Returns if the method returns its value as reference.
+	 * Returns if the function/method returns its value as reference.
 	 *
 	 * @return boolean
 	 */

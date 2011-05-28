@@ -29,21 +29,21 @@ interface IReflectionNamespace extends IReflection
 	public function getClass($className);
 
 	/**
-	 * Returns an array of all class reflections.
+	 * Returns class reflections.
 	 *
 	 * @return array
 	 */
 	public function getClasses();
 
 	/**
-	 * Returns an array of all class names (FQN).
+	 * Returns class names (FQN).
 	 *
 	 * @return array
 	 */
 	public function getClassNames();
 
 	/**
-	 * Returns an array of all class names (UQN).
+	 * Returns class unqualified names (UQN).
 	 *
 	 * @return array
 	 */
@@ -58,21 +58,21 @@ interface IReflectionNamespace extends IReflection
 	public function getFunction($functionName);
 
 	/**
-	 * Returns all function reflections.
+	 * Returns function reflections.
 	 *
 	 * @return array
 	 */
 	public function getFunctions();
 
 	/**
-	 * Returns all function names (FQN).
+	 * Returns function names (FQN).
 	 *
 	 * @return array
 	 */
 	public function getFunctionNames();
 
 	/**
-	 * Returns all function names (UQN).
+	 * Returns function unqualified names (UQN).
 	 *
 	 * @return array
 	 */
@@ -87,21 +87,21 @@ interface IReflectionNamespace extends IReflection
 	public function getConstant($constantName);
 
 	/**
-	 * Returns all constant reflections.
+	 * Returns constant reflections.
 	 *
 	 * @return array
 	 */
 	public function getConstants();
 
 	/**
-	 * Returns all constant names (FQN).
+	 * Returns constant names (FQN).
 	 *
 	 * @return array
 	 */
 	public function getConstantNames();
 
 	/**
-	 * Returns all constant names (UQN).
+	 * Returns constant unqualified names (UQN).
 	 *
 	 * @return array
 	 */

@@ -46,8 +46,6 @@ class ReflectionFile implements IReflection
 	/**
 	 * Constructor.
 	 *
-	 * Assigns a filename and the token stream.
-	 *
 	 * @param \TokenReflection\Stream $tokenStream Token stream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */

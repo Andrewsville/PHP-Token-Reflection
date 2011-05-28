@@ -53,14 +53,14 @@ interface IReflectionClass extends IReflection
 	public function getOwnConstants();
 
 	/**
-	 * Returns an array of constant reflections.
+	 * Returns constant reflections.
 	 *
 	 * @return array
 	 */
 	public function getConstantReflections();
 
 	/**
-	 * Returns reflections of constants declared by this class, not by its parents.
+	 * Returns constant reflections declared by this class, not by its parents.
 	 *
 	 * @return array
 	 */
@@ -91,14 +91,14 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getDocComment();
 
 	/**
 	 * Returns the docblock definition of the class or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment();
 
@@ -159,7 +159,7 @@ interface IReflectionClass extends IReflection
 	public function getInterfaces();
 
 	/**
-	 * Returns interfaces implemented by this class, not its parents.
+	 * Returns interface reflections implemented by this class, not its parents.
 	 *
 	 * @return array
 	 */
@@ -177,15 +177,15 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns method reflections.
 	 *
-	 * @param integer $filter Method filter
+	 * @param integer $filter Methods filter
 	 * @return array
 	 */
 	public function getMethods($filter = null);
 
 	/**
-	 * Returns methods declared by this class, not its parents.
+	 * Returns method reflections declared by this class, not its parents.
 	 *
-	 * @param integer $filter Method filter
+	 * @param integer $filter Methods filter
 	 * @return array
 	 */
 	public function getOwnMethods($filter = null);
@@ -219,9 +219,9 @@ interface IReflectionClass extends IReflection
 	public function getParentClasses();
 
 	/**
-	 * Returns the parent class reflection.
+	 * Returns the parent class name.
 	 *
-	 * @return \TokenReflection\ReflectionClass
+	 * @return string|null
 	 */
 	public function getParentClassName();
 
@@ -233,15 +233,15 @@ interface IReflectionClass extends IReflection
 	public function getParentClassNameList();
 
 	/**
-	 * Returns class properties.
+	 * Returns property reflections.
 	 *
-	 * @param integer $filter Property types
+	 * @param integer $filter Properties filter
 	 * @return array
 	 */
 	public function getProperties($filter = null);
 
 	/**
-	 * Returns properties declared by this class, not its parents.
+	 * Returns property reflections declared by this class, not its parents.
 	 *
 	 * @param integer $filter Properties filter
 	 * @return array
@@ -249,7 +249,7 @@ interface IReflectionClass extends IReflection
 	public function getOwnProperties($filter = null);
 
 	/**
-	 * Return a property reflections.
+	 * Return a property reflection.
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\ReflectionProperty
@@ -258,7 +258,7 @@ interface IReflectionClass extends IReflection
 	public function getProperty($name);
 
 	/**
-	 * Returns the unqualified name.
+	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */
@@ -315,7 +315,7 @@ interface IReflectionClass extends IReflection
 	public function hasOwnMethod($name);
 
 	/**
-	 * Returns if the class implements the given property.
+	 * Returns if the class defines the given property.
 	 *
 	 * @param string $name Property name
 	 * @return boolean
@@ -323,7 +323,7 @@ interface IReflectionClass extends IReflection
 	public function hasProperty($name);
 
 	/**
-	 * Returns if the class (and not its parents) implements the given property.
+	 * Returns if the class (and not its parents) defines the given property.
 	 *
 	 * @param string $name Property name
 	 * @return boolean

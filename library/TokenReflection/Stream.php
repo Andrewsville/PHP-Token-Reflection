@@ -232,7 +232,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Finds the position of the token of the given type.
 	 *
 	 * @param integer|string $type Token type
-	 * @return \TokenReflection\Stream|false
+	 * @return \TokenReflection\Stream|boolean
 	 */
 	public function find($type)
 	{

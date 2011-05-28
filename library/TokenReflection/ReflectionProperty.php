@@ -33,7 +33,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Name of the declaring class.
 	 *
-	 * @var String
+	 * @var string
 	 */
 	private $declaringClassName;
 
@@ -222,7 +222,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Returns the docblock definition of the property or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{
@@ -239,7 +239,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Sets value of a property for a particular class instnace.
+	 * Sets value of a property for a particular class instance.
 	 *
 	 * @param object $object Class instance
 	 * @param mixed $value Poperty value

@@ -162,7 +162,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Returns the required class name of the value as it was defined in the source code.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getOriginalClassName()
 	{
@@ -211,7 +211,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Returns the declaring function name.
 	 *
-	 * @return string|null
+	 * @return string
 	 */
 	public function getDeclaringFunctionName()
 	{
@@ -276,7 +276,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Returns the docblock definition of the parameter.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{

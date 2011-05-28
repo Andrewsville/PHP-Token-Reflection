@@ -109,7 +109,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return \TokenReflection\ReflectionClass
+	 * @return \TokenReflection\ReflectionClass|null
 	 */
 	public function getDeclaringClass()
 	{
@@ -119,7 +119,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns the declaring class name.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getDeclaringClassName()
 	{
@@ -129,7 +129,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns the docblock definition of the method or its parent.
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 */
 	public function getInheritedDocComment()
 	{

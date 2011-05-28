@@ -100,7 +100,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns an array of all class reflections.
+	 * Returns class reflections.
 	 *
 	 * @return array
 	 */
@@ -110,7 +110,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns an array of all class names (FQN).
+	 * Returns class names (FQN).
 	 *
 	 * @return array
 	 */
@@ -120,7 +120,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns an array of all class names (UQN).
+	 * Returns class unqualified names (UQN).
 	 *
 	 * @return array
 	 */
@@ -153,7 +153,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns all function reflections.
+	 * Returns function reflections.
 	 *
 	 * @return array
 	 */
@@ -163,7 +163,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns all function names (FQN).
+	 * Returns function names (FQN).
 	 *
 	 * @return array
 	 */
@@ -173,7 +173,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns all function names (UQN).
+	 * Returns function unqualified names (UQN).
 	 *
 	 * @return array
 	 */
@@ -206,7 +206,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns all constant reflections.
+	 * Returns constant reflections.
 	 *
 	 * @return array
 	 */
@@ -216,7 +216,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns all constant names (FQN).
+	 * Returns constant names (FQN).
 	 *
 	 * @return array
 	 */
@@ -226,7 +226,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns all constant names (UQN).
+	 * Returns constant unqualified names (UQN).
 	 *
 	 * @return array
 	 */
@@ -238,7 +238,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns the reflection subject name.
+	 * Returns the name.
 	 *
 	 * @return string
 	 */

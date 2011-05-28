@@ -14,6 +14,7 @@
  */
 
 namespace TokenReflection\Broker;
+
 use TokenReflection;
 
 /**

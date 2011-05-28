@@ -14,8 +14,8 @@
  */
 
 namespace TokenReflection\Php;
-use TokenReflection;
 
+use TokenReflection;
 use TokenReflection\Broker, TokenReflection\Exception;
 use Reflector, ReflectionExtension as InternalReflectionExtension;
 
@@ -136,7 +136,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	}
 
 	/**
-	 * Returns classes defined by this extension.
+	 * Returns a class reflection.
 	 *
 	 * @param string $name Class name
 	 * @return \TokenReflection\IReflectionClass|null
