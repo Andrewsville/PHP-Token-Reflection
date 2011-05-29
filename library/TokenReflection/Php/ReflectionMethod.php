@@ -110,15 +110,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getInheritedDocComment()
 	{
-		if (false !== ($docComment = $this->getDocComment())) {
-			return $docComment;
-		}
-
-		$parent = $this->getDeclaringClass()->getParentClass();
-		if ($parent && $parent->hasMethod($this->getName())) {
-			return $parent->getMethod($this->getName())->getInheritedDocComment();
-		}
-
 		return false;
 	}
 

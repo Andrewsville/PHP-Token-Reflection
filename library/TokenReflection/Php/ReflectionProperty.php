@@ -115,7 +115,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getInheritedDocComment()
 	{
-		return $this->getDocComment();
+		return false;
 	}
 
 	/**

@@ -148,7 +148,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getInheritedDocComment()
 	{
-		return $this->getDocComment();
+		return false;
 	}
 
 	/**

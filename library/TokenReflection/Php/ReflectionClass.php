@@ -500,14 +500,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function getInheritedDocComment()
 	{
-		if (false !== ($docComment = $this->getDocComment()) && false === strpos($docComment, '@inheritdoc')) {
-			return $docComment;
-		}
-
-		if ($parent = $this->getParentClass()) {
-			return $parent->getInheritedDocComment();
-		}
-
 		return false;
 	}
 

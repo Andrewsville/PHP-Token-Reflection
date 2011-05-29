@@ -191,7 +191,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 */
 	public function getInheritedDocComment()
 	{
-		return $this->getDocComment();
+		return false;
 	}
 
 	/**

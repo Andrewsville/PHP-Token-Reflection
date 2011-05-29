@@ -268,7 +268,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 */
 	public function getInheritedDocComment()
 	{
-		return $this->getDocComment();
+		return false;
 	}
 
 	/**
