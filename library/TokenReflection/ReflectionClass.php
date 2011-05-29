@@ -277,10 +277,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getConstructor()
 	{
-		$methods = $this->getMethods();
-		foreach ($methods as $reflectionMethod) {
-			if ($reflectionMethod->isConstructor()) {
-				return $reflectionMethod;
+		foreach ($this->getMethods() as $method) {
+			if ($method->isConstructor()) {
+				return $method;
 			}
 		}
 
@@ -294,10 +293,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getDestructor()
 	{
-		$methods = $this->getMethods();
-		foreach ($methods as $reflectionMethod) {
-			if ($reflectionMethod->isDestructor()) {
-				return $reflectionMethod;
+		foreach ($this->getMethods() as $method) {
+			if ($method->isDestructor()) {
+				return $method;
 			}
 		}
 
@@ -317,9 +315,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$properties = $this->getProperties();
 		foreach (array(true, false) as $static) {
 			foreach ($accessLevels as $level) {
-				foreach ($properties as $name => $property) {
+				foreach ($properties as $property) {
 					if ($property->isStatic() === $static && ($property->getModifiers() & $level)) {
-						$defaults[$name] = $property->getDefaultValue();
+						$defaults[$property->getName()] = $property->getDefaultValue();
 					}
 				}
 			}
@@ -387,12 +385,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getMethod($name)
 	{
-		$methods = $this->getMethods();
-		if (!isset($methods[$name])) {
-			throw new Exception\Runtime(sprintf('There is no method "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		foreach ($this->getMethods() as $method) {
+			if ($name === $method->getName()) {
+				return $method;
+			}
 		}
 
-		return $methods[$name];
+		throw new Exception\Runtime(sprintf('There is no method "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -405,7 +404,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$methods = $this->getOwnMethods($filter);
 		if (null !== $this->parentClassName) {
-			$methods = array_merge($this->getParentClass()->getMethods($filter), $methods);
+			foreach ($this->getParentClass()->getMethods($filter) as $parentMethod) {
+				foreach ($methods as $method) {
+					if ($method->getName() === $parentMethod->getName()) {
+						continue 2;
+					}
+				}
+				$methods[] = $parentMethod;
+			}
 		}
 
 		return $methods;
@@ -509,10 +515,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$properties = $this->getOwnProperties($filter);
 
 		if (null !== $this->parentClassName) {
-			foreach ($this->getParentClass()->getProperties($filter) as $name => $property) {
-				if (!isset($properties[$name])) {
-					$properties[$name] = $property;
+			foreach ($this->getParentClass()->getProperties($filter) as $parentProperty) {
+				foreach ($properties as $property) {
+					if ($property->getName() === $parentProperty->getName()) {
+						continue 2;
+					}
 				}
+				$properties[] = $parentProperty;
 			}
 		}
 
@@ -528,12 +537,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getProperty($name)
 	{
-		$properties = $this->getProperties();
-		if (!isset($properties[$name])) {
-			throw new Exception\Runtime(sprintf('There is no property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		foreach ($this->getProperties() as $property) {
+			if ($name === $property->getName()) {
+				return $property;
+			}
 		}
 
-		return $properties[$name];
+		throw new Exception\Runtime(sprintf('There is no property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -559,9 +569,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getStaticProperties()
 	{
 		$defaults = array();
-		foreach ($this->getProperties(InternalReflectionProperty::IS_STATIC) as $name => $property) {
+		foreach ($this->getProperties(InternalReflectionProperty::IS_STATIC) as $property) {
 			if ($property instanceof ReflectionProperty) {
-				$defaults[$name] = $property->getDefaultValue();
+				$defaults[$property->getName()] = $property->getDefaultValue();
 			}
 		}
 
@@ -580,21 +590,22 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getStaticPropertyValue($name, $default = null)
 	{
 		$properties = $this->getProperties(InternalReflectionProperty::IS_STATIC);
-		if (!isset($properties[$name])) {
-			throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+
+		foreach ($this->getProperties(InternalReflectionProperty::IS_STATIC) as $property) {
+			if ($name === $property->getName()) {
+				if (!$property instanceof ReflectionProperty) {
+					return $property->getDeclaringClass()->getStaticPropertyValue($name, $default);
+				}
+
+				if (!$property->isPublic() && !$property->isAccessible()) {
+					throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
+				}
+
+				return $property->getDefaultValue();
+			}
 		}
 
-		$property = $properties[$name];
-
-		if (!$property instanceof ReflectionProperty) {
-			return $property->getDeclaringClass()->getStaticPropertyValue($name, $default);
-		}
-
-		if (!$property->isPublic() && !$property->isAccessible()) {
-			throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
-		}
-
-		return $property->getDefaultValue();
+		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -631,7 +642,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			});
 		}
 
-		return $methods;
+		return array_values($methods);
 	}
 
 	/**
@@ -650,7 +661,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			});
 		}
 
-		return $properties;
+		return array_values($properties);
 	}
 
 	/**
@@ -706,8 +717,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function hasMethod($name)
 	{
-		$methods = $this->getMethods();
-		return isset($methods[$name]);
+		foreach ($this->getMethods() as $method) {
+			if ($name === $method->getName()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -729,8 +745,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function hasProperty($name)
 	{
-		$properties = $this->getProperties();
-		return isset($properties[$name]);
+		foreach ($this->getProperties() as $property) {
+			if ($name === $property->getName()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -852,8 +873,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			return false;
 		}
 
-		$methods = $this->getMethods();
-		return isset($methods['__clone']) ? $methods['__clone']->isPublic() : true;
+		foreach ($this->getMethods() as $method) {
+			if ('__clone' === $method->getName()) {
+				return $method->isPublic();
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -1083,17 +1109,18 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
-		$properties = $this->getProperties(InternalReflectionProperty::IS_STATIC);
-		if (!isset($properties[$name])) {
-			throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		foreach ($this->getProperties(InternalReflectionProperty::IS_STATIC) as $property) {
+			if ($name === $property->getName()) {
+				if (!$property->isPublic() && !$property->isAccessible()) {
+					throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
+				}
+
+				$property->setDefaultValue($value);
+				return;
+			}
 		}
 
-		$reflectionProperty = $properties[$name];
-		if (!$reflectionProperty->isPublic() && !$reflectionProperty->isAccessible()) {
-			throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
-		}
-
-		$reflectionProperty->setDefaultValue($value);
+		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
 
 	/**

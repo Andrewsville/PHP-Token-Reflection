@@ -156,17 +156,19 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$declaringClass = $this->getDeclaringClass();
 			$parentClass = $declaringClass->getParentClass();
 			if (false !== $parentClass) {
-				$parentClassMethods = $parentClass->getMethods();
-				// Access level changed
-				if ($this->modifiers & InternalReflectionMethod::IS_PUBLIC) {
-					if (isset($parentClassMethods[$this->name]) && ($parentClassMethods[$this->name]->getModifiers() & (self::ACCESS_LEVEL_CHANGED | InternalReflectionMethod::IS_PRIVATE))) {
-						$this->modifiers |= self::ACCESS_LEVEL_CHANGED;
-					}
-				}
+				foreach ($parentClass->getMethods() as $parentClassMethod) {
+					if ($this->name === $parentClassMethod->getName()) {
+						// Access level changed
+						if ($this->modifiers & InternalReflectionMethod::IS_PUBLIC && ($parentClassMethod->getModifiers() & (self::ACCESS_LEVEL_CHANGED | InternalReflectionMethod::IS_PRIVATE))) {
+							$this->modifiers |= self::ACCESS_LEVEL_CHANGED;
+						}
 
-				// Implemented abstract
-				if (isset($parentClassMethods[$this->name]) && ($parentClassMethods[$this->name]->getModifiers() & (self::IS_IMPLEMENTED_ABSTRACT | InternalReflectionMethod::IS_ABSTRACT))) {
-					$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+						// Implemented abstract
+						if ($parentClassMethod->getModifiers() & (self::IS_IMPLEMENTED_ABSTRACT | InternalReflectionMethod::IS_ABSTRACT)) {
+							$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+						}
+						break;
+					}
 				}
 			}
 
