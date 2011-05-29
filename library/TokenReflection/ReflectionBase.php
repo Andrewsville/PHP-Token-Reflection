@@ -203,6 +203,7 @@ abstract class ReflectionBase implements IReflection
 	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
 	{
 		if ($this instanceof ReflectionParameter) {
+			$this->docComment = new ReflectionAnnotation($this);
 			return $this;
 		}
 
