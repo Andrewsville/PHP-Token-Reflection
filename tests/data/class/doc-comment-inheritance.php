@@ -14,9 +14,9 @@ class TokenReflection_Test_ClassDocCommentInheritanceParent
 }
 
 /**
- * My {@inheritdoc}
+ * My {@inheritDoc}
  *
- * {@inheritdoc} Phew, that was long.
+ * {@inheritDoc} Phew, that was long.
  *
  * @author anotherauthor
  */

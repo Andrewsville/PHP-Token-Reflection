@@ -223,10 +223,10 @@ class ReflectionAnnotation
 		// Process docblock inheritance if needed
 		$willInherit = false === $this->docComment;
 		if (!$willInherit && isset($this->annotations[self::SHORT_DESCRIPTION])) {
-			$willInherit = false !== strpos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}');
+			$willInherit = false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}');
 		}
 		if (!$willInherit && isset($this->annotations[self::LONG_DESCRIPTION])) {
-			$willInherit = false !== strpos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}');
+			$willInherit = false !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}');
 		}
 		if ($willInherit) {
 			$this->inheritAnnotations();
@@ -300,15 +300,15 @@ class ReflectionAnnotation
 			}
 		} else {
 			// Place parent short and long descriptions on defined positions
-			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && false !== strpos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
-				$this->annotations[self::SHORT_DESCRIPTION] = str_replace(
+			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
+				$this->annotations[self::SHORT_DESCRIPTION] = str_ireplace(
 					'{@inheritdoc}',
 					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::SHORT_DESCRIPTION),
 					$this->annotations[self::SHORT_DESCRIPTION]
 				);
 			}
-			if (isset($this->annotations[self::LONG_DESCRIPTION]) && false !== strpos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}')) {
-				$this->annotations[self::LONG_DESCRIPTION] = str_replace(
+			if (isset($this->annotations[self::LONG_DESCRIPTION]) && false !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}')) {
+				$this->annotations[self::LONG_DESCRIPTION] = str_ireplace(
 					'{@inheritdoc}',
 					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::LONG_DESCRIPTION),
 					$this->annotations[self::LONG_DESCRIPTION]

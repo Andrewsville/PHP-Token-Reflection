@@ -1062,7 +1062,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getInheritedDocComment()
 	{
-		if (false !== ($docComment = $this->getDocComment()) && false === strpos($docComment, '@inheritdoc')) {
+		if (false !== ($docComment = $this->getDocComment()) && false === stripos($docComment, '@inheritdoc')) {
 			return $docComment;
 		}
 
