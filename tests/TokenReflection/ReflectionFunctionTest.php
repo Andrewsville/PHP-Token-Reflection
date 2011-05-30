@@ -142,7 +142,7 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame($rfl->internal->getNumberOfRequiredParameters(), $rfl->token->getNumberOfRequiredParameters());
 		$this->assertSame(2, $rfl->token->getNumberOfRequiredParameters());
 
-		$this->assertSame(count($rfl->internal->getParameters()), count($rfl->token->getParameters()));
+		$this->assertSame(array_keys($rfl->internal->getParameters()), array_keys($rfl->token->getParameters()));
 		$internalParameters = $rfl->internal->getParameters();
 		$tokenParameters = $rfl->token->getParameters();
 		for ($i = 0; $i < count($internalParameters); $i++) {

@@ -53,7 +53,7 @@ class ReflectionClassTest extends Test
 
 		$filters = array(\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE);
 		foreach ($this->getFilterCombinations($filters) as $filter) {
-			$this->assertSame(count($rfl->internal->getProperties($filter)), count($rfl->token->getProperties($filter)));
+			$this->assertSame(array_keys($rfl->internal->getProperties($filter)), array_keys($rfl->token->getProperties($filter)));
 			foreach ($rfl->token->getProperties($filter) as $property) {
 				$this->assertInstanceOf('TokenReflection\ReflectionProperty', $property);
 			}
@@ -192,7 +192,7 @@ class ReflectionClassTest extends Test
 
 		$filters = array(\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE);
 		foreach ($this->getFilterCombinations($filters) as $filter) {
-			$this->assertSame(count($rfl->internal->getProperties($filter)), count($rfl->token->getProperties($filter)), $filter);
+			$this->assertSame(array_keys($rfl->internal->getProperties($filter)), array_keys($rfl->token->getProperties($filter)), $filter);
 			foreach ($rfl->token->getProperties($filter) as $property) {
 				$this->assertInstanceOf('TokenReflection\ReflectionProperty', $property);
 			}
@@ -251,7 +251,7 @@ class ReflectionClassTest extends Test
 
 		$filters = array(\ReflectionMethod::IS_STATIC, \ReflectionMethod::IS_PUBLIC, \ReflectionMethod::IS_PROTECTED, \ReflectionMethod::IS_PRIVATE, \ReflectionMethod::IS_ABSTRACT, \ReflectionMethod::IS_FINAL);
 		foreach ($this->getFilterCombinations($filters) as $filter) {
-			$this->assertSame(count($rfl->internal->getMethods($filter)), count($rfl->token->getMethods($filter)));
+			$this->assertSame(array_keys($rfl->internal->getMethods($filter)), array_keys($rfl->token->getMethods($filter)));
 			foreach ($rfl->token->getMethods($filter) as $method) {
 				$this->assertInstanceOf('TokenReflection\ReflectionMethod', $method);
 			}
