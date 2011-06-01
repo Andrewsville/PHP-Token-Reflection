@@ -27,7 +27,7 @@ class ReflectionClassTest extends Test
 		$this->assertSame($rfl->internal->getConstants(), $rfl->token->getConstants());
 		$this->assertSame(array('STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => true, 'PARENT' => 'parent'), $rfl->token->getConstants());
 		$this->assertSame(array('STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => true), $rfl->token->getOwnConstants());
-		$this->assertSame(array('STRING', 'INTEGER', 'FLOAT', 'BOOLEAN'), array_keys($rfl->token->getOwnConstantReflections()));
+		$this->assertSame(range(0, 3), array_keys($rfl->token->getOwnConstantReflections()));
 		foreach ($rfl->token->getOwnConstantReflections() as $constant) {
 			$this->assertInstanceOf('TokenReflection\ReflectionConstant', $constant);
 		}

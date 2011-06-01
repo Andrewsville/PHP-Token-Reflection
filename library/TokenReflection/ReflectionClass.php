@@ -235,10 +235,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getConstantReflection($name)
 	{
-		$constants = $this->getConstantReflections();
+		if (isset($this->constants[$name])) {
+			return $this->constants[$name];
+		}
 
-		if (isset($constants[$name])) {
-			return $constants[$name];
+		foreach ($this->getConstantReflections() as $constant) {
+			if ($name === $constant->getName()) {
+				return $constant;
+			}
 		}
 
 		throw new Exception\Runtime(sprintf('There is no constant "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
@@ -251,9 +255,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getConstants()
 	{
-		return array_map(function(IReflectionConstant $constant) {
-			return $constant->getValue();
-		}, $this->getConstantReflections());
+		$constants = array();
+		foreach ($this->getConstantReflections() as $constant) {
+			$constants[$constant->getName()] = $constant->getValue();
+		}
+		return $constants;
 	}
 
 	/**
@@ -264,9 +270,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function getConstantReflections()
 	{
 		if (null === $this->parentClassName) {
-			return $this->constants;
+			return array_values($this->constants);
 		} else {
-			return array_merge($this->constants, $this->getParentClass()->getConstantReflections());
+			return array_merge(array_values($this->constants), $this->getParentClass()->getConstantReflections());
 		}
 	}
 
@@ -683,7 +689,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getOwnConstantReflections()
 	{
-		return $this->constants;
+		return array_values($this->constants);
 	}
 
 	/**
@@ -694,8 +700,17 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function hasConstant($name)
 	{
-		$constants = $this->getConstantReflections();
-		return isset($constants[$name]);
+		if (isset($this->constants[$name])) {
+			return true;
+		}
+
+		foreach ($this->getConstantReflections() as $constant) {
+			if ($name === $constant->getName()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

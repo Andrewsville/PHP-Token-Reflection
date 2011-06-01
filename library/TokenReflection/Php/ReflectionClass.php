@@ -148,7 +148,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		return $this->contants;
+		return array_values($this->contants);
 	}
 
 	/**
@@ -158,14 +158,11 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function getOwnConstantReflections()
 	{
-		if (null === $this->contants) {
-			$this->contants = array();
-			foreach ($this->getOwnConstants() as $name => $value) {
-				$this->contants[$name] = $this->getConstantReflection($name);
-			}
+		$constants = array();
+		foreach ($this->getOwnConstants() as $name => $value) {
+			$constants[] = $this->getConstantReflection($name);
 		}
-
-		return $this->contants;
+		return $constants;
 	}
 
 	/**
@@ -243,8 +240,13 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function hasOwnMethod($name)
 	{
-		$methods = $this->getOwnMethods();
-		return isset($methods[$name]);
+		foreach ($this->getOwnMethods() as $method) {
+			if ($name === $method->getName()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -269,8 +271,13 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function hasOwnProperty($name)
 	{
-		$properties = $this->getOwnProperties();
-		return isset($properties[$name]);
+		foreach ($this->getOwnProperties() as $property) {
+			if ($name === $property->getName()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -366,7 +373,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		// @todo throw?
 		return null;
 	}
 
