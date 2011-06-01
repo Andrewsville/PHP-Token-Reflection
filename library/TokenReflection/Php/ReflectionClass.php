@@ -141,14 +141,14 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function getConstantReflections()
 	{
-		if (null === $this->contants) {
+		if (null === $this->constants) {
 			$this->constants = array();
 			foreach ($this->getConstants() as $name => $value) {
 				$this->constants[$name] = $this->getConstantReflection($name);
 			}
 		}
 
-		return array_values($this->contants);
+		return array_values($this->constants);
 	}
 
 	/**
