@@ -221,15 +221,17 @@ class ReflectionAnnotation
 		$this->mergeTemplates();
 
 		// Process docblock inheritance if needed
-		$willInherit = false === $this->docComment;
-		if (!$willInherit && isset($this->annotations[self::SHORT_DESCRIPTION])) {
-			$willInherit = false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}');
-		}
-		if (!$willInherit && isset($this->annotations[self::LONG_DESCRIPTION])) {
-			$willInherit = false !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}');
-		}
-		if ($willInherit) {
-			$this->inheritAnnotations();
+		if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
+			$willInherit = false === $this->docComment;
+			if (!$willInherit && isset($this->annotations[self::SHORT_DESCRIPTION])) {
+				$willInherit = false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}');
+			}
+			if (!$willInherit && isset($this->annotations[self::LONG_DESCRIPTION])) {
+				$willInherit = false !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}');
+			}
+			if ($willInherit) {
+				$this->inheritAnnotations();
+			}
 		}
 	}
 
@@ -268,51 +270,95 @@ class ReflectionAnnotation
 	 */
 	private function inheritAnnotations()
 	{
-		// Find the reflection to inherit from
-		$parentReflection = null;
 		if ($this->reflection instanceof ReflectionClass) {
-			$parentClass = $this->reflection->getParentClass();
-			if (false !== $parentClass && $parentClass->isTokenized()) {
-				// Process parent only if tokenized; internal and dummy classes have no docblocks
-				$parentReflection = $parentClass;
-			}
+			$declaringClass = $this->reflection;
 		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
-			$parentClass = $this->reflection->getDeclaringClass()->getParentClass();
-			if (false !== $parentClass && $parentClass->isTokenized()) {
-				// Process parent only if tokenized;
-				// internal and dummy classes' methods and properties have no docblocks
+			$declaringClass = $this->reflection->getDeclaringClass();
+		} else {
+			throw new Exception\Parse(sprintf('Unsupported reflection type: "%s".', get_class($this->reflection)), Exception\Parse::UNSUPPORTED);
+		}
+
+		$parents = array_filter(
+			array_merge(array($declaringClass->getParentClass()), $declaringClass->getOwnInterfaces()),
+			function ($class) {
+				return $class instanceof ReflectionClass;
+			}
+		);
+
+		// In case of properties and methods, look for a property/method of the same name and return
+		// and array of such members.
+		$parentDefinitions = array();
+		if ($this->reflection instanceof ReflectionProperty) {
+			$name = $this->reflection->getName();
+			foreach ($parents as $parent) {
 				try {
-					if ($this->reflection instanceof ReflectionMethod) {
-						$parentReflection = $parentClass->getMethod($this->reflection->getName());
-					} else {
-						$parentReflection = $parentClass->getProperty($this->reflection->getName());
-					}
+					$parentDefinitions[] = $parent->getProperty($name);
 				} catch (Exception\Runtime $e) {
-					// No usable parent reflection object exists
+					if (Exception\Runtime::DOES_NOT_EXIST === $e->getCode()) {
+						continue;
+					}
+
+					throw $e;
 				}
 			}
+
+			$parents = $parentDefinitions;
+		} elseif ($this->reflection instanceof ReflectionMethod) {
+			$name = $this->reflection->getName();
+			foreach ($parents as $parent) {
+				try {
+					$parentDefinitions[] = $parent->getMethod($name);
+				} catch (Exception\Runtime $e) {
+					if (Exception\Runtime::DOES_NOT_EXIST === $e->getCode()) {
+						continue;
+					}
+
+					throw $e;
+				}
+			}
+
+			$parents = $parentDefinitions;
 		}
 
 		if (false === $this->docComment) {
-			if (null !== $parentReflection) {
-				// No documentation -> inherit everything
-				$this->annotations = $parentReflection->getAnnotations();
+			// Inherit the entire docblock
+			foreach ($parents as $parent) {
+				$annotations = $parent->getAnnotations();
+				if (!empty($annotations)) {
+					$this->annotations = $annotations;
+					break;
+				}
 			}
 		} else {
-			// Place parent short and long descriptions on defined positions
-			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
-				$this->annotations[self::SHORT_DESCRIPTION] = str_ireplace(
-					'{@inheritdoc}',
-					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::SHORT_DESCRIPTION),
-					$this->annotations[self::SHORT_DESCRIPTION]
-				);
-			}
 			if (isset($this->annotations[self::LONG_DESCRIPTION]) && false !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}')) {
-				$this->annotations[self::LONG_DESCRIPTION] = str_ireplace(
-					'{@inheritdoc}',
-					null === $parentReflection ? '' : $parentReflection->getAnnotation(self::LONG_DESCRIPTION),
-					$this->annotations[self::LONG_DESCRIPTION]
-				);
+				// Inherit long description
+				foreach ($parents as $parent) {
+					if ($parent->hasAnnotation(self::LONG_DESCRIPTION)) {
+						$this->annotations[self::LONG_DESCRIPTION] = str_ireplace(
+							'{@inheritdoc}',
+							$parent->getAnnotation(self::LONG_DESCRIPTION),
+							$this->annotations[self::LONG_DESCRIPTION]
+						);
+						break;
+					}
+				}
+
+				$this->annotations[self::LONG_DESCRIPTION] = str_ireplace('{@inheritdoc}', '', $this->annotations[self::LONG_DESCRIPTION]);
+			}
+			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
+				// Inherit short description
+				foreach ($parents as $parent) {
+					if ($parent->hasAnnotation(self::SHORT_DESCRIPTION)) {
+						$this->annotations[self::SHORT_DESCRIPTION] = str_ireplace(
+							'{@inheritdoc}',
+							$parent->getAnnotation(self::SHORT_DESCRIPTION),
+							$this->annotations[self::SHORT_DESCRIPTION]
+						);
+						break;
+					}
+				}
+
+				$this->annotations[self::SHORT_DESCRIPTION] = str_ireplace('{@inheritdoc}', '', $this->annotations[self::SHORT_DESCRIPTION]);
 			}
 		}
 	}
