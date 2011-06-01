@@ -38,7 +38,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @var array
 	 */
-	private $contants;
+	private $constants;
 
 	/**
 	 * Metod reflections.
@@ -142,9 +142,9 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getConstantReflections()
 	{
 		if (null === $this->contants) {
-			$this->contants = array();
+			$this->constants = array();
 			foreach ($this->getConstants() as $name => $value) {
-				$this->contants[$name] = $this->getConstantReflection($name);
+				$this->constants[$name] = $this->getConstantReflection($name);
 			}
 		}
 
