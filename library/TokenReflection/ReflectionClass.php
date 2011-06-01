@@ -84,6 +84,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	private $modifiers = 0;
 
 	/**
+	 * Determines if modifiers are complete.
+	 *
+	 * @var boolean
+	 */
+	private $modifiersComplete = false;
+
+	/**
 	 * Parent class name.
 	 *
 	 * @var string
@@ -391,6 +398,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getMethod($name)
 	{
+		if (isset($this->methods[$name])) {
+			return $this->methods[$name];
+		}
+
 		foreach ($this->getMethods() as $method) {
 			if ($name === $method->getName()) {
 				return $method;
@@ -408,19 +419,23 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getMethods($filter = null)
 	{
-		$methods = $this->getOwnMethods($filter);
+		$methods = $this->methods;
+
+		if (null !== $filter) {
+			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
+				return (bool) ($method->getModifiers() & $filter);
+			});
+		}
+
 		if (null !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getMethods($filter) as $parentMethod) {
-				foreach ($methods as $method) {
-					if ($method->getName() === $parentMethod->getName()) {
-						continue 2;
-					}
+				if (!isset($methods[$parentMethod->getName()])) {
+					$methods[$parentMethod->getName()] = $parentMethod;
 				}
-				$methods[] = $parentMethod;
 			}
 		}
 
-		return $methods;
+		return array_values($methods);
 	}
 
 	/**
@@ -430,16 +445,26 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getModifiers()
 	{
-		if (($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT) && !($this->modifiers & InternalReflectionClass::IS_IMPLICIT_ABSTRACT)) {
-			foreach ($this->getMethods() as $reflectionMethod) {
-				if ($reflectionMethod->isAbstract()) {
-					$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+		if (false === $this->modifiersComplete) {
+			if (($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT) && !($this->modifiers & InternalReflectionClass::IS_IMPLICIT_ABSTRACT)) {
+				foreach ($this->getMethods() as $reflectionMethod) {
+					if ($reflectionMethod->isAbstract()) {
+						$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+					}
 				}
 			}
-		}
 
-		if (count($this->getInterfaceNames())) {
-			$this->modifiers |= self::IMPLEMENTS_INTERFACES;
+			if (count($this->getInterfaceNames())) {
+				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
+			}
+
+			$this->modifiersComplete = true;
+			foreach ($this->getParentClasses() as $parentClass) {
+				if ($parentClass instanceof Dummy\ReflectionClass) {
+					$this->modifiersComplete = false;
+					break;
+				}
+			}
 		}
 
 		return $this->modifiers;
@@ -518,20 +543,23 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getProperties($filter = null)
 	{
-		$properties = $this->getOwnProperties($filter);
+		$properties = $this->properties;
+
+		if (null !== $filter) {
+			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
+				return (bool) ($property->getModifiers() & $filter);
+			});
+		}
 
 		if (null !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getProperties($filter) as $parentProperty) {
-				foreach ($properties as $property) {
-					if ($property->getName() === $parentProperty->getName()) {
-						continue 2;
-					}
+				if (!isset($properties[$parentProperty->getName()])) {
+					$properties[$parentProperty->getName()] = $parentProperty;
 				}
-				$properties[] = $parentProperty;
 			}
 		}
 
-		return $properties;
+		return array_values($properties);
 	}
 
 	/**
@@ -543,6 +571,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getProperty($name)
 	{
+		if (isset($this->properties[$name])) {
+			return $this->properties[$name];
+		}
+
 		foreach ($this->getProperties() as $property) {
 			if ($name === $property->getName()) {
 				return $property;
@@ -595,20 +627,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getStaticPropertyValue($name, $default = null)
 	{
-		$properties = $this->getProperties(InternalReflectionProperty::IS_STATIC);
-
-		foreach ($this->getProperties(InternalReflectionProperty::IS_STATIC) as $property) {
-			if ($name === $property->getName()) {
-				if (!$property instanceof ReflectionProperty) {
-					return $property->getDeclaringClass()->getStaticPropertyValue($name, $default);
-				}
-
-				if (!$property->isPublic() && !$property->isAccessible()) {
-					throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
-				}
-
-				return $property->getDefaultValue();
+		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
+			if (!$property->isPublic() && !$property->isAccessible()) {
+				throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
 			}
+
+			return $property->getDefaultValue();
 		}
 
 		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
@@ -888,10 +912,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			return false;
 		}
 
-		foreach ($this->getMethods() as $method) {
-			if ('__clone' === $method->getName()) {
-				return $method->isPublic();
-			}
+		if ($this->hasMethod('__clone')) {
+			return $this->getMethod('__clone')->isPublic();
 		}
 
 		return true;
@@ -1124,15 +1146,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
-		foreach ($this->getProperties(InternalReflectionProperty::IS_STATIC) as $property) {
-			if ($name === $property->getName()) {
-				if (!$property->isPublic() && !$property->isAccessible()) {
-					throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
-				}
-
-				$property->setDefaultValue($value);
-				return;
+		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
+			if (!$property->isPublic() && !$property->isAccessible()) {
+				throw new Exception\Runtime(sprintf('Static property "%s" in class "%s" is not accessible.', $name, $this->name), Exception\Runtime::NOT_ACCESSBILE);
 			}
+
+			$property->setDefaultValue($value);
+			return;
 		}
 
 		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
