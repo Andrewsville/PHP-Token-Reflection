@@ -348,6 +348,18 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns if the definition is complete.
+	 *
+	 * Technically returns if the declaring class definition is complete.
+	 *
+	 * @return boolean
+	 */
+	private function isComplete()
+	{
+		return $this->getDeclaringClass()->isComplete();
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

@@ -886,4 +886,16 @@ class ReflectionClass implements IReflectionClass
 	{
 		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
 	}
+
+	/**
+	 * Returns if the class definition is complete.
+	 *
+	 * Dummy classes never have the definition complete.
+	 *
+	 * @return boolean
+	 */
+	public function isComplete()
+	{
+		return false;
+	}
 }

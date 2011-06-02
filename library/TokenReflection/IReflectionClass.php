@@ -480,4 +480,13 @@ interface IReflectionClass extends IReflection
 	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
 	 */
 	public function setStaticPropertyValue($name, $value);
+
+	/**
+	 * Returns if the class definition is complete.
+	 *
+	 * That means if there are no dummy classes among parents and implemented interfaces.
+	 *
+	 * @return boolean
+	 */
+	public function isComplete();
 }

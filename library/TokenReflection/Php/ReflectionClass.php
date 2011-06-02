@@ -689,6 +689,18 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Returns if the class definition is complete.
+	 *
+	 * Internal classes always have the definition complete.
+	 *
+	 * @return boolean
+	 */
+	public function isComplete()
+	{
+		return true;
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance

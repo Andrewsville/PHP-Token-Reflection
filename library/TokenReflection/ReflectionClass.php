@@ -105,6 +105,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	private $interfaces = array();
 
 	/**
+	 * Stores if the class definition is complete.
+	 *
+	 * @var boolean
+	 */
+	private $definitionComplete = false;
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
@@ -1142,6 +1149,30 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+	}
+
+	/**
+	 * Returns if the class definition is complete.
+	 *
+	 * @return boolean
+	 */
+	public function isComplete()
+	{
+		if (!$this->definitionComplete) {
+			if (null !== $this->parentClassName && !$this->getParentClass()->isComplete()) {
+				return false;
+			}
+
+			foreach ($this->getOwnInterfaces() as $interface) {
+				if (!$interface->isComplete()) {
+					return false;
+				}
+			}
+
+			$this->definitionComplete = true;
+		}
+
+		return $this->definitionComplete;
 	}
 
 	/**
