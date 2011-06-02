@@ -131,7 +131,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			return new ReflectionConstant($name, $this->getConstant($name), $this->broker, $this);
 		}
 
-		throw new Exception(sprintf('Constant "%s" is not defined in class "%s"', $name, $this->getName()), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('Constant "%s" is not defined in class "%s"', $name, $this->getName()), Exception::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -443,7 +443,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			if ($interface instanceof InternalReflectionClass || $interface instanceof IReflectionClass) {
 				$interfaceName = $interface->getName();
 			} else {
-				throw new InvalidArgumentException('Parameter must be a string or an instance of class reflection');
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
 			}
 		} else {
 			$interfaceName = $interface;
@@ -468,7 +468,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		throw new Exception(sprintf('There is no method %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('There is no method %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -486,7 +486,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		throw new Exception(sprintf('There is no property %s in class %s', $name, $this->getName()), Exception::DOES_NOT_EXIST);
+		throw new Exception\Runtime(sprintf('There is no property %s in class %s', $name, $this->getName()), Exception::DOES_NOT_EXIST);
 	}
 
 	/**

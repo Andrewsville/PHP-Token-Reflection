@@ -343,11 +343,11 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * Impossible for namespaces.
 	 *
-	 * @throws \TokenReflection\Exception\RuntimeException
+	 * @throws \TokenReflection\Exception\Runtime
 	 */
 	public function getSource()
 	{
-		throw new \RuntimeException('Cannot export source code of a namespace.');
+		throw new Exception\Runtime('Cannot export source code of a namespace.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
