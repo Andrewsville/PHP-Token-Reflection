@@ -127,25 +127,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
-	 * Returns the docblock definition of the method or its parent.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		if (false !== ($docComment = $this->getDocComment()) && false === stripos($docComment, '@inheritdoc')) {
-			return $docComment;
-		}
-
-		$parent = $this->getDeclaringClass()->getParentClass();
-		if (false !== $parent && $parent->hasMethod($this->getName())) {
-			return $parent->getMethod($this->getName())->getInheritedDocComment();
-		}
-
-		return false;
-	}
-
-	/**
 	 * Returns method modifiers.
 	 *
 	 * @return integer

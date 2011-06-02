@@ -81,16 +81,6 @@ class ReflectionFileNamespace extends ReflectionBase
 	}
 
 	/**
-	 * Returns the docblock definition of the namespace.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return $this->getDocComment();
-	}
-
-	/**
 	 * Returns all imported namespaces and aliases.
 	 *
 	 * @return array

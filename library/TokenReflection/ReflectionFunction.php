@@ -40,16 +40,6 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	}
 
 	/**
-	 * Returns the docblock definition of the function.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return $this->getDocComment();
-	}
-
-	/**
 	 * Calls the function.
 	 *
 	 * @return mixed

@@ -262,16 +262,6 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
-	 * Returns the docblock definition of the constant.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return false;
-	}
-
-	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return null

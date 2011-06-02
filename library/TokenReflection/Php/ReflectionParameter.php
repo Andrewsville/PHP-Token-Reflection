@@ -185,16 +185,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
-	 * Returns the docblock definition of the parameter.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return false;
-	}
-
-	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return null

@@ -1093,20 +1093,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
-	 * Returns the docblock definition of the class or its parent.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		if (false !== ($docComment = $this->getDocComment()) && false === stripos($docComment, '@inheritdoc')) {
-			return $docComment;
-		}
-
-		return null === $this->parentClassName ? false : $this->getParentClass()->getInheritedDocComment();
-	}
-
-	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
 	 * Use any number of constructor parameters as function parameters.

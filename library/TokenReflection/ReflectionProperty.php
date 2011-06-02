@@ -220,25 +220,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Returns the docblock definition of the property or its parent.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		if (false !== ($docComment = $this->getDocComment()) && false === stripos($docComment, '@inheritdoc')) {
-			return $docComment;
-		}
-
-		$parent = $this->getDeclaringClass()->getParentClass();
-		if (false !== $parent && $parent->hasProperty($this->getName())) {
-			return $parent->getProperty($this->getName())->getInheritedDocComment();
-		}
-
-		return false;
-	}
-
-	/**
 	 * Sets value of a property for a particular class instance.
 	 *
 	 * @param object $object Class instance

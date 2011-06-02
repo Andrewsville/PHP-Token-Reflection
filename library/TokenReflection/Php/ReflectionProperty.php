@@ -109,16 +109,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
-	 * Returns the docblock definition of the property or its parent.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return false;
-	}
-
-	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return null

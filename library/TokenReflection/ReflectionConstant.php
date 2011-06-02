@@ -266,16 +266,6 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
-	 * Returns the docblock definition of the constant.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return $this->getDocComment();
-	}
-
-	/**
 	 * Returns the namespace name.
 	 *
 	 * @return string

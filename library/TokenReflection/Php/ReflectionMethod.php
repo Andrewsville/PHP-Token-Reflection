@@ -104,16 +104,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
-	 * Returns the docblock definition of the method or its parent.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return false;
-	}
-
-	/**
 	 * Returns a particular parameter.
 	 *
 	 * @param integer|string $parameter Parameter name or position

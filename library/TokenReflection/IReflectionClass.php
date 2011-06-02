@@ -96,13 +96,6 @@ interface IReflectionClass extends IReflection
 	public function getDocComment();
 
 	/**
-	 * Returns the docblock definition of the class or its parent.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment();
-
-	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer

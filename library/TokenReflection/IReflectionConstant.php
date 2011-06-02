@@ -70,13 +70,6 @@ interface IReflectionConstant extends IReflection
 	public function getDocComment();
 
 	/**
-	 * Returns the docblock definition of the constant.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment();
-
-	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer

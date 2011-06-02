@@ -194,16 +194,6 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns the docblock definition of the class or its parent.
-	 *
-	 * @return boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return $this->getDocComment();
-	}
-
-	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string

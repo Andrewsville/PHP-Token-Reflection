@@ -142,16 +142,6 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
-	 * Returns the docblock definition of the function.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return false;
-	}
-
-	/**
 	 * Returns parsed docblock.
 	 *
 	 * @return array

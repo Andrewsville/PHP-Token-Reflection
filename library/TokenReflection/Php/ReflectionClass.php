@@ -500,16 +500,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
-	 * Returns the docblock definition of the class or its parent.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return false;
-	}
-
-	/**
 	 * Returns parsed docblock.
 	 *
 	 * @return array

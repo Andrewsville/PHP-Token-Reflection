@@ -278,16 +278,6 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
-	 * Returns the docblock definition of the parameter.
-	 *
-	 * @return string|boolean
-	 */
-	public function getInheritedDocComment()
-	{
-		return $this->getDocComment();
-	}
-
-	/**
 	 * Returns if the parameter is optional.
 	 *
 	 * @return boolean
