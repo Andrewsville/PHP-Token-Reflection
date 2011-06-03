@@ -29,7 +29,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @var integer
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l122
 	 */
-	const IS_INTERFACE = 128;
+	const IS_INTERFACE = 0x80;
 
 	/**
 	 * Method implements interfaces.
