@@ -430,7 +430,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		if (null !== $filter) {
 			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
-				return (bool) ($method->getModifiers() & $filter);
+				return $method->is($filter);
 			});
 		}
 
@@ -675,7 +675,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		if (null !== $filter) {
 			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
-				return (bool) ($method->getModifiers() & $filter);
+				return $method->is($filter);
 			});
 		}
 

@@ -147,12 +147,12 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 				$parentClassMethod = $parentClass->getMethod($this->name);
 
 				// Access level changed
-				if ($this->modifiers & InternalReflectionMethod::IS_PUBLIC && ($parentClassMethod->getModifiers() & (self::ACCESS_LEVEL_CHANGED | InternalReflectionMethod::IS_PRIVATE))) {
+				if ($this->modifiers & InternalReflectionMethod::IS_PUBLIC && $parentClassMethod->is(self::ACCESS_LEVEL_CHANGED | InternalReflectionMethod::IS_PRIVATE)) {
 					$this->modifiers |= self::ACCESS_LEVEL_CHANGED;
 				}
 
 				// Implemented abstract
-				if ($parentClassMethod->getModifiers() & (self::IS_IMPLEMENTED_ABSTRACT | InternalReflectionMethod::IS_ABSTRACT)) {
+				if ($parentClassMethod->is(self::IS_IMPLEMENTED_ABSTRACT | InternalReflectionMethod::IS_ABSTRACT)) {
 					$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
 				}
 			}
@@ -162,6 +162,34 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		return $this->modifiers;
+	}
+
+	/**
+	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
+	 *
+	 * The {@see getModifiers()} method is called only when really necessary making this
+	 * a more efficient way of doing
+	 * <code>
+	 *     if ($method->getModifiers() & $filter) {
+	 *        ...
+	 *     }
+	 * </code>
+	 *
+	 * @param integer $filter Filter
+	 * @return boolean
+	 */
+	public function is($filter = null)
+	{
+		// self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT
+		static $computedModifiers = 0x808;
+
+		if (null === $filter || ($this->modifiers & $filter)) {
+			return true;
+		} elseif (($filter & $computedModifiers) && !$this->modifiersComplete) {
+			return $this->getModifiers() & $filter;
+		}
+
+		return false;
 	}
 
 	/**
