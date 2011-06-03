@@ -107,6 +107,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $modifiersComplete = false;
 
 	/**
+	 * Method prototype reflection.
+	 *
+	 * @var \TokenReflection\IReflectionMethod
+	 */
+	private $prototype;
+
+	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return \TokenReflection\ReflectionClass|null
@@ -151,13 +158,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			}
 
 			// Set if modifiers definition is complete
-			$this->modifiersComplete = true;
-			foreach ($declaringClass->getParentClasses() as $parentClass) {
-				if ($parentClass instanceof Dummy\ReflectionClass) {
-					$this->modifiersComplete = false;
-					break;
-				}
-			}
+			$this->modifiersComplete = $this->isComplete() || (($this->modifiers & self::IS_IMPLEMENTED_ABSTRACT) && ($this->modifiers & self::ACCESS_LEVEL_CHANGED));
 		}
 
 		return $this->modifiers;
@@ -329,22 +330,36 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	public function getPrototype()
 	{
-		$declaring = $this->getDeclaringClass();
-		if ($declaring->getParentClassName()) {
-			foreach ($declaring->getParentClass()->getMethods() as $method) {
-				if ($method->getName() === $this->name && !$method->isPrivate()) {
-					return $method;
+		if (null === $this->prototype) {
+			$prototype = null;
+
+			$declaring = $this->getDeclaringClass();
+			if ($parent = $declaring->getParentClass()) {
+				if ($parent->hasMethod($this->name)) {
+					$method = $parent->getMethod($this->name);
+					if (!$method->isPrivate()) {
+						$prototype = $method;
+					}
 				}
 			}
-		}
 
-		foreach ($declaring->getInterfaces() as $interface) {
-			if ($interface->hasMethod($this->name)) {
-				return $interface->getMethod($this->name);
+			if (null === $prototype) {
+				foreach ($declaring->getInterfaces() as $interface) {
+					if ($interface->hasMethod($this->name)) {
+						$prototype = $interface->getMethod($this->name);
+						break;
+					}
+				}
 			}
+
+			$this->prototype = $prototype ?: ($this->isComplete() ? false : null);
 		}
 
-		throw new Exception\Runtime(sprintf('Method "%s::%s()" has no prototype.', $this->declaringClassName, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		if (empty($this->prototype)) {
+			throw new Exception\Runtime(sprintf('Method "%s::%s()" has no prototype.', $this->declaringClassName, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		return $this->prototype;
 	}
 
 	/**
