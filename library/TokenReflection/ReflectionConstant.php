@@ -196,8 +196,13 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 					$namespaceName = $this->namespaceName ?: $parent->getNamespaceName();
 					if ($pos = strpos($this->valueDefinition, '::')) {
 						$className = substr($this->valueDefinition, 0, $pos);
-						$this->valueDefinition = ReflectionBase::resolveClassFQN($className, $parent->getNamespaceAliases(), $namespaceName)
-							. substr($this->valueDefinition, $pos);
+						if ('self' === strtolower($className)) {
+							$className = $this->declaringClassName;
+						} else {
+							$className = ReflectionBase::resolveClassFQN($className, $parent->getNamespaceAliases(), $namespaceName);
+						}
+
+						$this->valueDefinition = $className . substr($this->valueDefinition, $pos);
 					} elseif(ReflectionNamespace::NO_NAMESPACE_NAME !== $namespaceName) {
 						$this->valueDefinition = $namespaceName . '\\' . $this->valueDefinition;
 					}
