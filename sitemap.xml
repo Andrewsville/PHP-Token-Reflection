@@ -4,9 +4,6 @@
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/index.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/package-None.html</loc>
-</url>
-<url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.html</loc>
 </url>
 <url>
@@ -25,72 +22,117 @@
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.Php.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Broker.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Broker.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Broker.Backend.Memory.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Broker.Backend.Memory.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Dummy.ReflectionClass.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Dummy.ReflectionClass.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Php.ReflectionClass.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionClass.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Php.ReflectionConstant.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionConstant.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Php.ReflectionExtension.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionExtension.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Php.ReflectionFunction.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionFunction.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Php.ReflectionMethod.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionMethod.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Php.ReflectionParameter.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionParameter.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Php.ReflectionProperty.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionProperty.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionAnnotation.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionAnnotation.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionBase.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionBase.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionClass.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionClass.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionConstant.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionConstant.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionFile.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionFile.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionFileNamespace.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionFileNamespace.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionFunction.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionFunction.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionFunctionBase.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionFunctionBase.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionMethod.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionMethod.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionNamespace.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionNamespace.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionParameter.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionParameter.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.ReflectionProperty.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.ReflectionProperty.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/TokenReflection.Stream.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Stream.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Broker.Backend.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflection.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionClass.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionConstant.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionExtension.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionFunction.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionFunctionBase.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionMethod.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionNamespace.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionParameter.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.IReflectionProperty.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.IReflection.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.Parse.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.Runtime.html</loc>
 </url>
 </urlset>

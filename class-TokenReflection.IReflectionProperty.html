@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="TR ApiGen 2.0 RC" />
+
+	<title>Interface TokenReflection\IReflectionProperty | PHP Token Reflection</title>
+
+	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="elementlist.js?2139979877"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
+
+</head>
+
+<body>
+<div id="main">
+<div id="leftWrapper">
+	<div id="left">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+		<div id="entities">
+
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.html">Broker</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.Backend.html">Backend</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Php.html">Php</a>
+						</li>
+							</ul></li>
+			</ul>
+
+			<hr />
+
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-TokenReflection.Broker.html">Broker</a></li>
+				<li><a href="class-TokenReflection.ReflectionAnnotation.html">ReflectionAnnotation</a></li>
+				<li><a href="class-TokenReflection.ReflectionBase.html">ReflectionBase</a></li>
+				<li><a href="class-TokenReflection.ReflectionClass.html">ReflectionClass</a></li>
+				<li><a href="class-TokenReflection.ReflectionConstant.html">ReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.ReflectionFile.html">ReflectionFile</a></li>
+				<li><a href="class-TokenReflection.ReflectionFileNamespace.html">ReflectionFileNamespace</a></li>
+				<li><a href="class-TokenReflection.ReflectionFunction.html">ReflectionFunction</a></li>
+				<li><a href="class-TokenReflection.ReflectionFunctionBase.html">ReflectionFunctionBase</a></li>
+				<li><a href="class-TokenReflection.ReflectionMethod.html">ReflectionMethod</a></li>
+				<li><a href="class-TokenReflection.ReflectionNamespace.html">ReflectionNamespace</a></li>
+				<li><a href="class-TokenReflection.ReflectionParameter.html">ReflectionParameter</a></li>
+				<li><a href="class-TokenReflection.ReflectionProperty.html">ReflectionProperty</a></li>
+				<li><a href="class-TokenReflection.Stream.html">Stream</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-TokenReflection.IReflection.html">IReflection</a></li>
+				<li><a href="class-TokenReflection.IReflectionClass.html">IReflectionClass</a></li>
+				<li><a href="class-TokenReflection.IReflectionConstant.html">IReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.IReflectionExtension.html">IReflectionExtension</a></li>
+				<li><a href="class-TokenReflection.IReflectionFunction.html">IReflectionFunction</a></li>
+				<li><a href="class-TokenReflection.IReflectionFunctionBase.html">IReflectionFunctionBase</a></li>
+				<li><a href="class-TokenReflection.IReflectionMethod.html">IReflectionMethod</a></li>
+				<li><a href="class-TokenReflection.IReflectionNamespace.html">IReflectionNamespace</a></li>
+				<li><a href="class-TokenReflection.IReflectionParameter.html">IReflectionParameter</a></li>
+				<li class="active"><a href="class-TokenReflection.IReflectionProperty.html">IReflectionProperty</a></li>
+			</ul>
+
+			<h3>Exceptions</h3>
+			<ul>
+				<li><a href="class-TokenReflection.Exception.html">Exception</a></li>
+			</ul>
+
+
+		</div>
+	</div>
+</div>
+<div id="rightWrapper">
+	<div id="right">
+		<form id="search">
+			<input type="hidden" name="cx" value="" />
+			<input type="hidden" name="ie" value="UTF-8" />
+			<input type="text" name="q" class="text" />
+			<input type="submit" value="Search" />
+		</form>
+
+		<div id="navigation">
+			<ul>
+				<li>
+					<a href="index.html" title="Overview"><span>Overview</span></a>
+				</li>
+				<li>
+					<a href="namespace-TokenReflection.html" title="Summary of TokenReflection"><span>Namespace</span></a>
+				</li>
+				<li class="active">
+<span>Class</span>				</li>
+			</ul>
+			<ul>
+				<li>
+					<a href="tree.html" title="Tree view of classes, interfaces and exceptions"><span>Tree</span></a>
+				</li>
+				<li>
+					<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+				</li>
+			</ul>
+		</div>
+
+<div id="content">
+	<h1>Interface IReflectionProperty</h1>
+
+	<div class="description">
+	
+<p>Common reflection property interface.</p>
+
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+			<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.gif" alt="Extended by" />
+<b>TokenReflection\IReflectionProperty</b>			
+			
+		</dd>
+	</dl>
+
+
+
+	<div>
+		<h4>Direct Known Implementers</h4>
+			<a href="class-TokenReflection.Php.ReflectionProperty.html">TokenReflection\Php\ReflectionProperty</a>, 
+			<a href="class-TokenReflection.ReflectionProperty.html">TokenReflection\ReflectionProperty</a>
+	</div>
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a><br />
+
+		<b>Located at</b> <a href="source-TokenReflection.IReflectionProperty.html#18" title="Go to source code">IReflectionProperty.php</a><br />
+	</div>
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="getDeclaringClass" id="_getDeclaringClass">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			<code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getDeclaringClass">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#23" title="Go to source code">getDeclaringClass</a>(
+		)</code>
+
+		<div class="short">
+			Returns a reflection of the declaring class.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns a reflection of the declaring class.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code></code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDeclaringClassName" id="_getDeclaringClassName">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getDeclaringClassName">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#30" title="Go to source code">getDeclaringClassName</a>(
+		)</code>
+
+		<div class="short">
+			Returns the name of the declaring class.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the name of the declaring class.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDocComment" id="_getDocComment">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string|boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getDocComment">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#37" title="Go to source code">getDocComment</a>(
+		)</code>
+
+		<div class="short">
+			Returns the appropriate docblock definition.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the appropriate docblock definition.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string|boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getStartLine" id="_getStartLine">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getStartLine">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#44" title="Go to source code">getStartLine</a>(
+		)</code>
+
+		<div class="short">
+			Returns the definition start line number in the file.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the definition start line number in the file.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>integer</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getEndLine" id="_getEndLine">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getEndLine">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#51" title="Go to source code">getEndLine</a>(
+		)</code>
+
+		<div class="short">
+			Returns the definition end line number in the file.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the definition end line number in the file.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>integer</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getModifiers" id="_getModifiers">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getModifiers">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#58" title="Go to source code">getModifiers</a>(
+		)</code>
+
+		<div class="short">
+			Returns property modifiers.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns property modifiers.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>integer</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getValue" id="_getValue">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getValue">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#65" title="Go to source code">getValue</a>(
+				object
+				<var>$object</var>
+		)</code>
+
+		<div class="short">
+			Returns the property value for a particular class instance.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the property value for a particular class instance.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$object</var></dt>
+					<dd><code>object</code></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>mixed</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isDefault" id="_isDefault">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isDefault">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#73" title="Go to source code">isDefault</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the property was defined at compile time.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the property was defined at compile time.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDefaultValue" id="_getDefaultValue">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getDefaultValue">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#80" title="Go to source code">getDefaultValue</a>(
+		)</code>
+
+		<div class="short">
+			Returns the property default value.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the property default value.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>mixed</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDefaultValueDefinition" id="_getDefaultValueDefinition">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getDefaultValueDefinition">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#87" title="Go to source code">getDefaultValueDefinition</a>(
+		)</code>
+
+		<div class="short">
+			Returns the part of the source code defining the property default value.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the part of the source code defining the property default value.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isPrivate" id="_isPrivate">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isPrivate">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#94" title="Go to source code">isPrivate</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the property is private.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the property is private.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isProtected" id="_isProtected">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isProtected">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#101" title="Go to source code">isProtected</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the property is protected.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the property is protected.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isPublic" id="_isPublic">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isPublic">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#108" title="Go to source code">isPublic</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the property is public.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the property is public.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isStatic" id="_isStatic">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isStatic">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#115" title="Go to source code">isStatic</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the property is static.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the property is static.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setAccessible" id="_setAccessible">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_setAccessible">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#122" title="Go to source code">setAccessible</a>(
+				boolean
+				<var>$accessible</var>
+		)</code>
+
+		<div class="short">
+			Sets a property to be accessible or not.
+		</div>
+
+		<div class="detailed">
+			
+<p>Sets a property to be accessible or not.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$accessible</var></dt>
+					<dd><code>boolean</code><br /> If the property should be accessible.</dd>
+				</dl></div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setValue" id="_setValue">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_setValue">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionProperty.html#129" title="Go to source code">setValue</a>(
+				object
+				<var>$object</var>, 
+				mixed
+				<var>$value</var>
+		)</code>
+
+		<div class="short">
+			Sets value of a property for a particular class instance.
+		</div>
+
+		<div class="detailed">
+			
+<p>Sets value of a property for a particular class instance.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$object</var></dt>
+					<dd><code>object</code><br /> Class instance</dd>
+					<dt><var>$value</var></dt>
+					<dd><code>mixed</code><br /> Poperty value</dd>
+				</dl></div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+	<table class="summary methods">
+	<caption>Methods Inherited From <a href="class-TokenReflection.IReflection.html#methods">TokenReflection\IReflection</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.IReflection.html#___get">__get()</a>, 
+<a href="class-TokenReflection.IReflection.html#___isset">__isset()</a>, 
+<a href="class-TokenReflection.IReflection.html#_getBroker">getBroker()</a>, 
+<a href="class-TokenReflection.IReflection.html#_getName">getName()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isInternal">isInternal()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isTokenized">isTokenized()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isUserDefined">isUserDefined()</a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+
+
+</div>
+
+		<div id="footer">
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</html>

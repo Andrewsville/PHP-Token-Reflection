@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="TR ApiGen 2.0 RC" />
+
+	<title>Class TokenReflection\ReflectionFunction | PHP Token Reflection</title>
+
+	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="elementlist.js?2139979877"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
+
+</head>
+
+<body>
+<div id="main">
+<div id="leftWrapper">
+	<div id="left">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+		<div id="entities">
+
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.html">Broker</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.Backend.html">Backend</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Php.html">Php</a>
+						</li>
+							</ul></li>
+			</ul>
+
+			<hr />
+
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-TokenReflection.Broker.html">Broker</a></li>
+				<li><a href="class-TokenReflection.ReflectionAnnotation.html">ReflectionAnnotation</a></li>
+				<li><a href="class-TokenReflection.ReflectionBase.html">ReflectionBase</a></li>
+				<li><a href="class-TokenReflection.ReflectionClass.html">ReflectionClass</a></li>
+				<li><a href="class-TokenReflection.ReflectionConstant.html">ReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.ReflectionFile.html">ReflectionFile</a></li>
+				<li><a href="class-TokenReflection.ReflectionFileNamespace.html">ReflectionFileNamespace</a></li>
+				<li class="active"><a href="class-TokenReflection.ReflectionFunction.html">ReflectionFunction</a></li>
+				<li><a href="class-TokenReflection.ReflectionFunctionBase.html">ReflectionFunctionBase</a></li>
+				<li><a href="class-TokenReflection.ReflectionMethod.html">ReflectionMethod</a></li>
+				<li><a href="class-TokenReflection.ReflectionNamespace.html">ReflectionNamespace</a></li>
+				<li><a href="class-TokenReflection.ReflectionParameter.html">ReflectionParameter</a></li>
+				<li><a href="class-TokenReflection.ReflectionProperty.html">ReflectionProperty</a></li>
+				<li><a href="class-TokenReflection.Stream.html">Stream</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-TokenReflection.IReflection.html">IReflection</a></li>
+				<li><a href="class-TokenReflection.IReflectionClass.html">IReflectionClass</a></li>
+				<li><a href="class-TokenReflection.IReflectionConstant.html">IReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.IReflectionExtension.html">IReflectionExtension</a></li>
+				<li><a href="class-TokenReflection.IReflectionFunction.html">IReflectionFunction</a></li>
+				<li><a href="class-TokenReflection.IReflectionFunctionBase.html">IReflectionFunctionBase</a></li>
+				<li><a href="class-TokenReflection.IReflectionMethod.html">IReflectionMethod</a></li>
+				<li><a href="class-TokenReflection.IReflectionNamespace.html">IReflectionNamespace</a></li>
+				<li><a href="class-TokenReflection.IReflectionParameter.html">IReflectionParameter</a></li>
+				<li><a href="class-TokenReflection.IReflectionProperty.html">IReflectionProperty</a></li>
+			</ul>
+
+			<h3>Exceptions</h3>
+			<ul>
+				<li><a href="class-TokenReflection.Exception.html">Exception</a></li>
+			</ul>
+
+
+		</div>
+	</div>
+</div>
+<div id="rightWrapper">
+	<div id="right">
+		<form id="search">
+			<input type="hidden" name="cx" value="" />
+			<input type="hidden" name="ie" value="UTF-8" />
+			<input type="text" name="q" class="text" />
+			<input type="submit" value="Search" />
+		</form>
+
+		<div id="navigation">
+			<ul>
+				<li>
+					<a href="index.html" title="Overview"><span>Overview</span></a>
+				</li>
+				<li>
+					<a href="namespace-TokenReflection.html" title="Summary of TokenReflection"><span>Namespace</span></a>
+				</li>
+				<li class="active">
+<span>Class</span>				</li>
+			</ul>
+			<ul>
+				<li>
+					<a href="tree.html" title="Tree view of classes, interfaces and exceptions"><span>Tree</span></a>
+				</li>
+				<li>
+					<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+				</li>
+			</ul>
+		</div>
+
+<div id="content">
+	<h1>Class ReflectionFunction</h1>
+
+	<div class="description">
+	
+<p>Tokenized function reflection.</p>
+
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+			<a href="class-TokenReflection.ReflectionBase.html">TokenReflection\ReflectionBase</a>
+			
+			 implements 
+				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.gif" alt="Extended by" />
+			<a href="class-TokenReflection.ReflectionFunctionBase.html">TokenReflection\ReflectionFunctionBase</a>
+			
+			 implements 
+				<a href="class-TokenReflection.IReflectionFunctionBase.html">TokenReflection\IReflectionFunctionBase</a>
+			
+		</dd>
+		<dd style="padding-left:60px">
+			<img src="resources/inherit.gif" alt="Extended by" />
+<b>TokenReflection\ReflectionFunction</b>			
+			 implements 
+				<a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a>
+			
+		</dd>
+	</dl>
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a><br />
+
+		<b>Located at</b> <a href="source-TokenReflection.ReflectionFunction.html#20" title="Go to source code">ReflectionFunction.php</a><br />
+	</div>
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="isDisabled" id="_isDisabled">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isDisabled">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunction.html#32" title="Go to source code">isDisabled</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the function is is disabled via the disable_functions directive.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the function is is disabled via the disable_functions
+directive.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunction.html#_isDisabled">TokenReflection\IReflectionFunction::isDisabled</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="invoke" id="_invoke">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_invoke">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunction.html#42" title="Go to source code">invoke</a>(
+		)</code>
+
+		<div class="short">
+			Calls the function.
+		</div>
+
+		<div class="detailed">
+			
+<p>Calls the function.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>mixed</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="invokeArgs" id="_invokeArgs">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_invokeArgs">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunction.html#52" title="Go to source code">invokeArgs</a>(
+				array
+				
+				<var>$args</var> = <span class="php-keyword1">array</span>()
+		)</code>
+
+		<div class="short">
+			Calls the function.
+		</div>
+
+		<div class="detailed">
+			
+<p>Calls the function.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$args</var></dt>
+					<dd><code>mixed</code><br /> Function parameter values</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>mixed</code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If the required function does not exist<br />
+				</div>
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunction.html#_invokeArgs">TokenReflection\IReflectionFunction::invokeArgs</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="parse" id="_parse">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 protected 
+			<code><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_parse">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunction.html#68" title="Go to source code">parse</a>(
+				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
+				
+				<var>$tokenStream</var>, 
+				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+				
+				<var>$parent</var>
+		)</code>
+
+		<div class="short">
+			Parses reflected element metadata from the token stream.
+		</div>
+
+		<div class="detailed">
+			
+<p>Parses reflected element metadata from the token stream.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br /> Token substream</dd>
+					<dt><var>$parent</var></dt>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br /> Parent reflection object</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a></code></code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="processParent" id="_processParent">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 protected 
+			<code><a href="class-TokenReflection.ReflectionBase.html">TokenReflection\ReflectionBase</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_processParent">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunction.html#82" title="Go to source code">processParent</a>(
+				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+				
+				<var>$parent</var>
+		)</code>
+
+		<div class="short">
+			Processes the parent reflection object.
+		</div>
+
+		<div class="detailed">
+			
+<p>Processes the parent reflection object.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$parent</var></dt>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br /> Parent reflection object</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.ReflectionBase.html">TokenReflection\ReflectionBase</a></code></code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If an invalid parent reflection object was provided<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getNamespaceAliases" id="_getNamespaceAliases">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getNamespaceAliases">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunction.html#100" title="Go to source code">getNamespaceAliases</a>(
+		)</code>
+
+		<div class="short">
+			Returns imported namespaces and aliases from the declaring namespace.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns imported namespaces and aliases from the declaring namespace.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>array</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+	<table class="summary methods">
+	<caption>Methods Inherited From <a href="class-TokenReflection.ReflectionFunctionBase.html#methods">TokenReflection\ReflectionFunctionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getModifiers">getModifiers()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getName">getName()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getNamespaceName">getNamespaceName()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getNumberOfParameters">getNumberOfParameters()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getNumberOfRequiredParameters">getNumberOfRequiredParameters()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getParameter">getParameter()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getParameters">getParameters()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getShortName">getShortName()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_getStaticVariables">getStaticVariables()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_inNamespace">inNamespace()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_isClosure">isClosure()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_parseChildren">parseChildren()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_parseName">parseName()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_parseParameters">parseParameters()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_parseReturnsReference">parseReturnsReference()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_parseStaticVariables">parseStaticVariables()</a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#_returnsReference">returnsReference()</a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary methods">
+	<caption>Methods Inherited From <a href="class-TokenReflection.ReflectionBase.html#methods">TokenReflection\ReflectionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.ReflectionBase.html#___construct">__construct()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#___get">__get()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#___isset">__isset()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#___toString">__toString()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_exists">exists()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_export">export()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_get">get()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getAnnotation">getAnnotation()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getAnnotations">getAnnotations()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getBroker">getBroker()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getDocComment">getDocComment()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getDocblockTemplates">getDocblockTemplates()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getEndLine">getEndLine()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getEndPosition">getEndPosition()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getExtension">getExtension()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getExtensionName">getExtensionName()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getFileName">getFileName()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getName">getName()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getSource">getSource()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getStartLine">getStartLine()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getStartPosition">getStartPosition()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_hasAnnotation">hasAnnotation()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isDeprecated">isDeprecated()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isInternal">isInternal()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isTokenized">isTokenized()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isUserDefined">isUserDefined()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_parseChildren">parseChildren()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_parseDocComment">parseDocComment()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_parseName">parseName()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_resolveClassFQN">resolveClassFQN()</a>
+		</code></td>
+	</tr>
+	</table>
+
+
+	<table class="summary constants">
+	<caption>Constants Inherited From <a href="class-TokenReflection.ReflectionBase.html#constants">TokenReflection\ReflectionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.ReflectionBase.html#DOCBLOCK_TEMPLATE_START"><b>DOCBLOCK_TEMPLATE_START</b></a>, 
+<a href="class-TokenReflection.ReflectionBase.html#DOCBLOCK_TEMPLATE_END"><b>DOCBLOCK_TEMPLATE_END</b></a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+	<table class="summary properties">
+	<caption>Properties Inherited From <a href="class-TokenReflection.ReflectionFunctionBase.html#properties">TokenReflection\ReflectionFunctionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.ReflectionFunctionBase.html#$modifiers"><var>$modifiers</var></a>, 
+<a href="class-TokenReflection.ReflectionFunctionBase.html#$namespaceName"><var>$namespaceName</var></a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary properties">
+	<caption>Properties Inherited From <a href="class-TokenReflection.ReflectionBase.html#properties">TokenReflection\ReflectionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.ReflectionBase.html#$docComment"><var>$docComment</var></a>, 
+<a href="class-TokenReflection.ReflectionBase.html#$docblockTemplates"><var>$docblockTemplates</var></a>, 
+<a href="class-TokenReflection.ReflectionBase.html#$name"><var>$name</var></a>
+		</code></td>
+	</tr>
+	</table>
+</div>
+
+		<div id="footer">
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</html>

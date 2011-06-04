@@ -2,12 +2,14 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.0 beta" />
+	<meta name="generator" content="TR ApiGen 2.0 RC" />
 	<meta name="robots" content="noindex" />
+
 	<title>File Php/ReflectionFunction.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?4162569229"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3606076025" />
+	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="elementlist.js?2139979877"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
 </head>
 
@@ -15,52 +17,83 @@
 <div id="main">
 <div id="leftWrapper">
 	<div id="left">
-		<a href="index.html">Overview</a>
+		<a href="index.html" title="Overview"><span>Overview</span></a>
 
-		<h3>Packages</h3>
-		<ul>
-			<li class="all"><a href="index.html#packages">All</a></li>
-			<li class="active"><a href="package-None.html">None</a></li>
-		</ul>
+		<div id="entities">
 
-		<h3>Namespaces</h3>
-		<ul>
-			<li class="all"><a href="index.html#namespaces">All</a></li>
-			<li><a href="namespace-TokenReflection.html">TokenReflection</a>
-					<ul>
-			<li class="active"><a href="namespace-TokenReflection.Php.html">TokenReflection\Php</a>
-					</li>
-						</ul></li>
-		</ul>
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.html">Broker</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.Backend.html">Backend</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li class="active"><a href="namespace-TokenReflection.Php.html">Php</a>
+						</li>
+							</ul></li>
+			</ul>
 
-		<hr />
+			<hr />
 
-		<h3>Classes</h3>
-		<ul>
-			<li class="all"><a href="allclasses.html#classes">All</a></li>
-			<li class="all"><a href="package-None.html#classes">All in package None</a></li>
-			<li class="all"><a href="namespace-TokenReflection.Php.html#classes">All in namespace TokenReflection\Php</a></li>
-			<li class="active"><a href="TokenReflection.Php.ReflectionFunction.html">ReflectionFunction</a></li>
-		</ul>
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-TokenReflection.Php.ReflectionClass.html">ReflectionClass</a></li>
+				<li><a href="class-TokenReflection.Php.ReflectionConstant.html">ReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.Php.ReflectionExtension.html">ReflectionExtension</a></li>
+				<li class="active"><a href="class-TokenReflection.Php.ReflectionFunction.html">ReflectionFunction</a></li>
+				<li><a href="class-TokenReflection.Php.ReflectionMethod.html">ReflectionMethod</a></li>
+				<li><a href="class-TokenReflection.Php.ReflectionParameter.html">ReflectionParameter</a></li>
+				<li><a href="class-TokenReflection.Php.ReflectionProperty.html">ReflectionProperty</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-TokenReflection.Php.IReflection.html">IReflection</a></li>
+			</ul>
 
 
+
+		</div>
 	</div>
 </div>
 <div id="rightWrapper">
 	<div id="right">
+		<form id="search">
+			<input type="hidden" name="cx" value="" />
+			<input type="hidden" name="ie" value="UTF-8" />
+			<input type="text" name="q" class="text" />
+			<input type="submit" value="Search" />
+		</form>
 
-<div id="navigation">
-	<ul>
-		<li><a href="index.html" title="Summary of all packages">Overview</a></li>
-		<li><a href="package-None.html" title="Summary of None">Package</a></li>
-		<li><a href="namespace-TokenReflection.Php.html" title="Summary of TokenReflection\Php">Namespace</a></li>
-		<li><a href="TokenReflection.Php.ReflectionFunction.html" title="Summary of TokenReflection\Php\ReflectionFunction">Class</a></li>
-	</ul>
-	<ul>
-		<li><a href="tree.html" title="Tree view of classes, interfaces and exceptions">Tree</a></li>
-		<li><a href="deprecated.html" title="List of deprecated elements">Deprecated</a></li>
-	</ul>
-</div>
+		<div id="navigation">
+			<ul>
+				<li>
+					<a href="index.html" title="Overview"><span>Overview</span></a>
+				</li>
+				<li>
+					<a href="namespace-TokenReflection.Php.html" title="Summary of TokenReflection\Php"><span>Namespace</span></a>
+				</li>
+				<li>
+					<a href="class-TokenReflection.Php.ReflectionFunction.html" title="Summary of TokenReflection\Php\ReflectionFunction"><span>Class</span></a>
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<a href="tree.html" title="Tree view of classes, interfaces and exceptions"><span>Tree</span></a>
+				</li>
+				<li>
+					<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+				</li>
+			</ul>
+		</div>
 
 <pre><code><a href="#1" id="1" class="l">  1: </a><span class="xlang">&lt;?php</span>
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
@@ -78,8 +111,8 @@
 </span><a href="#14" id="14" class="l"> 14: </a><span class="php-comment"> */</span>
 <a href="#15" id="15" class="l"> 15: </a>
 <a href="#16" id="16" class="l"> 16: </a><span class="php-keyword1">namespace</span> TokenReflection\Php;
-<a href="#17" id="17" class="l"> 17: </a><span class="php-keyword1">use</span> TokenReflection;
-<a href="#18" id="18" class="l"> 18: </a>
+<a href="#17" id="17" class="l"> 17: </a>
+<a href="#18" id="18" class="l"> 18: </a><span class="php-keyword1">use</span> TokenReflection;
 <a href="#19" id="19" class="l"> 19: </a><span class="php-keyword1">use</span> TokenReflection\Broker, TokenReflection\Exception;
 <a href="#20" id="20" class="l"> 20: </a><span class="php-keyword1">use</span> Reflector, ReflectionFunction as InternalReflectionFunction, ReflectionParameter as InternalReflectionParameter;
 <a href="#21" id="21" class="l"> 21: </a>
@@ -143,125 +176,125 @@
 </span><a href="#79" id="79" class="l"> 79: </a><span class="php-comment">     * @param string $key Variable name
 </span><a href="#80" id="80" class="l"> 80: </a><span class="php-comment">     * @return boolean
 </span><a href="#81" id="81" class="l"> 81: </a><span class="php-comment">     */</span>
-<a href="#82" id="82" class="l"> 82: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __<span class="php-keyword1">isset</span>(<span class="php-var">$key</span>) {
-<a href="#83" id="83" class="l"> 83: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionBase::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#84" id="84" class="l"> 84: </a>    }
-<a href="#85" id="85" class="l"> 85: </a>
-<a href="#86" id="86" class="l"> 86: </a>    <span class="php-comment">/**
-</span><a href="#87" id="87" class="l"> 87: </a><span class="php-comment">     * Returns the PHP extension reflection.
-</span><a href="#88" id="88" class="l"> 88: </a><span class="php-comment">     *
-</span><a href="#89" id="89" class="l"> 89: </a><span class="php-comment">     * @return \TokenReflection\Php\IReflectionExtension
-</span><a href="#90" id="90" class="l"> 90: </a><span class="php-comment">     */</span>
-<a href="#91" id="91" class="l"> 91: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getExtension()
-<a href="#92" id="92" class="l"> 92: </a>    {
-<a href="#93" id="93" class="l"> 93: </a>        <span class="php-keyword1">return</span> ReflectionExtension::create(parent::getExtension(), <span class="php-var">$this</span>-&gt;broker);
-<a href="#94" id="94" class="l"> 94: </a>    }
-<a href="#95" id="95" class="l"> 95: </a>
-<a href="#96" id="96" class="l"> 96: </a>    <span class="php-comment">/**
-</span><a href="#97" id="97" class="l"> 97: </a><span class="php-comment">     * Returns function parameters.
-</span><a href="#98" id="98" class="l"> 98: </a><span class="php-comment">     *
-</span><a href="#99" id="99" class="l"> 99: </a><span class="php-comment">     * @return array
-</span><a href="#100" id="100" class="l">100: </a><span class="php-comment">     */</span>
-<a href="#101" id="101" class="l">101: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getParameters()
-<a href="#102" id="102" class="l">102: </a>    {
-<a href="#103" id="103" class="l">103: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;parameters) {
-<a href="#104" id="104" class="l">104: </a>            <span class="php-var">$broker</span> = <span class="php-var">$this</span>-&gt;broker;
-<a href="#105" id="105" class="l">105: </a>            <span class="php-var">$parent</span> = <span class="php-var">$this</span>;
-<a href="#106" id="106" class="l">106: </a>            <span class="php-var">$this</span>-&gt;parameters = <span class="php-keyword2">array_map</span>(<span class="php-keyword1">function</span>(InternalReflectionParameter <span class="php-var">$parameter</span>) <span class="php-keyword1">use</span>(<span class="php-var">$broker</span>, <span class="php-var">$parent</span>) {
-<a href="#107" id="107" class="l">107: </a>                <span class="php-keyword1">return</span> ReflectionParameter::create(<span class="php-var">$parameter</span>, <span class="php-var">$broker</span>, <span class="php-var">$parent</span>);
-<a href="#108" id="108" class="l">108: </a>            }, parent::getParameters());
-<a href="#109" id="109" class="l">109: </a>        }
-<a href="#110" id="110" class="l">110: </a>
-<a href="#111" id="111" class="l">111: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;parameters;
-<a href="#112" id="112" class="l">112: </a>    }
-<a href="#113" id="113" class="l">113: </a>
-<a href="#114" id="114" class="l">114: </a>    <span class="php-comment">/**
-</span><a href="#115" id="115" class="l">115: </a><span class="php-comment">     * Returns a particular parameter.
-</span><a href="#116" id="116" class="l">116: </a><span class="php-comment">     *
-</span><a href="#117" id="117" class="l">117: </a><span class="php-comment">     * @param integer|string $parameter Parameter name or position
-</span><a href="#118" id="118" class="l">118: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionParameter
-</span><a href="#119" id="119" class="l">119: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name
-</span><a href="#120" id="120" class="l">120: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position
-</span><a href="#121" id="121" class="l">121: </a><span class="php-comment">     */</span>
-<a href="#122" id="122" class="l">122: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getParameter(<span class="php-var">$parameter</span>)
-<a href="#123" id="123" class="l">123: </a>    {
-<a href="#124" id="124" class="l">124: </a>        <span class="php-var">$parameters</span> = <span class="php-var">$this</span>-&gt;getParameters();
-<a href="#125" id="125" class="l">125: </a>
-<a href="#126" id="126" class="l">126: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_numeric</span>(<span class="php-var">$parameter</span>)) {
-<a href="#127" id="127" class="l">127: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$parameters</span>[<span class="php-var">$parameter</span>])) {
-<a href="#128" id="128" class="l">128: </a>                <span class="php-keyword1">return</span> <span class="php-var">$parameters</span>[<span class="php-var">$parameter</span>];
-<a href="#129" id="129" class="l">129: </a>            } <span class="php-keyword1">else</span> {
-<a href="#130" id="130" class="l">130: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no parameter at position &quot;%d&quot; in function &quot;%s&quot;.'</span>, <span class="php-var">$parameter</span>, <span class="php-var">$this</span>-&gt;getName()), Exception\Runtime::DOES_NOT_EXIST);
-<a href="#131" id="131" class="l">131: </a>            }
-<a href="#132" id="132" class="l">132: </a>        } <span class="php-keyword1">else</span> {
-<a href="#133" id="133" class="l">133: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$parameters</span> as <span class="php-var">$reflection</span>) {
-<a href="#134" id="134" class="l">134: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$reflection</span>-&gt;getName() === <span class="php-var">$parameter</span>) {
-<a href="#135" id="135" class="l">135: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$reflection</span>;
-<a href="#136" id="136" class="l">136: </a>                }
-<a href="#137" id="137" class="l">137: </a>            }
-<a href="#138" id="138" class="l">138: </a>
-<a href="#139" id="139" class="l">139: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no parameter &quot;%s&quot; in function &quot;%s&quot;.'</span>, <span class="php-var">$parameter</span>, <span class="php-var">$this</span>-&gt;getName()), Exception\Runtime::DOES_NOT_EXIST);
-<a href="#140" id="140" class="l">140: </a>        }
-<a href="#141" id="141" class="l">141: </a>    }
-<a href="#142" id="142" class="l">142: </a>
-<a href="#143" id="143" class="l">143: </a>    <span class="php-comment">/**
-</span><a href="#144" id="144" class="l">144: </a><span class="php-comment">     * Returns the docblock definition of the function.
-</span><a href="#145" id="145" class="l">145: </a><span class="php-comment">     *
-</span><a href="#146" id="146" class="l">146: </a><span class="php-comment">     * @return string|false
-</span><a href="#147" id="147" class="l">147: </a><span class="php-comment">     */</span>
-<a href="#148" id="148" class="l">148: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getInheritedDocComment()
-<a href="#149" id="149" class="l">149: </a>    {
-<a href="#150" id="150" class="l">150: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getDocComment();
-<a href="#151" id="151" class="l">151: </a>    }
-<a href="#152" id="152" class="l">152: </a>
-<a href="#153" id="153" class="l">153: </a>    <span class="php-comment">/**
-</span><a href="#154" id="154" class="l">154: </a><span class="php-comment">     * Returns parsed docblock.
-</span><a href="#155" id="155" class="l">155: </a><span class="php-comment">     *
-</span><a href="#156" id="156" class="l">156: </a><span class="php-comment">     * @return array
-</span><a href="#157" id="157" class="l">157: </a><span class="php-comment">     */</span>
-<a href="#158" id="158" class="l">158: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotations()
-<a href="#159" id="159" class="l">159: </a>    {
-<a href="#160" id="160" class="l">160: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
-<a href="#161" id="161" class="l">161: </a>    }
-<a href="#162" id="162" class="l">162: </a>
-<a href="#163" id="163" class="l">163: </a>    <span class="php-comment">/**
-</span><a href="#164" id="164" class="l">164: </a><span class="php-comment">     * Returns a particular annotation value.
-</span><a href="#165" id="165" class="l">165: </a><span class="php-comment">     *
-</span><a href="#166" id="166" class="l">166: </a><span class="php-comment">     * @param string $name Annotation name
-</span><a href="#167" id="167" class="l">167: </a><span class="php-comment">     * @param boolean $forceArray Always return values as array
-</span><a href="#168" id="168" class="l">168: </a><span class="php-comment">     * @return string|array|null
-</span><a href="#169" id="169" class="l">169: </a><span class="php-comment">     */</span>
-<a href="#170" id="170" class="l">170: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotation(<span class="php-var">$name</span>)
-<a href="#171" id="171" class="l">171: </a>    {
-<a href="#172" id="172" class="l">172: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">null</span>;
-<a href="#173" id="173" class="l">173: </a>    }
-<a href="#174" id="174" class="l">174: </a>
-<a href="#175" id="175" class="l">175: </a>    <span class="php-comment">/**
-</span><a href="#176" id="176" class="l">176: </a><span class="php-comment">     * Checks if there is a particular annotation.
-</span><a href="#177" id="177" class="l">177: </a><span class="php-comment">     *
-</span><a href="#178" id="178" class="l">178: </a><span class="php-comment">     * @param string $name Annotation name
+<a href="#82" id="82" class="l"> 82: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __<span class="php-keyword1">isset</span>(<span class="php-var">$key</span>)
+<a href="#83" id="83" class="l"> 83: </a>    {
+<a href="#84" id="84" class="l"> 84: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionBase::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#85" id="85" class="l"> 85: </a>    }
+<a href="#86" id="86" class="l"> 86: </a>
+<a href="#87" id="87" class="l"> 87: </a>    <span class="php-comment">/**
+</span><a href="#88" id="88" class="l"> 88: </a><span class="php-comment">     * Returns the PHP extension reflection.
+</span><a href="#89" id="89" class="l"> 89: </a><span class="php-comment">     *
+</span><a href="#90" id="90" class="l"> 90: </a><span class="php-comment">     * @return \TokenReflection\Php\IReflectionExtension
+</span><a href="#91" id="91" class="l"> 91: </a><span class="php-comment">     */</span>
+<a href="#92" id="92" class="l"> 92: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getExtension()
+<a href="#93" id="93" class="l"> 93: </a>    {
+<a href="#94" id="94" class="l"> 94: </a>        <span class="php-keyword1">return</span> ReflectionExtension::create(parent::getExtension(), <span class="php-var">$this</span>-&gt;broker);
+<a href="#95" id="95" class="l"> 95: </a>    }
+<a href="#96" id="96" class="l"> 96: </a>
+<a href="#97" id="97" class="l"> 97: </a>    <span class="php-comment">/**
+</span><a href="#98" id="98" class="l"> 98: </a><span class="php-comment">     * Returns function parameters.
+</span><a href="#99" id="99" class="l"> 99: </a><span class="php-comment">     *
+</span><a href="#100" id="100" class="l">100: </a><span class="php-comment">     * @return array
+</span><a href="#101" id="101" class="l">101: </a><span class="php-comment">     */</span>
+<a href="#102" id="102" class="l">102: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getParameters()
+<a href="#103" id="103" class="l">103: </a>    {
+<a href="#104" id="104" class="l">104: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;parameters) {
+<a href="#105" id="105" class="l">105: </a>            <span class="php-var">$broker</span> = <span class="php-var">$this</span>-&gt;broker;
+<a href="#106" id="106" class="l">106: </a>            <span class="php-var">$parent</span> = <span class="php-var">$this</span>;
+<a href="#107" id="107" class="l">107: </a>            <span class="php-var">$this</span>-&gt;parameters = <span class="php-keyword2">array_map</span>(<span class="php-keyword1">function</span>(InternalReflectionParameter <span class="php-var">$parameter</span>) <span class="php-keyword1">use</span> (<span class="php-var">$broker</span>, <span class="php-var">$parent</span>) {
+<a href="#108" id="108" class="l">108: </a>                <span class="php-keyword1">return</span> ReflectionParameter::create(<span class="php-var">$parameter</span>, <span class="php-var">$broker</span>, <span class="php-var">$parent</span>);
+<a href="#109" id="109" class="l">109: </a>            }, parent::getParameters());
+<a href="#110" id="110" class="l">110: </a>        }
+<a href="#111" id="111" class="l">111: </a>
+<a href="#112" id="112" class="l">112: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;parameters;
+<a href="#113" id="113" class="l">113: </a>    }
+<a href="#114" id="114" class="l">114: </a>
+<a href="#115" id="115" class="l">115: </a>    <span class="php-comment">/**
+</span><a href="#116" id="116" class="l">116: </a><span class="php-comment">     * Returns a particular parameter.
+</span><a href="#117" id="117" class="l">117: </a><span class="php-comment">     *
+</span><a href="#118" id="118" class="l">118: </a><span class="php-comment">     * @param integer|string $parameter Parameter name or position
+</span><a href="#119" id="119" class="l">119: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionParameter
+</span><a href="#120" id="120" class="l">120: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name
+</span><a href="#121" id="121" class="l">121: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position
+</span><a href="#122" id="122" class="l">122: </a><span class="php-comment">     */</span>
+<a href="#123" id="123" class="l">123: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getParameter(<span class="php-var">$parameter</span>)
+<a href="#124" id="124" class="l">124: </a>    {
+<a href="#125" id="125" class="l">125: </a>        <span class="php-var">$parameters</span> = <span class="php-var">$this</span>-&gt;getParameters();
+<a href="#126" id="126" class="l">126: </a>
+<a href="#127" id="127" class="l">127: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_numeric</span>(<span class="php-var">$parameter</span>)) {
+<a href="#128" id="128" class="l">128: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$parameters</span>[<span class="php-var">$parameter</span>])) {
+<a href="#129" id="129" class="l">129: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no parameter at position &quot;%d&quot; in function &quot;%s&quot;.'</span>, <span class="php-var">$parameter</span>, <span class="php-var">$this</span>-&gt;getName()), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#130" id="130" class="l">130: </a>            }
+<a href="#131" id="131" class="l">131: </a>
+<a href="#132" id="132" class="l">132: </a>            <span class="php-keyword1">return</span> <span class="php-var">$parameters</span>[<span class="php-var">$parameter</span>];
+<a href="#133" id="133" class="l">133: </a>        } <span class="php-keyword1">else</span> {
+<a href="#134" id="134" class="l">134: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$parameters</span> as <span class="php-var">$reflection</span>) {
+<a href="#135" id="135" class="l">135: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$reflection</span>-&gt;getName() === <span class="php-var">$parameter</span>) {
+<a href="#136" id="136" class="l">136: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$reflection</span>;
+<a href="#137" id="137" class="l">137: </a>                }
+<a href="#138" id="138" class="l">138: </a>            }
+<a href="#139" id="139" class="l">139: </a>
+<a href="#140" id="140" class="l">140: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no parameter &quot;%s&quot; in function &quot;%s&quot;.'</span>, <span class="php-var">$parameter</span>, <span class="php-var">$this</span>-&gt;getName()), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#141" id="141" class="l">141: </a>        }
+<a href="#142" id="142" class="l">142: </a>    }
+<a href="#143" id="143" class="l">143: </a>
+<a href="#144" id="144" class="l">144: </a>    <span class="php-comment">/**
+</span><a href="#145" id="145" class="l">145: </a><span class="php-comment">     * Returns parsed docblock.
+</span><a href="#146" id="146" class="l">146: </a><span class="php-comment">     *
+</span><a href="#147" id="147" class="l">147: </a><span class="php-comment">     * @return array
+</span><a href="#148" id="148" class="l">148: </a><span class="php-comment">     */</span>
+<a href="#149" id="149" class="l">149: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotations()
+<a href="#150" id="150" class="l">150: </a>    {
+<a href="#151" id="151" class="l">151: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
+<a href="#152" id="152" class="l">152: </a>    }
+<a href="#153" id="153" class="l">153: </a>
+<a href="#154" id="154" class="l">154: </a>    <span class="php-comment">/**
+</span><a href="#155" id="155" class="l">155: </a><span class="php-comment">     * Returns a particular annotation value.
+</span><a href="#156" id="156" class="l">156: </a><span class="php-comment">     *
+</span><a href="#157" id="157" class="l">157: </a><span class="php-comment">     * @param string $name Annotation name
+</span><a href="#158" id="158" class="l">158: </a><span class="php-comment">     * @return null
+</span><a href="#159" id="159" class="l">159: </a><span class="php-comment">     */</span>
+<a href="#160" id="160" class="l">160: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotation(<span class="php-var">$name</span>)
+<a href="#161" id="161" class="l">161: </a>    {
+<a href="#162" id="162" class="l">162: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">null</span>;
+<a href="#163" id="163" class="l">163: </a>    }
+<a href="#164" id="164" class="l">164: </a>
+<a href="#165" id="165" class="l">165: </a>    <span class="php-comment">/**
+</span><a href="#166" id="166" class="l">166: </a><span class="php-comment">     * Checks if there is a particular annotation.
+</span><a href="#167" id="167" class="l">167: </a><span class="php-comment">     *
+</span><a href="#168" id="168" class="l">168: </a><span class="php-comment">     * @param string $name Annotation name
+</span><a href="#169" id="169" class="l">169: </a><span class="php-comment">     * @return boolean
+</span><a href="#170" id="170" class="l">170: </a><span class="php-comment">     */</span>
+<a href="#171" id="171" class="l">171: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> hasAnnotation(<span class="php-var">$name</span>)
+<a href="#172" id="172" class="l">172: </a>    {
+<a href="#173" id="173" class="l">173: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
+<a href="#174" id="174" class="l">174: </a>    }
+<a href="#175" id="175" class="l">175: </a>
+<a href="#176" id="176" class="l">176: </a>    <span class="php-comment">/**
+</span><a href="#177" id="177" class="l">177: </a><span class="php-comment">     * Returns if the current reflection comes from a tokenized source.
+</span><a href="#178" id="178" class="l">178: </a><span class="php-comment">     *
 </span><a href="#179" id="179" class="l">179: </a><span class="php-comment">     * @return boolean
 </span><a href="#180" id="180" class="l">180: </a><span class="php-comment">     */</span>
-<a href="#181" id="181" class="l">181: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> hasAnnotation(<span class="php-var">$name</span>)
+<a href="#181" id="181" class="l">181: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isTokenized()
 <a href="#182" id="182" class="l">182: </a>    {
 <a href="#183" id="183" class="l">183: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
 <a href="#184" id="184" class="l">184: </a>    }
 <a href="#185" id="185" class="l">185: </a>
 <a href="#186" id="186" class="l">186: </a>    <span class="php-comment">/**
-</span><a href="#187" id="187" class="l">187: </a><span class="php-comment">     * Returns if the current reflection comes from a tokenized source.
+</span><a href="#187" id="187" class="l">187: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
 </span><a href="#188" id="188" class="l">188: </a><span class="php-comment">     *
-</span><a href="#189" id="189" class="l">189: </a><span class="php-comment">     * @return boolean
+</span><a href="#189" id="189" class="l">189: </a><span class="php-comment">     * @return array
 </span><a href="#190" id="190" class="l">190: </a><span class="php-comment">     */</span>
-<a href="#191" id="191" class="l">191: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isTokenized()
+<a href="#191" id="191" class="l">191: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases()
 <a href="#192" id="192" class="l">192: </a>    {
-<a href="#193" id="193" class="l">193: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
+<a href="#193" id="193" class="l">193: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
 <a href="#194" id="194" class="l">194: </a>    }
 <a href="#195" id="195" class="l">195: </a>
 <a href="#196" id="196" class="l">196: </a>    <span class="php-comment">/**
 </span><a href="#197" id="197" class="l">197: </a><span class="php-comment">     * Creates a reflection instance.
 </span><a href="#198" id="198" class="l">198: </a><span class="php-comment">     *
-</span><a href="#199" id="199" class="l">199: </a><span class="php-comment">     * @param \ReflectionFunction Internal reflection instance
-</span><a href="#200" id="200" class="l">200: </a><span class="php-comment">     * @param \TokenReflection\Broker Reflection broker instance
+</span><a href="#199" id="199" class="l">199: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
+</span><a href="#200" id="200" class="l">200: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
 </span><a href="#201" id="201" class="l">201: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionFunction
 </span><a href="#202" id="202" class="l">202: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
 </span><a href="#203" id="203" class="l">203: </a><span class="php-comment">     */</span>
