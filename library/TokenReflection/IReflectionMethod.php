@@ -123,6 +123,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	public function isStatic();
 
 	/**
+	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
+	 *
+	 * @param integer $filter Filter
+	 * @return boolean
+	 */
+	public function is($filter = null);
+
+	/**
 	 * Sets a method to be accessible or not.
 	 *
 	 * @param boolean $accessible If the method should be accessible.

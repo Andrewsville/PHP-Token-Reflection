@@ -215,6 +215,17 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
+	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
+	 *
+	 * @param integer $filter Filter
+	 * @return boolean
+	 */
+	public function is($filter = null)
+	{
+		return null === $filter || ($this->getModifiers() & $filter);
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
