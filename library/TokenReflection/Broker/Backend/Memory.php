@@ -96,6 +96,16 @@ class Memory implements Broker\Backend
 	}
 
 	/**
+	 * Returns all present namespaces.
+	 *
+	 * @return array
+	 */
+	public function getNamespaces()
+	{
+		return $this->namespaces;
+	}
+
+	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
 	 * @param string $className CLass bame
