@@ -15,8 +15,6 @@
 
 namespace TokenReflection;
 
-use ArrayIterator;
-
 /**
  * Processed file class.
  */

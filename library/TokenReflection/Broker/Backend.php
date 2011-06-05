@@ -15,8 +15,6 @@
 
 namespace TokenReflection\Broker;
 
-use TokenReflection;
-
 /**
  * Broker backend interface.
  *
@@ -89,7 +87,7 @@ interface Backend
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return \ArrayIterator
+	 * @return \TokenReflection\Stream
 	 */
 	public function getFileTokens($fileName);
 
