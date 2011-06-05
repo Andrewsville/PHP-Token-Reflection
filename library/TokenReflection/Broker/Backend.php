@@ -15,6 +15,8 @@
 
 namespace TokenReflection\Broker;
 
+use TokenReflection;
+
 /**
  * Broker backend interface.
  *
