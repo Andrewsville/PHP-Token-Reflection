@@ -286,7 +286,16 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		if (null === $this->parentClassName) {
 			return array_values($this->constants);
 		} else {
-			return array_merge(array_values($this->constants), $this->getParentClass()->getConstantReflections());
+			$reflections = array_values($this->constants);
+
+			if (null !== $this->parentClassName) {
+				$reflections = array_merge($reflections, $this->getParentClass()->getConstantReflections());
+			}
+			foreach ($this->getOwnInterfaces() as $interface) {
+				$reflections = array_merge($reflections, $interface->getConstantReflections());
+			}
+
+			return $reflections;
 		}
 	}
 
