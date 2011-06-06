@@ -444,6 +444,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				}
 			}
 		}
+		foreach ($this->getOwnInterfaces() as $interface) {
+			foreach ($interface->getMethods(null) as $parentMethod) {
+				if (!isset($methods[$parentMethod->getName()])) {
+					$methods[$parentMethod->getName()] = $parentMethod;
+				}
+			}
+		}
 
 		if (null !== $filter) {
 			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
