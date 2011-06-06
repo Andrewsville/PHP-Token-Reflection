@@ -428,18 +428,18 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$methods = $this->methods;
 
-		if (null !== $filter) {
-			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
-				return $method->is($filter);
-			});
-		}
-
 		if (null !== $this->parentClassName) {
-			foreach ($this->getParentClass()->getMethods($filter) as $parentMethod) {
+			foreach ($this->getParentClass()->getMethods(null) as $parentMethod) {
 				if (!isset($methods[$parentMethod->getName()])) {
 					$methods[$parentMethod->getName()] = $parentMethod;
 				}
 			}
+		}
+
+		if (null !== $filter) {
+			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
+				return $method->is($filter);
+			});
 		}
 
 		return array_values($methods);
@@ -552,18 +552,18 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$properties = $this->properties;
 
-		if (null !== $filter) {
-			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
-				return (bool) ($property->getModifiers() & $filter);
-			});
-		}
-
 		if (null !== $this->parentClassName) {
-			foreach ($this->getParentClass()->getProperties($filter) as $parentProperty) {
+			foreach ($this->getParentClass()->getProperties(null) as $parentProperty) {
 				if (!isset($properties[$parentProperty->getName()])) {
 					$properties[$parentProperty->getName()] = $parentProperty;
 				}
 			}
+		}
+
+		if (null !== $filter) {
+			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
+				return (bool) ($property->getModifiers() & $filter);
+			});
 		}
 
 		return array_values($properties);
