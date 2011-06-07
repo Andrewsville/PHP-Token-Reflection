@@ -166,6 +166,7 @@ class Broker
 	public function processDirectory($path, $returnReflectionFile = false)
 	{
 		try {
+			$realPath = realpath($path);
 			if (!is_dir($realPath)) {
 				throw new Exception\Parse('Directory does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
 			}
