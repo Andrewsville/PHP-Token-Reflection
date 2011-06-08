@@ -453,7 +453,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		if (null !== $filter) {
-			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
+			$methods = array_filter($methods, function(IReflectionMethod $method) use ($filter) {
 				return $method->is($filter);
 			});
 		}
@@ -577,7 +577,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		if (null !== $filter) {
-			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
+			$properties = array_filter($properties, function(IReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
