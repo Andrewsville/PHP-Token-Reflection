@@ -116,7 +116,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Returns reflection of the required class of the value.
 	 *
-	 * @return \TokenReflection\ReflectionClass|\TokenReflection\ReflectionPhpClass|null
+	 * @return \TokenReflection\IReflectionClass|null
 	 */
 	public function getClass()
 	{
