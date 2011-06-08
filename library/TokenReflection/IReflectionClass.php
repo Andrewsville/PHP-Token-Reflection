@@ -453,6 +453,41 @@ interface IReflectionClass extends IReflection
 	public function getIndirectImplementerNames();
 
 	/**
+	 * Returns if it is possible to create an instance of this class.
+	 *
+	 * @return boolean
+	 */
+	public function isInstantiable();
+
+	/**
+	 * Returns traits used by this class.
+	 *
+	 * @return array
+	 */
+	public function getTraits();
+
+	/**
+	 * Returns names of used traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitNames();
+
+	/**
+	 * Returns method aliases from traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitAliases();
+
+	/**
+	 * Returns if the class is a trait.
+	 *
+	 * @return boolean
+	 */
+	public function isTrait();
+
+	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
 	 * Use any number of constructor parameters as function parameters.

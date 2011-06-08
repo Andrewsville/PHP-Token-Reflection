@@ -119,6 +119,13 @@ interface IReflectionParameter extends IReflection
 	public function isPassedByReference();
 
 	/**
+	 * Returns if the paramter value can be passed by value.
+	 *
+	 * @return boolean
+	 */
+	public function canBePassedByValue();
+
+	/**
 	 * Returns the appropriate docblock definition.
 	 *
 	 * @return string|boolean

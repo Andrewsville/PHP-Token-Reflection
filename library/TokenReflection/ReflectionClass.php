@@ -924,10 +924,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Returns if objects of this class are cloneable.
 	 *
-	 * Not implemented in 5.3, but in trunk though.
-	 *
 	 * @return boolean
-	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
 	 */
 	public function isCloneable()
 	{
@@ -997,6 +994,46 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		$parent = $this->getParentClass();
 		return false === $parent ? false : $parent->isSubclassOf($class);
+	}
+
+	/**
+	 * Returns traits used by this class.
+	 *
+	 * @return array
+	 */
+	public function getTraits()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns names of used traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitNames()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns method aliases from traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitAliases()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class is a trait.
+	 *
+	 * @return boolean
+	 */
+	public function isTrait()
+	{
+		return array();
 	}
 
 	/**

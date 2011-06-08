@@ -120,6 +120,20 @@ interface IReflectionFunctionBase extends IReflection
 	public function isClosure();
 
 	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosure();
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosureThis();
+
+	/**
 	 * Returns if the function/method is deprecated.
 	 *
 	 * @return boolean

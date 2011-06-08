@@ -318,6 +318,16 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
+	 * Returns if the paramter value can be passed by value.
+	 *
+	 * @return boolean
+	 */
+	public function canBePassedByValue()
+	{
+		return !$this->isPassedByReference();
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

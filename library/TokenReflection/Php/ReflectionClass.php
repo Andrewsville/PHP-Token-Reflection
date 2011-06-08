@@ -701,6 +701,46 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Returns traits used by this class.
+	 *
+	 * @return array
+	 */
+	public function getTraits()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns names of used traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitNames()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns method aliases from traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitAliases()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class is a trait.
+	 *
+	 * @return boolean
+	 */
+	public function isTrait()
+	{
+		return array();
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance

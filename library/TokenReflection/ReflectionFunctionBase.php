@@ -204,6 +204,25 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosure(){
+		return null;
+	}
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosureThis()
+	{
+		return null;
+	}
+
+	/**
 	 * Parses the function/method name.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
