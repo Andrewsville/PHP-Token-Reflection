@@ -707,7 +707,22 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function getTraits()
 	{
-		return array();
+		return NATIVE_TRAITS ? parent::getTraits() : array();
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits()
+	{
+		if (!NATIVE_TRAITS) {
+			return array();
+		}
+
+		$parent = $this->getParentClass();
+		return $parent ? array_diff_key($this->getTraits(), $parent->getTraits()) : $this->getTraits();
 	}
 
 	/**
@@ -717,7 +732,17 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function getTraitNames()
 	{
-		return array();
+		return NATIVE_TRAITS ? parent::getTraitNames() : array();
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames()
+	{
+		return array_keys($this->getOwnTraits());
 	}
 
 	/**
@@ -727,7 +752,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function getTraitAliases()
 	{
-		return array();
+		return NATIVE_TRAITS ? parent::getTraitAliases() : array();
 	}
 
 	/**
@@ -737,7 +762,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function isTrait()
 	{
-		return array();
+		return NATIVE_TRAITS && parent::isTrait();
 	}
 
 	/**

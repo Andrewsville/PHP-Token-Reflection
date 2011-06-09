@@ -32,14 +32,30 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	const IS_INTERFACE = 0x80;
 
 	/**
-	 * Method implements interfaces.
+	 * Modifier for determining if the reflected object is a trait.
+	 *
+	 * @var integer
+	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l150
+	 */
+	const IS_TRAIT = 0x120;
+
+	/**
+	 * Class implements interfaces.
 	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l152
-	 * ZEND_ACC_IMPLEMENT_INTERFACES
 	 *
 	 * @var integer
 	 */
 	const IMPLEMENTS_INTERFACES = 0x80000;
+
+	/**
+	 * Class implements traits.
+	 *
+	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l181
+	 *
+	 * @var integer
+	 */
+	const IMPLEMENTS_TRAITS = 0x400000;
 
 	/**
 	 * Class namespace name.
@@ -103,6 +119,20 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @var array
 	 */
 	private $interfaces = array();
+
+	/**
+	 * Used trait names.
+	 *
+	 * @var array
+	 */
+	private $traits = array();
+
+	/**
+	 * Aliases used at traits.
+	 *
+	 * @var array
+	 */
+	private $traitAliases = array();
 
 	/**
 	 * Stores if the class definition is complete.
@@ -432,6 +462,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param integer $filter Methods filter
 	 * @return array
+	 * @todo traits
 	 */
 	public function getMethods($filter = null)
 	{
@@ -479,6 +510,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 			if (count($this->getInterfaceNames())) {
 				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
+			}
+
+			if (count($this->getTraitNames())) {
+				$this->modifiers |= self::IMPLEMENTS_TRAITS;
 			}
 
 			$this->modifiersComplete = true;
@@ -946,7 +981,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isInterface()
 	{
-		return self::IS_INTERFACE === $this->modifiers;
+		return (bool) (self::IS_INTERFACE & $this->modifiers);
 	}
 
 	/**
@@ -1003,7 +1038,32 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getTraits()
 	{
-		return array();
+		$traitNames = $this->getTraitNames();
+		if (empty($traitNames)) {
+			return array();
+		}
+
+		$broker = $this->getBroker();
+		return array_combine($this->traits, array_map(function($traitName) use ($broker) {
+			return $broker->getClass($traitName);
+		}, $traitNames));
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits()
+	{
+		if (empty($this->traits)) {
+			return array();
+		}
+
+		$broker = $this->getBroker();
+		return array_combine($this->traits, array_map(function($traitName) use ($broker) {
+			return $broker->getClass($traitName);
+		}, $this->traits));
 	}
 
 	/**
@@ -1013,7 +1073,25 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getTraitNames()
 	{
-		return array();
+		$parentClass = $this->getParentClass();
+
+		$names = $parentClass ? $parentClass->getTraitNames() : array();
+		foreach (array_reverse($this->traits) as $traitName) {
+			$names = array_merge($names, $this->getBroker()->getClass($traitName)->getTraitNames());
+			$names[] = $traitName;
+		}
+
+		return array_unique($names);
+	}
+
+	/**
+	 * Returns names of traits used by this class an not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames()
+	{
+		return $this->traits;
 	}
 
 	/**
@@ -1023,7 +1101,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getTraitAliases()
 	{
-		return array();
+		return $this->traitAliases;
 	}
 
 	/**
@@ -1033,7 +1111,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isTrait()
 	{
-		return array();
+		return (bool) (self::IS_TRAIT & $this->modifiers);
 	}
 
 	/**
@@ -1250,7 +1328,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						break;
 					case T_INTERFACE:
 						$this->modifiers = self::IS_INTERFACE;
-						// break missing on purpose
+						$tokenStream->skipWhitespaces();
+						break 2;
+					case T_TRAIT:
+						$this->modifiers = self::IS_TRAIT;
+						$tokenStream->skipWhitespaces();
+						break 2;
 					case T_CLASS:
 						$tokenStream->skipWhitespaces();
 						break 2;

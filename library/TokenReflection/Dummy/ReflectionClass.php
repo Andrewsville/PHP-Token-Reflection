@@ -910,11 +910,31 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits()
+	{
+		return array();
+	}
+
+	/**
 	 * Returns names of used traits.
 	 *
 	 * @return array
 	 */
 	public function getTraitNames()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames()
 	{
 		return array();
 	}

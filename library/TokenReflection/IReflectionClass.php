@@ -467,11 +467,25 @@ interface IReflectionClass extends IReflection
 	public function getTraits();
 
 	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits();
+
+	/**
 	 * Returns names of used traits.
 	 *
 	 * @return array
 	 */
 	public function getTraitNames();
+
+	/**
+	 * Returns names of traits used by this class an not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames();
 
 	/**
 	 * Returns method aliases from traits.

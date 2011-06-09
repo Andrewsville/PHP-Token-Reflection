@@ -154,6 +154,7 @@ class ReflectionFileNamespace extends ReflectionBase
 				case T_ABSTRACT:
 				case T_FINAL:
 				case T_CLASS:
+				case T_TRAIT:
 				case T_INTERFACE:
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
 					$this->classes[$class->getName()] = $class;
