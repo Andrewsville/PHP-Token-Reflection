@@ -507,10 +507,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		/**
 		 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_API.c?revision=309853&view=markup#l1795
 		 */
-		static $notAllowed;
-		if (null === $notAllowed) {
-			$notAllowed = array_flip(array('__clone', '__tostring', '__get', '__set', '__isset', '__unset'));
-		}
+		static $notAllowed = array('__clone' => true, '__tostring' => true, '__get' => true, '__set' => true, '__isset' => true, '__unset' => true);
 		if (!$this->isConstructor() && !$this->isDestructor() && !isset($notAllowed[$name])) {
 			$this->modifiers |= self::IS_ALLOWED_STATIC;
 		}

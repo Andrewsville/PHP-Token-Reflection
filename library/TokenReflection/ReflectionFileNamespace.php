@@ -130,10 +130,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
-		static $skipped;
-		if (null === $skipped) {
-			$skipped = array_flip(array(T_WHITESPACE, T_COMMENT, T_DOC_COMMENT));
-		}
+		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
 
 		while (true) {
 			switch ($tokenStream->getType()) {

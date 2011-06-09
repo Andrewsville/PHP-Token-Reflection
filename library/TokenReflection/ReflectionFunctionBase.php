@@ -256,10 +256,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 				throw new Exception\Parse('Could find the start token.', Exception\Parse::PARSE_CHILDREN_ERROR);
 			}
 
-			static $accepted;
-			if (null === $accepted) {
-				$accepted = array_flip(array(T_NS_SEPARATOR, T_STRING, T_ARRAY, T_VARIABLE, '&'));
-			}
+			static $accepted = array(T_NS_SEPARATOR => true, T_STRING => true, T_ARRAY => true, T_VARIABLE => true, '&' => true);
 
 			$tokenStream->skipWhitespaces();
 

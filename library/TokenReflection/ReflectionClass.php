@@ -176,11 +176,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				case T_STATIC:
 				case T_VAR:
 				case T_VARIABLE:
-					static $searching = array(T_VARIABLE, T_FUNCTION);
+					static $searching = array(T_VARIABLE => true, T_FUNCTION => true);
 
 					if (T_VAR !== $tokenStream->getType()) {
 						$position = $tokenStream->key();
-						while (null !== ($type = $tokenStream->getType($position++)) && !in_array($type, $searching)) {
+						while (null !== ($type = $tokenStream->getType($position++)) && !isset($searching[$type])) {
 							$position++;
 						}
 					}

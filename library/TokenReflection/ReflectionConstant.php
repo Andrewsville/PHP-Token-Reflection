@@ -169,11 +169,8 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 
 			$tokenStream->skipWhitespaces();
 
-			static $acceptedStrings, $acceptedTokens;
-			if (null === $acceptedStrings) {
-				$acceptedStrings = array_flip(array('true', 'false', 'null'));
-				$acceptedTokens = array_flip(array('-', '+', T_STRING, T_NS_SEPARATOR, T_CONSTANT_ENCAPSED_STRING, T_DNUMBER, T_LNUMBER, T_DOUBLE_COLON));
-			}
+			static $acceptedStrings = array('true' => true, 'false' => true, 'null' => true);
+			static $acceptedTokens = array('-' => true, '+' => true, T_STRING => true, T_NS_SEPARATOR => true, T_CONSTANT_ENCAPSED_STRING => true, T_DNUMBER => true, T_LNUMBER => true, T_DOUBLE_COLON => true);
 
 			$evalValue = true;
 			while (null !== ($type = $tokenStream->getType())) {

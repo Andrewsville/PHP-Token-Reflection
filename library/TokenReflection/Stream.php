@@ -73,10 +73,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 
 		$stream = @token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents));
 
-		static $checkLines;
-		if (null === $checkLines) {
-			 $checkLines = array_flip(array(T_COMMENT, T_WHITESPACE, T_DOC_COMMENT, T_INLINE_HTML, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING));
-		}
+		static $checkLines = array(T_COMMENT => true, T_WHITESPACE => true, T_DOC_COMMENT => true, T_INLINE_HTML => true, T_ENCAPSED_AND_WHITESPACE => true, T_CONSTANT_ENCAPSED_STRING => true);
 
 		foreach ($stream as $position => $token) {
 			if (is_array($token)) {
@@ -305,11 +302,11 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 */
 	public function skipWhitespaces()
 	{
-		static $skipped = array(T_WHITESPACE, T_COMMENT);
+		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true);
 
 		do {
 			$this->position++;
-		} while (isset($this->tokens[$this->position]) && in_array($this->tokens[$this->position][0], $skipped));
+		} while (isset($this->tokens[$this->position]) && isset($skipped[$this->tokens[$this->position][0]]));
 
 		return $this;
 	}
