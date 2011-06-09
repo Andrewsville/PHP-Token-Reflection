@@ -29,6 +29,14 @@ interface IReflectionNamespace extends IReflection
 	public function getClass($className);
 
 	/**
+	 * Returns if the namespace contains a class of the given name.
+	 *
+	 * @param string $className Class name
+	 * @return boolean
+	 */
+	public function hasClass($className);
+
+	/**
 	 * Returns class reflections.
 	 *
 	 * @return array
@@ -65,6 +73,14 @@ interface IReflectionNamespace extends IReflection
 	public function getFunctions();
 
 	/**
+	 * Returns if the namespace contains a function of the given name.
+	 *
+	 * @param string $functionName Function name
+	 * @return boolean
+	 */
+	public function hasFunction($functionName);
+
+	/**
 	 * Returns function names (FQN).
 	 *
 	 * @return array
@@ -92,6 +108,14 @@ interface IReflectionNamespace extends IReflection
 	 * @return array
 	 */
 	public function getConstants();
+
+	/**
+	 * Returns if the namespace contains a constant of the given name.
+	 *
+	 * @param string $constantName Constant name
+	 * @return boolean
+	 */
+	public function hasConstant($constantName);
 
 	/**
 	 * Returns constant names (FQN).

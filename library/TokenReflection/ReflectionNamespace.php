@@ -100,6 +100,22 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
+	 * Returns if the namespace contains a class of the given name.
+	 *
+	 * @param string $className Class name
+	 * @return boolean
+	 */
+	public function hasClass($className)
+	{
+		$className = ltrim($className, '\\');
+		if (false === strpos($className, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
+			$className = $this->getName() . '\\' . $className;
+		}
+
+		return isset($this->classes[$className]);
+	}
+
+	/**
 	 * Returns class reflections.
 	 *
 	 * @return array
@@ -153,6 +169,22 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
+	 * Returns if the namespace contains a function of the given name.
+	 *
+	 * @param string $functionName Function name
+	 * @return boolean
+	 */
+	public function hasFunction($functionName)
+	{
+		$functionName = ltrim($functionName, '\\');
+		if (false === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
+			$functionName = $this->getName() . '\\' . $functionName;
+		}
+
+		return isset($this->functions[$functionName]);
+	}
+
+	/**
 	 * Returns function reflections.
 	 *
 	 * @return array
@@ -203,6 +235,22 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		return $this->constants[$constantName];
+	}
+
+	/**
+	 * Returns if the namespace contains a constant of the given name.
+	 *
+	 * @param string $constantName Constant name
+	 * @return boolean
+	 */
+	public function hasConstant($constantName)
+	{
+		$constantName = ltrim($constantName, '\\');
+		if (false === strpos($constantName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
+			$constantName = $this->getName() . '\\' . $constantName;
+		}
+
+		return isset($this->constants[$constantName]);
 	}
 
 	/**
