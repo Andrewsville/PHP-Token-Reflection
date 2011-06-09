@@ -30,9 +30,14 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	/**
 	 * Calls the function.
 	 *
+	 * This function is commented out because its actual declaration in ReflectionFunction
+	 * is different in PHP 5.3.0 (http://bugs.php.net/bug.php?id=48757).
+	 *
+	 * If you use PHP > 5.3.0, you can uncomment it.
+	 *
 	 * @return mixed
 	 */
-	public function invoke();
+	//public function invoke();
 
 	/**
 	 * Calls the function.
