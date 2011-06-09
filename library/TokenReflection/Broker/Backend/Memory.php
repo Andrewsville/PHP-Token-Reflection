@@ -168,7 +168,7 @@ class Memory implements Broker\Backend
 			$namespace = $this->getNamespace($namespace);
 			$className = substr($className, $pos + 1);
 		} else {
-			$namepace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
 
 		return $namespace->hasClass($className);
@@ -225,7 +225,7 @@ class Memory implements Broker\Backend
 			$namespace = $this->getNamespace($namespace);
 			$functionName = substr($functionName, $pos + 1);
 		} else {
-			$namepace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
 
 		return $namespace->hasFunction($functionName);

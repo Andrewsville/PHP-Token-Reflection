@@ -255,7 +255,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 				$constantName = substr($this->valueDefinition, $position + 2);
 
 				$class = $this->getBroker()->getClass($className);
-				$this->value = $class->hasConstant($constantName) ? $class->getConstant($constantName)->getValue() : null;
+				$this->value = $class->hasConstant($constantName) ? $class->getConstantReflection($constantName)->getValue() : null;
 			} else {
 				$constant = $this->getBroker()->getConstant($this->valueDefinition);
 				$this->value = $constant ? $constant->getValue() : null;
