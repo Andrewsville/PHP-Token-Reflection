@@ -605,6 +605,6 @@ abstract class ReflectionBase implements IReflection
 			}
 		}
 
-		return null === $namespaceName || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
+		return null === $namespaceName || '' === $namespaceName || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
 	}
 }
