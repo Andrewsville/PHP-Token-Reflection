@@ -236,6 +236,17 @@ class Broker
 	}
 
 	/**
+	 * Returns if the broker contains a namespace of the given name.
+	 *
+	 * @param string $namespaceName Namespace name
+	 * @return boolean
+	 */
+	public function hasNamespace($namespaceName)
+	{
+		return isset($this->cache[self::CACHE_NAMESPACE][$namespaceName]) || $this->backend->hasNamespace($namespaceName);
+	}
+
+	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
 	 * @param string $className CLass bame
@@ -252,6 +263,17 @@ class Broker
 
 		$this->cache[self::CACHE_CLASS][$className] = $this->backend->getClass($className);
 		return $this->cache[self::CACHE_CLASS][$className];
+	}
+
+	/**
+	 * Returns if the broker contains a class of the given name.
+	 *
+	 * @param string $className Class name
+	 * @return boolean
+	 */
+	public function hasClass($className)
+	{
+		return isset($this->cache[self::CACHE_CLASS][$className]) || $this->backend->hasClass($className);
 	}
 
 	/**
@@ -276,6 +298,17 @@ class Broker
 	}
 
 	/**
+	 * Returns if the broker contains a function of the given name.
+	 *
+	 * @param string $functionName Function name
+	 * @return boolean
+	 */
+	public function hasFunction($functionName)
+	{
+		return isset($this->cache[self::CACHE_FUNCTION][$functionName]) || $this->backend->hasFunction($functionName);
+	}
+
+	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
 	 * @param string $constantName Constant name
@@ -294,6 +327,17 @@ class Broker
 		}
 
 		return $constant;
+	}
+
+	/**
+	 * Returns if the broker contains a constant of the given name.
+	 *
+	 * @param string $constantName Constant name
+	 * @return boolean
+	 */
+	public function hasConstant($constantName)
+	{
+		return isset($this->cache[self::CACHE_CONSTANT][$constantName]) || $this->backend->hasConstant($constantName);
 	}
 
 	/**

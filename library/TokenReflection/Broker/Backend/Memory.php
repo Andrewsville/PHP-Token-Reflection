@@ -96,6 +96,17 @@ class Memory implements Broker\Backend
 	}
 
 	/**
+	 * Returns if there was such namespace processed (FQN expected).
+	 *
+	 * @param string $namespaceName Namespace name
+	 * @return boolean
+	 */
+	public function hasNamespace($namespaceName)
+	{
+		return isset($this->namespaces[ltrim($namespaceName, '\\')]);
+	}
+
+	/**
 	 * Returns all present namespaces.
 	 *
 	 * @return array
@@ -140,6 +151,30 @@ class Memory implements Broker\Backend
 	}
 
 	/**
+	 * Returns if there was such class processed (FQN expected).
+	 *
+	 * @param string $className Class name
+	 * @return boolean
+	 */
+	public function hasClass($className)
+	{
+		$className = ltrim($className, '\\');
+		if ($pos = strrpos($className, '\\')) {
+			$namespace = substr($className, $pos);
+			if (!isset($this->namespaces[$namespace])) {
+				return false;
+			}
+
+			$namespace = $this->getNamespace($namespace);
+			$className = substr($className, $pos + 1);
+		} else {
+			$namepace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+		}
+
+		return $namespace->hasClass($className);
+	}
+
+	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
 	 * @param string $functionName Function name
@@ -170,6 +205,30 @@ class Memory implements Broker\Backend
 
 			throw new Exception\Runtime(sprintf('Function %s does not exist.', $functionName), 0, $e);
 		}
+	}
+
+	/**
+	 * Returns if there was such function processed (FQN expected).
+	 *
+	 * @param string $functionName Function name
+	 * @return boolean
+	 */
+	public function hasFunction($functionName)
+	{
+		$functionName = ltrim($functionName, '\\');
+		if ($pos = strrpos($functionName, '\\')) {
+			$namespace = substr($functionName, $pos);
+			if (!isset($this->namespaces[$namespace])) {
+				return false;
+			}
+
+			$namespace = $this->getNamespace($namespace);
+			$functionName = substr($functionName, $pos + 1);
+		} else {
+			$namepace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+		}
+
+		return $namespace->hasFunction($functionName);
 	}
 
 	/**
@@ -216,6 +275,42 @@ class Memory implements Broker\Backend
 
 			throw new Exception\Runtime(sprintf('Constant %s does not exist.', $constantName), 0, $e);
 		}
+	}
+
+	/**
+	 * Returns if there was such constant processed (FQN expected).
+	 *
+	 * @param string $constantName Constant name
+	 * @return boolean
+	 */
+	public function hasConstant($constantName)
+	{
+		$constantName = ltrim($constantName, '\\');
+
+		if ($pos = strpos($constantName, '::')) {
+			$className = substr($constantName, 0, $pos);
+			$constantName = substr($constantName, $pos + 2);
+
+			if (!$this->hasClass($className)) {
+				return false;
+			}
+
+			$parent = $this->getClass($className);
+		} else {
+			if ($pos = strrpos($constantName, '\\')) {
+				$namespace = substr($constantName, $pos);
+				if (!$this->hasNamespace($namespace)) {
+					return false;
+				}
+
+				$parent = $this->getNamespace($namespace);
+				$constantName = substr($constantName, $pos + 1);
+			} else {
+				$parent = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			}
+		}
+
+		return $parent->hasConstant($constantName);
 	}
 
 	/**

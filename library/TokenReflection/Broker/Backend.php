@@ -54,12 +54,28 @@ interface Backend
 	public function getNamespace($namespaceName);
 
 	/**
+	 * Returns if there was such namespace processed (FQN expected).
+	 *
+	 * @param string $namespaceName Namespace name
+	 * @return boolean
+	 */
+	public function hasNamespace($namespaceName);
+
+	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
 	 * @param string $className CLass bame
 	 * @return \TokenReflection\IReflectionClass|null
 	 */
 	public function getClass($className);
+
+	/**
+	 * Returns if there was such class processed (FQN expected).
+	 *
+	 * @param string $className Class name
+	 * @return boolean
+	 */
+	public function hasClass($className);
 
 	/**
 	 * Returns a reflection object of a function (FQN expected).
@@ -70,12 +86,28 @@ interface Backend
 	public function getFunction($functionName);
 
 	/**
+	 * Returns if there was such function processed (FQN expected).
+	 *
+	 * @param string $functionName Function name
+	 * @return boolean
+	 */
+	public function hasFunction($functionName);
+
+	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
 	 * @param string $constantName Constant name
 	 * @return \TokenReflection\IReflectionConstant|null
 	 */
 	public function getConstant($constantName);
+
+	/**
+	 * Returns if there was such constant processed (FQN expected).
+	 *
+	 * @param string $constantName Constant name
+	 * @return boolean
+	 */
+	public function hasConstant($constantName);
 
 	/**
 	 * Returns if the given file was already processed.
