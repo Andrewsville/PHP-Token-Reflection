@@ -49,6 +49,13 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	private $valueDefinition = '';
 
 	/**
+	 * Constant value is another constant name.
+	 *
+	 * @var boolean
+	 */
+	private $valueAsLink = false;
+
+	/**
 	 * Imported namespace/class aliases.
 	 *
 	 * @var array
@@ -188,25 +195,9 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 
 			$this->valueDefinition = trim($this->valueDefinition);
 
+			$this->valueAsLink = !$evalValue;
 			if ($evalValue) {
 				$this->value = eval(sprintf('return %s;', $this->valueDefinition));
-			} else {
-				// Another constant's name
-				if ('\\' !== $this->valueDefinition{0}) {
-					$namespaceName = $this->namespaceName ?: $parent->getNamespaceName();
-					if ($pos = strpos($this->valueDefinition, '::')) {
-						$className = substr($this->valueDefinition, 0, $pos);
-						if ('self' === strtolower($className)) {
-							$className = $this->declaringClassName;
-						} else {
-							$className = ReflectionBase::resolveClassFQN($className, $parent->getNamespaceAliases(), $namespaceName);
-						}
-
-						$this->valueDefinition = $className . substr($this->valueDefinition, $pos);
-					} elseif(ReflectionNamespace::NO_NAMESPACE_NAME !== $namespaceName) {
-						$this->valueDefinition = $namespaceName . '\\' . $this->valueDefinition;
-					}
-				}
 			}
 
 			return $this;
@@ -222,6 +213,35 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 */
 	public function getValueDefinition()
 	{
+		if (!$this->valueAsLink) {
+			return $this->valueDefinition;
+		}
+
+		if ($pos = strpos($this->valueDefinition, '::')) {
+			$className = substr($this->valueDefinition, 0, $pos);
+			if ('self' === strtolower($className)) {
+				return $this->valueDefinition;
+			}
+
+			$nsClassName = self::resolveClassFQN($className, $this->getNamespaceAliases(), $this->namespaceName ?: $this->getDeclaringClass()->getNamespaceName());
+			$nsValue = $nsClassName . substr($this->valueDefinition, $pos);
+		} else {
+			$nsValue = $this->valueDefinition;
+			if ('\\' !== $nsValue{0}) {
+				$nsValue = ltrim(($this->namespaceName ? $this->getNamespaceName() : $this->getDeclaringClass()->getNamespaceName()) . '\\' . $nsValue, '\\');
+			}
+		}
+
+		return $this->getBroker()->hasConstant($nsValue) ? $nsValue : $this->valueDefinition;
+	}
+
+	/**
+	 * Returns the originaly provided value definition.
+	 *
+	 * @return string
+	 */
+	public function getOriginalValueDefinition()
+	{
 		return $this->valueDefinition;
 	}
 
@@ -236,7 +256,9 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 			if ($position = strpos($this->valueDefinition, '::')) {
 				$className = substr($this->valueDefinition, 0, $position);
 				$constantName = substr($this->valueDefinition, $position + 2);
-				$this->value = $this->getBroker()->getClass($className)->getConstant($constantName);
+
+				$class = $this->getBroker()->getClass($className);
+				$this->value = $class->hasConstant($constantName) ? $class->getConstant($constantName)->getValue() : null;
 			} else {
 				$constant = $this->getBroker()->getConstant($this->valueDefinition);
 				$this->value = $constant ? $constant->getValue() : null;
