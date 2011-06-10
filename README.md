@@ -83,6 +83,10 @@ $function = $broker->getFunction(...);
 $constant = $broker->getConstant(...);
 ```
 
+## Requirements
+
+The library requires PHP 5.3 with the [tokenizer extension](http://cz.php.net/manual/en/book.tokenizer.php) enabled. If you want to process PHAR archives, you will require the [appropriate extension](http://cz.php.net/manual/en/book.phar.php) enabled as well.
+
 ## Current status
 
 From the beginning we have tested our work using simple unit tests and some real source. We have decided, that once we are able to generate documentation for [Zend Framework](https://github.com/zendframework), [Doctrine](https://github.com/doctrine/doctrine2), [Nella](https://github.com/nella/framework), [Nette](https://github.com/nette/nette) and [Jyxo PHP Libraries](https://github.com/jyxo/php) using our [ApiGen fork](https://github.com/Andrewsville/apigen), we will publish the first public version.
