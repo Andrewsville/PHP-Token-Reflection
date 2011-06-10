@@ -248,4 +248,21 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 		return $cache[$key];
 	}
+
+	/**
+	 * Sets a method to be accessible or not.
+	 *
+	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
+	 *
+	 * @param boolean $accessible
+	 * @throws \TokenReflection\Exception\Runtime If run on PHP version < 5.3.2
+	 */
+	public function setAccessible($accessible)
+	{
+		if (PHP_VERSION_ID < 50302) {
+			throw new Exception\Runtime(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\Runtime::UNSUPPORTED);
+		}
+
+		return parent::setAccessible($accessible);
+	}
 }
