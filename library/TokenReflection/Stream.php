@@ -60,6 +60,10 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 */
 	public function __construct($fileName)
 	{
+		if (!extension_loaded('tokenizer')) {
+			throw new Exception\Parse('The tokenizer PHP extension is not loaded.', Exception\Parse::UNSUPPORTED);
+		}
+
 		$this->fileName = Broker::getRealPath($fileName);
 
 		if (false === $this->fileName) {

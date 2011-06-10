@@ -138,7 +138,7 @@ class Broker
 				throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
 			}
 
-			if (!class_exists('Phar', false)) {
+			if (!extension_loaded('Phar')) {
 				throw new Exception\Parse('The PHAR PHP extension is not loaded.', Exception\Parse::UNSUPPORTED);
 			}
 
