@@ -28,7 +28,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 *
 	 * @var boolean
 	 */
-	private static $parseValueDefinitions = false;
+	private static $parseValueDefinitions = true;
 
 	/**
 	 * Name of the declaring class.
@@ -112,6 +112,10 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 */
 	public function getDefaultValue()
 	{
+		if (self::$parseValueDefinitions && null === $this->defaultValue) {
+			$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
+		}
+
 		return $this->defaultValue;
 	}
 
@@ -385,11 +389,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 
 			if (',' !== $type && ';' !== $type) {
 				throw new Exception\Parse(sprintf('The property default value is not terminated properly. Expected "," or ";", "%s" found.', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			if (self::$parseValueDefinitions) {
-				// A fucking awesomness follows
-				$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
 			}
 
 			return $this;

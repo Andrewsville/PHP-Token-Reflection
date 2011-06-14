@@ -34,7 +34,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @var boolean
 	 */
-	private static $parseValueDefinitions = false;
+	private static $parseValueDefinitions = true;
 
 	/**
 	 * Defines a constraint (class name or array) of parameter values.
@@ -249,6 +249,10 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	{
 		if (null === $this->defaultValueDefinition) {
 			throw new Exception\Runtime(sprintf('Property "%s" has no default value.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		if (self::$parseValueDefinitions && null === $this->defaultValue) {
+			$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
 		}
 
 		return $this->defaultValue;
@@ -510,11 +514,6 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 
 				if (')' !== $type && ',' !== $type) {
 					throw new Exception\Parse(sprintf('The property default value is not terminated properly. Expected "," or ")", "%s" found.', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
-				}
-
-				if (self::$parseValueDefinitions) {
-					// A fucking awesomness follows
-					$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
 				}
 			}
 
