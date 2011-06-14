@@ -362,10 +362,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getInterfaceNames()
 	{
-		if ($this->isInterface()) {
-			return $this->getParentClassNameList();
-		}
-
 		$parentClass = $this->getParentClass();
 
 		$names = $parentClass ? $parentClass->getInterfaceNames() : array();
@@ -1273,24 +1269,37 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		try {
-			$tokenStream->skipWhitespaces();
+			while(true) {
+				$tokenStream->skipWhitespaces();
 
-			$parentClassName = '';
-			while (true) {
-				switch ($tokenStream->getType()) {
-					case T_STRING:
-					case T_NS_SEPARATOR:
-						$parentClassName .= $tokenStream->getTokenValue();
-						break;
-					default:
-						break 2;
+				$parentClassName = '';
+				while (true) {
+					switch ($tokenStream->getType()) {
+						case T_STRING:
+						case T_NS_SEPARATOR:
+							$parentClassName .= $tokenStream->getTokenValue();
+							break;
+						default:
+							break 2;
+					}
+
+					$tokenStream->skipWhitespaces();
 				}
 
-				$tokenStream->next();
-			}
-			$tokenStream->skipWhitespaces();
+				$parentClassName = self::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
 
-			$this->parentClassName = self::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
+				if ($this->isInterface()) {
+					$this->interfaces[] = $parentClassName;
+
+					if (',' === $tokenStream->getTokenValue()) {
+						continue;
+					}
+				} else {
+					$this->parentClassName = $parentClassName;
+				}
+
+				break;
+			}
 
 			return $this;
 		} catch (Exception $e) {
@@ -1320,6 +1329,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		if (!$tokenStream->is(T_IMPLEMENTS)) {
 			return $this;
+		}
+
+		if ($this->isInterface()) {
+			throw new Exception\Parse(sprintf('Interfaces ("%s") cannot implement interfaces.', $this->name), Exception\Parse::PARSE_ELEMENT_ERROR);
 		}
 
 		try {
