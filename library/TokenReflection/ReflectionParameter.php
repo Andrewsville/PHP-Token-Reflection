@@ -154,7 +154,24 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 					}
 				}
 
-				$this->valueConstraint = ltrim(self::resolveClassFQN($this->originalValueConstraint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+				$lConstraint = strtolower($this->originalValueConstraint);
+				if ('parent' === $lConstraint || 'self' === $lConstraint) {
+					if (null === $this->declaringClassName) {
+						throw new Exception\Runtime('Parameter constraint cannot be "self" nor "parent" when not a method.', Exception::UNSUPPORTED);
+					}
+
+					if ('parent' === $lConstraint) {
+						if ($parent->isInterface() || null === $parent->getParentClassName()) {
+							throw new Exception\Runtime(sprintf('Class "%s" has no parent.', $this->declaringClassName), Exception::DOES_NOT_EXIST);
+						}
+
+						$this->valueConstraint = $parent->getParentClassName();
+					} else {
+						$this->valueConstraint = $this->declaringClassName;
+					}
+				} else {
+					$this->valueConstraint = ltrim(self::resolveClassFQN($this->originalValueConstraint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+				}
 			}
 
 			return $this->valueConstraint;
