@@ -167,4 +167,15 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame($rfl->internal->invokeArgs(array(1, 2)), $rfl->token->invokeArgs(array(1, 2)));
 		$this->assertSame(3, $rfl->token->invokeArgs(array(1, 2)));
 	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'invoke', 'noParameters', 'parameters', 'reference', 'noReference', 'noNamespace', 'userDefined', 'noClosure'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getFunctionReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+		}
+	}
 }

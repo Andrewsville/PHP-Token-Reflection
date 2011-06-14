@@ -438,17 +438,6 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		// @todo
-		return '';
-	}
-
-	/**
 	 * Returns a particular annotation value.
 	 *
 	 * @param string $name Annotation name

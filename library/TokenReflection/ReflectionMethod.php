@@ -193,6 +193,75 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$overwrite = '';
+		$prototype = '';
+
+		try {
+			$parent = $this->getPrototype();
+			if (!$parent->getDeclaringClass()->isInterface()) {
+				$overwrite = ', overwrites ' . $parent->getDeclaringClassName();
+			}
+			$prototype = ', prototype ' . $parent->getDeclaringClassName();
+		} catch (Exception $e) {
+			$parentClass = $this->getDeclaringClass()->getParentClass();
+			if ($parentClass && ($parentMethods = $parentClass->getMethods(\ReflectionMethod::IS_PRIVATE))) {
+				foreach ($parentMethods as $parent) {
+					if ($parent->getName() === $this->getName()) {
+						$overwrite = ', overwrites ' . $parent->getDeclaringClassName();
+						break;
+					}
+				}
+			}
+		}
+
+		if ($this->isConstructor()) {
+			$cdtor = ', ctor';
+		} elseif ($this->isDestructor()) {
+			$cdtor = ', dtor';
+		} else {
+			$cdtor = '';
+		}
+
+		$parameters = '';
+		if ($this->getNumberOfParameters() > 0 ) {
+			$buffer = '';
+			foreach ($this->getParameters() as $parameter) {
+				$buffer .= "\n    " . $parameter->__toString();
+			}
+			$parameters = sprintf(
+				"\n\n  - Parameters [%d] {%s\n  }",
+				$this->getNumberOfParameters(),
+				$buffer
+			);
+		}
+		// @todo support inherits
+		return sprintf(
+			"Method [ <user%s%s%s> %s%s%s%s%s%s method %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			$overwrite,
+			$prototype,
+			$cdtor,
+			$this->isAbstract() ? 'abstract ' : '',
+			$this->isFinal() ? 'final ' : '',
+			$this->isStatic() ? 'static ' : '',
+			$this->isPublic() ? 'public' : '',
+			$this->isPrivate() ? 'private' : '',
+			$this->isProtected() ? 'protected' : '',
+			$this->returnsReference() ? '&' : '',
+			$this->getName(),
+			$this->getFileName(),
+			$this->getStartLine(),
+			$this->getEndLine(),
+			$parameters
+		);
+	}
+
+	/**
 	 * Calls the method on an given instance.
 	 *
 	 * @param object $object Class instance

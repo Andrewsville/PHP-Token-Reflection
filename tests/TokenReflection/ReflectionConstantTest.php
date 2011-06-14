@@ -61,4 +61,21 @@ class ReflectionConstantTest extends Test
 		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClass()->getName());
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'noNamespace' => "Constant [ string NO_NAMESPACE ] { no-namespace }\n",
+			'typeString' => "Constant [ string TYPE_STRING ] { string }\n",
+			'typeInteger' => "Constant [ integer TYPE_INTEGER ] { 1 }\n",
+			'typeIntegerNegative' => "Constant [ integer TYPE_INTEGER_NEGATIVE ] { -1 }\n",
+			'typeFloat' => "Constant [ double TYPE_FLOAT ] { 1.1 }\n",
+			'typeFloatNegative' => "Constant [ double TYPE_FLOAT_NEGATIVE ] { -1.1 }\n",
+			'typeBoolean' => "Constant [ boolean TYPE_BOOLEAN ] { 1 }\n",
+			'typeNull' => "Constant [ NULL TYPE_NULL ] {  }\n"
+		);
+		foreach ($tests as $test => $expected) {
+			$this->assertSame($expected, $this->getConstantTokenReflection($test)->__toString());
+		}
+	}
 }

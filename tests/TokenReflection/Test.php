@@ -8,6 +8,12 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 {
 	protected $type;
 
+	protected function setUp()
+	{
+		ReflectionProperty::setParseValueDefinitions(true);
+		ReflectionParameter::setParseValueDefinitions(true);
+	}
+
 	protected function getClassReflection($test)
 	{
 		$reflection = new \stdClass();

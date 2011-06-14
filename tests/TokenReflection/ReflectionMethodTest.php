@@ -436,4 +436,30 @@ class ReflectionMethodTest extends Test
 			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
 	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'prototype', 'noPrototype', 'parameters', 'reference', 'noReference', 'noClosure', 'noNamespace', 'userDefined', 'shadow'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getMethodReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+		}
+
+		$tests = array(
+			'constructorDestructor' => array('__construct', '__destruct'),
+			'clone' => array('__clone', 'noClone'),
+			'declaringClass' => array(/*'parent',*/ 'child', 'parentOverlay'),
+			'invoke' => array('publicInvoke', 'protectedInvoke'),
+			'accessLevel' => array('privateExtended', 'privateNoExtended', 'protectedExtended', 'protectedNoExtended'),
+			'modifiers' => array('publicAbstract', 'publicFinal', 'publicStatic', 'publicNoStatic', 'protectedAbstract', 'protectedFinal', 'protectedStatic', 'protectedNoStatic', 'privateFinal', 'privateStatic', 'privateNoStatic')
+		);
+		foreach ($tests as $class => $classTests) {
+			$rfl = $this->getClassReflection($class);
+			foreach ($classTests as $method) {
+				$this->assertSame($rfl->internal->getMethod($method)->__toString(), $rfl->token->getMethod($method)->__toString());
+			}
+		}
+	}
 }

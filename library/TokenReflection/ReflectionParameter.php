@@ -339,6 +339,55 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		if ($this->getClass()) {
+			$hint = $this->getClassName();
+			if ($this->allowsNull()) {
+				$hint .= ' or NULL';
+			}
+		} elseif ($this->isArray()) {
+			$hint = 'array';
+			if ($this->allowsNull()) {
+				$hint .= ' or NULL';
+			}
+		} else {
+			$hint = '';
+		}
+
+		if ($this->isDefaultValueAvailable()) {
+			$default = ' = ';
+			if (is_null($this->getDefaultValue())) {
+				$default .= 'NULL';
+			} elseif (is_array($this->getDefaultValue())) {
+				$default .= 'Array';
+			} elseif (is_bool($this->getDefaultValue())) {
+				$default .= $this->getDefaultValue() ? 'true' : 'false';
+			} elseif (is_string($this->getDefaultValue())) {
+				$default .= sprintf("'%s'", str_replace("'", "\\'", $this->getDefaultValue()));
+			} else {
+				$default .= $this->getDefaultValue();
+			}
+		} else {
+			$default = '';
+		}
+
+		return sprintf(
+			'Parameter #%d [ <%s> %s%s$%s%s ]',
+			$this->getPosition(),
+			$this->isOptional() ? 'optional' : 'required',
+			$hint ? $hint . ' ' : '',
+			$this->isPassedByReference() ? '&' : '',
+			$this->getName(),
+			$default
+		);
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

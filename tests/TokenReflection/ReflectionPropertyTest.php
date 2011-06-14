@@ -171,8 +171,6 @@ class ReflectionPropertyTest extends Test
 
 	public function testDefault()
 	{
-		ReflectionProperty::setParseValueDefinitions(true);
-
 		$token = $this->getPropertyTokenReflection('default');
 		$this->assertTrue($token->isDefault());
 		$this->assertSame('default', $token->getDefaultValue());
@@ -181,8 +179,6 @@ class ReflectionPropertyTest extends Test
 		$token = $this->getPropertyTokenReflection('noDefault');
 		$this->assertFalse($token->isDefault());
 		$this->assertNull($token->getDefaultValue());
-
-		ReflectionProperty::setParseValueDefinitions(false);
 	}
 
 	public function testModifiers()
@@ -235,6 +231,24 @@ class ReflectionPropertyTest extends Test
 
 			$this->assertSame($rfl->internal->getValue($object), $rfl->token->getValue($object));
 			$this->assertSame($value, $rfl->token->getValue($object));
+		}
+	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'default', 'typeNull', 'typeArray', 'typeString', 'typeInteger', 'typeFloat'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getPropertyReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+		}
+
+		$rfl = $this->getClassReflection('modifiers');
+		foreach (array('public', 'protected', 'private') as $name) {
+			$internal = $rfl->internal->getProperty($name);
+			$token = $rfl->token->getProperty($name);
+			$this->assertSame($internal->__toString(), $token->__toString());
 		}
 	}
 }

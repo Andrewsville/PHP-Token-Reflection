@@ -337,6 +337,21 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return sprintf(
+			"Constant [ %s %s ] { %s }\n",
+			gettype($this->getValue()),
+			$this->getShortName(),
+			$this->getValue()
+		);
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * Not supported for constants since there is no internal constant reflection.

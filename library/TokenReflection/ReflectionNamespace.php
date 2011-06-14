@@ -382,8 +382,43 @@ class ReflectionNamespace implements IReflectionNamespace
 	 */
 	public function __toString()
 	{
-		// @todo
-		return '';
+		$buffer = '';
+		$count = 0;
+		foreach ($this->getClasses() as $class) {
+			$string = "\n    " . trim(str_replace("\n", "\n    ", $class->__toString()), ' ');
+			$string = str_replace("    \n      - Parameters", "\n      - Parameters", $string);
+
+			$buffer .= $string;
+			$count++;
+		}
+		$classes = sprintf("\n\n  - Classes [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
+
+		$buffer = '';
+		$count = 0;
+		foreach ($this->getConstants() as $constant) {
+			$buffer .= "    " . $constant->__toString();
+			$count++;
+		}
+		$constants = sprintf("\n\n  - Constants [%d] {\n%s  }", $count, $buffer);
+
+		$buffer = '';
+		$count = 0;
+		foreach ($this->getFunctions() as $function) {
+			$string = "\n    " . trim(str_replace("\n", "\n    ", $function->__toString()), ' ');
+			$string = str_replace("    \n      - Parameters", "\n      - Parameters", $string);
+
+			$buffer .= $string;
+			$count++;
+		}
+		$functions = sprintf("\n\n  - Functions [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
+
+		return sprintf(
+			"Namespace [ <user> namespace %s ] {  %s%s%s\n}\n",
+			$this->getName(),
+			$classes,
+			$constants,
+			$functions
+		);
 	}
 
 	/**

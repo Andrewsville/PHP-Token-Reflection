@@ -37,8 +37,6 @@ class ReflectionParameterTest extends Test
 
 	public function testOptional()
 	{
-		ReflectionParameter::setParseValueDefinitions(true);
-
 		$types = array('null' => null, 'true' => true, 'false' => false, 'array' => array(), 'string' => 'string', 'integer' => 1, 'float' => 1.1, 'constant' => E_NOTICE);
 		$definitions = array('null' => 'null', 'true' => 'true', 'false' => 'false', 'array' => 'array()', 'string' => "'string'", 'integer' => '1', 'float' => '1.1', 'constant' => 'E_NOTICE');
 		foreach ($types as $type => $value) {
@@ -67,8 +65,6 @@ class ReflectionParameterTest extends Test
 			// Correctly thrown exception
 			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
-
-		ReflectionParameter::setParseValueDefinitions(false);
 	}
 
 	public function testArray()
@@ -134,5 +130,18 @@ class ReflectionParameterTest extends Test
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClass()->getName());
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClassName());
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
+	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'declaringFunction', 'reference', 'noReference', 'class', 'noClass', 'array', 'noArray',
+			'nullClass', 'noNullClass', 'nullArray', 'noNullArray', 'noOptional',
+			'optionalNull', 'optionalTrue', 'optionalFalse', 'optionalArray', 'optionalString', 'optionalInteger', 'optionalFloat', 'optionalConstant'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getParameterReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+		}
 	}
 }

@@ -40,6 +40,36 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$parameters = '';
+		if ($this->getNumberOfParameters() > 0 ) {
+			$buffer = '';
+			foreach ($this->getParameters() as $parameter) {
+				$buffer .= "\n    " . $parameter->__toString();
+			}
+			$parameters = sprintf(
+				"\n\n  - Parameters [%d] {%s\n  }",
+				$this->getNumberOfParameters(),
+				$buffer
+			);
+		}
+		return sprintf(
+			"Function [ <user> function %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			$this->returnsReference() ? '&' : '',
+			$this->getName(),
+			$this->getFileName(),
+			$this->getStartLine(),
+			$this->getEndLine(),
+			$parameters
+		);
+	}
+
+	/**
 	 * Calls the function.
 	 *
 	 * @return mixed

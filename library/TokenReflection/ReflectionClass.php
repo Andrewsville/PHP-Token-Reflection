@@ -996,6 +996,85 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$implements = '';
+		if (count($this->getInterfaceNames()) > 0) {
+			$interfaceNames = $this->getInterfaceNames();
+			// @todo
+			// sort($interfaceNames);
+			$implements = ' implements ' . implode(', ', $interfaceNames);
+		}
+
+		$buffer = '';
+		$count = 0;
+		foreach ($this->getConstantReflections() as $constant) {
+			$buffer .= "    " . $constant->__toString();
+			$count++;
+		}
+		$constants = sprintf("\n\n  - Constants [%d] {\n%s  }", $count, $buffer);
+
+		$sBuffer = '';
+		$sCount = 0;
+		$buffer = '';
+		$count = 0;
+		foreach ($this->getProperties() as $property) {
+			$string = "    " . trim(str_replace("\n", "\n    ", $property->__toString()), ' ');
+			if ($property->isStatic()) {
+				$sBuffer .= $string;
+				$sCount++;
+			} else {
+				$buffer .= $string;
+				$count++;
+			}
+		}
+		$staticProperties = sprintf("\n\n  - Static properties [%d] {\n%s  }", $sCount, $sBuffer);
+		$properties = sprintf("\n\n  - Properties [%d] {\n%s  }", $count, $buffer);
+
+		$sBuffer = '';
+		$sCount = 0;
+		$buffer = '';
+		$count = 0;
+		foreach ($this->getMethods() as $method) {
+			$string = "\n    " . trim(str_replace("\n", "\n    ", $method->__toString()), ' ');
+			$string = str_replace("    \n      - Parameters", "\n      - Parameters", $string);
+			if ($method->isStatic()) {
+				$sBuffer .= $string;
+				$sCount++;
+			} else {
+				$buffer .= $string;
+				$count++;
+			}
+		}
+		$staticMethods = sprintf("\n\n  - Static methods [%d] {\n%s  }", $sCount, ltrim($sBuffer, "\n"));
+		$methods = sprintf("\n\n  - Methods [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
+
+		return sprintf(
+			"%s [ <user>%s %s%s%s %s%s%s ] {\n  @@ %s %d-%d%s%s%s%s%s\n}\n",
+			$this->isInterface() ? 'Interface' : 'Class',
+			$this->isIterateable() ? ' <iterateable>' : '',
+			$this->isAbstract() ? 'abstract ' : '',
+			$this->isFinal() ? 'final ' : '',
+			$this->isInterface() ? 'interface' : 'class',
+			$this->getShortName(),
+			null !== $this->getParentClassName() ? ' extends ' . $this->getParentClassName() : '',
+			$implements,
+			$this->getFileName(),
+			$this->getStartLine(),
+			$this->getEndLine(),
+			$constants,
+			$staticProperties,
+			$staticMethods,
+			$properties,
+			$methods
+		);
+	}
+
+	/**
 	 * Returns reflections of direct subclasses.
 	 *
 	 * @return array

@@ -243,6 +243,21 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return sprintf(
+			"Constant [ %s %s ] { %s }\n",
+			gettype($this->getValue()),
+			$this->getShortName(),
+			$this->getValue()
+		);
+	}
+
+	/**
 	 * Returns the constant value.
 	 *
 	 * @return mixed

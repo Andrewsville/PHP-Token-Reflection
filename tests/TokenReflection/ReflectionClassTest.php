@@ -48,7 +48,6 @@ class ReflectionClassTest extends Test
 
 	public function testProperties()
 	{
-		ReflectionProperty::setParseValueDefinitions(true);
 		$rfl = $this->getClassReflection('properties');
 
 		$filters = array(\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE);
@@ -214,8 +213,6 @@ class ReflectionClassTest extends Test
 
 			$this->assertInstanceOf('TokenReflection\ReflectionProperty', $rfl->token->getProperty($property));
 		}
-
-		ReflectionProperty::setParseValueDefinitions(false);
 	}
 
 	public function testInstantiableCloneable()
@@ -592,9 +589,9 @@ class ReflectionClassTest extends Test
 	public function testMethodGetSource()
 	{
 		static $expected = array(
-			'protectedStaticFunction' => "protected static function protectedStaticFunction()\n	{\n	}",
-			'protectedFunction' => "protected function protectedFunction()\n	{\n	}",
-			'publicStaticFunction' => "public static function publicStaticFunction()\n	{\n	}"
+			'protectedStaticFunction' => "protected static function protectedStaticFunction(\$one = true)\n	{\n	}",
+			'protectedFunction' => "protected function protectedFunction(\$two = false)\n	{\n	}",
+			'publicStaticFunction' => "public static function publicStaticFunction(\$five = 1.1)\n	{\n	}"
 		);
 
 		$rfl = $this->getClassReflection('methods')->token;
@@ -621,7 +618,7 @@ class ReflectionClassTest extends Test
 	public function testClassGetSource()
 	{
 		static $expected = array(
-			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n	public function __construct()\n	{\n	}\n\n	public function __destruct()\n	{\n	}\n\n	public final function publicFinalFunction()\n	{\n	}\n\n	public static function publicStaticFunction()\n	{\n	}\n\n	private static function privateStaticFunction()\n	{\n	}\n\n	public function publicFunction()\n	{\n	}\n\n	private function privateFunction()\n	{\n	}\n}",
+			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n	public function __construct(\$three)\n	{\n	}\n\n	public function __destruct()\n	{\n	}\n\n	public final function publicFinalFunction(\$four = 1)\n	{\n	}\n\n	public static function publicStaticFunction(\$five = 1.1)\n	{\n	}\n\n	private static function privateStaticFunction(\$six = 'string', \$seven = null)\n	{\n	}\n\n	public function publicFunction(array \$eight = array())\n	{\n	}\n\n	private function privateFunction(Foo \$nine = null)\n	{\n	}\n}",
 			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n	const STRING = 'string';\n	const INTEGER = 1;\n	const FLOAT = 1.1;\n	const BOOLEAN = true;\n}",
 			'docComment' => "/**\n * TokenReflection_Test_ClassDocComment.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */\nclass TokenReflection_Test_ClassDocComment\n{\n}"
 		);
@@ -631,6 +628,23 @@ class ReflectionClassTest extends Test
 				$source,
 				$this->getClassReflection($className)->token->getSource()
 			);
+		}
+	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'constants', 'noConstants', 'properties', 'noProperties', 'doubleProperties',
+			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
+			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
+			'interface', 'noInterface', 'interfaces', 'noInterfaces',
+			/*'iterator',*/ 'noIterator', 'parent', 'noParent',
+			'userDefined', 'noNamespace'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getClassReflection($test);
+			// inherits not supported yet
+			$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl->internal->__toString()), $rfl->token->__toString());
 		}
 	}
 }

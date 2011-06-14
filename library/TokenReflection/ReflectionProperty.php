@@ -273,6 +273,24 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return sprintf(
+			"Property [ %s%s%s%s%s\$%s ]\n",
+			$this->isStatic() ? '' : '<default> ',
+			$this->isPublic() ? 'public ' : '',
+			$this->isPrivate() ? 'private ' : '',
+			$this->isProtected() ? 'protected ' : '',
+			$this->isStatic() ? 'static ' : '',
+			$this->getName()
+		);
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
