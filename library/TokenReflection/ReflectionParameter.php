@@ -44,11 +44,11 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	private $valueConstraint;
 
 	/**
-	 * Defines a constraint (class name or array) of parameter values as it was defined.
+	 * Defines a type hint (class name or array) of parameter values as it was defined.
 	 *
 	 * @var string
 	 */
-	private $originalValueConstraint;
+	private $originalTypeHint;
 
 	/**
 	 * Parameter default value definition (part of the source code).
@@ -106,7 +106,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function allowsNull()
 	{
-		if (($this->isArray() || null !== $this->getOriginalClassName()) && 'null' !== strtolower($this->defaultValueDefinition)) {
+		if (($this->isArray() || null !== $this->getOriginalTypeHint()) && 'null' !== strtolower($this->defaultValueDefinition)) {
 			return false;
 		}
 
@@ -141,7 +141,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 		}
 
 		try {
-			if (null === $this->valueConstraint && null !== $this->originalValueConstraint) {
+			if (null === $this->valueConstraint && null !== $this->originalTypeHint) {
 				if (null !== $this->declaringClassName) {
 					$parent = $this->getDeclaringClass();
 					if (null === $parent) {
@@ -154,7 +154,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 					}
 				}
 
-				$lConstraint = strtolower($this->originalValueConstraint);
+				$lConstraint = strtolower($this->originalTypeHint);
 				if ('parent' === $lConstraint || 'self' === $lConstraint) {
 					if (null === $this->declaringClassName) {
 						throw new Exception\Runtime('Parameter constraint cannot be "self" nor "parent" when not a method.', Exception::UNSUPPORTED);
@@ -170,7 +170,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 						$this->valueConstraint = $this->declaringClassName;
 					}
 				} else {
-					$this->valueConstraint = ltrim(self::resolveClassFQN($this->originalValueConstraint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+					$this->valueConstraint = ltrim(self::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
 				}
 			}
 
@@ -181,13 +181,13 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
-	 * Returns the required class name of the value as it was defined in the source code.
+	 * Returns the original type hint as defined in the source code.
 	 *
 	 * @return string|null
 	 */
-	public function getOriginalClassName()
+	public function getOriginalTypeHint()
 	{
-		return !$this->isArray() ? ltrim($this->originalValueConstraint, '\\') : null;
+		return !$this->isArray() ? ltrim($this->originalTypeHint, '\\') : null;
 	}
 
 	/**
@@ -426,7 +426,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 
 			if (T_ARRAY === $type) {
 				$this->valueConstraint = self::ARRAY_CONSTRAINT;
-				$this->originalValueConstraint = self::ARRAY_CONSTRAINT;
+				$this->originalTypeHint = self::ARRAY_CONSTRAINT;
 				$tokenStream->skipWhitespaces();
 			} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
 				$className = '';
@@ -441,7 +441,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 					throw new Exception\Parse(sprintf('Invalid class name definition: "%s".', $className), Exception\Parse::PARSE_ELEMENT_ERROR);
 				}
 
-				$this->originalValueConstraint = $className;
+				$this->originalTypeHint = $className;
 			}
 
 			return $this;
