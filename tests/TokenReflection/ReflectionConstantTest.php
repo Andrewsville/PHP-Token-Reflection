@@ -27,7 +27,7 @@ class ReflectionConstantTest extends Test
 
 	public function testTypes()
 	{
-		$constants = array('string' => 'string', 'integer' => 1, 'integerNegative' => -1, 'float' => 1.1, 'floatNegative' => -1.1, 'boolean' => true, 'null' => null/*, 'constant' => E_NOTICE*/);
+		$constants = array('string' => 'string', 'integer' => 1, 'integerNegative' => -1, 'float' => 1.1, 'floatNegative' => -1.1, 'boolean' => true, 'null' => null, 'constant' => E_NOTICE);
 		foreach ($constants as $type => $value) {
 			$test = 'type' . ucfirst($type);
 			$token = $this->getConstantTokenReflection($test);
