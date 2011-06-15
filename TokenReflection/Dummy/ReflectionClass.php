@@ -194,17 +194,6 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		// @todo
-		return '';
-	}
-
-	/**
 	 * Returns parsed docblock.
 	 *
 	 * @return array
@@ -897,5 +886,23 @@ class ReflectionClass implements IReflectionClass
 	public function isComplete()
 	{
 		return false;
+	}
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return sprintf(
+			"Class|Interface [ <user> class|interface %s ] {\n  %s%s%s%s%s\n}\n",
+			$this->getShortName(),
+			"\n\n  - Constants [0] {\n  }",
+			"\n\n  - Static properties [0] {\n  }",
+			"\n\n  - Static methods [0] {\n  }",
+			"\n\n  - Properties [0] {\n  }",
+			"\n\n  - Methods [0] {\n  }"
+		);
 	}
 }
