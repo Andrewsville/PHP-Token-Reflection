@@ -1023,7 +1023,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getProperties() as $property) {
-			$string = "    " . trim(str_replace("\n", "\n    ", $property->__toString()), ' ');
+			$string = "    " . preg_replace('~\n(?!$)~', "\n    ", $property->__toString());
 			if ($property->isStatic()) {
 				$sBuffer .= $string;
 				$sCount++;
@@ -1040,8 +1040,16 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getMethods() as $method) {
-			$string = "\n    " . trim(str_replace("\n", "\n    ", $method->__toString()), ' ');
-			$string = str_replace("    \n      - Parameters", "\n      - Parameters", $string);
+			// Skip private methods of parent classes
+			if ($method->getDeclaringClassName() !== $this->getName() && $method->isPrivate()) {
+				continue;
+			}
+			// Indent
+			$string = "\n    " . preg_replace('~\n(?!$|\n)~', "\n    ", $method->__toString());
+			// Add inherits
+			if ($method->getDeclaringClassName() !== $this->getName()) {
+				$string = preg_replace('~Method [ <[\w:]+~', '\0, inherits ' . $method->getDeclaringClassName(), $string);
+			}
 			if ($method->isStatic()) {
 				$sBuffer .= $string;
 				$sCount++;

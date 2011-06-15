@@ -638,13 +638,12 @@ class ReflectionClassTest extends Test
 			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
 			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
 			'interface', 'noInterface', 'interfaces', 'noInterfaces',
-			/*'iterator',*/ 'noIterator', /*'parent',*/ 'noParent',
+			/*'iterator',*/ 'noIterator', 'parent', 'noParent',
 			'userDefined', 'noNamespace'
 		);
 		foreach ($tests as $test) {
 			$rfl = $this->getClassReflection($test);
-			// @todo inherits not supported yet
-			$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl->internal->__toString()), $rfl->token->__toString());
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 	}
 }
