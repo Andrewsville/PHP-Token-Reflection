@@ -130,4 +130,11 @@ interface IReflectionNamespace extends IReflection
 	 * @return array
 	 */
 	public function getConstantShortNames();
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString();
 }

@@ -96,4 +96,11 @@ interface IReflectionConstant extends IReflection
 	 * @return string
 	 */
 	public function getShortName();
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString();
 }

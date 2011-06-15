@@ -138,4 +138,11 @@ interface IReflectionParameter extends IReflection
 	 * @return integer
 	 */
 	public function getEndLine();
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString();
 }

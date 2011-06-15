@@ -133,4 +133,11 @@ interface IReflectionProperty extends IReflection
 	 * @param mixed $value Poperty value
 	 */
 	public function setValue($object, $value);
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString();
 }

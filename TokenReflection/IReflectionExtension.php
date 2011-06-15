@@ -98,4 +98,11 @@ interface IReflectionExtension extends IReflection
 	 * @return array
 	 */
 	public function getFunctionNames();
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString();
 }
