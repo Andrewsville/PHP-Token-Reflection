@@ -7,7 +7,7 @@
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file license.txt.
+ * with this library in the file LICENSE.
  *
  * @author Ondřej Nešpor <andrew@andrewsville.cz>
  * @author Jaroslav Hanslík <kukulich@kukulich.cz>
