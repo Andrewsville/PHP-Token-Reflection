@@ -2,7 +2,7 @@
 
 // Class search path
 set_include_path(
-	realpath(__DIR__ . '/../library') . PATH_SEPARATOR .   // Libraries
+	realpath(__DIR__ . '/..') . PATH_SEPARATOR .   // Libraries
 	__DIR__ . PATH_SEPARATOR .   // Library tests
 	get_include_path()
 );

@@ -16,6 +16,7 @@
 namespace TokenReflection;
 
 use TokenReflection\Exception;
+use ReflectionFunction as InternalReflectionFunction;
 
 /**
  * Tokenized function reflection.
@@ -67,6 +68,31 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 			$this->getEndLine(),
 			$parameters
 		);
+	}
+
+	/**
+	 * Exports a reflected object.
+	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
+	 * @param string $function Function name
+	 * @param boolean $return Return the export instead of outputting it
+	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 */
+	public static function export(Broker $broker, $function, $return = false)
+	{
+		$functionName = $function;
+
+		$function = $broker->getFunction($functionName);
+		if (null === $function) {
+			throw new Exception\Runtime(sprintf('Function %s() does not exist.', $functionName), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		if ($return) {
+			return $function->__toString();
+		}
+
+		echo $function->__toString();
 	}
 
 	/**

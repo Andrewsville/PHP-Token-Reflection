@@ -258,6 +258,41 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
+	 * Exports a reflected object.
+	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
+	 * @param string|object|null $class Class name, class instance or null
+	 * @param string $constant Constant name
+	 * @param boolean $return Return the export instead of outputting it
+	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 */
+	public static function export(Broker $broker, $class, $constant, $return = false)
+	{
+		$className = is_object($class) ? get_class($class) : $class;
+		$constantName = $constant;
+
+		if (null === $className) {
+			$constant = $broker->getConstant($constantName);
+			if (null === $constant) {
+				throw new Exception\Runtime(sprintf('Constant %s does not exist.', $constantName), Exception\Runtime::DOES_NOT_EXIST);
+			}
+		} else {
+			$class = $broker->getClass($className);
+			if ($class instanceof Dummy\ReflectionClass) {
+				throw new Exception\Runtime(sprintf('Class %s does not exist.', $className), Exception\Runtime::DOES_NOT_EXIST);
+			}
+			$constant = $class->getConstantReflection($constantName);
+		}
+
+		if ($return) {
+			return $constant->__toString();
+		}
+
+		echo $constant->__toString();
+	}
+
+	/**
 	 * Returns the constant value.
 	 *
 	 * @return mixed

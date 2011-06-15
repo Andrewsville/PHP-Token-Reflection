@@ -2,6 +2,8 @@
 
 namespace TokenReflection;
 
+use ReflectionParameter as InternalReflectionParameter;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 class ReflectionParameterTest extends Test
@@ -142,6 +144,9 @@ class ReflectionParameterTest extends Test
 		foreach ($tests as $test) {
 			$rfl = $this->getParameterReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, true), ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, true));
 		}
+
+		$this->assertSame(InternalReflectionParameter::export('strpos', 0, true), ReflectionParameter::export($this->getBroker(), 'strpos', 0, true));
 	}
 }

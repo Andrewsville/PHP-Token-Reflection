@@ -2,6 +2,8 @@
 
 namespace TokenReflection;
 
+use ReflectionMethod as InternalReflectionMethod;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 class ReflectionMethodTest extends Test
@@ -189,7 +191,7 @@ class ReflectionMethodTest extends Test
 				$this->assertTrue($token->isAbstract());
 				$this->assertSame($internal->getModifiers(), $token->getModifiers());
 				$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-				$this->assertGreaterThan(0, $token->getModifiers() & \ReflectionMethod::IS_ABSTRACT);
+				$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_ABSTRACT);
 			}
 
 			$internal = $rfl->internal->getMethod($finalName);
@@ -207,7 +209,7 @@ class ReflectionMethodTest extends Test
 			$this->assertFalse($token->isAbstract());
 			$this->assertSame($internal->getModifiers(), $token->getModifiers());
 			$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-			$this->assertGreaterThan(0, $token->getModifiers() & \ReflectionMethod::IS_FINAL);
+			$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_FINAL);
 
 			$internal = $rfl->internal->getMethod($staticName);
 			$token = $rfl->token->getMethod($staticName);
@@ -223,7 +225,7 @@ class ReflectionMethodTest extends Test
 			$this->assertSame($internal->isAbstract(), $internal->isAbstract());
 			$this->assertFalse($token->isAbstract());
 			$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-			$this->assertGreaterThan(0, $token->getModifiers() & \ReflectionMethod::IS_STATIC);
+			$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_STATIC);
 		}
 
 		// Shadow
@@ -231,7 +233,7 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionMethod('TokenReflection_Test_MethodShadowParent', 'shadow');
+		$rfl->internal = new InternalReflectionMethod('TokenReflection_Test_MethodShadowParent', 'shadow');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_MethodShadowParent')->getMethod('shadow');
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 
@@ -445,6 +447,7 @@ class ReflectionMethodTest extends Test
 		foreach ($tests as $test) {
 			$rfl = $this->getMethodReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionMethod::export($this->getClassName($test), $test, true), ReflectionMethod::export($this->getBroker(), $this->getClassName($test), $test, true));
 		}
 
 		$tests = array(
@@ -460,7 +463,11 @@ class ReflectionMethodTest extends Test
 			foreach ($classTests as $method) {
 				// @todo inherits not supported yet
 				$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl->internal->getMethod($method)->__toString()), $rfl->token->getMethod($method)->__toString());
+				$this->assertSame(preg_replace('~, inherits [\w]+~', '', InternalReflectionMethod::export($this->getClassName($class), $method, true)), ReflectionMethod::export($this->getBroker(), $this->getClassName($class), $method, true));
 			}
 		}
+
+		$this->assertSame(InternalReflectionMethod::export('ReflectionMethod', 'isFinal', true), ReflectionMethod::export($this->getBroker(), 'ReflectionMethod', 'isFinal', true));
+		$this->assertSame(InternalReflectionMethod::export(new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true), ReflectionMethod::export($this->getBroker(), new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true));
 	}
 }

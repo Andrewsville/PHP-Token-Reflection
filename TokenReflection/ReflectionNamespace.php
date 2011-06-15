@@ -422,6 +422,31 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
+	 * Exports a reflected object.
+	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
+	 * @param string $namespace Namespace name
+	 * @param boolean $return Return the export instead of outputting it
+	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 */
+	public static function export(Broker $broker, $namespace, $return = false)
+	{
+		$namespaceName = $namespace;
+
+		$namespace = $broker->getNamespace($namespaceName);
+		if (null === $namespace) {
+			throw new Exception\Runtime(sprintf('Namespace %s does not exist.', $namespaceName), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		if ($return) {
+			return $namespace->__toString();
+		}
+
+		echo $namespace->__toString();
+	}
+
+	/**
 	 * Returns the appropriate source code part.
 	 *
 	 * Impossible for namespaces.
@@ -431,18 +456,6 @@ class ReflectionNamespace implements IReflectionNamespace
 	public function getSource()
 	{
 		throw new Exception\Runtime('Cannot export source code of a namespace.', Exception\Runtime::UNSUPPORTED);
-	}
-
-	/**
-	 * Exports a reflected object.
-	 *
-	 * @param string $argument Reflection object name
-	 * @param boolean $return Return the export instead of outputting it
-	 * @return string|null
-	 */
-	public static function export($argument, $return = false)
-	{
-		return ReflectionBase::export($argument, $return);
 	}
 
 	/**

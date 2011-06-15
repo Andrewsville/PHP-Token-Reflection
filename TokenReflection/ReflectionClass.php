@@ -1083,6 +1083,33 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
+	 * Exports a reflected object.
+	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
+	 * @param string|object $className Class name or class instance
+	 * @param boolean $return Return the export instead of outputting it
+	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 */
+	public static function export(Broker $broker, $className, $return = false)
+	{
+		if (is_object($className)) {
+			$className = get_class($className);
+		}
+
+		$class = $broker->getClass($className);
+		if ($class instanceof Dummy\ReflectionClass) {
+			throw new Exception\Runtime(sprintf('Class %s does not exist.', $className), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		if ($return) {
+			return $class->__toString();
+		}
+
+		echo $class->__toString();
+	}
+
+	/**
 	 * Returns reflections of direct subclasses.
 	 *
 	 * @return array

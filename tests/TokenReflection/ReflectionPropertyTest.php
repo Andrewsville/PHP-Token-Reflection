@@ -2,6 +2,8 @@
 
 namespace TokenReflection;
 
+use ReflectionProperty as InternalReflectionProperty;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 class ReflectionPropertyTest extends Test
@@ -215,7 +217,7 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($internal->isStatic(), $internal->isStatic());
 			$this->assertTrue($token->isStatic());
 			$this->assertSame($internal->getModifiers(), $token->getModifiers());
-			$this->assertSame(\ReflectionProperty::IS_STATIC | constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
+			$this->assertSame(InternalReflectionProperty::IS_STATIC | constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
 		}
 	}
 
@@ -242,6 +244,7 @@ class ReflectionPropertyTest extends Test
 		foreach ($tests as $test) {
 			$rfl = $this->getPropertyReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionProperty::export($this->getClassName($test), $test, true), ReflectionProperty::export($this->getBroker(), $this->getClassName($test), $test, true));
 		}
 
 		$rfl = $this->getClassReflection('modifiers');
@@ -249,6 +252,10 @@ class ReflectionPropertyTest extends Test
 			$internal = $rfl->internal->getProperty($name);
 			$token = $rfl->token->getProperty($name);
 			$this->assertSame($internal->__toString(), $token->__toString());
+			$this->assertSame(InternalReflectionProperty::export($this->getClassName('modifiers'), $name, true), ReflectionProperty::export($this->getBroker(), $this->getClassName('modifiers'), $name, true));
 		}
+
+		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', true), ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', true));
+		$this->assertSame(InternalReflectionProperty::export(new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true), ReflectionProperty::export($this->getBroker(), new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true));
 	}
 }

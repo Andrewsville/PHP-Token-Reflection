@@ -267,6 +267,34 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Exports a reflected object.
+	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
+	 * @param string|object $class Class name or class instance
+	 * @param string $method Method name
+	 * @param boolean $return Return the export instead of outputting it
+	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 */
+	public static function export(Broker $broker, $class, $method, $return = false)
+	{
+		$className = is_object($class) ? get_class($class) : $class;
+		$methodName = $method;
+
+		$class = $broker->getClass($className);
+		if ($class instanceof Dummy\ReflectionClass) {
+			throw new Exception\Runtime(sprintf('Class %s does not exist.', $className), Exception\Runtime::DOES_NOT_EXIST);
+		}
+		$method = $class->getMethod($methodName);
+
+		if ($return) {
+			return $method->__toString();
+		}
+
+		echo $method->__toString();
+	}
+
+	/**
 	 * Calls the method on an given instance.
 	 *
 	 * @param object $object Class instance

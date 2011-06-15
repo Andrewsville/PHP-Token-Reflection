@@ -509,19 +509,6 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Exports a reflected object.
-	 *
-	 * @param string $argument Reflection object name
-	 * @param boolean $return Return the export instead of outputting it
-	 * @return string|null
-	 */
-	public static function export($argument, $return = false)
-	{
-		// @todo
-		return '';
-	}
-
-	/**
 	 * Magic __get method helper.
 	 *
 	 * @param \TokenReflection\IReflection $object Reflection object

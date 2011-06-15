@@ -2,6 +2,8 @@
 
 namespace TokenReflection;
 
+use ReflectionClass as InternalReflectionClass;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 class ReflectionClassTest extends Test
@@ -347,7 +349,7 @@ class ReflectionClassTest extends Test
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-		$this->assertSame(\ReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
+		$this->assertSame(InternalReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('abstractImplicit');
 		$this->assertSame($rfl->internal->isAbstract(), $rfl->token->isAbstract());
@@ -355,7 +357,7 @@ class ReflectionClassTest extends Test
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-		$this->assertSame(\ReflectionClass::IS_IMPLICIT_ABSTRACT | \ReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
+		$this->assertSame(InternalReflectionClass::IS_IMPLICIT_ABSTRACT | InternalReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('noAbstract');
 		$this->assertSame($rfl->internal->isAbstract(), $rfl->token->isAbstract());
@@ -372,7 +374,7 @@ class ReflectionClassTest extends Test
 		$this->assertSame($rfl->internal->isFinal(), $rfl->token->isFinal());
 		$this->assertTrue($rfl->token->isFinal());
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-		$this->assertSame(\ReflectionClass::IS_FINAL, $rfl->token->getModifiers());
+		$this->assertSame(InternalReflectionClass::IS_FINAL, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('noFinal');
 		$this->assertSame($rfl->internal->isFinal(), $rfl->token->isFinal());
@@ -415,7 +417,7 @@ class ReflectionClassTest extends Test
 		}
 		$this->assertSame($rfl->internal->implementsInterface('Countable'), $rfl->token->implementsInterface('Countable'));
 		$this->assertTrue($rfl->token->implementsInterface('Countable'));
-		$this->assertTrue($rfl->token->implementsInterface(new \ReflectionClass('Countable')));
+		$this->assertTrue($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 
 		$rfl = $this->getClassReflection('noInterfaces');
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
@@ -427,7 +429,7 @@ class ReflectionClassTest extends Test
 		$this->assertSame(array(), $rfl->token->getOwnInterfaces());
 		$this->assertSame($rfl->internal->implementsInterface('Countable'), $rfl->token->implementsInterface('Countable'));
 		$this->assertFalse($rfl->token->implementsInterface('Countable'));
-		$this->assertFalse($rfl->token->implementsInterface(new \ReflectionClass('Countable')));
+		$this->assertFalse($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 	}
 
 	public function testIterator()
@@ -465,7 +467,7 @@ class ReflectionClassTest extends Test
 		$rfl = $this->getClassReflection('noParent');
 		$this->assertSame($rfl->internal->isSubclassOf('Exception'), $rfl->token->isSubclassOf('Exception'));
 		$this->assertFalse($rfl->token->isSubclassOf('Exception'));
-		$this->assertFalse($rfl->token->isSubclassOf(new \ReflectionClass('Exception')));
+		$this->assertFalse($rfl->token->isSubclassOf(new InternalReflectionClass('Exception')));
 
 		$this->assertSame($rfl->internal->getParentClass(), $rfl->token->getParentClass());
 		$this->assertFalse($rfl->token->getParentClass());
@@ -490,7 +492,7 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->getExtensionName());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('Exception');
+		$rfl->internal = new InternalReflectionClass('Exception');
 		$rfl->token = $this->getBroker()->getClass('Exception');
 
 		$this->assertSame($rfl->internal->isUserDefined(), $rfl->token->isUserDefined());
@@ -522,19 +524,19 @@ class ReflectionClassTest extends Test
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
 
 		$parent = new \stdClass();
-		$parent->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
+		$parent->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
 		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
 		$this->assertSame($parent->internal->getDocComment(), $parent->token->getDocComment());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame('My Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertSame('Long description. Phew, that was long.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame($parent->token->getAnnotations(), $rfl->token->getAnnotations());
@@ -546,7 +548,7 @@ class ReflectionClassTest extends Test
 		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('TokenReflection\Test\ClassInNamespace');
+		$rfl->internal = new InternalReflectionClass('TokenReflection\Test\ClassInNamespace');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection\Test\ClassInNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
@@ -644,6 +646,10 @@ class ReflectionClassTest extends Test
 		foreach ($tests as $test) {
 			$rfl = $this->getClassReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionClass::export($this->getClassName($test), true), ReflectionClass::export($this->getBroker(), $this->getClassName($test), true));
 		}
+
+		$this->assertSame(InternalReflectionClass::export('ReflectionClass', true), ReflectionClass::export($this->getBroker(), 'ReflectionClass', true));
+		$this->assertSame(InternalReflectionClass::export(new InternalReflectionClass('ReflectionClass'), true), ReflectionClass::export($this->getBroker(), new InternalReflectionClass('ReflectionClass'), true));
 	}
 }
