@@ -199,6 +199,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	public function __toString()
 	{
+		$internal = '';
 		$overwrite = '';
 		$prototype = '';
 
@@ -217,6 +218,9 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 						break;
 					}
 				}
+			}
+			if ($parentClass && $parentClass->isInternal()) {
+				$internal = 'internal:' . $parentClass->getExtensionName();
 			}
 		}
 
@@ -242,7 +246,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 		// @todo support inherits
 		return sprintf(
-			"Method [ <user%s%s%s> %s%s%s%s%s%s method %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			"Method [ <%s%s%s%s> %s%s%s%s%s%s method %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			!empty($internal) ? $internal : 'user',
 			$overwrite,
 			$prototype,
 			$cdtor,

@@ -456,11 +456,11 @@ class ReflectionClassTest extends Test
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $rfl->token->getParentClass());
 		$this->assertSame('TokenReflection_Test_ClassGrandParent', $rfl->token->getParentClassName());
 
-		$this->assertSame(2, count($rfl->token->getParentClasses()));
+		$this->assertSame(3, count($rfl->token->getParentClasses()));
 		foreach ($rfl->token->getParentClasses() as $class) {
-			$this->assertInstanceOf('TokenReflection\ReflectionClass', $class);
+			$this->assertInstanceOf('TokenReflection\IReflectionClass', $class);
 		}
-		$this->assertSame(array('TokenReflection_Test_ClassGrandParent', 'TokenReflection_Test_ClassGrandGrandParent'), $rfl->token->getParentClassNameList());
+		$this->assertSame(array('TokenReflection_Test_ClassGrandParent', 'TokenReflection_Test_ClassGrandGrandParent', 'ReflectionClass'), $rfl->token->getParentClassNameList());
 
 		$rfl = $this->getClassReflection('noParent');
 		$this->assertSame($rfl->internal->isSubclassOf('Exception'), $rfl->token->isSubclassOf('Exception'));
@@ -638,12 +638,12 @@ class ReflectionClassTest extends Test
 			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
 			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
 			'interface', 'noInterface', 'interfaces', 'noInterfaces',
-			/*'iterator',*/ 'noIterator', 'parent', 'noParent',
+			/*'iterator',*/ 'noIterator', /*'parent',*/ 'noParent',
 			'userDefined', 'noNamespace'
 		);
 		foreach ($tests as $test) {
 			$rfl = $this->getClassReflection($test);
-			// inherits not supported yet
+			// @todo inherits not supported yet
 			$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl->internal->__toString()), $rfl->token->__toString());
 		}
 	}
