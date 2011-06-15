@@ -24,13 +24,6 @@ use ReflectionProperty as InternalReflectionProperty, ReflectionClass as Interna
 class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 {
 	/**
-	 * Defines if the default value definitions should be parsed (eval-ed).
-	 *
-	 * @var boolean
-	 */
-	private static $parseValueDefinitions = true;
-
-	/**
 	 * Name of the declaring class.
 	 *
 	 * @var string
@@ -47,9 +40,9 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Property default value definition (part of the source code).
 	 *
-	 * @var string
+	 * @var array|string
 	 */
-	private $defaultValueDefinition;
+	private $defaultValueDefinition = array();
 
 	/**
 	 * Property modifiers.
@@ -102,7 +95,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 */
 	public function isDefault()
 	{
-		return null !== $this->defaultValueDefinition;
+		return null !== $this->getDefaultValueDefinition();
 	}
 
 	/**
@@ -112,8 +105,9 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 */
 	public function getDefaultValue()
 	{
-		if (self::$parseValueDefinitions && null === $this->defaultValue) {
-			$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
+		if (is_array($this->defaultValueDefinition)) {
+			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
+			$this->defaultValueDefinition = Resolver::getSourceCode($this->defaultValueDefinition);
 		}
 
 		return $this->defaultValue;
@@ -160,7 +154,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 */
 	public function getDefaultValueDefinition()
 	{
-		return $this->defaultValueDefinition;
+		return is_array($this->defaultValueDefinition) ? Resolver::getSourceCode($this->defaultValueDefinition) : $this->defaultValueDefinition;
 	}
 
 	/**
@@ -249,10 +243,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 				$refProperty->setAccessible(false);
 
 				if ($this->isStatic()) {
-					$this->defaultValue = $value;
-
-					// var_export()?
-					$this->defaultValueDefinition = null;
+					$this->setDefaultValue($value);
 				}
 			} else {
 				throw new Exception\Runtime('Only public and accessible properties can be set.', Exception\Runtime::NOT_ACCESSBILE);
@@ -270,6 +261,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	public function setDefaultValue($value)
 	{
 		$this->defaultValue = $value;
+		$this->defaultValueDefinition = var_export($value, true);
 	}
 
 	/**
@@ -428,7 +420,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 						break;
 				}
 
-				$this->defaultValueDefinition .= $tokenStream->getTokenValue();
+				$this->defaultValueDefinition[] = $tokenStream->current();
 				$tokenStream->next();
 
 			}
@@ -504,25 +496,5 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Sets if the default value definitions should be parsed.
-	 *
-	 * @param boolean $parse Should be definitions parsed
-	 */
-	public static function setParseValueDefinitions($parse)
-	{
-		self::$parseValueDefinitions = (bool) $parse;
-	}
-
-	/**
-	 * Returns if the default value definitions should be parsed.
-	 *
-	 * @return boolean
-	 */
-	public static function getParseValueDefinitions()
-	{
-		return self::$parseValueDefinitions;
 	}
 }

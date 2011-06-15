@@ -42,18 +42,11 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	private $value;
 
 	/**
-	 * Constant value definition.
+	 * Constant value definition in tokens.
 	 *
-	 * @var string
+	 * @var array|string
 	 */
-	private $valueDefinition = '';
-
-	/**
-	 * Constant value is another constant name.
-	 *
-	 * @var boolean
-	 */
-	private $valueAsLink = false;
+	private $valueDefinition = array();
 
 	/**
 	 * Imported namespace/class aliases.
@@ -169,32 +162,19 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 
 			$tokenStream->skipWhitespaces();
 
-			static $acceptedStrings = array('true' => true, 'false' => true, 'null' => true);
 			static $acceptedTokens = array('-' => true, '+' => true, T_STRING => true, T_NS_SEPARATOR => true, T_CONSTANT_ENCAPSED_STRING => true, T_DNUMBER => true, T_LNUMBER => true, T_DOUBLE_COLON => true);
-
-			$evalValue = true;
-			while (null !== ($type = $tokenStream->getType())) {
-				$value = $tokenStream->getTokenValue();
-
-				if (!isset($acceptedTokens[$type])) {
-					break;
-				} elseif ($tokenStream->is(T_STRING) && !isset($acceptedStrings[strtolower($value)])) {
-					$evalValue = false;
-				}
-
-				$this->valueDefinition .= $value;
+			while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
+				$this->valueDefinition[] = $tokenStream->current();
 				$tokenStream->next();
 			}
 
-			if (null === $type || (',' !== $value && ';' !== $value)) {
-				throw new Exception\Parse(sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
+			if (empty($this->valueDefinition)) {
+				throw new Exception\Parse('Value definition is empty.', Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
-			$this->valueDefinition = trim($this->valueDefinition);
-
-			$this->valueAsLink = !$evalValue;
-			if ($evalValue) {
-				$this->value = eval(sprintf('return %s;', $this->valueDefinition));
+			$value = $tokenStream->getTokenValue();
+			if (null === $type || (',' !== $value && ';' !== $value)) {
+				throw new Exception\Parse(sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
 			return $this;
@@ -210,26 +190,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 */
 	public function getValueDefinition()
 	{
-		if (!$this->valueAsLink) {
-			return $this->valueDefinition;
-		}
-
-		if ($pos = strpos($this->valueDefinition, '::')) {
-			$className = substr($this->valueDefinition, 0, $pos);
-			if ('self' === strtolower($className)) {
-				return $this->valueDefinition;
-			}
-
-			$nsClassName = Resolver::resolveClassFQN($className, $this->getNamespaceAliases(), $this->namespaceName ?: $this->getDeclaringClass()->getNamespaceName());
-			$nsValue = $nsClassName . substr($this->valueDefinition, $pos);
-		} else {
-			$nsValue = $this->valueDefinition;
-			if ('\\' !== $nsValue{0}) {
-				$nsValue = ltrim(($this->namespaceName ? $this->getNamespaceName() : $this->getDeclaringClass()->getNamespaceName()) . '\\' . $nsValue, '\\');
-			}
-		}
-
-		return $this->getBroker()->hasConstant($nsValue) ? $nsValue : $this->valueDefinition;
+		return is_array($this->valueDefinition) ? Resolver::getSourceCode($this->valueDefinition) : $this->valueDefinition;
 	}
 
 	/**
@@ -299,17 +260,9 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 */
 	public function getValue()
 	{
-		if (null === $this->value && 'null' !== strtolower($this->valueDefinition)) {
-			if ($position = strpos($this->valueDefinition, '::')) {
-				$className = substr($this->valueDefinition, 0, $position);
-				$constantName = substr($this->valueDefinition, $position + 2);
-
-				$class = $this->getBroker()->getClass($className);
-				$this->value = $class->hasConstant($constantName) ? $class->getConstantReflection($constantName)->getValue() : null;
-			} else {
-				$constant = $this->getBroker()->getConstant($this->valueDefinition);
-				$this->value = $constant ? $constant->getValue() : null;
-			}
+		if (is_array($this->valueDefinition)) {
+			$this->value = Resolver::getValueDefinition($this->valueDefinition, $this);
+			$this->valueDefinition = Resolver::getSourceCode($this->valueDefinition);
 		}
 
 		return $this->value;

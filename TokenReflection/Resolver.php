@@ -21,6 +21,13 @@ namespace TokenReflection;
 class Resolver
 {
 	/**
+	 * Placeholder for non-existen constants.
+	 *
+	 * @var null
+	 */
+	const CONSTANT_NOT_FOUND = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * Prevents from creating instances.
@@ -61,5 +68,104 @@ class Resolver
 		}
 
 		return null === $namespaceName || '' === $namespaceName || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
+	}
+
+	/**
+	 * Returns a property/parameter/constant value definition.
+	 *
+	 * @param array $tokens Tokenized definition
+	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
+	 * @return string
+	 */
+	final public static function getValueDefinition(array $tokens, ReflectionBase $reflection)
+	{
+		$source = self::getSourceCode($tokens);
+
+		$constants = self::findConstants($tokens, $reflection);
+		if (!empty($constants)) {
+			$replacements = array();
+			foreach ($constants as $constant) {
+				try {
+					$reflection = $reflection->getBroker()->getConstant($constant);
+					$value = $reflection->getValue();
+				} catch (Exception\Runtime $e) {
+					$value = self::CONSTANT_NOT_FOUND;
+				}
+
+				$replacements[$constant] = var_export($value, true);
+			}
+			uksort($replacements, function($a, $b) {
+				$ca = strspn($a, '\\');
+				$cb = strspn($b, '\\');
+				return $ca === $cb ? strcasecmp($b, $a) : $cb - $ca;
+			});
+
+			$source = strtr($source, $replacements);
+		}
+
+		return eval(sprintf('return %s;', $source));
+	}
+
+	/**
+	 * Returns a part of the source code defined by given tokens.
+	 *
+	 * @param array $tokens Tokens array
+	 * @return array
+	 */
+	final public static function getSourceCode(array $tokens)
+	{
+		if (empty($tokens)) {
+			return null;
+		}
+
+		$source = '';
+		foreach ($tokens as $token) {
+			$source .= $token[1];
+		}
+		return $source;
+	}
+
+	/**
+	 * Finds constant names in the token definition.
+	 *
+	 * @param array $tokens Tokenized source code
+	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
+	 * @return array
+	 */
+	final public static function findConstants(array $tokens, ReflectionBase $reflection)
+	{
+		static $accepted = array(T_DOUBLE_COLON => true, T_STRING => true, T_NS_SEPARATOR => true);
+		static $dontResolve = array('true' => true, 'false' => true, 'null' => true);
+
+		if ($reflection instanceof ReflectionConstant) {
+			$namespace = $reflection->getNamespaceName();
+		} elseif ($reflection instanceof ReflectionParameter) {
+			$namespace = $reflection->getDeclaringFunction()->getNamespaceName();
+		} elseif ($reflection instanceof ReflectionProperty) {
+			$namespace = $reflection->getDeclaringClass()->getNamespaceName();
+		} else {
+			throw new Exception\Runtime(sprintf('Invalid reflection object given: "%s" ("%s")', get_class($reflection), $reflection->getName()), Exception\Runtime::INVALID_ARGUMENT);
+		}
+
+		// Adding a dummy token to the end
+		$tokens[] = array(-1);
+							 ;
+		$constants = array();
+		$constant = '';
+		foreach ($tokens as $token) {
+			if (isset($accepted[$token[0]])) {
+				$constant .= $token[1];
+			} elseif ('' !== $constant) {
+				if (!isset($dontResolve[strtolower($constant)])) {
+					$resolvedConstant = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
+					if ($nr = strspn($constant, '\\')) {
+						$resolvedConstant = str_repeat('\\', $nr) . $resolvedConstant;
+					}
+					$constants[$resolvedConstant] = true;
+				}
+				$constant = '';
+			}
+		}
+		return array_keys($constants);
 	}
 }

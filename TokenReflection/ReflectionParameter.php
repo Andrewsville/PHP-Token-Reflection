@@ -31,13 +31,6 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	CONST ARRAY_CONSTRAINT = 'array';
 
 	/**
-	 * Defines if the default value definitions should be parsed (eval-ed).
-	 *
-	 * @var boolean
-	 */
-	private static $parseValueDefinitions = true;
-
-	/**
 	 * Defines a constraint (class name or array) of parameter values.
 	 *
 	 * @var string
@@ -54,9 +47,9 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Parameter default value definition (part of the source code).
 	 *
-	 * @var string
+	 * @var array|string
 	 */
-	private $defaultValueDefinition;
+	private $defaultValueDefinition = array();
 
 	/**
 	 * Parameter default value.
@@ -107,7 +100,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function allowsNull()
 	{
-		if (($this->isArray() || null !== $this->getOriginalTypeHint()) && 'null' !== strtolower($this->defaultValueDefinition)) {
+		if (($this->isArray() || null !== $this->getOriginalTypeHint()) && 'null' !== strtolower($this->getDefaultValueDefinition())) {
 			return false;
 		}
 
@@ -248,12 +241,13 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function getDefaultValue()
 	{
-		if (null === $this->defaultValueDefinition) {
-			throw new Exception\Runtime(sprintf('Property "%s" has no default value.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
-		}
+		if (is_array($this->defaultValueDefinition)) {
+			if (0 === count($this->defaultValueDefinition)) {
+				throw new Exception\Runtime(sprintf('Property "%s" has no default value.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
+			}
 
-		if (self::$parseValueDefinitions && null === $this->defaultValue) {
-			$this->defaultValue = @eval('return ' . $this->defaultValueDefinition . ';');
+			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
+			$this->defaultValueDefinition = Resolver::getSourceCode($this->defaultValueDefinition);
 		}
 
 		return $this->defaultValue;
@@ -266,7 +260,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function getDefaultValueDefinition()
 	{
-		return $this->defaultValueDefinition;
+		return is_array($this->defaultValueDefinition) ? Resolver::getSourceCode($this->defaultValueDefinition) : $this->defaultValueDefinition;
 	}
 
 	/**
@@ -296,7 +290,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function isDefaultValueAvailable()
 	{
-		return null !== $this->defaultValueDefinition;
+		return null !== $this->getDefaultValueDefinition();
 	}
 
 	/**
@@ -586,7 +580,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 							break;
 					}
 
-					$this->defaultValueDefinition .= $tokenStream->getTokenValue();
+					$this->defaultValueDefinition[] = $tokenStream->current();
 					$tokenStream->next();
 				}
 
@@ -599,25 +593,5 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 		} catch (Exception\Parse $e) {
 			throw new Exception\Parse('Could not parse the default value.', 0, $e);
 		}
-	}
-
-	/**
-	 * Sets if the default value definitions should be parsed.
-	 *
-	 * @param boolean $parse Should be definitions parsed
-	 */
-	public static function setParseValueDefinitions($parse)
-	{
-		self::$parseValueDefinitions = (bool) $parse;
-	}
-
-	/**
-	 * Returns if the default value definitions should be parsed.
-	 *
-	 * @return boolean
-	 */
-	public static function getParseValueDefinitions()
-	{
-		return self::$parseValueDefinitions;
 	}
 }
