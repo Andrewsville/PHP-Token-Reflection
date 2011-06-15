@@ -220,7 +220,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 				return $this->valueDefinition;
 			}
 
-			$nsClassName = self::resolveClassFQN($className, $this->getNamespaceAliases(), $this->namespaceName ?: $this->getDeclaringClass()->getNamespaceName());
+			$nsClassName = Resolver::resolveClassFQN($className, $this->getNamespaceAliases(), $this->namespaceName ?: $this->getDeclaringClass()->getNamespaceName());
 			$nsValue = $nsClassName . substr($this->valueDefinition, $pos);
 		} else {
 			$nsValue = $this->valueDefinition;

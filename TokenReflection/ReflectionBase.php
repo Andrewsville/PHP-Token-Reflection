@@ -552,35 +552,4 @@ abstract class ReflectionBase implements IReflection
 			return false;
 		}
 	}
-
-	/**
-	 * Returns a fully qualified name of a class using imported/aliased namespaces.
-	 *
-	 * @param string $className Input class name
-	 * @param array $aliases Namespace import aliases
-	 * @param string $namespaceName Context namespace name
-	 * @return string
-	 */
-	final public static function resolveClassFQN($className, array $aliases, $namespaceName = null)
-	{
-		if ($className{0} == '\\') {
-			// FQN
-			return ltrim($className, '\\');
-		}
-
-		if (false === ($position = strpos($className, '\\'))) {
-			// Plain class name
-			if (isset($aliases[$className])) {
-				return $aliases[$className];
-			}
-		} else {
-			// Namespaced class name
-			$alias = substr($className, 0, $position);
-			if (isset($aliases[$alias])) {
-				return $aliases[$alias] . '\\' . substr($className, $position + 1);
-			}
-		}
-
-		return null === $namespaceName || '' === $namespaceName || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
-	}
 }

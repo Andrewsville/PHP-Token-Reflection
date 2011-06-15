@@ -1400,7 +1400,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					$tokenStream->skipWhitespaces();
 				}
 
-				$parentClassName = self::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
+				$parentClassName = Resolver::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
 
 				if ($this->isInterface()) {
 					$this->interfaces[] = $parentClassName;
@@ -1467,7 +1467,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					$tokenStream->skipWhitespaces();
 				}
 
-				$this->interfaces[] = self::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
+				$this->interfaces[] = Resolver::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
 
 				$type = $tokenStream->getType();
 				if ('{' === $type) {

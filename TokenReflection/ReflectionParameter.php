@@ -171,7 +171,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 						$this->valueConstraint = $this->declaringClassName;
 					}
 				} else {
-					$this->valueConstraint = ltrim(self::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+					$this->valueConstraint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
 				}
 			}
 
