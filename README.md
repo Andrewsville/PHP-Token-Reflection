@@ -87,6 +87,6 @@ The library requires PHP 5.3 with the [tokenizer extension](http://cz.php.net/ma
 
 ## Current status
 
-The current library version is 1.0 beta 2. That means that there are few features that need to be implemented but there should not be any significant changes in the public API.
+The current library version is 1.0 beta 3. That means that there are few features that need to be implemented but there should not be any significant changes in the public API.
 
 Every commit (fingers crossed) is checked against our unit tests and every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 branch, the 5.4dev version and actual trunk.
