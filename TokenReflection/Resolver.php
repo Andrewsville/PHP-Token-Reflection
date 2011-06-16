@@ -25,7 +25,7 @@ class Resolver
 	 *
 	 * @var null
 	 */
-	const CONSTANT_NOT_FOUND = null;
+	const CONSTANT_NOT_FOUND = '~~NOT RESOLVED~~';
 
 	/**
 	 * Constructor.
@@ -86,7 +86,28 @@ class Resolver
 			$replacements = array();
 			foreach ($constants as $constant) {
 				try {
-					$reflection = $reflection->getBroker()->getConstant($constant);
+					if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
+						// handle self:: and parent:: definitions
+
+						if ($reflection instanceof ReflectionConstant) {
+							throw new Exception\Runtime('Constants cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
+						} elseif ($reflection instanceof ReflectionParameter && null === $reflection->getDeclaringClassName()) {
+							throw new Exception\Runtime('Function parameters cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
+						}
+
+						if (0 === stripos($constant, 'self::')) {
+							$className = $reflection->getDeclaringClassName();
+						} else {
+							$declaringClass = $reflection->getDeclaringClass();
+							$className = $declaringClass->getParentClassName() ?: self::CONSTANT_NOT_FOUND;
+						}
+
+						$constantName = $className . substr($constant, strpos($constant, '::'));
+					} else {
+						$constantName = $constant;
+					}
+
+					$reflection = $reflection->getBroker()->getConstant($constantName);
 					$value = $reflection->getValue();
 				} catch (Exception\Runtime $e) {
 					$value = self::CONSTANT_NOT_FOUND;
@@ -157,9 +178,13 @@ class Resolver
 				$constant .= $token[1];
 			} elseif ('' !== $constant) {
 				if (!isset($dontResolve[strtolower($constant)])) {
-					$resolvedConstant = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
-					if ($nr = strspn($constant, '\\')) {
-						$resolvedConstant = str_repeat('\\', $nr) . $resolvedConstant;
+					if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
+						$resolvedConstant = $constant;
+					} else {
+						$resolvedConstant = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
+						if ($cnt = strspn($constant, '\\')) {
+							$resolvedConstant = str_repeat('\\', $cnt) . $resolvedConstant;
+						}
 					}
 					$constants[$resolvedConstant] = true;
 				}
