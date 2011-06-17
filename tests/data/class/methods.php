@@ -2,18 +2,18 @@
 
 class TokenReflection_Test_ClassMethodsParent
 {
-	protected static function protectedStaticFunction()
+	protected static function protectedStaticFunction($one = true)
 	{
 	}
 
-	protected function protectedFunction()
+	protected function protectedFunction($two = false)
 	{
 	}
 }
 
 class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent
 {
-	public function __construct()
+	public function __construct($three)
 	{
 	}
 
@@ -21,23 +21,23 @@ class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethod
 	{
 	}
 
-	public final function publicFinalFunction()
+	public final function publicFinalFunction($four = 1)
 	{
 	}
 
-	public static function publicStaticFunction()
+	public static function publicStaticFunction($five = 1.1)
 	{
 	}
 
-	private static function privateStaticFunction()
+	private static function privateStaticFunction($six = 'string', $seven = null)
 	{
 	}
 
-	public function publicFunction()
+	public function publicFunction(array $eight = array())
 	{
 	}
 
-	private function privateFunction()
+	private function privateFunction(Foo $nine = null)
 	{
 	}
 }

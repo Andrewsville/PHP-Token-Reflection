@@ -2,6 +2,8 @@
 
 namespace TokenReflection;
 
+use ReflectionParameter as InternalReflectionParameter;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 class ReflectionParameterTest extends Test
@@ -22,21 +24,21 @@ class ReflectionParameterTest extends Test
 		}
 	}
 
-	public function testNull()
+	public function testAllowsNull()
 	{
-		$rfl = $this->getParameterReflection('null');
-		$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
-		$this->assertTrue($rfl->token->allowsNull());
+		foreach (array('Class', 'Array') as $type) {
+			$rfl = $this->getParameterReflection('null' . $type);
+			$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
+			$this->assertTrue($rfl->token->allowsNull());
 
-		$rfl = $this->getParameterReflection('noNull');
-		$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
-		$this->assertTrue($rfl->token->allowsNull());
+			$rfl = $this->getParameterReflection('noNull' . $type);
+			$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
+			$this->assertFalse($rfl->token->allowsNull());
+		}
 	}
 
 	public function testOptional()
 	{
-		ReflectionParameter::setParseValueDefinitions(true);
-
 		$types = array('null' => null, 'true' => true, 'false' => false, 'array' => array(), 'string' => 'string', 'integer' => 1, 'float' => 1.1, 'constant' => E_NOTICE);
 		$definitions = array('null' => 'null', 'true' => 'true', 'false' => 'false', 'array' => 'array()', 'string' => "'string'", 'integer' => '1', 'float' => '1.1', 'constant' => 'E_NOTICE');
 		foreach ($types as $type => $value) {
@@ -65,8 +67,6 @@ class ReflectionParameterTest extends Test
 			// Correctly thrown exception
 			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
-
-		ReflectionParameter::setParseValueDefinitions(false);
 	}
 
 	public function testArray()
@@ -132,5 +132,21 @@ class ReflectionParameterTest extends Test
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClass()->getName());
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClassName());
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
+	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'declaringFunction', 'reference', 'noReference', 'class', 'noClass', 'array', 'noArray',
+			'nullClass', 'noNullClass', 'nullArray', 'noNullArray', 'noOptional',
+			'optionalNull', 'optionalTrue', 'optionalFalse', 'optionalArray', 'optionalString', 'optionalInteger', 'optionalFloat', 'optionalConstant'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getParameterReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, true), ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, true));
+		}
+
+		$this->assertSame(InternalReflectionParameter::export('strpos', 0, true), ReflectionParameter::export($this->getBroker(), 'strpos', 0, true));
 	}
 }

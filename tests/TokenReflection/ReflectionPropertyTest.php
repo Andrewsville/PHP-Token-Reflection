@@ -2,6 +2,8 @@
 
 namespace TokenReflection;
 
+use ReflectionProperty as InternalReflectionProperty;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 class ReflectionPropertyTest extends Test
@@ -165,15 +167,12 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClassName());
-			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getClass());
 			$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}
 
 	public function testDefault()
 	{
-		ReflectionProperty::setParseValueDefinitions(true);
-
 		$token = $this->getPropertyTokenReflection('default');
 		$this->assertTrue($token->isDefault());
 		$this->assertSame('default', $token->getDefaultValue());
@@ -182,8 +181,6 @@ class ReflectionPropertyTest extends Test
 		$token = $this->getPropertyTokenReflection('noDefault');
 		$this->assertFalse($token->isDefault());
 		$this->assertNull($token->getDefaultValue());
-
-		ReflectionProperty::setParseValueDefinitions(false);
 	}
 
 	public function testModifiers()
@@ -220,7 +217,7 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($internal->isStatic(), $internal->isStatic());
 			$this->assertTrue($token->isStatic());
 			$this->assertSame($internal->getModifiers(), $token->getModifiers());
-			$this->assertSame(\ReflectionProperty::IS_STATIC | constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
+			$this->assertSame(InternalReflectionProperty::IS_STATIC | constant('\ReflectionProperty::IS_' . strtoupper($name)), $token->getModifiers());
 		}
 	}
 
@@ -237,5 +234,28 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($rfl->internal->getValue($object), $rfl->token->getValue($object));
 			$this->assertSame($value, $rfl->token->getValue($object));
 		}
+	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'default', 'typeNull', 'typeArray', 'typeString', 'typeInteger', 'typeFloat'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getPropertyReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionProperty::export($this->getClassName($test), $test, true), ReflectionProperty::export($this->getBroker(), $this->getClassName($test), $test, true));
+		}
+
+		$rfl = $this->getClassReflection('modifiers');
+		foreach (array('public', 'protected', 'private') as $name) {
+			$internal = $rfl->internal->getProperty($name);
+			$token = $rfl->token->getProperty($name);
+			$this->assertSame($internal->__toString(), $token->__toString());
+			$this->assertSame(InternalReflectionProperty::export($this->getClassName('modifiers'), $name, true), ReflectionProperty::export($this->getBroker(), $this->getClassName('modifiers'), $name, true));
+		}
+
+		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', true), ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', true));
+		$this->assertSame(InternalReflectionProperty::export(new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true), ReflectionProperty::export($this->getBroker(), new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true));
 	}
 }

@@ -44,9 +44,9 @@ There are reflections for the tokenized source (those mentioned above), but also
 
 From the beginning we tried to be as compatible as possible with the internal reflection (including things like returning the interface list in the same - pretty weird - order). However there are situations where it is just impossible.
 
-Generally, we are not able to implement the entire functionality that handles attribute/constant/parameter values. We are able to parse the value definition (in return, this is something the internal reflection cannot) and are able to do ```eval(...)``` to get the value. Yes, that sucks. Moreover, the value may be defined using a constant name. And that constant may not exist. And that would mean a fatal error in ```eval(...)```.
+We are limited in the way we can handle constant values and property and parameter default values. When defined as a constant, we try to resolve its value (within parsed and internal constants) and use it. This is eventually made via a combination of ```var_export()``` and ```eval()```. Yes, that sucks, but there is no better way. Moreover the referenced constant may not exist. In that case it is replaced by a ```~~NOT RESOLVED~~``` string.
 
-We do not support constants declared using the define() function. We will implement support for names defined using a single string and simple values, but there is no way to implement support for something like
+At the moment we do not support constants declared using the define() function. We will implement support for names defined using a single string and simple values, but there is no way to implement support for something like
 
 ```
 define('CONSTANT', $a ? 1 : 0);
@@ -61,8 +61,6 @@ if (!class_exists('RuntimeException')) {
 ```
 
 We have discussed how to solve this problem, we had several possibilities but every one of them had some side effects that were hardly acceptable for us (the most important problem is that the generated documentation depends on the current generator's scope). Eventually we have decided to completely ignore such definitions until there is a better and more stable solution.
-
-Currently we have made some significant performance improvements and according to our benchmarks, our parse stage is actually faster than the Nette\\RobotLoader used in the original ApiGen to include parsed files in the correct order.
 
 ## Usage
 
@@ -83,8 +81,12 @@ $function = $broker->getFunction(...);
 $constant = $broker->getConstant(...);
 ```
 
+## Requirements
+
+The library requires PHP 5.3 with the [tokenizer extension](http://cz.php.net/manual/en/book.tokenizer.php) enabled. If you want to process PHAR archives, you will require the [appropriate extension](http://cz.php.net/manual/en/book.phar.php) enabled as well.
+
 ## Current status
 
-From the beginning we have tested our work using simple unit tests and some real source. We have decided, that once we are able to generate documentation for [Zend Framework](https://github.com/zendframework), [Doctrine](https://github.com/doctrine/doctrine2), [Nella](https://github.com/nella/framework), [Nette](https://github.com/nette/nette) and [Jyxo PHP Libraries](https://github.com/jyxo/php) using our [ApiGen fork](https://github.com/Andrewsville/apigen), we will publish the first public version.
+The current library version is 1.0 beta 3. That means that there are few features that need to be implemented but there should not be any significant changes in the public API.
 
-And here we are :)
+Every commit (fingers crossed) is checked against our unit tests and every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 branch, the 5.4dev version and actual trunk.

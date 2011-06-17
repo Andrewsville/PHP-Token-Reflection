@@ -2,6 +2,8 @@
 
 namespace TokenReflection;
 
+use ReflectionFunction as InternalReflectionFunction;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 class ReflectionFunctionTest extends Test
@@ -79,7 +81,7 @@ class ReflectionFunctionTest extends Test
 		$this->assertFalse($rfl->token->getExtensionName());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionFunction('get_class');
+		$rfl->internal = new InternalReflectionFunction('get_class');
 		$rfl->token = $this->getBroker()->getFunction('get_class');
 
 		$this->assertSame($rfl->internal->isUserDefined(), $rfl->token->isUserDefined());
@@ -100,7 +102,7 @@ class ReflectionFunctionTest extends Test
 		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionFunction('TokenReflection\Test\functionInNamespace');
+		$rfl->internal = new InternalReflectionFunction('TokenReflection\Test\functionInNamespace');
 		$rfl->token = $this->getBroker()->getFunction('TokenReflection\Test\functionInNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
@@ -142,7 +144,7 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame($rfl->internal->getNumberOfRequiredParameters(), $rfl->token->getNumberOfRequiredParameters());
 		$this->assertSame(2, $rfl->token->getNumberOfRequiredParameters());
 
-		$this->assertSame(count($rfl->internal->getParameters()), count($rfl->token->getParameters()));
+		$this->assertSame(array_keys($rfl->internal->getParameters()), array_keys($rfl->token->getParameters()));
 		$internalParameters = $rfl->internal->getParameters();
 		$tokenParameters = $rfl->token->getParameters();
 		for ($i = 0; $i < count($internalParameters); $i++) {
@@ -166,5 +168,19 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame(3, $rfl->token->invoke(1, 2));
 		$this->assertSame($rfl->internal->invokeArgs(array(1, 2)), $rfl->token->invokeArgs(array(1, 2)));
 		$this->assertSame(3, $rfl->token->invokeArgs(array(1, 2)));
+	}
+
+	public function testToString()
+	{
+		$tests = array(
+			'invoke', 'noParameters', 'parameters', 'reference', 'noReference', 'noNamespace', 'userDefined', 'noClosure'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getFunctionReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionFunction::export($this->getFunctionName($test), true), ReflectionFunction::export($this->getBroker(), $this->getFunctionName($test), true));
+		}
+
+		$this->assertSame(InternalReflectionFunction::export('strpos', true), ReflectionFunction::export($this->getBroker(), 'strpos', true));
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-class TokenReflection_Test_ClassGrandGrandParent
+class TokenReflection_Test_ClassGrandGrandParent extends ReflectionClass
 {
 }
 
