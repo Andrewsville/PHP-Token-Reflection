@@ -79,6 +79,16 @@ class Resolver
 	 */
 	final public static function getValueDefinition(array $tokens, ReflectionBase $reflection)
 	{
+		if ($reflection instanceof ReflectionConstant) {
+			$namespace = $reflection->getNamespaceName();
+		} elseif ($reflection instanceof ReflectionParameter) {
+			$namespace = $reflection->getDeclaringFunction()->getNamespaceName();
+		} elseif ($reflection instanceof ReflectionProperty) {
+			$namespace = $reflection->getDeclaringClass()->getNamespaceName();
+		} else {
+			throw new Exception\Runtime(sprintf('Invalid reflection object given: "%s" ("%s")', get_class($reflection), $reflection->getName()), Exception\Runtime::INVALID_ARGUMENT);
+		}
+
 		$source = self::getSourceCode($tokens);
 
 		$constants = self::findConstants($tokens, $reflection);
@@ -104,7 +114,10 @@ class Resolver
 
 						$constantName = $className . substr($constant, strpos($constant, '::'));
 					} else {
-						$constantName = $constant;
+						$constantName = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
+						if ($cnt = strspn($constant, '\\')) {
+							$constantName = str_repeat('\\', $cnt) . $constantName;
+						}
 					}
 
 					$reflection = $reflection->getBroker()->getConstant($constantName);
@@ -158,16 +171,6 @@ class Resolver
 		static $accepted = array(T_DOUBLE_COLON => true, T_STRING => true, T_NS_SEPARATOR => true);
 		static $dontResolve = array('true' => true, 'false' => true, 'null' => true);
 
-		if ($reflection instanceof ReflectionConstant) {
-			$namespace = $reflection->getNamespaceName();
-		} elseif ($reflection instanceof ReflectionParameter) {
-			$namespace = $reflection->getDeclaringFunction()->getNamespaceName();
-		} elseif ($reflection instanceof ReflectionProperty) {
-			$namespace = $reflection->getDeclaringClass()->getNamespaceName();
-		} else {
-			throw new Exception\Runtime(sprintf('Invalid reflection object given: "%s" ("%s")', get_class($reflection), $reflection->getName()), Exception\Runtime::INVALID_ARGUMENT);
-		}
-
 		// Adding a dummy token to the end
 		$tokens[] = array(-1);
 							 ;
@@ -178,15 +181,7 @@ class Resolver
 				$constant .= $token[1];
 			} elseif ('' !== $constant) {
 				if (!isset($dontResolve[strtolower($constant)])) {
-					if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
-						$resolvedConstant = $constant;
-					} else {
-						$resolvedConstant = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
-						if ($cnt = strspn($constant, '\\')) {
-							$resolvedConstant = str_repeat('\\', $cnt) . $resolvedConstant;
-						}
-					}
-					$constants[$resolvedConstant] = true;
+					$constants[$constant] = true;
 				}
 				$constant = '';
 			}
