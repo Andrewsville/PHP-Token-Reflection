@@ -2,12 +2,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC" />
+	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
 
 	<title>Class TokenReflection\ReflectionMethod | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
-	<script type="text/javascript" src="elementlist.js?2139979877"></script>
+	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
 </head>
@@ -57,6 +57,7 @@
 				<li><a href="class-TokenReflection.ReflectionNamespace.html">ReflectionNamespace</a></li>
 				<li><a href="class-TokenReflection.ReflectionParameter.html">ReflectionParameter</a></li>
 				<li><a href="class-TokenReflection.ReflectionProperty.html">ReflectionProperty</a></li>
+				<li><a href="class-TokenReflection.Resolver.html">Resolver</a></li>
 				<li><a href="class-TokenReflection.Stream.html">Stream</a></li>
 			</ul>
 
@@ -334,6 +335,104 @@ class="php-var">$filter</span>) {
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="__toString" id="___toString">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#___toString">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionMethod.html#195" title="Go to source code">__toString</a>(
+		)</code>
+
+		<div class="short">
+			Returns the string representation of the reflection object.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the string representation of the reflection object.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="export" id="_export">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public static
+			string|null
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_export">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionMethod.html#269" title="Go to source code">export</a>(
+				<a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a>
+				
+				<var>$broker</var>, 
+				string|object
+				<var>$class</var>, 
+				string
+				<var>$method</var>, 
+				boolean
+				<var>$return</var> = <span class="php-keyword1">false</span>
+		)</code>
+
+		<div class="short">
+			Exports a reflected object.
+		</div>
+
+		<div class="detailed">
+			
+<p>Exports a reflected object.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$broker</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br /> Broker instance</dd>
+					<dt><var>$class</var></dt>
+					<dd><code>string|object</code><br /> Class name or class instance</dd>
+					<dt><var>$method</var></dt>
+					<dd><code>string</code><br /> Method name</dd>
+					<dt><var>$return</var></dt>
+					<dd><code>boolean</code><br /> Return the export instead of outputting it</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string|null</code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If requested parameter doesn't exist<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="invoke" id="_invoke">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -347,7 +446,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_invoke">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#195" title="Go to source code">invoke</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#297" title="Go to source code">invoke</a>(
 				object
 				<var>$object</var>, 
 				mixed
@@ -397,7 +496,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_invokeArgs">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#208" title="Go to source code">invokeArgs</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#310" title="Go to source code">invokeArgs</a>(
 				object
 				<var>$object</var>, 
 				array
@@ -452,7 +551,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isAbstract">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#243" title="Go to source code">isAbstract</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#345" title="Go to source code">isAbstract</a>(
 		)</code>
 
 		<div class="short">
@@ -491,7 +590,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isConstructor">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#253" title="Go to source code">isConstructor</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#355" title="Go to source code">isConstructor</a>(
 		)</code>
 
 		<div class="short">
@@ -530,7 +629,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isDestructor">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#263" title="Go to source code">isDestructor</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#365" title="Go to source code">isDestructor</a>(
 		)</code>
 
 		<div class="short">
@@ -569,7 +668,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isFinal">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#273" title="Go to source code">isFinal</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#375" title="Go to source code">isFinal</a>(
 		)</code>
 
 		<div class="short">
@@ -608,7 +707,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isPrivate">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#283" title="Go to source code">isPrivate</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#385" title="Go to source code">isPrivate</a>(
 		)</code>
 
 		<div class="short">
@@ -647,7 +746,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isProtected">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#293" title="Go to source code">isProtected</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#395" title="Go to source code">isProtected</a>(
 		)</code>
 
 		<div class="short">
@@ -686,7 +785,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isPublic">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#303" title="Go to source code">isPublic</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#405" title="Go to source code">isPublic</a>(
 		)</code>
 
 		<div class="short">
@@ -725,7 +824,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isStatic">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#313" title="Go to source code">isStatic</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#415" title="Go to source code">isStatic</a>(
 		)</code>
 
 		<div class="short">
@@ -764,7 +863,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_setAccessible">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#323" title="Go to source code">setAccessible</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#425" title="Go to source code">setAccessible</a>(
 				boolean
 				<var>$accessible</var>
 		)</code>
@@ -806,7 +905,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_isAccessible">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#333" title="Go to source code">isAccessible</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#435" title="Go to source code">isAccessible</a>(
 		)</code>
 
 		<div class="short">
@@ -843,7 +942,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_getNamespaceAliases">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#343" title="Go to source code">getNamespaceAliases</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#445" title="Go to source code">getNamespaceAliases</a>(
 		)</code>
 
 		<div class="short">
@@ -880,7 +979,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_getPrototype">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#353" title="Go to source code">getPrototype</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#455" title="Go to source code">getPrototype</a>(
 		)</code>
 
 		<div class="short">
@@ -923,7 +1022,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_processParent">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#405" title="Go to source code">processParent</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#507" title="Go to source code">processParent</a>(
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
 				
 				<var>$parent</var>
@@ -972,7 +1071,7 @@ class="php-var">$filter</span>) {
 		<td><div class="position">
 		<a class="anchor" href="#_parse">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionMethod.html#422" title="Go to source code">parse</a>(
+				<a href="source-TokenReflection.ReflectionMethod.html#524" title="Go to source code">parse</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>, 
@@ -1046,9 +1145,7 @@ class="php-var">$filter</span>) {
 <a href="class-TokenReflection.ReflectionBase.html#___construct">__construct()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#___get">__get()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#___isset">__isset()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#___toString">__toString()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_exists">exists()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#_export">export()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_get">get()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_getAnnotation">getAnnotation()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_getAnnotations">getAnnotations()</a>, 
@@ -1071,8 +1168,44 @@ class="php-var">$filter</span>) {
 <a href="class-TokenReflection.ReflectionBase.html#_isUserDefined">isUserDefined()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_parseChildren">parseChildren()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_parseDocComment">parseDocComment()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#_parseName">parseName()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#_resolveClassFQN">resolveClassFQN()</a>
+<a href="class-TokenReflection.ReflectionBase.html#_parseName">parseName()</a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary methods">
+	<caption>Methods Inherited From <a href="class-TokenReflection.IReflectionFunctionBase.html#methods">TokenReflection\IReflectionFunctionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getDocComment">getDocComment()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getEndLine">getEndLine()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getExtension">getExtension()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getExtensionName">getExtensionName()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getFileName">getFileName()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getNamespaceName">getNamespaceName()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getNumberOfParameters">getNumberOfParameters()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getNumberOfRequiredParameters">getNumberOfRequiredParameters()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getParameter">getParameter()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getParameters">getParameters()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getStartLine">getStartLine()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_getStaticVariables">getStaticVariables()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_inNamespace">inNamespace()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_isClosure">isClosure()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_isDeprecated">isDeprecated()</a>, 
+<a href="class-TokenReflection.IReflectionFunctionBase.html#_returnsReference">returnsReference()</a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary methods">
+	<caption>Methods Inherited From <a href="class-TokenReflection.IReflection.html#methods">TokenReflection\IReflection</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.IReflection.html#___get">__get()</a>, 
+<a href="class-TokenReflection.IReflection.html#___isset">__isset()</a>, 
+<a href="class-TokenReflection.IReflection.html#_getBroker">getBroker()</a>, 
+<a href="class-TokenReflection.IReflection.html#_getName">getName()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isInternal">isInternal()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isTokenized">isTokenized()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isUserDefined">isUserDefined()</a>
 		</code></td>
 	</tr>
 	</table>
@@ -1088,9 +1221,7 @@ class="php-var">$filter</span>) {
 		<td width="1%"><code>
 				<a href="source-TokenReflection.ReflectionMethod.html#26" title="Go to source code"><b>IS_IMPLEMENTED_ABSTRACT</b></a>
 		</code></td>
-		<td width="1%">
-			<code><span class="php-num">0x08</span></code>
-		</td>
+		<td width="1%"><code><span class="php-num">0x08</span></code></td>
 		<td><div class="position">
 			<a href="#IS_IMPLEMENTED_ABSTRACT" class="anchor">#</a>
 			<div class="short">
@@ -1120,9 +1251,7 @@ ZEND_ACC_IMPLICIT_PUBLIC<br />
 		<td width="1%"><code>
 				<a href="source-TokenReflection.ReflectionMethod.html#36" title="Go to source code"><b>ACCESS_LEVEL_CHANGED</b></a>
 		</code></td>
-		<td width="1%">
-			<code><span class="php-num">0x800</span></code>
-		</td>
+		<td width="1%"><code><span class="php-num">0x800</span></code></td>
 		<td><div class="position">
 			<a href="#ACCESS_LEVEL_CHANGED" class="anchor">#</a>
 			<div class="short">
@@ -1152,9 +1281,7 @@ ZEND_ACC_CHANGED<br />
 		<td width="1%"><code>
 				<a href="source-TokenReflection.ReflectionMethod.html#46" title="Go to source code"><b>IS_CONSTRUCTOR</b></a>
 		</code></td>
-		<td width="1%">
-			<code><span class="php-num">0x2000</span></code>
-		</td>
+		<td width="1%"><code><span class="php-num">0x2000</span></code></td>
 		<td><div class="position">
 			<a href="#IS_CONSTRUCTOR" class="anchor">#</a>
 			<div class="short">
@@ -1186,9 +1313,7 @@ ZEND_ACC_CTOR<br />
 		<td width="1%"><code>
 				<a href="source-TokenReflection.ReflectionMethod.html#58" title="Go to source code"><b>IS_DESTRUCTOR</b></a>
 		</code></td>
-		<td width="1%">
-			<code><span class="php-num">0x4000</span></code>
-		</td>
+		<td width="1%"><code><span class="php-num">0x4000</span></code></td>
 		<td><div class="position">
 			<a href="#IS_DESTRUCTOR" class="anchor">#</a>
 			<div class="short">
@@ -1218,9 +1343,7 @@ ZEND_ACC_DTOR<br />
 		<td width="1%"><code>
 				<a href="source-TokenReflection.ReflectionMethod.html#68" title="Go to source code"><b>IS_CLONE</b></a>
 		</code></td>
-		<td width="1%">
-			<code><span class="php-num">0x8000</span></code>
-		</td>
+		<td width="1%"><code><span class="php-num">0x8000</span></code></td>
 		<td><div class="position">
 			<a href="#IS_CLONE" class="anchor">#</a>
 			<div class="short">
@@ -1250,9 +1373,7 @@ ZEND_ACC_CLONE<br />
 		<td width="1%"><code>
 				<a href="source-TokenReflection.ReflectionMethod.html#78" title="Go to source code"><b>IS_ALLOWED_STATIC</b></a>
 		</code></td>
-		<td width="1%">
-			<code><span class="php-num">0x10000</span></code>
-		</td>
+		<td width="1%"><code><span class="php-num">0x10000</span></code></td>
 		<td><div class="position">
 			<a href="#IS_ALLOWED_STATIC" class="anchor">#</a>
 			<div class="short">

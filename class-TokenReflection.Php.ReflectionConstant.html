@@ -2,12 +2,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC" />
+	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
 
 	<title>Class TokenReflection\Php\ReflectionConstant | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
-	<script type="text/javascript" src="elementlist.js?2139979877"></script>
+	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
 </head>
@@ -1099,6 +1099,106 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="__toString" id="___toString">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#___toString">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionConstant.html#339" title="Go to source code">__toString</a>(
+		)</code>
+
+		<div class="short">
+			Returns the string representation of the reflection object.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the string representation of the reflection object.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionConstant.html#___toString">TokenReflection\IReflectionConstant::__toString</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="export" id="_export">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public static
+			string|null
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_export">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionConstant.html#354" title="Go to source code">export</a>(
+				<a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a>
+				
+				<var>$broker</var>, 
+				string|object|null
+				<var>$class</var>, 
+				string
+				<var>$constant</var>, 
+				boolean
+				<var>$return</var> = <span class="php-keyword1">false</span>
+		)</code>
+
+		<div class="short">
+			Exports a reflected object.
+		</div>
+
+		<div class="detailed">
+			
+<p>Exports a reflected object.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$broker</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br /> Broker instance</dd>
+					<dt><var>$class</var></dt>
+					<dd><code>string|object|null</code><br /> Class name, class instance or null</dd>
+					<dt><var>$constant</var></dt>
+					<dd><code>string</code><br /> Constant name</dd>
+					<dt><var>$return</var></dt>
+					<dd><code>boolean</code><br /> Return the export instead of outputting it</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string|null</code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If requested parameter doesn't exist<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="create" id="_create">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -1112,7 +1212,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_create">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionConstant.html#339" title="Go to source code">create</a>(
+				<a href="source-TokenReflection.Php.ReflectionConstant.html#389" title="Go to source code">create</a>(
 				Reflector				
 				<var>$internalReflection</var>, 
 				<a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a>

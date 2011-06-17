@@ -2,13 +2,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC" />
+	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
 	<meta name="robots" content="noindex" />
 
 	<title>File ReflectionBase.php | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
-	<script type="text/javascript" src="elementlist.js?2139979877"></script>
+	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
 </head>
@@ -58,6 +58,7 @@
 				<li><a href="class-TokenReflection.ReflectionNamespace.html">ReflectionNamespace</a></li>
 				<li><a href="class-TokenReflection.ReflectionParameter.html">ReflectionParameter</a></li>
 				<li><a href="class-TokenReflection.ReflectionProperty.html">ReflectionProperty</a></li>
+				<li><a href="class-TokenReflection.Resolver.html">Resolver</a></li>
 				<li><a href="class-TokenReflection.Stream.html">Stream</a></li>
 			</ul>
 
@@ -119,12 +120,12 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0 beta 2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0 beta 3
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
 </span><a href="#9" id="9" class="l">  9: </a><span class="php-comment"> * This source file is subject to the new BSD license that is bundled
-</span><a href="#10" id="10" class="l"> 10: </a><span class="php-comment"> * with this library in the file license.txt.
+</span><a href="#10" id="10" class="l"> 10: </a><span class="php-comment"> * with this library in the file LICENSE.
 </span><a href="#11" id="11" class="l"> 11: </a><span class="php-comment"> *
 </span><a href="#12" id="12" class="l"> 12: </a><span class="php-comment"> * @author Ondřej Nešpor &lt;andrew@andrewsville.cz&gt;
 </span><a href="#13" id="13" class="l"> 13: </a><span class="php-comment"> * @author Jaroslav Hanslík &lt;kukulich@kukulich.cz&gt;
@@ -555,177 +556,122 @@
 <a href="#438" id="438" class="l">438: </a>    }
 <a href="#439" id="439" class="l">439: </a>
 <a href="#440" id="440" class="l">440: </a>    <span class="php-comment">/**
-</span><a href="#441" id="441" class="l">441: </a><span class="php-comment">     * Returns the string representation of the reflection object.
+</span><a href="#441" id="441" class="l">441: </a><span class="php-comment">     * Returns a particular annotation value.
 </span><a href="#442" id="442" class="l">442: </a><span class="php-comment">     *
-</span><a href="#443" id="443" class="l">443: </a><span class="php-comment">     * @return string
-</span><a href="#444" id="444" class="l">444: </a><span class="php-comment">     */</span>
-<a href="#445" id="445" class="l">445: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __toString()
-<a href="#446" id="446" class="l">446: </a>    {
-<a href="#447" id="447" class="l">447: </a>        <span class="php-comment">// @todo
-</span><a href="#448" id="448" class="l">448: </a>        <span class="php-keyword1">return</span> <span class="php-quote">''</span>;
+</span><a href="#443" id="443" class="l">443: </a><span class="php-comment">     * @param string $name Annotation name
+</span><a href="#444" id="444" class="l">444: </a><span class="php-comment">     * @return string|array|null
+</span><a href="#445" id="445" class="l">445: </a><span class="php-comment">     */</span>
+<a href="#446" id="446" class="l">446: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotation(<span class="php-var">$name</span>)
+<a href="#447" id="447" class="l">447: </a>    {
+<a href="#448" id="448" class="l">448: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;docComment-&gt;getAnnotation(<span class="php-var">$name</span>);
 <a href="#449" id="449" class="l">449: </a>    }
 <a href="#450" id="450" class="l">450: </a>
 <a href="#451" id="451" class="l">451: </a>    <span class="php-comment">/**
-</span><a href="#452" id="452" class="l">452: </a><span class="php-comment">     * Returns a particular annotation value.
+</span><a href="#452" id="452" class="l">452: </a><span class="php-comment">     * Checks if there is a particular annotation.
 </span><a href="#453" id="453" class="l">453: </a><span class="php-comment">     *
 </span><a href="#454" id="454" class="l">454: </a><span class="php-comment">     * @param string $name Annotation name
-</span><a href="#455" id="455" class="l">455: </a><span class="php-comment">     * @return string|array|null
+</span><a href="#455" id="455" class="l">455: </a><span class="php-comment">     * @return boolean
 </span><a href="#456" id="456" class="l">456: </a><span class="php-comment">     */</span>
-<a href="#457" id="457" class="l">457: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotation(<span class="php-var">$name</span>)
+<a href="#457" id="457" class="l">457: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> hasAnnotation(<span class="php-var">$name</span>)
 <a href="#458" id="458" class="l">458: </a>    {
-<a href="#459" id="459" class="l">459: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;docComment-&gt;getAnnotation(<span class="php-var">$name</span>);
+<a href="#459" id="459" class="l">459: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;docComment-&gt;hasAnnotation(<span class="php-var">$name</span>);
 <a href="#460" id="460" class="l">460: </a>    }
 <a href="#461" id="461" class="l">461: </a>
 <a href="#462" id="462" class="l">462: </a>    <span class="php-comment">/**
-</span><a href="#463" id="463" class="l">463: </a><span class="php-comment">     * Checks if there is a particular annotation.
+</span><a href="#463" id="463" class="l">463: </a><span class="php-comment">     * Returns all annotations.
 </span><a href="#464" id="464" class="l">464: </a><span class="php-comment">     *
-</span><a href="#465" id="465" class="l">465: </a><span class="php-comment">     * @param string $name Annotation name
-</span><a href="#466" id="466" class="l">466: </a><span class="php-comment">     * @return boolean
-</span><a href="#467" id="467" class="l">467: </a><span class="php-comment">     */</span>
-<a href="#468" id="468" class="l">468: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> hasAnnotation(<span class="php-var">$name</span>)
-<a href="#469" id="469" class="l">469: </a>    {
-<a href="#470" id="470" class="l">470: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;docComment-&gt;hasAnnotation(<span class="php-var">$name</span>);
-<a href="#471" id="471" class="l">471: </a>    }
-<a href="#472" id="472" class="l">472: </a>
-<a href="#473" id="473" class="l">473: </a>    <span class="php-comment">/**
-</span><a href="#474" id="474" class="l">474: </a><span class="php-comment">     * Returns all annotations.
-</span><a href="#475" id="475" class="l">475: </a><span class="php-comment">     *
-</span><a href="#476" id="476" class="l">476: </a><span class="php-comment">     * @return array
-</span><a href="#477" id="477" class="l">477: </a><span class="php-comment">     */</span>
-<a href="#478" id="478" class="l">478: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotations()
-<a href="#479" id="479" class="l">479: </a>    {
-<a href="#480" id="480" class="l">480: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;docComment-&gt;getAnnotations();
-<a href="#481" id="481" class="l">481: </a>    }
-<a href="#482" id="482" class="l">482: </a>
-<a href="#483" id="483" class="l">483: </a>    <span class="php-comment">/**
-</span><a href="#484" id="484" class="l">484: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
-</span><a href="#485" id="485" class="l">485: </a><span class="php-comment">     *
-</span><a href="#486" id="486" class="l">486: </a><span class="php-comment">     * @return array
-</span><a href="#487" id="487" class="l">487: </a><span class="php-comment">     */</span>
-<a href="#488" id="488" class="l">488: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases();
-<a href="#489" id="489" class="l">489: </a>
-<a href="#490" id="490" class="l">490: </a>    <span class="php-comment">/**
-</span><a href="#491" id="491" class="l">491: </a><span class="php-comment">     * Returns the appropriate source code part.
-</span><a href="#492" id="492" class="l">492: </a><span class="php-comment">     *
-</span><a href="#493" id="493" class="l">493: </a><span class="php-comment">     * @return string
+</span><a href="#465" id="465" class="l">465: </a><span class="php-comment">     * @return array
+</span><a href="#466" id="466" class="l">466: </a><span class="php-comment">     */</span>
+<a href="#467" id="467" class="l">467: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getAnnotations()
+<a href="#468" id="468" class="l">468: </a>    {
+<a href="#469" id="469" class="l">469: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;docComment-&gt;getAnnotations();
+<a href="#470" id="470" class="l">470: </a>    }
+<a href="#471" id="471" class="l">471: </a>
+<a href="#472" id="472" class="l">472: </a>    <span class="php-comment">/**
+</span><a href="#473" id="473" class="l">473: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
+</span><a href="#474" id="474" class="l">474: </a><span class="php-comment">     *
+</span><a href="#475" id="475" class="l">475: </a><span class="php-comment">     * @return array
+</span><a href="#476" id="476" class="l">476: </a><span class="php-comment">     */</span>
+<a href="#477" id="477" class="l">477: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases();
+<a href="#478" id="478" class="l">478: </a>
+<a href="#479" id="479" class="l">479: </a>    <span class="php-comment">/**
+</span><a href="#480" id="480" class="l">480: </a><span class="php-comment">     * Returns the appropriate source code part.
+</span><a href="#481" id="481" class="l">481: </a><span class="php-comment">     *
+</span><a href="#482" id="482" class="l">482: </a><span class="php-comment">     * @return string
+</span><a href="#483" id="483" class="l">483: </a><span class="php-comment">     */</span>
+<a href="#484" id="484" class="l">484: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getSource()
+<a href="#485" id="485" class="l">485: </a>    {
+<a href="#486" id="486" class="l">486: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker-&gt;getFileTokens(<span class="php-var">$this</span>-&gt;getFileName())-&gt;getSourcePart(<span class="php-var">$this</span>-&gt;startPosition, <span class="php-var">$this</span>-&gt;endPosition);
+<a href="#487" id="487" class="l">487: </a>    }
+<a href="#488" id="488" class="l">488: </a>
+<a href="#489" id="489" class="l">489: </a>    <span class="php-comment">/**
+</span><a href="#490" id="490" class="l">490: </a><span class="php-comment">     * Magic __get method.
+</span><a href="#491" id="491" class="l">491: </a><span class="php-comment">     *
+</span><a href="#492" id="492" class="l">492: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#493" id="493" class="l">493: </a><span class="php-comment">     * @return mixed
 </span><a href="#494" id="494" class="l">494: </a><span class="php-comment">     */</span>
-<a href="#495" id="495" class="l">495: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getSource()
+<a href="#495" id="495" class="l">495: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
 <a href="#496" id="496" class="l">496: </a>    {
-<a href="#497" id="497" class="l">497: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker-&gt;getFileTokens(<span class="php-var">$this</span>-&gt;getFileName())-&gt;getSourcePart(<span class="php-var">$this</span>-&gt;startPosition, <span class="php-var">$this</span>-&gt;endPosition);
+<a href="#497" id="497" class="l">497: </a>        <span class="php-keyword1">return</span> self::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
 <a href="#498" id="498" class="l">498: </a>    }
 <a href="#499" id="499" class="l">499: </a>
 <a href="#500" id="500" class="l">500: </a>    <span class="php-comment">/**
-</span><a href="#501" id="501" class="l">501: </a><span class="php-comment">     * Magic __get method.
+</span><a href="#501" id="501" class="l">501: </a><span class="php-comment">     * Magic __isset method.
 </span><a href="#502" id="502" class="l">502: </a><span class="php-comment">     *
 </span><a href="#503" id="503" class="l">503: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#504" id="504" class="l">504: </a><span class="php-comment">     * @return mixed
+</span><a href="#504" id="504" class="l">504: </a><span class="php-comment">     * @return boolean
 </span><a href="#505" id="505" class="l">505: </a><span class="php-comment">     */</span>
-<a href="#506" id="506" class="l">506: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
+<a href="#506" id="506" class="l">506: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __<span class="php-keyword1">isset</span>(<span class="php-var">$key</span>)
 <a href="#507" id="507" class="l">507: </a>    {
-<a href="#508" id="508" class="l">508: </a>        <span class="php-keyword1">return</span> self::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#508" id="508" class="l">508: </a>        <span class="php-keyword1">return</span> self::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
 <a href="#509" id="509" class="l">509: </a>    }
 <a href="#510" id="510" class="l">510: </a>
 <a href="#511" id="511" class="l">511: </a>    <span class="php-comment">/**
-</span><a href="#512" id="512" class="l">512: </a><span class="php-comment">     * Magic __isset method.
+</span><a href="#512" id="512" class="l">512: </a><span class="php-comment">     * Magic __get method helper.
 </span><a href="#513" id="513" class="l">513: </a><span class="php-comment">     *
-</span><a href="#514" id="514" class="l">514: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#515" id="515" class="l">515: </a><span class="php-comment">     * @return boolean
-</span><a href="#516" id="516" class="l">516: </a><span class="php-comment">     */</span>
-<a href="#517" id="517" class="l">517: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __<span class="php-keyword1">isset</span>(<span class="php-var">$key</span>)
-<a href="#518" id="518" class="l">518: </a>    {
-<a href="#519" id="519" class="l">519: </a>        <span class="php-keyword1">return</span> self::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#520" id="520" class="l">520: </a>    }
-<a href="#521" id="521" class="l">521: </a>
-<a href="#522" id="522" class="l">522: </a>    <span class="php-comment">/**
-</span><a href="#523" id="523" class="l">523: </a><span class="php-comment">     * Exports a reflected object.
-</span><a href="#524" id="524" class="l">524: </a><span class="php-comment">     *
-</span><a href="#525" id="525" class="l">525: </a><span class="php-comment">     * @param string $argument Reflection object name
-</span><a href="#526" id="526" class="l">526: </a><span class="php-comment">     * @param boolean $return Return the export instead of outputting it
-</span><a href="#527" id="527" class="l">527: </a><span class="php-comment">     * @return string|null
-</span><a href="#528" id="528" class="l">528: </a><span class="php-comment">     */</span>
-<a href="#529" id="529" class="l">529: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> export(<span class="php-var">$argument</span>, <span class="php-var">$return</span> = <span class="php-keyword1">false</span>)
-<a href="#530" id="530" class="l">530: </a>    {
-<a href="#531" id="531" class="l">531: </a>        <span class="php-comment">// @todo
-</span><a href="#532" id="532" class="l">532: </a>        <span class="php-keyword1">return</span> <span class="php-quote">''</span>;
-<a href="#533" id="533" class="l">533: </a>    }
-<a href="#534" id="534" class="l">534: </a>
-<a href="#535" id="535" class="l">535: </a>    <span class="php-comment">/**
-</span><a href="#536" id="536" class="l">536: </a><span class="php-comment">     * Magic __get method helper.
-</span><a href="#537" id="537" class="l">537: </a><span class="php-comment">     *
-</span><a href="#538" id="538" class="l">538: </a><span class="php-comment">     * @param \TokenReflection\IReflection $object Reflection object
-</span><a href="#539" id="539" class="l">539: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#540" id="540" class="l">540: </a><span class="php-comment">     * @return mixed
-</span><a href="#541" id="541" class="l">541: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested parameter does not exist
-</span><a href="#542" id="542" class="l">542: </a><span class="php-comment">     */</span>
-<a href="#543" id="543" class="l">543: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> get(IReflection <span class="php-var">$object</span>, <span class="php-var">$key</span>)
-<a href="#544" id="544" class="l">544: </a>    {
-<a href="#545" id="545" class="l">545: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$key</span>)) {
-<a href="#546" id="546" class="l">546: </a>            <span class="php-var">$className</span> = <span class="php-keyword2">get_class</span>(<span class="php-var">$object</span>);
-<a href="#547" id="547" class="l">547: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(self::<span class="php-var">$methodCache</span>[<span class="php-var">$className</span>])) {
-<a href="#548" id="548" class="l">548: </a>                self::<span class="php-var">$methodCache</span>[<span class="php-var">$className</span>] = <span class="php-keyword2">array_flip</span>(<span class="php-keyword2">get_class_methods</span>(<span class="php-var">$className</span>));
-<a href="#549" id="549" class="l">549: </a>            }
-<a href="#550" id="550" class="l">550: </a>
-<a href="#551" id="551" class="l">551: </a>            <span class="php-var">$methods</span> = self::<span class="php-var">$methodCache</span>[<span class="php-var">$className</span>];
-<a href="#552" id="552" class="l">552: </a>            <span class="php-var">$key2</span> = <span class="php-keyword2">ucfirst</span>(<span class="php-var">$key</span>);
-<a href="#553" id="553" class="l">553: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$methods</span>[<span class="php-quote">'get'</span> . <span class="php-var">$key2</span>])) {
-<a href="#554" id="554" class="l">554: </a>                <span class="php-keyword1">return</span> <span class="php-var">$object</span>-&gt;{<span class="php-quote">'get'</span> . <span class="php-var">$key2}</span>();
-<a href="#555" id="555" class="l">555: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$methods</span>[<span class="php-quote">'is'</span> . <span class="php-var">$key2</span>])) {
-<a href="#556" id="556" class="l">556: </a>                <span class="php-keyword1">return</span> <span class="php-var">$object</span>-&gt;{<span class="php-quote">'is'</span> . <span class="php-var">$key2}</span>();
-<a href="#557" id="557" class="l">557: </a>            }
-<a href="#558" id="558" class="l">558: </a>        }
-<a href="#559" id="559" class="l">559: </a>
-<a href="#560" id="560" class="l">560: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Cannot read %s &quot;%s&quot; property &quot;%s&quot;.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$object</span>), <span class="php-var">$object</span>-&gt;getName(), <span class="php-var">$key</span>), Exception\Runtime::DOES_NOT_EXIST);
-<a href="#561" id="561" class="l">561: </a>    }
-<a href="#562" id="562" class="l">562: </a>
-<a href="#563" id="563" class="l">563: </a>    <span class="php-comment">/**
-</span><a href="#564" id="564" class="l">564: </a><span class="php-comment">     * Magic __isset method helper.
-</span><a href="#565" id="565" class="l">565: </a><span class="php-comment">     *
-</span><a href="#566" id="566" class="l">566: </a><span class="php-comment">     * @param \TokenReflection\IReflection $object Reflection object
-</span><a href="#567" id="567" class="l">567: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#568" id="568" class="l">568: </a><span class="php-comment">     * @return boolean
-</span><a href="#569" id="569" class="l">569: </a><span class="php-comment">     */</span>
-<a href="#570" id="570" class="l">570: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> exists(IReflection <span class="php-var">$object</span>, <span class="php-var">$key</span>)
-<a href="#571" id="571" class="l">571: </a>    {
-<a href="#572" id="572" class="l">572: </a>        <span class="php-keyword1">try</span> {
-<a href="#573" id="573" class="l">573: </a>            self::get(<span class="php-var">$object</span>, <span class="php-var">$key</span>);
-<a href="#574" id="574" class="l">574: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
-<a href="#575" id="575" class="l">575: </a>        } <span class="php-keyword1">catch</span> (RuntimeException <span class="php-var">$e</span>) {
-<a href="#576" id="576" class="l">576: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
-<a href="#577" id="577" class="l">577: </a>        }
-<a href="#578" id="578" class="l">578: </a>    }
-<a href="#579" id="579" class="l">579: </a>
-<a href="#580" id="580" class="l">580: </a>    <span class="php-comment">/**
-</span><a href="#581" id="581" class="l">581: </a><span class="php-comment">     * Returns a fully qualified name of a class using imported/aliased namespaces.
-</span><a href="#582" id="582" class="l">582: </a><span class="php-comment">     *
-</span><a href="#583" id="583" class="l">583: </a><span class="php-comment">     * @param string $className Input class name
-</span><a href="#584" id="584" class="l">584: </a><span class="php-comment">     * @param array $aliases Namespace import aliases
-</span><a href="#585" id="585" class="l">585: </a><span class="php-comment">     * @param string $namespaceName Context namespace name
-</span><a href="#586" id="586" class="l">586: </a><span class="php-comment">     * @return string
-</span><a href="#587" id="587" class="l">587: </a><span class="php-comment">     */</span>
-<a href="#588" id="588" class="l">588: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> resolveClassFQN(<span class="php-var">$className</span>, <span class="php-keyword1">array</span> <span class="php-var">$aliases</span>, <span class="php-var">$namespaceName</span> = <span class="php-keyword1">null</span>)
-<a href="#589" id="589" class="l">589: </a>    {
-<a href="#590" id="590" class="l">590: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$className{0}</span> == <span class="php-quote">'\\'</span>) {
-<a href="#591" id="591" class="l">591: </a>            <span class="php-comment">// FQN
-</span><a href="#592" id="592" class="l">592: </a>            <span class="php-keyword1">return</span> <span class="php-keyword2">ltrim</span>(<span class="php-var">$className</span>, <span class="php-quote">'\\'</span>);
-<a href="#593" id="593" class="l">593: </a>        }
-<a href="#594" id="594" class="l">594: </a>
-<a href="#595" id="595" class="l">595: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">false</span> === (<span class="php-var">$position</span> = <span class="php-keyword2">strpos</span>(<span class="php-var">$className</span>, <span class="php-quote">'\\'</span>))) {
-<a href="#596" id="596" class="l">596: </a>            <span class="php-comment">// Plain class name
-</span><a href="#597" id="597" class="l">597: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$aliases</span>[<span class="php-var">$className</span>])) {
-<a href="#598" id="598" class="l">598: </a>                <span class="php-keyword1">return</span> <span class="php-var">$aliases</span>[<span class="php-var">$className</span>];
-<a href="#599" id="599" class="l">599: </a>            }
-<a href="#600" id="600" class="l">600: </a>        } <span class="php-keyword1">else</span> {
-<a href="#601" id="601" class="l">601: </a>            <span class="php-comment">// Namespaced class name
-</span><a href="#602" id="602" class="l">602: </a>            <span class="php-var">$alias</span> = <span class="php-keyword2">substr</span>(<span class="php-var">$className</span>, <span class="php-num">0</span>, <span class="php-var">$position</span>);
-<a href="#603" id="603" class="l">603: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$aliases</span>[<span class="php-var">$alias</span>])) {
-<a href="#604" id="604" class="l">604: </a>                <span class="php-keyword1">return</span> <span class="php-var">$aliases</span>[<span class="php-var">$alias</span>] . <span class="php-quote">'\\'</span> . <span class="php-keyword2">substr</span>(<span class="php-var">$className</span>, <span class="php-var">$position</span> + <span class="php-num">1</span>);
-<a href="#605" id="605" class="l">605: </a>            }
-<a href="#606" id="606" class="l">606: </a>        }
-<a href="#607" id="607" class="l">607: </a>
-<a href="#608" id="608" class="l">608: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">null</span> === <span class="php-var">$namespaceName</span> || <span class="php-quote">''</span> === <span class="php-var">$namespaceName</span> || <span class="php-var">$namespaceName</span> === ReflectionNamespace::NO_NAMESPACE_NAME ? <span class="php-var">$className</span> : <span class="php-var">$namespaceName</span> . <span class="php-quote">'\\'</span> . <span class="php-var">$className</span>;
-<a href="#609" id="609" class="l">609: </a>    }
-<a href="#610" id="610" class="l">610: </a>}
-<a href="#611" id="611" class="l">611: </a></code></pre>
+</span><a href="#514" id="514" class="l">514: </a><span class="php-comment">     * @param \TokenReflection\IReflection $object Reflection object
+</span><a href="#515" id="515" class="l">515: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#516" id="516" class="l">516: </a><span class="php-comment">     * @return mixed
+</span><a href="#517" id="517" class="l">517: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested parameter does not exist
+</span><a href="#518" id="518" class="l">518: </a><span class="php-comment">     */</span>
+<a href="#519" id="519" class="l">519: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> get(IReflection <span class="php-var">$object</span>, <span class="php-var">$key</span>)
+<a href="#520" id="520" class="l">520: </a>    {
+<a href="#521" id="521" class="l">521: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$key</span>)) {
+<a href="#522" id="522" class="l">522: </a>            <span class="php-var">$className</span> = <span class="php-keyword2">get_class</span>(<span class="php-var">$object</span>);
+<a href="#523" id="523" class="l">523: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(self::<span class="php-var">$methodCache</span>[<span class="php-var">$className</span>])) {
+<a href="#524" id="524" class="l">524: </a>                self::<span class="php-var">$methodCache</span>[<span class="php-var">$className</span>] = <span class="php-keyword2">array_flip</span>(<span class="php-keyword2">get_class_methods</span>(<span class="php-var">$className</span>));
+<a href="#525" id="525" class="l">525: </a>            }
+<a href="#526" id="526" class="l">526: </a>
+<a href="#527" id="527" class="l">527: </a>            <span class="php-var">$methods</span> = self::<span class="php-var">$methodCache</span>[<span class="php-var">$className</span>];
+<a href="#528" id="528" class="l">528: </a>            <span class="php-var">$key2</span> = <span class="php-keyword2">ucfirst</span>(<span class="php-var">$key</span>);
+<a href="#529" id="529" class="l">529: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$methods</span>[<span class="php-quote">'get'</span> . <span class="php-var">$key2</span>])) {
+<a href="#530" id="530" class="l">530: </a>                <span class="php-keyword1">return</span> <span class="php-var">$object</span>-&gt;{<span class="php-quote">'get'</span> . <span class="php-var">$key2}</span>();
+<a href="#531" id="531" class="l">531: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$methods</span>[<span class="php-quote">'is'</span> . <span class="php-var">$key2</span>])) {
+<a href="#532" id="532" class="l">532: </a>                <span class="php-keyword1">return</span> <span class="php-var">$object</span>-&gt;{<span class="php-quote">'is'</span> . <span class="php-var">$key2}</span>();
+<a href="#533" id="533" class="l">533: </a>            }
+<a href="#534" id="534" class="l">534: </a>        }
+<a href="#535" id="535" class="l">535: </a>
+<a href="#536" id="536" class="l">536: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Cannot read %s &quot;%s&quot; property &quot;%s&quot;.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$object</span>), <span class="php-var">$object</span>-&gt;getName(), <span class="php-var">$key</span>), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#537" id="537" class="l">537: </a>    }
+<a href="#538" id="538" class="l">538: </a>
+<a href="#539" id="539" class="l">539: </a>    <span class="php-comment">/**
+</span><a href="#540" id="540" class="l">540: </a><span class="php-comment">     * Magic __isset method helper.
+</span><a href="#541" id="541" class="l">541: </a><span class="php-comment">     *
+</span><a href="#542" id="542" class="l">542: </a><span class="php-comment">     * @param \TokenReflection\IReflection $object Reflection object
+</span><a href="#543" id="543" class="l">543: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#544" id="544" class="l">544: </a><span class="php-comment">     * @return boolean
+</span><a href="#545" id="545" class="l">545: </a><span class="php-comment">     */</span>
+<a href="#546" id="546" class="l">546: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> exists(IReflection <span class="php-var">$object</span>, <span class="php-var">$key</span>)
+<a href="#547" id="547" class="l">547: </a>    {
+<a href="#548" id="548" class="l">548: </a>        <span class="php-keyword1">try</span> {
+<a href="#549" id="549" class="l">549: </a>            self::get(<span class="php-var">$object</span>, <span class="php-var">$key</span>);
+<a href="#550" id="550" class="l">550: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+<a href="#551" id="551" class="l">551: </a>        } <span class="php-keyword1">catch</span> (RuntimeException <span class="php-var">$e</span>) {
+<a href="#552" id="552" class="l">552: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
+<a href="#553" id="553" class="l">553: </a>        }
+<a href="#554" id="554" class="l">554: </a>    }
+<a href="#555" id="555" class="l">555: </a>}
+<a href="#556" id="556" class="l">556: </a></code></pre>
 
 		<div id="footer">
 			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />

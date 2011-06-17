@@ -2,12 +2,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC" />
+	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
 
 	<title>Class TokenReflection\ReflectionConstant | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
-	<script type="text/javascript" src="elementlist.js?2139979877"></script>
+	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
 </head>
@@ -57,6 +57,7 @@
 				<li><a href="class-TokenReflection.ReflectionNamespace.html">ReflectionNamespace</a></li>
 				<li><a href="class-TokenReflection.ReflectionParameter.html">ReflectionParameter</a></li>
 				<li><a href="class-TokenReflection.ReflectionProperty.html">ReflectionProperty</a></li>
+				<li><a href="class-TokenReflection.Resolver.html">Resolver</a></li>
 				<li><a href="class-TokenReflection.Stream.html">Stream</a></li>
 			</ul>
 
@@ -167,7 +168,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_processParent">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#65" title="Go to source code">processParent</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#58" title="Go to source code">processParent</a>(
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
 				
 				<var>$parent</var>
@@ -216,7 +217,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parse">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#86" title="Go to source code">parse</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#79" title="Go to source code">parse</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>, 
@@ -266,7 +267,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parseName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#100" title="Go to source code">parseName</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#93" title="Go to source code">parseName</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>
@@ -315,7 +316,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parseDocComment">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#132" title="Go to source code">parseDocComment</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#125" title="Go to source code">parseDocComment</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>, 
@@ -365,7 +366,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getValueDefinition">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#206" title="Go to source code">getValueDefinition</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#186" title="Go to source code">getValueDefinition</a>(
 		)</code>
 
 		<div class="short">
@@ -404,7 +405,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getOriginalValueDefinition">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#235" title="Go to source code">getOriginalValueDefinition</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#196" title="Go to source code">getOriginalValueDefinition</a>(
 		)</code>
 
 		<div class="short">
@@ -428,6 +429,106 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="__toString" id="___toString">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#___toString">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionConstant.html#206" title="Go to source code">__toString</a>(
+		)</code>
+
+		<div class="short">
+			Returns the string representation of the reflection object.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the string representation of the reflection object.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionConstant.html#___toString">TokenReflection\IReflectionConstant::__toString</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="export" id="_export">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public static
+			string|null
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_export">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionConstant.html#221" title="Go to source code">export</a>(
+				<a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a>
+				
+				<var>$broker</var>, 
+				string|object|null
+				<var>$class</var>, 
+				string
+				<var>$constant</var>, 
+				boolean
+				<var>$return</var> = <span class="php-keyword1">false</span>
+		)</code>
+
+		<div class="short">
+			Exports a reflected object.
+		</div>
+
+		<div class="detailed">
+			
+<p>Exports a reflected object.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$broker</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br /> Broker instance</dd>
+					<dt><var>$class</var></dt>
+					<dd><code>string|object|null</code><br /> Class name, class instance or null</dd>
+					<dt><var>$constant</var></dt>
+					<dd><code>string</code><br /> Constant name</dd>
+					<dt><var>$return</var></dt>
+					<dd><code>boolean</code><br /> Return the export instead of outputting it</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string|null</code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If requested parameter doesn't exist<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="getValue" id="_getValue">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -441,7 +542,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getValue">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#245" title="Go to source code">getValue</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#256" title="Go to source code">getValue</a>(
 		)</code>
 
 		<div class="short">
@@ -480,7 +581,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getDeclaringClassName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#268" title="Go to source code">getDeclaringClassName</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#271" title="Go to source code">getDeclaringClassName</a>(
 		)</code>
 
 		<div class="short">
@@ -519,7 +620,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getDeclaringClass">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#278" title="Go to source code">getDeclaringClass</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#281" title="Go to source code">getDeclaringClass</a>(
 		)</code>
 
 		<div class="short">
@@ -558,7 +659,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getNamespaceName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#292" title="Go to source code">getNamespaceName</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#295" title="Go to source code">getNamespaceName</a>(
 		)</code>
 
 		<div class="short">
@@ -597,7 +698,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_inNamespace">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#302" title="Go to source code">inNamespace</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#305" title="Go to source code">inNamespace</a>(
 		)</code>
 
 		<div class="short">
@@ -636,7 +737,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getShortName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#312" title="Go to source code">getShortName</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#315" title="Go to source code">getShortName</a>(
 		)</code>
 
 		<div class="short">
@@ -675,7 +776,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getNamespaceAliases">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionConstant.html#327" title="Go to source code">getNamespaceAliases</a>(
+				<a href="source-TokenReflection.ReflectionConstant.html#330" title="Go to source code">getNamespaceAliases</a>(
 		)</code>
 
 		<div class="short">
@@ -709,9 +810,7 @@
 <a href="class-TokenReflection.ReflectionBase.html#___construct">__construct()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#___get">__get()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#___isset">__isset()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#___toString">__toString()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_exists">exists()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#_export">export()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_get">get()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_getAnnotation">getAnnotation()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_getAnnotations">getAnnotations()</a>, 
@@ -732,8 +831,32 @@
 <a href="class-TokenReflection.ReflectionBase.html#_isInternal">isInternal()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_isTokenized">isTokenized()</a>, 
 <a href="class-TokenReflection.ReflectionBase.html#_isUserDefined">isUserDefined()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#_parseChildren">parseChildren()</a>, 
-<a href="class-TokenReflection.ReflectionBase.html#_resolveClassFQN">resolveClassFQN()</a>
+<a href="class-TokenReflection.ReflectionBase.html#_parseChildren">parseChildren()</a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary methods">
+	<caption>Methods Inherited From <a href="class-TokenReflection.IReflectionConstant.html#methods">TokenReflection\IReflectionConstant</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.IReflectionConstant.html#_getDocComment">getDocComment()</a>, 
+<a href="class-TokenReflection.IReflectionConstant.html#_getEndLine">getEndLine()</a>, 
+<a href="class-TokenReflection.IReflectionConstant.html#_getFileName">getFileName()</a>, 
+<a href="class-TokenReflection.IReflectionConstant.html#_getStartLine">getStartLine()</a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary methods">
+	<caption>Methods Inherited From <a href="class-TokenReflection.IReflection.html#methods">TokenReflection\IReflection</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.IReflection.html#___get">__get()</a>, 
+<a href="class-TokenReflection.IReflection.html#___isset">__isset()</a>, 
+<a href="class-TokenReflection.IReflection.html#_getBroker">getBroker()</a>, 
+<a href="class-TokenReflection.IReflection.html#_getName">getName()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isInternal">isInternal()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isTokenized">isTokenized()</a>, 
+<a href="class-TokenReflection.IReflection.html#_isUserDefined">isUserDefined()</a>
 		</code></td>
 	</tr>
 	</table>
