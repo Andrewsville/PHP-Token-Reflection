@@ -268,9 +268,11 @@ class Memory implements Broker\Backend
 
 			return $ns->getConstant($constantName);
 		} catch (TokenReflection\Exception $e) {
-			$reflection = new Php\ReflectionConstant($constantName, $declared[$constantName], $this->broker);
-			if ($reflection->isInternal()) {
-				return $reflection;
+			if (isset($declared[$constantName])) {
+				$reflection = new Php\ReflectionConstant($constantName, $declared[$constantName], $this->broker);
+				if ($reflection->isInternal()) {
+					return $reflection;
+				}
 			}
 
 			throw new Exception\Runtime(sprintf('Constant %s does not exist.', $constantName), 0, $e);
