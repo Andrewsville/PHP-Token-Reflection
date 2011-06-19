@@ -112,6 +112,13 @@ interface IReflectionClass extends IReflection
 	public function isInterface();
 
 	/**
+	 * Returns if the class is an exception or its descendant.
+	 *
+	 * @return boolean
+	 */
+	public function isException();
+
+	/**
 	 * Returns if objects of this class are cloneable.
 	 *
 	 * Not implemented in 5.3, but in trunk though.
