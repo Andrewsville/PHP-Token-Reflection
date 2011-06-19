@@ -49,6 +49,27 @@ interface IReflectionParameter extends IReflection
 	public function getDeclaringFunctionName();
 
 	/**
+	 * Returns the definition start line number in the file.
+	 *
+	 * @return integer
+	 */
+	public function getStartLine();
+
+	/**
+	 * Returns the definition end line number in the file.
+	 *
+	 * @return integer
+	 */
+	public function getEndLine();
+
+	/**
+	 * Returns the appropriate docblock definition.
+	 *
+	 * @return string|boolean
+	 */
+	public function getDocComment();
+
+	/**
 	 * Returns the default value.
 	 *
 	 * @return mixed
@@ -61,6 +82,13 @@ interface IReflectionParameter extends IReflection
 	 * @return string
 	 */
 	public function getDefaultValueDefinition();
+
+	/**
+	 * Retutns if a default value for the parameter is available.
+	 *
+	 * @return boolean
+	 */
+	public function isDefaultValueAvailable();
 
 	/**
 	 * Returns the position within all parameters.
@@ -77,13 +105,6 @@ interface IReflectionParameter extends IReflection
 	public function isArray();
 
 	/**
-	 * Returns if the the parameter allows NULL.
-	 *
-	 * @return boolean
-	 */
-	public function allowsNull();
-
-	/**
 	 * Returns reflection of the required class of the value.
 	 *
 	 * @return \TokenReflection\IReflectionClass|null
@@ -98,11 +119,11 @@ interface IReflectionParameter extends IReflection
 	public function getClassName();
 
 	/**
-	 * Retutns if a default value for the parameter is available.
+	 * Returns if the the parameter allows NULL.
 	 *
 	 * @return boolean
 	 */
-	public function isDefaultValueAvailable();
+	public function allowsNull();
 
 	/**
 	 * Returns if the parameter is optional.
@@ -117,27 +138,6 @@ interface IReflectionParameter extends IReflection
 	 * @return boolean
 	 */
 	public function isPassedByReference();
-
-	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return string|boolean
-	 */
-	public function getDocComment();
-
-	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return integer
-	 */
-	public function getStartLine();
-
-	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return integer
-	 */
-	public function getEndLine();
 
 	/**
 	 * Returns the string representation of the reflection object.

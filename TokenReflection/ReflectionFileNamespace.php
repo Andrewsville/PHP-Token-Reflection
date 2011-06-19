@@ -23,18 +23,18 @@ use TokenReflection\Exception;
 class ReflectionFileNamespace extends ReflectionBase
 {
 	/**
-	 * Namespace aliases.
-	 *
-	 * @var array
-	 */
-	private $aliases = array();
-
-	/**
 	 * List of class reflections.
 	 *
 	 * @var array
 	 */
 	private $classes = array();
+
+	/**
+	 * List of constant reflections.
+	 *
+	 * @var array
+	 */
+	private $constants = array();
 
 	/**
 	 * List of function reflections.
@@ -44,11 +44,11 @@ class ReflectionFileNamespace extends ReflectionBase
 	private $functions = array();
 
 	/**
-	 * List of constant reflections.
+	 * Namespace aliases.
 	 *
 	 * @var array
 	 */
-	private $constants = array();
+	private $aliases = array();
 
 	/**
 	 * Returns class reflections.
@@ -61,16 +61,6 @@ class ReflectionFileNamespace extends ReflectionBase
 	}
 
 	/**
-	 * Returns function reflections.
-	 *
-	 * @return array
-	 */
-	public function getFunctions()
-	{
-		return $this->functions;
-	}
-
-	/**
 	 * Returns constant reflections.
 	 *
 	 * @return array
@@ -78,6 +68,16 @@ class ReflectionFileNamespace extends ReflectionBase
 	public function getConstants()
 	{
 		return $this->constants;
+	}
+
+	/**
+	 * Returns function reflections.
+	 *
+	 * @return array
+	 */
+	public function getFunctions()
+	{
+		return $this->functions;
 	}
 
 	/**
@@ -118,97 +118,6 @@ class ReflectionFileNamespace extends ReflectionBase
 		return $this
 			->parseName($tokenStream)
 			->parseAliases($tokenStream);
-	}
-
-	/**
-	 * Parses child reflection objects from the token stream.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionFileNamespace
-	 * @throws \TokenReflection\Exception\Parse If child elements could not be parsed
-	 */
-	protected function parseChildren(Stream $tokenStream, IReflection $parent)
-	{
-		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
-
-		while (true) {
-			switch ($tokenStream->getType()) {
-				case T_COMMENT:
-				case T_DOC_COMMENT:
-					$docblock = $tokenStream->getTokenValue();
-					if (preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $docblock)) {
-						array_unshift($this->docblockTemplates, new ReflectionAnnotation($this, $docblock));
-					} elseif (self::DOCBLOCK_TEMPLATE_END === $docblock) {
-						array_shift($this->docblockTemplates);
-					}
-					$tokenStream->next();
-					break;
-				case '{':
-					$tokenStream->findMatchingBracket()->next();
-					break;
-				case '}':
-				case null:
-				case T_NAMESPACE:
-					break 2;
-				case T_ABSTRACT:
-				case T_FINAL:
-				case T_CLASS:
-				case T_INTERFACE:
-					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
-					$this->classes[$class->getName()] = $class;
-					$tokenStream->next();
-					break;
-				case T_CONST:
-					$tokenStream->skipWhitespaces();
-					while ($tokenStream->is(T_STRING)) {
-						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
-						$this->constants[$constant->getName()] = $constant;
-						if ($tokenStream->is(',')) {
-							$tokenStream->skipWhitespaces();
-						} else {
-							$tokenStream->next();
-						}
-					}
-					break;
-				case T_FUNCTION:
-					$position = $tokenStream->key() + 1;
-					while (isset($skipped[$type = $tokenStream->getType($position)])) {
-						$position++;
-					}
-					if ('(' === $type) {
-						// Skipping anonymous functions
-
-						$tokenStream
-							->seek($position)
-							->findMatchingBracket()
-							->skipWhiteSpaces();
-
-						if ($tokenStream->is(T_USE)) {
-							$tokenStream
-								->skipWhitespaces()
-								->findMatchingBracket()
-								->skipWhitespaces();
-						}
-
-						$tokenStream
-							->findMatchingBracket()
-							->next();
-
-						continue;
-					}
-
-					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
-					$this->functions[$function->getName()] = $function;
-					$tokenStream->next();
-					break;
-				default:
-					$tokenStream->next();
-					break;
-			}
-		}
-
-		return $this;
 	}
 
 	/**
@@ -358,4 +267,96 @@ class ReflectionFileNamespace extends ReflectionBase
 			throw new Exception\Parse('Could not parse namespace aliases.', 0, $e);
 		}
 	}
+
+	/**
+	 * Parses child reflection objects from the token stream.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionFileNamespace
+	 * @throws \TokenReflection\Exception\Parse If child elements could not be parsed
+	 */
+	protected function parseChildren(Stream $tokenStream, IReflection $parent)
+	{
+		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
+
+		while (true) {
+			switch ($tokenStream->getType()) {
+				case T_COMMENT:
+				case T_DOC_COMMENT:
+					$docblock = $tokenStream->getTokenValue();
+					if (preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $docblock)) {
+						array_unshift($this->docblockTemplates, new ReflectionAnnotation($this, $docblock));
+					} elseif (self::DOCBLOCK_TEMPLATE_END === $docblock) {
+						array_shift($this->docblockTemplates);
+					}
+					$tokenStream->next();
+					break;
+				case '{':
+					$tokenStream->findMatchingBracket()->next();
+					break;
+				case '}':
+				case null:
+				case T_NAMESPACE:
+					break 2;
+				case T_ABSTRACT:
+				case T_FINAL:
+				case T_CLASS:
+				case T_INTERFACE:
+					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
+					$this->classes[$class->getName()] = $class;
+					$tokenStream->next();
+					break;
+				case T_CONST:
+					$tokenStream->skipWhitespaces();
+					while ($tokenStream->is(T_STRING)) {
+						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
+						$this->constants[$constant->getName()] = $constant;
+						if ($tokenStream->is(',')) {
+							$tokenStream->skipWhitespaces();
+						} else {
+							$tokenStream->next();
+						}
+					}
+					break;
+				case T_FUNCTION:
+					$position = $tokenStream->key() + 1;
+					while (isset($skipped[$type = $tokenStream->getType($position)])) {
+						$position++;
+					}
+					if ('(' === $type) {
+						// Skipping anonymous functions
+
+						$tokenStream
+							->seek($position)
+							->findMatchingBracket()
+							->skipWhiteSpaces();
+
+						if ($tokenStream->is(T_USE)) {
+							$tokenStream
+								->skipWhitespaces()
+								->findMatchingBracket()
+								->skipWhitespaces();
+						}
+
+						$tokenStream
+							->findMatchingBracket()
+							->next();
+
+						continue;
+					}
+
+					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
+					$this->functions[$function->getName()] = $function;
+					$tokenStream->next();
+					break;
+				default:
+					$tokenStream->next();
+					break;
+			}
+		}
+
+		return $this;
+	}
+
 }

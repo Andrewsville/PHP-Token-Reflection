@@ -21,93 +21,25 @@ namespace TokenReflection;
 interface IReflectionClass extends IReflection
 {
 	/**
-	 * Returns a constant value.
+	 * Returns the unqualified name (UQN).
 	 *
-	 * @param string $name Constant name
-	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 * @return string
 	 */
-	public function getConstant($name);
+	public function getShortName();
 
 	/**
-	 * Returns a constant reflection.
+	 * Returns the namespace name.
 	 *
-	 * @param string $name Constant name
-	 * @return \TokenReflection\IReflectionConstant
-	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 * @return string
 	 */
-	public function getConstantReflection($name);
+	public function getNamespaceName();
 
 	/**
-	 * Returns an array of constant values.
+	 * Returns if the class is defined within a namespace.
 	 *
-	 * @return array
+	 * @return boolean
 	 */
-	public function getConstants();
-
-	/**
-	 * Returns values of constants declared by this class, not by its parents.
-	 *
-	 * @return array
-	 */
-	public function getOwnConstants();
-
-	/**
-	 * Returns constant reflections.
-	 *
-	 * @return array
-	 */
-	public function getConstantReflections();
-
-	/**
-	 * Returns constant reflections declared by this class, not by its parents.
-	 *
-	 * @return array
-	 */
-	public function getOwnConstantReflections();
-
-	/**
-	 * Returns the class constructor reflection.
-	 *
-	 * @return \TokenReflection\IReflectionMethod|null
-	 */
-	public function getConstructor();
-
-
-	/**
-	 * Returns the class desctructor reflection.
-	 *
-	 * @return \TokenReflection\IReflectionMethod|null
-	 */
-	public function getDestructor();
-
-	/**
-	 * Returns default properties.
-	 *
-	 * @return array
-	 */
-	public function getDefaultProperties();
-
-	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return string|boolean
-	 */
-	public function getDocComment();
-
-	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return integer
-	 */
-	public function getStartLine();
-
-	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return integer
-	 */
-	public function getEndLine();
+	public function inNamespace();
 
 	/**
 	 * Returns the PHP extension reflection.
@@ -131,57 +63,25 @@ interface IReflectionClass extends IReflection
 	public function getFileName();
 
 	/**
-	 * Returns interface names.
+	 * Returns the definition start line number in the file.
 	 *
-	 * @return array
+	 * @return integer
 	 */
-	public function getInterfaceNames();
+	public function getStartLine();
 
 	/**
-	 * Returns names of interfaces implemented by this class, not its parents.
+	 * Returns the definition end line number in the file.
 	 *
-	 * @return array
+	 * @return integer
 	 */
-	public function getOwnInterfaceNames();
+	public function getEndLine();
 
 	/**
-	 * Returns interface reflections.
+	 * Returns the appropriate docblock definition.
 	 *
-	 * @return array
+	 * @return string|boolean
 	 */
-	public function getInterfaces();
-
-	/**
-	 * Returns interface reflections implemented by this class, not its parents.
-	 *
-	 * @return array
-	 */
-	public function getOwnInterfaces();
-
-	/**
-	 * Returns a method reflection.
-	 *
-	 * @param string $name Method name
-	 * @return \TokenReflection\IReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
-	 */
-	public function getMethod($name);
-
-	/**
-	 * Returns method reflections.
-	 *
-	 * @param integer $filter Methods filter
-	 * @return array
-	 */
-	public function getMethods($filter = null);
-
-	/**
-	 * Returns method reflections declared by this class, not its parents.
-	 *
-	 * @param integer $filter Methods filter
-	 * @return array
-	 */
-	public function getOwnMethods($filter = null);
+	public function getDocComment();
 
 	/**
 	 * Returns modifiers.
@@ -189,155 +89,6 @@ interface IReflectionClass extends IReflection
 	 * @return array
 	 */
 	public function getModifiers();
-
-	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
-	 */
-	public function getNamespaceName();
-
-	/**
-	 * Returns the parent class reflection.
-	 *
-	 * @return \TokenReflection\IReflectionClass|null
-	 */
-	public function getParentClass();
-
-	/**
-	 * Returns the parent classes reflections.
-	 *
-	 * @return array
-	 */
-	public function getParentClasses();
-
-	/**
-	 * Returns the parent class name.
-	 *
-	 * @return string|null
-	 */
-	public function getParentClassName();
-
-	/**
-	 * Returns the parent classes names.
-	 *
-	 * @return array
-	 */
-	public function getParentClassNameList();
-
-	/**
-	 * Returns property reflections.
-	 *
-	 * @param integer $filter Properties filter
-	 * @return array
-	 */
-	public function getProperties($filter = null);
-
-	/**
-	 * Returns property reflections declared by this class, not its parents.
-	 *
-	 * @param integer $filter Properties filter
-	 * @return array
-	 */
-	public function getOwnProperties($filter = null);
-
-	/**
-	 * Return a property reflection.
-	 *
-	 * @param string $name Property name
-	 * @return \TokenReflection\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
-	 */
-	public function getProperty($name);
-
-	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
-	 */
-	public function getShortName();
-
-	/**
-	 * Returns static properties reflections.
-	 *
-	 * @return array
-	 */
-	public function getStaticProperties();
-
-	/**
-	 * Returns a value of a static property.
-	 *
-	 * @param string $name Property name
-	 * @param mixed $default Default value
-	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
-	 */
-	public function getStaticPropertyValue($name, $default = null);
-
-	/**
-	 * Returns if the class defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return boolean
-	 */
-	public function hasConstant($name);
-
-	/**
-	 * Returns if the class (and not its parents) defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return boolean
-	 */
-	public function hasOwnConstant($name);
-
-	/**
-	 * Returns if the class implements the given method.
-	 *
-	 * @param string $name Method name
-	 * @return boolean
-	 */
-	public function hasMethod($name);
-
-	/**
-	 * Returns if the class implements (and not its parents) the given method.
-	 *
-	 * @param string $name Method name
-	 * @return boolean
-	 */
-	public function hasOwnMethod($name);
-
-	/**
-	 * Returns if the class defines the given property.
-	 *
-	 * @param string $name Property name
-	 * @return boolean
-	 */
-	public function hasProperty($name);
-
-	/**
-	 * Returns if the class (and not its parents) defines the given property.
-	 *
-	 * @param string $name Property name
-	 * @return boolean
-	 */
-	public function hasOwnProperty($name);
-
-	/**
-	 * Returns if the class implements the given interface.
-	 *
-	 * @param string|object $interface Interface name or reflection object
-	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If an invalid object was provided as interface
-	 */
-	public function implementsInterface($interface);
-
-	/**
-	 * Returns if the class is defined within a namespace.
-	 *
-	 * @return boolean
-	 */
-	public function inNamespace();
 
 	/**
 	 * Returns if the class is abstract.
@@ -352,15 +103,6 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function isFinal();
-
-	/**
-	 * Returns if the given object is an instance of this class.
-	 *
-	 * @param object $object Instance
-	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
-	 */
-	public function isInstance($object);
 
 	/**
 	 * Returns if it is possible to create an instance of this class.
@@ -395,6 +137,254 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function isSubclassOf($class);
+
+	/**
+	 * Returns the parent class reflection.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getParentClass();
+
+	/**
+	 * Returns the parent class name.
+	 *
+	 * @return string|null
+	 */
+	public function getParentClassName();
+
+	/**
+	 * Returns the parent classes reflections.
+	 *
+	 * @return array
+	 */
+	public function getParentClasses();
+
+	/**
+	 * Returns the parent classes names.
+	 *
+	 * @return array
+	 */
+	public function getParentClassNameList();
+
+	/**
+	 * Returns if the class implements the given interface.
+	 *
+	 * @param string|object $interface Interface name or reflection object
+	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If an invalid object was provided as interface
+	 */
+	public function implementsInterface($interface);
+
+	/**
+	 * Returns interface reflections.
+	 *
+	 * @return array
+	 */
+	public function getInterfaces();
+
+	/**
+	 * Returns interface names.
+	 *
+	 * @return array
+	 */
+	public function getInterfaceNames();
+
+	/**
+	 * Returns interface reflections implemented by this class, not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnInterfaces();
+
+	/**
+	 * Returns names of interfaces implemented by this class, not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnInterfaceNames();
+
+	/**
+	 * Returns the class constructor reflection.
+	 *
+	 * @return \TokenReflection\IReflectionMethod|null
+	 */
+	public function getConstructor();
+
+	/**
+	 * Returns the class desctructor reflection.
+	 *
+	 * @return \TokenReflection\IReflectionMethod|null
+	 */
+	public function getDestructor();
+
+	/**
+	 * Returns if the class implements the given method.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasMethod($name);
+
+	/**
+	 * Returns a method reflection.
+	 *
+	 * @param string $name Method name
+	 * @return \TokenReflection\IReflectionMethod
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
+	 */
+	public function getMethod($name);
+
+	/**
+	 * Returns method reflections.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getMethods($filter = null);
+
+	/**
+	 * Returns if the class implements (and not its parents) the given method.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasOwnMethod($name);
+
+	/**
+	 * Returns method reflections declared by this class, not its parents.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getOwnMethods($filter = null);
+
+	/**
+	 * Returns if the class defines the given constant.
+	 *
+	 * @param string $name Constant name.
+	 * @return boolean
+	 */
+	public function hasConstant($name);
+
+	/**
+	 * Returns a constant value.
+	 *
+	 * @param string $name Constant name
+	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 */
+	public function getConstant($name);
+
+	/**
+	 * Returns a constant reflection.
+	 *
+	 * @param string $name Constant name
+	 * @return \TokenReflection\IReflectionConstant
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 */
+	public function getConstantReflection($name);
+
+	/**
+	 * Returns an array of constant values.
+	 *
+	 * @return array
+	 */
+	public function getConstants();
+
+	/**
+	 * Returns constant reflections.
+	 *
+	 * @return array
+	 */
+	public function getConstantReflections();
+
+	/**
+	 * Returns if the class (and not its parents) defines the given constant.
+	 *
+	 * @param string $name Constant name.
+	 * @return boolean
+	 */
+	public function hasOwnConstant($name);
+
+	/**
+	 * Returns values of constants declared by this class, not by its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnConstants();
+
+	/**
+	 * Returns constant reflections declared by this class, not by its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnConstantReflections();
+
+	/**
+	 * Returns if the class defines the given property.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasProperty($name);
+
+	/**
+	 * Return a property reflection.
+	 *
+	 * @param string $name Property name
+	 * @return \TokenReflection\ReflectionProperty
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
+	 */
+	public function getProperty($name);
+
+	/**
+	 * Returns property reflections.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getProperties($filter = null);
+
+	/**
+	 * Returns if the class (and not its parents) defines the given property.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasOwnProperty($name);
+
+	/**
+	 * Returns property reflections declared by this class, not its parents.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getOwnProperties($filter = null);
+
+	/**
+	 * Returns default properties.
+	 *
+	 * @return array
+	 */
+	public function getDefaultProperties();
+
+	/**
+	 * Returns static properties reflections.
+	 *
+	 * @return array
+	 */
+	public function getStaticProperties();
+
+	/**
+	 * Returns a value of a static property.
+	 *
+	 * @param string $name Property name
+	 * @param mixed $default Default value
+	 * @return mixed
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
+	 */
+	public function getStaticPropertyValue($name, $default = null);
 
 	/**
 	 * Returns reflections of direct subclasses.
@@ -453,6 +443,15 @@ interface IReflectionClass extends IReflection
 	public function getIndirectImplementerNames();
 
 	/**
+	 * Returns if the given object is an instance of this class.
+	 *
+	 * @param object $object Instance
+	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
+	 */
+	public function isInstance($object);
+
+	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
 	 * Use any number of constructor parameters as function parameters.
@@ -482,6 +481,13 @@ interface IReflectionClass extends IReflection
 	public function setStaticPropertyValue($name, $value);
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString();
+
+	/**
 	 * Returns if the class definition is complete.
 	 *
 	 * That means if there are no dummy classes among parents and implemented interfaces.
@@ -489,11 +495,4 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function isComplete();
-
-	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	public function __toString();
 }

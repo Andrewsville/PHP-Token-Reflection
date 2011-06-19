@@ -93,6 +93,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $declaringClassName;
 
 	/**
+	 * Method prototype reflection.
+	 *
+	 * @var \TokenReflection\IReflectionMethod
+	 */
+	private $prototype;
+
+	/**
 	 * Determined if the method is accessible.
 	 *
 	 * @var boolean
@@ -105,13 +112,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @var boolean
 	 */
 	private $modifiersComplete = false;
-
-	/**
-	 * Method prototype reflection.
-	 *
-	 * @var \TokenReflection\IReflectionMethod
-	 */
-	private $prototype;
 
 	/**
 	 * Returns the declaring class reflection.
@@ -165,6 +165,66 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns if the method is abstract.
+	 *
+	 * @return boolean
+	 */
+	public function isAbstract()
+	{
+		return (bool) ($this->modifiers & InternalReflectionMethod::IS_ABSTRACT);
+	}
+
+	/**
+	 * Returns if the method is final.
+	 *
+	 * @return boolean
+	 */
+	public function isFinal()
+	{
+		return (bool) ($this->modifiers & InternalReflectionMethod::IS_FINAL);
+	}
+
+	/**
+	 * Returns if the method is private.
+	 *
+	 * @return boolean
+	 */
+	public function isPrivate()
+	{
+		return (bool) ($this->modifiers & InternalReflectionMethod::IS_PRIVATE);
+	}
+
+	/**
+	 * Returns if the method is protected.
+	 *
+	 * @return boolean
+	 */
+	public function isProtected()
+	{
+		return (bool) ($this->modifiers & InternalReflectionMethod::IS_PROTECTED);
+	}
+
+	/**
+	 * Returns if the method is public.
+	 *
+	 * @return boolean
+	 */
+	public function isPublic()
+	{
+		return (bool) ($this->modifiers & InternalReflectionMethod::IS_PUBLIC);
+	}
+
+	/**
+	 * Returns if the method is static.
+	 *
+	 * @return boolean
+	 */
+	public function isStatic()
+	{
+		return (bool) ($this->modifiers & InternalReflectionMethod::IS_STATIC);
+	}
+
+	/**
 	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
 	 *
 	 * The {@see getModifiers()} method is called only when really necessary making this
@@ -190,6 +250,66 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns if the method is a constructor.
+	 *
+	 * @return boolean
+	 */
+	public function isConstructor()
+	{
+		return (bool) ($this->modifiers & self::IS_CONSTRUCTOR);
+	}
+
+	/**
+	 * Returns if the method is a destructor.
+	 *
+	 * @return boolean
+	 */
+	public function isDestructor()
+	{
+		return (bool) ($this->modifiers & self::IS_DESTRUCTOR);
+	}
+
+	/**
+	 * Returns the method prototype.
+	 *
+	 * @return \TokenReflection\ReflectionMethod
+	 * @throws \TokenReflection\Exception\Runtime If the method has no prototype
+	 */
+	public function getPrototype()
+	{
+		if (null === $this->prototype) {
+			$prototype = null;
+
+			$declaring = $this->getDeclaringClass();
+			if ($parent = $declaring->getParentClass()) {
+				if ($parent->hasMethod($this->name)) {
+					$method = $parent->getMethod($this->name);
+					if (!$method->isPrivate()) {
+						$prototype = $method;
+					}
+				}
+			}
+
+			if (null === $prototype) {
+				foreach ($declaring->getInterfaces() as $interface) {
+					if ($interface->hasMethod($this->name)) {
+						$prototype = $interface->getMethod($this->name);
+						break;
+					}
+				}
+			}
+
+			$this->prototype = $prototype ?: ($this->isComplete() ? false : null);
+		}
+
+		if (empty($this->prototype)) {
+			throw new Exception\Runtime(sprintf('Method "%s::%s()" has no prototype.', $this->declaringClassName, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		return $this->prototype;
 	}
 
 	/**
@@ -343,83 +463,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
-	 * Returns if the method is abstract.
+	 * Returns if the property is set accessible.
 	 *
 	 * @return boolean
 	 */
-	public function isAbstract()
+	public function isAccessible()
 	{
-		return (bool) ($this->modifiers & InternalReflectionMethod::IS_ABSTRACT);
-	}
-
-	/**
-	 * Returns if the method is a constructor.
-	 *
-	 * @return boolean
-	 */
-	public function isConstructor()
-	{
-		return (bool) ($this->modifiers & self::IS_CONSTRUCTOR);
-	}
-
-	/**
-	 * Returns if the method is a destructor.
-	 *
-	 * @return boolean
-	 */
-	public function isDestructor()
-	{
-		return (bool) ($this->modifiers & self::IS_DESTRUCTOR);
-	}
-
-	/**
-	 * Returns if the method is final.
-	 *
-	 * @return boolean
-	 */
-	public function isFinal()
-	{
-		return (bool) ($this->modifiers & InternalReflectionMethod::IS_FINAL);
-	}
-
-	/**
-	 * Returns if the method is private.
-	 *
-	 * @return boolean
-	 */
-	public function isPrivate()
-	{
-		return (bool) ($this->modifiers & InternalReflectionMethod::IS_PRIVATE);
-	}
-
-	/**
-	 * Returns if the method is protected.
-	 *
-	 * @return boolean
-	 */
-	public function isProtected()
-	{
-		return (bool) ($this->modifiers & InternalReflectionMethod::IS_PROTECTED);
-	}
-
-	/**
-	 * Returns if the method is public.
-	 *
-	 * @return boolean
-	 */
-	public function isPublic()
-	{
-		return (bool) ($this->modifiers & InternalReflectionMethod::IS_PUBLIC);
-	}
-
-	/**
-	 * Returns if the method is static.
-	 *
-	 * @return boolean
-	 */
-	public function isStatic()
-	{
-		return (bool) ($this->modifiers & InternalReflectionMethod::IS_STATIC);
+		return $this->accessible;
 	}
 
 	/**
@@ -433,13 +483,15 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
-	 * Returns if the property is set accessible.
+	 * Returns if the definition is complete.
+	 *
+	 * Technically returns if the declaring class definition is complete.
 	 *
 	 * @return boolean
 	 */
-	public function isAccessible()
+	private function isComplete()
 	{
-		return $this->accessible;
+		return $this->getDeclaringClass()->isComplete();
 	}
 
 	/**
@@ -450,58 +502,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	public function getNamespaceAliases()
 	{
 		return $this->getDeclaringClass()->getNamespaceAliases();
-	}
-
-	/**
-	 * Returns the method prototype.
-	 *
-	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the method has no prototype
-	 */
-	public function getPrototype()
-	{
-		if (null === $this->prototype) {
-			$prototype = null;
-
-			$declaring = $this->getDeclaringClass();
-			if ($parent = $declaring->getParentClass()) {
-				if ($parent->hasMethod($this->name)) {
-					$method = $parent->getMethod($this->name);
-					if (!$method->isPrivate()) {
-						$prototype = $method;
-					}
-				}
-			}
-
-			if (null === $prototype) {
-				foreach ($declaring->getInterfaces() as $interface) {
-					if ($interface->hasMethod($this->name)) {
-						$prototype = $interface->getMethod($this->name);
-						break;
-					}
-				}
-			}
-
-			$this->prototype = $prototype ?: ($this->isComplete() ? false : null);
-		}
-
-		if (empty($this->prototype)) {
-			throw new Exception\Runtime(sprintf('Method "%s::%s()" has no prototype.', $this->declaringClassName, $this->name), Exception\Runtime::DOES_NOT_EXIST);
-		}
-
-		return $this->prototype;
-	}
-
-	/**
-	 * Returns if the definition is complete.
-	 *
-	 * Technically returns if the declaring class definition is complete.
-	 *
-	 * @return boolean
-	 */
-	private function isComplete()
-	{
-		return $this->getDeclaringClass()->isComplete();
 	}
 
 	/**

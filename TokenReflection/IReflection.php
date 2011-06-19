@@ -28,20 +28,6 @@ interface IReflection
 	public function getName();
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return \TokenReflection\Broker
-	 */
-	public function getBroker();
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized();
-
-	/**
 	 * Returns if the reflection object is internal.
 	 *
 	 * @return boolean
@@ -54,6 +40,20 @@ interface IReflection
 	 * @return boolean
 	 */
 	public function isUserDefined();
+
+	/**
+	 * Returns if the current reflection comes from a tokenized source.
+	 *
+	 * @return boolean
+	 */
+	public function isTokenized();
+
+	/**
+	 * Returns the reflection broker used by this reflection object.
+	 *
+	 * @return \TokenReflection\Broker
+	 */
+	public function getBroker();
 
 	/**
 	 * Magic __get method.

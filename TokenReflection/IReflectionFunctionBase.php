@@ -21,25 +21,18 @@ namespace TokenReflection;
 interface IReflectionFunctionBase extends IReflection
 {
 	/**
-	 * Returns the appropriate docblock definition.
+	 * Returns the namespace name.
 	 *
-	 * @return string|boolean
+	 * @return string
 	 */
-	public function getDocComment();
+	public function getNamespaceName();
 
 	/**
-	 * Returns the definition start line number in the file.
+	 * Returns if the function/method is defined within a namespace.
 	 *
-	 * @return integer
+	 * @return boolean
 	 */
-	public function getStartLine();
-
-	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return integer
-	 */
-	public function getEndLine();
+	public function inNamespace();
 
 	/**
 	 * Returns the PHP extension reflection.
@@ -63,54 +56,25 @@ interface IReflectionFunctionBase extends IReflection
 	public function getFileName();
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
-	 */
-	public function getNamespaceName();
-
-	/**
-	 * Returns the number of parameters.
+	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer
 	 */
-	public function getNumberOfParameters();
+	public function getStartLine();
 
 	/**
-	 * Returns the number of required parameters.
+	 * Returns the definition end line number in the file.
 	 *
 	 * @return integer
 	 */
-	public function getNumberOfRequiredParameters();
+	public function getEndLine();
 
 	/**
-	 * Returns function/method parameters.
+	 * Returns the appropriate docblock definition.
 	 *
-	 * @return array
+	 * @return string|boolean
 	 */
-	public function getParameters();
-
-	/**
-	 * Returns a function/method parameter.
-	 *
-	 * @param integer|string $parameter Parameter name or position
-	 * @return \TokenReflection\IReflectionParameter
-	 */
-	public function getParameter($parameter);
-
-	/**
-	 * Returns static variables.
-	 *
-	 * @return array
-	 */
-	public function getStaticVariables();
-
-	/**
-	 * Returns if the function/method is defined within a namespace.
-	 *
-	 * @return boolean
-	 */
-	public function inNamespace();
+	public function getDocComment();
 
 	/**
 	 * Returns if the function/method is a closure.
@@ -132,4 +96,40 @@ interface IReflectionFunctionBase extends IReflection
 	 * @return boolean
 	 */
 	public function returnsReference();
+
+	/**
+	 * Returns a function/method parameter.
+	 *
+	 * @param integer|string $parameter Parameter name or position
+	 * @return \TokenReflection\IReflectionParameter
+	 */
+	public function getParameter($parameter);
+
+	/**
+	 * Returns function/method parameters.
+	 *
+	 * @return array
+	 */
+	public function getParameters();
+
+	/**
+	 * Returns the number of parameters.
+	 *
+	 * @return integer
+	 */
+	public function getNumberOfParameters();
+
+	/**
+	 * Returns the number of required parameters.
+	 *
+	 * @return integer
+	 */
+	public function getNumberOfRequiredParameters();
+
+	/**
+	 * Returns static variables.
+	 *
+	 * @return array
+	 */
+	public function getStaticVariables();
 }

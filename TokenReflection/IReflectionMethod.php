@@ -42,50 +42,11 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	public function getModifiers();
 
 	/**
-	 * Returns the method prototype.
-	 *
-	 * @return \TokenReflection\IReflectionMethod
-	 */
-	public function getPrototype();
-
-	/**
-	 * Calls the method on an given instance.
-	 *
-	 * @param object $object Class instance
-	 * @param mixed $args
-	 * @return mixed
-	 */
-	public function invoke($object, $args);
-
-	/**
-	 * Calls the method on an given object.
-	 *
-	 * @param object $object Class instance
-	 * @param array $args Method parameter values
-	 * @return mixed
-	 */
-	public function invokeArgs($object, array $args);
-
-	/**
 	 * Returns if the method is abstract.
 	 *
 	 * @return boolean
 	 */
 	public function isAbstract();
-
-	/**
-	 * Returns if the method is a constructor.
-	 *
-	 * @return boolean
-	 */
-	public function isConstructor();
-
-	/**
-	 * Returns if the method is a destructor.
-	 *
-	 * @return boolean
-	 */
-	public function isDestructor();
 
 	/**
 	 * Returns if the method is final.
@@ -129,6 +90,45 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @return boolean
 	 */
 	public function is($filter = null);
+
+	/**
+	 * Returns if the method is a constructor.
+	 *
+	 * @return boolean
+	 */
+	public function isConstructor();
+
+	/**
+	 * Returns if the method is a destructor.
+	 *
+	 * @return boolean
+	 */
+	public function isDestructor();
+
+	/**
+	 * Returns the method prototype.
+	 *
+	 * @return \TokenReflection\IReflectionMethod
+	 */
+	public function getPrototype();
+
+	/**
+	 * Calls the method on an given instance.
+	 *
+	 * @param object $object Class instance
+	 * @param mixed $args
+	 * @return mixed
+	 */
+	public function invoke($object, $args);
+
+	/**
+	 * Calls the method on an given object.
+	 *
+	 * @param object $object Class instance
+	 * @param array $args Method parameter values
+	 * @return mixed
+	 */
+	public function invokeArgs($object, array $args);
 
 	/**
 	 * Sets a method to be accessible or not.

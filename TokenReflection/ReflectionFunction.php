@@ -122,17 +122,13 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	}
 
 	/**
-	 * Parses reflected element metadata from the token stream.
+	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionFunction
+	 * @return array
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	public function getNamespaceAliases()
 	{
-		return $this
-			->parseReturnsReference($tokenStream)
-			->parseName($tokenStream);
+		return $this->aliases;
 	}
 
 	/**
@@ -154,12 +150,16 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	}
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
+	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @return array
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionFunction
 	 */
-	public function getNamespaceAliases()
+	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return $this->aliases;
+		return $this
+			->parseReturnsReference($tokenStream)
+			->parseName($tokenStream);
 	}
 }

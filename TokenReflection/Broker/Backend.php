@@ -46,14 +46,6 @@ interface Backend
 	const NONEXISTENT_CLASSES = 4;
 
 	/**
-	 * Returns a reflection object of the given namespace.
-	 *
-	 * @param string $namespaceName Namespace name
-	 * @return \TokenReflection\IReflectionNamespace|null
-	 */
-	public function getNamespace($namespaceName);
-
-	/**
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
 	 * @param string $namespaceName Namespace name
@@ -62,12 +54,12 @@ interface Backend
 	public function hasNamespace($namespaceName);
 
 	/**
-	 * Returns a reflection object of the given class (FQN expected).
+	 * Returns a reflection object of the given namespace.
 	 *
-	 * @param string $className CLass bame
-	 * @return \TokenReflection\IReflectionClass|null
+	 * @param string $namespaceName Namespace name
+	 * @return \TokenReflection\IReflectionNamespace|null
 	 */
-	public function getClass($className);
+	public function getNamespace($namespaceName);
 
 	/**
 	 * Returns if there was such class processed (FQN expected).
@@ -78,20 +70,28 @@ interface Backend
 	public function hasClass($className);
 
 	/**
-	 * Returns a reflection object of a function (FQN expected).
+	 * Returns a reflection object of the given class (FQN expected).
 	 *
-	 * @param string $functionName Function name
-	 * @return \TokenReflection\IReflectionFunction|null
+	 * @param string $className CLass bame
+	 * @return \TokenReflection\IReflectionClass|null
 	 */
-	public function getFunction($functionName);
+	public function getClass($className);
 
 	/**
-	 * Returns if there was such function processed (FQN expected).
+	 * Returns all classes from all namespaces.
 	 *
-	 * @param string $functionName Function name
+	 * @param integer $type Returned class types (multiple values may be OR-ed)
+	 * @return array
+	 */
+	public function getClasses($type = Backend::TOKENIZED_CLASSES);
+
+	/**
+	 * Returns if there was such constant processed (FQN expected).
+	 *
+	 * @param string $constantName Constant name
 	 * @return boolean
 	 */
-	public function hasFunction($functionName);
+	public function hasConstant($constantName);
 
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
@@ -102,12 +102,34 @@ interface Backend
 	public function getConstant($constantName);
 
 	/**
-	 * Returns if there was such constant processed (FQN expected).
+	 * Returns all constants from all namespaces.
 	 *
-	 * @param string $constantName Constant name
+	 * @return array
+	 */
+	public function getConstants();
+
+	/**
+	 * Returns if there was such function processed (FQN expected).
+	 *
+	 * @param string $functionName Function name
 	 * @return boolean
 	 */
-	public function hasConstant($constantName);
+	public function hasFunction($functionName);
+
+	/**
+	 * Returns a reflection object of a function (FQN expected).
+	 *
+	 * @param string $functionName Function name
+	 * @return \TokenReflection\IReflectionFunction|null
+	 */
+	public function getFunction($functionName);
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions();
 
 	/**
 	 * Returns if the given file was already processed.
@@ -162,26 +184,4 @@ interface Backend
 	 * @return boolean
 	 */
 	public function getStoringTokenStreams();
-
-	/**
-	 * Returns all classes from all namespaces.
-	 *
-	 * @param integer $type Returned class types (multiple values may be OR-ed)
-	 * @return array
-	 */
-	public function getClasses($type = Backend::TOKENIZED_CLASSES);
-
-	/**
-	 * Returns all functions from all namespaces.
-	 *
-	 * @return array
-	 */
-	public function getFunctions();
-
-	/**
-	 * Returns all constants from all namespaces.
-	 *
-	 * @return array
-	 */
-	public function getConstants();
 }

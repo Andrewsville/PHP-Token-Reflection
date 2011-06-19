@@ -46,11 +46,18 @@ abstract class ReflectionBase implements IReflection
 	private static $methodCache = array();
 
 	/**
-	 * Reflection broker.
+	 * Object name (FQN).
 	 *
-	 * @var \TokenReflection\Broker
+	 * @var string
 	 */
-	private $broker;
+	protected $name;
+
+	/**
+	 * Filename with reflection subject definition.
+	 *
+	 * @var string
+	 */
+	private $fileName;
 
 	/**
 	 * Start line in the file.
@@ -81,18 +88,11 @@ abstract class ReflectionBase implements IReflection
 	private $parsedDocComment;
 
 	/**
-	 * Object name (FQN).
+	 * Reflection broker.
 	 *
-	 * @var string
+	 * @var \TokenReflection\Broker
 	 */
-	protected $name;
-
-	/**
-	 * Filename with reflection subject definition.
-	 *
-	 * @var string
-	 */
-	private $fileName;
+	private $broker;
 
 	/**
 	 * Start position in the file token stream.
@@ -160,134 +160,14 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Processes the parent reflection object.
+	 * Returns the name (FQN).
 	 *
-	 * @param \TokenReflection\Reflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return string
 	 */
-	protected function processParent(IReflection $parent)
+	public function getName()
 	{
-		// To be defined in child classes
-		return $this;
+		return $this->name;
 	}
-
-	/**
-	 * Parses child reflection objects from the token stream.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\Reflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
-	 */
-	protected function parseChildren(Stream $tokenStream, IReflection $parent)
-	{
-		// To be defined in child classes
-		return $this;
-	}
-
-	/**
-	 * Parses reflected element metadata from the token stream.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
-	 */
-	protected abstract function parse(Stream $tokenStream, IReflection $parent);
-
-	/**
-	 * Find the appropriate docblock.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\IReflection $parent Parent reflection
-	 * @return \TokenReflection\ReflectionBase
-	 */
-	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
-	{
-		if ($this instanceof ReflectionParameter) {
-			$this->docComment = new ReflectionAnnotation($this);
-			return $this;
-		}
-
-		$position = $tokenStream->key();
-		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
-			$value = $tokenStream->getTokenValue($position - 1);
-			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
-				$this->docComment = new ReflectionAnnotation($this, $value);
-				$this->startPosition--;
-			}
-		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
-			$value = $tokenStream->getTokenValue($position - 2);
-			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
-				$this->docComment = new ReflectionAnnotation($this, $value);
-				$this->startPosition -= 2;
-			}
-		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
-			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 1));
-			$this->startPosition--;
-		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
-			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 2));
-			$this->startPosition -= 2;
-		}
-
-		if (null === $this->docComment) {
-			$this->docComment = new ReflectionAnnotation($this);
-		}
-
-		if ($parent instanceof ReflectionBase) {
-			$this->docComment->setTemplates($parent->getDocblockTemplates());
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Returns the stack of docblock templates.
-	 *
-	 * @return array
-	 */
-	protected function getDocblockTemplates()
-	{
-		return $this->docblockTemplates;
-	}
-
-	/**
-	 * Saves the start line number.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token susbtream
-	 * @return \TokenReflection\ReflectionBase
-	 */
-	private final function parseStartLine(Stream $tokenStream)
-	{
-		$token = $tokenStream->current();
-		$this->startLine = $token[2];
-
-		$this->startPosition = $tokenStream->key();
-
-		return $this;
-	}
-
-	/**
-	 * Saves the end line number.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token susbtream
-	 * @return \TokenReflection\ReflectionBase
-	 */
-	private final function parseEndLine(Stream $tokenStream)
-	{
-		$token = $tokenStream->current();
-		$this->endLine = $token[2];
-
-		$this->endPosition = $tokenStream->key();
-
-		return $this;
-	}
-
-	/**
-	 * Parses the reflection object name.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @return \TokenReflection\ReflectionBase
-	 */
-	abstract protected function parseName(Stream $tokenStream);
 
 	/**
 	 * Returns the file name the reflection object is defined in.
@@ -320,26 +200,6 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Returns the start position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getStartPosition()
-	{
-		return $this->startPosition;
-	}
-
-	/**
-	 * Returns the end position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getEndPosition()
-	{
-		return $this->endPosition;
-	}
-
-	/**
 	 * Returns the PHP extension reflection.
 	 *
 	 * Alwyas returns null - everything is user defined.
@@ -361,6 +221,48 @@ abstract class ReflectionBase implements IReflection
 	public function getExtensionName()
 	{
 		return false;
+	}
+
+	/**
+	 * Returns the appropriate docblock definition.
+	 *
+	 * @return string|boolean
+	 */
+	public function getDocComment()
+	{
+		return $this->docComment->getDocComment();
+	}
+
+	/**
+	 * Checks if there is a particular annotation.
+	 *
+	 * @param string $name Annotation name
+	 * @return boolean
+	 */
+	final public function hasAnnotation($name)
+	{
+		return $this->docComment->hasAnnotation($name);
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
+	 * @return string|array|null
+	 */
+	final public function getAnnotation($name)
+	{
+		return $this->docComment->getAnnotation($name);
+	}
+
+	/**
+	 * Returns all annotations.
+	 *
+	 * @return array
+	 */
+	final public function getAnnotations()
+	{
+		return $this->docComment->getAnnotations();
 	}
 
 	/**
@@ -388,6 +290,16 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
+	 * Returns if the current reflection comes from a tokenized source.
+	 *
+	 * @return boolean
+	 */
+	public function isTokenized()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
 	 * @return boolean
@@ -398,23 +310,33 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Returns the name (FQN).
+	 * Returns the appropriate source code part.
 	 *
 	 * @return string
 	 */
-	public function getName()
+	public function getSource()
 	{
-		return $this->name;
+		return $this->broker->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
 	}
 
 	/**
-	 * Returns the appropriate docblock definition.
+	 * Returns the start position in the file token stream.
 	 *
-	 * @return string|boolean
+	 * @return integer
 	 */
-	public function getDocComment()
+	public function getStartPosition()
 	{
-		return $this->docComment->getDocComment();
+		return $this->startPosition;
+	}
+
+	/**
+	 * Returns the end position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getEndPosition()
+	{
+		return $this->endPosition;
 	}
 
 	/**
@@ -428,63 +350,11 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return true;
-	}
-
-	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return string|array|null
-	 */
-	final public function getAnnotation($name)
-	{
-		return $this->docComment->getAnnotation($name);
-	}
-
-	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return boolean
-	 */
-	final public function hasAnnotation($name)
-	{
-		return $this->docComment->hasAnnotation($name);
-	}
-
-	/**
-	 * Returns all annotations.
-	 *
-	 * @return array
-	 */
-	final public function getAnnotations()
-	{
-		return $this->docComment->getAnnotations();
-	}
-
-	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array
 	 */
 	abstract public function getNamespaceAliases();
-
-	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return $this->broker->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
-	}
 
 	/**
 	 * Magic __get method.
@@ -551,5 +421,135 @@ abstract class ReflectionBase implements IReflection
 		} catch (RuntimeException $e) {
 			return false;
 		}
+	}
+
+		/**
+	 * Returns the stack of docblock templates.
+	 *
+	 * @return array
+	 */
+	protected function getDocblockTemplates()
+	{
+		return $this->docblockTemplates;
+	}
+
+	/**
+	 * Processes the parent reflection object.
+	 *
+	 * @param \TokenReflection\Reflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	protected function processParent(IReflection $parent)
+	{
+		// To be defined in child classes
+		return $this;
+	}
+
+	/**
+	 * Find the appropriate docblock.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
+	{
+		if ($this instanceof ReflectionParameter) {
+			$this->docComment = new ReflectionAnnotation($this);
+			return $this;
+		}
+
+		$position = $tokenStream->key();
+		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
+			$value = $tokenStream->getTokenValue($position - 1);
+			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
+				$this->docComment = new ReflectionAnnotation($this, $value);
+				$this->startPosition--;
+			}
+		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
+			$value = $tokenStream->getTokenValue($position - 2);
+			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
+				$this->docComment = new ReflectionAnnotation($this, $value);
+				$this->startPosition -= 2;
+			}
+		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
+			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 1));
+			$this->startPosition--;
+		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
+			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 2));
+			$this->startPosition -= 2;
+		}
+
+		if (null === $this->docComment) {
+			$this->docComment = new ReflectionAnnotation($this);
+		}
+
+		if ($parent instanceof ReflectionBase) {
+			$this->docComment->setTemplates($parent->getDocblockTemplates());
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Saves the start line number.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token susbtream
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	private final function parseStartLine(Stream $tokenStream)
+	{
+		$token = $tokenStream->current();
+		$this->startLine = $token[2];
+
+		$this->startPosition = $tokenStream->key();
+
+		return $this;
+	}
+
+	/**
+	 * Saves the end line number.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token susbtream
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	private final function parseEndLine(Stream $tokenStream)
+	{
+		$token = $tokenStream->current();
+		$this->endLine = $token[2];
+
+		$this->endPosition = $tokenStream->key();
+
+		return $this;
+	}
+
+	/**
+	 * Parses reflected element metadata from the token stream.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	abstract protected function parse(Stream $tokenStream, IReflection $parent);
+
+	/**
+	 * Parses the reflection object name.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	abstract protected function parseName(Stream $tokenStream);
+
+	/**
+	 * Parses child reflection objects from the token stream.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Reflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionBase
+	 */
+	protected function parseChildren(Stream $tokenStream, IReflection $parent)
+	{
+		// To be defined in child classes
+		return $this;
 	}
 }

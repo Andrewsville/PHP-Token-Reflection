@@ -33,6 +33,13 @@ class Memory implements Broker\Backend
 	private $namespaces = array();
 
 	/**
+	 * All tokenized constants cache.
+	 *
+	 * @var array
+	 */
+	private $allConstants;
+
+	/**
 	 * All tokenized classes cache.
 	 *
 	 * @var array
@@ -45,13 +52,6 @@ class Memory implements Broker\Backend
 	 * @var array
 	 */
 	private $allFunctions;
-
-	/**
-	 * All tokenized constants cache.
-	 *
-	 * @var array
-	 */
-	private $allConstants;
 
 	/**
 	 * Token streams storage.
@@ -75,6 +75,17 @@ class Memory implements Broker\Backend
 	private $storingTokenStreams;
 
 	/**
+	 * Returns if there was such namespace processed (FQN expected).
+	 *
+	 * @param string $namespaceName Namespace name
+	 * @return boolean
+	 */
+	public function hasNamespace($namespaceName)
+	{
+		return isset($this->namespaces[ltrim($namespaceName, '\\')]);
+	}
+
+	/**
 	 * Returns a reflection object of the given namespace.
 	 *
 	 * @param string $namespaceName Namespace name
@@ -96,17 +107,6 @@ class Memory implements Broker\Backend
 	}
 
 	/**
-	 * Returns if there was such namespace processed (FQN expected).
-	 *
-	 * @param string $namespaceName Namespace name
-	 * @return boolean
-	 */
-	public function hasNamespace($namespaceName)
-	{
-		return isset($this->namespaces[ltrim($namespaceName, '\\')]);
-	}
-
-	/**
 	 * Returns all present namespaces.
 	 *
 	 * @return array
@@ -114,6 +114,30 @@ class Memory implements Broker\Backend
 	public function getNamespaces()
 	{
 		return $this->namespaces;
+	}
+
+	/**
+	 * Returns if there was such class processed (FQN expected).
+	 *
+	 * @param string $className Class name
+	 * @return boolean
+	 */
+	public function hasClass($className)
+	{
+		$className = ltrim($className, '\\');
+		if ($pos = strrpos($className, '\\')) {
+			$namespace = substr($className, $pos);
+			if (!isset($this->namespaces[$namespace])) {
+				return false;
+			}
+
+			$namespace = $this->getNamespace($namespace);
+			$className = substr($className, $pos + 1);
+		} else {
+			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+		}
+
+		return $namespace->hasClass($className);
 	}
 
 	/**
@@ -151,84 +175,60 @@ class Memory implements Broker\Backend
 	}
 
 	/**
-	 * Returns if there was such class processed (FQN expected).
+	 * Returns all classes from all namespaces.
 	 *
-	 * @param string $className Class name
-	 * @return boolean
+	 * @param integer $type Returned class types (multiple values may be OR-ed)
+	 * @return array
 	 */
-	public function hasClass($className)
+	public function getClasses($type = self::TOKENIZED_CLASSES)
 	{
-		$className = ltrim($className, '\\');
-		if ($pos = strrpos($className, '\\')) {
-			$namespace = substr($className, $pos);
-			if (!isset($this->namespaces[$namespace])) {
-				return false;
-			}
-
-			$namespace = $this->getNamespace($namespace);
-			$className = substr($className, $pos + 1);
-		} else {
-			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+		if (null === $this->allClasses) {
+			$this->allClasses = $this->parseClassLists();
 		}
 
-		return $namespace->hasClass($className);
+		$result = array();
+		foreach ($this->allClasses as $classType => $classes) {
+			if ($type & $classType) {
+				$result = array_merge($result, $classes);
+			}
+		}
+		return $result;
 	}
 
 	/**
-	 * Returns a reflection object of a function (FQN expected).
+	 * Returns if there was such constant processed (FQN expected).
 	 *
-	 * @param string $functionName Function name
-	 * @return \TokenReflection\IReflectionFunction
-	 * @throws \TokenReflection\Exception\Runtime If the requested function does not exist
-	 */
-	public function getFunction($functionName)
-	{
-		static $declared = array();
-		if (empty($declared)) {
-			$functions = get_defined_functions();
-			$declared = array_flip($functions['internal']);
-		}
-
-		$functionName = ltrim($functionName, '\\');
-		try {
-			$ns = $this->getNamespace(
-				($boundary = strrpos($functionName, '\\'))
-					? substr($functionName, 0, $boundary)     // Function within a namespace
-					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME  // Function wihout a namespace
-			);
-
-			return $ns->getFunction($functionName);
-		} catch (TokenReflection\Exception $e) {
-			if (isset($declared[$functionName])) {
-				return new Php\ReflectionFunction($functionName, $this->broker);
-			}
-
-			throw new Exception\Runtime(sprintf('Function %s does not exist.', $functionName), 0, $e);
-		}
-	}
-
-	/**
-	 * Returns if there was such function processed (FQN expected).
-	 *
-	 * @param string $functionName Function name
+	 * @param string $constantName Constant name
 	 * @return boolean
 	 */
-	public function hasFunction($functionName)
+	public function hasConstant($constantName)
 	{
-		$functionName = ltrim($functionName, '\\');
-		if ($pos = strrpos($functionName, '\\')) {
-			$namespace = substr($functionName, $pos);
-			if (!isset($this->namespaces[$namespace])) {
+		$constantName = ltrim($constantName, '\\');
+
+		if ($pos = strpos($constantName, '::')) {
+			$className = substr($constantName, 0, $pos);
+			$constantName = substr($constantName, $pos + 2);
+
+			if (!$this->hasClass($className)) {
 				return false;
 			}
 
-			$namespace = $this->getNamespace($namespace);
-			$functionName = substr($functionName, $pos + 1);
+			$parent = $this->getClass($className);
 		} else {
-			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			if ($pos = strrpos($constantName, '\\')) {
+				$namespace = substr($constantName, $pos);
+				if (!$this->hasNamespace($namespace)) {
+					return false;
+				}
+
+				$parent = $this->getNamespace($namespace);
+				$constantName = substr($constantName, $pos + 1);
+			} else {
+				$parent = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			}
 		}
 
-		return $namespace->hasFunction($functionName);
+		return $parent->hasConstant($constantName);
 	}
 
 	/**
@@ -280,39 +280,98 @@ class Memory implements Broker\Backend
 	}
 
 	/**
-	 * Returns if there was such constant processed (FQN expected).
+	 * Returns all constants from all namespaces.
 	 *
-	 * @param string $constantName Constant name
-	 * @return boolean
+	 * @return array
 	 */
-	public function hasConstant($constantName)
+	public function getConstants()
 	{
-		$constantName = ltrim($constantName, '\\');
-
-		if ($pos = strpos($constantName, '::')) {
-			$className = substr($constantName, 0, $pos);
-			$constantName = substr($constantName, $pos + 2);
-
-			if (!$this->hasClass($className)) {
-				return false;
-			}
-
-			$parent = $this->getClass($className);
-		} else {
-			if ($pos = strrpos($constantName, '\\')) {
-				$namespace = substr($constantName, $pos);
-				if (!$this->hasNamespace($namespace)) {
-					return false;
+		if (null === $this->allConstants) {
+			$this->allConstants = array();
+			foreach ($this->namespaces as $namespace) {
+				foreach ($namespace->getConstants() as $constant) {
+					$this->allConstants[$constant->getName()] = $constant;
 				}
-
-				$parent = $this->getNamespace($namespace);
-				$constantName = substr($constantName, $pos + 1);
-			} else {
-				$parent = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
 		}
 
-		return $parent->hasConstant($constantName);
+		return $this->allConstants;
+	}
+
+	/**
+	 * Returns if there was such function processed (FQN expected).
+	 *
+	 * @param string $functionName Function name
+	 * @return boolean
+	 */
+	public function hasFunction($functionName)
+	{
+		$functionName = ltrim($functionName, '\\');
+		if ($pos = strrpos($functionName, '\\')) {
+			$namespace = substr($functionName, $pos);
+			if (!isset($this->namespaces[$namespace])) {
+				return false;
+			}
+
+			$namespace = $this->getNamespace($namespace);
+			$functionName = substr($functionName, $pos + 1);
+		} else {
+			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+		}
+
+		return $namespace->hasFunction($functionName);
+	}
+
+	/**
+	 * Returns a reflection object of a function (FQN expected).
+	 *
+	 * @param string $functionName Function name
+	 * @return \TokenReflection\IReflectionFunction
+	 * @throws \TokenReflection\Exception\Runtime If the requested function does not exist
+	 */
+	public function getFunction($functionName)
+	{
+		static $declared = array();
+		if (empty($declared)) {
+			$functions = get_defined_functions();
+			$declared = array_flip($functions['internal']);
+		}
+
+		$functionName = ltrim($functionName, '\\');
+		try {
+			$ns = $this->getNamespace(
+				($boundary = strrpos($functionName, '\\'))
+					? substr($functionName, 0, $boundary)     // Function within a namespace
+					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME  // Function wihout a namespace
+			);
+
+			return $ns->getFunction($functionName);
+		} catch (TokenReflection\Exception $e) {
+			if (isset($declared[$functionName])) {
+				return new Php\ReflectionFunction($functionName, $this->broker);
+			}
+
+			throw new Exception\Runtime(sprintf('Function %s does not exist.', $functionName), 0, $e);
+		}
+	}
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions()
+	{
+		if (null === $this->allFunctions) {
+			$this->allFunctions = array();
+			foreach ($this->namespaces as $namespace) {
+				foreach ($namespace->getFunctions() as $function) {
+					$this->allFunctions[$function->getName()] = $function;
+				}
+			}
+		}
+
+		return $this->allFunctions;
 	}
 
 	/**
@@ -444,64 +503,5 @@ class Memory implements Broker\Backend
 		}
 
 		return $allClasses;
-	}
-
-	/**
-	 * Returns all classes from all namespaces.
-	 *
-	 * @param integer $type Returned class types (multiple values may be OR-ed)
-	 * @return array
-	 */
-	public function getClasses($type = self::TOKENIZED_CLASSES)
-	{
-		if (null === $this->allClasses) {
-			$this->allClasses = $this->parseClassLists();
-		}
-
-		$result = array();
-		foreach ($this->allClasses as $classType => $classes) {
-			if ($type & $classType) {
-				$result = array_merge($result, $classes);
-			}
-		}
-		return $result;
-	}
-
-	/**
-	 * Returns all functions from all namespaces.
-	 *
-	 * @return array
-	 */
-	public function getFunctions()
-	{
-		if (null === $this->allFunctions) {
-			$this->allFunctions = array();
-			foreach ($this->namespaces as $namespace) {
-				foreach ($namespace->getFunctions() as $function) {
-					$this->allFunctions[$function->getName()] = $function;
-				}
-			}
-		}
-
-		return $this->allFunctions;
-	}
-
-	/**
-	 * Returns all constants from all namespaces.
-	 *
-	 * @return array
-	 */
-	public function getConstants()
-	{
-		if (null === $this->allConstants) {
-			$this->allConstants = array();
-			foreach ($this->namespaces as $namespace) {
-				foreach ($namespace->getConstants() as $constant) {
-					$this->allConstants[$constant->getName()] = $constant;
-				}
-			}
-		}
-
-		return $this->allConstants;
 	}
 }

@@ -56,131 +56,77 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	private $aliases = array();
 
 	/**
-	 * Processes the parent reflection object.
+	 * Returns the unqualified name (UQN).
 	 *
-	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @return string
 	 */
-	protected function processParent(IReflection $parent)
+	public function getShortName()
 	{
-		if ($parent instanceof ReflectionFileNamespace) {
-			$this->namespaceName = $parent->getName();
-			$this->aliases = $parent->getNamespaceAliases();
-		} elseif ($parent instanceof ReflectionClass) {
-			$this->declaringClassName = $parent->getName();
-		} else {
-			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace or TokenReflection\ReflectionClass, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
+		$name = $this->getName();
+		if (null !== $this->namespaceName && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
+			$name = substr($name, strlen($this->namespaceName) + 1);
 		}
 
-		return parent::processParent($parent);
+		return $name;
 	}
 
 	/**
-	 * Parses reflected element metadata from the token stream.
+	 * Returns the name of the declaring class.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionConstant
+	 * @return string|null
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	public function getDeclaringClassName()
 	{
-		return $this
-			->parseName($tokenStream)
-			->parseValue($tokenStream, $parent);
+		return $this->declaringClassName;
 	}
 
 	/**
-	 * Parses the constant name.
+	 * Returns a reflection of the declaring class.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined
+	 * @return \TokenReflection\ReflectionClass|null
 	 */
-	protected function parseName(Stream $tokenStream)
+	public function getDeclaringClass()
 	{
-		try {
-			if ($tokenStream->is(T_CONST)) {
-				$tokenStream->skipWhitespaces();
-			}
-
-			if (!$tokenStream->is(T_STRING)) {
-				throw new Exception\Parse('The constant name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			if (null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
-				$this->name = $tokenStream->getTokenValue();
-			} else {
-				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
-			}
-
-			$tokenStream->skipWhitespaces();
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse constant name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		if (null === $this->declaringClassName) {
+			return null;
 		}
+
+		return $this->getBroker()->getClass($this->declaringClassName);
 	}
 
 	/**
-	 * Find the appropriate docblock.
+	 * Returns the namespace name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\IReflection $parent Parent reflection
-	 * @return \TokenReflection\ReflectionConstant
+	 * @return string
 	 */
-	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
+	public function getNamespaceName()
 	{
-		$position = $tokenStream->key() - 1;
-		while ($position > 0 && !$tokenStream->is(T_CONST, $position)) {
-			$position--;
-		}
-
-		$actual = $tokenStream->key();
-
-		parent::parseDocComment($tokenStream->seek($position), $parent);
-
-		$tokenStream->seek($actual);
-
-		return $this;
+		return null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 	/**
-	 * Parses the constant value.
+	 * Returns if the class is defined within a namespace.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined
+	 * @return boolean
 	 */
-	private function parseValue(Stream $tokenStream, IReflection $parent)
+	public function inNamespace()
 	{
-		try {
-			if (!$tokenStream->is('=')) {
-				throw new Exception\Parse('Could not find the definition start.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
+		return '' !== $this->getNamespaceName();
+	}
 
-			$tokenStream->skipWhitespaces();
-
-			static $acceptedTokens = array('-' => true, '+' => true, T_STRING => true, T_NS_SEPARATOR => true, T_CONSTANT_ENCAPSED_STRING => true, T_DNUMBER => true, T_LNUMBER => true, T_DOUBLE_COLON => true);
-			while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
-				$this->valueDefinition[] = $tokenStream->current();
-				$tokenStream->next();
-			}
-
-			if (empty($this->valueDefinition)) {
-				throw new Exception\Parse('Value definition is empty.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			$value = $tokenStream->getTokenValue();
-			if (null === $type || (',' !== $value && ';' !== $value)) {
-				throw new Exception\Parse(sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse constant value.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+	/**
+	 * Returns the constant value.
+	 *
+	 * @return mixed
+	 */
+	public function getValue()
+	{
+		if (is_array($this->valueDefinition)) {
+			$this->value = Resolver::getValueDefinition($this->valueDefinition, $this);
+			$this->valueDefinition = Resolver::getSourceCode($this->valueDefinition);
 		}
+
+		return $this->value;
 	}
 
 	/**
@@ -254,80 +200,6 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	}
 
 	/**
-	 * Returns the constant value.
-	 *
-	 * @return mixed
-	 */
-	public function getValue()
-	{
-		if (is_array($this->valueDefinition)) {
-			$this->value = Resolver::getValueDefinition($this->valueDefinition, $this);
-			$this->valueDefinition = Resolver::getSourceCode($this->valueDefinition);
-		}
-
-		return $this->value;
-	}
-
-	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string|null
-	 */
-	public function getDeclaringClassName()
-	{
-		return $this->declaringClassName;
-	}
-
-	/**
-	 * Returns a reflection of the declaring class.
-	 *
-	 * @return \TokenReflection\ReflectionClass|null
-	 */
-	public function getDeclaringClass()
-	{
-		if (null === $this->declaringClassName) {
-			return null;
-		}
-
-		return $this->getBroker()->getClass($this->declaringClassName);
-	}
-
-	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
-	 */
-	public function getNamespaceName()
-	{
-		return null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
-	}
-
-	/**
-	 * Returns if the class is defined within a namespace.
-	 *
-	 * @return boolean
-	 */
-	public function inNamespace()
-	{
-		return '' !== $this->getNamespaceName();
-	}
-
-	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
-	 */
-	public function getShortName()
-	{
-		$name = $this->getName();
-		if (null !== $this->namespaceName && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
-			$name = substr($name, strlen($this->namespaceName) + 1);
-		}
-
-		return $name;
-	}
-
-	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array
@@ -335,5 +207,133 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	public function getNamespaceAliases()
 	{
 		return null === $this->declaringClassName ? $this->aliases : $this->getDeclaringClass()->getNamespaceAliases();
+	}
+
+	/**
+	 * Processes the parent reflection object.
+	 *
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionBase
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 */
+	protected function processParent(IReflection $parent)
+	{
+		if ($parent instanceof ReflectionFileNamespace) {
+			$this->namespaceName = $parent->getName();
+			$this->aliases = $parent->getNamespaceAliases();
+		} elseif ($parent instanceof ReflectionClass) {
+			$this->declaringClassName = $parent->getName();
+		} else {
+			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace or TokenReflection\ReflectionClass, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
+		}
+
+		return parent::processParent($parent);
+	}
+
+	/**
+	 * Find the appropriate docblock.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection
+	 * @return \TokenReflection\ReflectionConstant
+	 */
+	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
+	{
+		$position = $tokenStream->key() - 1;
+		while ($position > 0 && !$tokenStream->is(T_CONST, $position)) {
+			$position--;
+		}
+
+		$actual = $tokenStream->key();
+
+		parent::parseDocComment($tokenStream->seek($position), $parent);
+
+		$tokenStream->seek($actual);
+
+		return $this;
+	}
+
+	/**
+	 * Parses reflected element metadata from the token stream.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionConstant
+	 */
+	protected function parse(Stream $tokenStream, IReflection $parent)
+	{
+		return $this
+			->parseName($tokenStream)
+			->parseValue($tokenStream, $parent);
+	}
+
+	/**
+	 * Parses the constant name.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @return \TokenReflection\ReflectionConstant
+	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined
+	 */
+	protected function parseName(Stream $tokenStream)
+	{
+		try {
+			if ($tokenStream->is(T_CONST)) {
+				$tokenStream->skipWhitespaces();
+			}
+
+			if (!$tokenStream->is(T_STRING)) {
+				throw new Exception\Parse('The constant name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			if (null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
+				$this->name = $tokenStream->getTokenValue();
+			} else {
+				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
+			}
+
+			$tokenStream->skipWhitespaces();
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse constant name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		}
+	}
+
+	/**
+	 * Parses the constant value.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @return \TokenReflection\ReflectionConstant
+	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined
+	 */
+	private function parseValue(Stream $tokenStream, IReflection $parent)
+	{
+		try {
+			if (!$tokenStream->is('=')) {
+				throw new Exception\Parse('Could not find the definition start.', Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			$tokenStream->skipWhitespaces();
+
+			static $acceptedTokens = array('-' => true, '+' => true, T_STRING => true, T_NS_SEPARATOR => true, T_CONSTANT_ENCAPSED_STRING => true, T_DNUMBER => true, T_LNUMBER => true, T_DOUBLE_COLON => true);
+			while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
+				$this->valueDefinition[] = $tokenStream->current();
+				$tokenStream->next();
+			}
+
+			if (empty($this->valueDefinition)) {
+				throw new Exception\Parse('Value definition is empty.', Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			$value = $tokenStream->getTokenValue();
+			if (null === $type || (',' !== $value && ';' !== $value)) {
+				throw new Exception\Parse(sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse constant value.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		}
 	}
 }

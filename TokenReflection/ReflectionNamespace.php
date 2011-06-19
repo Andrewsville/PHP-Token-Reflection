@@ -32,13 +32,6 @@ class ReflectionNamespace implements IReflectionNamespace
 	const NO_NAMESPACE_NAME = 'no-namespace';
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
-	/**
 	 * Namespace name.
 	 *
 	 * @var string
@@ -53,6 +46,13 @@ class ReflectionNamespace implements IReflectionNamespace
 	private $classes = array();
 
 	/**
+	 * List of constant reflections.
+	 *
+	 * @var array
+	 */
+	private $constants = array();
+
+	/**
 	 * List of function reflections.
 	 *
 	 * @var array
@@ -60,11 +60,11 @@ class ReflectionNamespace implements IReflectionNamespace
 	private $functions = array();
 
 	/**
-	 * List of constant reflections.
+	 * Reflection broker.
 	 *
-	 * @var array
+	 * @var \TokenReflection\Broker
 	 */
-	private $constants = array();
+	private $broker;
 
 	/**
 	 * Constructor.
@@ -76,6 +76,66 @@ class ReflectionNamespace implements IReflectionNamespace
 	{
 		$this->name = $name;
 		$this->broker = $broker;
+	}
+
+	/**
+	 * Returns the name.
+	 *
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * Returns if the namespace is internal.
+	 *
+	 * Always false.
+	 *
+	 * @return boolean
+	 */
+	public function isInternal()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the namespace is user defined.
+	 *
+	 * Always true.
+	 *
+	 * @return boolean
+	 */
+	public function isUserDefined()
+	{
+		return true;
+	}
+
+	/**
+	 * Returns if the current reflection comes from a tokenized source.
+	 *
+	 * @return boolean
+	 */
+	public function isTokenized()
+	{
+		return true;
+	}
+
+	/**
+	 * Returns if the namespace contains a class of the given name.
+	 *
+	 * @param string $className Class name
+	 * @return boolean
+	 */
+	public function hasClass($className)
+	{
+		$className = ltrim($className, '\\');
+		if (false === strpos($className, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
+			$className = $this->getName() . '\\' . $className;
+		}
+
+		return isset($this->classes[$className]);
 	}
 
 	/**
@@ -97,22 +157,6 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		return $this->classes[$className];
-	}
-
-	/**
-	 * Returns if the namespace contains a class of the given name.
-	 *
-	 * @param string $className Class name
-	 * @return boolean
-	 */
-	public function hasClass($className)
-	{
-		$className = ltrim($className, '\\');
-		if (false === strpos($className, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$className = $this->getName() . '\\' . $className;
-		}
-
-		return isset($this->classes[$className]);
 	}
 
 	/**
@@ -148,72 +192,19 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns a function reflection.
+	 * Returns if the namespace contains a constant of the given name.
 	 *
-	 * @param string $functionName Function name
-	 * @return \TokenReflection\ReflectionFunction
-	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist
-	 */
-	public function getFunction($functionName)
-	{
-		$functionName = ltrim($functionName, '\\');
-		if (false === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$functionName = $this->getName() . '\\' . $functionName;
-		}
-
-		if (!isset($this->functions[$functionName])) {
-			throw new Exception\Runtime(sprintf('Function "%s" does not exist.', $functionName), Exception\Runtime::DOES_NOT_EXIST);
-		}
-
-		return $this->functions[$functionName];
-	}
-
-	/**
-	 * Returns if the namespace contains a function of the given name.
-	 *
-	 * @param string $functionName Function name
+	 * @param string $constantName Constant name
 	 * @return boolean
 	 */
-	public function hasFunction($functionName)
+	public function hasConstant($constantName)
 	{
-		$functionName = ltrim($functionName, '\\');
-		if (false === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$functionName = $this->getName() . '\\' . $functionName;
+		$constantName = ltrim($constantName, '\\');
+		if (false === strpos($constantName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
+			$constantName = $this->getName() . '\\' . $constantName;
 		}
 
-		return isset($this->functions[$functionName]);
-	}
-
-	/**
-	 * Returns function reflections.
-	 *
-	 * @return array
-	 */
-	public function getFunctions()
-	{
-		return $this->functions;
-	}
-
-	/**
-	 * Returns function names (FQN).
-	 *
-	 * @return array
-	 */
-	public function getFunctionNames()
-	{
-		return array_keys($this->functions);
-	}
-
-	/**
-	 * Returns function unqualified names (UQN).
-	 *
-	 * @return array
-	 */
-	public function getFunctionShortNames()
-	{
-		return array_map(function(IReflectionFunction $function) {
-			return $function->getShortName();
-		}, $this->functions);
+		return isset($this->constants[$constantName]);
 	}
 
 	/**
@@ -235,22 +226,6 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		return $this->constants[$constantName];
-	}
-
-	/**
-	 * Returns if the namespace contains a constant of the given name.
-	 *
-	 * @param string $constantName Constant name
-	 * @return boolean
-	 */
-	public function hasConstant($constantName)
-	{
-		$constantName = ltrim($constantName, '\\');
-		if (false === strpos($constantName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$constantName = $this->getName() . '\\' . $constantName;
-		}
-
-		return isset($this->constants[$constantName]);
 	}
 
 	/**
@@ -286,93 +261,72 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
-	 * Returns the name.
+	 * Returns if the namespace contains a function of the given name.
 	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return \TokenReflection\Broker|null
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
+	 * @param string $functionName Function name
 	 * @return boolean
 	 */
-	public function isTokenized()
+	public function hasFunction($functionName)
 	{
-		return true;
+		$functionName = ltrim($functionName, '\\');
+		if (false === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
+			$functionName = $this->getName() . '\\' . $functionName;
+		}
+
+		return isset($this->functions[$functionName]);
 	}
 
 	/**
-	 * Returns if the namespace is internal.
+	 * Returns a function reflection.
 	 *
-	 * Always false.
-	 *
-	 * @return boolean
+	 * @param string $functionName Function name
+	 * @return \TokenReflection\ReflectionFunction
+	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist
 	 */
-	public function isInternal()
+	public function getFunction($functionName)
 	{
-		return false;
+		$functionName = ltrim($functionName, '\\');
+		if (false === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
+			$functionName = $this->getName() . '\\' . $functionName;
+		}
+
+		if (!isset($this->functions[$functionName])) {
+			throw new Exception\Runtime(sprintf('Function "%s" does not exist.', $functionName), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		return $this->functions[$functionName];
 	}
 
 	/**
-	 * Returns if the namespace is user defined.
+	 * Returns function reflections.
 	 *
-	 * Always true.
-	 *
-	 * @return boolean
+	 * @return array
 	 */
-	public function isUserDefined()
+	public function getFunctions()
 	{
-		return true;
+		return $this->functions;
 	}
 
+	/**
+	 * Returns function names (FQN).
+	 *
+	 * @return array
+	 */
+	public function getFunctionNames()
+	{
+		return array_keys($this->functions);
+	}
 
 	/**
-	 * Adds a namespace part from a file.
+	 * Returns function unqualified names (UQN).
 	 *
-	 * @param \TokenReflection\ReflectionFileNamespace $namespace Namespace part
-	 * @throws \TokenReflection\Exception\Runtime If one of classes form the namespace are already defined
-	 * @throws \TokenReflection\Exception\Runtime If one of functions form the namespace are already defined
-	 * @throws \TokenReflection\Exception\Runtime If one of constants form the namespace are already defined
+	 * @return array
 	 */
-	public function addFileNamespace(ReflectionFileNamespace $namespace)
+	public function getFunctionShortNames()
 	{
-		$classes = $namespace->getClasses();
-		foreach ($this->classes as $className => $reflection) {
-			if (isset($classes[$className])) {
-				throw new Exception\Runtime(sprintf('Class "%s" is already defined; in file "%s".', $className, $reflection->getFileName()), Exception\Runtime::ALREADY_EXISTS);
-			}
-		}
-		$this->classes = array_merge($this->classes, $classes);
-
-		$functions = $namespace->getFunctions();
-		foreach ($this->functions as $functionName => $reflection) {
-			if (isset($functions[$functionName])) {
-				throw new Exception\Runtime(sprintf('Function "%s" is already defined; in file "%s".', $functionName, $reflection->getFileName()), Exception\Runtime::ALREADY_EXISTS);
-			}
-		}
-		$this->functions = array_merge($this->functions, $functions);
-
-		$constants = $namespace->getConstants();
-		foreach ($this->constants as $constantName => $reflection) {
-			if (isset($constants[$constantName])) {
-				throw new Exception\Runtime(sprintf('Constant "%s" is already defined; in file "%s".', $constantName, $reflection->getFileName()), Exception\Runtime::ALREADY_EXISTS);
-			}
-		}
-		$this->constants = array_merge($this->constants, $constants);
+		return array_map(function(IReflectionFunction $function) {
+			return $function->getShortName();
+		}, $this->functions);
 	}
 
 	/**
@@ -447,6 +401,41 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
+	 * Adds a namespace part from a file.
+	 *
+	 * @param \TokenReflection\ReflectionFileNamespace $namespace Namespace part
+	 * @throws \TokenReflection\Exception\Runtime If one of classes form the namespace are already defined
+	 * @throws \TokenReflection\Exception\Runtime If one of functions form the namespace are already defined
+	 * @throws \TokenReflection\Exception\Runtime If one of constants form the namespace are already defined
+	 */
+	public function addFileNamespace(ReflectionFileNamespace $namespace)
+	{
+		$classes = $namespace->getClasses();
+		foreach ($this->classes as $className => $reflection) {
+			if (isset($classes[$className])) {
+				throw new Exception\Runtime(sprintf('Class "%s" is already defined; in file "%s".', $className, $reflection->getFileName()), Exception\Runtime::ALREADY_EXISTS);
+			}
+		}
+		$this->classes = array_merge($this->classes, $classes);
+
+		$functions = $namespace->getFunctions();
+		foreach ($this->functions as $functionName => $reflection) {
+			if (isset($functions[$functionName])) {
+				throw new Exception\Runtime(sprintf('Function "%s" is already defined; in file "%s".', $functionName, $reflection->getFileName()), Exception\Runtime::ALREADY_EXISTS);
+			}
+		}
+		$this->functions = array_merge($this->functions, $functions);
+
+		$constants = $namespace->getConstants();
+		foreach ($this->constants as $constantName => $reflection) {
+			if (isset($constants[$constantName])) {
+				throw new Exception\Runtime(sprintf('Constant "%s" is already defined; in file "%s".', $constantName, $reflection->getFileName()), Exception\Runtime::ALREADY_EXISTS);
+			}
+		}
+		$this->constants = array_merge($this->constants, $constants);
+	}
+
+	/**
 	 * Returns the appropriate source code part.
 	 *
 	 * Impossible for namespaces.
@@ -456,6 +445,16 @@ class ReflectionNamespace implements IReflectionNamespace
 	public function getSource()
 	{
 		throw new Exception\Runtime('Cannot export source code of a namespace.', Exception\Runtime::UNSUPPORTED);
+	}
+
+	/**
+	 * Returns the reflection broker used by this reflection object.
+	 *
+	 * @return \TokenReflection\Broker|null
+	 */
+	public function getBroker()
+	{
+		return $this->broker;
 	}
 
 	/**

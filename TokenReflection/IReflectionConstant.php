@@ -21,6 +21,13 @@ namespace TokenReflection;
 interface IReflectionConstant extends IReflection
 {
 	/**
+	 * Returns the unqualified name (UQN).
+	 *
+	 * @return string
+	 */
+	public function getShortName();
+
+	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return \TokenReflection\IReflectionClass
@@ -49,25 +56,11 @@ interface IReflectionConstant extends IReflection
 	public function inNamespace();
 
 	/**
-	 * Returns the constant value.
-	 *
-	 * @return mixed
-	 */
-	public function getValue();
-
-	/**
-	 * Returns the part of the source code defining the constant value.
+	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string
 	 */
-	public function getValueDefinition();
-
-	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return string|boolean
-	 */
-	public function getDocComment();
+	public function getFileName();
 
 	/**
 	 * Returns the definition start line number in the file.
@@ -84,18 +77,25 @@ interface IReflectionConstant extends IReflection
 	public function getEndLine();
 
 	/**
-	 * Returns the file name the reflection object is defined in.
+	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string
+	 * @return string|boolean
 	 */
-	public function getFileName();
+	public function getDocComment();
 
 	/**
-	 * Returns the unqualified name (UQN).
+	 * Returns the constant value.
+	 *
+	 * @return mixed
+	 */
+	public function getValue();
+
+	/**
+	 * Returns the part of the source code defining the constant value.
 	 *
 	 * @return string
 	 */
-	public function getShortName();
+	public function getValueDefinition();
 
 	/**
 	 * Returns the string representation of the reflection object.

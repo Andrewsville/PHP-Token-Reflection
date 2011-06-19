@@ -26,18 +26,18 @@ use RecursiveDirectoryIterator, RecursiveIteratorIterator;
 class Broker
 {
 	/**
+	 * Cache identifier for namespaces.
+	 *
+	 * @var string
+	 */
+	const CACHE_NAMESPACE = 'namespace';
+
+	/**
 	 * Cache identifier for classes.
 	 *
 	 * @var string
 	 */
 	const CACHE_CLASS = 'class';
-
-	/**
-	 * Cache identifier for functions.
-	 *
-	 * @var string
-	 */
-	const CACHE_FUNCTION = 'function';
 
 	/**
 	 * Cache identifier for constants.
@@ -47,11 +47,11 @@ class Broker
 	const CACHE_CONSTANT = 'constant';
 
 	/**
-	 * Cache identifier for namespaces.
+	 * Cache identifier for functions.
 	 *
 	 * @var string
 	 */
-	const CACHE_NAMESPACE = 'namespace';
+	const CACHE_FUNCTION = 'function';
 
 	/**
 	 * Namespace/class backend.
@@ -76,10 +76,10 @@ class Broker
 	public function __construct(Broker\Backend $backend, $storingTokenStream = true)
 	{
 		$this->cache = array(
+			self::CACHE_NAMESPACE => array(),
 			self::CACHE_CLASS => array(),
 			self::CACHE_CONSTANT => array(),
-			self::CACHE_FUNCTION => array(),
-			self::CACHE_NAMESPACE => array()
+			self::CACHE_FUNCTION => array()
 		);
 
 		$this->backend = $backend
@@ -214,6 +214,17 @@ class Broker
 	}
 
 	/**
+	 * Returns if the broker contains a namespace of the given name.
+	 *
+	 * @param string $namespaceName Namespace name
+	 * @return boolean
+	 */
+	public function hasNamespace($namespaceName)
+	{
+		return isset($this->cache[self::CACHE_NAMESPACE][$namespaceName]) || $this->backend->hasNamespace($namespaceName);
+	}
+
+	/**
 	 * Returns a reflection object of the given namespace.
 	 *
 	 * @param string $namespaceName Namespace name
@@ -236,14 +247,14 @@ class Broker
 	}
 
 	/**
-	 * Returns if the broker contains a namespace of the given name.
+	 * Returns if the broker contains a class of the given name.
 	 *
-	 * @param string $namespaceName Namespace name
+	 * @param string $className Class name
 	 * @return boolean
 	 */
-	public function hasNamespace($namespaceName)
+	public function hasClass($className)
 	{
-		return isset($this->cache[self::CACHE_NAMESPACE][$namespaceName]) || $this->backend->hasNamespace($namespaceName);
+		return isset($this->cache[self::CACHE_CLASS][$className]) || $this->backend->hasClass($className);
 	}
 
 	/**
@@ -266,46 +277,25 @@ class Broker
 	}
 
 	/**
-	 * Returns if the broker contains a class of the given name.
+	 * Returns all classes from all namespaces.
 	 *
-	 * @param string $className Class name
-	 * @return boolean
+	 * @param integer $types Returned class types (multiple values may be OR-ed)
+	 * @return array
 	 */
-	public function hasClass($className)
+	public function getClasses($types = Broker\Backend::TOKENIZED_CLASSES)
 	{
-		return isset($this->cache[self::CACHE_CLASS][$className]) || $this->backend->hasClass($className);
+		return $this->backend->getClasses($types);
 	}
 
 	/**
-	 * Returns a reflection object of a function (FQN expected).
+	 * Returns if the broker contains a constant of the given name.
 	 *
-	 * @param string $functionName Function name
-	 * @return \TokenReflection\ReflectionFunction|null
-	 */
-	public function getFunction($functionName)
-	{
-		$functionName = ltrim($functionName, '\\');
-
-		if (isset($this->cache[self::CACHE_FUNCTION][$functionName])) {
-			return $this->cache[self::CACHE_FUNCTION][$functionName];
-		}
-
-		if ($function = $this->backend->getFunction($functionName)) {
-			$this->cache[self::CACHE_FUNCTION][$functionName] = $function;
-		}
-
-		return $function;
-	}
-
-	/**
-	 * Returns if the broker contains a function of the given name.
-	 *
-	 * @param string $functionName Function name
+	 * @param string $constantName Constant name
 	 * @return boolean
 	 */
-	public function hasFunction($functionName)
+	public function hasConstant($constantName)
 	{
-		return isset($this->cache[self::CACHE_FUNCTION][$functionName]) || $this->backend->hasFunction($functionName);
+		return isset($this->cache[self::CACHE_CONSTANT][$constantName]) || $this->backend->hasConstant($constantName);
 	}
 
 	/**
@@ -330,14 +320,55 @@ class Broker
 	}
 
 	/**
-	 * Returns if the broker contains a constant of the given name.
+	 * Returns all constants from all namespaces.
 	 *
-	 * @param string $constantName Constant name
+	 * @return array
+	 */
+	public function getConstants()
+	{
+		return $this->backend->getConstants();
+	}
+
+	/**
+	 * Returns if the broker contains a function of the given name.
+	 *
+	 * @param string $functionName Function name
 	 * @return boolean
 	 */
-	public function hasConstant($constantName)
+	public function hasFunction($functionName)
 	{
-		return isset($this->cache[self::CACHE_CONSTANT][$constantName]) || $this->backend->hasConstant($constantName);
+		return isset($this->cache[self::CACHE_FUNCTION][$functionName]) || $this->backend->hasFunction($functionName);
+	}
+
+	/**
+	 * Returns a reflection object of a function (FQN expected).
+	 *
+	 * @param string $functionName Function name
+	 * @return \TokenReflection\ReflectionFunction|null
+	 */
+	public function getFunction($functionName)
+	{
+		$functionName = ltrim($functionName, '\\');
+
+		if (isset($this->cache[self::CACHE_FUNCTION][$functionName])) {
+			return $this->cache[self::CACHE_FUNCTION][$functionName];
+		}
+
+		if ($function = $this->backend->getFunction($functionName)) {
+			$this->cache[self::CACHE_FUNCTION][$functionName] = $function;
+		}
+
+		return $function;
+	}
+
+	/**
+	 * Returns all functions from all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getFunctions()
+	{
+		return $this->backend->getFunctions();
 	}
 
 	/**
@@ -354,37 +385,6 @@ class Broker
 		} catch (Exception $e) {
 			throw new Exception\Runtime(sprintf('Could not retrieve token stream for file %s.', $fileName), 0, $e);
 		}
-	}
-
-	/**
-	 * Returns all classes from all namespaces.
-	 *
-	 * @param integer $types Returned class types (multiple values may be OR-ed)
-	 * @return array
-	 */
-	public function getClasses($types = Broker\Backend::TOKENIZED_CLASSES)
-	{
-		return $this->backend->getClasses($types);
-	}
-
-	/**
-	 * Returns all functions from all namespaces.
-	 *
-	 * @return array
-	 */
-	public function getFunctions()
-	{
-		return $this->backend->getFunctions();
-	}
-
-	/**
-	 * Returns all constants from all namespaces.
-	 *
-	 * @return array
-	 */
-	public function getConstants()
-	{
-		return $this->backend->getConstants();
 	}
 
 	/**
