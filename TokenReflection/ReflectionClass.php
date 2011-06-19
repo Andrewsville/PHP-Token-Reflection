@@ -246,7 +246,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isCloneable()
 	{
-		if (!$this->isInstantiable()) {
+		if ($this->isInterface() || $this->isAbstract()) {
 			return false;
 		}
 

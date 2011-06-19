@@ -135,7 +135,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function isCloneable()
 	{
-		if (!$this->isInstantiable()) {
+		if ($this->isInterface() || $this->isAbstract()) {
 			return false;
 		}
 
