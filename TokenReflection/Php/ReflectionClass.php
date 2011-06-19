@@ -128,7 +128,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	/**
 	 * Returns if objects of this class are cloneable.
 	 *
-	 * Not implemented in 5.3, but in trunk though.
+	 * Introduced in PHP 5.4.
 	 *
 	 * @return boolean
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
