@@ -255,25 +255,29 @@ class ReflectionClassTest extends Test
 		$rfl = $this->getClassReflection('publicConstructor');
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertTrue($rfl->token->isInstantiable());
-// Not yet in the internal reflection
-//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
 		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('privateConstructor');
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
-// Not yet in the internal reflection
-//		 $this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
-		$this->assertFalse($rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
+		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('publicClone');
-// Not yet in the internal reflection
-//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
 		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('privateClone');
-// Not yet in the internal reflection
-//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
 		$this->assertFalse($rfl->token->isCloneable());
 	}
 
