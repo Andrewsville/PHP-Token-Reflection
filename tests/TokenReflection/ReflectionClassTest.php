@@ -19,10 +19,24 @@ use ReflectionClass as InternalReflectionClass;
 
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Class test.
+ *
+ * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor <andrew@andrewsville.cz>
+ */
 class ReflectionClassTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'class';
 
+	/**
+	 * Tests getting of class constants.
+	 */
 	public function testConstants()
 	{
 		$rfl = $this->getClassReflection('constants');
@@ -61,6 +75,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(array(), $rfl->token->getOwnConstantReflections());
 	}
 
+	/**
+	 * Tests getting of class properties.
+	 */
 	public function testProperties()
 	{
 		$rfl = $this->getClassReflection('properties');
@@ -230,6 +247,9 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests if class is instantiable or cloneable.
+	 */
 	public function testInstantiableCloneable()
 	{
 		$rfl = $this->getClassReflection('publicConstructor');
@@ -257,6 +277,9 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->isCloneable());
 	}
 
+	/**
+	 * Tests getting of class methods.
+	 */
 	public function testMethods()
 	{
 		$rfl = $this->getClassReflection('methods');
@@ -328,6 +351,9 @@ class ReflectionClassTest extends Test
 		$this->assertNull($rfl->token->getDestructor());
 	}
 
+	/**
+	 * Tests getting of start and end line.
+	 */
 	public function testLines()
 	{
 		$rfl = $this->getClassReflection('lines');
@@ -337,6 +363,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(5, $rfl->token->getEndLine());
 	}
 
+	/**
+	 * Tests if class is instance of a object and tests creating new instances.
+	 */
 	public function testInstances()
 	{
 		$rfl = $this->getClassReflection('instances');
@@ -354,6 +383,9 @@ class ReflectionClassTest extends Test
 		$this->assertInstanceOf($this->getClassName('instances'), $rfl->token->newInstanceArgs(array(1)));
 	}
 
+	/**
+	 * Tests if class is abstract.
+	 */
 	public function testAbstract()
 	{
 		$rfl = $this->getClassReflection('abstract');
@@ -381,6 +413,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
 
+	/**
+	 * Tests if class is final.
+	 */
 	public function testFinal()
 	{
 		$rfl = $this->getClassReflection('final');
@@ -396,6 +431,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
 
+	/**
+	 * Tests if class is an interface.
+	 */
 	public function testInterface()
 	{
 		$rfl = $this->getClassReflection('interface');
@@ -411,6 +449,9 @@ class ReflectionClassTest extends Test
 		$this->assertTrue($rfl->token->isInstantiable());
 	}
 
+	/**
+	 * Tests if class implements interfaces.
+	 */
 	public function testInterfaces()
 	{
 		$rfl = $this->getClassReflection('interfaces');
@@ -445,6 +486,9 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 	}
 
+	/**
+	 * Tests if class is iterator.
+	 */
 	public function testIterator()
 	{
 		$rfl = $this->getClassReflection('iterator');
@@ -456,6 +500,9 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->isIterateable());
 	}
 
+	/**
+	 * Tests if class has parent.
+	 */
 	public function testParent()
 	{
 		$rfl = $this->getClassReflection('parent');
@@ -488,6 +535,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(array(), $rfl->token->getParentClassNameList());
 	}
 
+	/**
+	 * Tests if class is user defined or internal.
+	 */
 	public function testUserDefined()
 	{
 		$rfl = $this->getClassReflection('userDefined');
@@ -520,6 +570,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
 
+	/**
+	 * Tests getting of documentation comment.
+	 */
 	public function testDocComment()
 	{
 		$rfl = $this->getClassReflection('docComment');
@@ -531,6 +584,9 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	/**
+	 * Tests getting of inherited documentation comment.
+	 */
 	public function testDocCommentInheritance()
 	{
 		require_once $this->getFilePath('docCommentInheritance');
@@ -555,6 +611,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame($parent->token->getAnnotations(), $rfl->token->getAnnotations());
 	}
 
+	/**
+	 * Tests if class is defined in namespace.
+	 */
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
@@ -584,6 +643,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame($this->getClassName('noNamespace'), $rfl->token->getShortName());
 	}
 
+	/**
+	 * Tests getting of property source code.
+	 */
 	public function testPropertyGetSource()
 	{
 		static $expected = array(
@@ -601,6 +663,9 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests getting of method source code.
+	 */
 	public function testMethodGetSource()
 	{
 		static $expected = array(
@@ -615,6 +680,9 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests getting of constant source code.
+	 */
 	public function testConstantGetSource()
 	{
 		static $expected = array(
@@ -630,6 +698,9 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests getting of class source code.
+	 */
 	public function testClassGetSource()
 	{
 		static $expected = array(
@@ -646,6 +717,9 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests export.
+	 */
 	public function testToString()
 	{
 		$tests = array(

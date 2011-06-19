@@ -17,10 +17,24 @@ namespace TokenReflection;
 
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Constant test.
+ *
+ * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor <andrew@andrewsville.cz>
+ */
 class ReflectionConstantTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'constant';
 
+	/**
+	 * Tests getting of start and end line.
+	 */
 	public function testLines()
 	{
 		$token = $this->getConstantTokenReflection('lines');
@@ -29,6 +43,9 @@ class ReflectionConstantTest extends Test
 		$this->assertSame(5, $token->getEndLine());
 	}
 
+	/**
+	 * Tests getting of documentation comment.
+	 */
 	public function testComment()
 	{
 		$token = $this->getConstantTokenReflection('docComment');
@@ -38,6 +55,9 @@ class ReflectionConstantTest extends Test
 		$this->assertFalse($token->getDocComment());
 	}
 
+	/**
+	 * Tests different types of constant value.
+	 */
 	public function testTypes()
 	{
 		$constants = array('string' => 'string', 'integer' => 1, 'integerNegative' => -1, 'float' => 1.1, 'floatNegative' => -1.1, 'boolean' => true, 'null' => null, 'constant' => E_NOTICE);
@@ -49,6 +69,9 @@ class ReflectionConstantTest extends Test
 		}
 	}
 
+	/**
+	 * Tests if constant is defined in namespace or in class.
+	 */
 	public function testInNamespace()
 	{
 		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
@@ -75,6 +98,9 @@ class ReflectionConstantTest extends Test
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 	}
 
+	/**
+	 * Tests export.
+	 */
 	public function testToString()
 	{
 		$tests = array(
