@@ -597,7 +597,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private function parseInternalModifiers(ReflectionClass $class)
 	{
 		$name = strtolower($this->name);
-		if ('__construct' === $name || ($class && !$class->inNamespace() && strtolower($class->getShortName()) === $name)) {
+		// In PHP 5.3.3+ the ctor can be named only __construct in namespaced classes
+		if ('__construct' === $name || ($class && (!$class->inNamespace() || PHP_VERSION_ID < 50303) && strtolower($class->getShortName()) === $name)) {
 			$this->modifiers |= self::IS_CONSTRUCTOR;
 		} elseif ('__destruct' === $name) {
 			$this->modifiers |= self::IS_DESTRUCTOR;

@@ -166,7 +166,11 @@ class ReflectionMethodTest extends Test
 		$token = $this->getBroker()->getClass('TokenReflection\Test\MethodNamedConstructor')->getMethod('MethodNamedConstructor');
 
 		$this->assertSame($internal->isConstructor(), $token->isConstructor());
-		$this->assertFalse($token->isConstructor());
+		if (PHP_VERSION_ID >= 50303) {
+			$this->assertFalse($token->isConstructor());
+		} else {
+			$this->assertTrue($token->isConstructor());
+		}
 	}
 
 	/**
@@ -435,8 +439,10 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($internal->invokeArgs($object, array(1, 2)), $token->invokeArgs($object, array(1, 2)));
 		$this->assertSame(3, $token->invokeArgs($object, array(1, 2)));
 
-		$this->assertSame($internal->setAccessible(false), $token->setAccessible(false));
-		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
+		if (PHP_VERSION_ID >= 50302) {
+			$this->assertSame($internal->setAccessible(false), $token->setAccessible(false));
+			$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
+		}
 
 		try {
 			$token->invoke(new \Exception(), 1, 2);
@@ -481,11 +487,13 @@ class ReflectionMethodTest extends Test
 			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
 
-		$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));
-		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
-		$this->assertSame(3, $token->invoke($object, 1, 2));
-		$this->assertSame($internal->invokeArgs($object, array(1, 2)), $token->invokeArgs($object, array(1, 2)));
-		$this->assertSame(3, $token->invokeArgs($object, array(1, 2)));
+		if (PHP_VERSION_ID >= 50302) {
+			$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));
+			$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
+			$this->assertSame(3, $token->invoke($object, 1, 2));
+			$this->assertSame($internal->invokeArgs($object, array(1, 2)), $token->invokeArgs($object, array(1, 2)));
+			$this->assertSame(3, $token->invokeArgs($object, array(1, 2)));
+		}
 	}
 
 	/**
