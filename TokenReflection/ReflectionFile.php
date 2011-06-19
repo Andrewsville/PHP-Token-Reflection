@@ -127,7 +127,10 @@ class ReflectionFile implements IReflection
 	 */
 	public static function export($argument, $return = false)
 	{
-		return ReflectionBase::export($argument, $return);
+		if ($return) {
+			return $this->__toString();
+		}
+		echo $this->__toString();
 	}
 
 	/**
