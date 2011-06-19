@@ -10,7 +10,7 @@
  * with this library in the file license.txt.
  *
  * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Jaroslav Hanslík <kontakt@kukulich.cz>
  */
 
 namespace TokenReflection;

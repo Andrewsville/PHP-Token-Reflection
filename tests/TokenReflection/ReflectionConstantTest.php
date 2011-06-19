@@ -10,7 +10,7 @@
  * with this library in the file LICENSE.
  *
  * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Jaroslav Hanslík <kontakt@kukulich.cz>
  */
 
 namespace TokenReflection;
@@ -20,7 +20,7 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * Constant test.
  *
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Jaroslav Hanslík <kontakt@kukulich.cz>
  * @author Ondřej Nešpor <andrew@andrewsville.cz>
  */
 class ReflectionConstantTest extends Test
