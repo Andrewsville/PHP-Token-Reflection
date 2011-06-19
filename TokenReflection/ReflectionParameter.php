@@ -28,7 +28,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @var string
 	 */
-	CONST ARRAY_CONSTRAINT = 'array';
+	CONST ARRAY_TYPE_HINT = 'array';
 
 	/**
 	 * Declaring class name.
@@ -59,11 +59,11 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	private $defaultValueDefinition = array();
 
 	/**
-	 * Defines a constraint (class name or array) of parameter values.
+	 * Defines a type hint (class name or array) of parameter values.
 	 *
 	 * @var string
 	 */
-	private $valueConstraint;
+	private $typeHint;
 
 	/**
 	 * Defines a type hint (class name or array) of parameter values as it was defined.
@@ -199,7 +199,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function isArray()
 	{
-		return $this->valueConstraint === self::ARRAY_CONSTRAINT;
+		return $this->typeHint === self::ARRAY_TYPE_HINT;
 	}
 
 	/**
@@ -231,7 +231,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Returns the required class name of the value.
 	 *
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If the constraint class FQN could not be determined
+	 * @throws \TokenReflection\Exception\Runtime If the type hint class FQN could not be determined
 	 */
 	public function getClassName()
 	{
@@ -240,7 +240,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 		}
 
 		try {
-			if (null === $this->valueConstraint && null !== $this->originalTypeHint) {
+			if (null === $this->typeHint && null !== $this->originalTypeHint) {
 				if (null !== $this->declaringClassName) {
 					$parent = $this->getDeclaringClass();
 					if (null === $parent) {
@@ -253,29 +253,29 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 					}
 				}
 
-				$lConstraint = strtolower($this->originalTypeHint);
-				if ('parent' === $lConstraint || 'self' === $lConstraint) {
+				$lTypeHint = strtolower($this->originalTypeHint);
+				if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
 					if (null === $this->declaringClassName) {
-						throw new Exception\Runtime('Parameter constraint cannot be "self" nor "parent" when not a method.', Exception::UNSUPPORTED);
+						throw new Exception\Runtime('Parameter type hint cannot be "self" nor "parent" when not a method.', Exception::UNSUPPORTED);
 					}
 
-					if ('parent' === $lConstraint) {
+					if ('parent' === $lTypeHint) {
 						if ($parent->isInterface() || null === $parent->getParentClassName()) {
 							throw new Exception\Runtime(sprintf('Class "%s" has no parent.', $this->declaringClassName), Exception::DOES_NOT_EXIST);
 						}
 
-						$this->valueConstraint = $parent->getParentClassName();
+						$this->typeHint = $parent->getParentClassName();
 					} else {
-						$this->valueConstraint = $this->declaringClassName;
+						$this->typeHint = $this->declaringClassName;
 					}
 				} else {
-					$this->valueConstraint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+					$this->typeHint= ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
 				}
 			}
 
-			return $this->valueConstraint;
+			return $this->typeHint;
 		} catch (Exception\Runtime $e) {
-			throw new Exception\Runtime('Could not determine the class constraint FQN.', 0, $e);
+			throw new Exception\Runtime('Could not determine the class type hint FQN.', 0, $e);
 		}
 	}
 
@@ -457,27 +457,27 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
 		return $this
-			->parseConstraint($tokenStream)
+			->parseTypeHint($tokenStream)
 			->parsePassedByReference($tokenStream)
 			->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
 	}
 
 	/**
-	 * Parses the value type constraint.
+	 * Parses the type hint.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the constraint class name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the type hint class name could not be determined
 	 */
-	private function parseConstraint(Stream $tokenStream)
+	private function parseTypeHint(Stream $tokenStream)
 	{
 		try {
 			$type = $tokenStream->getType();
 
 			if (T_ARRAY === $type) {
-				$this->valueConstraint = self::ARRAY_CONSTRAINT;
-				$this->originalTypeHint = self::ARRAY_CONSTRAINT;
+				$this->typeHint = self::ARRAY_TYPE_HINT;
+				$this->originalTypeHint = self::ARRAY_TYPE_HINT;
 				$tokenStream->skipWhitespaces();
 			} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
 				$className = '';
