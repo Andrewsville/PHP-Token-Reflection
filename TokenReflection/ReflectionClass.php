@@ -356,7 +356,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @return boolean
 	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
 	 */
-	public function implementsInterface($interface) {
+	public function implementsInterface($interface)
+	{
 		if (is_object($interface)) {
 			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
 				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
