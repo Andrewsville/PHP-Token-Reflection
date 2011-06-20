@@ -366,7 +366,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 		// @todo support inherits
 		return sprintf(
-			"Method [ <%s%s%s%s> %s%s%s%s%s%s method %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			"%sMethod [ <%s%s%s%s> %s%s%s%s%s%s method %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
 			!empty($internal) ? $internal : 'user',
 			$overwrite,
 			$prototype,

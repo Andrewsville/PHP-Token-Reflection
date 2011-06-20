@@ -233,6 +233,7 @@ class ReflectionFunctionTest extends Test
 	public function testToString()
 	{
 		$tests = array(
+			'lines', 'docComment', 'noComment',
 			'invoke', 'noParameters', 'parameters', 'reference', 'noReference', 'noNamespace', 'userDefined', 'noClosure'
 		);
 		foreach ($tests as $test) {

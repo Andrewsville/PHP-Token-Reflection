@@ -293,6 +293,7 @@ class ReflectionPropertyTest extends Test
 	public function testToString()
 	{
 		$tests = array(
+			'lines', 'docComment', 'noComment',
 			'default', 'typeNull', 'typeArray', 'typeString', 'typeInteger', 'typeFloat'
 		);
 		foreach ($tests as $test) {

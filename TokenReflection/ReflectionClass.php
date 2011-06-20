@@ -1122,7 +1122,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$methods = sprintf("\n\n  - Methods [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
 
 		return sprintf(
-			"%s [ <user>%s %s%s%s %s%s%s ] {\n  @@ %s %d-%d%s%s%s%s%s\n}\n",
+			"%s%s [ <user>%s %s%s%s %s%s%s ] {\n  @@ %s %d-%d%s%s%s%s%s\n}\n",
+			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
 			$this->isInterface() ? 'Interface' : 'Class',
 			$this->isIterateable() ? ' <iterateable>' : '',
 			$this->isAbstract() ? 'abstract ' : '',

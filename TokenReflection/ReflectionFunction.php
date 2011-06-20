@@ -60,7 +60,8 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 			);
 		}
 		return sprintf(
-			"Function [ <user> function %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			"%sFunction [ <user> function %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
 			$this->returnsReference() ? '&' : '',
 			$this->getName(),
 			$this->getFileName(),

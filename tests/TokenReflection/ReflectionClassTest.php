@@ -727,6 +727,7 @@ class ReflectionClassTest extends Test
 	public function testToString()
 	{
 		$tests = array(
+			'lines', 'docComment', 'noDocComment',
 			'constants', 'noConstants', 'properties', 'noProperties', 'doubleProperties',
 			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
 			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',

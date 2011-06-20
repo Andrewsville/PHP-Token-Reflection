@@ -525,6 +525,7 @@ class ReflectionMethodTest extends Test
 	public function testToString()
 	{
 		$tests = array(
+			'lines', 'docComment', 'noComment',
 			'prototype', 'noPrototype', 'parameters', 'reference', 'noReference', 'noClosure', 'noNamespace', 'userDefined', 'shadow'
 		);
 		foreach ($tests as $test) {
