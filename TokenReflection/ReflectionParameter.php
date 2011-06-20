@@ -146,10 +146,15 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Returns the default value.
 	 *
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If property has no default value
+	 * @throws \TokenReflection\Exception\Runtime If the property is not optional
+	 * @throws \TokenReflection\Exception\Runtime If the property has no default value
 	 */
 	public function getDefaultValue()
 	{
+		if (!$this->isOptional()) {
+			throw new Exception\Runtime(sprintf('Property "%s" is not optional.', $this->name), Exception\Runtime::UNSUPPORTED);
+		}
+
 		if (is_array($this->defaultValueDefinition)) {
 			if (0 === count($this->defaultValueDefinition)) {
 				throw new Exception\Runtime(sprintf('Property "%s" has no default value.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
@@ -286,11 +291,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function allowsNull()
 	{
-		if (($this->isArray() || null !== $this->getOriginalTypeHint()) && 'null' !== strtolower($this->getDefaultValueDefinition())) {
-			return false;
-		}
-
-		return true;
+		return !$this->isArray();
 	}
 
 	/**
