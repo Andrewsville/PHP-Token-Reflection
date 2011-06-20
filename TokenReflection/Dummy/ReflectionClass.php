@@ -843,7 +843,7 @@ class ReflectionClass implements IReflectionClass
 	{
 		return sprintf(
 			"Class|Interface [ <user> class|interface %s ] {\n  %s%s%s%s%s\n}\n",
-			$this->getShortName(),
+			$this->getName(),
 			"\n\n  - Constants [0] {\n  }",
 			"\n\n  - Static properties [0] {\n  }",
 			"\n\n  - Static methods [0] {\n  }",

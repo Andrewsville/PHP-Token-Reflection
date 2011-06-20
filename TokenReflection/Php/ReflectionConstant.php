@@ -304,7 +304,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 		return sprintf(
 			"Constant [ %s %s ] { %s }\n",
 			gettype($this->getValue()),
-			$this->getShortName(),
+			$this->getName(),
 			$this->getValue()
 		);
 	}
