@@ -159,7 +159,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 		return sprintf(
 			"Constant [ %s %s ] { %s }\n",
 			gettype($this->getValue()),
-			$this->getShortName(),
+			$this->getName(),
 			$this->getValue()
 		);
 	}

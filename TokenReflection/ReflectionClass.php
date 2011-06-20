@@ -1129,7 +1129,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			$this->isAbstract() ? 'abstract ' : '',
 			$this->isFinal() ? 'final ' : '',
 			$this->isInterface() ? 'interface' : 'class',
-			$this->getShortName(),
+			$this->getName(),
 			null !== $this->getParentClassName() ? ' extends ' . $this->getParentClassName() : '',
 			$implements,
 			$this->getFileName(),
