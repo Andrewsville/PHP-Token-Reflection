@@ -112,25 +112,25 @@ class ReflectionFile implements IReflection
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string
+	 * @throws \TokenReflection\Exception\Runtime
 	 */
 	public function __toString()
 	{
-		return '';
+		throw new Exception\Runtime('__toString is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
 	 * Exports a reflected object.
 	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
 	 * @param string $argument Reflection object name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime
 	 */
-	public static function export($argument, $return = false)
+	public static function export(Broker $broker, $argument, $return = false)
 	{
-		if ($return) {
-			return $this->__toString();
-		}
-		echo $this->__toString();
+		throw new Exception\Runtime('Export is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
