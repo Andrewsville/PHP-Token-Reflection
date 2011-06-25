@@ -28,7 +28,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @var string
 	 */
-	CONST ARRAY_TYPE_HINT = 'array';
+	const ARRAY_TYPE_HINT = 'array';
 
 	/**
 	 * Declaring class name.
@@ -274,7 +274,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 						$this->typeHint = $this->declaringClassName;
 					}
 				} else {
-					$this->typeHint= ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+					$this->typeHint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
 				}
 			}
 

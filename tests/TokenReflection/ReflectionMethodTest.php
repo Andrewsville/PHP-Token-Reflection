@@ -297,7 +297,7 @@ class ReflectionMethodTest extends Test
 
 		// Access level
 		$rfl = $this->getClassReflection('accessLevel');
-		foreach(array('private', 'protected') as $method) {
+		foreach (array('private', 'protected') as $method) {
 			$extended = $method . 'Extended';
 			$noExtended = $method . 'NoExtended';
 

@@ -57,6 +57,8 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Creates a token substream.
 	 *
 	 * @param string $fileName File name
+	 * @throws \TokenReflection\Exception\Parse If tokenizer PHP extension is missing
+	 * @throws \TokenReflection\Exception\Parse If file does not exist or is not readable
 	 */
 	public function __construct($fileName)
 	{

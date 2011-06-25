@@ -188,13 +188,14 @@ class ReflectionFile implements IReflection
 	/**
 	 * Prepares namespace reflections from the file.
 	 *
+	 * @return \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed
 	 */
 	private function parse()
 	{
 		if ($this->tokenStream->count() <= 1) {
 			// No PHP content
-			return;
+			return $this;
 		}
 
 		try {

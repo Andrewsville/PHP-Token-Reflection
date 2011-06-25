@@ -329,8 +329,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	{
 		$combinations = array();
 
-		for ($i = 0; $i < pow(2, count($filters)); $i++)
-		{
+		for ($i = 0; $i < pow(2, count($filters)); $i++) {
 			$combination = 0;
 			for ($j = 0; $j < count($filters); $j++) {
 				if ($i % pow(2, $j + 1) < pow(2, $j)) {

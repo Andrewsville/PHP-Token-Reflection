@@ -76,6 +76,8 @@ class Resolver
 	 * @param array $tokens Tokenized definition
 	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
 	 * @return string
+	 * @throws \TokenReflection\Exception\Runtime If invalid reflection object is given
+	 * @throws \TokenReflection\Exception\Runtime If invalid source code is given
 	 */
 	final public static function getValueDefinition(array $tokens, ReflectionBase $reflection)
 	{
@@ -173,7 +175,7 @@ class Resolver
 
 		// Adding a dummy token to the end
 		$tokens[] = array(-1);
-							 ;
+
 		$constants = array();
 		$constant = '';
 		foreach ($tokens as $token) {

@@ -177,7 +177,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses other namespaces usage and aliases from the token stream.
 	 *
-	 * @param \TokenReflection\Stream Token substream
+	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 * @throws \TokenReflection\Exception\Parse If aliases could not be parsed
 	 */

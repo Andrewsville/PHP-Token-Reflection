@@ -37,7 +37,7 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 *
 	 * @return mixed
 	 */
-	//public function invoke();
+	// public function invoke();
 
 	/**
 	 * Calls the function.

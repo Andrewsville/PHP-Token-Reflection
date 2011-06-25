@@ -423,7 +423,7 @@ abstract class ReflectionBase implements IReflection
 		}
 	}
 
-		/**
+	/**
 	 * Returns the stack of docblock templates.
 	 *
 	 * @return array

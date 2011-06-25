@@ -1073,7 +1073,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getConstantReflections() as $constant) {
-			$buffer .= "    " . $constant->__toString();
+			$buffer .= '    ' . $constant->__toString();
 			$count++;
 		}
 		$constants = sprintf("\n\n  - Constants [%d] {\n%s  }", $count, $buffer);
@@ -1083,7 +1083,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getProperties() as $property) {
-			$string = "    " . preg_replace('~\n(?!$)~', "\n    ", $property->__toString());
+			$string = '    ' . preg_replace('~\n(?!$)~', "\n    ", $property->__toString());
 			if ($property->isStatic()) {
 				$sBuffer .= $string;
 				$sCount++;
@@ -1320,7 +1320,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		try {
-			while(true) {
+			while (true) {
 				$tokenStream->skipWhitespaces();
 
 				$parentClassName = '';

@@ -278,7 +278,6 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
 	 * @throws \TokenReflection\Exception\Parse If parameters could not be parsed
-	 *
 	 */
 	final protected function parseParameters(Stream $tokenStream)
 	{

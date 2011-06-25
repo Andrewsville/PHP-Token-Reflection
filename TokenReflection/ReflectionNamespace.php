@@ -350,7 +350,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getConstants() as $constant) {
-			$buffer .= "    " . $constant->__toString();
+			$buffer .= '    ' . $constant->__toString();
 			$count++;
 		}
 		$constants = sprintf("\n\n  - Constants [%d] {\n%s  }", $count, $buffer);

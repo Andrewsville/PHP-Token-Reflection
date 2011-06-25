@@ -262,7 +262,6 @@ class Broker
 	 *
 	 * @param string $className CLass bame
 	 * @return \TokenReflection\ReflectionClass|null
-	 *
 	 */
 	public function getClass($className)
 	{
