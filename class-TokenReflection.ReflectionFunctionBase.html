@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
+	<meta name="generator" content="ApiGen 2.0" />
 
 	<title>Class TokenReflection\ReflectionFunctionBase | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
 	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
@@ -160,36 +160,36 @@
 
 	<table class="summary" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="getModifiers" id="_getModifiers">
+	<tr data-order="getName" id="_getName">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
 			 public 
-			integer
+			string
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getModifiers">#</a>
+		<a class="anchor" href="#_getName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#60" title="Go to source code">getModifiers</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#60" title="Go to source code">getName</a>(
 		)</code>
 
 		<div class="short">
-			Returns function/method modifiers.
+			Returns the name (FQN).
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns function/method modifiers.</p>
+<p>Returns the name (FQN).</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code>integer</code><br />
+					<code>string</code><br />
 				</div>
 
 
@@ -197,42 +197,40 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="inNamespace" id="_inNamespace">
+	<tr data-order="getShortName" id="_getShortName">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
 			 public 
-			boolean
+			string
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_inNamespace">#</a>
+		<a class="anchor" href="#_getShortName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#70" title="Go to source code">inNamespace</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#74" title="Go to source code">getShortName</a>(
 		)</code>
 
 		<div class="short">
-			Returns if the function/method is defined within a namespace.
+			Returns the unqualified name (UQN).
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns if the function/method is defined within a namespace.</p>
+<p>Returns the unqualified name (UQN).</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code>boolean</code><br />
+					<code>string</code><br />
 				</div>
 
 
 
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_inNamespace">TokenReflection\IReflectionFunctionBase::inNamespace</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -249,7 +247,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getNamespaceName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#80" title="Go to source code">getNamespaceName</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#84" title="Go to source code">getNamespaceName</a>(
 		)</code>
 
 		<div class="short">
@@ -275,7 +273,46 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getNumberOfParameters" id="_getNumberOfParameters">
+	<tr data-order="inNamespace" id="_inNamespace">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_inNamespace">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#94" title="Go to source code">inNamespace</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the function/method is defined within a namespace.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the function/method is defined within a namespace.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_inNamespace">TokenReflection\IReflectionFunctionBase::inNamespace</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getModifiers" id="_getModifiers">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
@@ -286,18 +323,18 @@
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getNumberOfParameters">#</a>
+		<a class="anchor" href="#_getModifiers">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#90" title="Go to source code">getNumberOfParameters</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#104" title="Go to source code">getModifiers</a>(
 		)</code>
 
 		<div class="short">
-			Returns the number of parameters.
+			Returns function/method modifiers.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns the number of parameters.</p>
+<p>Returns function/method modifiers.</p>
 
 
 
@@ -309,176 +346,6 @@
 
 
 
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getNumberOfParameters">TokenReflection\IReflectionFunctionBase::getNumberOfParameters</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getNumberOfRequiredParameters" id="_getNumberOfRequiredParameters">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			integer
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getNumberOfRequiredParameters">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#100" title="Go to source code">getNumberOfRequiredParameters</a>(
-		)</code>
-
-		<div class="short">
-			Returns the number of required parameters.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the number of required parameters.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>integer</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getNumberOfRequiredParameters">TokenReflection\IReflectionFunctionBase::getNumberOfRequiredParameters</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getParameters" id="_getParameters">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			array
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getParameters">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#116" title="Go to source code">getParameters</a>(
-		)</code>
-
-		<div class="short">
-			Returns parameters.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns parameters.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>array</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getParameters">TokenReflection\IReflectionFunctionBase::getParameters</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getParameter" id="_getParameter">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			<code><a href="class-TokenReflection.ReflectionParameter.html">TokenReflection\ReflectionParameter</a></code>
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getParameter">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#126" title="Go to source code">getParameter</a>(
-				integer|string
-				<var>$parameter</var>
-		)</code>
-
-		<div class="short">
-			Returns a particular function/method parameter.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns a particular function/method parameter.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$parameter</var></dt>
-					<dd><code>integer|string</code><br /> Parameter name or position</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.ReflectionParameter.html">TokenReflection\ReflectionParameter</a></code></code><br />
-				</div>
-
-				<h4>Throws</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If there is no parameter of the given name<br />
-					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If there is no parameter at the given position<br />
-				</div>
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getParameter">TokenReflection\IReflectionFunctionBase::getParameter</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getStaticVariables" id="_getStaticVariables">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			array
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getStaticVariables">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#152" title="Go to source code">getStaticVariables</a>(
-		)</code>
-
-		<div class="short">
-			Returns static variables.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns static variables.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>array</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getStaticVariables">TokenReflection\IReflectionFunctionBase::getStaticVariables</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -495,7 +362,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_isClosure">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#162" title="Go to source code">isClosure</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#114" title="Go to source code">isClosure</a>(
 		)</code>
 
 		<div class="short">
@@ -534,7 +401,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_returnsReference">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#172" title="Go to source code">returnsReference</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#124" title="Go to source code">returnsReference</a>(
 		)</code>
 
 		<div class="short">
@@ -560,75 +427,257 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getName" id="_getName">
+	<tr data-order="getParameter" id="_getParameter">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
 			 public 
-			string
+			<code><a href="class-TokenReflection.ReflectionParameter.html">TokenReflection\ReflectionParameter</a></code>
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getName">#</a>
+		<a class="anchor" href="#_getParameter">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#182" title="Go to source code">getName</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#134" title="Go to source code">getParameter</a>(
+				integer|string
+				<var>$parameter</var>
 		)</code>
 
 		<div class="short">
-			Returns the name (FQN).
+			Returns a particular function/method parameter.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns the name (FQN).</p>
+<p>Returns a particular function/method parameter.</p>
 
 
 
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$parameter</var></dt>
+					<dd><code>integer|string</code><br /> Parameter name or position</dd>
+				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code>string</code><br />
+					<code><code><a href="class-TokenReflection.ReflectionParameter.html">TokenReflection\ReflectionParameter</a></code></code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If there is no parameter of the given name<br />
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If there is no parameter at the given position<br />
 				</div>
 
 
-
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getParameter">TokenReflection\IReflectionFunctionBase::getParameter</a></code></div>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getShortName" id="_getShortName">
+	<tr data-order="getParameters" id="_getParameters">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
 			 public 
-			string
+			array
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getShortName">#</a>
+		<a class="anchor" href="#_getParameters">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#196" title="Go to source code">getShortName</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#160" title="Go to source code">getParameters</a>(
 		)</code>
 
 		<div class="short">
-			Returns the unqualified name (UQN).
+			Returns parameters.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns the unqualified name (UQN).</p>
+<p>Returns parameters.</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code>string</code><br />
+					<code>array</code><br />
 				</div>
 
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getParameters">TokenReflection\IReflectionFunctionBase::getParameters</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getNumberOfParameters" id="_getNumberOfParameters">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getNumberOfParameters">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#170" title="Go to source code">getNumberOfParameters</a>(
+		)</code>
+
+		<div class="short">
+			Returns the number of parameters.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the number of parameters.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>integer</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getNumberOfParameters">TokenReflection\IReflectionFunctionBase::getNumberOfParameters</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getNumberOfRequiredParameters" id="_getNumberOfRequiredParameters">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getNumberOfRequiredParameters">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#180" title="Go to source code">getNumberOfRequiredParameters</a>(
+		)</code>
+
+		<div class="short">
+			Returns the number of required parameters.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the number of required parameters.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>integer</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getNumberOfRequiredParameters">TokenReflection\IReflectionFunctionBase::getNumberOfRequiredParameters</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getStaticVariables" id="_getStaticVariables">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getStaticVariables">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#196" title="Go to source code">getStaticVariables</a>(
+		)</code>
+
+		<div class="short">
+			Returns static variables.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns static variables.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>array</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionFunctionBase.html#_getStaticVariables">TokenReflection\IReflectionFunctionBase::getStaticVariables</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="parseReturnsReference" id="_parseReturnsReference">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			final protected 
+			<code><a href="class-TokenReflection.ReflectionFunctionBase.html">TokenReflection\ReflectionFunctionBase</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_parseReturnsReference">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#206" title="Go to source code">parseReturnsReference</a>(
+				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
+				
+				<var>$tokenStream</var>
+		)</code>
+
+		<div class="short">
+			Parses if the function/method returns its value as reference.
+		</div>
+
+		<div class="detailed">
+			
+<p>Parses if the function/method returns its value as reference.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br /> Token substream</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.ReflectionFunctionBase.html">TokenReflection\ReflectionFunctionBase</a></code></code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If could not be determined if the function\method returns its value by reference<br />
+				</div>
 
 
 		</div>
@@ -647,7 +696,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parseName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#206" title="Go to source code">parseName</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#237" title="Go to source code">parseName</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>
@@ -696,7 +745,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parseChildren">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#230" title="Go to source code">parseChildren</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#261" title="Go to source code">parseChildren</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>, 
@@ -746,7 +795,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parseParameters">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#244" title="Go to source code">parseParameters</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#275" title="Go to source code">parseParameters</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>
@@ -795,7 +844,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parseStaticVariables">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#284" title="Go to source code">parseStaticVariables</a>(
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#314" title="Go to source code">parseStaticVariables</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>
@@ -825,55 +874,6 @@
 				<h4>Throws</h4>
 				<div class="smallList">
 					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If static variables could not be parsed<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="parseReturnsReference" id="_parseReturnsReference">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			final protected 
-			<code><a href="class-TokenReflection.ReflectionFunctionBase.html">TokenReflection\ReflectionFunctionBase</a></code>
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_parseReturnsReference">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#308" title="Go to source code">parseReturnsReference</a>(
-				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
-				
-				<var>$tokenStream</var>
-		)</code>
-
-		<div class="short">
-			Parses if the function/method returns its value as reference.
-		</div>
-
-		<div class="detailed">
-			
-<p>Parses if the function/method returns its value as reference.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br /> Token substream</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.ReflectionFunctionBase.html">TokenReflection\ReflectionFunctionBase</a></code></code><br />
-				</div>
-
-				<h4>Throws</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If could not be determined if the function\method returns its value by reference<br />
 				</div>
 
 
@@ -959,33 +959,6 @@
 
 	<table class="summary" id="properties">
 	<caption>Properties summary</caption>
-	<tr data-order="modifiers" id="$modifiers">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			protected 
-			integer
-		</code></td>
-
-		<td width="1%">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#25" title="Go to source code"><var>$modifiers</var></a>
-		</td>
-		<td width="1%"><code><span class="php-num">0</span></code></td>
-		<td><div class="position">
-			<a href="#$modifiers" class="anchor">#</a>
-
-			<div class="short">
-				Function/method modifiers.
-			</div>
-
-			<div class="detailed">
-				
-<p>Function/method modifiers.</p>
-
-
-			</div>
-		</div></td>
-	</tr>
 	<tr data-order="namespaceName" id="$namespaceName">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -995,7 +968,7 @@
 		</code></td>
 
 		<td width="1%">
-				<a href="source-TokenReflection.ReflectionFunctionBase.html#39" title="Go to source code"><var>$namespaceName</var></a>
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#25" title="Go to source code"><var>$namespaceName</var></a>
 		</td>
 		<td width="1%"><code></code></td>
 		<td><div class="position">
@@ -1008,6 +981,33 @@
 			<div class="detailed">
 				
 <p>Function/method namespace name.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="modifiers" id="$modifiers">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			protected 
+			integer
+		</code></td>
+
+		<td width="1%">
+				<a href="source-TokenReflection.ReflectionFunctionBase.html#32" title="Go to source code"><var>$modifiers</var></a>
+		</td>
+		<td width="1%"><code><span class="php-num">0</span></code></td>
+		<td><div class="position">
+			<a href="#$modifiers" class="anchor">#</a>
+
+			<div class="short">
+				Function/method modifiers.
+			</div>
+
+			<div class="detailed">
+				
+<p>Function/method modifiers.</p>
 
 
 			</div>
@@ -1028,7 +1028,7 @@
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>

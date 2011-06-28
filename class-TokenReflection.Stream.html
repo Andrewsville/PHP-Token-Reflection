@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
+	<meta name="generator" content="ApiGen 2.0" />
 
 	<title>Class TokenReflection\Stream | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
 	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
@@ -190,8 +190,524 @@ SeekableIterator
 				</dl></div>
 
 
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If tokenizer PHP extension is missing<br />
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If file does not exist or is not readable<br />
+				</div>
 
 
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFileName" id="_getFileName">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getFileName">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#101" title="Go to source code">getFileName</a>(
+		)</code>
+
+		<div class="short">
+			Returns the file name this is a part of.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the file name this is a part of.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getSource" id="_getSource">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getSource">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#111" title="Go to source code">getSource</a>(
+		)</code>
+
+		<div class="short">
+			Returns the original source code.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the original source code.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getSourcePart" id="_getSourcePart">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getSourcePart">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#121" title="Go to source code">getSourcePart</a>(
+				mixed
+				<var>$start</var> = <span class="php-keyword1">null</span>, 
+				mixed
+				<var>$end</var> = <span class="php-keyword1">null</span>
+		)</code>
+
+		<div class="short">
+			Returns a part of the source code.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns a part of the source code.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$start</var></dt>
+					<dd><code>mixed</code><br /> Start offset</dd>
+					<dt><var>$end</var></dt>
+					<dd><code>mixed</code><br /> End offset</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="find" id="_find">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			<code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>|boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_find">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#140" title="Go to source code">find</a>(
+				integer|string
+				<var>$type</var>
+		)</code>
+
+		<div class="short">
+			Finds the position of the token of the given type.
+		</div>
+
+		<div class="detailed">
+			
+<p>Finds the position of the token of the given type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$type</var></dt>
+					<dd><code>integer|string</code><br /> Token type</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>|boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="findMatchingBracket" id="_findMatchingBracket">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			<code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_findMatchingBracket">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#161" title="Go to source code">findMatchingBracket</a>(
+		)</code>
+
+		<div class="short">
+			Returns the position of the token with the matching bracket.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the position of the token with the matching bracket.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If out of the array<br />
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If there is no brancket at the current position<br />
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If the matching bracket could not be found<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="skipWhitespaces" id="_skipWhitespaces">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			<code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_skipWhitespaces">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#210" title="Go to source code">skipWhitespaces</a>(
+		)</code>
+
+		<div class="short">
+			Skips whitespaces and comments next to the current position.
+		</div>
+
+		<div class="detailed">
+			
+<p>Skips whitespaces and comments next to the current position.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="is" id="_is">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_is">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#226" title="Go to source code">is</a>(
+				integer|string
+				<var>$type</var>, 
+				integer
+				<var>$position</var> = -<span class="php-num">1</span>
+		)</code>
+
+		<div class="short">
+			Checks if there is a token of the given type at the given position.
+		</div>
+
+		<div class="detailed">
+			
+<p>Checks if there is a token of the given type at the given position.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$type</var></dt>
+					<dd><code>integer|string</code><br /> Token type</dd>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br /> Position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getType" id="_getType">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string|integer|null
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getType">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#238" title="Go to source code">getType</a>(
+				integer
+				<var>$position</var> = -<span class="php-num">1</span>
+		)</code>
+
+		<div class="short">
+			Returns the type of a token.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the type of a token.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br /> Token position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string|integer|null</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTokenValue" id="_getTokenValue">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			stirng
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getTokenValue">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#253" title="Go to source code">getTokenValue</a>(
+				integer
+				<var>$position</var> = -<span class="php-num">1</span>
+		)</code>
+
+		<div class="short">
+			Returns the current token value.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the current token value.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br /> Token position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>stirng</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTokenName" id="_getTokenName">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string|null
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getTokenName">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#268" title="Go to source code">getTokenName</a>(
+				integer
+				<var>$position</var> = -<span class="php-num">1</span>
+		)</code>
+
+		<div class="short">
+			Returns the token type name.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the token type name.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br /> Token position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string|null</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="serialize" id="_serialize">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_serialize">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#280" title="Go to source code">serialize</a>(
+		)</code>
+
+		<div class="short">
+			Stream serialization.
+		</div>
+
+		<div class="detailed">
+			
+<p>Stream serialization.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code>Serializable::serialize</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="unserialize" id="_unserialize">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_unserialize">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Stream.html#290" title="Go to source code">unserialize</a>(
+				string
+				<var>$serialized</var>
+		)</code>
+
+		<div class="short">
+			Restores the stream from the serialized state.
+		</div>
+
+		<div class="detailed">
+			
+<p>Restores the stream from the serialized state.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$serialized</var></dt>
+					<dd><code>string</code><br /> Serialized form</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />On unserialization error<br />
+				</div>
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code>Serializable::unserialize</code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -208,7 +724,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetExists">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#99" title="Go to source code">offsetExists</a>(
+				<a href="source-TokenReflection.Stream.html#312" title="Go to source code">offsetExists</a>(
 				integer
 				<var>$offset</var>
 		)</code>
@@ -254,7 +770,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetUnset">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#110" title="Go to source code">offsetUnset</a>(
+				<a href="source-TokenReflection.Stream.html#323" title="Go to source code">offsetUnset</a>(
 				integer
 				<var>$offset</var>
 		)</code>
@@ -302,7 +818,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetGet">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#123" title="Go to source code">offsetGet</a>(
+				<a href="source-TokenReflection.Stream.html#336" title="Go to source code">offsetGet</a>(
 				integer
 				<var>$offset</var>
 		)</code>
@@ -348,7 +864,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetSet">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#134" title="Go to source code">offsetSet</a>(
+				<a href="source-TokenReflection.Stream.html#347" title="Go to source code">offsetSet</a>(
 				integer
 				<var>$offset</var>, 
 				mixed
@@ -400,7 +916,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_key">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#148" title="Go to source code">key</a>(
+				<a href="source-TokenReflection.Stream.html#361" title="Go to source code">key</a>(
 		)</code>
 
 		<div class="short">
@@ -439,7 +955,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_next">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#158" title="Go to source code">next</a>(
+				<a href="source-TokenReflection.Stream.html#371" title="Go to source code">next</a>(
 		)</code>
 
 		<div class="short">
@@ -478,7 +994,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_rewind">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#169" title="Go to source code">rewind</a>(
+				<a href="source-TokenReflection.Stream.html#382" title="Go to source code">rewind</a>(
 		)</code>
 
 		<div class="short">
@@ -517,7 +1033,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_current">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#180" title="Go to source code">current</a>(
+				<a href="source-TokenReflection.Stream.html#393" title="Go to source code">current</a>(
 		)</code>
 
 		<div class="short">
@@ -556,7 +1072,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_valid">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#190" title="Go to source code">valid</a>(
+				<a href="source-TokenReflection.Stream.html#403" title="Go to source code">valid</a>(
 		)</code>
 
 		<div class="short">
@@ -595,7 +1111,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_count">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#200" title="Go to source code">count</a>(
+				<a href="source-TokenReflection.Stream.html#413" title="Go to source code">count</a>(
 		)</code>
 
 		<div class="short">
@@ -634,7 +1150,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_seek">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#210" title="Go to source code">seek</a>(
+				<a href="source-TokenReflection.Stream.html#423" title="Go to source code">seek</a>(
 				integer
 				<var>$position</var>
 		)</code>
@@ -667,347 +1183,6 @@ SeekableIterator
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getFileName" id="_getFileName">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getFileName">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#222" title="Go to source code">getFileName</a>(
-		)</code>
-
-		<div class="short">
-			Returns the file name this is a part of.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the file name this is a part of.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>string</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="find" id="_find">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			<code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>|boolean
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_find">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#232" title="Go to source code">find</a>(
-				integer|string
-				<var>$type</var>
-		)</code>
-
-		<div class="short">
-			Finds the position of the token of the given type.
-		</div>
-
-		<div class="detailed">
-			
-<p>Finds the position of the token of the given type.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$type</var></dt>
-					<dd><code>integer|string</code><br /> Token type</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>|boolean</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="findMatchingBracket" id="_findMatchingBracket">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			<code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_findMatchingBracket">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#253" title="Go to source code">findMatchingBracket</a>(
-		)</code>
-
-		<div class="short">
-			Returns the position of the token with the matching bracket.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the position of the token with the matching bracket.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br />
-				</div>
-
-				<h4>Throws</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If out of the array<br />
-					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If there is no brancket at the current position<br />
-					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />If the matching bracket could not be found<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="skipWhitespaces" id="_skipWhitespaces">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			<code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code>
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_skipWhitespaces">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#302" title="Go to source code">skipWhitespaces</a>(
-		)</code>
-
-		<div class="short">
-			Skips whitespaces and comments next to the current position.
-		</div>
-
-		<div class="detailed">
-			
-<p>Skips whitespaces and comments next to the current position.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is" id="_is">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_is">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#318" title="Go to source code">is</a>(
-				integer|string
-				<var>$type</var>, 
-				integer
-				<var>$position</var> = -<span class="php-num">1</span>
-		)</code>
-
-		<div class="short">
-			Checks if there is a token of the given type at the given position.
-		</div>
-
-		<div class="detailed">
-			
-<p>Checks if there is a token of the given type at the given position.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$type</var></dt>
-					<dd><code>integer|string</code><br /> Token type</dd>
-					<dt><var>$position</var></dt>
-					<dd><code>integer</code><br /> Position; if none given, consider the current iteration position</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>boolean</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getType" id="_getType">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			string|integer|null
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getType">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#330" title="Go to source code">getType</a>(
-				integer
-				<var>$position</var> = -<span class="php-num">1</span>
-		)</code>
-
-		<div class="short">
-			Returns the type of a token.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the type of a token.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$position</var></dt>
-					<dd><code>integer</code><br /> Token position; if none given, consider the current iteration position</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>string|integer|null</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getTokenValue" id="_getTokenValue">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			stirng
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getTokenValue">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#345" title="Go to source code">getTokenValue</a>(
-				integer
-				<var>$position</var> = -<span class="php-num">1</span>
-		)</code>
-
-		<div class="short">
-			Returns the current token value.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the current token value.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$position</var></dt>
-					<dd><code>integer</code><br /> Token position; if none given, consider the current iteration position</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>stirng</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getTokenName" id="_getTokenName">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			string|null
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getTokenName">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#360" title="Go to source code">getTokenName</a>(
-				integer
-				<var>$position</var> = -<span class="php-num">1</span>
-		)</code>
-
-		<div class="short">
-			Returns the token type name.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the token type name.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$position</var></dt>
-					<dd><code>integer</code><br /> Token position; if none given, consider the current iteration position</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>string|null</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="__toString" id="___toString">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -1021,7 +1196,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#___toString">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#372" title="Go to source code">__toString</a>(
+				<a href="source-TokenReflection.Stream.html#435" title="Go to source code">__toString</a>(
 		)</code>
 
 		<div class="short">
@@ -1045,176 +1220,6 @@ SeekableIterator
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getSource" id="_getSource">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getSource">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#382" title="Go to source code">getSource</a>(
-		)</code>
-
-		<div class="short">
-			Returns the original source code.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the original source code.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>string</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getSourcePart" id="_getSourcePart">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getSourcePart">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#392" title="Go to source code">getSourcePart</a>(
-				mixed
-				<var>$start</var> = <span class="php-keyword1">null</span>, 
-				mixed
-				<var>$end</var> = <span class="php-keyword1">null</span>
-		)</code>
-
-		<div class="short">
-			Returns a part of the source code.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns a part of the source code.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$start</var></dt>
-					<dd><code>mixed</code><br /> Start offset</dd>
-					<dt><var>$end</var></dt>
-					<dd><code>mixed</code><br /> End offset</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>string</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="serialize" id="_serialize">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_serialize">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#411" title="Go to source code">serialize</a>(
-		)</code>
-
-		<div class="short">
-			Stream serialization.
-		</div>
-
-		<div class="detailed">
-			
-<p>Stream serialization.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>string</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code>Serializable::serialize</code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="unserialize" id="_unserialize">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_unserialize">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#421" title="Go to source code">unserialize</a>(
-				string
-				<var>$serialized</var>
-		)</code>
-
-		<div class="short">
-			Restores the stream from the serialized state.
-		</div>
-
-		<div class="detailed">
-			
-<p>Restores the stream from the serialized state.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$serialized</var></dt>
-					<dd><code>string</code><br /> Serialized form</dd>
-				</dl></div>
-
-
-				<h4>Throws</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br />On unserialization error<br />
-				</div>
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code>Serializable::unserialize</code></div>
-		</div>
-		</div></td>
-	</tr>
 	</table>
 
 
@@ -1226,7 +1231,7 @@ SeekableIterator
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>

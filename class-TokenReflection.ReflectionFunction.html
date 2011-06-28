@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
+	<meta name="generator" content="ApiGen 2.0" />
 
 	<title>Class TokenReflection\ReflectionFunction | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
 	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
@@ -253,7 +253,7 @@ directive.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_export">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunction.html#73" title="Go to source code">export</a>(
+				<a href="source-TokenReflection.ReflectionFunction.html#74" title="Go to source code">export</a>(
 				<a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a>
 				
 				<var>$broker</var>, 
@@ -310,7 +310,7 @@ directive.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_invoke">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunction.html#98" title="Go to source code">invoke</a>(
+				<a href="source-TokenReflection.ReflectionFunction.html#99" title="Go to source code">invoke</a>(
 		)</code>
 
 		<div class="short">
@@ -347,10 +347,10 @@ directive.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_invokeArgs">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunction.html#108" title="Go to source code">invokeArgs</a>(
+				<a href="source-TokenReflection.ReflectionFunction.html#109" title="Go to source code">invokeArgs</a>(
 				array
 				
-				<var>$args</var> = <span class="php-keyword1">array</span>()
+				<var>$args</var> = <span class="php-keyword2">array</span>()
 		)</code>
 
 		<div class="short">
@@ -385,49 +385,36 @@ directive.</p>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="parse" id="_parse">
+	<tr data-order="getNamespaceAliases" id="_getNamespaceAliases">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
-			 protected 
-			<code><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a></code>
+			 public 
+			array
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_parse">#</a>
+		<a class="anchor" href="#_getNamespaceAliases">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunction.html#124" title="Go to source code">parse</a>(
-				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
-				
-				<var>$tokenStream</var>, 
-				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
-				
-				<var>$parent</var>
+				<a href="source-TokenReflection.ReflectionFunction.html#125" title="Go to source code">getNamespaceAliases</a>(
 		)</code>
 
 		<div class="short">
-			Parses reflected element metadata from the token stream.
+			Returns imported namespaces and aliases from the declaring namespace.
 		</div>
 
 		<div class="detailed">
 			
-<p>Parses reflected element metadata from the token stream.</p>
+<p>Returns imported namespaces and aliases from the declaring namespace.</p>
 
 
 
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br /> Token substream</dd>
-					<dt><var>$parent</var></dt>
-					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br /> Parent reflection object</dd>
-				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code><code><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a></code></code><br />
+					<code>array</code><br />
 				</div>
 
 
@@ -448,7 +435,7 @@ directive.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_processParent">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunction.html#138" title="Go to source code">processParent</a>(
+				<a href="source-TokenReflection.ReflectionFunction.html#135" title="Go to source code">processParent</a>(
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
 				
 				<var>$parent</var>
@@ -484,36 +471,49 @@ directive.</p>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getNamespaceAliases" id="_getNamespaceAliases">
+	<tr data-order="parse" id="_parse">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
-			 public 
-			array
+			 protected 
+			<code><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a></code>
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getNamespaceAliases">#</a>
+		<a class="anchor" href="#_parse">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFunction.html#156" title="Go to source code">getNamespaceAliases</a>(
+				<a href="source-TokenReflection.ReflectionFunction.html#153" title="Go to source code">parse</a>(
+				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
+				
+				<var>$tokenStream</var>, 
+				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+				
+				<var>$parent</var>
 		)</code>
 
 		<div class="short">
-			Returns imported namespaces and aliases from the declaring namespace.
+			Parses reflected element metadata from the token stream.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns imported namespaces and aliases from the declaring namespace.</p>
+<p>Parses reflected element metadata from the token stream.</p>
 
 
 
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br /> Token substream</dd>
+					<dt><var>$parent</var></dt>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br /> Parent reflection object</dd>
+				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code>array</code><br />
+					<code><code><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a></code></code><br />
 				</div>
 
 
@@ -655,7 +655,7 @@ directive.</p>
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>

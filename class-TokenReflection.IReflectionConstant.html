@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
+	<meta name="generator" content="ApiGen 2.0" />
 
 	<title>Interface TokenReflection\IReflectionConstant | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
 	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
@@ -152,6 +152,43 @@
 
 	<table class="summary" id="methods">
 	<caption>Methods summary</caption>
+	<tr data-order="getShortName" id="_getShortName">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getShortName">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionConstant.html#23" title="Go to source code">getShortName</a>(
+		)</code>
+
+		<div class="short">
+			Returns the unqualified name (UQN).
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the unqualified name (UQN).</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="getDeclaringClass" id="_getDeclaringClass">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -165,7 +202,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getDeclaringClass">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#23" title="Go to source code">getDeclaringClass</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#30" title="Go to source code">getDeclaringClass</a>(
 		)</code>
 
 		<div class="short">
@@ -202,7 +239,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getDeclaringClassName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#30" title="Go to source code">getDeclaringClassName</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#37" title="Go to source code">getDeclaringClassName</a>(
 		)</code>
 
 		<div class="short">
@@ -239,7 +276,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getNamespaceName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#37" title="Go to source code">getNamespaceName</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#44" title="Go to source code">getNamespaceName</a>(
 		)</code>
 
 		<div class="short">
@@ -276,7 +313,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_inNamespace">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#44" title="Go to source code">inNamespace</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#51" title="Go to source code">inNamespace</a>(
 		)</code>
 
 		<div class="short">
@@ -300,44 +337,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getValue" id="_getValue">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			mixed
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getValue">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#51" title="Go to source code">getValue</a>(
-		)</code>
-
-		<div class="short">
-			Returns the constant value.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the constant value.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>mixed</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getValueDefinition" id="_getValueDefinition">
+	<tr data-order="getFileName" id="_getFileName">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
@@ -348,18 +348,18 @@
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getValueDefinition">#</a>
+		<a class="anchor" href="#_getFileName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#58" title="Go to source code">getValueDefinition</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#58" title="Go to source code">getFileName</a>(
 		)</code>
 
 		<div class="short">
-			Returns the part of the source code defining the constant value.
+			Returns the file name the reflection object is defined in.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns the part of the source code defining the constant value.</p>
+<p>Returns the file name the reflection object is defined in.</p>
 
 
 
@@ -367,43 +367,6 @@
 				<h4>Returns</h4>
 				<div class="smallList">
 					<code>string</code><br />
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getDocComment" id="_getDocComment">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			string|boolean
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getDocComment">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#65" title="Go to source code">getDocComment</a>(
-		)</code>
-
-		<div class="short">
-			Returns the appropriate docblock definition.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the appropriate docblock definition.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>string|boolean</code><br />
 				</div>
 
 
@@ -424,7 +387,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getStartLine">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#72" title="Go to source code">getStartLine</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#65" title="Go to source code">getStartLine</a>(
 		)</code>
 
 		<div class="short">
@@ -461,7 +424,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_getEndLine">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#79" title="Go to source code">getEndLine</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#72" title="Go to source code">getEndLine</a>(
 		)</code>
 
 		<div class="short">
@@ -485,36 +448,36 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getFileName" id="_getFileName">
+	<tr data-order="getDocComment" id="_getDocComment">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
 			 public 
-			string
+			string|boolean
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getFileName">#</a>
+		<a class="anchor" href="#_getDocComment">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#86" title="Go to source code">getFileName</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#79" title="Go to source code">getDocComment</a>(
 		)</code>
 
 		<div class="short">
-			Returns the file name the reflection object is defined in.
+			Returns the appropriate docblock definition.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns the file name the reflection object is defined in.</p>
+<p>Returns the appropriate docblock definition.</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code>string</code><br />
+					<code>string|boolean</code><br />
 				</div>
 
 
@@ -522,7 +485,44 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getShortName" id="_getShortName">
+	<tr data-order="getValue" id="_getValue">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getValue">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.IReflectionConstant.html#86" title="Go to source code">getValue</a>(
+		)</code>
+
+		<div class="short">
+			Returns the constant value.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns the constant value.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>mixed</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getValueDefinition" id="_getValueDefinition">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
@@ -533,18 +533,18 @@
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getShortName">#</a>
+		<a class="anchor" href="#_getValueDefinition">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.IReflectionConstant.html#93" title="Go to source code">getShortName</a>(
+				<a href="source-TokenReflection.IReflectionConstant.html#93" title="Go to source code">getValueDefinition</a>(
 		)</code>
 
 		<div class="short">
-			Returns the unqualified name (UQN).
+			Returns the part of the source code defining the constant value.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns the unqualified name (UQN).</p>
+<p>Returns the part of the source code defining the constant value.</p>
 
 
 
@@ -621,7 +621,7 @@
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>

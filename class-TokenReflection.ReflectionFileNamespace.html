@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
+	<meta name="generator" content="ApiGen 2.0" />
 
 	<title>Class TokenReflection\ReflectionFileNamespace | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
 	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
@@ -190,7 +190,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getFunctions" id="_getFunctions">
+	<tr data-order="getConstants" id="_getConstants">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
@@ -201,18 +201,18 @@
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getFunctions">#</a>
+		<a class="anchor" href="#_getConstants">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFileNamespace.html#63" title="Go to source code">getFunctions</a>(
+				<a href="source-TokenReflection.ReflectionFileNamespace.html#63" title="Go to source code">getConstants</a>(
 		)</code>
 
 		<div class="short">
-			Returns function reflections.
+			Returns constant reflections.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns function reflections.</p>
+<p>Returns constant reflections.</p>
 
 
 
@@ -227,7 +227,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getConstants" id="_getConstants">
+	<tr data-order="getFunctions" id="_getFunctions">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
@@ -238,18 +238,18 @@
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getConstants">#</a>
+		<a class="anchor" href="#_getFunctions">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFileNamespace.html#73" title="Go to source code">getConstants</a>(
+				<a href="source-TokenReflection.ReflectionFileNamespace.html#73" title="Go to source code">getFunctions</a>(
 		)</code>
 
 		<div class="short">
-			Returns constant reflections.
+			Returns function reflections.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns constant reflections.</p>
+<p>Returns function reflections.</p>
 
 
 
@@ -400,6 +400,55 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="parseName" id="_parseName">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 protected 
+			<code><a href="class-TokenReflection.ReflectionFileNamespace.html">TokenReflection\ReflectionFileNamespace</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_parseName">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.ReflectionFileNamespace.html#123" title="Go to source code">parseName</a>(
+				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
+				
+				<var>$tokenStream</var>
+		)</code>
+
+		<div class="short">
+			Parses the namespace name.
+		</div>
+
+		<div class="detailed">
+			
+<p>Parses the namespace name.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br /> Token substream</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.ReflectionFileNamespace.html">TokenReflection\ReflectionFileNamespace</a></code></code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If the namespace name could not be determined<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="parseChildren" id="_parseChildren">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -413,7 +462,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_parseChildren">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFileNamespace.html#123" title="Go to source code">parseChildren</a>(
+				<a href="source-TokenReflection.ReflectionFileNamespace.html#271" title="Go to source code">parseChildren</a>(
 				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
 				
 				<var>$tokenStream</var>, 
@@ -448,55 +497,6 @@
 				<h4>Throws</h4>
 				<div class="smallList">
 					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If child elements could not be parsed<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="parseName" id="_parseName">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 protected 
-			<code><a href="class-TokenReflection.ReflectionFileNamespace.html">TokenReflection\ReflectionFileNamespace</a></code>
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_parseName">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.ReflectionFileNamespace.html#214" title="Go to source code">parseName</a>(
-				<a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
-				
-				<var>$tokenStream</var>
-		)</code>
-
-		<div class="short">
-			Parses the namespace name.
-		</div>
-
-		<div class="detailed">
-			
-<p>Parses the namespace name.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></code></code><br /> Token substream</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.ReflectionFileNamespace.html">TokenReflection\ReflectionFileNamespace</a></code></code><br />
-				</div>
-
-				<h4>Throws</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br />If the namespace name could not be determined<br />
 				</div>
 
 
@@ -579,7 +579,7 @@
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>

@@ -2,11 +2,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="TR ApiGen 2.0 RC 2" />
+	<meta name="generator" content="ApiGen 2.0" />
 
 	<title>Class TokenReflection\Php\ReflectionExtension | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?3309972472"></script>
+	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
 	<script type="text/javascript" src="elementlist.js?3520989432"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
 
@@ -260,124 +260,32 @@ Reflector
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getBroker" id="_getBroker">
+	<tr data-order="isTokenized" id="_isTokenized">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
 			 public 
-			<code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code>
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getBroker">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#89" title="Go to source code">getBroker</a>(
-		)</code>
-
-		<div class="short">
-			Returns the reflection broker used by this reflection object.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns the reflection broker used by this reflection object.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#_getBroker">TokenReflection\IReflection::getBroker</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="__get" id="___get">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			final public 
-			mixed
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#___get">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#99" title="Go to source code">__get</a>(
-				string
-				<var>$key</var>
-		)</code>
-
-		<div class="short">
-			Magic __get method.
-		</div>
-
-		<div class="detailed">
-			
-<p>Magic __get method.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$key</var></dt>
-					<dd><code>string</code><br /> Variable name</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>mixed</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#___get">TokenReflection\IReflection::__get</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="__isset" id="___isset">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			final public 
 			boolean
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#___isset">#</a>
+		<a class="anchor" href="#_isTokenized">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#110" title="Go to source code">__isset</a>(
-				string
-				<var>$key</var>
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#89" title="Go to source code">isTokenized</a>(
 		)</code>
 
 		<div class="short">
-			Magic __isset method.
+			Returns if the current reflection comes from a tokenized source.
 		</div>
 
 		<div class="detailed">
 			
-<p>Magic __isset method.</p>
+<p>Returns if the current reflection comes from a tokenized source.</p>
 
 
 
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$key</var></dt>
-					<dd><code>string</code><br /> Variable name</dd>
-				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="smallList">
@@ -387,7 +295,90 @@ Reflector
 
 
 				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#___isset">TokenReflection\IReflection::__isset</a></code></div>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#_isTokenized">TokenReflection\IReflection::isTokenized</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isDeprecated" id="_isDeprecated">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isDeprecated">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#99" title="Go to source code">isDeprecated</a>(
+		)</code>
+
+		<div class="short">
+			Returns if the reflection subject is deprecated.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if the reflection subject is deprecated.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getClass" id="_getClass">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			<code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|null
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getClass">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#109" title="Go to source code">getClass</a>(
+				string
+				<var>$name</var>
+		)</code>
+
+		<div class="short">
+			Returns a class reflection.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns a class reflection.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$name</var></dt>
+					<dd><code>string</code><br /> Class name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|null</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionExtension.html#_getClass">TokenReflection\IReflectionExtension::getClass</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -428,91 +419,6 @@ Reflector
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getClass" id="_getClass">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			<code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|null
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getClass">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#138" title="Go to source code">getClass</a>(
-				string
-				<var>$name</var>
-		)</code>
-
-		<div class="short">
-			Returns a class reflection.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns a class reflection.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$name</var></dt>
-					<dd><code>string</code><br /> Class name</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|null</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionExtension.html#_getClass">TokenReflection\IReflectionExtension::getClass</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getConstantReflections" id="_getConstantReflections">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			array
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_getConstantReflections">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#150" title="Go to source code">getConstantReflections</a>(
-		)</code>
-
-		<div class="short">
-			Returns reflections of defined constants.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns reflections of defined constants.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>array</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionExtension.html#_getConstantReflections">TokenReflection\IReflectionExtension::getConstantReflections</a></code></div>
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="getConstant" id="_getConstant">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -526,7 +432,7 @@ Reflector
 		<td><div class="position">
 		<a class="anchor" href="#_getConstant">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#167" title="Go to source code">getConstant</a>(
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#138" title="Go to source code">getConstant</a>(
 				string
 				<var>$name</var>
 		)</code>
@@ -572,7 +478,7 @@ Reflector
 		<td><div class="position">
 		<a class="anchor" href="#_getConstantReflection">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#179" title="Go to source code">getConstantReflection</a>(
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#150" title="Go to source code">getConstantReflection</a>(
 				string
 				<var>$name</var>
 		)</code>
@@ -602,6 +508,91 @@ Reflector
 
 				<h4>Implementation of</h4>
 				<div class="smallList"><code><a href="class-TokenReflection.IReflectionExtension.html#_getConstantReflection">TokenReflection\IReflectionExtension::getConstantReflection</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getConstantReflections" id="_getConstantReflections">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getConstantReflections">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#162" title="Go to source code">getConstantReflections</a>(
+		)</code>
+
+		<div class="short">
+			Returns reflections of defined constants.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns reflections of defined constants.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>array</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionExtension.html#_getConstantReflections">TokenReflection\IReflectionExtension::getConstantReflections</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFunction" id="_getFunction">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			<code><a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a></code>
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getFunction">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#179" title="Go to source code">getFunction</a>(
+				string
+				<var>$name</var>
+		)</code>
+
+		<div class="short">
+			Returns a function reflection.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns a function reflection.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$name</var></dt>
+					<dd><code>string</code><br /> Function name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code><code><a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a></code></code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflectionExtension.html#_getFunction">TokenReflection\IReflectionExtension::getFunction</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -681,125 +672,42 @@ Reflector
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getFunction" id="_getFunction">
+	<tr data-order="getBroker" id="_getBroker">
 
 		<td class="right" width="1%"><code class="nowrap">
 			
 			 public 
-			<code><a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a></code>
+			<code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code>
 			
 			</code>
 		</td>
 
 		<td><div class="position">
-		<a class="anchor" href="#_getFunction">#</a>
+		<a class="anchor" href="#_getBroker">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#218" title="Go to source code">getFunction</a>(
-				string
-				<var>$name</var>
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#218" title="Go to source code">getBroker</a>(
 		)</code>
 
 		<div class="short">
-			Returns a function reflection.
+			Returns the reflection broker used by this reflection object.
 		</div>
 
 		<div class="detailed">
 			
-<p>Returns a function reflection.</p>
+<p>Returns the reflection broker used by this reflection object.</p>
 
 
 
-				<h4>Parameters</h4>
-				<div class="smallList"><dl>
-					<dt><var>$name</var></dt>
-					<dd><code>string</code><br /> Function name</dd>
-				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="smallList">
-					<code><code><a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a></code></code><br />
+					<code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br />
 				</div>
 
 
 
 				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflectionExtension.html#_getFunction">TokenReflection\IReflectionExtension::getFunction</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="isTokenized" id="_isTokenized">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_isTokenized">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#230" title="Go to source code">isTokenized</a>(
-		)</code>
-
-		<div class="short">
-			Returns if the current reflection comes from a tokenized source.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns if the current reflection comes from a tokenized source.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>boolean</code><br />
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#_isTokenized">TokenReflection\IReflection::isTokenized</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="isDeprecated" id="_isDeprecated">
-
-		<td class="right" width="1%"><code class="nowrap">
-			
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td><div class="position">
-		<a class="anchor" href="#_isDeprecated">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#240" title="Go to source code">isDeprecated</a>(
-		)</code>
-
-		<div class="short">
-			Returns if the reflection subject is deprecated.
-		</div>
-
-		<div class="detailed">
-			
-<p>Returns if the reflection subject is deprecated.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="smallList">
-					<code>boolean</code><br />
-				</div>
-
-
-
+				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#_getBroker">TokenReflection\IReflection::getBroker</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -816,7 +724,7 @@ Reflector
 		<td><div class="position">
 		<a class="anchor" href="#_getNamespaceAliases">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Php.ReflectionExtension.html#250" title="Go to source code">getNamespaceAliases</a>(
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#228" title="Go to source code">getNamespaceAliases</a>(
 		)</code>
 
 		<div class="short">
@@ -839,6 +747,98 @@ Reflector
 
 				<h4>Implementation of</h4>
 				<div class="smallList"><code><a href="class-TokenReflection.Php.IReflection.html#_getNamespaceAliases">TokenReflection\Php\IReflection::getNamespaceAliases</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__get" id="___get">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			final public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#___get">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#238" title="Go to source code">__get</a>(
+				string
+				<var>$key</var>
+		)</code>
+
+		<div class="short">
+			Magic __get method.
+		</div>
+
+		<div class="detailed">
+			
+<p>Magic __get method.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$key</var></dt>
+					<dd><code>string</code><br /> Variable name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>mixed</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#___get">TokenReflection\IReflection::__get</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__isset" id="___isset">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			final public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#___isset">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Php.ReflectionExtension.html#249" title="Go to source code">__isset</a>(
+				string
+				<var>$key</var>
+		)</code>
+
+		<div class="short">
+			Magic __isset method.
+		</div>
+
+		<div class="detailed">
+			
+<p>Magic __isset method.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$key</var></dt>
+					<dd><code>string</code><br /> Variable name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>boolean</code><br />
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="smallList"><code><a href="class-TokenReflection.IReflection.html#___isset">TokenReflection\IReflection::__isset</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -912,9 +912,7 @@ getDependencies(),
 getINIEntries(), 
 getName(), 
 getVersion(), 
-info(), 
-isPersistent(), 
-isTemporary()
+info()
 		</code></td>
 	</tr>
 	</table>
@@ -961,7 +959,7 @@ export()
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">TR ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>
