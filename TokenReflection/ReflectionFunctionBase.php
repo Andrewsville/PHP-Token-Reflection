@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -23,25 +23,18 @@ use TokenReflection\Exception;
 abstract class ReflectionFunctionBase extends ReflectionBase implements IReflectionFunctionBase
 {
 	/**
-	 * Function/method modifiers.
-	 *
-	 * @var integer
-	 */
-	protected $modifiers = 0;
-
-	/**
-	 * Static variables defined within the function/method.
-	 *
-	 * @var array
-	 */
-	private $staticVariables = array();
-
-	/**
 	 * Function/method namespace name.
 	 *
 	 * @var string
 	 */
 	protected $namespaceName;
+
+	/**
+	 * Function/method modifiers.
+	 *
+	 * @var integer
+	 */
+	protected $modifiers = 0;
 
 	/**
 	 * Determines if the function/method returns its value as reference.
@@ -58,23 +51,34 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	private $parameters = array();
 
 	/**
-	 * Returns function/method modifiers.
+	 * Static variables defined within the function/method.
 	 *
-	 * @return integer
+	 * @var array
 	 */
-	public function getModifiers()
+	private $staticVariables = array();
+
+	/**
+	 * Returns the name (FQN).
+	 *
+	 * @return string
+	 */
+	public function getName()
 	{
-		return $this->modifiers;
+		if (null !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName) {
+			return $this->namespaceName . '\\' . $this->name;
+		}
+
+		return $this->name;
 	}
 
 	/**
-	 * Returns if the function/method is defined within a namespace.
+	 * Returns the unqualified name (UQN).
 	 *
-	 * @return boolean
+	 * @return string
 	 */
-	public function inNamespace()
+	public function getShortName()
 	{
-		return '' !== $this->getNamespaceName();
+		return $this->name;
 	}
 
 	/**
@@ -88,39 +92,43 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
-	 * Returns the number of parameters.
+	 * Returns if the function/method is defined within a namespace.
 	 *
-	 * @return integer
+	 * @return boolean
 	 */
-	public function getNumberOfParameters()
+	public function inNamespace()
 	{
-		return count($this->parameters);
+		return '' !== $this->getNamespaceName();
 	}
 
 	/**
-	 * Returns the number of required parameters.
+	 * Returns function/method modifiers.
 	 *
 	 * @return integer
 	 */
-	public function getNumberOfRequiredParameters()
+	public function getModifiers()
 	{
-		$count = 0;
-		array_walk($this->parameters, function(ReflectionParameter $parameter) use (&$count) {
-			if (!$parameter->isOptional()) {
-				$count++;
-			}
-		});
-		return $count;
+		return $this->modifiers;
 	}
 
 	/**
-	 * Returns parameters.
+	 * Returns if the function/method is a closure.
 	 *
-	 * @return array
+	 * @return boolean
 	 */
-	public function getParameters()
+	public function isClosure()
 	{
-		return $this->parameters;
+		return false;
+	}
+
+	/**
+	 * Returns if the function/method returns its value as reference.
+	 *
+	 * @return boolean
+	 */
+	public function returnsReference()
+	{
+		return $this->returnsReference;
 	}
 
 	/**
@@ -150,6 +158,42 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
+	 * Returns parameters.
+	 *
+	 * @return array
+	 */
+	public function getParameters()
+	{
+		return $this->parameters;
+	}
+
+	/**
+	 * Returns the number of parameters.
+	 *
+	 * @return integer
+	 */
+	public function getNumberOfParameters()
+	{
+		return count($this->parameters);
+	}
+
+	/**
+	 * Returns the number of required parameters.
+	 *
+	 * @return integer
+	 */
+	public function getNumberOfRequiredParameters()
+	{
+		$count = 0;
+		array_walk($this->parameters, function(ReflectionParameter $parameter) use (&$count) {
+			if (!$parameter->isOptional()) {
+				$count++;
+			}
+		});
+		return $count;
+	}
+
+	/**
 	 * Returns static variables.
 	 *
 	 * @return array
@@ -160,47 +204,34 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
-	 * Returns if the function/method is a closure.
+	 * Parses if the function/method returns its value as reference.
 	 *
-	 * @return boolean
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @return \TokenReflection\ReflectionFunctionBase
+	 * @throws \TokenReflection\Exception\Parse If could not be determined if the function\method returns its value by reference
 	 */
-	public function isClosure()
+	final protected function parseReturnsReference(Stream $tokenStream)
 	{
-		return false;
-	}
+		try {
+			if (!$tokenStream->is(T_FUNCTION)) {
+				throw new Exception\Parse('Could not find the function keyword.', Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
 
-	/**
-	 * Returns if the function/method returns its value as reference.
-	 *
-	 * @return boolean
-	 */
-	public function returnsReference()
-	{
-		return $this->returnsReference;
-	}
+			$tokenStream->skipWhitespaces();
 
-	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		if (null !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName) {
-			return $this->namespaceName . '\\' . $this->name;
+			$type = $tokenStream->getType();
+
+			if ('&' === $type) {
+				$this->returnsReference = true;
+				$tokenStream->skipWhitespaces();
+			} elseif (T_STRING !== $type) {
+				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			return $this;
+		} catch (Exception\Parse $e) {
+			throw new Exception\Parse('Could not determine if the function\method returns its value by reference.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-
-		return $this->name;
-	}
-
-	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
-	 */
-	public function getShortName()
-	{
-		return $this->name;
 	}
 
 	/**
@@ -247,7 +278,6 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
 	 * @throws \TokenReflection\Exception\Parse If parameters could not be parsed
-	 *
 	 */
 	final protected function parseParameters(Stream $tokenStream)
 	{
@@ -302,37 +332,6 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 			return $this;
 		} catch (Exception $e) {
 			throw new Exception\Parse(sprintf('Could not parse function/method "%s" static variables.', $this->name), Exception\Parse::PARSE_CHILDREN_ERROR, $e);
-		}
-	}
-
-	/**
-	 * Parses if the function/method returns its value as reference.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @return \TokenReflection\ReflectionFunctionBase
-	 * @throws \TokenReflection\Exception\Parse If could not be determined if the function\method returns its value by reference
-	 */
-	final protected function parseReturnsReference(Stream $tokenStream)
-	{
-		try {
-			if (!$tokenStream->is(T_FUNCTION)) {
-				throw new Exception\Parse('Could not find the function keyword.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			$tokenStream->skipWhitespaces();
-
-			$type = $tokenStream->getType();
-
-			if ('&' === $type) {
-				$this->returnsReference = true;
-				$tokenStream->skipWhitespaces();
-			} elseif (T_STRING !== $type) {
-				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			return $this;
-		} catch (Exception\Parse $e) {
-			throw new Exception\Parse('Could not determine if the function\method returns its value by reference.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
 	}
 }

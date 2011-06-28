@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Dummy;
@@ -72,35 +72,43 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
+	 * Returns the namespace name.
 	 *
-	 * @return \TokenReflection\Broker
+	 * @return string
 	 */
-	public function getBroker()
+	public function getNamespaceName()
 	{
-		return $this->broker;
+		return '';
 	}
 
 	/**
-	 * Magic __get method.
+	 * Returns if the class is defined within a namespace.
 	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key)
+	public function inNamespace()
 	{
-		return ReflectionBase::exists($this, $key);
+		return false;
+	}
+
+	/**
+	 * Returns the PHP extension reflection.
+	 *
+	 * @return null
+	 */
+	public function getExtension()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the PHP extension name.
+	 *
+	 * @return boolean
+	 */
+	public function getExtensionName()
+	{
+		return false;
 	}
 
 	/**
@@ -134,21 +142,128 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns the PHP extension reflection.
+	 * Returns the appropriate docblock definition.
 	 *
+	 * @return boolean
+	 */
+	public function getDocComment()
+	{
+		return false;
+	}
+
+	/**
+	 * Checks if there is a particular annotation.
+	 *
+	 * @param string $name Annotation name
+	 * @return boolean
+	 */
+	public function hasAnnotation($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
 	 * @return null
 	 */
-	public function getExtension()
+	public function getAnnotation($name)
 	{
 		return null;
 	}
 
 	/**
-	 * Returns the PHP extension name.
+	 * Returns parsed docblock.
+	 *
+	 * @return array
+	 */
+	public function getAnnotations()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns modifiers.
+	 *
+	 * @return integer
+	 */
+	public function getModifiers()
+	{
+		return 0;
+	}
+
+	/**
+	 * Returns if the class is abstract.
 	 *
 	 * @return boolean
 	 */
-	public function getExtensionName()
+	public function isAbstract()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the class is final.
+	 *
+	 * @return boolean
+	 */
+	public function isFinal()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the class is an interface.
+	 *
+	 * @return boolean
+	 */
+	public function isInterface()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the class is an exception or its descendant.
+	 *
+	 * @return boolean
+	 */
+	public function isException()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if it is possible to create an instance of this class.
+	 *
+	 * @return boolean
+	 */
+	public function isInstantiable()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if objects of this class are cloneable.
+	 *
+	 * Introduced in PHP 5.4.
+	 *
+	 * @return boolean
+	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
+	 */
+	public function isCloneable()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the class is iterateable.
+	 *
+	 * Returns true if the class implements the Traversable interface.
+	 *
+	 * @return boolean
+	 */
+	public function isIterateable()
 	{
 		return false;
 	}
@@ -174,53 +289,213 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Outputs the reflection subject source code.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return '';
-	}
-
-	/**
-	 * Returns the appropriate docblock definition.
+	 * Returns if the current reflection comes from a tokenized source.
 	 *
 	 * @return boolean
 	 */
-	public function getDocComment()
+	public function isTokenized()
 	{
 		return false;
 	}
 
 	/**
-	 * Returns parsed docblock.
+	 * Returns if the current class is a subclass of the given class.
 	 *
-	 * @return array
+	 * @param string|object $class Class name or reflection object
+	 * @return boolean
 	 */
-	public function getAnnotations()
+	public function isSubclassOf($class)
 	{
-		return array();
+		return false;
 	}
 
 	/**
-	 * Returns a particular annotation value.
+	 * Returns the parent class reflection.
 	 *
-	 * @param string $name Annotation name
 	 * @return null
 	 */
-	public function getAnnotation($name)
+	public function getParentClass()
 	{
 		return null;
 	}
 
 	/**
-	 * Checks if there is a particular annotation.
+	 * Returns the parent classes reflections.
 	 *
-	 * @param string $name Annotation name
+	 * @return array
+	 */
+	public function getParentClasses()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns the parent classes names.
+	 *
+	 * @return array
+	 */
+	public function getParentClassNameList()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns the parent class reflection.
+	 *
+	 * @return null
+	 */
+	public function getParentClassName()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns if the class implements the given interface.
+	 *
+	 * @param string|object $interface Interface name or reflection object
+	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
+	 */
+	public function implementsInterface($interface)
+	{
+		if (is_object($interface)) {
+			if (!$interface instanceof IReflectionClass) {
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$interfaceName = $interface->getName();
+
+			if (!$interface->isInterface()) {
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
+			}
+		}
+
+		// Only validation, always returns false
+		return false;
+	}
+
+	/**
+	 * Returns interface reflections.
+	 *
+	 * @return array
+	 */
+	public function getInterfaces()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns interface names.
+	 *
+	 * @return array
+	 */
+	public function getInterfaceNames()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns interfaces implemented by this class, not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnInterfaces()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns names of interfaces implemented by this class, not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnInterfaceNames()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns the class constructor reflection.
+	 *
+	 * @return null
+	 */
+	public function getConstructor()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the class desctructor reflection.
+	 *
+	 * @return null
+	 */
+	public function getDestructor()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns if the class implements the given method.
+	 *
+	 * @param string $name Method name
 	 * @return boolean
 	 */
-	public function hasAnnotation($name)
+	public function hasMethod($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns a method reflection.
+	 *
+	 * @param string $name Method name
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
+	 */
+	public function getMethod($name)
+	{
+		throw new Exception\Runtime(sprintf('There is no method "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+	}
+
+	/**
+	 * Returns method reflections.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getMethods($filter = null)
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class implements (and not its parents) the given method.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasOwnMethod($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns methods declared by this class, not its parents.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getOwnMethods($filter = null)
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class defines the given constant.
+	 *
+	 * @param string $name Constant name.
+	 * @return boolean
+	 */
+	public function hasConstant($name)
 	{
 		return false;
 	}
@@ -268,6 +543,27 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class (and not its parents) defines the given constant.
+	 *
+	 * @param string $name Constant name.
+	 * @return boolean
+	 */
+	public function hasOwnConstant($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns constants declared by this class, not its parents
+	 *
+	 * @return array
+	 */
+	public function getOwnConstants()
+	{
+		return array();
+	}
+
+	/**
 	 * Returns an array of constant reflections defined by this class not its parents.
 	 *
 	 * @return array
@@ -275,26 +571,6 @@ class ReflectionClass implements IReflectionClass
 	public function getOwnConstantReflections()
 	{
 		return array();
-	}
-
-	/**
-	 * Returns the class constructor reflection.
-	 *
-	 * @return null
-	 */
-	public function getConstructor()
-	{
-		return null;
-	}
-
-	/**
-	 * Returns the class desctructor reflection.
-	 *
-	 * @return null
-	 */
-	public function getDestructor()
-	{
-		return null;
 	}
 
 	/**
@@ -308,105 +584,14 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns interface names.
+	 * Returns if the class implements the given property.
 	 *
-	 * @return array
+	 * @param string $name Property name
+	 * @return boolean
 	 */
-	public function getInterfaceNames()
+	public function hasProperty($name)
 	{
-		return array();
-	}
-
-	/**
-	 * Returns interface reflections.
-	 *
-	 * @return array
-	 */
-	public function getInterfaces()
-	{
-		return array();
-	}
-
-	/**
-	 * Returns a method reflection.
-	 *
-	 * @param string $name Method name
-	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
-	 */
-	public function getMethod($name)
-	{
-		throw new Exception\Runtime(sprintf('There is no method "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
-	}
-
-	/**
-	 * Returns method reflections.
-	 *
-	 * @param integer $filter Methods filter
-	 * @return array
-	 */
-	public function getMethods($filter = null)
-	{
-		return array();
-	}
-
-	/**
-	 * Returns modifiers.
-	 *
-	 * @return integer
-	 */
-	public function getModifiers()
-	{
-		return 0;
-	}
-
-	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
-	 */
-	public function getNamespaceName()
-	{
-		return '';
-	}
-
-	/**
-	 * Returns the parent class reflection.
-	 *
-	 * @return null
-	 */
-	public function getParentClass()
-	{
-		return null;
-	}
-
-	/**
-	 * Returns the parent classes reflections.
-	 *
-	 * @return array
-	 */
-	public function getParentClasses()
-	{
-		return array();
-	}
-
-	/**
-	 * Returns the parent classes names.
-	 *
-	 * @return array
-	 */
-	public function getParentClassNameList()
-	{
-		return array();
-	}
-
-	/**
-	 * Returns the parent class reflection.
-	 *
-	 * @return null
-	 */
-	public function getParentClassName()
-	{
-		return null;
+		return false;
 	}
 
 	/**
@@ -432,6 +617,28 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class (and not its parents) implements the given property.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasOwnProperty($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns properties declared by this class, not its parents.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getOwnProperties($filter = null)
+	{
+		return array();
+	}
+
+	/**
 	 * Returns static properties reflections.
 	 *
 	 * @return array
@@ -451,271 +658,6 @@ class ReflectionClass implements IReflectionClass
 	public function getStaticPropertyValue($name, $default = null)
 	{
 		throw new Exception(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception::DOES_NOT_EXIST);
-	}
-
-	/**
-	 * Returns interfaces implemented by this class, not its parents.
-	 *
-	 * @return array
-	 */
-	public function getOwnInterfaces()
-	{
-		return array();
-	}
-
-	/**
-	 * Returns names of interfaces implemented by this class, not its parents.
-	 *
-	 * @return array
-	 */
-	public function getOwnInterfaceNames()
-	{
-		return array();
-	}
-
-	/**
-	 * Returns methods declared by this class, not its parents.
-	 *
-	 * @param integer $filter Methods filter
-	 * @return array
-	 */
-	public function getOwnMethods($filter = null)
-	{
-		return array();
-	}
-
-	/**
-	 * Returns properties declared by this class, not its parents.
-	 *
-	 * @param integer $filter Properties filter
-	 * @return array
-	 */
-	public function getOwnProperties($filter = null)
-	{
-		return array();
-	}
-
-	/**
-	 * Returns constants declared by this class, not its parents
-	 *
-	 * @return array
-	 */
-	public function getOwnConstants()
-	{
-		return array();
-	}
-
-	/**
-	 * Returns if the class defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return boolean
-	 */
-	public function hasConstant($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class (and not its parents) defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return boolean
-	 */
-	public function hasOwnConstant($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class implements the given method.
-	 *
-	 * @param string $name Method name
-	 * @return boolean
-	 */
-	public function hasMethod($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class implements (and not its parents) the given method.
-	 *
-	 * @param string $name Method name
-	 * @return boolean
-	 */
-	public function hasOwnMethod($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class implements the given property.
-	 *
-	 * @param string $name Property name
-	 * @return boolean
-	 */
-	public function hasProperty($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class (and not its parents) implements the given property.
-	 *
-	 * @param string $name Property name
-	 * @return boolean
-	 */
-	public function hasOwnProperty($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class implements the given interface.
-	 *
-	 * @param string|object $interface Interface name or reflection object
-	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
-	 */
-	public function implementsInterface($interface)
-	{
-		if (is_object($interface)) {
-			if (!$interface instanceof IReflectionClass) {
-				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
-			}
-
-			$interfaceName = $interface->getName();
-
-			if (!$interface->isInterface()) {
-				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
-			}
-		}
-
-		// Only validation, always returns false
-		return false;
-	}
-
-	/**
-	 * Returns if the class is defined within a namespace.
-	 *
-	 * @return boolean
-	 */
-	public function inNamespace()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class is abstract.
-	 *
-	 * @return boolean
-	 */
-	public function isAbstract()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class is final.
-	 *
-	 * @return boolean
-	 */
-	public function isFinal()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the given object is an instance of this class.
-	 *
-	 * @param object $object Instance
-	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
-	 */
-	public function isInstance($object)
-	{
-		if (!is_object($object)) {
-			throw new Exception\Runtime(sprintf('Parameter must be a class instance, "%s" provided.', gettype($object)), Exception\Runtime::INVALID_ARGUMENT);
-		}
-
-		return $this->name === get_class($object) || is_subclass_of($object, $this->name);
-	}
-
-	/**
-	 * Returns if it is possible to create an instance of this class.
-	 *
-	 * @return boolean
-	 */
-	public function isInstantiable()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if objects of this class are cloneable.
-	 *
-	 * Not implemented in 5.3, but in trunk though.
-	 *
-	 * @return boolean
-	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
-	 */
-	public function isCloneable()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class is an interface.
-	 *
-	 * @return boolean
-	 */
-	public function isInterface()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class is an exception or its descendant.
-	 *
-	 * @return boolean
-	 */
-	public function isException()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the class is iterateable.
-	 *
-	 * Returns true if the class implements the Traversable interface.
-	 *
-	 * @return boolean
-	 */
-	public function isIterateable()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the current class is a subclass of the given class.
-	 *
-	 * @param string|object $class Class name or reflection object
-	 * @return boolean
-	 */
-	public function isSubclassOf($class)
-	{
-		return false;
 	}
 
 	/**
@@ -835,6 +777,22 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the given object is an instance of this class.
+	 *
+	 * @param object $object Instance
+	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
+	 */
+	public function isInstance($object)
+	{
+		if (!is_object($object)) {
+			throw new Exception\Runtime(sprintf('Parameter must be a class instance, "%s" provided.', gettype($object)), Exception\Runtime::INVALID_ARGUMENT);
+		}
+
+		return $this->name === get_class($object) || is_subclass_of($object, $this->name);
+	}
+
+	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
 	 * Use any number of constructor parameters as function parameters.
@@ -877,6 +835,34 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return sprintf(
+			"Class|Interface [ <user> class|interface %s ] {\n  %s%s%s%s%s\n}\n",
+			$this->getName(),
+			"\n\n  - Constants [0] {\n  }",
+			"\n\n  - Static properties [0] {\n  }",
+			"\n\n  - Static methods [0] {\n  }",
+			"\n\n  - Properties [0] {\n  }",
+			"\n\n  - Methods [0] {\n  }"
+		);
+	}
+
+	/**
+	 * Outputs the reflection subject source code.
+	 *
+	 * @return string
+	 */
+	public function getSource()
+	{
+		return '';
+	}
+
+	/**
 	 * Returns if the class definition is complete.
 	 *
 	 * Dummy classes never have the definition complete.
@@ -889,20 +875,34 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns the string representation of the reflection object.
+	 * Returns the reflection broker used by this reflection object.
 	 *
-	 * @return string
+	 * @return \TokenReflection\Broker
 	 */
-	public function __toString()
+	public function getBroker()
 	{
-		return sprintf(
-			"Class|Interface [ <user> class|interface %s ] {\n  %s%s%s%s%s\n}\n",
-			$this->getShortName(),
-			"\n\n  - Constants [0] {\n  }",
-			"\n\n  - Static properties [0] {\n  }",
-			"\n\n  - Static methods [0] {\n  }",
-			"\n\n  - Properties [0] {\n  }",
-			"\n\n  - Methods [0] {\n  }"
-		);
+		return $this->broker;
+	}
+
+	/**
+	 * Magic __get method.
+	 *
+	 * @param string $key Variable name
+	 * @return mixed
+	 */
+	final public function __get($key)
+	{
+		return ReflectionBase::get($this, $key);
+	}
+
+	/**
+	 * Magic __isset method.
+	 *
+	 * @param string $key Variable name
+	 * @return boolean
+	 */
+	final public function __isset($key)
+	{
+		return ReflectionBase::exists($this, $key);
 	}
 }

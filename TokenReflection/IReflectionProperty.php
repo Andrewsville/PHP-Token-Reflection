@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -35,13 +35,6 @@ interface IReflectionProperty extends IReflection
 	public function getDeclaringClassName();
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return string|boolean
-	 */
-	public function getDocComment();
-
-	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer
@@ -56,26 +49,11 @@ interface IReflectionProperty extends IReflection
 	public function getEndLine();
 
 	/**
-	 * Returns property modifiers.
+	 * Returns the appropriate docblock definition.
 	 *
-	 * @return integer
+	 * @return string|boolean
 	 */
-	public function getModifiers();
-
-	/**
-	 * Returns the property value for a particular class instance.
-	 *
-	 * @param object $object
-	 * @return mixed
-	 */
-	public function getValue($object);
-
-	/**
-	 * Returns if the property was defined at compile time.
-	 *
-	 * @return boolean
-	 */
-	public function isDefault();
+	public function getDocComment();
 
 	/**
 	 * Returns the property default value.
@@ -90,6 +68,21 @@ interface IReflectionProperty extends IReflection
 	 * @return string
 	 */
 	public function getDefaultValueDefinition();
+
+	/**
+	 * Returns the property value for a particular class instance.
+	 *
+	 * @param object $object
+	 * @return mixed
+	 */
+	public function getValue($object);
+
+	/**
+	 * Returns property modifiers.
+	 *
+	 * @return integer
+	 */
+	public function getModifiers();
 
 	/**
 	 * Returns if the property is private.
@@ -118,6 +111,13 @@ interface IReflectionProperty extends IReflection
 	 * @return boolean
 	 */
 	public function isStatic();
+
+	/**
+	 * Returns if the property was defined at compile time.
+	 *
+	 * @return boolean
+	 */
+	public function isDefault();
 
 	/**
 	 * Sets a property to be accessible or not.

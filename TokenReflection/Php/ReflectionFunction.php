@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Php;
@@ -27,18 +27,18 @@ use Reflector, ReflectionFunction as InternalReflectionFunction, ReflectionParam
 class ReflectionFunction extends InternalReflectionFunction implements IReflection, TokenReflection\IReflectionFunction
 {
 	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
-	/**
 	 * Function parameter reflections.
 	 *
 	 * @var array
 	 */
 	private $parameters;
+
+	/**
+	 * Reflection broker.
+	 *
+	 * @var \TokenReflection\Broker
+	 */
+	private $broker;
 
 	/**
 	 * Constructor.
@@ -53,38 +53,6 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return \TokenReflection\Broker
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return TokenReflection\ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return boolean
-	 */
-	final public function __isset($key)
-	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
-	}
-
-	/**
 	 * Returns the PHP extension reflection.
 	 *
 	 * @return \TokenReflection\Php\IReflectionExtension
@@ -95,21 +63,45 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
-	 * Returns function parameters.
+	 * Checks if there is a particular annotation.
+	 *
+	 * @param string $name Annotation name
+	 * @return boolean
+	 */
+	public function hasAnnotation($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
+	 * @return null
+	 */
+	public function getAnnotation($name)
+	{
+		return null;
+	}
+
+	/**
+	 * Returns parsed docblock.
 	 *
 	 * @return array
 	 */
-	public function getParameters()
+	public function getAnnotations()
 	{
-		if (null === $this->parameters) {
-			$broker = $this->broker;
-			$parent = $this;
-			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
-				return ReflectionParameter::create($parameter, $broker, $parent);
-			}, parent::getParameters());
-		}
+		return array();
+	}
 
-		return $this->parameters;
+	/**
+	 * Returns if the current reflection comes from a tokenized source.
+	 *
+	 * @return boolean
+	 */
+	public function isTokenized()
+	{
+		return false;
 	}
 
 	/**
@@ -142,45 +134,31 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
-	 * Returns parsed docblock.
+	 * Returns function parameters.
 	 *
 	 * @return array
 	 */
-	public function getAnnotations()
+	public function getParameters()
 	{
-		return array();
+		if (null === $this->parameters) {
+			$broker = $this->broker;
+			$parent = $this;
+			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
+				return ReflectionParameter::create($parameter, $broker, $parent);
+			}, parent::getParameters());
+		}
+
+		return $this->parameters;
 	}
 
 	/**
-	 * Returns a particular annotation value.
+	 * Returns the reflection broker used by this reflection object.
 	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * @return \TokenReflection\Broker
 	 */
-	public function getAnnotation($name)
+	public function getBroker()
 	{
-		return null;
-	}
-
-	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return boolean
-	 */
-	public function hasAnnotation($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return false;
+		return $this->broker;
 	}
 
 	/**
@@ -191,6 +169,28 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public function getNamespaceAliases()
 	{
 		return array();
+	}
+
+	/**
+	 * Magic __get method.
+	 *
+	 * @param string $key Variable name
+	 * @return mixed
+	 */
+	final public function __get($key)
+	{
+		return TokenReflection\ReflectionBase::get($this, $key);
+	}
+
+	/**
+	 * Magic __isset method.
+	 *
+	 * @param string $key Variable name
+	 * @return boolean
+	 */
+	final public function __isset($key)
+	{
+		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
 	/**

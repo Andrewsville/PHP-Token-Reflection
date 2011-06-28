@@ -1,4 +1,17 @@
 <?php
+/**
+ * PHP Token Reflection
+ *
+ * Version 1.0 beta 2
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this library in the file LICENSE.
+ *
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
+ */
 
 namespace TokenReflection;
 
@@ -6,10 +19,24 @@ use ReflectionParameter as InternalReflectionParameter;
 
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Parameter test.
+ *
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
+ */
 class ReflectionParameterTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'parameter';
 
+	/**
+	 * Tests getting of parameter position.
+	 */
 	public function testPosition()
 	{
 		$rfl = $this->getFunctionReflection('position');
@@ -24,6 +51,9 @@ class ReflectionParameterTest extends Test
 		}
 	}
 
+	/**
+	 * Tests if parameter allows null.
+	 */
 	public function testAllowsNull()
 	{
 		foreach (array('Class', 'Array') as $type) {
@@ -37,6 +67,9 @@ class ReflectionParameterTest extends Test
 		}
 	}
 
+	/**
+	 * Tests if parameters is optional.
+	 */
 	public function testOptional()
 	{
 		$types = array('null' => null, 'true' => true, 'false' => false, 'array' => array(), 'string' => 'string', 'integer' => 1, 'float' => 1.1, 'constant' => E_NOTICE);
@@ -69,6 +102,9 @@ class ReflectionParameterTest extends Test
 		}
 	}
 
+	/**
+	 * Tests if parameter has array type hint.
+	 */
 	public function testArray()
 	{
 		$rfl = $this->getParameterReflection('array');
@@ -80,6 +116,9 @@ class ReflectionParameterTest extends Test
 		$this->assertFalse($rfl->token->isArray());
 	}
 
+	/**
+	 * Tests if parameter has class type hint.
+	 */
 	public function testClass()
 	{
 		$rfl = $this->getParameterReflection('class');
@@ -94,6 +133,9 @@ class ReflectionParameterTest extends Test
 		$this->assertNull($rfl->token->getClassName());
 	}
 
+	/**
+	 * Tests if parameter is passed by reference.
+	 */
 	public function testReference()
 	{
 		$rfl = $this->getParameterReflection('reference');
@@ -105,6 +147,9 @@ class ReflectionParameterTest extends Test
 		$this->assertFalse($rfl->token->isPassedByReference());
 	}
 
+	/**
+	 * Tests getting of declaring method or function.
+	 */
 	public function testDeclaring()
 	{
 		$rfl = $this->getParameterReflection('declaringFunction');
@@ -134,6 +179,9 @@ class ReflectionParameterTest extends Test
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
 	}
 
+	/**
+	 * Tests export.
+	 */
 	public function testToString()
 	{
 		$tests = array(

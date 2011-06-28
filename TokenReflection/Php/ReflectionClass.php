@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Php;
@@ -34,11 +34,11 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	private $broker;
 
 	/**
-	 * Constant reflections.
+	 * Implemented interface reflections.
 	 *
 	 * @var array
 	 */
-	private $constants;
+	private $interfaces;
 
 	/**
 	 * Metod reflections.
@@ -48,11 +48,11 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	private $methods;
 
 	/**
-	 * Implemented interface reflections.
+	 * Constant reflections.
 	 *
 	 * @var array
 	 */
-	private $interfaces;
+	private $constants;
 
 	/**
 	 * Property reflections.
@@ -74,13 +74,104 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
+	 * Returns the PHP extension reflection.
 	 *
-	 * @return \TokenReflection\Broker
+	 * @return \TokenReflection\Php\ReflectionExtension
 	 */
-	public function getBroker()
+	public function getExtension()
 	{
-		return $this->broker;
+		return ReflectionExtension::create(parent::getExtension(), $this->broker);
+	}
+
+	/**
+	 * Checks if there is a particular annotation.
+	 *
+	 * @param string $name Annotation name
+	 * @return boolean
+	 */
+	public function hasAnnotation($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
+	 * @return null
+	 */
+	public function getAnnotation($name)
+	{
+		return null;
+	}
+
+	/**
+	 * Returns parsed docblock.
+	 *
+	 * @return array
+	 */
+	public function getAnnotations()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class is an exception or its descendant.
+	 *
+	 * @return boolean
+	 */
+	public function isException()
+	{
+		return 'Exception' === $this->getName() || $this->isSubclassOf('Exception');
+	}
+
+	/**
+	 * Returns if objects of this class are cloneable.
+	 *
+	 * Introduced in PHP 5.4.
+	 *
+	 * @return boolean
+	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
+	 */
+	public function isCloneable()
+	{
+		if ($this->isInterface() || $this->isAbstract()) {
+			return false;
+		}
+
+		$methods = $this->getMethods();
+		return isset($methods['__clone']) ? $methods['__clone']->isPublic() : true;
+	}
+
+	/**
+	 * Returns if the current reflection comes from a tokenized source.
+	 *
+	 * @return boolean
+	 */
+	public function isTokenized()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the reflection subject is deprecated.
+	 *
+	 * @return boolean
+	 */
+	public function isDeprecated()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the current class is a subclass of the given class.
+	 *
+	 * @param string|object $class Class name or reflection object
+	 * @return boolean
+	 */
+	public function isSubclassOf($class)
+	{
+		return in_array($class, $this->getParentClassNameList());
 	}
 
 	/**
@@ -119,6 +210,176 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Returns the parent classes names.
+	 *
+	 * @return array
+	 */
+	public function getParentClassNameList()
+	{
+		return class_parents($this->getName());
+	}
+
+	/**
+	 * Returns if the class implements the given interface.
+	 *
+	 * @param string|object $interface Interface name or reflection object
+	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
+	 */
+	public function implementsInterface($interface)
+	{
+		if (is_object($interface)) {
+			if ($interface instanceof InternalReflectionClass || $interface instanceof IReflectionClass) {
+				$interfaceName = $interface->getName();
+			} else {
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+		} else {
+			$interfaceName = $interface;
+		}
+
+		$interfaces = $this->getInterfaces();
+		return isset($interfaces[$interfaceName]);
+	}
+
+	/**
+	 * Returns an array of interface reflections.
+	 *
+	 * @return array
+	 */
+	public function getInterfaces()
+	{
+		if (null === $this->interfaces) {
+			$broker = $this->broker;
+			$this->interfaces = array_map(function($interfaceName) use ($broker) {
+				return $broker->getClass($interfaceName);
+			}, $this->getInterfaceNames());
+		}
+
+		return $this->interfaces;
+	}
+
+	/**
+	 * Returns interfaces implemented by this class, not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnInterfaces()
+	{
+		$parent = $this->getParentClass();
+		return $parent ? array_diff_key($this->getInterfaces(), $parent->getInterfaces()) : $this->getInterfaces();
+	}
+
+	/**
+	 * Returns names of interfaces implemented by this class, not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnInterfaceNames()
+	{
+		return array_keys($this->getOwnInterfaces());
+	}
+
+	/**
+	 * Returns class constructor reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionClass|null
+	 */
+	public function getConstructor()
+	{
+		return ReflectionMethod::create(parent::getConstructor(), $this->broker);
+	}
+
+	/**
+	 * Returns class desctructor reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionClass|null
+	 */
+	public function getDestructor()
+	{
+		foreach ($this->getMethods() as $method) {
+			if ($method->isDestructor()) {
+				return $method;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns a particular method reflection.
+	 *
+	 * @param string $name Method name
+	 * @return \TokenReflection\Php\ReflectionMethod
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
+	 */
+	public function getMethod($name)
+	{
+		foreach ($this->getMethods() as $method) {
+			if ($method->getName() === $name) {
+				return $method;
+			}
+		}
+
+		throw new Exception\Runtime(sprintf('There is no method %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+	}
+
+	/**
+	 * Returns class methods.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getMethods($filter = null)
+	{
+		if (null === $this->methods) {
+			$broker = $this->broker;
+			$this->methods = array_map(function(InternalReflectionMethod $method) use ($broker) {
+				return ReflectionMethod::create($method, $broker);
+			}, parent::getMethods());
+		}
+
+		if (null === $filter) {
+			return $this->methods;
+		}
+
+		return array_filter($this->methods, function(ReflectionMethod $method) use ($filter) {
+			return (bool) ($method->getModifiers() & $filter);
+		});
+	}
+
+	/**
+	 * Returns if the class implements (and not its parents) the given method.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasOwnMethod($name)
+	{
+		foreach ($this->getOwnMethods() as $method) {
+			if ($name === $method->getName()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns methods declared by this class, not its parents.
+	 *
+	 * @param integer $filter
+	 * @return array
+	 */
+	public function getOwnMethods($filter = null)
+	{
+		$me = $this->getName();
+		return array_filter($this->getMethods($filter), function(ReflectionMethod $method) use ($me) {
+			return $method->getDeclaringClass()->getName() === $me;
+		});
+	}
+
+	/**
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
@@ -152,6 +413,28 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Returns if the class (and not its parents) defines the given constant.
+	 *
+	 * @param string $name Constant name.
+	 * @return boolean
+	 */
+	public function hasOwnConstant($name)
+	{
+		$constants = $this->getOwnConstants();
+		return isset($constants[$name]);
+	}
+
+	/**
+	 * Returns constants declared by this class, not its parents
+	 *
+	 * @return array
+	 */
+	public function getOwnConstants()
+	{
+		return array_diff_assoc($this->getConstants(), $this->getParentClass() ? $this->getParentClass()->getConstants() : array());
+	}
+
+	/**
 	 * Returns an array of constant reflections defined by this class and not its parents.
 	 *
 	 * @return array
@@ -166,140 +449,21 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
-	 * Returns the parent classes names.
-	 *
-	 * @return array
-	 */
-	public function getParentClassNameList()
-	{
-		return class_parents($this->getName());
-	}
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return TokenReflection\ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return boolean
-	 */
-	final public function __isset($key)
-	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
-	}
-
-	/**
-	 * Returns interfaces implemented by this class, not its parents.
-	 *
-	 * @return array
-	 */
-	public function getOwnInterfaces()
-	{
-		$parent = $this->getParentClass();
-		return $parent ? array_diff_key($this->getInterfaces(), $parent->getInterfaces()) : $this->getInterfaces();
-	}
-
-	/**
-	 * Returns names of interfaces implemented by this class, not its parents.
-	 *
-	 * @return array
-	 */
-	public function getOwnInterfaceNames()
-	{
-		return array_keys($this->getOwnInterfaces());
-	}
-
-	/**
-	 * Returns methods declared by this class, not its parents.
-	 *
-	 * @param integer $filter
-	 * @return array
-	 */
-	public function getOwnMethods($filter = null)
-	{
-		$me = $this->getName();
-		return array_filter($this->getMethods($filter), function(ReflectionMethod $method) use ($me) {
-			return $method->getDeclaringClass()->getName() === $me;
-		});
-	}
-
-	/**
-	 * Returns if the class implements (and not its parents) the given method.
-	 *
-	 * @param string $name Method name
-	 * @return boolean
-	 */
-	public function hasOwnMethod($name)
-	{
-		foreach ($this->getOwnMethods() as $method) {
-			if ($name === $method->getName()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns properties declared by this class, not its parents.
-	 *
-	 * @param integer $filter
-	 * @return array
-	 */
-	public function getOwnProperties($filter = null)
-	{
-		$me = $this->getName();
-		return array_filter($this->getProperties($filter), function(ReflectionProperty $property) use ($me) {
-			return $property->getDeclaringClass()->getName() === $me;
-		});
-	}
-
-	/**
-	 * Returns if the class has (and not its parents) the given property.
+	 * Returns a particular property reflection.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return \TokenReflection\Php\ReflectionProperty
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
 	 */
-	public function hasOwnProperty($name)
+	public function getProperty($name)
 	{
-		foreach ($this->getOwnProperties() as $property) {
+		foreach ($this->getProperties() as $property) {
 			if ($name === $property->getName()) {
-				return true;
+				return $property;
 			}
 		}
 
-		return false;
-	}
-
-	/**
-	 * Returns constants declared by this class, not its parents
-	 *
-	 * @return array
-	 */
-	public function getOwnConstants()
-	{
-		return array_diff_assoc($this->getConstants(), $this->getParentClass() ? $this->getParentClass()->getConstants() : array());
-	}
-
-	/**
-	 * Returns if the class (and not its parents) defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return boolean
-	 */
-	public function hasOwnConstant($name)
-	{
-		$constants = $this->getOwnConstants();
-		return isset($constants[$name]);
+		throw new Exception\Runtime(sprintf('There is no property %s in class %s', $name, $this->getName()), Exception::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -327,166 +491,34 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
-	 * Returns class methods.
-	 *
-	 * @param integer $filter Methods filter
-	 * @return array
-	 */
-	public function getMethods($filter = null)
-	{
-		if (null === $this->methods) {
-			$broker = $this->broker;
-			$this->methods = array_map(function(InternalReflectionMethod $method) use ($broker) {
-				return ReflectionMethod::create($method, $broker);
-			}, parent::getMethods());
-		}
-
-		if (null === $filter) {
-			return $this->methods;
-		}
-
-		return array_filter($this->methods, function(ReflectionMethod $method) use ($filter) {
-			return (bool) ($method->getModifiers() & $filter);
-		});
-	}
-
-	/**
-	 * Returns class constructor reflection.
-	 *
-	 * @return \TokenReflection\Php\ReflectionClass|null
-	 */
-	public function getConstructor()
-	{
-		return ReflectionMethod::create(parent::getConstructor(), $this->broker);
-	}
-
-	/**
-	 * Returns class desctructor reflection.
-	 *
-	 * @return \TokenReflection\Php\ReflectionClass|null
-	 */
-	public function getDestructor()
-	{
-		foreach ($this->getMethods() as $method) {
-			if ($method->isDestructor()) {
-				return $method;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return \TokenReflection\Php\ReflectionExtension
-	 */
-	public function getExtension()
-	{
-		return ReflectionExtension::create(parent::getExtension(), $this->broker);
-	}
-
-	/**
-	 * Returns if objects of this class are cloneable.
-	 *
-	 * Not implemented in 5.3, but in trunk though.
-	 *
-	 * @return boolean
-	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
-	 */
-	public function isCloneable()
-	{
-		if (!$this->isInstantiable()) {
-			return false;
-		}
-
-		$methods = $this->getMethods();
-		return isset($methods['__clone']) ? $methods['__clone']->isPublic() : true;
-	}
-
-	/**
-	 * Returns if the class is an exception or its descendant.
-	 *
-	 * @return boolean
-	 */
-	public function isException()
-	{
-		return 'Exception' === $this->getName() || $this->isSubclassOf('Exception');
-	}
-
-	/**
-	 * Returns an array of interface reflections.
-	 *
-	 * @return array
-	 */
-	public function getInterfaces()
-	{
-		if (null === $this->interfaces) {
-			$broker = $this->broker;
-			$this->interfaces = array_map(function($interfaceName) use ($broker) {
-				return $broker->getClass($interfaceName);
-			}, $this->getInterfaceNames());
-		}
-
-		return $this->interfaces;
-	}
-
-	/**
-	 * Returns if the class implements the given interface.
-	 *
-	 * @param string|object $interface Interface name or reflection object
-	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
-	 */
-	public function implementsInterface($interface) {
-		if (is_object($interface)) {
-			if ($interface instanceof InternalReflectionClass || $interface instanceof IReflectionClass) {
-				$interfaceName = $interface->getName();
-			} else {
-				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
-			}
-		} else {
-			$interfaceName = $interface;
-		}
-
-		$interfaces = $this->getInterfaces();
-		return isset($interfaces[$interfaceName]);
-	}
-
-	/**
-	 * Returns a particular method reflection.
-	 *
-	 * @param string $name Method name
-	 * @return \TokenReflection\Php\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
-	 */
-	public function getMethod($name)
-	{
-		foreach ($this->getMethods() as $method) {
-			if ($method->getName() === $name) {
-				return $method;
-			}
-		}
-
-		throw new Exception\Runtime(sprintf('There is no method %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
-	}
-
-	/**
-	 * Returns a particular property reflection.
+	 * Returns if the class has (and not its parents) the given property.
 	 *
 	 * @param string $name Property name
-	 * @return \TokenReflection\Php\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
+	 * @return boolean
 	 */
-	public function getProperty($name)
+	public function hasOwnProperty($name)
 	{
-		foreach ($this->getProperties() as $property) {
+		foreach ($this->getOwnProperties() as $property) {
 			if ($name === $property->getName()) {
-				return $property;
+				return true;
 			}
 		}
 
-		throw new Exception\Runtime(sprintf('There is no property %s in class %s', $name, $this->getName()), Exception::DOES_NOT_EXIST);
+		return false;
+	}
+
+	/**
+	 * Returns properties declared by this class, not its parents.
+	 *
+	 * @param integer $filter
+	 * @return array
+	 */
+	public function getOwnProperties($filter = null)
+	{
+		$me = $this->getName();
+		return array_filter($this->getProperties($filter), function(ReflectionProperty $property) use ($me) {
+			return $property->getDeclaringClass()->getName() === $me;
+		});
 	}
 
 	/**
@@ -497,69 +529,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function getStaticProperties()
 	{
 		return $this->getProperties(InternalReflectionProperty::IS_STATIC);
-	}
-
-	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
-	 */
-	public function getAnnotations()
-	{
-		return array();
-	}
-
-	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
-	 */
-	public function getAnnotation($name)
-	{
-		return null;
-	}
-
-	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return boolean
-	 */
-	public function hasAnnotation($name)
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the current class is a subclass of the given class.
-	 *
-	 * @param string|object $class Class name or reflection object
-	 * @return boolean
-	 */
-	public function isSubclassOf($class)
-	{
-		return in_array($class, $this->getParentClassNameList());
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the reflection subject is deprecated.
-	 *
-	 * @return boolean
-	 */
-	public function isDeprecated()
-	{
-		return false;
 	}
 
 	/**
@@ -679,6 +648,18 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Returns if the class definition is complete.
+	 *
+	 * Internal classes always have the definition complete.
+	 *
+	 * @return boolean
+	 */
+	public function isComplete()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array
@@ -689,15 +670,35 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
-	 * Returns if the class definition is complete.
+	 * Returns the reflection broker used by this reflection object.
 	 *
-	 * Internal classes always have the definition complete.
+	 * @return \TokenReflection\Broker
+	 */
+	public function getBroker()
+	{
+		return $this->broker;
+	}
+
+	/**
+	 * Magic __get method.
 	 *
+	 * @param string $key Variable name
+	 * @return mixed
+	 */
+	final public function __get($key)
+	{
+		return TokenReflection\ReflectionBase::get($this, $key);
+	}
+
+	/**
+	 * Magic __isset method.
+	 *
+	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	public function isComplete()
+	final public function __isset($key)
 	{
-		return true;
+		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
 	/**

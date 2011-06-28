@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -42,50 +42,11 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	public function getModifiers();
 
 	/**
-	 * Returns the method prototype.
-	 *
-	 * @return \TokenReflection\IReflectionMethod
-	 */
-	public function getPrototype();
-
-	/**
-	 * Calls the method on an given instance.
-	 *
-	 * @param object $object Class instance
-	 * @param mixed $args
-	 * @return mixed
-	 */
-	public function invoke($object, $args);
-
-	/**
-	 * Calls the method on an given object.
-	 *
-	 * @param object $object Class instance
-	 * @param array $args Method parameter values
-	 * @return mixed
-	 */
-	public function invokeArgs($object, array $args);
-
-	/**
 	 * Returns if the method is abstract.
 	 *
 	 * @return boolean
 	 */
 	public function isAbstract();
-
-	/**
-	 * Returns if the method is a constructor.
-	 *
-	 * @return boolean
-	 */
-	public function isConstructor();
-
-	/**
-	 * Returns if the method is a destructor.
-	 *
-	 * @return boolean
-	 */
-	public function isDestructor();
 
 	/**
 	 * Returns if the method is final.
@@ -129,6 +90,45 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @return boolean
 	 */
 	public function is($filter = null);
+
+	/**
+	 * Returns if the method is a constructor.
+	 *
+	 * @return boolean
+	 */
+	public function isConstructor();
+
+	/**
+	 * Returns if the method is a destructor.
+	 *
+	 * @return boolean
+	 */
+	public function isDestructor();
+
+	/**
+	 * Returns the method prototype.
+	 *
+	 * @return \TokenReflection\IReflectionMethod
+	 */
+	public function getPrototype();
+
+	/**
+	 * Calls the method on an given instance.
+	 *
+	 * @param object $object Class instance
+	 * @param mixed $args
+	 * @return mixed
+	 */
+	public function invoke($object, $args);
+
+	/**
+	 * Calls the method on an given object.
+	 *
+	 * @param object $object Class instance
+	 * @param array $args Method parameter values
+	 * @return mixed
+	 */
+	public function invokeArgs($object, array $args);
 
 	/**
 	 * Sets a method to be accessible or not.

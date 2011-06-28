@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -57,6 +57,8 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Creates a token substream.
 	 *
 	 * @param string $fileName File name
+	 * @throws \TokenReflection\Exception\Parse If tokenizer PHP extension is missing
+	 * @throws \TokenReflection\Exception\Parse If file does not exist or is not readable
 	 */
 	public function __construct($fileName)
 	{
@@ -97,129 +99,6 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	}
 
 	/**
-	 * Checks of there is a token with the given index.
-	 *
-	 * @param integer $offset Token index
-	 * @return boolean
-	 */
-	public function offsetExists($offset)
-	{
-		return isset($this->tokens[$offset]);
-	}
-
-	/**
-	 * Removes a token.
-	 *
-	 * Unsupported.
-	 *
-	 * @param integer $offset Position
-	 * @throws \TokenReflection\Exception\Runtime Unsupported
-	 */
-	public function offsetUnset($offset)
-	{
-		throw new Exception\Runtime('Removing of tokens from the stream is not supported.', Exception\Runtime::UNSUPPORTED);
-	}
-
-	/**
-	 * Returns a token at the given index.
-	 *
-	 * @param integer $offset Token index
-	 * @return mixed
-	 */
-	public function offsetGet($offset)
-	{
-		return isset($this->tokens[$offset]) ? $this->tokens[$offset] : null;
-	}
-
-	/**
-	 * Sets a value of a particular token.
-	 *
-	 * Unsupported
-	 *
-	 * @param integer $offset Position
-	 * @param mixed $value Value
-	 * @throws \TokenReflection\Exception\Runtime Unsupported
-	 */
-	public function offsetSet($offset, $value)
-	{
-		throw new Exception\Runtime('Setting token values is not supported.', Exception\Runtime::UNSUPPORTED);
-	}
-
-	/**
-	 * Returns the current internal pointer value.
-	 *
-	 * @return integer
-	 */
-	public function key()
-	{
-		return $this->position;
-	}
-
-	/**
-	 * Advances the internal pointer.
-	 *
-	 * @return \TokenReflection\Stream
-	 */
-	public function next()
-	{
-		$this->position++;
-		return $this;
-	}
-
-	/**
-	 * Sets the internal pointer to zero.
-	 *
-	 * @return \TokenReflection\Stream
-	 */
-	public function rewind()
-	{
-		$this->position = 0;
-		return $this;
-	}
-
-	/**
-	 * Returns the current token.
-	 *
-	 * @return array|null
-	 */
-	public function current()
-	{
-		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position] : null;
-	}
-
-	/**
-	 * Checks if there is a token on the current position.
-	 *
-	 * @return boolean
-	 */
-	public function valid()
-	{
-		return isset($this->tokens[$this->position]);
-	}
-
-	/**
-	 * Returns the number of tokens in the stream.
-	 *
-	 * @return integer
-	 */
-	public function count()
-	{
-		return $this->count;
-	}
-
-	/**
-	 * Sets the internal pointer to the given value.
-	 *
-	 * @param integer $position New position
-	 * @return \TokenReflection\Stream
-	 */
-	public function seek($position)
-	{
-		$this->position = (int) $position;
-		return $this;
-	}
-
-	/**
 	 * Returns the file name this is a part of.
 	 *
 	 * @return string
@@ -227,6 +106,35 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	public function getFileName()
 	{
 		return $this->fileName;
+	}
+
+	/**
+	 * Returns the original source code.
+	 *
+	 * @return string
+	 */
+	public function getSource()
+	{
+		return $this->getSourcePart();
+	}
+
+	/**
+	 * Returns a part of the source code.
+	 *
+	 * @param mixed $start Start offset
+	 * @param mixed $end End offset
+	 * @return string
+	 */
+	public function getSourcePart($start = null, $end = null)
+	{
+		$start = (int) $start;
+		$end = null === $end ? ($this->count - 1) : (int) $end;
+
+		$source = '';
+		for ($i = $start; $i <= $end; $i++) {
+			$source .= $this->tokens[$i][1];
+		}
+		return $source;
 	}
 
 	/**
@@ -370,45 +278,6 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	}
 
 	/**
-	 * Returns the stream source code.
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return $this->getSource();
-	}
-
-	/**
-	 * Returns the original source code.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return $this->getSourcePart();
-	}
-
-	/**
-	 * Returns a part of the source code.
-	 *
-	 * @param mixed $start Start offset
-	 * @param mixed $end End offset
-	 * @return string
-	 */
-	public function getSourcePart($start = null, $end = null)
-	{
-		$start = (int) $start;
-		$end = null === $end ? ($this->count - 1) : (int) $end;
-
-		$source = '';
-		for ($i = $start; $i <= $end; $i++) {
-			$source .= $this->tokens[$i][1];
-		}
-		return $source;
-	}
-
-	/**
 	 * Stream serialization.
 	 *
 	 * @return string
@@ -438,5 +307,138 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 		$this->tokens = $data[1];
 		$this->count = count($this->tokens);
 		$this->position = 0;
+	}
+
+	/**
+	 * Checks of there is a token with the given index.
+	 *
+	 * @param integer $offset Token index
+	 * @return boolean
+	 */
+	public function offsetExists($offset)
+	{
+		return isset($this->tokens[$offset]);
+	}
+
+	/**
+	 * Removes a token.
+	 *
+	 * Unsupported.
+	 *
+	 * @param integer $offset Position
+	 * @throws \TokenReflection\Exception\Runtime Unsupported
+	 */
+	public function offsetUnset($offset)
+	{
+		throw new Exception\Runtime('Removing of tokens from the stream is not supported.', Exception\Runtime::UNSUPPORTED);
+	}
+
+	/**
+	 * Returns a token at the given index.
+	 *
+	 * @param integer $offset Token index
+	 * @return mixed
+	 */
+	public function offsetGet($offset)
+	{
+		return isset($this->tokens[$offset]) ? $this->tokens[$offset] : null;
+	}
+
+	/**
+	 * Sets a value of a particular token.
+	 *
+	 * Unsupported
+	 *
+	 * @param integer $offset Position
+	 * @param mixed $value Value
+	 * @throws \TokenReflection\Exception\Runtime Unsupported
+	 */
+	public function offsetSet($offset, $value)
+	{
+		throw new Exception\Runtime('Setting token values is not supported.', Exception\Runtime::UNSUPPORTED);
+	}
+
+	/**
+	 * Returns the current internal pointer value.
+	 *
+	 * @return integer
+	 */
+	public function key()
+	{
+		return $this->position;
+	}
+
+	/**
+	 * Advances the internal pointer.
+	 *
+	 * @return \TokenReflection\Stream
+	 */
+	public function next()
+	{
+		$this->position++;
+		return $this;
+	}
+
+	/**
+	 * Sets the internal pointer to zero.
+	 *
+	 * @return \TokenReflection\Stream
+	 */
+	public function rewind()
+	{
+		$this->position = 0;
+		return $this;
+	}
+
+	/**
+	 * Returns the current token.
+	 *
+	 * @return array|null
+	 */
+	public function current()
+	{
+		return isset($this->tokens[$this->position]) ? $this->tokens[$this->position] : null;
+	}
+
+	/**
+	 * Checks if there is a token on the current position.
+	 *
+	 * @return boolean
+	 */
+	public function valid()
+	{
+		return isset($this->tokens[$this->position]);
+	}
+
+	/**
+	 * Returns the number of tokens in the stream.
+	 *
+	 * @return integer
+	 */
+	public function count()
+	{
+		return $this->count;
+	}
+
+	/**
+	 * Sets the internal pointer to the given value.
+	 *
+	 * @param integer $position New position
+	 * @return \TokenReflection\Stream
+	 */
+	public function seek($position)
+	{
+		$this->position = (int) $position;
+		return $this;
+	}
+
+	/**
+	 * Returns the stream source code.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->getSource();
 	}
 }

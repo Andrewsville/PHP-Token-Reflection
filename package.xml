@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+		http://pear.php.net/dtd/tasks-1.0.xsd
+		http://pear.php.net/dtd/package-2.0
+		http://pear.php.net/dtd/package-2.0.xsd">
+<name>TokenReflection</name>
+<channel>pear.kukulich.cz</channel>
+<summary>PHP reflection replacement.</summary>
+<description>
+	Reflection library that does not need to load the source code and uses just the tokenized source code. Compatible with the PHP reflection and adds many useful features.
+</description>
+<lead>
+	<name>Ondřej Nešpor</name>
+	<user>andrewsville</user>
+	<email>andrew@andrewsville.cz</email>
+	<active>yes</active>
+</lead>
+<developer>
+	<name>Jaroslav Hanslík</name>
+	<user>kukulich</user>
+	<email>kontakt@kukulich.cz</email>
+	<active>yes</active>
+</developer>
+<date>2011-06-28</date>
+<version>
+	<release>1.0.0beta4</release>
+	<api>1.0.0</api>
+</version>
+<stability>
+	<release>beta</release>
+	<api>beta</api>
+</stability>
+<license uri="https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/LICENSE">New BSD</license>
+<notes>-</notes>
+<contents>
+	<dir name="/">
+		<dir name="TokenReflection">
+			<dir name="Broker">
+				<dir name="Backend">
+					<file name="Memory.php" role="php" />
+				</dir>
+				<file name="Backend.php" role="php" />
+			</dir>
+			<dir name="Dummy">
+				<file name="ReflectionClass.php" role="php" />
+			</dir>
+			<dir name="Exception">
+				<file name="Parse.php" role="php" />
+				<file name="Runtime.php" role="php" />
+			</dir>
+			<dir name="Php">
+				<file name="IReflection.php" role="php" />
+				<file name="ReflectionClass.php" role="php" />
+				<file name="ReflectionConstant.php" role="php" />
+				<file name="ReflectionExtension.php" role="php" />
+				<file name="ReflectionFunction.php" role="php" />
+				<file name="ReflectionMethod.php" role="php" />
+				<file name="ReflectionParameter.php" role="php" />
+				<file name="ReflectionProperty.php" role="php" />
+			</dir>
+			<file name="Broker.php" role="php" />
+			<file name="Exception.php" role="php" />
+			<file name="IReflection.php" role="php" />
+			<file name="IReflectionClass.php" role="php" />
+			<file name="IReflectionConstant.php" role="php" />
+			<file name="IReflectionExtension.php" role="php" />
+			<file name="IReflectionFunction.php" role="php" />
+			<file name="IReflectionFunctionBase.php" role="php" />
+			<file name="IReflectionMethod.php" role="php" />
+			<file name="IReflectionNamespace.php" role="php" />
+			<file name="IReflectionParameter.php" role="php" />
+			<file name="IReflectionProperty.php" role="php" />
+			<file name="ReflectionAnnotation.php" role="php" />
+			<file name="ReflectionBase.php" role="php" />
+			<file name="ReflectionClass.php" role="php" />
+			<file name="ReflectionConstant.php" role="php" />
+			<file name="ReflectionFile.php" role="php" />
+			<file name="ReflectionFileNamespace.php" role="php" />
+			<file name="ReflectionFunction.php" role="php" />
+			<file name="ReflectionFunctionBase.php" role="php" />
+			<file name="ReflectionMethod.php" role="php" />
+			<file name="ReflectionNamespace.php" role="php" />
+			<file name="ReflectionParameter.php" role="php" />
+			<file name="ReflectionProperty.php" role="php" />
+			<file name="Stream.php" role="php" />
+		</dir>
+		<file name="LICENSE" role="doc" />
+		<file name="README.md" role="doc" />
+	</dir>
+</contents>
+<dependencies>
+	<required>
+		<php>
+			<min>5.3.0</min>
+		</php>
+		<pearinstaller>
+			<min>1.4.0</min>
+		</pearinstaller>
+		<extension>
+			<name>tokenizer</name>
+		</extension>
+	</required>
+</dependencies>
+<phprelease />
+</package>

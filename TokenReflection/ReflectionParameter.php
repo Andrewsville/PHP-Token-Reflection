@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -28,35 +28,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @var string
 	 */
-	CONST ARRAY_CONSTRAINT = 'array';
-
-	/**
-	 * Defines a constraint (class name or array) of parameter values.
-	 *
-	 * @var string
-	 */
-	private $valueConstraint;
-
-	/**
-	 * Defines a type hint (class name or array) of parameter values as it was defined.
-	 *
-	 * @var string
-	 */
-	private $originalTypeHint;
-
-	/**
-	 * Parameter default value definition (part of the source code).
-	 *
-	 * @var array|string
-	 */
-	private $defaultValueDefinition = array();
-
-	/**
-	 * Parameter default value.
-	 *
-	 * @var mixed
-	 */
-	private $defaultValue;
+	const ARRAY_TYPE_HINT = 'array';
 
 	/**
 	 * Declaring class name.
@@ -73,18 +45,32 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	private $declaringFunctionName;
 
 	/**
-	 * Determines if the value is passed by reference.
+	 * Parameter default value.
 	 *
-	 * @var boolean
+	 * @var mixed
 	 */
-	private $passedByReference = false;
+	private $defaultValue;
 
 	/**
-	 * Determines if the parameter is optional.
+	 * Parameter default value definition (part of the source code).
 	 *
-	 * @var boolean
+	 * @var array|string
 	 */
-	private $isOptional;
+	private $defaultValueDefinition = array();
+
+	/**
+	 * Defines a type hint (class name or array) of parameter values.
+	 *
+	 * @var string
+	 */
+	private $typeHint;
+
+	/**
+	 * Defines a type hint (class name or array) of parameter values as it was defined.
+	 *
+	 * @var string
+	 */
+	private $originalTypeHint;
 
 	/**
 	 * Position of the parameter in the function/method.
@@ -94,95 +80,18 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	private $position;
 
 	/**
-	 * Returns if the the parameter allows NULL.
+	 * Determines if the parameter is optional.
 	 *
-	 * @return boolean
+	 * @var boolean
 	 */
-	public function allowsNull()
-	{
-		if (($this->isArray() || null !== $this->getOriginalTypeHint()) && 'null' !== strtolower($this->getDefaultValueDefinition())) {
-			return false;
-		}
-
-		return true;
-	}
+	private $isOptional;
 
 	/**
-	 * Returns reflection of the required class of the value.
+	 * Determines if the value is passed by reference.
 	 *
-	 * @return \TokenReflection\IReflectionClass|null
+	 * @var boolean
 	 */
-	public function getClass()
-	{
-		$name = $this->getClassName();
-		if (null === $name) {
-			return null;
-		}
-
-		return $this->getBroker()->getClass($name);
-	}
-
-	/**
-	 * Returns the required class name of the value.
-	 *
-	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If the constraint class FQN could not be determined
-	 */
-	public function getClassName()
-	{
-		if ($this->isArray()) {
-			return null;
-		}
-
-		try {
-			if (null === $this->valueConstraint && null !== $this->originalTypeHint) {
-				if (null !== $this->declaringClassName) {
-					$parent = $this->getDeclaringClass();
-					if (null === $parent) {
-						throw new Exception\Runtime(sprintf('Could not load class "%s" reflection.', $this->declaringClassName), Exception\Runtime::DOES_NOT_EXIST);
-					}
-				} else {
-					$parent = $this->getDeclaringFunction();
-					if (null === $parent || !$parent->isTokenized()) {
-						throw new Exception\Runtime(sprintf('Could not load function "%s" reflection.', $this->declaringFunctionName), Exception\Runtime::DOES_NOT_EXIST);
-					}
-				}
-
-				$lConstraint = strtolower($this->originalTypeHint);
-				if ('parent' === $lConstraint || 'self' === $lConstraint) {
-					if (null === $this->declaringClassName) {
-						throw new Exception\Runtime('Parameter constraint cannot be "self" nor "parent" when not a method.', Exception::UNSUPPORTED);
-					}
-
-					if ('parent' === $lConstraint) {
-						if ($parent->isInterface() || null === $parent->getParentClassName()) {
-							throw new Exception\Runtime(sprintf('Class "%s" has no parent.', $this->declaringClassName), Exception::DOES_NOT_EXIST);
-						}
-
-						$this->valueConstraint = $parent->getParentClassName();
-					} else {
-						$this->valueConstraint = $this->declaringClassName;
-					}
-				} else {
-					$this->valueConstraint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
-				}
-			}
-
-			return $this->valueConstraint;
-		} catch (Exception\Runtime $e) {
-			throw new Exception\Runtime('Could not determine the class constraint FQN.', 0, $e);
-		}
-	}
-
-	/**
-	 * Returns the original type hint as defined in the source code.
-	 *
-	 * @return string|null
-	 */
-	public function getOriginalTypeHint()
-	{
-		return !$this->isArray() ? ltrim($this->originalTypeHint, '\\') : null;
-	}
+	private $passedByReference = false;
 
 	/**
 	 * Returns the declaring class.
@@ -237,10 +146,15 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Returns the default value.
 	 *
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If property has no default value
+	 * @throws \TokenReflection\Exception\Runtime If the property is not optional
+	 * @throws \TokenReflection\Exception\Runtime If the property has no default value
 	 */
 	public function getDefaultValue()
 	{
+		if (!$this->isOptional()) {
+			throw new Exception\Runtime(sprintf('Property "%s" is not optional.', $this->name), Exception\Runtime::UNSUPPORTED);
+		}
+
 		if (is_array($this->defaultValueDefinition)) {
 			if (0 === count($this->defaultValueDefinition)) {
 				throw new Exception\Runtime(sprintf('Property "%s" has no default value.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
@@ -264,6 +178,16 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
+	 * Retutns if a default value for the parameter is available.
+	 *
+	 * @return boolean
+	 */
+	public function isDefaultValueAvailable()
+	{
+		return null !== $this->getDefaultValueDefinition();
+	}
+
+	/**
 	 * Returns the position within all parameters.
 	 *
 	 * @return integer
@@ -280,17 +204,98 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function isArray()
 	{
-		return $this->valueConstraint === self::ARRAY_CONSTRAINT;
+		return $this->typeHint === self::ARRAY_TYPE_HINT;
 	}
 
 	/**
-	 * Retutns if a default value for the parameter is available.
+	 * Returns the original type hint as defined in the source code.
+	 *
+	 * @return string|null
+	 */
+	public function getOriginalTypeHint()
+	{
+		return !$this->isArray() ? ltrim($this->originalTypeHint, '\\') : null;
+	}
+
+	/**
+	 * Returns reflection of the required class of the value.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getClass()
+	{
+		$name = $this->getClassName();
+		if (null === $name) {
+			return null;
+		}
+
+		return $this->getBroker()->getClass($name);
+	}
+
+	/**
+	 * Returns the required class name of the value.
+	 *
+	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime If the type hint class FQN could not be determined
+	 */
+	public function getClassName()
+	{
+		if ($this->isArray()) {
+			return null;
+		}
+
+		try {
+			if (null === $this->typeHint && null !== $this->originalTypeHint) {
+				if (null !== $this->declaringClassName) {
+					$parent = $this->getDeclaringClass();
+					if (null === $parent) {
+						throw new Exception\Runtime(sprintf('Could not load class "%s" reflection.', $this->declaringClassName), Exception\Runtime::DOES_NOT_EXIST);
+					}
+				} else {
+					$parent = $this->getDeclaringFunction();
+					if (null === $parent || !$parent->isTokenized()) {
+						throw new Exception\Runtime(sprintf('Could not load function "%s" reflection.', $this->declaringFunctionName), Exception\Runtime::DOES_NOT_EXIST);
+					}
+				}
+
+				$lTypeHint = strtolower($this->originalTypeHint);
+				if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
+					if (null === $this->declaringClassName) {
+						throw new Exception\Runtime('Parameter type hint cannot be "self" nor "parent" when not a method.', Exception::UNSUPPORTED);
+					}
+
+					if ('parent' === $lTypeHint) {
+						if ($parent->isInterface() || null === $parent->getParentClassName()) {
+							throw new Exception\Runtime(sprintf('Class "%s" has no parent.', $this->declaringClassName), Exception::DOES_NOT_EXIST);
+						}
+
+						$this->typeHint = $parent->getParentClassName();
+					} else {
+						$this->typeHint = $this->declaringClassName;
+					}
+				} else {
+					$this->typeHint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+				}
+			}
+
+			return $this->typeHint;
+		} catch (Exception\Runtime $e) {
+			throw new Exception\Runtime('Could not determine the class type hint FQN.', 0, $e);
+		}
+	}
+
+	/**
+	 * Returns if the the parameter allows NULL.
 	 *
 	 * @return boolean
 	 */
-	public function isDefaultValueAvailable()
+	public function allowsNull()
 	{
-		return null !== $this->getDefaultValueDefinition();
+		if ($this->isArray()) {
+			return 'null' === strtolower($this->getDefaultValueDefinition());
+		}
+
+		return null === $this->originalTypeHint || !empty($this->defaultValueDefinition);
 	}
 
 	/**
@@ -411,6 +416,16 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return $this->getDeclaringFunction()->getNamespaceAliases();
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
@@ -438,16 +453,6 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
-	public function getNamespaceAliases()
-	{
-		return $this->getDeclaringFunction()->getNamespaceAliases();
-	}
-
-	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
@@ -457,52 +462,27 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
 		return $this
-			->parseConstraint($tokenStream)
+			->parseTypeHint($tokenStream)
 			->parsePassedByReference($tokenStream)
 			->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
 	}
 
 	/**
-	 * Parses the constant name.
+	 * Parses the type hint.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined
-	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the type hint class name could not be determined
 	 */
-	protected function parseName(Stream $tokenStream)
-	{
-		try {
-			if (!$tokenStream->is(T_VARIABLE)) {
-				throw new Exception\Parse('The parameter name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			$this->name = substr($tokenStream->getTokenValue(), 1);
-
-			$tokenStream->skipWhitespaces();
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse parameter name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
-		}
-	}
-
-	/**
-	 * Parses the value type constraint.
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the constraint class name could not be determined
-	 */
-	private function parseConstraint(Stream $tokenStream)
+	private function parseTypeHint(Stream $tokenStream)
 	{
 		try {
 			$type = $tokenStream->getType();
 
 			if (T_ARRAY === $type) {
-				$this->valueConstraint = self::ARRAY_CONSTRAINT;
-				$this->originalTypeHint = self::ARRAY_CONSTRAINT;
+				$this->typeHint = self::ARRAY_TYPE_HINT;
+				$this->originalTypeHint = self::ARRAY_TYPE_HINT;
 				$tokenStream->skipWhitespaces();
 			} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
 				$className = '';
@@ -540,6 +520,31 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Parses the constant name.
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @return \TokenReflection\ReflectionParameter
+	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined
+	 */
+	protected function parseName(Stream $tokenStream)
+	{
+		try {
+			if (!$tokenStream->is(T_VARIABLE)) {
+				throw new Exception\Parse('The parameter name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
+			}
+
+			$this->name = substr($tokenStream->getTokenValue(), 1);
+
+			$tokenStream->skipWhitespaces();
+
+			return $this;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not parse parameter name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		}
 	}
 
 	/**

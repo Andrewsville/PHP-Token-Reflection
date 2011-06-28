@@ -1,4 +1,17 @@
 <?php
+/**
+ * PHP Token Reflection
+ *
+ * Version 1.0 beta 2
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this library in the file LICENSE.
+ *
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
+ */
 
 namespace TokenReflection;
 
@@ -6,10 +19,24 @@ use ReflectionProperty as InternalReflectionProperty;
 
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Property test.
+ *
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
+ */
 class ReflectionPropertyTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'property';
 
+	/**
+	 * Tests getting of start and end line.
+	 */
 	public function testLines()
 	{
 		$token = $this->getPropertyTokenReflection('lines');
@@ -18,6 +45,9 @@ class ReflectionPropertyTest extends Test
 		$this->assertSame(5, $token->getEndLine());
 	}
 
+	/**
+	 * Tests getting of documentation comment.
+	 */
 	public function testComment()
 	{
 		$rfl = $this->getPropertyReflection('docComment');
@@ -29,6 +59,9 @@ class ReflectionPropertyTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	/**
+	 * Tests getting of inherited documentation comment.
+	 */
 	public function testDocCommentInheritance()
 	{
 		require_once $this->getFilePath('docCommentInheritance');
@@ -57,6 +90,9 @@ class ReflectionPropertyTest extends Test
 		$this->assertNull($rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
 	}
 
+	/**
+	 * Tests getting of documentation comment from templates.
+	 */
 	public function testCommentTemplate()
 	{
 		static $expected = array(
@@ -106,6 +142,9 @@ class ReflectionPropertyTest extends Test
 		}
 	}
 
+	/**
+	 * Test property accessibility.
+	 */
 	public function testAccessible()
 	{
 		$rfl = $this->getClassReflection('accessible');
@@ -156,6 +195,9 @@ class ReflectionPropertyTest extends Test
 		$this->assertSame($internal->getValue($object), $token->getValue($object));
 	}
 
+	/**
+	 * Tests getting of declaring class.
+	 */
 	public function testDeclaringClass()
 	{
 		$rfl = $this->getClassReflection('declaringClass');
@@ -171,6 +213,9 @@ class ReflectionPropertyTest extends Test
 		}
 	}
 
+	/**
+	 * Tests getting of default value.
+	 */
 	public function testDefault()
 	{
 		$token = $this->getPropertyTokenReflection('default');
@@ -183,6 +228,9 @@ class ReflectionPropertyTest extends Test
 		$this->assertNull($token->getDefaultValue());
 	}
 
+	/**
+	 * Tests all property modifiers.
+	 */
 	public function testModifiers()
 	{
 		$rfl = $this->getClassReflection('modifiers');
@@ -221,6 +269,9 @@ class ReflectionPropertyTest extends Test
 		}
 	}
 
+	/**
+	 * Tests different types of property value.
+	 */
 	public function testTypes()
 	{
 		$constants = array('string' => 'string', 'integer' => 1, 'float' => 1.1, 'boolean' => true, 'null' => null, 'array' => array(1 => 1));
@@ -236,9 +287,13 @@ class ReflectionPropertyTest extends Test
 		}
 	}
 
+	/**
+	 * Tests export.
+	 */
 	public function testToString()
 	{
 		$tests = array(
+			'lines', 'docComment', 'noComment',
 			'default', 'typeNull', 'typeArray', 'typeString', 'typeInteger', 'typeFloat'
 		);
 		foreach ($tests as $test) {

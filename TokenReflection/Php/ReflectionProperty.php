@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Php;
@@ -47,38 +47,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return \TokenReflection\Broker
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return TokenReflection\ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return boolean
-	 */
-	final public function __isset($key)
-	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
-	}
-
-	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return \TokenReflection\Php\IReflectionClass
@@ -96,16 +64,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getDeclaringClassName()
 	{
 		return $this->getDeclaringClass()->getName();
-	}
-
-	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return boolean
-	 */
-	public function getDocComment()
-	{
-		return false;
 	}
 
 	/**
@@ -129,24 +87,13 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
-	 * Returns parsed docblock.
+	 * Returns the appropriate docblock definition.
 	 *
-	 * @return array
+	 * @return boolean
 	 */
-	public function getAnnotations()
+	public function getDocComment()
 	{
-		return array();
-	}
-
-	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
-	 */
-	public function getAnnotation($name)
-	{
-		return null;
+		return false;
 	}
 
 	/**
@@ -161,23 +108,24 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
-	 * Returns if the property is internal.
+	 * Returns a particular annotation value.
 	 *
-	 * @return boolean
+	 * @param string $name Annotation name
+	 * @return null
 	 */
-	public function isInternal()
+	public function getAnnotation($name)
 	{
-		return $this->getDeclaringClass()->isInternal();
+		return null;
 	}
 
 	/**
-	 * Returns if the property is user defined.
+	 * Returns parsed docblock.
 	 *
-	 * @return boolean
+	 * @return array
 	 */
-	public function isUserDefined()
+	public function getAnnotations()
 	{
-		return $this->getDeclaringClass()->isUserDefined();
+		return array();
 	}
 
 	/**
@@ -203,6 +151,26 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
+	 * Returns if the property is internal.
+	 *
+	 * @return boolean
+	 */
+	public function isInternal()
+	{
+		return $this->getDeclaringClass()->isInternal();
+	}
+
+	/**
+	 * Returns if the property is user defined.
+	 *
+	 * @return boolean
+	 */
+	public function isUserDefined()
+	{
+		return $this->getDeclaringClass()->isUserDefined();
+	}
+
+	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
 	 * @return boolean
@@ -223,6 +191,16 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
+	 * Returns the reflection broker used by this reflection object.
+	 *
+	 * @return \TokenReflection\Broker
+	 */
+	public function getBroker()
+	{
+		return $this->broker;
+	}
+
+	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array
@@ -230,6 +208,28 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getNamespaceAliases()
 	{
 		return array();
+	}
+
+	/**
+	 * Magic __get method.
+	 *
+	 * @param string $key Variable name
+	 * @return mixed
+	 */
+	final public function __get($key)
+	{
+		return TokenReflection\ReflectionBase::get($this, $key);
+	}
+
+	/**
+	 * Magic __isset method.
+	 *
+	 * @param string $key Variable name
+	 * @return boolean
+	 */
+	final public function __isset($key)
+	{
+		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
 	/**

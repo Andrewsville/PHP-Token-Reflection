@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -31,6 +31,13 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	private $declaringClassName;
 
 	/**
+	 * Property modifiers.
+	 *
+	 * @var integer
+	 */
+	private $modifiers = 0;
+
+	/**
 	 * Property default value.
 	 *
 	 * @var mixed
@@ -45,28 +52,11 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	private $defaultValueDefinition = array();
 
 	/**
-	 * Property modifiers.
-	 *
-	 * @var integer
-	 */
-	private $modifiers = 0;
-
-	/**
 	 * Determined if the property value is accessible.
 	 *
 	 * @var boolean
 	 */
 	private $accessible = false;
-
-	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
-	 */
-	public function getDeclaringClassName()
-	{
-		return $this->declaringClassName;
-	}
 
 	/**
 	 * Returns a reflection of the declaring class.
@@ -79,23 +69,13 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Returns property modifiers.
+	 * Returns the name of the declaring class.
 	 *
-	 * @return integer
+	 * @return string
 	 */
-	public function getModifiers()
+	public function getDeclaringClassName()
 	{
-		return $this->modifiers;
-	}
-
-	/**
-	 * Returns if the property has a default value.
-	 *
-	 * @return boolean
-	 */
-	public function isDefault()
-	{
-		return null !== $this->getDefaultValueDefinition();
+		return $this->declaringClassName;
 	}
 
 	/**
@@ -111,6 +91,16 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		}
 
 		return $this->defaultValue;
+	}
+
+	/**
+	 * Returns the part of the source code defining the property default value.
+	 *
+	 * @return string
+	 */
+	public function getDefaultValueDefinition()
+	{
+		return is_array($this->defaultValueDefinition) ? Resolver::getSourceCode($this->defaultValueDefinition) : $this->defaultValueDefinition;
 	}
 
 	/**
@@ -148,13 +138,23 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Returns the part of the source code defining the property default value.
+	 * Returns if the property has a default value.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
-	public function getDefaultValueDefinition()
+	public function isDefault()
 	{
-		return is_array($this->defaultValueDefinition) ? Resolver::getSourceCode($this->defaultValueDefinition) : $this->defaultValueDefinition;
+		return null !== $this->getDefaultValueDefinition();
+	}
+
+	/**
+	 * Returns property modifiers.
+	 *
+	 * @return integer
+	 */
+	public function getModifiers()
+	{
+		return $this->modifiers;
 	}
 
 	/**
@@ -195,73 +195,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	public function isStatic()
 	{
 		return (bool) ($this->modifiers & InternalReflectionProperty::IS_STATIC);
-	}
-
-	/**
-	 * Sets a property to be accessible or not.
-	 *
-	 * @param boolean $accessible If the property should be accessible.
-	 */
-	public function setAccessible($accessible)
-	{
-		$this->accessible = (bool) $accessible;
-	}
-
-	/**
-	 * Returns if the property is set accessible.
-	 *
-	 * @return boolean
-	 */
-	public function isAccessible()
-	{
-		return $this->accessible;
-	}
-
-	/**
-	 * Sets value of a property for a particular class instance.
-	 *
-	 * @param object $object Class instance
-	 * @param mixed $value Poperty value
-	 * @throws \TokenReflection\Exception\Runtime If it is not possible to set the property value
-	 */
-	public function setValue($object, $value)
-	{
-		try {
-			$declaringClass = $this->getDeclaringClass();
-			if (!$declaringClass->isInstance($object)) {
-				throw new Exception\Runtime(sprintf('Invalid class, "%s" expected "%s" given.', $declaringClass->getName(), get_class($object)), Exception\Runtime::INVALID_ARGUMENT);
-			}
-
-			if ($this->isPublic()) {
-				$object->{$this->name} = $value;
-			} elseif ($this->isAccessible()) {
-				$refClass = new InternalReflectionClass($object);
-				$refProperty = $refClass->getProperty($this->name);
-
-				$refProperty->setAccessible(true);
-				$refProperty->setValue($object, $value);
-				$refProperty->setAccessible(false);
-
-				if ($this->isStatic()) {
-					$this->setDefaultValue($value);
-				}
-			} else {
-				throw new Exception\Runtime('Only public and accessible properties can be set.', Exception\Runtime::NOT_ACCESSBILE);
-			}
-		} catch (Exception\Runtime $e) {
-			throw new Exception\Runtime(sprintf('Could not set value of property "%s::$%s".', $this->declaringClassName, $this->name), 0, $e);
-		}
-	}
-
-	/**
-	 * Sets the property default value.
-	 *
-	 * @param mixed $value
-	 */
-	public function setDefaultValue($value)
-	{
-		$this->defaultValue = $value;
-		$this->defaultValueDefinition = var_export($value, true);
 	}
 
 	/**
@@ -311,6 +244,83 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
+	 * Returns if the property is set accessible.
+	 *
+	 * @return boolean
+	 */
+	public function isAccessible()
+	{
+		return $this->accessible;
+	}
+
+	/**
+	 * Sets a property to be accessible or not.
+	 *
+	 * @param boolean $accessible If the property should be accessible.
+	 */
+	public function setAccessible($accessible)
+	{
+		$this->accessible = (bool) $accessible;
+	}
+
+	/**
+	 * Sets the property default value.
+	 *
+	 * @param mixed $value
+	 */
+	public function setDefaultValue($value)
+	{
+		$this->defaultValue = $value;
+		$this->defaultValueDefinition = var_export($value, true);
+	}
+
+	/**
+	 * Sets value of a property for a particular class instance.
+	 *
+	 * @param object $object Class instance
+	 * @param mixed $value Poperty value
+	 * @throws \TokenReflection\Exception\Runtime If it is not possible to set the property value
+	 */
+	public function setValue($object, $value)
+	{
+		try {
+			$declaringClass = $this->getDeclaringClass();
+			if (!$declaringClass->isInstance($object)) {
+				throw new Exception\Runtime(sprintf('Invalid class, "%s" expected "%s" given.', $declaringClass->getName(), get_class($object)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			if ($this->isPublic()) {
+				$object->{$this->name} = $value;
+			} elseif ($this->isAccessible()) {
+				$refClass = new InternalReflectionClass($object);
+				$refProperty = $refClass->getProperty($this->name);
+
+				$refProperty->setAccessible(true);
+				$refProperty->setValue($object, $value);
+				$refProperty->setAccessible(false);
+
+				if ($this->isStatic()) {
+					$this->setDefaultValue($value);
+				}
+			} else {
+				throw new Exception\Runtime('Only public and accessible properties can be set.', Exception\Runtime::NOT_ACCESSBILE);
+			}
+		} catch (Exception\Runtime $e) {
+			throw new Exception\Runtime(sprintf('Could not set value of property "%s::$%s".', $this->declaringClassName, $this->name), 0, $e);
+		}
+	}
+
+	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return $this->getDeclaringClass()->getNamespaceAliases();
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
@@ -328,16 +338,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
-	public function getNamespaceAliases()
-	{
-		return $this->getDeclaringClass()->getNamespaceAliases();
-	}
-
-	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
@@ -350,6 +350,69 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 			->parseModifiers($tokenStream, $parent)
 			->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
+	}
+
+	/**
+	 * Parses class modifiers (abstract, final) and class type (class, interface).
+	 *
+	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\ReflectionClass $class Defining class
+	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\Exception\Parse If the modifiers value cannot be determined
+	 */
+	private function parseModifiers(Stream $tokenStream, ReflectionClass $class)
+	{
+		while (true) {
+			switch ($tokenStream->getType()) {
+				case T_PUBLIC:
+				case T_VAR:
+					$this->modifiers |= InternalReflectionProperty::IS_PUBLIC;
+					break;
+				case T_PROTECTED:
+					$this->modifiers |= InternalReflectionProperty::IS_PROTECTED;
+					break;
+				case T_PRIVATE:
+					$this->modifiers |= InternalReflectionProperty::IS_PRIVATE;
+					break;
+				case T_STATIC:
+					$this->modifiers |= InternalReflectionProperty::IS_STATIC;
+					break;
+				default:
+					break 2;
+			}
+
+			$tokenStream->skipWhitespaces();
+		}
+
+		if (InternalReflectionProperty::IS_STATIC === $this->modifiers) {
+			$this->modifiers |= InternalReflectionProperty::IS_PUBLIC;
+		} elseif (0 === $this->modifiers) {
+			try {
+				$parentProperties = $class->getOwnProperties();
+				if (empty($parentProperties)) {
+					throw new Exception\Parse('No access level defined and no previous defining class property present.', Exception\Parse::PARSE_ELEMENT_ERROR);
+				}
+
+				$sibling = array_pop($parentProperties);
+				if ($sibling->isPublic()) {
+					$this->modifiers = InternalReflectionProperty::IS_PUBLIC;
+				} elseif ($sibling->isPrivate()) {
+					$this->modifiers = InternalReflectionProperty::IS_PRIVATE;
+				} elseif ($sibling->isProtected()) {
+					$this->modifiers = InternalReflectionProperty::IS_PROTECTED;
+				} else {
+					throw new Exception\Parse(sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+				}
+
+				if ($sibling->isStatic()) {
+					$this->modifiers |= InternalReflectionProperty::IS_STATIC;
+				}
+			} catch (Exception $e) {
+				throw new Exception\Parse('Could not parse modifiers.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+			}
+		}
+
+		return $this;
 	}
 
 	/**
@@ -433,68 +496,5 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		} catch (Exception $e) {
 			throw new Exception\Parse('Could not parse property default value.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
 		}
-	}
-
-	/**
-	 * Parses class modifiers (abstract, final) and class type (class, interface).
-	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
-	 * @param \TokenReflection\ReflectionClass $class Defining class
-	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse If the modifiers value cannot be determined
-	 */
-	private function parseModifiers(Stream $tokenStream, ReflectionClass $class)
-	{
-		while (true) {
-			switch ($tokenStream->getType()) {
-				case T_PUBLIC:
-				case T_VAR:
-					$this->modifiers |= InternalReflectionProperty::IS_PUBLIC;
-					break;
-				case T_PROTECTED:
-					$this->modifiers |= InternalReflectionProperty::IS_PROTECTED;
-					break;
-				case T_PRIVATE:
-					$this->modifiers |= InternalReflectionProperty::IS_PRIVATE;
-					break;
-				case T_STATIC:
-					$this->modifiers |= InternalReflectionProperty::IS_STATIC;
-					break;
-				default:
-					break 2;
-			}
-
-			$tokenStream->skipWhitespaces();
-		}
-
-		if (InternalReflectionProperty::IS_STATIC === $this->modifiers) {
-			$this->modifiers |= InternalReflectionProperty::IS_PUBLIC;
-		} elseif (0 === $this->modifiers) {
-			try {
-				$parentProperties = $class->getOwnProperties();
-				if (empty($parentProperties)) {
-					throw new Exception\Parse('No access level defined and no previous defining class property present.', Exception\Parse::PARSE_ELEMENT_ERROR);
-				}
-
-				$sibling = array_pop($parentProperties);
-				if ($sibling->isPublic()) {
-					$this->modifiers = InternalReflectionProperty::IS_PUBLIC;
-				} elseif ($sibling->isPrivate()) {
-					$this->modifiers = InternalReflectionProperty::IS_PRIVATE;
-				} elseif ($sibling->isProtected()) {
-					$this->modifiers = InternalReflectionProperty::IS_PROTECTED;
-				} else {
-					throw new Exception\Parse(sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
-				}
-
-				if ($sibling->isStatic()) {
-					$this->modifiers |= InternalReflectionProperty::IS_STATIC;
-				}
-			} catch (Exception $e) {
-				throw new Exception\Parse('Could not parse modifiers.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
-			}
-		}
-
-		return $this;
 	}
 }

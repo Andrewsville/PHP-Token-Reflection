@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -20,6 +20,13 @@ namespace TokenReflection;
  */
 interface IReflectionConstant extends IReflection
 {
+	/**
+	 * Returns the unqualified name (UQN).
+	 *
+	 * @return string
+	 */
+	public function getShortName();
+
 	/**
 	 * Returns the declaring class reflection.
 	 *
@@ -49,25 +56,11 @@ interface IReflectionConstant extends IReflection
 	public function inNamespace();
 
 	/**
-	 * Returns the constant value.
-	 *
-	 * @return mixed
-	 */
-	public function getValue();
-
-	/**
-	 * Returns the part of the source code defining the constant value.
+	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string
 	 */
-	public function getValueDefinition();
-
-	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return string|boolean
-	 */
-	public function getDocComment();
+	public function getFileName();
 
 	/**
 	 * Returns the definition start line number in the file.
@@ -84,18 +77,25 @@ interface IReflectionConstant extends IReflection
 	public function getEndLine();
 
 	/**
-	 * Returns the file name the reflection object is defined in.
+	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string
+	 * @return string|boolean
 	 */
-	public function getFileName();
+	public function getDocComment();
 
 	/**
-	 * Returns the unqualified name (UQN).
+	 * Returns the constant value.
+	 *
+	 * @return mixed
+	 */
+	public function getValue();
+
+	/**
+	 * Returns the part of the source code defining the constant value.
 	 *
 	 * @return string
 	 */
-	public function getShortName();
+	public function getValueDefinition();
 
 	/**
 	 * Returns the string representation of the reflection object.

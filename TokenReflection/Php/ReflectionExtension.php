@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Php;
@@ -26,13 +26,6 @@ use Reflector, ReflectionExtension as InternalReflectionExtension;
  */
 class ReflectionExtension extends InternalReflectionExtension implements IReflection, TokenReflection\IReflectionExtension
 {
-	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
 	/**
 	 * Defined classes.
 	 *
@@ -53,6 +46,13 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 * @var array
 	 */
 	private $functions;
+
+	/**
+	 * Reflection broker.
+	 *
+	 * @var \TokenReflection\Broker
+	 */
+	private $broker;
 
 	/**
 	 * Constructor.
@@ -87,35 +87,35 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	}
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
+	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return \TokenReflection\Broker
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return TokenReflection\ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	final public function __isset($key)
+	public function isTokenized()
 	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
+		return false;
+	}
+
+	/**
+	 * Returns if the reflection subject is deprecated.
+	 *
+	 * @return boolean
+	 */
+	public function isDeprecated()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns a class reflection.
+	 *
+	 * @param string $name Class name
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getClass($name)
+	{
+		$classes = $this->getClasses();
+		return isset($classes[$name]) ? $classes[$name] : null;
 	}
 
 	/**
@@ -133,35 +133,6 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 		}
 
 		return $this->classes;
-	}
-
-	/**
-	 * Returns a class reflection.
-	 *
-	 * @param string $name Class name
-	 * @return \TokenReflection\IReflectionClass|null
-	 */
-	public function getClass($name)
-	{
-		$classes = $this->getClasses();
-		return isset($classes[$name]) ? $classes[$name] : null;
-	}
-
-	/**
-	 * Returns reflections of defined constants.
-	 *
-	 * @return array
-	 */
-	public function getConstantReflections()
-	{
-		if (null === $this->constants) {
-			$broker = $this->broker;
-			$this->constants = array_map(function($constantName) use ($broker) {
-				return $broker->getConstant($constantName);
-			}, array_keys($this->getConstants()));
-		}
-
-		return $this->constants;
 	}
 
 	/**
@@ -186,6 +157,35 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	{
 		$constants = $this->getConstantReflections();
 		return isset($constants[$name]) ? $constants[$name] : null;
+	}
+
+	/**
+	 * Returns reflections of defined constants.
+	 *
+	 * @return array
+	 */
+	public function getConstantReflections()
+	{
+		if (null === $this->constants) {
+			$broker = $this->broker;
+			$this->constants = array_map(function($constantName) use ($broker) {
+				return $broker->getConstant($constantName);
+			}, array_keys($this->getConstants()));
+		}
+
+		return $this->constants;
+	}
+
+	/**
+	 * Returns a function reflection.
+	 *
+	 * @param string $name Function name
+	 * @return \TokenReflection\IReflectionFunction
+	 */
+	public function getFunction($name)
+	{
+		$functions = $this->getFunctions();
+		return isset($functions[$name]) ? $functions[$name] : null;
 	}
 
 	/**
@@ -216,35 +216,13 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	}
 
 	/**
-	 * Returns a function reflection.
+	 * Returns the reflection broker used by this reflection object.
 	 *
-	 * @param string $name Function name
-	 * @return \TokenReflection\IReflectionFunction
+	 * @return \TokenReflection\Broker
 	 */
-	public function getFunction($name)
+	public function getBroker()
 	{
-		$functions = $this->getFunctions();
-		return isset($functions[$name]) ? $functions[$name] : null;
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the reflection subject is deprecated.
-	 *
-	 * @return boolean
-	 */
-	public function isDeprecated()
-	{
-		return false;
+		return $this->broker;
 	}
 
 	/**
@@ -255,6 +233,28 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	public function getNamespaceAliases()
 	{
 		return array();
+	}
+
+	/**
+	 * Magic __get method.
+	 *
+	 * @param string $key Variable name
+	 * @return mixed
+	 */
+	final public function __get($key)
+	{
+		return TokenReflection\ReflectionBase::get($this, $key);
+	}
+
+	/**
+	 * Magic __isset method.
+	 *
+	 * @param string $key Variable name
+	 * @return boolean
+	 */
+	final public function __isset($key)
+	{
+		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
 	/**

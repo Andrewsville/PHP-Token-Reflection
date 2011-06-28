@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Php;
@@ -27,18 +27,18 @@ use Reflector, ReflectionMethod as InternalReflectionMethod, ReflectionParameter
 class ReflectionMethod extends InternalReflectionMethod implements IReflection, TokenReflection\IReflectionMethod
 {
 	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
-	/**
 	 * Function parameter reflections.
 	 *
 	 * @var array
 	 */
 	private $parameters;
+
+	/**
+	 * Reflection broker.
+	 *
+	 * @var \TokenReflection\Broker
+	 */
+	private $broker;
 
 	/**
 	 * Constructor.
@@ -54,53 +54,75 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
+	 * Returns the declaring class reflection.
 	 *
-	 * @return \TokenReflection\Broker
+	 * @return \TokenReflection\Php\IReflectionClass
 	 */
-	public function getBroker()
+	public function getDeclaringClass()
 	{
-		return $this->broker;
+		return ReflectionClass::create(parent::getDeclaringClass(), $this->broker);
 	}
 
 	/**
-	 * Magic __get method.
+	 * Returns the declaring class name.
 	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * @return string
 	 */
-	final public function __get($key)
+	public function getDeclaringClassName()
 	{
-		return TokenReflection\ReflectionBase::get($this, $key);
+		return $this->getDeclaringClass()->getName();
 	}
 
 	/**
-	 * Magic __isset method.
+	 * Checks if there is a particular annotation.
 	 *
-	 * @param string $key Variable name
+	 * @param string $name Annotation name
 	 * @return boolean
 	 */
-	final public function __isset($key)
+	public function hasAnnotation($name)
 	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
+		return false;
 	}
 
 	/**
-	 * Returns function parameters.
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
+	 * @return null
+	 */
+	public function getAnnotation($name)
+	{
+		return null;
+	}
+
+	/**
+	 * Returns parsed docblock.
 	 *
 	 * @return array
 	 */
-	public function getParameters()
+	public function getAnnotations()
 	{
-		if (null === $this->parameters) {
-			$broker = $this->broker;
-			$parent = $this;
-			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
-				return ReflectionParameter::create($parameter, $broker, $parent);
-			}, parent::getParameters());
-		}
+		return array();
+	}
 
-		return $this->parameters;
+	/**
+	 * Returns if the current reflection comes from a tokenized source.
+	 *
+	 * @return boolean
+	 */
+	public function isTokenized()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns the method prototype.
+	 *
+	 * @return \TokenReflection\Php\ReflectionMethod
+	 */
+	public function getPrototype()
+	{
+		return self::create(parent::getPrototype(), $this->broker);
 	}
 
 	/**
@@ -133,75 +155,59 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
-	 * Returns the declaring class reflection.
-	 *
-	 * @return \TokenReflection\Php\IReflectionClass
-	 */
-	public function getDeclaringClass()
-	{
-		return ReflectionClass::create(parent::getDeclaringClass(), $this->broker);
-	}
-
-	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return string
-	 */
-	public function getDeclaringClassName()
-	{
-		return $this->getDeclaringClass()->getName();
-	}
-
-	/**
-	 * Returns parsed docblock.
+	 * Returns function parameters.
 	 *
 	 * @return array
 	 */
-	public function getAnnotations()
+	public function getParameters()
 	{
-		return array();
+		if (null === $this->parameters) {
+			$broker = $this->broker;
+			$parent = $this;
+			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
+				return ReflectionParameter::create($parameter, $broker, $parent);
+			}, parent::getParameters());
+		}
+
+		return $this->parameters;
 	}
 
 	/**
-	 * Returns a particular annotation value.
+	 * Sets a method to be accessible or not.
 	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
+	 *
+	 * @param boolean $accessible
+	 * @throws \TokenReflection\Exception\Runtime If run on PHP version < 5.3.2
 	 */
-	public function getAnnotation($name)
+	public function setAccessible($accessible)
 	{
-		return null;
+		if (PHP_VERSION_ID < 50302) {
+			throw new Exception\Runtime(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\Runtime::UNSUPPORTED);
+		}
+
+		parent::setAccessible($accessible);
 	}
 
 	/**
-	 * Checks if there is a particular annotation.
+	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
 	 *
-	 * @param string $name Annotation name
+	 * @param integer $filter Filter
 	 * @return boolean
 	 */
-	public function hasAnnotation($name)
+	public function is($filter = null)
 	{
-		return false;
+		return null === $filter || ($this->getModifiers() & $filter);
 	}
 
 	/**
-	 * Returns the method prototype.
+	 * Returns the reflection broker used by this reflection object.
 	 *
-	 * @return \TokenReflection\Php\ReflectionMethod
+	 * @return \TokenReflection\Broker
 	 */
-	public function getPrototype()
+	public function getBroker()
 	{
-		return self::create(parent::getPrototype(), $this->broker);
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return false;
+		return $this->broker;
 	}
 
 	/**
@@ -215,14 +221,25 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
-	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
+	 * Magic __get method.
 	 *
-	 * @param integer $filter Filter
+	 * @param string $key Variable name
+	 * @return mixed
+	 */
+	final public function __get($key)
+	{
+		return TokenReflection\ReflectionBase::get($this, $key);
+	}
+
+	/**
+	 * Magic __isset method.
+	 *
+	 * @param string $key Variable name
 	 * @return boolean
 	 */
-	public function is($filter = null)
+	final public function __isset($key)
 	{
-		return null === $filter || ($this->getModifiers() & $filter);
+		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
 	/**
@@ -247,22 +264,5 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		}
 
 		return $cache[$key];
-	}
-
-	/**
-	 * Sets a method to be accessible or not.
-	 *
-	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
-	 *
-	 * @param boolean $accessible
-	 * @throws \TokenReflection\Exception\Runtime If run on PHP version < 5.3.2
-	 */
-	public function setAccessible($accessible)
-	{
-		if (PHP_VERSION_ID < 50302) {
-			throw new Exception\Runtime(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\Runtime::UNSUPPORTED);
-		}
-
-		return parent::setAccessible($accessible);
 	}
 }

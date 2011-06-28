@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kukulich@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Php;
@@ -27,18 +27,18 @@ use Reflector, ReflectionParameter as InternalReflectionParameter, ReflectionFun
 class ReflectionParameter extends InternalReflectionParameter implements IReflection, TokenReflection\IReflectionParameter
 {
 	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
-	/**
 	 * Determined if the parameter (along with the function/method) is user defined.
 	 *
 	 * @var boolean
 	 */
 	private $userDefined;
+
+	/**
+	 * Reflection broker.
+	 *
+	 * @var \TokenReflection\Broker
+	 */
+	private $broker;
 
 	/**
 	 * Constructor.
@@ -53,58 +53,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 		parent::__construct($function, $paramName);
 		$this->broker = $broker;
 		$this->userDefined = $parent->isUserDefined();
-	}
-
-	/**
-	 * Returns if the parameter is internal.
-	 *
-	 * @return boolean
-	 */
-	public function isInternal()
-	{
-		return !$this->userDefined;
-	}
-
-	/**
-	 * Returns if the parameter is user defined.
-	 *
-	 * @return boolean
-	 */
-	public function isUserDefined()
-	{
-		return $this->userDefined;
-	}
-
-	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return \TokenReflection\Broker
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return TokenReflection\ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return boolean
-	 */
-	final public function __isset($key)
-	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
 	/**
@@ -127,16 +75,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	{
 		$class = parent::getDeclaringClass();
 		return $class ? $class->getName() : null;
-	}
-
-	/**
-	 * Returns the required class name of the value.
-	 *
-	 * @return string|null
-	 */
-	public function getClassName()
-	{
-		return $this->getClass() ? $this->getClass()->getName() : null;
 	}
 
 	/**
@@ -164,27 +102,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
-	 * Returns the part of the source code defining the paramter default value.
-	 *
-	 * @return string|null
-	 */
-	public function getDefaultValueDefinition()
-	{
-		$value = $this->getDefaultValue();
-		return null === $value ? null : var_export($value, true);
-	}
-
-	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return boolean
-	 */
-	public function getDocComment()
-	{
-		return false;
-	}
-
-	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return null
@@ -202,6 +119,57 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	public function getEndLine()
 	{
 		return null;
+	}
+
+	/**
+	 * Returns the appropriate docblock definition.
+	 *
+	 * @return boolean
+	 */
+	public function getDocComment()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns the part of the source code defining the paramter default value.
+	 *
+	 * @return string|null
+	 */
+	public function getDefaultValueDefinition()
+	{
+		$value = $this->getDefaultValue();
+		return null === $value ? null : var_export($value, true);
+	}
+
+	/**
+	 * Returns the required class name of the value.
+	 *
+	 * @return string|null
+	 */
+	public function getClassName()
+	{
+		return $this->getClass() ? $this->getClass()->getName() : null;
+	}
+
+	/**
+	 * Returns if the parameter is internal.
+	 *
+	 * @return boolean
+	 */
+	public function isInternal()
+	{
+		return !$this->userDefined;
+	}
+
+	/**
+	 * Returns if the parameter is user defined.
+	 *
+	 * @return boolean
+	 */
+	public function isUserDefined()
+	{
+		return $this->userDefined;
 	}
 
 	/**
@@ -225,6 +193,16 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
+	 * Returns the reflection broker used by this reflection object.
+	 *
+	 * @return \TokenReflection\Broker
+	 */
+	public function getBroker()
+	{
+		return $this->broker;
+	}
+
+	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array
@@ -232,6 +210,28 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	public function getNamespaceAliases()
 	{
 		return array();
+	}
+
+	/**
+	 * Magic __get method.
+	 *
+	 * @param string $key Variable name
+	 * @return mixed
+	 */
+	final public function __get($key)
+	{
+		return TokenReflection\ReflectionBase::get($this, $key);
+	}
+
+	/**
+	 * Magic __isset method.
+	 *
+	 * @param string $key Variable name
+	 * @return boolean
+	 */
+	final public function __isset($key)
+	{
+		return TokenReflection\ReflectionBase::exists($this, $key);
 	}
 
 	/**
