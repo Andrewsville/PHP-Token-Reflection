@@ -1,13 +1,42 @@
 <?php
+/**
+ * PHP Token Reflection
+ *
+ * Version 1.0 beta 2
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this library in the file LICENSE.
+ *
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
+ */
 
 namespace TokenReflection;
 
+use ReflectionMethod as InternalReflectionMethod;
+
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Method test.
+ *
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
+ */
 class ReflectionMethodTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'method';
 
+	/**
+	 * Tests getting of start and end line.
+	 */
 	public function testLines()
 	{
 		$rfl = $this->getMethodReflection('lines');
@@ -17,6 +46,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame(7, $rfl->token->getEndLine());
 	}
 
+	/**
+	 * Tests getting of documentation comment.
+	 */
 	public function testComment()
 	{
 		$rfl = $this->getMethodReflection('docComment');
@@ -28,6 +60,9 @@ class ReflectionMethodTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	/**
+	 * Tests getting of inherited documentation comment.
+	 */
 	public function testDocCommentInheritance()
 	{
 		require_once $this->getFilePath('docCommentInheritance');
@@ -56,6 +91,9 @@ class ReflectionMethodTest extends Test
 		$this->assertNull($rfl->token->getMethod('method4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
 	}
 
+	/**
+	 * Tests getting of static variables.
+	 */
 	public function testStaticVariables()
 	{
 		/**
@@ -69,6 +107,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame(array('string' => 'string', 'integer' => 1, 'float' => 1.1, 'boolean' => true, 'null' => null, 'array' => array(1 => 1)), $rfl->token->getStaticVariables());
 	}
 
+	/**
+	 * Tests if method is a closure.
+	 */
 	public function testClosure()
 	{
 		$rfl = $this->getMethodReflection('noClosure');
@@ -76,6 +117,9 @@ class ReflectionMethodTest extends Test
 		$this->assertFalse($rfl->token->isClosure());
 	}
 
+	/**
+	 * Tests if method is deprecated.
+	 */
 	public function testDeprecated()
 	{
 		$rfl = $this->getMethodReflection('noDeprecated');
@@ -83,6 +127,9 @@ class ReflectionMethodTest extends Test
 		$this->assertFalse($rfl->token->isDeprecated());
 	}
 
+	/**
+	 * Tests if method is constructor or destructor.
+	 */
 	public function testConstructorDestructor()
 	{
 		$rfl = $this->getClassReflection('constructorDestructor');
@@ -119,9 +166,16 @@ class ReflectionMethodTest extends Test
 		$token = $this->getBroker()->getClass('TokenReflection\Test\MethodNamedConstructor')->getMethod('MethodNamedConstructor');
 
 		$this->assertSame($internal->isConstructor(), $token->isConstructor());
-		$this->assertFalse($token->isConstructor());
+		if (PHP_VERSION_ID >= 50303) {
+			$this->assertFalse($token->isConstructor());
+		} else {
+			$this->assertTrue($token->isConstructor());
+		}
 	}
 
+	/**
+	 * Tests if method can clone.
+	 */
 	public function testClone()
 	{
 		$rfl = $this->getClassReflection('clone');
@@ -130,6 +184,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($rfl->internal->getMethod('noClone')->getModifiers(), $rfl->token->getMethod('noClone')->getModifiers());
 	}
 
+	/**
+	 * Tests getting of declaring class.
+	 */
 	public function testDeclaringClass()
 	{
 		$rfl = $this->getClassReflection('declaringClass');
@@ -145,6 +202,9 @@ class ReflectionMethodTest extends Test
 		}
 	}
 
+	/**
+	 * Tests all method modifiers.
+	 */
 	public function testModifiers()
 	{
 		$rfl = $this->getClassReflection('modifiers');
@@ -189,7 +249,7 @@ class ReflectionMethodTest extends Test
 				$this->assertTrue($token->isAbstract());
 				$this->assertSame($internal->getModifiers(), $token->getModifiers());
 				$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-				$this->assertGreaterThan(0, $token->getModifiers() & \ReflectionMethod::IS_ABSTRACT);
+				$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_ABSTRACT);
 			}
 
 			$internal = $rfl->internal->getMethod($finalName);
@@ -207,7 +267,7 @@ class ReflectionMethodTest extends Test
 			$this->assertFalse($token->isAbstract());
 			$this->assertSame($internal->getModifiers(), $token->getModifiers());
 			$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-			$this->assertGreaterThan(0, $token->getModifiers() & \ReflectionMethod::IS_FINAL);
+			$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_FINAL);
 
 			$internal = $rfl->internal->getMethod($staticName);
 			$token = $rfl->token->getMethod($staticName);
@@ -223,7 +283,7 @@ class ReflectionMethodTest extends Test
 			$this->assertSame($internal->isAbstract(), $internal->isAbstract());
 			$this->assertFalse($token->isAbstract());
 			$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-			$this->assertGreaterThan(0, $token->getModifiers() & \ReflectionMethod::IS_STATIC);
+			$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_STATIC);
 		}
 
 		// Shadow
@@ -231,13 +291,13 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionMethod('TokenReflection_Test_MethodShadowParent', 'shadow');
+		$rfl->internal = new InternalReflectionMethod('TokenReflection_Test_MethodShadowParent', 'shadow');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_MethodShadowParent')->getMethod('shadow');
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 
 		// Access level
 		$rfl = $this->getClassReflection('accessLevel');
-		foreach(array('private', 'protected') as $method) {
+		foreach (array('private', 'protected') as $method) {
 			$extended = $method . 'Extended';
 			$noExtended = $method . 'NoExtended';
 
@@ -250,6 +310,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 	}
 
+	/**
+	 * Tests if method is user defined or internal.
+	 */
 	public function testUserDefined()
 	{
 		$rfl = $this->getMethodReflection('userDefined');
@@ -283,6 +346,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
 
+	/**
+	 * Tests if method is defined in class in namespace.
+	 */
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
@@ -313,6 +379,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($this->getMethodName('noNamespace'), $rfl->token->getShortName());
 	}
 
+	/**
+	 * Tests if method returns reference.
+	 */
 	public function testReference()
 	{
 		$rfl = $this->getMethodReflection('reference');
@@ -324,6 +393,9 @@ class ReflectionMethodTest extends Test
 		$this->assertFalse($rfl->token->returnsReference());
 	}
 
+	/**
+	 * Tests getting of method parameters.
+	 */
 	public function testParameters()
 	{
 		$rfl = $this->getMethodReflection('parameters');
@@ -349,6 +421,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame(array(), $rfl->token->getParameters());
 	}
 
+	/**
+	 * Tests method invoking.
+	 */
 	public function testInvoke()
 	{
 		$rfl = $this->getClassReflection('invoke');
@@ -364,8 +439,10 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($internal->invokeArgs($object, array(1, 2)), $token->invokeArgs($object, array(1, 2)));
 		$this->assertSame(3, $token->invokeArgs($object, array(1, 2)));
 
-		$this->assertSame($internal->setAccessible(false), $token->setAccessible(false));
-		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
+		if (PHP_VERSION_ID >= 50302) {
+			$this->assertSame($internal->setAccessible(false), $token->setAccessible(false));
+			$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
+		}
 
 		try {
 			$token->invoke(new \Exception(), 1, 2);
@@ -410,13 +487,18 @@ class ReflectionMethodTest extends Test
 			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
 
-		$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));
-		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
-		$this->assertSame(3, $token->invoke($object, 1, 2));
-		$this->assertSame($internal->invokeArgs($object, array(1, 2)), $token->invokeArgs($object, array(1, 2)));
-		$this->assertSame(3, $token->invokeArgs($object, array(1, 2)));
+		if (PHP_VERSION_ID >= 50302) {
+			$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));
+			$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
+			$this->assertSame(3, $token->invoke($object, 1, 2));
+			$this->assertSame($internal->invokeArgs($object, array(1, 2)), $token->invokeArgs($object, array(1, 2)));
+			$this->assertSame(3, $token->invokeArgs($object, array(1, 2)));
+		}
 	}
 
+	/**
+	 * Tests if method has a prototype.
+	 */
 	public function testPrototype()
 	{
 		$rfl = $this->getMethodReflection('prototype');
@@ -435,5 +517,41 @@ class ReflectionMethodTest extends Test
 			// Correctly thrown exception
 			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
+	}
+
+	/**
+	 * Tests export.
+	 */
+	public function testToString()
+	{
+		$tests = array(
+			'lines', 'docComment', 'noComment',
+			'prototype', 'noPrototype', 'parameters', 'reference', 'noReference', 'noClosure', 'noNamespace', 'userDefined', 'shadow'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getMethodReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionMethod::export($this->getClassName($test), $test, true), ReflectionMethod::export($this->getBroker(), $this->getClassName($test), $test, true));
+		}
+
+		$tests = array(
+			'constructorDestructor' => array('__construct', '__destruct'),
+			'clone' => array('__clone', 'noClone'),
+			'declaringClass' => array('parent', 'child', 'parentOverlay'),
+			'invoke' => array('publicInvoke', 'protectedInvoke'),
+			'accessLevel' => array('privateExtended', 'privateNoExtended', 'protectedExtended', 'protectedNoExtended'),
+			'modifiers' => array('publicAbstract', 'publicFinal', 'publicStatic', 'publicNoStatic', 'protectedAbstract', 'protectedFinal', 'protectedStatic', 'protectedNoStatic', 'privateFinal', 'privateStatic', 'privateNoStatic')
+		);
+		foreach ($tests as $class => $classTests) {
+			$rfl = $this->getClassReflection($class);
+			foreach ($classTests as $method) {
+				// @todo inherits not supported yet
+				$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl->internal->getMethod($method)->__toString()), $rfl->token->getMethod($method)->__toString());
+				$this->assertSame(preg_replace('~, inherits [\w]+~', '', InternalReflectionMethod::export($this->getClassName($class), $method, true)), ReflectionMethod::export($this->getBroker(), $this->getClassName($class), $method, true));
+			}
+		}
+
+		$this->assertSame(InternalReflectionMethod::export('ReflectionMethod', 'isFinal', true), ReflectionMethod::export($this->getBroker(), 'ReflectionMethod', 'isFinal', true));
+		$this->assertSame(InternalReflectionMethod::export(new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true), ReflectionMethod::export($this->getBroker(), new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true));
 	}
 }

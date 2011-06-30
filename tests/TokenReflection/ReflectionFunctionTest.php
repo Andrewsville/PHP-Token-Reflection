@@ -1,13 +1,42 @@
 <?php
+/**
+ * PHP Token Reflection
+ *
+ * Version 1.0 beta 2
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this library in the file LICENSE.
+ *
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
+ */
 
 namespace TokenReflection;
 
+use ReflectionFunction as InternalReflectionFunction;
+
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Function test.
+ *
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
+ */
 class ReflectionFunctionTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'function';
 
+	/**
+	 * Tests getting of start and end line.
+	 */
 	public function testLines()
 	{
 		$rfl = $this->getFunctionReflection('lines');
@@ -17,6 +46,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame(5, $rfl->token->getEndLine());
 	}
 
+	/**
+	 * Tests getting of documentation comment.
+	 */
 	public function testComment()
 	{
 		$rfl = $this->getFunctionReflection('docComment');
@@ -28,6 +60,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	/**
+	 * Tests getting of static variables.
+	 */
 	public function testStaticVariables()
 	{
 		/**
@@ -41,6 +76,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame(array('string' => 'string', 'integer' => 1, 'float' => 1.1, 'boolean' => true, 'null' => null, 'array' => array(1 => 1)), $rfl->token->getStaticVariables());
 	}
 
+	/**
+	 * Tests if function is a closure.
+	 */
 	public function testClosure()
 	{
 		$rfl = $this->getFunctionReflection('noClosure');
@@ -48,6 +86,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertFalse($rfl->token->isClosure());
 	}
 
+	/**
+	 * Tests if function is deprecated.
+	 */
 	public function testDeprecated()
 	{
 		$rfl = $this->getFunctionReflection('noDeprecated');
@@ -55,6 +96,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertFalse($rfl->token->isDeprecated());
 	}
 
+	/**
+	 * Tests if function is disabled.
+	 */
 	public function testDisabled()
 	{
 		$rfl = $this->getFunctionReflection('noDisabled');
@@ -62,6 +106,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertFalse($rfl->token->isDisabled());
 	}
 
+	/**
+	 * Tests if function is user defined or internal.
+	 */
 	public function testUserDefined()
 	{
 		$rfl = $this->getFunctionReflection('userDefined');
@@ -79,7 +126,7 @@ class ReflectionFunctionTest extends Test
 		$this->assertFalse($rfl->token->getExtensionName());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionFunction('get_class');
+		$rfl->internal = new InternalReflectionFunction('get_class');
 		$rfl->token = $this->getBroker()->getFunction('get_class');
 
 		$this->assertSame($rfl->internal->isUserDefined(), $rfl->token->isUserDefined());
@@ -94,13 +141,16 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
 
+	/**
+	 * Tests if function is defined in namespace.
+	 */
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
 		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionFunction('TokenReflection\Test\functionInNamespace');
+		$rfl->internal = new InternalReflectionFunction('TokenReflection\Test\functionInNamespace');
 		$rfl->token = $this->getBroker()->getFunction('TokenReflection\Test\functionInNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
@@ -123,6 +173,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame($this->getFunctionName('noNamespace'), $rfl->token->getShortName());
 	}
 
+	/**
+	 * Tests if function returns reference.
+	 */
 	public function testReference()
 	{
 		$rfl = $this->getFunctionReflection('reference');
@@ -134,6 +187,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertFalse($rfl->token->returnsReference());
 	}
 
+	/**
+	 * Tests getting of function parameters.
+	 */
 	public function testParameters()
 	{
 		$rfl = $this->getFunctionReflection('parameters');
@@ -159,6 +215,9 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame(array(), $rfl->token->getParameters());
 	}
 
+	/**
+	 * Tests function invoking.
+	 */
 	public function testInvoke()
 	{
 		$rfl = $this->getFunctionReflection('invoke');
@@ -166,5 +225,23 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame(3, $rfl->token->invoke(1, 2));
 		$this->assertSame($rfl->internal->invokeArgs(array(1, 2)), $rfl->token->invokeArgs(array(1, 2)));
 		$this->assertSame(3, $rfl->token->invokeArgs(array(1, 2)));
+	}
+
+	/**
+	 * Tests export.
+	 */
+	public function testToString()
+	{
+		$tests = array(
+			'lines', 'docComment', 'noComment',
+			'invoke', 'noParameters', 'parameters', 'reference', 'noReference', 'noNamespace', 'userDefined', 'noClosure'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getFunctionReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionFunction::export($this->getFunctionName($test), true), ReflectionFunction::export($this->getBroker(), $this->getFunctionName($test), true));
+		}
+
+		$this->assertSame(InternalReflectionFunction::export('strpos', true), ReflectionFunction::export($this->getBroker(), 'strpos', true));
 	}
 }

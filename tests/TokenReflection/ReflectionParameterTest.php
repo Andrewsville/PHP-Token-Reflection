@@ -1,13 +1,42 @@
 <?php
+/**
+ * PHP Token Reflection
+ *
+ * Version 1.0 beta 2
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this library in the file LICENSE.
+ *
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
+ */
 
 namespace TokenReflection;
 
+use ReflectionParameter as InternalReflectionParameter;
+
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Parameter test.
+ *
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
+ */
 class ReflectionParameterTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'parameter';
 
+	/**
+	 * Tests getting of parameter position.
+	 */
 	public function testPosition()
 	{
 		$rfl = $this->getFunctionReflection('position');
@@ -22,6 +51,9 @@ class ReflectionParameterTest extends Test
 		}
 	}
 
+	/**
+	 * Tests if parameter allows null.
+	 */
 	public function testAllowsNull()
 	{
 		foreach (array('Class', 'Array') as $type) {
@@ -35,10 +67,11 @@ class ReflectionParameterTest extends Test
 		}
 	}
 
+	/**
+	 * Tests if parameters is optional.
+	 */
 	public function testOptional()
 	{
-		ReflectionParameter::setParseValueDefinitions(true);
-
 		$types = array('null' => null, 'true' => true, 'false' => false, 'array' => array(), 'string' => 'string', 'integer' => 1, 'float' => 1.1, 'constant' => E_NOTICE);
 		$definitions = array('null' => 'null', 'true' => 'true', 'false' => 'false', 'array' => 'array()', 'string' => "'string'", 'integer' => '1', 'float' => '1.1', 'constant' => 'E_NOTICE');
 		foreach ($types as $type => $value) {
@@ -67,10 +100,11 @@ class ReflectionParameterTest extends Test
 			// Correctly thrown exception
 			$this->assertInstanceOf('TokenReflection\Exception', $e);
 		}
-
-		ReflectionParameter::setParseValueDefinitions(false);
 	}
 
+	/**
+	 * Tests if parameter has array type hint.
+	 */
 	public function testArray()
 	{
 		$rfl = $this->getParameterReflection('array');
@@ -82,6 +116,9 @@ class ReflectionParameterTest extends Test
 		$this->assertFalse($rfl->token->isArray());
 	}
 
+	/**
+	 * Tests if parameter has class type hint.
+	 */
 	public function testClass()
 	{
 		$rfl = $this->getParameterReflection('class');
@@ -96,6 +133,9 @@ class ReflectionParameterTest extends Test
 		$this->assertNull($rfl->token->getClassName());
 	}
 
+	/**
+	 * Tests if parameter is passed by reference.
+	 */
 	public function testReference()
 	{
 		$rfl = $this->getParameterReflection('reference');
@@ -107,6 +147,9 @@ class ReflectionParameterTest extends Test
 		$this->assertFalse($rfl->token->isPassedByReference());
 	}
 
+	/**
+	 * Tests getting of declaring method or function.
+	 */
 	public function testDeclaring()
 	{
 		$rfl = $this->getParameterReflection('declaringFunction');
@@ -134,5 +177,24 @@ class ReflectionParameterTest extends Test
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClass()->getName());
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClassName());
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
+	}
+
+	/**
+	 * Tests export.
+	 */
+	public function testToString()
+	{
+		$tests = array(
+			'declaringFunction', 'reference', 'noReference', 'class', 'noClass', 'array', 'noArray',
+			'nullClass', 'noNullClass', 'nullArray', 'noNullArray', 'noOptional',
+			'optionalNull', 'optionalTrue', 'optionalFalse', 'optionalArray', 'optionalString', 'optionalInteger', 'optionalFloat', 'optionalConstant'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getParameterReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, true), ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, true));
+		}
+
+		$this->assertSame(InternalReflectionParameter::export('strpos', 0, true), ReflectionParameter::export($this->getBroker(), 'strpos', 0, true));
 	}
 }

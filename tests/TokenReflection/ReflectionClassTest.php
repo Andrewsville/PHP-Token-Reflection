@@ -1,13 +1,42 @@
 <?php
+/**
+ * PHP Token Reflection
+ *
+ * Version 1.0 beta 2
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this library in the file LICENSE.
+ *
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
+ */
 
 namespace TokenReflection;
 
+use ReflectionClass as InternalReflectionClass;
+
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * Class test.
+ *
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
+ */
 class ReflectionClassTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
 	protected $type = 'class';
 
+	/**
+	 * Tests getting of class constants.
+	 */
 	public function testConstants()
 	{
 		$rfl = $this->getClassReflection('constants');
@@ -46,9 +75,11 @@ class ReflectionClassTest extends Test
 		$this->assertSame(array(), $rfl->token->getOwnConstantReflections());
 	}
 
+	/**
+	 * Tests getting of class properties.
+	 */
 	public function testProperties()
 	{
-		ReflectionProperty::setParseValueDefinitions(true);
 		$rfl = $this->getClassReflection('properties');
 
 		$filters = array(\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE);
@@ -214,37 +245,45 @@ class ReflectionClassTest extends Test
 
 			$this->assertInstanceOf('TokenReflection\ReflectionProperty', $rfl->token->getProperty($property));
 		}
-
-		ReflectionProperty::setParseValueDefinitions(false);
 	}
 
+	/**
+	 * Tests if class is instantiable or cloneable.
+	 */
 	public function testInstantiableCloneable()
 	{
 		$rfl = $this->getClassReflection('publicConstructor');
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertTrue($rfl->token->isInstantiable());
-// Not yet in the internal reflection
-//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
 		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('privateConstructor');
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
-// Not yet in the internal reflection
-//		 $this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
-		$this->assertFalse($rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
+		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('publicClone');
-// Not yet in the internal reflection
-//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
 		$this->assertTrue($rfl->token->isCloneable());
 
 		$rfl = $this->getClassReflection('privateClone');
-// Not yet in the internal reflection
-//		$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
+		}
 		$this->assertFalse($rfl->token->isCloneable());
 	}
 
+	/**
+	 * Tests getting of class methods.
+	 */
 	public function testMethods()
 	{
 		$rfl = $this->getClassReflection('methods');
@@ -316,6 +355,9 @@ class ReflectionClassTest extends Test
 		$this->assertNull($rfl->token->getDestructor());
 	}
 
+	/**
+	 * Tests getting of start and end line.
+	 */
 	public function testLines()
 	{
 		$rfl = $this->getClassReflection('lines');
@@ -325,6 +367,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(5, $rfl->token->getEndLine());
 	}
 
+	/**
+	 * Tests if class is instance of a object and tests creating new instances.
+	 */
 	public function testInstances()
 	{
 		$rfl = $this->getClassReflection('instances');
@@ -342,6 +387,9 @@ class ReflectionClassTest extends Test
 		$this->assertInstanceOf($this->getClassName('instances'), $rfl->token->newInstanceArgs(array(1)));
 	}
 
+	/**
+	 * Tests if class is abstract.
+	 */
 	public function testAbstract()
 	{
 		$rfl = $this->getClassReflection('abstract');
@@ -350,7 +398,7 @@ class ReflectionClassTest extends Test
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-		$this->assertSame(\ReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
+		$this->assertSame(InternalReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('abstractImplicit');
 		$this->assertSame($rfl->internal->isAbstract(), $rfl->token->isAbstract());
@@ -358,7 +406,7 @@ class ReflectionClassTest extends Test
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-		$this->assertSame(\ReflectionClass::IS_IMPLICIT_ABSTRACT | \ReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
+		$this->assertSame(InternalReflectionClass::IS_IMPLICIT_ABSTRACT | InternalReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('noAbstract');
 		$this->assertSame($rfl->internal->isAbstract(), $rfl->token->isAbstract());
@@ -369,13 +417,16 @@ class ReflectionClassTest extends Test
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
 
+	/**
+	 * Tests if class is final.
+	 */
 	public function testFinal()
 	{
 		$rfl = $this->getClassReflection('final');
 		$this->assertSame($rfl->internal->isFinal(), $rfl->token->isFinal());
 		$this->assertTrue($rfl->token->isFinal());
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-		$this->assertSame(\ReflectionClass::IS_FINAL, $rfl->token->getModifiers());
+		$this->assertSame(InternalReflectionClass::IS_FINAL, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('noFinal');
 		$this->assertSame($rfl->internal->isFinal(), $rfl->token->isFinal());
@@ -384,6 +435,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
 
+	/**
+	 * Tests if class is an interface.
+	 */
 	public function testInterface()
 	{
 		$rfl = $this->getClassReflection('interface');
@@ -399,6 +453,9 @@ class ReflectionClassTest extends Test
 		$this->assertTrue($rfl->token->isInstantiable());
 	}
 
+	/**
+	 * Tests if class implements interfaces.
+	 */
 	public function testInterfaces()
 	{
 		$rfl = $this->getClassReflection('interfaces');
@@ -418,7 +475,7 @@ class ReflectionClassTest extends Test
 		}
 		$this->assertSame($rfl->internal->implementsInterface('Countable'), $rfl->token->implementsInterface('Countable'));
 		$this->assertTrue($rfl->token->implementsInterface('Countable'));
-		$this->assertTrue($rfl->token->implementsInterface(new \ReflectionClass('Countable')));
+		$this->assertTrue($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 
 		$rfl = $this->getClassReflection('noInterfaces');
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
@@ -430,9 +487,12 @@ class ReflectionClassTest extends Test
 		$this->assertSame(array(), $rfl->token->getOwnInterfaces());
 		$this->assertSame($rfl->internal->implementsInterface('Countable'), $rfl->token->implementsInterface('Countable'));
 		$this->assertFalse($rfl->token->implementsInterface('Countable'));
-		$this->assertFalse($rfl->token->implementsInterface(new \ReflectionClass('Countable')));
+		$this->assertFalse($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 	}
 
+	/**
+	 * Tests if class is iterator.
+	 */
 	public function testIterator()
 	{
 		$rfl = $this->getClassReflection('iterator');
@@ -444,6 +504,9 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->isIterateable());
 	}
 
+	/**
+	 * Tests if class has parent.
+	 */
 	public function testParent()
 	{
 		$rfl = $this->getClassReflection('parent');
@@ -459,16 +522,16 @@ class ReflectionClassTest extends Test
 		$this->assertInstanceOf('TokenReflection\ReflectionClass', $rfl->token->getParentClass());
 		$this->assertSame('TokenReflection_Test_ClassGrandParent', $rfl->token->getParentClassName());
 
-		$this->assertSame(2, count($rfl->token->getParentClasses()));
+		$this->assertSame(3, count($rfl->token->getParentClasses()));
 		foreach ($rfl->token->getParentClasses() as $class) {
-			$this->assertInstanceOf('TokenReflection\ReflectionClass', $class);
+			$this->assertInstanceOf('TokenReflection\IReflectionClass', $class);
 		}
-		$this->assertSame(array('TokenReflection_Test_ClassGrandParent', 'TokenReflection_Test_ClassGrandGrandParent'), $rfl->token->getParentClassNameList());
+		$this->assertSame(array('TokenReflection_Test_ClassGrandParent', 'TokenReflection_Test_ClassGrandGrandParent', 'ReflectionClass'), $rfl->token->getParentClassNameList());
 
 		$rfl = $this->getClassReflection('noParent');
 		$this->assertSame($rfl->internal->isSubclassOf('Exception'), $rfl->token->isSubclassOf('Exception'));
 		$this->assertFalse($rfl->token->isSubclassOf('Exception'));
-		$this->assertFalse($rfl->token->isSubclassOf(new \ReflectionClass('Exception')));
+		$this->assertFalse($rfl->token->isSubclassOf(new InternalReflectionClass('Exception')));
 
 		$this->assertSame($rfl->internal->getParentClass(), $rfl->token->getParentClass());
 		$this->assertFalse($rfl->token->getParentClass());
@@ -476,6 +539,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame(array(), $rfl->token->getParentClassNameList());
 	}
 
+	/**
+	 * Tests if class is user defined or internal.
+	 */
 	public function testUserDefined()
 	{
 		$rfl = $this->getClassReflection('userDefined');
@@ -493,7 +559,7 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->getExtensionName());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('Exception');
+		$rfl->internal = new InternalReflectionClass('Exception');
 		$rfl->token = $this->getBroker()->getClass('Exception');
 
 		$this->assertSame($rfl->internal->isUserDefined(), $rfl->token->isUserDefined());
@@ -508,6 +574,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
 
+	/**
+	 * Tests getting of documentation comment.
+	 */
 	public function testDocComment()
 	{
 		$rfl = $this->getClassReflection('docComment');
@@ -519,37 +588,43 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+	/**
+	 * Tests getting of inherited documentation comment.
+	 */
 	public function testDocCommentInheritance()
 	{
 		require_once $this->getFilePath('docCommentInheritance');
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
 
 		$parent = new \stdClass();
-		$parent->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
+		$parent->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
 		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
 		$this->assertSame($parent->internal->getDocComment(), $parent->token->getDocComment());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame('My Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertSame('Long description. Phew, that was long.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame($parent->token->getAnnotations(), $rfl->token->getAnnotations());
 	}
 
+	/**
+	 * Tests if class is defined in namespace.
+	 */
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
 		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
-		$rfl->internal = new \ReflectionClass('TokenReflection\Test\ClassInNamespace');
+		$rfl->internal = new InternalReflectionClass('TokenReflection\Test\ClassInNamespace');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection\Test\ClassInNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
@@ -572,6 +647,9 @@ class ReflectionClassTest extends Test
 		$this->assertSame($this->getClassName('noNamespace'), $rfl->token->getShortName());
 	}
 
+	/**
+	 * Tests getting of property source code.
+	 */
 	public function testPropertyGetSource()
 	{
 		static $expected = array(
@@ -589,12 +667,15 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests getting of method source code.
+	 */
 	public function testMethodGetSource()
 	{
 		static $expected = array(
-			'protectedStaticFunction' => "protected static function protectedStaticFunction()\n	{\n	}",
-			'protectedFunction' => "protected function protectedFunction()\n	{\n	}",
-			'publicStaticFunction' => "public static function publicStaticFunction()\n	{\n	}"
+			'protectedStaticFunction' => "protected static function protectedStaticFunction(\$one = true)\n	{\n	}",
+			'protectedFunction' => "protected function protectedFunction(\$two = false)\n	{\n	}",
+			'publicStaticFunction' => "public static function publicStaticFunction(\$five = 1.1)\n	{\n	}"
 		);
 
 		$rfl = $this->getClassReflection('methods')->token;
@@ -603,6 +684,9 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests getting of constant source code.
+	 */
 	public function testConstantGetSource()
 	{
 		static $expected = array(
@@ -618,10 +702,13 @@ class ReflectionClassTest extends Test
 		}
 	}
 
+	/**
+	 * Tests getting of class source code.
+	 */
 	public function testClassGetSource()
 	{
 		static $expected = array(
-			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n	public function __construct()\n	{\n	}\n\n	public function __destruct()\n	{\n	}\n\n	public final function publicFinalFunction()\n	{\n	}\n\n	public static function publicStaticFunction()\n	{\n	}\n\n	private static function privateStaticFunction()\n	{\n	}\n\n	public function publicFunction()\n	{\n	}\n\n	private function privateFunction()\n	{\n	}\n}",
+			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n	public function __construct(\$three)\n	{\n	}\n\n	public function __destruct()\n	{\n	}\n\n	public final function publicFinalFunction(\$four = 1)\n	{\n	}\n\n	public static function publicStaticFunction(\$five = 1.1)\n	{\n	}\n\n	private static function privateStaticFunction(\$six = 'string', \$seven = null)\n	{\n	}\n\n	public function publicFunction(array \$eight = array())\n	{\n	}\n\n	private function privateFunction(Foo \$nine = null)\n	{\n	}\n}",
 			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n	const STRING = 'string';\n	const INTEGER = 1;\n	const FLOAT = 1.1;\n	const BOOLEAN = true;\n}",
 			'docComment' => "/**\n * TokenReflection_Test_ClassDocComment.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */\nclass TokenReflection_Test_ClassDocComment\n{\n}"
 		);
@@ -632,5 +719,29 @@ class ReflectionClassTest extends Test
 				$this->getClassReflection($className)->token->getSource()
 			);
 		}
+	}
+
+	/**
+	 * Tests export.
+	 */
+	public function testToString()
+	{
+		$tests = array(
+			'lines', 'docComment', 'noDocComment',
+			'constants', 'noConstants', 'properties', 'noProperties', 'doubleProperties',
+			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
+			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
+			'interface', 'noInterface', 'interfaces', 'noInterfaces',
+			/*'iterator',*/ 'noIterator', 'parent', 'noParent',
+			'userDefined', 'noNamespace'
+		);
+		foreach ($tests as $test) {
+			$rfl = $this->getClassReflection($test);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionClass::export($this->getClassName($test), true), ReflectionClass::export($this->getBroker(), $this->getClassName($test), true));
+		}
+
+		$this->assertSame(InternalReflectionClass::export('ReflectionClass', true), ReflectionClass::export($this->getBroker(), 'ReflectionClass', true));
+		$this->assertSame(InternalReflectionClass::export(new InternalReflectionClass('ReflectionClass'), true), ReflectionClass::export($this->getBroker(), new InternalReflectionClass('ReflectionClass'), true));
 	}
 }
