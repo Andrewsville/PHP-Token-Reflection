@@ -9,8 +9,8 @@
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -20,7 +20,7 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * Abstract test.
  *
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Jaroslav Hanslík
  */
 abstract class Test extends \PHPUnit_Framework_TestCase
 {
@@ -329,8 +329,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	{
 		$combinations = array();
 
-		for ($i = 0; $i < pow(2, count($filters)); $i++)
-		{
+		for ($i = 0; $i < pow(2, count($filters)); $i++) {
 			$combination = 0;
 			for ($j = 0; $j < count($filters); $j++) {
 				if ($i % pow(2, $j + 1) < pow(2, $j)) {

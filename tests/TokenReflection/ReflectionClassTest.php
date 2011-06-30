@@ -9,8 +9,8 @@
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -22,8 +22,8 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * Class test.
  *
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
  */
 class ReflectionClassTest extends Test
 {
@@ -727,6 +727,7 @@ class ReflectionClassTest extends Test
 	public function testToString()
 	{
 		$tests = array(
+			'lines', 'docComment', 'noDocComment',
 			'constants', 'noConstants', 'properties', 'noProperties', 'doubleProperties',
 			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
 			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',

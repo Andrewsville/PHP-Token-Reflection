@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -57,6 +57,8 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Creates a token substream.
 	 *
 	 * @param string $fileName File name
+	 * @throws \TokenReflection\Exception\Parse If tokenizer PHP extension is missing
+	 * @throws \TokenReflection\Exception\Parse If file does not exist or is not readable
 	 */
 	public function __construct($fileName)
 	{

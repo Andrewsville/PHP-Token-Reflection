@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection\Dummy;
@@ -843,7 +843,7 @@ class ReflectionClass implements IReflectionClass
 	{
 		return sprintf(
 			"Class|Interface [ <user> class|interface %s ] {\n  %s%s%s%s%s\n}\n",
-			$this->getShortName(),
+			$this->getName(),
 			"\n\n  - Constants [0] {\n  }",
 			"\n\n  - Static properties [0] {\n  }",
 			"\n\n  - Static methods [0] {\n  }",

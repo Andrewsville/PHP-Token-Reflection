@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -112,25 +112,25 @@ class ReflectionFile implements IReflection
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string
+	 * @throws \TokenReflection\Exception\Runtime
 	 */
 	public function __toString()
 	{
-		return '';
+		throw new Exception\Runtime('__toString is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
 	 * Exports a reflected object.
 	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
 	 * @param string $argument Reflection object name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
+	 * @throws \TokenReflection\Exception\Runtime
 	 */
-	public static function export($argument, $return = false)
+	public static function export(Broker $broker, $argument, $return = false)
 	{
-		if ($return) {
-			return $this->__toString();
-		}
-		echo $this->__toString();
+		throw new Exception\Runtime('Export is not supported.', Exception\Runtime::UNSUPPORTED);
 	}
 
 	/**
@@ -188,13 +188,14 @@ class ReflectionFile implements IReflection
 	/**
 	 * Prepares namespace reflections from the file.
 	 *
+	 * @return \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed
 	 */
 	private function parse()
 	{
 		if ($this->tokenStream->count() <= 1) {
 			// No PHP content
-			return;
+			return $this;
 		}
 
 		try {

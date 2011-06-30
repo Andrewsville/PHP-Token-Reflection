@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -1073,7 +1073,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getConstantReflections() as $constant) {
-			$buffer .= "    " . $constant->__toString();
+			$buffer .= '    ' . $constant->__toString();
 			$count++;
 		}
 		$constants = sprintf("\n\n  - Constants [%d] {\n%s  }", $count, $buffer);
@@ -1083,7 +1083,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getProperties() as $property) {
-			$string = "    " . preg_replace('~\n(?!$)~', "\n    ", $property->__toString());
+			$string = '    ' . preg_replace('~\n(?!$)~', "\n    ", $property->__toString());
 			if ($property->isStatic()) {
 				$sBuffer .= $string;
 				$sCount++;
@@ -1122,13 +1122,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$methods = sprintf("\n\n  - Methods [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
 
 		return sprintf(
-			"%s [ <user>%s %s%s%s %s%s%s ] {\n  @@ %s %d-%d%s%s%s%s%s\n}\n",
+			"%s%s [ <user>%s %s%s%s %s%s%s ] {\n  @@ %s %d-%d%s%s%s%s%s\n}\n",
+			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
 			$this->isInterface() ? 'Interface' : 'Class',
 			$this->isIterateable() ? ' <iterateable>' : '',
 			$this->isAbstract() ? 'abstract ' : '',
 			$this->isFinal() ? 'final ' : '',
 			$this->isInterface() ? 'interface' : 'class',
-			$this->getShortName(),
+			$this->getName(),
 			null !== $this->getParentClassName() ? ' extends ' . $this->getParentClassName() : '',
 			$implements,
 			$this->getFileName(),
@@ -1319,7 +1320,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		try {
-			while(true) {
+			while (true) {
 				$tokenStream->skipWhitespaces();
 
 				$parentClassName = '';

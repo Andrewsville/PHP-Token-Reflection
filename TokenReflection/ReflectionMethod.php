@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -366,7 +366,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 		// @todo support inherits
 		return sprintf(
-			"Method [ <%s%s%s%s> %s%s%s%s%s%s method %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			"%sMethod [ <%s%s%s%s> %s%s%s%s%s%s method %s%s ] {\n  @@ %s %d - %d%s\n}\n",
+			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
 			!empty($internal) ? $internal : 'user',
 			$overwrite,
 			$prototype,
@@ -607,9 +608,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 
-		/**
-		 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_API.c?revision=309853&view=markup#l1795
-		 */
+		// See http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_API.c?revision=309853&view=markup#l1795
 		static $notAllowed = array('__clone' => true, '__tostring' => true, '__get' => true, '__set' => true, '__isset' => true, '__unset' => true);
 		if (!$this->isConstructor() && !$this->isDestructor() && !isset($notAllowed[$name])) {
 			$this->modifiers |= self::IS_ALLOWED_STATIC;

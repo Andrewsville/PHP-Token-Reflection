@@ -9,8 +9,8 @@
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -22,8 +22,8 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * Method test.
  *
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
+ * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
  */
 class ReflectionMethodTest extends Test
 {
@@ -297,7 +297,7 @@ class ReflectionMethodTest extends Test
 
 		// Access level
 		$rfl = $this->getClassReflection('accessLevel');
-		foreach(array('private', 'protected') as $method) {
+		foreach (array('private', 'protected') as $method) {
 			$extended = $method . 'Extended';
 			$noExtended = $method . 'NoExtended';
 
@@ -525,6 +525,7 @@ class ReflectionMethodTest extends Test
 	public function testToString()
 	{
 		$tests = array(
+			'lines', 'docComment', 'noComment',
 			'prototype', 'noPrototype', 'parameters', 'reference', 'noReference', 'noClosure', 'noNamespace', 'userDefined', 'shadow'
 		);
 		foreach ($tests as $test) {

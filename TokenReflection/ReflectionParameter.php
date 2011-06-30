@@ -2,15 +2,15 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 3
+ * Version 1.0 beta 4
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this library in the file LICENSE.
  *
- * @author Ondřej Nešpor <andrew@andrewsville.cz>
- * @author Jaroslav Hanslík <kontakt@kukulich.cz>
+ * @author Ondřej Nešpor
+ * @author Jaroslav Hanslík
  */
 
 namespace TokenReflection;
@@ -28,7 +28,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @var string
 	 */
-	CONST ARRAY_TYPE_HINT = 'array';
+	const ARRAY_TYPE_HINT = 'array';
 
 	/**
 	 * Declaring class name.
@@ -146,10 +146,15 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Returns the default value.
 	 *
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If property has no default value
+	 * @throws \TokenReflection\Exception\Runtime If the property is not optional
+	 * @throws \TokenReflection\Exception\Runtime If the property has no default value
 	 */
 	public function getDefaultValue()
 	{
+		if (!$this->isOptional()) {
+			throw new Exception\Runtime(sprintf('Property "%s" is not optional.', $this->name), Exception\Runtime::UNSUPPORTED);
+		}
+
 		if (is_array($this->defaultValueDefinition)) {
 			if (0 === count($this->defaultValueDefinition)) {
 				throw new Exception\Runtime(sprintf('Property "%s" has no default value.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
@@ -269,7 +274,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 						$this->typeHint = $this->declaringClassName;
 					}
 				} else {
-					$this->typeHint= ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+					$this->typeHint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
 				}
 			}
 
@@ -286,11 +291,11 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 */
 	public function allowsNull()
 	{
-		if (($this->isArray() || null !== $this->getOriginalTypeHint()) && 'null' !== strtolower($this->getDefaultValueDefinition())) {
-			return false;
+		if ($this->isArray()) {
+			return 'null' === strtolower($this->getDefaultValueDefinition());
 		}
 
-		return true;
+		return null === $this->originalTypeHint || !empty($this->defaultValueDefinition);
 	}
 
 	/**
