@@ -93,7 +93,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	private $interfaces = array();
 
 	/**
-	 * Methods reflections.
 	 * Used trait names.
 	 *
 	 * @var array
