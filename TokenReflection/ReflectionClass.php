@@ -102,9 +102,21 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Aliases used at traits.
 	 *
+	 * Compatible with the internal reflection.
+	 *
 	 * @var array
 	 */
 	private $traitAliases = array();
+
+	/**
+	 * Trait importing rules.
+	 *
+	 * [<trait>::]<method> => array(<new-name>, <access-level>) - active alias
+	 * [<trait>::]<method> => null - ignored import (insteadof used)
+	 *
+	 * @var array
+	 */
+	private $traitImports = array();
 
 	/**
 	 * Stores if the class definition is complete.
@@ -1598,6 +1610,114 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							$tokenStream->next();
 						}
 					}
+					break;
+				case T_USE:
+					$tokenStream->skipWhitespaces();
+
+					while (true) {
+						$traitName = '';
+						$type = $tokenStream->getType();
+						while (T_STRING === $type || T_NS_SEPARATOR === $type) {
+							$traitName .= $tokenStream->getTokenValue();
+							$type = $tokenStream->skipWhitespaces()->getType();
+						}
+
+						if ('' === trim($traitName, '\\')) {
+							throw new Exception\Parse('Empty trait name found.', Exception\Parse::PARSE_CHILDREN_ERROR);
+						}
+
+						$this->traits[] = Resolver::resolveClassFQN($traitName, $this->aliases, $this->namespaceName);
+
+						if (';' === $type) { // End of "use"
+							$tokenStream->skipWhitespaces();
+							break;
+						} elseif (',' === $type) { // Next trait name follows
+							$tokenStream->skipWhitespaces();
+							continue;
+						} elseif ('{' !== $type) { // Unexpected token
+							throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+						}
+
+						// Aliases definition
+						$type = $tokenStream->skipWhitespaces()->getType();
+						while (true) {
+							if ('}' === $type) {
+								$tokenStream->skipWhitespaces();
+								break 2;
+							}
+
+							$leftSide = '';
+							$rightSide = array(0, '');
+							$alias = true;
+
+							while (T_STRING === $type || T_NS_SEPARATOR === $type || T_DOUBLE_COLON === $type) {
+								$leftSide .= $tokenStream->getTokenValue();
+								$type = $tokenStream->skipWhitespaces()->getType();
+							}
+
+							if (T_INSTEADOF === $type) {
+								$alias = false;
+							} elseif (T_AS !== $type) {
+								throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+							}
+
+							$type = $tokenStream->skipWhitespaces()->getType();
+
+							if (T_PUBLIC === $type || T_PROTECTED === $type || T_PRIVATE === $type) {
+								if (!$alias) {
+									throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+								}
+
+								$rightSide[0] = $type;
+								$type = $tokenStream->skipWhitespaces()->getType();
+							}
+
+
+							while (T_STRING === $type || (T_NS_SEPARATOR === $type && !$alias)) {
+								$rightSide[1] .= $tokenStream->getTokenValue();
+								$type = $tokenStream->skipWhitespaces()->getType();
+							}
+
+							if (empty($leftSide)) {
+								throw new Exception\Parse('An empty method name was found.', Exception\Parse::PARSE_CHILDREN_ERROR);
+							} elseif (empty($rightSide[1])) {
+								throw new Exception\Parse($alias ? 'An empty alias name was found.' : 'An empty trait name was found.', Exception\Parse::PARSE_CHILDREN_ERROR);
+							}
+
+							if ($alias) {
+								// Alias
+								if ($pos = strpos($leftSide, '::')) {
+									$methodName = substr($leftSide, $pos + 2);
+									$className = Resolver::resolveClassFQN(substr($leftSide, 0, $pos), $this->aliases, $this->namespaceName);
+									$leftSide = $className . '::' . $methodName;
+								}
+
+								$this->traitImports[$leftSide] = $rightSide;
+							} else {
+								// Insteadof
+								if ($pos = strpos($leftSide, '::')) {
+									$methodName = substr($leftSide, $pos + 2);
+								} else {
+									throw new Exception\Parse('A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', Exception\Parse::PARSE_CHILDREN_ERROR);
+								}
+
+								$this->traitImports[Resolver::resolveClassFQN($rightSide[1], $this->aliases, $this->namespaceName) . '::' . $methodName] = null;
+							}
+
+
+							if (',' === $type) {
+								$tokenStream->skipWhitespaces();
+								continue;
+							} elseif (';' !== $type) {
+								throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+							}
+
+							$type = $tokenStream->skipWhitespaces()->getType();
+						}
+
+						throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+					}
+
 					break;
 				default:
 					$tokenStream->next();
