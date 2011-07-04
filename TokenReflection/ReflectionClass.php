@@ -1071,7 +1071,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($trait);
-			if (!$reflection->isInterface()) {
+			if (!$reflection->isTrait()) {
 				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $trait), Exception\Runtime::INVALID_ARGUMENT);
 			}
 
