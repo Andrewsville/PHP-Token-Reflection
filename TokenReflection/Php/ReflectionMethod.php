@@ -245,9 +245,10 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Returns the function/method as closure.
 	 *
+	 * @param object $object Object
 	 * @return \Closure
 	 */
-	public function getClosure(){
+	public function getClosure($object){
 		return null;
 	}
 

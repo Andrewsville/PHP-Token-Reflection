@@ -137,4 +137,19 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @return boolean
 	 */
 	public function setAccessible($accessible);
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @param object $object Object
+	 * @return \Closure
+	 */
+	public function getClosure($object);
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosureThis();
 }

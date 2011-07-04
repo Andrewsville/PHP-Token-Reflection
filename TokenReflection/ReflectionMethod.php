@@ -506,6 +506,26 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @param object $object Object
+	 * @return \Closure
+	 */
+	public function getClosure($object){
+		return null;
+	}
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosureThis()
+	{
+		return null;
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

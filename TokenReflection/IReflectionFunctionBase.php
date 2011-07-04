@@ -127,20 +127,6 @@ interface IReflectionFunctionBase extends IReflection
 	public function getNumberOfRequiredParameters();
 
 	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
-	 */
-	public function getClosure();
-
-	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
-	 */
-	public function getClosureThis();
-
-	/**
 	 * Returns static variables.
 	 *
 	 * @return array
