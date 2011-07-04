@@ -808,6 +808,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$properties = $this->properties;
 
+		foreach ($this->getOwnTraits() as $trait) {
+			foreach ($trait->getProperties(null) as $traitProperty) {
+				if (!isset($properties[$traitProperty->getName()])) {
+					$properties[$traitProperty->getName()] = $traitProperty->alias($this);
+				}
+			}
+		}
+
 		if (null !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getProperties(null) as $parentProperty) {
 				if (!isset($properties[$parentProperty->getName()])) {
@@ -850,6 +858,48 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
+		}
+
+		return array_values($properties);
+	}
+
+	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasTraitProperty($name)
+	{
+		if (isset($this->properties[$name])) {
+			return false;
+		}
+
+		foreach ($this->getOwnTraits() as $trait) {
+			if ($trait->hasProperty($name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns reflections of properties imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getTraitProperties($filter = null)
+	{
+		$properties = array();
+
+		foreach ($this->getOwnTraits() as $trait) {
+			foreach ($trait->getProperties(null) as $traitProperty) {
+				if (!isset($this->properties[$traitProperty->getName()]) && !isset($properties[$traitProperty->getName()])) {
+					$properties[$traitProperty->getName()] = $traitProperty->alias($this);
+				}
+			}
 		}
 
 		return array_values($properties);
