@@ -304,6 +304,17 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class uses a particular trait.
+	 *
+	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @return bool
+	 */
+	public function usesTrait($trait)
+	{
+		return false;
+	}
+
+	/**
 	 * Returns if objects of this class are cloneable.
 	 *
 	 * Introduced in PHP 5.4.

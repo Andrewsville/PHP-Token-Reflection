@@ -492,6 +492,14 @@ interface IReflectionClass extends IReflection
 	public function getTraitAliases();
 
 	/**
+	 * Returns if the class uses a particular trait.
+	 *
+	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @return bool
+	 */
+	public function usesTrait($trait);
+
+	/**
 	 * Returns if the class is a trait.
 	 *
 	 * @return boolean
