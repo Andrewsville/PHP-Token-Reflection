@@ -950,7 +950,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$broker = $this->getBroker();
 		return array_combine($this->traits, array_map(function($traitName) use ($broker) {
 			return $broker->getClass($traitName);
-		}, $this->traits));
+		}, $this->getOwnTraitNames()));
 	}
 
 	/**
@@ -978,7 +978,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getOwnTraitNames()
 	{
-		return $this->traits;
+		return array_reverse($this->traits);
 	}
 
 	/**
@@ -999,6 +999,36 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function isTrait()
 	{
 		return (bool) (self::IS_TRAIT & $this->modifiers);
+	}
+
+	/**
+	 * Returns if the class uses a particular trait.
+	 *
+	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @return bool
+	 */
+	public function usesTrait($trait)
+	{
+		if (is_object($trait)) {
+			if (!$trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$traitName = $trait->getName();
+
+			if (!$trait->isTrait()) {
+				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $traitName), Exception\Runtime::INVALID_ARGUMENT);
+			}
+		} else {
+			$reflection = $this->getBroker()->getClass($trait);
+			if (!$reflection->isInterface()) {
+				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $trait), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$traitName = $trait;
+		}
+
+		return in_array($traitName, $this->getTraitNames());
 	}
 
 	/**
