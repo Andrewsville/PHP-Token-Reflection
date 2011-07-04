@@ -321,6 +321,19 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
+	 * Creates a property alias for the given class.
+	 *
+	 * @param \TokenReflection\ReflectionClass $parent New parent class
+	 * @return \TokenReflection\ReflectionProperty
+	 */
+	public function alias(ReflectionClass $parent)
+	{
+		$property = clone $this;
+		$property->declaringClassName = $parent->getName();
+		return $property;
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
