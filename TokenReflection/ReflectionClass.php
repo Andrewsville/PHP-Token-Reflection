@@ -170,11 +170,23 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
 			}
 
+			if ($this->isInterface() && !empty($this->methods)) {
+				$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+			}
+
 			$this->modifiersComplete = true;
 			foreach ($this->getParentClasses() as $parentClass) {
 				if ($parentClass instanceof Dummy\ReflectionClass) {
 					$this->modifiersComplete = false;
 					break;
+				}
+			}
+			if ($this->modifiersComplete) {
+				foreach ($this->getInterfaces() as $interface) {
+					if ($interface instanceof Dummy\ReflectionClass) {
+						$this->modifiersComplete = false;
+						break;
+					}
 				}
 			}
 		}
@@ -1263,7 +1275,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						$this->modifiers = InternalReflectionClass::IS_FINAL;
 						break;
 					case T_INTERFACE:
-						$this->modifiers = self::IS_INTERFACE | InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+						$this->modifiers = self::IS_INTERFACE;
 						// break missing on purpose
 					case T_CLASS:
 						$tokenStream->skipWhitespaces();
