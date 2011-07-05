@@ -204,6 +204,22 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	}
 
 	/**
+	 * Creates aliases to parameters.
+	 *
+	 * @throws \TokenReflection\Exception\Runtime When called on a ReflectionFunction instance
+	 */
+	protected final function aliasParameters()
+	{
+		if (!$this instanceof ReflectionMethod) {
+			throw new Exception\Runtime('Only method parameters can be aliased.', Exception\Runtime::UNSUPPORTED);
+		}
+
+		foreach ($this->parameters as $index => $parameter) {
+			$this->parameters[$index] = $parameter->alias($this);
+		}
+	}
+
+	/**
 	 * Parses if the function/method returns its value as reference.
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream

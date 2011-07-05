@@ -436,6 +436,22 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
+	 * Creates a parameter alias for the given method.
+	 *
+	 * @param \TokenReflection\ReflectionMethod $parent New parent method
+	 * @return \TokenReflection\ReflectionParameter
+	 */
+	public function alias(ReflectionMethod $parent)
+	{
+		$parameter = clone $this;
+
+		$parameter->declaringClassName = $parent->getDeclaringClassName();
+		$parameter->declaringFunctionName = $parent->getName();
+
+		return $parameter;
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

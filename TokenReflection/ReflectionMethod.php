@@ -526,6 +526,37 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Creates a method alias of the given name and access level for the given class.
+	 *
+	 * @param \TokenReflection\ReflectionClass $parent New parent class
+	 * @param string $name New method name
+	 * @param integer $accessLevel New access level
+	 * @return \TokenReflection\ReflectionMethod
+	 */
+	public function alias(ReflectionClass $parent, $name = null, $accessLevel = null)
+	{
+		static $possibleLevels = array(InternalReflectionMethod::IS_PUBLIC => true, InternalReflectionMethod::IS_PROTECTED => true, InternalReflectionMethod::IS_PRIVATE => true);
+
+		$method = clone $this;
+
+		$method->declaringClassName = $parent->getName();
+		if (null !== $name) {
+			$method->name = $name;
+		}
+		if (null !== $accessLevel) {
+			if (!isset($possibleLevels[$accessLevel])) {
+				throw new Exception\Parse(sprintf('Invalid method access level: "%s".', $accessLevel), Exception\Parse::PARSE_CHILDREN_ERROR);
+			}
+
+			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);
+			$method->modifiers |= $accessLevel;
+		}
+		$method->aliasParameters();
+
+		return $method;
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
