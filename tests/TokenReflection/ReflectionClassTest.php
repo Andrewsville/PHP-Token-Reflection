@@ -288,7 +288,9 @@ class ReflectionClassTest extends Test
 	{
 		static $classes = array(
 			'TokenReflection_Test_ClassModifiersIface1',
-			'TokenReflection_Test_ClassModifiersiFace2',
+			'TokenReflection_Test_ClassModifiersIface2',
+			'TokenReflection_Test_ClassModifiersIface3',
+			'TokenReflection_Test_ClassModifiersIface4',
 			'TokenReflection_Test_ClassModifiersClass1',
 			'TokenReflection_Test_ClassModifiersClass2',
 			'TokenReflection_Test_ClassModifiersClass3',
@@ -296,6 +298,7 @@ class ReflectionClassTest extends Test
 			'TokenReflection_Test_ClassModifiersClass5',
 			'TokenReflection_Test_ClassModifiersClass6',
 			'TokenReflection_Test_ClassModifiersClass7',
+			'TokenReflection_Test_ClassModifiersClass8',
 		);
 
 		$rfl = $this->getClassReflection('modifiers');
