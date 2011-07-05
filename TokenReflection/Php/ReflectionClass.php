@@ -171,6 +171,14 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function isSubclassOf($class)
 	{
+		if (is_object($class)) {
+			if (!$class instanceof InternalReflectionClass && !$class instanceof IReflectionClass) {
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($class)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$class = $class->getName();
+		}
+
 		return in_array($class, $this->getParentClassNameList());
 	}
 
@@ -229,12 +237,21 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
-			if ($interface instanceof InternalReflectionClass || $interface instanceof IReflectionClass) {
-				$interfaceName = $interface->getName();
-			} else {
+			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
 				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
 			}
+
+			$interfaceName = $interface->getName();
+
+			if (!$interface->isInterface()) {
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
+			}
 		} else {
+			$reflection = $this->getBroker()->getClass($interface);
+			if (!$reflection->isInterface()) {
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interface), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
 			$interfaceName = $interface;
 		}
 
@@ -785,8 +802,8 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $traitName), Exception\Runtime::INVALID_ARGUMENT);
 			}
 		} else {
-			$r = new self($trait, $this->getBroker());
-			if (!$r->isTrait()) {
+			$reflection = $this->getBroker()->getClass($trait);
+			if (!$reflection->isTrait()) {
 				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $trait), Exception\Runtime::INVALID_ARGUMENT);
 			}
 
