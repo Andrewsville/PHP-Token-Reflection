@@ -72,6 +72,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	private $modifiers = 0;
 
 	/**
+	 * Class type (class/interface/trait).
+	 *
+	 * @var integer
+	 */
+	private $type = 0;
+
+	/**
 	 * Determines if modifiers are complete.
 	 *
 	 * @var boolean
@@ -202,13 +209,17 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 					}
 				}
+
+				if (!empty($this->interfaces)) {
+					$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+				}
 			}
 
-			if (count($this->getInterfaceNames())) {
+			if (!empty($this->interfaces)) {
 				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
 			}
 
-			if (count($this->getTraitNames())) {
+			if (!empty($this->traits)) {
 				$this->modifiers |= self::IMPLEMENTS_TRAITS;
 			}
 
@@ -241,7 +252,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isFinal()
 	{
-		return $this->modifiers === InternalReflectionClass::IS_FINAL;
+		return (bool) ($this->modifiers & InternalReflectionClass::IS_FINAL);
 	}
 
 	/**
@@ -251,7 +262,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isInterface()
 	{
-		return self::IS_INTERFACE === $this->modifiers;
+		return self::IS_INTERFACE === $this->type;
 	}
 
 	/**
@@ -1048,7 +1059,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isTrait()
 	{
-		return (bool) (self::IS_TRAIT & $this->modifiers);
+		return self::IS_TRAIT === $this->type;
 	}
 
 	/**
@@ -1469,11 +1480,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						$this->modifiers = InternalReflectionClass::IS_FINAL;
 						break;
 					case T_INTERFACE:
-						$this->modifiers = self::IS_INTERFACE;
+						$this->modifiers = self::IS_INTERFACE | InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+						$this->type = self::IS_INTERFACE;
 						$tokenStream->skipWhitespaces();
 						break 2;
 					case T_TRAIT:
 						$this->modifiers = self::IS_TRAIT;
+						$this->type = self::IS_TRAIT;
 						$tokenStream->skipWhitespaces();
 						break 2;
 					case T_CLASS:

@@ -282,6 +282,34 @@ class ReflectionClassTest extends Test
 	}
 
 	/**
+	 * Tests class modifiers.
+	 */
+	public function testModifiers()
+	{
+		static $classes = array(
+			'TokenReflection_Test_ClassModifiersIface1',
+			'TokenReflection_Test_ClassModifiersiFace2',
+			'TokenReflection_Test_ClassModifiersClass1',
+			'TokenReflection_Test_ClassModifiersClass2',
+			'TokenReflection_Test_ClassModifiersClass3',
+			'TokenReflection_Test_ClassModifiersClass4',
+			'TokenReflection_Test_ClassModifiersClass5',
+			'TokenReflection_Test_ClassModifiersClass6',
+			'TokenReflection_Test_ClassModifiersClass7',
+		);
+
+		$rfl = $this->getClassReflection('modifiers');
+		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+
+		foreach ($classes as $className) {
+			$rfl->token = $this->getBroker()->getClass($className);
+			$rfl->internal = new \ReflectionClass($className);
+
+			$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers(), $className);
+		}
+	}
+
+	/**
 	 * Tests getting of class methods.
 	 */
 	public function testMethods()
