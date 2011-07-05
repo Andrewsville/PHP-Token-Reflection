@@ -160,9 +160,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 					}
 				}
+
+				if (!empty($this->interfaces)) {
+					$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+				}
 			}
 
-			if (count($this->getInterfaceNames())) {
+			if (!empty($this->interfaces)) {
 				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
 			}
 
@@ -195,7 +199,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isFinal()
 	{
-		return $this->modifiers === InternalReflectionClass::IS_FINAL;
+		return (bool) ($this->modifiers & InternalReflectionClass::IS_FINAL);
 	}
 
 	/**
@@ -205,7 +209,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isInterface()
 	{
-		return self::IS_INTERFACE === $this->modifiers;
+		return (bool) ($this->modifiers & self::IS_INTERFACE);
 	}
 
 	/**
@@ -1259,7 +1263,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						$this->modifiers = InternalReflectionClass::IS_FINAL;
 						break;
 					case T_INTERFACE:
-						$this->modifiers = self::IS_INTERFACE;
+						$this->modifiers = self::IS_INTERFACE | InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 						// break missing on purpose
 					case T_CLASS:
 						$tokenStream->skipWhitespaces();
