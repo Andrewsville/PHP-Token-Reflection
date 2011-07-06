@@ -301,14 +301,14 @@ class ReflectionClassTest extends Test
 			'TokenReflection_Test_ClassModifiersClass8',
 		);
 
-		$rfl = $this->getClassReflection('modifiers');
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		require_once $this->getFilePath('modifiers');
+		$this->getBroker()->process($this->getFilePath('modifiers'));
 
 		foreach ($classes as $className) {
-			$rfl->token = $this->getBroker()->getClass($className);
-			$rfl->internal = new \ReflectionClass($className);
+			$token = $this->getBroker()->getClass($className);
+			$internal = new \ReflectionClass($className);
 
-			$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers(), $className);
+			$this->assertSame($internal->getModifiers(), $token->getModifiers(), $className);
 		}
 	}
 

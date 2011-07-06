@@ -1,10 +1,5 @@
 <?php
 
-class TokenReflection_Test_ClassModifiers
-{
-
-}
-
 interface TokenReflection_Test_ClassModifiersIface1 {
 
 }
