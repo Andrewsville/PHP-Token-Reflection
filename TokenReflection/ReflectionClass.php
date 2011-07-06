@@ -839,11 +839,9 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$properties = $this->properties;
 
-		foreach ($this->getOwnTraits() as $trait) {
-			foreach ($trait->getProperties(null) as $traitProperty) {
-				if (!isset($properties[$traitProperty->getName()])) {
-					$properties[$traitProperty->getName()] = $traitProperty->alias($this);
-				}
+		foreach ($this->getTraitProperties(null) as $traitProperty) {
+			if (!isset($properties[$traitProperty->getName()])) {
+				$properties[$traitProperty->getName()] = $traitProperty->alias($this);
 			}
 		}
 
@@ -931,6 +929,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					$properties[$traitProperty->getName()] = $traitProperty->alias($this);
 				}
 			}
+		}
+
+		if (null !== $filter) {
+			$properties = array_filter($properties, function(IReflectionProperty $property) use ($filter) {
+				return (bool) ($property->getModifiers() & $filter);
+			});
 		}
 
 		return array_values($properties);

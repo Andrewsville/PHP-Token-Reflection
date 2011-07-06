@@ -48,7 +48,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @var array
 	 */
-	private $parameters = array();
+	protected $parameters = array();
 
 	/**
 	 * Static variables defined within the function/method.

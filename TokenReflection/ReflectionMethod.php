@@ -551,7 +551,10 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);
 			$method->modifiers |= $accessLevel;
 		}
-		$method->aliasParameters();
+
+		foreach ($this->parameters as $parameterName => $parameter) {
+			$this->parameters[$parameterName] = $parameter->alias($this);
+		}
 
 		return $method;
 	}
