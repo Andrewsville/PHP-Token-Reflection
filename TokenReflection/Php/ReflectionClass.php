@@ -397,6 +397,30 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 * @todo
+	 */
+	public function hasTraitMethod($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns method reflections imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 * @todo
+	 */
+	public function getTraitMethods($filter = null)
+	{
+		return array();
+	}
+
+	/**
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
@@ -536,6 +560,30 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		return array_filter($this->getProperties($filter), function(ReflectionProperty $property) use ($me) {
 			return $property->getDeclaringClass()->getName() === $me;
 		});
+	}
+
+	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 * @todo
+	 */
+	public function hasTraitProperty($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns property reflections imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 * @todo
+	 */
+	public function getTraitProperties($filter = null)
+	{
+		return array();
 	}
 
 	/**
