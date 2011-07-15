@@ -561,6 +561,28 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasTraitMethod($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns method reflections imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getTraitMethods($filter = null)
+	{
+		return array();
+	}
+
+	/**
 	 * Returns if the class defines the given constant.
 	 *
 	 * @param string $name Constant name.
@@ -705,6 +727,28 @@ class ReflectionClass implements IReflectionClass
 	 * @return array
 	 */
 	public function getOwnProperties($filter = null)
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasTraitProperty($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns property reflections imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getTraitProperties($filter = null)
 	{
 		return array();
 	}
