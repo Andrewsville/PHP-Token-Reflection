@@ -266,6 +266,22 @@ interface IReflectionClass extends IReflection
 	public function getOwnMethods($filter = null);
 
 	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasTraitMethod($name);
+
+	/**
+	 * Returns method reflections imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getTraitMethods($filter = null);
+
+	/**
 	 * Returns if the class defines the given constant.
 	 *
 	 * @param string $name Constant name.
@@ -367,6 +383,22 @@ interface IReflectionClass extends IReflection
 	 * @return array
 	 */
 	public function getOwnProperties($filter = null);
+
+	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasTraitProperty($name);
+
+	/**
+	 * Returns property reflections imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getTraitProperties($filter = null);
 
 	/**
 	 * Returns default properties.
