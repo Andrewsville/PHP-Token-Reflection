@@ -32,22 +32,32 @@ class CompleteTest extends Test
 	protected $type = 'complete';
 
 	/**
-	 * Run a test on an example file.
+	 * Gathers test filenames.
+	 *
+	 * @return array
 	 */
-	public function testParser()
+	public function provider()
 	{
-		$this->fileTest('parser');
+		$filenames = array();
+
+		foreach (new \DirectoryIterator(realpath(__DIR__ . '/../data/' . $this->type)) as $fileinfo) {
+			if ($fileinfo->isFile() && fnmatch('*.php', $fileinfo->getFilename())) {
+				$filenames[] = array($fileinfo->getPathname());
+			}
+		}
+
+		return $filenames;
 	}
 
 	/**
-	 * Test a particular file.
+	 * Performs a complete test for a particular file.
 	 *
-	 * @param String $test Filename
+	 * @dataProvider provider
+	 * @param String $filename Filename
 	 */
-	protected function fileTest($test)
+	public function testParser($filename)
 	{
 		$broker = new Broker(new Broker\Backend\Memory(), false);
-		$filename = $this->getFilePath($test);
 
 		$broker->processFile($filename);
 		require_once $filename;
