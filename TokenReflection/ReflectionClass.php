@@ -16,7 +16,7 @@
 namespace TokenReflection;
 
 use TokenReflection\Exception;
-use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty;
+use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty, ReflectionMethod as InternalReflectionMethod;
 
 /**
  * Tokenized class reflection.
@@ -107,7 +107,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	private $traits = array();
 
 	/**
-	 * Aliases used at traits.
+	 * Aliases used at trait methods.
 	 *
 	 * Compatible with the internal reflection.
 	 *
@@ -118,8 +118,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Trait importing rules.
 	 *
-	 * [<trait>::]<method> => array(<new-name>, <access-level>) - active alias
-	 * [<trait>::]<method> => null - ignored import (insteadof used)
+	 * [<trait>::]<method> => array(
+	 *    array(<new-name>, [<access-level>])|null
+	 * 	  [, ...]
+	 * )
 	 *
 	 * @var array
 	 */
@@ -603,6 +605,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$methods = $this->methods;
 
+		foreach ($this->getTraitMethods() as $traitMethod) {
+			if (!isset($methods[$traitMethod->getName()])) {
+				$methods[$traitMethod->getName()] = $traitMethod;
+			}
+		}
+
 		if (null !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getMethods(null) as $parentMethod) {
 				if (!isset($methods[$parentMethod->getName()])) {
@@ -651,6 +659,81 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		if (null !== $filter) {
 			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
 				return $method->is($filter);
+			});
+		}
+
+		return array_values($methods);
+	}
+
+	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasTraitMethod($name)
+	{
+		if (isset($this->methods[$name])) {
+			return false;
+		}
+
+		foreach ($this->getOwnTraits() as $trait) {
+			if ($trait->hasMethod($name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns reflections of method imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getTraitMethods($filter = null)
+	{
+		$methods = array();
+
+		foreach ($this->getOwnTraits() as $trait) {
+			$traitName = $trait->getName();
+			foreach ($trait->getMethods(null) as $traitMethod) {
+				$methodName = $traitMethod->getName();
+
+				$imports = array();
+				if (isset($this->traitImports[$traitName . '::' . $methodName])) {
+					$imports = $this->traitImports[$traitName . '::' . $methodName];
+				}
+				if (isset($this->traitImports[$methodName])) {
+					$imports = empty($imports) ? $this->traitImports[$methodName] : array_merge($imports, $this->traitImports[$methodName]);
+				}
+
+				foreach ($imports as $import) {
+					if (null !== $import) {
+						list($newName, $accessLevel) = $import;
+
+						if (isset($methods[$newName])) {
+							throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $newName), Exception\Runtime::ALREADY_EXISTS);
+						}
+
+						$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
+					}
+				}
+
+				if (!in_array(null, $imports)) {
+					if (isset($methods[$methodName])) {
+						throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $methodName), Exception\Runtime::ALREADY_EXISTS);
+					}
+
+					$methods[$methodName] = $traitMethod->alias($this);
+				}
+			}
+		}
+
+		if (null !== $filter) {
+			$methods = array_filter($methods, function(IReflectionMethod $method) use ($filter) {
+				return (bool) ($method->getModifiers() & $filter);
 			});
 		}
 
@@ -1764,7 +1847,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							}
 
 							$leftSide = '';
-							$rightSide = array(0, '');
+							$rightSide = array('', 0);
 							$alias = true;
 
 							while (T_STRING === $type || T_NS_SEPARATOR === $type || T_DOUBLE_COLON === $type) {
@@ -1785,19 +1868,31 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 									throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
 								}
 
-								$rightSide[0] = $type;
+								switch ($type) {
+									case T_PUBLIC:
+										$type = InternalReflectionMethod::IS_PUBLIC;
+										break;
+									case T_PROTECTED:
+										$type = InternalReflectionMethod::IS_PROTECTED;
+										break;
+									case T_PRIVATE:
+										$type = InternalReflectionMethod::IS_PRIVATE;
+										break;
+								}
+
+								$rightSide[1] = $type;
 								$type = $tokenStream->skipWhitespaces()->getType();
 							}
 
 
 							while (T_STRING === $type || (T_NS_SEPARATOR === $type && !$alias)) {
-								$rightSide[1] .= $tokenStream->getTokenValue();
+								$rightSide[0] .= $tokenStream->getTokenValue();
 								$type = $tokenStream->skipWhitespaces()->getType();
 							}
 
 							if (empty($leftSide)) {
 								throw new Exception\Parse('An empty method name was found.', Exception\Parse::PARSE_CHILDREN_ERROR);
-							} elseif (empty($rightSide[1])) {
+							} elseif (empty($rightSide[0])) {
 								throw new Exception\Parse($alias ? 'An empty alias name was found.' : 'An empty trait name was found.', Exception\Parse::PARSE_CHILDREN_ERROR);
 							}
 
@@ -1809,7 +1904,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 									$leftSide = $className . '::' . $methodName;
 								}
 
-								$this->traitImports[$leftSide] = $rightSide;
+								$this->traitImports[$leftSide][] = $rightSide;
 							} else {
 								// Insteadof
 								if ($pos = strpos($leftSide, '::')) {
@@ -1818,7 +1913,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 									throw new Exception\Parse('A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', Exception\Parse::PARSE_CHILDREN_ERROR);
 								}
 
-								$this->traitImports[Resolver::resolveClassFQN($rightSide[1], $this->aliases, $this->namespaceName) . '::' . $methodName] = null;
+								$this->traitImports[Resolver::resolveClassFQN($rightSide[1], $this->aliases, $this->namespaceName) . '::' . $methodName][] = null;
 							}
 
 
