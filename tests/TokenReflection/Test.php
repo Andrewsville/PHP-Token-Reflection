@@ -18,305 +18,258 @@ namespace TokenReflection;
 require_once __DIR__ . '/../bootstrap.php';
 
 /**
- * Abstract test.
+ * Complete test.
  *
- * @author Jaroslav Hanslík
+ * @author Ondřej Nešpor
  */
-abstract class Test extends \PHPUnit_Framework_TestCase
+class Test extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * Element type.
+	 * Gathers test filenames.
 	 *
-	 * @var string
+	 * @return array
 	 */
-	protected $type;
-
-	/**
-	 * Returns class reflections.
-	 *
-	 * @param string $test
-	 * @return \stdClass
-	 */
-	protected function getClassReflection($test)
+	public function provider()
 	{
-		$reflection = new \stdClass();
-		$reflection->internal = $this->getClassInternalReflection($test);
-		$reflection->token = $this->getClassTokenReflection($test);
-		return $reflection;
-	}
+		$filenames = array();
 
-	/**
-	 * Returns method reflections.
-	 *
-	 * @param string $test
-	 * @return \stdClass
-	 */
-	protected function getMethodReflection($test)
-	{
-		$reflection = new \stdClass();
-		$reflection->internal = $this->getMethodInternalReflection($test);
-		$reflection->token = $this->getMethodTokenReflection($test);
-		return $reflection;
-	}
-
-	/**
-	 * Returns property reflections.
-	 *
-	 * @param string $test
-	 * @return \stdClass
-	 */
-	protected function getPropertyReflection($test)
-	{
-		$reflection = new \stdClass();
-		$reflection->internal = $this->getPropertyInternalReflection($test);
-		$reflection->token = $this->getPropertyTokenReflection($test);
-		return $reflection;
-	}
-
-	/**
-	 * Returns function reflections.
-	 *
-	 * @param string $test
-	 * @return \stdClass
-	 */
-	protected function getFunctionReflection($test)
-	{
-		$reflection = new \stdClass();
-		$reflection->internal = $this->getFunctionInternalReflection($test);
-		$reflection->token = $this->getFunctionTokenReflection($test);
-		return $reflection;
-	}
-
-	/**
-	 * Returns parameter reflections.
-	 *
-	 * @param string $test
-	 * @return \stdClass
-	 */
-	protected function getParameterReflection($test)
-	{
-		$reflection = new \stdClass();
-		$reflection->internal = $this->getParameterInternalReflection($test);
-		$reflection->token = $this->getParameterTokenReflection($test);
-		return $reflection;
-	}
-
-	/**
-	 * Returns internal class reflection.
-	 *
-	 * @param string $test
-	 * @return \ReflectionClass
-	 */
-	protected function getClassInternalReflection($test)
-	{
-		require_once $this->getFilePath($test);
-		return new \ReflectionClass($this->getClassName($test));
-	}
-
-	/**
-	 * Returns internal method reflection.
-	 *
-	 * @param string $test
-	 * @return \ReflectionMethod
-	 */
-	protected function getMethodInternalReflection($test)
-	{
-		return $this->getClassInternalReflection($test)->getMethod($this->getMethodName($test));
-	}
-
-	/**
-	 * Returns internal property reflection.
-	 *
-	 * @param string $test
-	 * @return \ReflectionProperty
-	 */
-	protected function getPropertyInternalReflection($test)
-	{
-		return $this->getClassInternalReflection($test)->getProperty($this->getPropertyName($test));
-	}
-
-	/**
-	 * Returns internal function reflection.
-	 *
-	 * @param string $test
-	 * @return \ReflectionFunction
-	 */
-	protected function getFunctionInternalReflection($test)
-	{
-		require_once $this->getFilePath($test);
-		return new \ReflectionFunction($this->getFunctionName($test));
-	}
-
-	/**
-	 * Returns internal parameter reflection.
-	 *
-	 * @param string $test
-	 * @return \ReflectionParameter
-	 */
-	protected function getParameterInternalReflection($test)
-	{
-		require_once $this->getFilePath($test);
-		$function = new \ReflectionFunction($this->getFunctionName($test));
-		$parameters = $function->getParameters();
-		return $parameters[0];
-	}
-
-	/**
-	 * Returns tokenized class reflection.
-	 *
-	 * @param string $test
-	 * @return \TokenReflection\ReflectionClass
-	 */
-	protected function getClassTokenReflection($test)
-	{
-		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath($test));
-		return $broker->getClass($this->getClassName($test));
-	}
-
-	/**
-	 * Returns tokenized method reflection.
-	 *
-	 * @param string $test
-	 * @return \TokenReflection\ReflectionMethod
-	 */
-	protected function getMethodTokenReflection($test)
-	{
-		return $this->getClassTokenReflection($test)->getMethod($this->getMethodName($test));
-	}
-
-	/**
-	 * Returns tokenized property reflection.
-	 *
-	 * @param string $test
-	 * @return \TokenReflection\ReflectionProperty
-	 */
-	protected function getPropertyTokenReflection($test)
-	{
-		return $this->getClassTokenReflection($test)->getProperty($this->getPropertyName($test));
-	}
-
-	/**
-	 * Returns tokenized constant reflection.
-	 *
-	 * @param string $test
-	 * @return \TokenReflection\ReflectionConstant
-	 */
-	protected function getConstantTokenReflection($test)
-	{
-		return $this->getClassTokenReflection($test)->getConstantReflection($this->getConstantName($test));
-	}
-
-	/**
-	 * Returns tokenized function reflection.
-	 *
-	 * @param string $test
-	 * @return \TokenReflection\ReflectionFunction
-	 */
-	protected function getFunctionTokenReflection($test)
-	{
-		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath($test));
-		return $broker->getFunction($this->getFunctionName($test));
-	}
-
-	/**
-	 * Returns tokenized parameter reflection.
-	 *
-	 * @param string $test
-	 * @return \TokenReflection\ReflectionParameter
-	 */
-	protected function getParameterTokenReflection($test)
-	{
-		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath($test));
-		$parameters = $broker->getFunction($this->getFunctionName($test))->getParameters();
-		return $parameters[0];
-	}
-
-	/**
-	 * Returns test file path.
-	 *
-	 * @param string $test
-	 * @return string
-	 */
-	protected function getFilePath($test)
-	{
-		$file = preg_replace_callback('~[A-Z]~', function($matches) {
-			return '-' . strtolower($matches[0]);
-		}, $test);
-		return realpath(__DIR__ . '/../data/' . $this->type . '/' . $file . '.php');
-	}
-
-	/**
-	 * Returns test class name.
-	 *
-	 * @param string $test
-	 * @return string
-	 */
-	protected function getClassName($test)
-	{
-		return 'TokenReflection_Test_' . ucfirst($this->type) . ucfirst($test);
-	}
-
-	/**
-	 * Returns test method name.
-	 *
-	 * @param string $test
-	 * @return string
-	 */
-	protected function getMethodName($test)
-	{
-		return $test;
-	}
-
-	/**
-	 * Returns test property name.
-	 *
-	 * @param string $test
-	 * @return string
-	 */
-	protected function getPropertyName($test)
-	{
-		return $test;
-	}
-
-	/**
-	 * Returns test constant name.
-	 *
-	 * @param string $test
-	 * @return string
-	 */
-	protected function getConstantName($test)
-	{
-		return strtoupper(preg_replace_callback('~[A-Z]~', function($matches) {
-			return '_' . $matches[0];
-		}, $test));
-	}
-
-	/**
-	 * Returns test function name.
-	 *
-	 * @param string $test
-	 * @return string
-	 */
-	protected function getFunctionName($test)
-	{
-		return 'tokenReflection' . ucfirst($this->type) . ucfirst($test);
-	}
-
-	/**
-	 * Returns broker instance.
-	 *
-	 * @return \TokenReflection\Broker
-	 */
-	protected function getBroker()
-	{
-		static $broker = null;
-		if (null === $broker) {
-			$broker = new Broker(new Broker\Backend\Memory());
+		foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(realpath(__DIR__ . '/../data')), \RecursiveIteratorIterator::LEAVES_ONLY) as $fileinfo) {
+			if (fnmatch('*.php', $fileinfo->getFilename())) {
+				$filenames[] = array($fileinfo->getPathname());
+			}
 		}
-		return $broker;
+
+		return $filenames;
+	}
+
+	/**
+	 * Performs a complete test for a particular file.
+	 *
+	 * @dataProvider provider
+	 * @param String $filename Filename
+	 */
+	public function testParser($filename)
+	{
+		$broker = new Broker(new Broker\Backend\Memory(), false);
+
+		$broker->processFile($filename);
+		require_once $filename;
+
+		foreach ($broker->getClasses() as $classReflection) {
+			$this->reflectionTest(new \ReflectionClass($classReflection->getName()), $classReflection);
+		}
+	}
+
+	/**
+	 * Test a particular reflection object by comparison with an appropriate internal reflection object.
+	 *
+	 * @param \Reflector $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionBase $token TokenReflection object
+	 */
+	protected function reflectionTest(\Reflector $internal, ReflectionBase $token)
+	{
+		$skip = array(
+			'invoke' => true, '__clone' => true, // Not possible to test
+			'getDeclaringClass' => true, 'getParentClass' => true, 'getParentClasses' => true, 'getDeclaringFunction' => true, 'getClass' => true, 'getPrototype' => true // Recursion prevention (will be tested individually later)
+		);
+
+		$internalReflection = $this->getReflectionReflection($internal);
+		$tokenReflection = $this->getReflectionReflection($token);
+
+		foreach ($internalReflection->getMethods() as $method) {
+			// Skip certain methods
+			if (isset($skip[$method->getName()])) {
+				continue;
+			}
+
+			// Only methods without parameters will be automatically checked
+			if (0 === $method->getNumberOfParameters()) {
+				// Check if TokenReflection contains the checked method
+				$this->assertTrue($tokenReflection->hasMethod($method->getName()), sprintf('%s does not contain method %s.', $tokenReflection->getName(), $method->getName()));
+
+				// Run return value comparison
+				$this->compareResults($internal, $token, $method, $tokenReflection->getMethod($method->getName()));
+			}
+		}
+
+		// Individual tests for individual reflection types
+		switch (true) {
+			case $internal instanceof \ReflectionClass:
+				$this->reflectionClassTest($internal, $token);
+				break;
+			case $internal instanceof \ReflectionFunction:
+				$this->reflectionFunctionTest($internal, $token);
+				break;
+			case $internal instanceof \ReflectionMethod:
+				$this->reflectionMethodTest($internal, $token);
+				break;
+			case $internal instanceof \ReflectionParameter:
+				$this->reflectionParameterTest($internal, $token);
+				break;
+			case $internal instanceof \ReflectionProperty:
+				$this->reflectionPropertyTest($internal, $token);
+				break;
+		}
+	}
+
+	/**
+	 * Compare results of an internal reflection method and its TokenReflection counterpart.
+	 *
+	 * @param \Reflector $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionBase $token TokenReflection object
+	 * @param \ReflectionMethod $internalMethod Tested method reflection (internal)
+	 * @param \ReflectionMethod $tokenMethod Tested method reflection (TokenReflection)
+	 */
+	protected function compareResults(\Reflector $internal, ReflectionBase $token, \ReflectionMethod $internalMethod, \ReflectionMethod $tokenMethod)
+	{
+		// Internal reflection value
+		try {
+			$internalValue = $internalMethod->invoke($internal);
+		} catch (\ReflectionException $e) {
+			try {
+				$tokenValue = $tokenMethod->invoke($token);
+				$this->fail(sprintf('%s::%s() for %s is supposed to throw a \\TokenReflection\\Exception descendant.', get_class($token), $internalMethod->getName(), $token->getName()));
+			} catch (\Exception $e) {
+				$this->assertInstanceOf('\\TokenReflection\\Exception', $e, sprintf('%s::%s() for %s is supposed to throw a \\TokenReflection\\Exception descendant.', get_class($token), $internalMethod->getName(), $token->getName()));
+				return;
+			}
+		}
+
+		// Token reflection value
+		$tokenValue = $tokenMethod->invoke($token);
+
+		if (is_scalar($internalValue)) {
+			// Return value is a scalar
+			$this->assertTrue(is_scalar($tokenValue), sprintf('Return value of %s::%s() for %s has to be scalar.', get_class($token), $internalMethod->getName(), $token->getName()));
+			$this->assertSame($internalValue, $tokenValue, sprintf('Return values of %s::%s() for %s do not match.', get_class($token), $internalMethod->getName(), $token->getName()));
+		} elseif (is_array($internalValue)) {
+			// Return value is an array
+			$this->assertTrue(is_array($tokenValue), sprintf('Return value of %s::%s() for %s has to be an array.', get_class($token), $internalMethod->getName(), $token->getName()));
+			$this->arrayTest($internalValue, $tokenValue, $internalMethod);
+		} elseif (is_object($internalValue)) {
+			// Return value is an object
+			if ($internalValue instanceof \Reflector) {
+				// Return value is a reflection -> run the same test recursively on them
+				$this->assertTrue(is_object($tokenValue), sprintf('Return value of %s::%s() for %s has to an object.', get_class($token), $internalMethod->getName(), $token->getName()));
+				$this->assertInstanceOf('\\TokenReflection\\ReflectionBase', $tokenValue, sprintf('Return value of %s::%s() for %s has to be an instance of \\TokenReflection\\ReflectionBase.', get_class($token), $internalMethod->getName(), $token->getName()));
+				$this->reflectionTest($internalValue, $tokenValue);
+			} else {
+				// Otherwise return values have to be equal
+				$this->assertEquals($internalValue, $tokenValue, sprintf('Returns values of %s::%s() for %s do not match.', get_class($token), $internalMethod->getName(), $token->getName()));
+			}
+		}
+	}
+
+	/**
+	 * Recursively compare arrays.
+	 *
+	 * @param array $internal Internal reflection return value
+	 * @param array $token TokenReflection return value
+	 * @param \Reflector $parent Parent internal reflection object
+	 */
+	protected function arrayTest(array $internal, array $token, \Reflector $parent)
+	{
+		$this->assertSame(array_keys($internal), array_keys($token), sprintf('Keys of return values of %s do not match.', $parent->getName()));
+
+		foreach ($internal as $key => $value) {
+			if (is_scalar($value)) {
+				$this->assertTrue(is_scalar($token[$key]), sprintf('%s result index %s has to be scalar.', $parent->getName(), $key));
+				$this->assertSame($value, $token[$key], sprintf('%s result values of index %s do not match.', $parent->getName(), $key));
+			} elseif (is_object($value)) {
+				if ($value instanceof \Reflector) {
+					$this->assertInstanceOf('\\TokenReflection\\ReflectionBase', $token[$key], sprintf('%s result index %s has to be an instance of \\TokenReflection\\ReflectionBase.', $parent->getName(), $key));
+					$this->reflectionTest($value, $token[$key]);
+				} else {
+					$this->assertEquals($value, $token[$key], sprintf('%s result values of index %s do not match.', $parent->getName(), $key));
+				}
+			} elseif (is_array($value)) {
+				$this->assertTrue(is_array($token[$key]), sprintf('%s result index %s has to be an array.', $parent->getName(), $key));
+			}
+		}
+	}
+
+	/**
+	 * Tests ReflectionClass specific features.
+	 *
+	 * @param \ReflectionClass $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionClass $token TokenReflection object
+	 */
+	protected function reflectionClassTest(\ReflectionClass $internal, ReflectionClass $token)
+	{
+
+	}
+
+	/**
+	 * Tests ReflectionFunction specific features.
+	 *
+	 * @param \ReflectionFunction $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionFunction $token TokenReflection object
+	 */
+	protected function reflectionFunctionTest(\ReflectionFunction $internal, ReflectionFunction $token)
+	{
+
+	}
+
+	/**
+	 * Tests ReflectionMethod specific features.
+	 *
+	 * @param \ReflectionMethod $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionMethod $token TokenReflection object
+	 */
+	protected function reflectionMethodTest(\ReflectionMethod $internal, ReflectionMethod $token)
+	{
+
+	}
+
+	/**
+	 * Tests ReflectionProperty specific features.
+	 *
+	 * @param \ReflectionProperty $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionProperty $token TokenReflection object
+	 */
+	protected function reflectionPropertyTest(\ReflectionProperty $internal, ReflectionProperty $token)
+	{
+
+	}
+
+	/**
+	 * Tests ReflectionParameter specific features.
+	 *
+	 * @param \ReflectionParameter $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionParameter $token TokenReflection object
+	 */
+	protected function reflectionParameterTest(\ReflectionParameter $internal, ReflectionParameter $token)
+	{
+
+	}
+
+	/**
+	 * Returns a reflection reflection.
+	 *
+	 * @param \Reflector|\TokenReflection\ReflectionBase $reflection Reflection object
+	 * @return \ReflectionCLass
+	 * @throws \InvalidArgumentException If an invalid argument was provided
+	 */
+	protected function getReflectionReflection($reflection)
+	{
+		static $internal = array(), $token = array();
+
+		$type = get_class($reflection);
+		if ($reflection instanceof ReflectionBase) {
+			if (!isset($token[$type])) {
+				$token[$type] = new \ReflectionClass($reflection);
+			}
+
+			return $token[$type];
+		} elseif ($reflection instanceof \Reflector) {
+			if (!isset($internal[$type])) {
+				$internal[$type] = new \ReflectionClass($reflection);
+			}
+
+			return $internal[$type];
+		} else {
+			throw new \InvalidArgumentException('Invalid reflection provided');
+		}
 	}
 
 	/**
