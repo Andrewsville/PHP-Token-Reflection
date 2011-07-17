@@ -1105,7 +1105,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				continue;
 			}
 			// Indent
-			$string = "\n    " . preg_replace('~\n(?!$|\n)~', "\n    ", $method->__toString());
+			$string = "\n    " . preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
 			// Add inherits
 			if ($method->getDeclaringClassName() !== $this->getName()) {
 				$string = preg_replace('~Method [ <[\w:]+~', '\0, inherits ' . $method->getDeclaringClassName(), $string);
