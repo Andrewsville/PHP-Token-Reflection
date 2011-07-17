@@ -146,6 +146,14 @@ class Test extends \PHPUnit_Framework_TestCase
 		} catch (\ReflectionException $e) {
 			try {
 				$tokenValue = $tokenMethod->invoke($token);
+
+				// Here it is kind of complicated to say that is the expected behaviour. Since TR returns for non-existent
+				// classes the dummy reflection we will assume that it si the right return value.
+				if ($tokenValue instanceof Dummy\ReflectionClass) {
+					return;
+				}
+
+
 				$this->fail(sprintf('%s::%s() for %s is supposed to throw a \\TokenReflection\\Exception descendant.', get_class($token), $internalMethod->getName(), $token->getName()));
 			} catch (\Exception $e) {
 				$this->assertInstanceOf('\\TokenReflection\\Exception', $e, sprintf('%s::%s() for %s is supposed to throw a \\TokenReflection\\Exception descendant.', get_class($token), $internalMethod->getName(), $token->getName()));
@@ -169,7 +177,7 @@ class Test extends \PHPUnit_Framework_TestCase
 			if ($internalValue instanceof \Reflector) {
 				// Return value is a reflection -> run the same test recursively on them
 				$this->assertTrue(is_object($tokenValue), sprintf('Return value of %s::%s() for %s has to an object.', get_class($token), $internalMethod->getName(), $token->getName()));
-				$this->assertInstanceOf('\\TokenReflection\\ReflectionBase', $tokenValue, sprintf('Return value of %s::%s() for %s has to be an instance of \\TokenReflection\\ReflectionBase.', get_class($token), $internalMethod->getName(), $token->getName()));
+				$this->assertInstanceOf('\\TokenReflection\\IReflection', $tokenValue, sprintf('Return value of %s::%s() for %s has to be an instance of \\TokenReflection\\ReflectionBase.', get_class($token), $internalMethod->getName(), $token->getName()));
 				$this->reflectionTest($internalValue, $tokenValue);
 			} else {
 				// Otherwise return values have to be equal
