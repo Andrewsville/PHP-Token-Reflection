@@ -1104,7 +1104,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		$broker = $this->getBroker();
-		return array_combine($this->traits, array_map(function($traitName) use ($broker) {
+		return array_combine($traitNames, array_map(function($traitName) use ($broker) {
 			return $broker->getClass($traitName);
 		}, $traitNames));
 	}
@@ -1116,14 +1116,15 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getOwnTraits()
 	{
-		if (empty($this->traits)) {
+		$ownTraitNames = $this->getOwnTraitNames();
+		if (empty($ownTraitNames)) {
 			return array();
 		}
 
 		$broker = $this->getBroker();
-		return array_combine($this->traits, array_map(function($traitName) use ($broker) {
+		return array_combine($ownTraitNames, array_map(function($traitName) use ($broker) {
 			return $broker->getClass($traitName);
-		}, $this->getOwnTraitNames()));
+		}, $ownTraitNames));
 	}
 
 	/**
