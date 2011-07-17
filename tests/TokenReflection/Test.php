@@ -15,6 +15,8 @@
 
 namespace TokenReflection;
 
+use ReflectionMethod as InternalReflectionMethod, ReflectionProperty as InternalReflectionProperty;
+
 require_once __DIR__ . '/../bootstrap.php';
 
 /**
@@ -209,7 +211,40 @@ class Test extends \PHPUnit_Framework_TestCase
 	 */
 	protected function reflectionClassTest(\ReflectionClass $internal, ReflectionClass $token)
 	{
+		static $methodFilters = array(
+			InternalReflectionMethod::IS_PUBLIC,
+			InternalReflectionMethod::IS_PROTECTED,
+			InternalReflectionMethod::IS_PRIVATE,
+			InternalReflectionMethod::IS_FINAL,
+			InternalReflectionMethod::IS_ABSTRACT,
+			InternalReflectionMethod::IS_STATIC,
+			ReflectionMethod::IS_ALLOWED_STATIC,
+			ReflectionMethod::IS_CLONE,
+			ReflectionMethod::IS_CONSTRUCTOR,
+			ReflectionMethod::IS_DESTRUCTOR,
+			ReflectionMethod::IS_IMPLEMENTED_ABSTRACT
+		);
+		foreach ($this->getFilterCombinations($methodFilters) as $filter) {
+			$this->arrayTest(
+				$internal->getMethods($filter),
+				$token->getMethods($filter),
+				$internal
+			);
+		}
 
+		static $propertyFilters = array(
+			InternalReflectionProperty::IS_PUBLIC,
+			InternalReflectionProperty::IS_PROTECTED,
+			InternalReflectionProperty::IS_PRIVATE,
+			InternalReflectionProperty::IS_STATIC
+		);
+		foreach ($this->getFilterCombinations($propertyFilters) as $filter) {
+			$this->arrayTest(
+				$internal->getProperties($filter),
+				$token->getProperties($filter),
+				$internal
+			);
+		}
 	}
 
 	/**
