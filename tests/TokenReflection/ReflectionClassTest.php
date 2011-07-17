@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 2
+ * Version 1.0 beta 5
  *
  * LICENSE
  *
@@ -279,6 +279,37 @@ class ReflectionClassTest extends Test
 			$this->assertSame($rfl->internal->isCloneable(), $rfl->token->isCloneable());
 		}
 		$this->assertFalse($rfl->token->isCloneable());
+	}
+
+	/**
+	 * Tests class modifiers.
+	 */
+	public function testModifiers()
+	{
+		static $classes = array(
+			'TokenReflection_Test_ClassModifiersIface1',
+			'TokenReflection_Test_ClassModifiersIface2',
+			'TokenReflection_Test_ClassModifiersIface3',
+			'TokenReflection_Test_ClassModifiersIface4',
+			'TokenReflection_Test_ClassModifiersClass1',
+			'TokenReflection_Test_ClassModifiersClass2',
+			'TokenReflection_Test_ClassModifiersClass3',
+			'TokenReflection_Test_ClassModifiersClass4',
+			'TokenReflection_Test_ClassModifiersClass5',
+			'TokenReflection_Test_ClassModifiersClass6',
+			'TokenReflection_Test_ClassModifiersClass7',
+			'TokenReflection_Test_ClassModifiersClass8',
+		);
+
+		require_once $this->getFilePath('modifiers');
+		$this->getBroker()->process($this->getFilePath('modifiers'));
+
+		foreach ($classes as $className) {
+			$token = $this->getBroker()->getClass($className);
+			$internal = new \ReflectionClass($className);
+
+			$this->assertSame($internal->getModifiers(), $token->getModifiers(), $className);
+		}
 	}
 
 	/**

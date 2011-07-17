@@ -22,9 +22,9 @@
 	<email>kontakt@kukulich.cz</email>
 	<active>yes</active>
 </developer>
-<date>2011-06-28</date>
+<date>2011-07-17</date>
 <version>
-	<release>1.0.0beta4</release>
+	<release>1.0.0beta5</release>
 	<api>1.0.0</api>
 </version>
 <stability>
@@ -83,6 +83,7 @@
 			<file name="ReflectionNamespace.php" role="php" />
 			<file name="ReflectionParameter.php" role="php" />
 			<file name="ReflectionProperty.php" role="php" />
+			<file name="Resolver.php" role="php" />
 			<file name="Stream.php" role="php" />
 		</dir>
 		<file name="LICENSE" role="doc" />
