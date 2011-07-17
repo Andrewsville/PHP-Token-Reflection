@@ -316,7 +316,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getParentClass()
 	{
-		return null;
+		return false;
 	}
 
 	/**

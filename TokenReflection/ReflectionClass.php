@@ -160,10 +160,18 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 					}
 				}
+
+				if (!empty($this->interfaces)) {
+					$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
+				}
 			}
 
-			if (count($this->getInterfaceNames())) {
+			if (!empty($this->interfaces)) {
 				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
+			}
+
+			if ($this->isInterface() && !empty($this->methods)) {
+				$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 			}
 
 			$this->modifiersComplete = true;
@@ -171,6 +179,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				if ($parentClass instanceof Dummy\ReflectionClass) {
 					$this->modifiersComplete = false;
 					break;
+				}
+			}
+			if ($this->modifiersComplete) {
+				foreach ($this->getInterfaces() as $interface) {
+					if ($interface instanceof Dummy\ReflectionClass) {
+						$this->modifiersComplete = false;
+						break;
+					}
 				}
 			}
 		}
@@ -195,7 +211,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isFinal()
 	{
-		return $this->modifiers === InternalReflectionClass::IS_FINAL;
+		return (bool) ($this->modifiers & InternalReflectionClass::IS_FINAL);
 	}
 
 	/**
@@ -205,7 +221,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isInterface()
 	{
-		return self::IS_INTERFACE === $this->modifiers;
+		return (bool) ($this->modifiers & self::IS_INTERFACE);
 	}
 
 	/**
