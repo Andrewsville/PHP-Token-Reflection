@@ -86,7 +86,10 @@ class Test extends \PHPUnit_Framework_TestCase
 
 		$this->processed[$ident] = true;
 
-		static $skip = array('invoke' => true, '__clone' => true); // Not possible to test
+		static $skip = array(
+			'invoke' => true, '__clone' => true, // Not possible to test
+			'getStaticVariables' => true // Not supported so far
+		);
 
 		$internalReflection = $this->getReflectionReflection($internal);
 		$tokenReflection = $this->getReflectionReflection($token);
