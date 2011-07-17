@@ -200,6 +200,17 @@ class Test extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test common features of methods and functions.
+	 *
+	 * @param \ReflectionFunctionAbstract $internal Internal reflection object
+	 * @param \TokenReflection\ReflectionFunctionBase $token TokenReflection object
+	 */
+	protected function reflectionFunctionAbstractTest(\ReflectionFunctionAbstract $internal, ReflectionFunctionBase $token)
+	{
+
+	}
+
+	/**
 	 * Tests ReflectionFunction specific features.
 	 *
 	 * @param \ReflectionFunction $internal Internal reflection object
@@ -207,6 +218,7 @@ class Test extends \PHPUnit_Framework_TestCase
 	 */
 	protected function reflectionFunctionTest(\ReflectionFunction $internal, ReflectionFunction $token)
 	{
+		$this->reflectionFunctionAbstractTest($internal, $token);
 
 	}
 
@@ -218,6 +230,7 @@ class Test extends \PHPUnit_Framework_TestCase
 	 */
 	protected function reflectionMethodTest(\ReflectionMethod $internal, ReflectionMethod $token)
 	{
+		$this->reflectionFunctionAbstractTest($internal, $token);
 
 	}
 
