@@ -25,6 +25,13 @@ require_once __DIR__ . '/../bootstrap.php';
 class Test extends \PHPUnit_Framework_TestCase
 {
 	/**
+	 * List of names of already processed reflection objects.
+	 *
+	 * @var mixed
+	 */
+	protected $processed = array();
+
+	/**
 	 * Gathers test filenames.
 	 *
 	 * @return array
@@ -68,10 +75,16 @@ class Test extends \PHPUnit_Framework_TestCase
 	 */
 	protected function reflectionTest(\Reflector $internal, ReflectionBase $token)
 	{
-		$skip = array(
-			'invoke' => true, '__clone' => true, // Not possible to test
-			'getDeclaringClass' => true, 'getParentClass' => true, 'getParentClasses' => true, 'getDeclaringFunction' => true, 'getClass' => true, 'getPrototype' => true // Recursion prevention (will be tested individually later)
-		);
+		// Check if the reflection object has already been tested
+		$ident = $this->getReflectionIdent($internal);
+		if (isset($this->processed[$ident])) {
+			$this->assertSame($internal->getName(), $token->getName(), sprintf('Reflection names do not match: %s and %s.', $internal->getName(), $token->getName()));
+			return;
+		}
+
+		$this->processed[$ident] = true;
+
+		static $skip = array('invoke' => true, '__clone' => true); // Not possible to test
 
 		$internalReflection = $this->getReflectionReflection($internal);
 		$tokenReflection = $this->getReflectionReflection($token);
@@ -307,5 +320,33 @@ class Test extends \PHPUnit_Framework_TestCase
 		}
 
 		return $combinations;
+	}
+
+	/**
+	 * Returns an identifier of a particular reflection object.
+	 *
+	 * @param \Reflector $reflection Reflection object
+	 * @return string
+	 */
+	protected function getReflectionIdent(\Reflector $reflection)
+	{
+		$name = $reflection->getName();
+
+		if (($reflection instanceof \ReflectionMethod) || ($reflection instanceof \ReflectionProperty)) {
+			$class = $reflection->getDeclaringClass();
+			if (null !== $class) {
+				$name = $class->getName() . '::' . $name;
+			}
+
+			if ($reflection instanceof \ReflectionProperty) {
+				$name = '$' . $name;
+			}
+		} elseif ($reflection instanceof \ReflectionParameter) {
+			$name = $this->getReflectionIdent($reflection->getDeclaringFunction()) . '(' . $name . ')';
+		} elseif ($reflection instanceof \ReflectionClass) {
+			$name = 'c-' . $name;
+		}
+
+		return $name;
 	}
 }
