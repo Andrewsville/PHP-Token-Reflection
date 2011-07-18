@@ -713,6 +713,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					if (null !== $import) {
 						list($newName, $accessLevel) = $import;
 
+						if ('' === $newName) {
+							$newName = $methodName;
+							$imports[] = null;
+						}
+
 						if (isset($methods[$newName])) {
 							throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $newName), Exception\Runtime::ALREADY_EXISTS);
 						}
@@ -1892,8 +1897,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 							if (empty($leftSide)) {
 								throw new Exception\Parse('An empty method name was found.', Exception\Parse::PARSE_CHILDREN_ERROR);
-							} elseif (empty($rightSide[0])) {
-								throw new Exception\Parse($alias ? 'An empty alias name was found.' : 'An empty trait name was found.', Exception\Parse::PARSE_CHILDREN_ERROR);
 							}
 
 							if ($alias) {
@@ -1915,7 +1918,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 								$this->traitImports[Resolver::resolveClassFQN($rightSide[1], $this->aliases, $this->namespaceName) . '::' . $methodName][] = null;
 							}
-
 
 							if (',' === $type) {
 								$tokenStream->skipWhitespaces();
