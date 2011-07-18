@@ -300,7 +300,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function isTrait()
 	{
-		return array();
+		return false;
 	}
 
 	/**
