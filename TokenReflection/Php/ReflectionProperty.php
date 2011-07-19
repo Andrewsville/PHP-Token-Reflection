@@ -211,6 +211,26 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName()
+	{
+		return null;
+	}
+
+	/**
 	 * Magic __get method.
 	 *
 	 * @param string $key Variable name

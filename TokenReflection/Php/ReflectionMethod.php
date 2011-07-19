@@ -263,6 +263,46 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
+	 * Returns the original name when importing from a trait.
+	 *
+	 * @return string
+	 */
+	public function getOriginalName()
+	{
+		return $this->getName();
+	}
+
+	/**
+	 * Returns the original modifiers value when importing from a trait.
+	 *
+	 * @return integer
+	 */
+	public function getOriginalModifiers()
+	{
+		return $this->getModifiers();
+	}
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName()
+	{
+		return null;
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance

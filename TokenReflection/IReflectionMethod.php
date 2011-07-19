@@ -152,4 +152,32 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @return \Closure
 	 */
 	public function getClosureThis();
+
+	/**
+	 * Returns the original name when importing from a trait.
+	 *
+	 * @return string
+	 */
+	public function getOriginalName();
+
+	/**
+	 * Returns the original modifiers value when importing from a trait.
+	 *
+	 * @return integer
+	 */
+	public function getOriginalModifiers();
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait();
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName();
 }

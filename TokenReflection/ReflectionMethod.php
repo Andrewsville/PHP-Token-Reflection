@@ -114,6 +114,27 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $modifiersComplete = false;
 
 	/**
+	 * The original name when importing from a trait.
+	 *
+	 * @var string
+	 */
+	private $originalName;
+
+	/**
+	 * The original modifiers value when importing from a trait.
+	 *
+	 * @var integer
+	 */
+	private $originalModifiers;
+
+	/**
+	 * Declaring trait name.
+	 *
+	 * @var string
+	 */
+	private $declaringTraitName;
+
+	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return \TokenReflection\ReflectionClass|null
@@ -539,9 +560,12 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 		$method = clone $this;
 
+		$method->declaringTraitName = $this->declaringClassName;
 		$method->declaringClassName = $parent->getName();
 		if (null !== $name) {
 			$method->name = $name;
+
+			$method->originalName = $this->name;
 		}
 		if (null !== $accessLevel) {
 			if (!isset($possibleLevels[$accessLevel])) {
@@ -550,6 +574,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);
 			$method->modifiers |= $accessLevel;
+
+			$method->originalModifiers = $this->getModifiers();
 		}
 
 		foreach ($this->parameters as $parameterName => $parameter) {
@@ -557,6 +583,46 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		return $method;
+	}
+
+	/**
+	 * Returns the original name when importing from a trait.
+	 *
+	 * @return string
+	 */
+	public function getOriginalName()
+	{
+		return $this->originalName ?: $this->getName();
+	}
+
+	/**
+	 * Returns the original modifiers value when importing from a trait.
+	 *
+	 * @return integer
+	 */
+	public function getOriginalModifiers()
+	{
+		return $this->originalModifiers ?: $this->getModifiers();
+	}
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait()
+	{
+		return null === $this->declaringTraitName ? null : $this->getBroker()->getClass($this->declaringTraitName);
+	}
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName()
+	{
+		return $this->declaringTraitName;
 	}
 
 	/**
