@@ -508,6 +508,12 @@ class ReflectionClassTest extends Test
 		$this->assertTrue($rfl->token->implementsInterface('Countable'));
 		$this->assertTrue($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 
+		$token = $this->getBroker()->getClass('Iterator');
+		$this->assertSame(array('Traversable'), array_keys($token->getInterfaces()));
+		$this->assertSame(array('Traversable'), $token->getInterfaceNames());
+		$this->assertSame(array('Traversable'), array_keys($token->getOwnInterfaces()));
+		$this->assertSame(array('Traversable'), $token->getOwnInterfaceNames());
+
 		$rfl = $this->getClassReflection('noInterfaces');
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
