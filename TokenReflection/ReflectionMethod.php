@@ -152,8 +152,16 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 				}
 
 				// Implemented abstract
-				if ($parentClassMethod->isAbstract()) {
+				if ($parentClassMethod->isAbstract() && !$this->isAbstract()) {
 					$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+				}
+			} else {
+				// Check if it is an implementation of an interface method
+				foreach ($declaringClass->getInterfaces() as $interface) {
+					if ($interface->hasOwnMethod($this->name)) {
+						$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+						break;
+					}
 				}
 			}
 
