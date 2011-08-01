@@ -95,15 +95,22 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testStaticVariables()
 	{
-		/**
-		 * @todo
-		 */
-		return;
-
 		$rfl = $this->getMethodReflection('staticVariables');
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
-		$this->assertSame(array('string' => 'string', 'integer' => 1, 'float' => 1.1, 'boolean' => true, 'null' => null, 'array' => array(1 => 1)), $rfl->token->getStaticVariables());
+		$this->assertSame(
+			array(
+				'string' => 'string',
+				'integer' => 1,
+				'float' => 1.1,
+				'boolean' => true,
+				'null' => null,
+				'array' => array(1 => 1),
+				'array2' => array(1 => 1, 2 => 2),
+				'constants' => array('self constant', 'parent constant')
+			),
+			$rfl->token->getStaticVariables()
+		);
 	}
 
 	/**
