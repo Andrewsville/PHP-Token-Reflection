@@ -201,7 +201,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isAbstract()
 	{
-		return (bool) ($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT);
+		if ($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT) {
+			return true;
+		} elseif ($this->isInterface() && !empty($this->methods)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1142,7 +1148,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
 			$this->isInterface() ? 'Interface' : 'Class',
 			$this->isIterateable() ? ' <iterateable>' : '',
-			$this->isAbstract() ? 'abstract ' : '',
+			$this->isAbstract() && !$this->isInterface() ? 'abstract ' : '',
 			$this->isFinal() ? 'final ' : '',
 			$this->isInterface() ? 'interface' : 'class',
 			$this->getName(),
