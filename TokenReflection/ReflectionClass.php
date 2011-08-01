@@ -423,13 +423,15 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$parentClass = $this->getParentClass();
 
-		$names = $parentClass ? $parentClass->getInterfaceNames() : array();
-		foreach (array_reverse($this->interfaces) as $interfaceName) {
-			$names = array_merge($names, $this->getBroker()->getClass($interfaceName)->getInterfaceNames());
-			$names[] = $interfaceName;
+		$names = false !== $parentClass ? array_reverse(array_flip($parentClass->getInterfaceNames())) : array();
+		foreach ($this->interfaces as $interfaceName) {
+			$names[$interfaceName] = true;
+			foreach (array_reverse($this->getBroker()->getClass($interfaceName)->getInterfaceNames()) as $parentInterfaceName) {
+				$names[$parentInterfaceName] = true;
+			}
 		}
 
-		return array_unique($names);
+		return array_keys($names);
 	}
 
 	/**
@@ -457,7 +459,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getOwnInterfaceNames()
 	{
-		return array_reverse($this->interfaces);
+		return $this->interfaces;
 	}
 
 	/**
@@ -1081,8 +1083,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$implements = '';
 		if (count($this->getInterfaceNames()) > 0) {
 			$interfaceNames = $this->getInterfaceNames();
-			// @todo
-			// sort($interfaceNames);
 			$implements = ' implements ' . implode(', ', $interfaceNames);
 		}
 
