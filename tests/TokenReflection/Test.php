@@ -178,7 +178,10 @@ class Test extends \PHPUnit_Framework_TestCase
 				// Return value is a reflection -> run the same test recursively on them
 				$this->assertTrue(is_object($tokenValue), sprintf('Return value of %s::%s() for %s has to an object.', get_class($token), $internalMethod->getName(), $token->getName()));
 				$this->assertInstanceOf('\\TokenReflection\\IReflection', $tokenValue, sprintf('Return value of %s::%s() for %s has to be an instance of \\TokenReflection\\ReflectionBase.', get_class($token), $internalMethod->getName(), $token->getName()));
-				$this->reflectionTest($internalValue, $tokenValue);
+
+				if ($tokenValue instanceof ReflectionBase) {
+					$this->reflectionTest($internalValue, $tokenValue);
+				}
 			} else {
 				// Otherwise return values have to be equal
 				$this->assertEquals($internalValue, $tokenValue, sprintf('Returns values of %s::%s() for %s do not match.', get_class($token), $internalMethod->getName(), $token->getName()));
@@ -203,8 +206,11 @@ class Test extends \PHPUnit_Framework_TestCase
 				$this->assertSame($value, $token[$key], sprintf('%s result values of index %s do not match.', $parent->getName(), $key));
 			} elseif (is_object($value)) {
 				if ($value instanceof \Reflector) {
-					$this->assertInstanceOf('\\TokenReflection\\ReflectionBase', $token[$key], sprintf('%s result index %s has to be an instance of \\TokenReflection\\ReflectionBase.', $parent->getName(), $key));
-					$this->reflectionTest($value, $token[$key]);
+					$this->assertInstanceOf('\\TokenReflection\\IReflection', $token[$key], sprintf('%s result index %s has to be an instance of \\TokenReflection\\IReflection.', $parent->getName(), $key));
+
+					if ($token[$key] instanceof ReflectionBase) {
+						$this->reflectionTest($value, $token[$key]);
+					}
 				} else {
 					$this->assertEquals($value, $token[$key], sprintf('%s result values of index %s do not match.', $parent->getName(), $key));
 				}
