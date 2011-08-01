@@ -86,8 +86,9 @@ class ReflectionPropertyTest extends Test
 		$this->assertSame('Public3 Protected3  short.', $rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertNull($rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
 
-		$this->assertSame(array(), $rfl->token->getProperty('param4')->getAnnotations());
+		$this->assertSame('Protected4 short.', $rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertNull($rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame(array('boolean'), $rfl->token->getProperty('param4')->getAnnotation('var'));
 	}
 
 	/**

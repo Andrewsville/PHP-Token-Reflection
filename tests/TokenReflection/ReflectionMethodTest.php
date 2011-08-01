@@ -65,7 +65,6 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testDocCommentInheritance()
 	{
-		require_once $this->getFilePath('docCommentInheritance');
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();

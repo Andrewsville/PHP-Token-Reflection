@@ -197,4 +197,28 @@ class ReflectionParameterTest extends Test
 
 		$this->assertSame(InternalReflectionParameter::export('strpos', 0, true), ReflectionParameter::export($this->getBroker(), 'strpos', 0, true));
 	}
+
+	/**
+	 * Tests getting of inherited documentation comment.
+	 */
+	public function testDocCommentInheritance()
+	{
+		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
+
+		$grandParent = new \stdClass();
+		$grandParent->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceGrandParent')->getMethod('m');
+
+		$parent = new \stdClass();
+		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceParent')->getMethod('m');
+
+		$rfl = new \stdClass();
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritance')->getMethod('m');
+
+		$this->assertNotNull($grandParent->token);
+		$this->assertNotNull($parent->token);
+		$this->assertNotNull($rfl->token);
+
+		$this->assertSame($grandParent->token->getAnnotation('param'), $parent->token->getAnnotation('param'));
+		$this->assertSame(count($grandParent->token->getAnnotation('param')), count($rfl->token->getAnnotation('param')));
+	}
 }
