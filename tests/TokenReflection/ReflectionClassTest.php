@@ -493,11 +493,11 @@ class ReflectionClassTest extends Test
 
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
-		$this->assertSame(array('Traversable', 'Iterator', 'Countable'), $rfl->token->getInterfaceNames());
-		$this->assertSame(array('Countable'), $rfl->token->getOwnInterfaceNames());
+		$this->assertSame(array('Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'), $rfl->token->getInterfaceNames());
+		$this->assertSame(array('Countable', 'ArrayAccess', 'Serializable'), $rfl->token->getOwnInterfaceNames());
 		$this->assertSame(array_keys($rfl->internal->getInterfaces()), array_keys($rfl->token->getInterfaces()));
-		$this->assertSame(array('Traversable', 'Iterator', 'Countable'), array_keys($rfl->token->getInterfaces()));
-		$this->assertSame(array('Countable'), array_keys($rfl->token->getOwnInterfaces()));
+		$this->assertSame(array('Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'), array_keys($rfl->token->getInterfaces()));
+		$this->assertSame(array('Countable', 'ArrayAccess', 'Serializable'), array_keys($rfl->token->getOwnInterfaces()));
 		foreach ($rfl->token->getInterfaces() as $interface) {
 			$this->assertInstanceOf('TokenReflection\Php\ReflectionClass', $interface);
 		}
@@ -769,7 +769,7 @@ class ReflectionClassTest extends Test
 			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
 			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
 			'interface', 'noInterface', 'interfaces', 'noInterfaces',
-			/*'iterator',*/ 'noIterator', 'parent', 'noParent',
+			'iterator', 'noIterator', 'parent', 'noParent',
 			'userDefined', 'noNamespace'
 		);
 		foreach ($tests as $test) {
