@@ -24,6 +24,16 @@ use ReflectionProperty as InternalReflectionProperty, ReflectionClass as Interna
 class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 {
 	/**
+	 * Access level of this property has changed from the original implementation.
+	 *
+	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l134
+	 * ZEND_ACC_CHANGED
+	 *
+	 * @var integer
+	 */
+	const ACCESS_LEVEL_CHANGED = 0x800;
+
+	/**
 	 * Name of the declaring class.
 	 *
 	 * @var string
@@ -36,6 +46,13 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 * @var integer
 	 */
 	private $modifiers = 0;
+
+	/**
+	 * Determines if modifiers are complete.
+	 *
+	 * @var boolean
+	 */
+	private $modifiersComplete = false;
 
 	/**
 	 * Property default value.
@@ -156,6 +173,20 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 */
 	public function getModifiers()
 	{
+		if (false === $this->modifiersComplete) {
+			$declaringClass = $this->getDeclaringClass();
+			$declaringClassParent = $declaringClass->getParentClass();
+
+			if ($declaringClassParent && $declaringClassParent->hasProperty($this->name)) {
+				$property = $declaringClassParent->getProperty($this->name);
+				if (($this->isPublic() && !$property->isPublic()) || ($this->isProtected() && $property->isPrivate())) {
+					$this->modifiers |= self::ACCESS_LEVEL_CHANGED;
+				}
+			}
+
+			$this->modifiersComplete = ($this->modifiers & self::ACCESS_LEVEL_CHANGED) || $declaringClass->isComplete();
+		}
+
 		return $this->modifiers;
 	}
 
