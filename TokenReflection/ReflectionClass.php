@@ -1134,7 +1134,11 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			$string = "\n    " . preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
 			// Add inherits
 			if ($method->getDeclaringClassName() !== $this->getName()) {
-				$string = preg_replace('~Method [ <[\w:]+~', '\0, inherits ' . $method->getDeclaringClassName(), $string);
+				$string = preg_replace(
+					array('~Method [ <[\w:]+~', '~, overwrites[^,]+~'),
+					array('\0, inherits ' . $method->getDeclaringClassName(), ''),
+					$string
+				);
 			}
 			if ($method->isStatic()) {
 				$sBuffer .= $string;
