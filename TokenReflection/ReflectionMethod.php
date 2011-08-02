@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 5
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -152,8 +152,16 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 				}
 
 				// Implemented abstract
-				if ($parentClassMethod->isAbstract()) {
+				if ($parentClassMethod->isAbstract() && !$this->isAbstract()) {
 					$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+				}
+			} else {
+				// Check if it is an implementation of an interface method
+				foreach ($declaringClass->getInterfaces() as $interface) {
+					if ($interface->hasOwnMethod($this->name)) {
+						$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+						break;
+					}
 				}
 			}
 
@@ -284,17 +292,20 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$prototype = null;
 
 			$declaring = $this->getDeclaringClass();
-			if ($parent = $declaring->getParentClass()) {
-				if ($parent->hasMethod($this->name)) {
-					$method = $parent->getMethod($this->name);
-					if (!$method->isPrivate()) {
+			if (($parent = $declaring->getParentClass()) && $parent->hasMethod($this->name)) {
+				$method = $parent->getMethod($this->name);
+
+				if (!$method->isPrivate()) {
+					try {
+						$prototype = $method->getPrototype();
+					} catch (\Exception $e) {
 						$prototype = $method;
 					}
 				}
 			}
 
 			if (null === $prototype) {
-				foreach ($declaring->getInterfaces() as $interface) {
+				foreach ($declaring->getOwnInterfaces() as $interface) {
 					if ($interface->hasMethod($this->name)) {
 						$prototype = $interface->getMethod($this->name);
 						break;
@@ -323,25 +334,18 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		$overwrite = '';
 		$prototype = '';
 
+		$declaringClassParent = $this->getDeclaringClass()->getParentClass();
 		try {
-			$parent = $this->getPrototype();
-			if (!$parent->getDeclaringClass()->isInterface()) {
-				$overwrite = ', overwrites ' . $parent->getDeclaringClassName();
-			}
-			$prototype = ', prototype ' . $parent->getDeclaringClassName();
+			$prototype = ', prototype ' . $this->getPrototype()->getDeclaringClassName();
 		} catch (Exception $e) {
-			$parentClass = $this->getDeclaringClass()->getParentClass();
-			if ($parentClass && ($parentMethods = $parentClass->getMethods(\ReflectionMethod::IS_PRIVATE))) {
-				foreach ($parentMethods as $parent) {
-					if ($parent->getName() === $this->getName()) {
-						$overwrite = ', overwrites ' . $parent->getDeclaringClassName();
-						break;
-					}
-				}
-			}
-			if ($parentClass && $parentClass->isInternal()) {
+			if ($declaringClassParent && $declaringClassParent->isInternal()) {
 				$internal = 'internal:' . $parentClass->getExtensionName();
 			}
+		}
+
+		if ($declaringClassParent && $declaringClassParent->hasMethod($this->name)) {
+			$parentMethod = $declaringClassParent->getMethod($this->name);
+			$overwrite = ', overwrites ' . $parentMethod->getDeclaringClassName();
 		}
 
 		if ($this->isConstructor()) {

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 5
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -71,7 +71,7 @@ class Resolver
 	}
 
 	/**
-	 * Returns a property/parameter/constant value definition.
+	 * Returns a property/parameter/constant/static variable value definition.
 	 *
 	 * @param array $tokens Tokenized definition
 	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
@@ -81,11 +81,11 @@ class Resolver
 	 */
 	final public static function getValueDefinition(array $tokens, ReflectionBase $reflection)
 	{
-		if ($reflection instanceof ReflectionConstant) {
+		if ($reflection instanceof ReflectionConstant || $reflection instanceof ReflectionFunction) {
 			$namespace = $reflection->getNamespaceName();
 		} elseif ($reflection instanceof ReflectionParameter) {
 			$namespace = $reflection->getDeclaringFunction()->getNamespaceName();
-		} elseif ($reflection instanceof ReflectionProperty) {
+		} elseif ($reflection instanceof ReflectionProperty || $reflection instanceof ReflectionMethod) {
 			$namespace = $reflection->getDeclaringClass()->getNamespaceName();
 		} else {
 			throw new Exception\Runtime(sprintf('Invalid reflection object given: "%s" ("%s")', get_class($reflection), $reflection->getName()), Exception\Runtime::INVALID_ARGUMENT);

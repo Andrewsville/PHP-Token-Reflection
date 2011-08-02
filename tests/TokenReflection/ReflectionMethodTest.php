@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 5
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -65,7 +65,6 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testDocCommentInheritance()
 	{
-		require_once $this->getFilePath('docCommentInheritance');
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
@@ -96,15 +95,22 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testStaticVariables()
 	{
-		/**
-		 * @todo
-		 */
-		return;
-
 		$rfl = $this->getMethodReflection('staticVariables');
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
-		$this->assertSame(array('string' => 'string', 'integer' => 1, 'float' => 1.1, 'boolean' => true, 'null' => null, 'array' => array(1 => 1)), $rfl->token->getStaticVariables());
+		$this->assertSame(
+			array(
+				'string' => 'string',
+				'integer' => 1,
+				'float' => 1.1,
+				'boolean' => true,
+				'null' => null,
+				'array' => array(1 => 1),
+				'array2' => array(1 => 1, 2 => 2),
+				'constants' => array('self constant', 'parent constant')
+			),
+			$rfl->token->getStaticVariables()
+		);
 	}
 
 	/**

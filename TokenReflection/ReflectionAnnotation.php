@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 5
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -220,18 +220,9 @@ class ReflectionAnnotation
 		// Merge docblock templates
 		$this->mergeTemplates();
 
-		// Process docblock inheritance if needed
+		// Process docblock inheritance for supported reflections
 		if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
-			$willInherit = false === $this->docComment;
-			if (!$willInherit && isset($this->annotations[self::SHORT_DESCRIPTION])) {
-				$willInherit = false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}');
-			}
-			if (!$willInherit && isset($this->annotations[self::LONG_DESCRIPTION])) {
-				$willInherit = false !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}');
-			}
-			if ($willInherit) {
-				$this->inheritAnnotations();
-			}
+			$this->inheritAnnotations();
 		}
 	}
 
@@ -361,6 +352,42 @@ class ReflectionAnnotation
 				}
 
 				$this->annotations[self::SHORT_DESCRIPTION] = str_ireplace('{@inheritdoc}', '', $this->annotations[self::SHORT_DESCRIPTION]);
+			}
+		}
+
+		// In case of properties check if we need and can inherit the data type
+		if ($this->reflection instanceof ReflectionProperty && empty($this->annotations['var'])) {
+			foreach ($parents as $parent) {
+				if ($parent->hasAnnotation('var')) {
+					$this->annotations['var'] = $parent->getAnnotation('var');
+					break;
+				}
+			}
+		}
+
+		// In case of methods check if we need and can inherit parameter descriptions
+		if (
+			$this->reflection instanceof ReflectionMethod
+			&& 0 !== $this->reflection->getNumberOfParameters()
+			&& (empty($this->annotations['param']) || count($this->annotations['param']) < $this->reflection->getNumberOfParameters())
+		) {
+			$params = isset($this->annotations['param']) ? $this->annotations['param'] : array();
+			foreach ($parents as $parent) {
+				if ($parent->hasAnnotation('param')) {
+					$parentParams = array_slice($parent->getAnnotation('param'), count($params));
+
+					while (!empty($parentParams)) {
+						array_push($params, array_shift($parentParams));
+
+						if (count($params) === $this->reflection->getNumberOfParameters()) {
+							break 2;
+						}
+					}
+				}
+			}
+
+			if (!empty($params)) {
+				$this->annotations['param'] = $params;
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 5
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -158,7 +158,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	{
 		return sprintf(
 			"Constant [ %s %s ] { %s }\n",
-			gettype($this->getValue()),
+			strtolower(gettype($this->getValue())),
 			$this->getName(),
 			$this->getValue()
 		);
