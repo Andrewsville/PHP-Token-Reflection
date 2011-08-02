@@ -138,13 +138,15 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	}
 
 	/**
-	 * Returns if the property has a default value.
+	 * Returns if the property was created at compile time.
+	 *
+	 * All properties in the source code are.
 	 *
 	 * @return boolean
 	 */
 	public function isDefault()
 	{
-		return null !== $this->getDefaultValueDefinition();
+		return true;
 	}
 
 	/**

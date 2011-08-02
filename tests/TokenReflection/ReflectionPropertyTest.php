@@ -225,7 +225,7 @@ class ReflectionPropertyTest extends Test
 		$this->assertSame("'default'", $token->getDefaultValueDefinition());
 
 		$token = $this->getPropertyTokenReflection('noDefault');
-		$this->assertFalse($token->isDefault());
+		$this->assertTrue($token->isDefault());
 		$this->assertNull($token->getDefaultValue());
 	}
 
