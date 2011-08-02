@@ -1087,9 +1087,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function __toString()
 	{
 		$implements = '';
-		if (count($this->getInterfaceNames()) > 0) {
-			$interfaceNames = $this->getInterfaceNames();
-			$implements = ' implements ' . implode(', ', $interfaceNames);
+		$interfaceNames = $this->getInterfaceNames();
+		if (count($interfaceNames) > 0) {
+			$implements = sprintf(
+				' %s %s',
+				$this->isInterface() ? 'extends' : 'implements',
+				implode(', ', $interfaceNames)
+			);
 		}
 
 		$buffer = '';
