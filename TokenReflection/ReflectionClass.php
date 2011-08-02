@@ -839,13 +839,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getDefaultProperties()
 	{
-		static $accessLevels = array(InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PRIVATE, InternalReflectionProperty::IS_PROTECTED);
+		static $accessLevels = array(InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PROTECTED, InternalReflectionProperty::IS_PRIVATE);
 
 		$defaults = array();
 		$properties = $this->getProperties();
 		foreach (array(true, false) as $static) {
-			foreach ($accessLevels as $level) {
-				foreach ($properties as $property) {
+			foreach ($properties as $property) {
+				foreach ($accessLevels as $level) {
 					if ($property->isStatic() === $static && ($property->getModifiers() & $level)) {
 						$defaults[$property->getName()] = $property->getDefaultValue();
 					}
