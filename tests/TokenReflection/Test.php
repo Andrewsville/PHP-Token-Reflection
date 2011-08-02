@@ -87,7 +87,8 @@ class Test extends \PHPUnit_Framework_TestCase
 		$this->processed[$ident] = true;
 
 		static $skip = array(
-			'invoke' => true, '__clone' => true // Not possible to test
+			'invoke' => true, '__clone' => true, // Not possible to test
+			'getDocComment' => true              // We treat annotations differently
 		);
 
 		$internalReflection = $this->getReflectionReflection($internal);
