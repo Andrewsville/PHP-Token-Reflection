@@ -322,6 +322,21 @@ class Test extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests ReflectionConstant specific features.
+	 *
+	 * There is no constant reflection in the internal reflection so we just test the name and value.
+	 *
+	 * @param string $name Constant name
+	 * @param mixed $value Constant value
+	 * @param ReflectionConstant $token TokenReflection object
+	 */
+	protected function reflectionConstantTest($name, $value, ReflectionConstant $token)
+	{
+		$this->assertSame($name, $token->getName());
+		$this->assertSame($value, $token->getValue());
+	}
+
+	/**
 	 * Returns a reflection reflection.
 	 *
 	 * @param \Reflector|\TokenReflection\ReflectionBase $reflection Reflection object
