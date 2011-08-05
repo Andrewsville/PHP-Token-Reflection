@@ -252,9 +252,14 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		if (null === $this->interfaces) {
 			$broker = $this->broker;
 			$interfaceNames = $this->getInterfaceNames();
-			$this->interfaces = array_combine($interfaceNames, array_map(function($interfaceName) use ($broker) {
-				return $broker->getClass($interfaceName);
-			}, $interfaceNames));
+
+			if (empty($interfaceNames)) {
+				$this->interfaces = array();
+			} else {
+				$this->interfaces = array_combine($interfaceNames, array_map(function($interfaceName) use ($broker) {
+					return $broker->getClass($interfaceName);
+				}, $interfaceNames));
+			}
 		}
 
 		return $this->interfaces;
