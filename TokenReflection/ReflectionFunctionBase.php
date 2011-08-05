@@ -342,7 +342,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 					switch ($type) {
 						case T_STATIC:
 							$type = $tokenStream->skipWhitespaces()->getType();
-							if (T_DOUBLE_COLON === $type) {
+							if (T_DOUBLE_COLON === $type || '(' === $type) {
 								// Late static binding call
 								break;
 							} elseif (T_VARIABLE !== $type) {
