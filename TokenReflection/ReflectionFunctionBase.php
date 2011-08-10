@@ -342,11 +342,9 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 					switch ($type) {
 						case T_STATIC:
 							$type = $tokenStream->skipWhitespaces()->getType();
-							if (T_DOUBLE_COLON === $type || '(' === $type) {
-								// Late static binding call
+							if (T_VARIABLE !== $type) {
+								// Late static binding
 								break;
-							} elseif (T_VARIABLE !== $type) {
-								throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
 							}
 
 							while (T_VARIABLE === $type) {
