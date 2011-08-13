@@ -342,7 +342,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 					switch ($type) {
 						case T_STATIC:
 							$type = $tokenStream->skipWhitespaces()->getType();
-							if (T_DOUBLE_COLON === $type) {
+							if (T_DOUBLE_COLON === $type || (isset($previousType) && $previousType === T_NEW)) {
 								// Late static binding call
 								break;
 							} elseif (T_VARIABLE !== $type) {
@@ -409,6 +409,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 						default:
 							$tokenStream->skipWhitespaces();
 					}
+					$previousType = $type;
 				}
 			} elseif (';' !== $type) {
 				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
