@@ -1475,7 +1475,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 					if (T_VAR !== $tokenStream->getType()) {
 						$position = $tokenStream->key();
-						while (null !== ($type = $tokenStream->getType($position++)) && !isset($searching[$type])) {
+						while (null !== ($type = $tokenStream->getType($position)) && !isset($searching[$type])) {
 							$position++;
 						}
 					}
