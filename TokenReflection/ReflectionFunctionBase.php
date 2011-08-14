@@ -360,6 +360,8 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 											case '(':
 											case '[':
 											case '{':
+											case T_CURLY_OPEN:
+											case T_DOLLAR_OPEN_CURLY_BRACES:
 												$level++;
 												break;
 											case ')':
@@ -402,6 +404,8 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 						case '{':
 						case '[':
 						case '(':
+						case T_CURLY_OPEN:
+						case T_DOLLAR_OPEN_CURLY_BRACES:
 							$tokenStream->findMatchingBracket()->skipWhitespaces();
 							break;
 						default:
