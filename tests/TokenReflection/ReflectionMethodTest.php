@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 2
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -65,7 +65,6 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testDocCommentInheritance()
 	{
-		require_once $this->getFilePath('docCommentInheritance');
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
@@ -96,15 +95,22 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testStaticVariables()
 	{
-		/**
-		 * @todo
-		 */
-		return;
-
 		$rfl = $this->getMethodReflection('staticVariables');
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
-		$this->assertSame(array('string' => 'string', 'integer' => 1, 'float' => 1.1, 'boolean' => true, 'null' => null, 'array' => array(1 => 1)), $rfl->token->getStaticVariables());
+		$this->assertSame(
+			array(
+				'string' => 'string',
+				'integer' => 1,
+				'float' => 1.1,
+				'boolean' => true,
+				'null' => null,
+				'array' => array(1 => 1),
+				'array2' => array(1 => 1, 2 => 2),
+				'constants' => array('self constant', 'parent constant')
+			),
+			$rfl->token->getStaticVariables()
+		);
 	}
 
 	/**
@@ -207,107 +213,28 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testModifiers()
 	{
-		$rfl = $this->getClassReflection('modifiers');
+		static $classes = array(
+			'TokenReflection_Test_MethodModifiersIface',
+			'TokenReflection_Test_MethodModifiersParent',
+			'TokenReflection_Test_MethodModifiers',
+			'TokenReflection_Test_MethodModifiersChild',
+			'TokenReflection_Test_MethodModifiersChild2',
+			'TokenReflection_Test_MethodModifiersChild3',
+			'TokenReflection_Test_MethodModifiersChild4'
+		);
 
-		foreach (array('public', 'protected', 'private') as $name) {
-			$abstractName = $name . 'Abstract';
-			$finalName = $name . 'Final';
-			$staticName = $name . 'Static';
+		require_once $this->getFilePath('modifiers');
+		$this->getBroker()->process($this->getFilePath('modifiers'));
 
-			$method = 'is' . ucfirst($name);
-			$oppositeMethod = 'private' === $name ? 'isPublic' : 'isPrivate';
+		foreach ($classes as $className) {
+			$token = $this->getBroker()->getClass($className);
+			$internal = new \ReflectionClass($className);
 
-			$internal = $rfl->internal->getMethod($name . 'NoStatic');
-			$token = $rfl->token->getMethod($name . 'NoStatic');
-
-			$this->assertSame($internal->$method(), $internal->$method());
-			$this->assertTrue($token->$method());
-			$this->assertSame($internal->$oppositeMethod(), $internal->$oppositeMethod());
-			$this->assertFalse($token->$oppositeMethod());
-			$this->assertSame($internal->isStatic(), $internal->isStatic());
-			$this->assertFalse($token->isStatic());
-			$this->assertSame($internal->isFinal(), $internal->isFinal());
-			$this->assertFalse($token->isFinal());
-			$this->assertSame($internal->isAbstract(), $internal->isAbstract());
-			$this->assertFalse($token->isAbstract());
-			$this->assertSame($internal->getModifiers(), $token->getModifiers());
-			$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-
-			if ('private' !== $name) {
-				$internal = $rfl->internal->getMethod($abstractName);
-				$token = $rfl->token->getMethod($abstractName);
-
-				$this->assertSame($internal->$method(), $internal->$method());
-				$this->assertTrue($token->$method());
-				$this->assertSame($internal->$oppositeMethod(), $internal->$oppositeMethod());
-				$this->assertFalse($token->$oppositeMethod());
-				$this->assertSame($internal->isStatic(), $internal->isStatic());
-				$this->assertFalse($token->isStatic());
-				$this->assertSame($internal->isFinal(), $internal->isFinal());
-				$this->assertFalse($token->isFinal());
-				$this->assertSame($internal->isAbstract(), $internal->isAbstract());
-				$this->assertTrue($token->isAbstract());
-				$this->assertSame($internal->getModifiers(), $token->getModifiers());
-				$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-				$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_ABSTRACT);
+			foreach ($internal->getMethods() as $method) {
+				$this->assertTrue($token->hasMethod($method->getName()), sprintf('%s::%s()', $className, $method->getName()));
+				$this->assertSame($method->getModifiers(), $token->getMethod($method->getName())->getModifiers(), sprintf('%s::%s()', $className, $method->getName()));
 			}
-
-			$internal = $rfl->internal->getMethod($finalName);
-			$token = $rfl->token->getMethod($finalName);
-
-			$this->assertSame($internal->$method(), $internal->$method());
-			$this->assertTrue($token->$method());
-			$this->assertSame($internal->$oppositeMethod(), $internal->$oppositeMethod());
-			$this->assertFalse($token->$oppositeMethod());
-			$this->assertSame($internal->isStatic(), $internal->isStatic());
-			$this->assertFalse($token->isStatic());
-			$this->assertSame($internal->isFinal(), $internal->isFinal());
-			$this->assertTrue($token->isFinal());
-			$this->assertSame($internal->isAbstract(), $internal->isAbstract());
-			$this->assertFalse($token->isAbstract());
-			$this->assertSame($internal->getModifiers(), $token->getModifiers());
-			$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-			$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_FINAL);
-
-			$internal = $rfl->internal->getMethod($staticName);
-			$token = $rfl->token->getMethod($staticName);
-
-			$this->assertSame($internal->$method(), $internal->$method());
-			$this->assertTrue($token->$method());
-			$this->assertSame($internal->$oppositeMethod(), $internal->$oppositeMethod());
-			$this->assertFalse($token->$oppositeMethod());
-			$this->assertSame($internal->isStatic(), $internal->isStatic());
-			$this->assertTrue($token->isStatic());
-			$this->assertSame($internal->isFinal(), $internal->isFinal());
-			$this->assertFalse($token->isFinal());
-			$this->assertSame($internal->isAbstract(), $internal->isAbstract());
-			$this->assertFalse($token->isAbstract());
-			$this->assertGreaterThan(0, $token->getModifiers() & constant('\ReflectionMethod::IS_' . strtoupper($name)));
-			$this->assertGreaterThan(0, $token->getModifiers() & InternalReflectionMethod::IS_STATIC);
 		}
-
-		// Shadow
-		$rfl = $this->getMethodReflection('shadow');
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-
-		$rfl = new \stdClass();
-		$rfl->internal = new InternalReflectionMethod('TokenReflection_Test_MethodShadowParent', 'shadow');
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_MethodShadowParent')->getMethod('shadow');
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
-
-		// Access level
-		$rfl = $this->getClassReflection('accessLevel');
-		foreach (array('private', 'protected') as $method) {
-			$extended = $method . 'Extended';
-			$noExtended = $method . 'NoExtended';
-
-			$this->assertSame($rfl->internal->getMethod($extended)->getModifiers(), $rfl->token->getMethod($extended)->getModifiers(), $method);
-			$this->assertSame($rfl->internal->getMethod($noExtended)->getModifiers(), $rfl->token->getMethod($noExtended)->getModifiers(), $method);
-		}
-
-		// Abstract implemented
-		$rfl = $this->getMethodReflection('abstractImplemented');
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 4
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -268,9 +268,15 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	{
 		if (null === $this->interfaces) {
 			$broker = $this->broker;
-			$this->interfaces = array_map(function($interfaceName) use ($broker) {
-				return $broker->getClass($interfaceName);
-			}, $this->getInterfaceNames());
+			$interfaceNames = $this->getInterfaceNames();
+
+			if (empty($interfaceNames)) {
+				$this->interfaces = array();
+			} else {
+				$this->interfaces = array_combine($interfaceNames, array_map(function($interfaceName) use ($broker) {
+					return $broker->getClass($interfaceName);
+				}, $interfaceNames));
+			}
 		}
 
 		return $this->interfaces;

@@ -1,15 +1,10 @@
 <?php
 
-class TokenReflection_Test_ClassModifiers
-{
-
-}
-
 interface TokenReflection_Test_ClassModifiersIface1 {
 
 }
 
-interface TokenReflection_Test_ClassModifiersIface2 {
+interface TokenReflection_Test_ClassModifiersIface2 extends Serializable {
 	public function foo();
 }
 
@@ -43,7 +38,7 @@ abstract class TokenReflection_Test_ClassModifiersClass4 implements TokenReflect
 
 }
 
-abstract class TokenReflection_Test_ClassModifiersClass5 implements TokenReflection_Test_ClassModifiersiFace3
+abstract class TokenReflection_Test_ClassModifiersClass5 implements TokenReflection_Test_ClassModifiersIface3, IteratorAggregate
 {
 	abstract protected function tmp();
 }
@@ -69,6 +64,21 @@ class TokenReflection_Test_ClassModifiersClass7 extends TokenReflection_Test_Cla
 	}
 
 	protected function tmp()
+	{
+
+	}
+
+	public function getIterator()
+	{
+
+	}
+
+	public function serialize()
+	{
+
+	}
+
+	public function unserialize($serialized)
 	{
 
 	}

@@ -22,7 +22,14 @@ class TokenReflection_Test_PropertyDocCommentInheritanceGrandParent
 
 	private $param3;
 
-	private $param4;
+	/**
+	 * Private4 short.
+	 *
+	 * Private4 long.
+	 *
+	 * @var boolean
+	 */
+	private $param4 = false;
 }
 
 class TokenReflection_Test_PropertyDocCommentInheritanceParent extends TokenReflection_Test_PropertyDocCommentInheritanceGrandParent
@@ -47,6 +54,9 @@ class TokenReflection_Test_PropertyDocCommentInheritanceParent extends TokenRefl
 	 */
 	protected $param3;
 
+	/**
+	 * Protected4 short.
+	 */
 	protected $param4;
 }
 

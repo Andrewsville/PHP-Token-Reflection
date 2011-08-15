@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 2
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -111,7 +111,7 @@ class ReflectionConstantTest extends Test
 			'typeFloat' => "Constant [ double TYPE_FLOAT ] { 1.1 }\n",
 			'typeFloatNegative' => "Constant [ double TYPE_FLOAT_NEGATIVE ] { -1.1 }\n",
 			'typeBoolean' => "Constant [ boolean TYPE_BOOLEAN ] { 1 }\n",
-			'typeNull' => "Constant [ NULL TYPE_NULL ] {  }\n"
+			'typeNull' => "Constant [ null TYPE_NULL ] {  }\n"
 		);
 		foreach ($tests as $test => $expected) {
 			$this->assertSame($expected, $this->getConstantTokenReflection($test)->__toString());

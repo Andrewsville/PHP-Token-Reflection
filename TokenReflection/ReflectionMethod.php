@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 4
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -168,13 +168,21 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 				$parentClassMethod = $parentClass->getMethod($this->name);
 
 				// Access level changed
-				if ($this->modifiers & InternalReflectionMethod::IS_PUBLIC && $parentClassMethod->is(self::ACCESS_LEVEL_CHANGED | InternalReflectionMethod::IS_PRIVATE)) {
+				if (($this->isPublic() || $this->isProtected()) && $parentClassMethod->is(self::ACCESS_LEVEL_CHANGED | InternalReflectionMethod::IS_PRIVATE)) {
 					$this->modifiers |= self::ACCESS_LEVEL_CHANGED;
 				}
 
 				// Implemented abstract
-				if ($parentClassMethod->is(self::IS_IMPLEMENTED_ABSTRACT | InternalReflectionMethod::IS_ABSTRACT)) {
+				if ($parentClassMethod->isAbstract() && !$this->isAbstract()) {
 					$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+				}
+			} else {
+				// Check if it is an implementation of an interface method
+				foreach ($declaringClass->getInterfaces() as $interface) {
+					if ($interface->hasOwnMethod($this->name)) {
+						$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
+						break;
+					}
 				}
 			}
 
@@ -267,7 +275,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		if (null === $filter || ($this->modifiers & $filter)) {
 			return true;
 		} elseif (($filter & $computedModifiers) && !$this->modifiersComplete) {
-			return $this->getModifiers() & $filter;
+			return (bool) ($this->getModifiers() & $filter);
 		}
 
 		return false;
@@ -305,17 +313,20 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$prototype = null;
 
 			$declaring = $this->getDeclaringClass();
-			if ($parent = $declaring->getParentClass()) {
-				if ($parent->hasMethod($this->name)) {
-					$method = $parent->getMethod($this->name);
-					if (!$method->isPrivate()) {
+			if (($parent = $declaring->getParentClass()) && $parent->hasMethod($this->name)) {
+				$method = $parent->getMethod($this->name);
+
+				if (!$method->isPrivate()) {
+					try {
+						$prototype = $method->getPrototype();
+					} catch (\Exception $e) {
 						$prototype = $method;
 					}
 				}
 			}
 
 			if (null === $prototype) {
-				foreach ($declaring->getInterfaces() as $interface) {
+				foreach ($declaring->getOwnInterfaces() as $interface) {
 					if ($interface->hasMethod($this->name)) {
 						$prototype = $interface->getMethod($this->name);
 						break;
@@ -344,25 +355,18 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		$overwrite = '';
 		$prototype = '';
 
+		$declaringClassParent = $this->getDeclaringClass()->getParentClass();
 		try {
-			$parent = $this->getPrototype();
-			if (!$parent->getDeclaringClass()->isInterface()) {
-				$overwrite = ', overwrites ' . $parent->getDeclaringClassName();
-			}
-			$prototype = ', prototype ' . $parent->getDeclaringClassName();
+			$prototype = ', prototype ' . $this->getPrototype()->getDeclaringClassName();
 		} catch (Exception $e) {
-			$parentClass = $this->getDeclaringClass()->getParentClass();
-			if ($parentClass && ($parentMethods = $parentClass->getMethods(\ReflectionMethod::IS_PRIVATE))) {
-				foreach ($parentMethods as $parent) {
-					if ($parent->getName() === $this->getName()) {
-						$overwrite = ', overwrites ' . $parent->getDeclaringClassName();
-						break;
-					}
-				}
-			}
-			if ($parentClass && $parentClass->isInternal()) {
+			if ($declaringClassParent && $declaringClassParent->isInternal()) {
 				$internal = 'internal:' . $parentClass->getExtensionName();
 			}
+		}
+
+		if ($declaringClassParent && $declaringClassParent->hasMethod($this->name)) {
+			$parentMethod = $declaringClassParent->getMethod($this->name);
+			$overwrite = ', overwrites ' . $parentMethod->getDeclaringClassName();
 		}
 
 		if ($this->isConstructor()) {
@@ -719,7 +723,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	{
 		$name = strtolower($this->name);
 		// In PHP 5.3.3+ the ctor can be named only __construct in namespaced classes
-		if ('__construct' === $name || ($class && (!$class->inNamespace() || PHP_VERSION_ID < 50303) && strtolower($class->getShortName()) === $name)) {
+		if ('__construct' === $name || ((!$class->inNamespace() || PHP_VERSION_ID < 50303) && strtolower($class->getShortName()) === $name)) {
 			$this->modifiers |= self::IS_CONSTRUCTOR;
 		} elseif ('__destruct' === $name) {
 			$this->modifiers |= self::IS_DESTRUCTOR;
@@ -727,11 +731,14 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$this->modifiers |= self::IS_CLONE;
 		}
 
-
-		// See http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_API.c?revision=309853&view=markup#l1795
-		static $notAllowed = array('__clone' => true, '__tostring' => true, '__get' => true, '__set' => true, '__isset' => true, '__unset' => true);
-		if (!$this->isConstructor() && !$this->isDestructor() && !isset($notAllowed[$name])) {
-			$this->modifiers |= self::IS_ALLOWED_STATIC;
+		if ($class->isInterface()) {
+			$this->modifiers |= InternalReflectionMethod::IS_ABSTRACT;
+		} else {
+			// Can be called statically, see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_API.c?revision=309853&view=markup#l1795
+			static $notAllowed = array('__clone' => true, '__tostring' => true, '__get' => true, '__set' => true, '__isset' => true, '__unset' => true);
+			if (!$this->isStatic() && !$this->isConstructor() && !$this->isDestructor() && !isset($notAllowed[$name])) {
+				$this->modifiers |= self::IS_ALLOWED_STATIC;
+			}
 		}
 
 		return $this;

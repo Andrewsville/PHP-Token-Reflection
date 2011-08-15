@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 2
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -86,8 +86,9 @@ class ReflectionPropertyTest extends Test
 		$this->assertSame('Public3 Protected3  short.', $rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertNull($rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
 
-		$this->assertSame(array(), $rfl->token->getProperty('param4')->getAnnotations());
+		$this->assertSame('Protected4 short.', $rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertNull($rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame(array('boolean'), $rfl->token->getProperty('param4')->getAnnotation('var'));
 	}
 
 	/**
@@ -224,7 +225,7 @@ class ReflectionPropertyTest extends Test
 		$this->assertSame("'default'", $token->getDefaultValueDefinition());
 
 		$token = $this->getPropertyTokenReflection('noDefault');
-		$this->assertFalse($token->isDefault());
+		$this->assertTrue($token->isDefault());
 		$this->assertNull($token->getDefaultValue());
 	}
 

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0 beta 4
+ * Version 1.0.0 beta 6
  *
  * LICENSE
  *
@@ -264,7 +264,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isAbstract()
 	{
-		return (bool) ($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT);
+		if ($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT) {
+			return true;
+		} elseif ($this->isInterface() && !empty($this->methods)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -284,7 +290,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function isInterface()
 	{
-		return self::IS_INTERFACE === $this->type;
+		return (bool) ($this->modifiers & self::IS_INTERFACE);
 	}
 
 	/**
@@ -487,13 +493,15 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$parentClass = $this->getParentClass();
 
-		$names = $parentClass ? $parentClass->getInterfaceNames() : array();
-		foreach (array_reverse($this->interfaces) as $interfaceName) {
-			$names = array_merge($names, $this->getBroker()->getClass($interfaceName)->getInterfaceNames());
-			$names[] = $interfaceName;
+		$names = false !== $parentClass ? array_reverse(array_flip($parentClass->getInterfaceNames())) : array();
+		foreach ($this->interfaces as $interfaceName) {
+			$names[$interfaceName] = true;
+			foreach (array_reverse($this->getBroker()->getClass($interfaceName)->getInterfaceNames()) as $parentInterfaceName) {
+				$names[$parentInterfaceName] = true;
+			}
 		}
 
-		return array_unique($names);
+		return array_keys($names);
 	}
 
 	/**
@@ -521,7 +529,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getOwnInterfaceNames()
 	{
-		return array_reverse($this->interfaces);
+		return $this->interfaces;
 	}
 
 	/**
@@ -1035,13 +1043,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getDefaultProperties()
 	{
-		static $accessLevels = array(InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PRIVATE, InternalReflectionProperty::IS_PROTECTED);
+		static $accessLevels = array(InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PROTECTED, InternalReflectionProperty::IS_PRIVATE);
 
 		$defaults = array();
 		$properties = $this->getProperties();
 		foreach (array(true, false) as $static) {
-			foreach ($accessLevels as $level) {
-				foreach ($properties as $property) {
+			foreach ($properties as $property) {
+				foreach ($accessLevels as $level) {
 					if ($property->isStatic() === $static && ($property->getModifiers() & $level)) {
 						$defaults[$property->getName()] = $property->getDefaultValue();
 					}
@@ -1397,11 +1405,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	public function __toString()
 	{
 		$implements = '';
-		if (count($this->getInterfaceNames()) > 0) {
-			$interfaceNames = $this->getInterfaceNames();
-			// @todo
-			// sort($interfaceNames);
-			$implements = ' implements ' . implode(', ', $interfaceNames);
+		$interfaceNames = $this->getInterfaceNames();
+		if (count($interfaceNames) > 0) {
+			$implements = sprintf(
+				' %s %s',
+				$this->isInterface() ? 'extends' : 'implements',
+				implode(', ', $interfaceNames)
+			);
 		}
 
 		$buffer = '';
@@ -1439,10 +1449,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				continue;
 			}
 			// Indent
-			$string = "\n    " . preg_replace('~\n(?!$|\n)~', "\n    ", $method->__toString());
+			$string = "\n    " . preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
 			// Add inherits
 			if ($method->getDeclaringClassName() !== $this->getName()) {
-				$string = preg_replace('~Method [ <[\w:]+~', '\0, inherits ' . $method->getDeclaringClassName(), $string);
+				$string = preg_replace(
+					array('~Method [ <[\w:]+~', '~, overwrites[^,]+~'),
+					array('\0, inherits ' . $method->getDeclaringClassName(), ''),
+					$string
+				);
 			}
 			if ($method->isStatic()) {
 				$sBuffer .= $string;
@@ -1460,7 +1474,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
 			$this->isInterface() ? 'Interface' : 'Class',
 			$this->isIterateable() ? ' <iterateable>' : '',
-			$this->isAbstract() ? 'abstract ' : '',
+			$this->isAbstract() && !$this->isInterface() ? 'abstract ' : '',
 			$this->isFinal() ? 'final ' : '',
 			$this->isInterface() ? 'interface' : 'class',
 			$this->getName(),
@@ -1786,7 +1800,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 					if (T_VAR !== $tokenStream->getType()) {
 						$position = $tokenStream->key();
-						while (null !== ($type = $tokenStream->getType($position++)) && !isset($searching[$type])) {
+						while (null !== ($type = $tokenStream->getType($position)) && !isset($searching[$type])) {
 							$position++;
 						}
 					}
