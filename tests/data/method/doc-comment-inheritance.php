@@ -7,7 +7,8 @@ class TokenReflection_Test_MethodDocCommentInheritanceGrandParent
 	 *
 	 * Private1 long.
 	 *
-	 * @return mixed
+	 * @return integer
+	 * @throws Exception
 	 */
 	private function method1()
 	{
@@ -40,7 +41,7 @@ class TokenReflection_Test_MethodDocCommentInheritanceParent extends TokenReflec
 	 *
 	 * Protected1 long. {@inheritdoc}
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	protected function method1()
 	{
@@ -55,7 +56,7 @@ class TokenReflection_Test_MethodDocCommentInheritanceParent extends TokenReflec
 	 *
 	 * Protected3 long.
 	 *
-	 * @return mixed
+	 * @return boolean
 	 */
 	protected function method3()
 	{
@@ -78,8 +79,6 @@ class TokenReflection_Test_MethodDocCommentInheritance extends TokenReflection_T
 
 	/**
 	 * Public3 {@inheritdoc}
-	 *
-	 * @return mixed
 	 */
 	public function method3()
 	{

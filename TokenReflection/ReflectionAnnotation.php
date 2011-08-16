@@ -365,29 +365,39 @@ class ReflectionAnnotation
 			}
 		}
 
-		// In case of methods check if we need and can inherit parameter descriptions
-		if (
-			$this->reflection instanceof ReflectionMethod
-			&& 0 !== $this->reflection->getNumberOfParameters()
-			&& (empty($this->annotations['param']) || count($this->annotations['param']) < $this->reflection->getNumberOfParameters())
-		) {
-			$params = isset($this->annotations['param']) ? $this->annotations['param'] : array();
-			foreach ($parents as $parent) {
-				if ($parent->hasAnnotation('param')) {
-					$parentParams = array_slice($parent->getAnnotation('param'), count($params));
+		if ($this->reflection instanceof ReflectionMethod) {
+			if (0 !== $this->reflection->getNumberOfParameters() && (empty($this->annotations['param']) || count($this->annotations['param']) < $this->reflection->getNumberOfParameters())) {
+				// In case of methods check if we need and can inherit parameter descriptions
+				$params = isset($this->annotations['param']) ? $this->annotations['param'] : array();
+				foreach ($parents as $parent) {
+					if ($parent->hasAnnotation('param')) {
+						$parentParams = array_slice($parent->getAnnotation('param'), count($params));
 
-					while (!empty($parentParams)) {
-						array_push($params, array_shift($parentParams));
+						while (!empty($parentParams)) {
+							array_push($params, array_shift($parentParams));
 
-						if (count($params) === $this->reflection->getNumberOfParameters()) {
-							break 2;
+							if (count($params) === $this->reflection->getNumberOfParameters()) {
+								break 2;
+							}
 						}
 					}
 				}
+
+				if (!empty($params)) {
+					$this->annotations['param'] = $params;
+				}
 			}
 
-			if (!empty($params)) {
-				$this->annotations['param'] = $params;
+			// And check if we need and can inherit the return and throws value
+			foreach (array('return', 'throws') as $paramName) {
+				if (!isset($this->annotations[$paramName])) {
+					foreach ($parents as $parent) {
+						if ($parent->hasAnnotation($paramName)) {
+							$this->annotations[$paramName] = $parent->getAnnotation($paramName);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}

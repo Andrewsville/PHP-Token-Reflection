@@ -88,6 +88,18 @@ class ReflectionMethodTest extends Test
 
 		$this->assertSame(array(), $rfl->token->getMethod('method4')->getAnnotations());
 		$this->assertNull($rfl->token->getMethod('method4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$this->assertSame($grandParent->token->getMethod('method1')->getAnnotation('throws'), $parent->token->getMethod('method1')->getAnnotation('throws'));
+		$this->assertSame($grandParent->token->getMethod('method1')->getAnnotation('throws'), $rfl->token->getMethod('method1')->getAnnotation('throws'));
+		$this->assertSame(array('Exception'), $grandParent->token->getMethod('method1')->getAnnotation('throws'));
+		$this->assertSame(array('string'), $parent->token->getMethod('method1')->getAnnotation('return'));
+
+		$this->assertSame($grandParent->token->getMethod('method2')->getAnnotation('return'), $parent->token->getMethod('method2')->getAnnotation('return'));
+		$this->assertSame($parent->token->getMethod('method2')->getAnnotation('return'), $rfl->token->getMethod('method2')->getAnnotation('return'));
+		$this->assertSame(array('mixed'), $parent->token->getMethod('method2')->getAnnotation('return'));
+
+		$this->assertSame($parent->token->getMethod('method3')->getAnnotation('return'), $rfl->token->getMethod('method3')->getAnnotation('return'));
+		$this->assertSame(array('boolean'), $rfl->token->getMethod('method3')->getAnnotation('return'));
 	}
 
 	/**
