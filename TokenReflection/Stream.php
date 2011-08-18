@@ -95,7 +95,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 			}
 		}
 
-		$this->count = count($stream);
+		$this->count = count($this->tokens);
 	}
 
 	/**
