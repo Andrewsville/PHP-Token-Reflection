@@ -1867,7 +1867,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							}
 
 							$leftSide = '';
-							$rightSide = array('', 0);
+							$rightSide = array('', null);
 							$alias = true;
 
 							while (T_STRING === $type || T_NS_SEPARATOR === $type || T_DOUBLE_COLON === $type) {
