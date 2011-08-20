@@ -567,9 +567,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		$method->declaringTraitName = $this->declaringClassName;
 		$method->declaringClassName = $parent->getName();
 		if (null !== $name) {
-			$method->name = $name;
-
 			$method->originalName = $this->name;
+			$method->name = $name;
 		}
 		if (null !== $accessLevel) {
 			if (!isset($possibleLevels[$accessLevel])) {
