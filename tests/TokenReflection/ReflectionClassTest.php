@@ -781,4 +781,30 @@ class ReflectionClassTest extends Test
 		$this->assertSame(InternalReflectionClass::export('ReflectionClass', true), ReflectionClass::export($this->getBroker(), 'ReflectionClass', true));
 		$this->assertSame(InternalReflectionClass::export(new InternalReflectionClass('ReflectionClass'), true), ReflectionClass::export($this->getBroker(), new InternalReflectionClass('ReflectionClass'), true));
 	}
+
+	/**
+	 * Tests traits support using the internal reflection.
+	 *
+	 * For PHP 5.4+ only.
+	 */
+	public function testTraits()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Requires PHP 5.4 or newer.');
+		}
+
+	}
+
+	/**
+	 * Tests traits support by hand.
+	 *
+	 * Needed only for PHP < 5.4.
+	 */
+	public function testTraits2()
+	{
+		if (PHP_VERSION_ID >= 50400) {
+			$this->markTestSkipped('Needed only for PHP older than 5.4.');
+		}
+
+	}
 }
