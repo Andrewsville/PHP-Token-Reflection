@@ -414,7 +414,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 						}
 					}
 				} else {
-					$tokenStream->findMatchingBracket()->skipWhitespaces();
+					$tokenStream->findMatchingBracket();
 				}
 			} elseif (';' !== $type) {
 				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
