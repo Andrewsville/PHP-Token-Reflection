@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 beta 7
  *
  * LICENSE
  *
@@ -95,7 +95,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 			}
 		}
 
-		$this->count = count($stream);
+		$this->count = count($this->tokens);
 	}
 
 	/**
@@ -171,7 +171,9 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 		static $brackets = array(
 			'(' => ')',
 			'{' => '}',
-			'[' => ']'
+			'[' => ']',
+			T_CURLY_OPEN => '}',
+			T_DOLLAR_OPEN_CURLY_BRACES => '}'
 		);
 
 		if (!$this->valid()) {
@@ -193,7 +195,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 			$type = $this->tokens[$this->position][0];
 			if ($searching === $type) {
 				$level--;
-			} elseif ($bracket === $type || ($searching === '}' && (T_CURLY_OPEN === $type || T_DOLLAR_OPEN_CURLY_BRACES === $type))) {
+			} elseif ($bracket === $type || ($searching === '}' && ('{' === $type || T_CURLY_OPEN === $type || T_DOLLAR_OPEN_CURLY_BRACES === $type))) {
 				$level++;
 			}
 

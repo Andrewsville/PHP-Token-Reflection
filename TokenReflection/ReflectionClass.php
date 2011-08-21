@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 beta 7
  *
  * LICENSE
  *
@@ -1475,7 +1475,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 					if (T_VAR !== $tokenStream->getType()) {
 						$position = $tokenStream->key();
-						while (null !== ($type = $tokenStream->getType($position++)) && !isset($searching[$type])) {
+						while (null !== ($type = $tokenStream->getType($position)) && !isset($searching[$type])) {
 							$position++;
 						}
 					}

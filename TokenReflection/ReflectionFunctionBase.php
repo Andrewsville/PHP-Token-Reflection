@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 beta 7
  *
  * LICENSE
  *
@@ -336,79 +336,85 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 		try {
 			$type = $tokenStream->getType();
 			if ('{' === $type) {
-				$tokenStream->skipWhitespaces();
+				if ($this->getBroker()->isOptionSet(Broker::OPTION_PARSE_FUNCTION_BODY)) {
+					$tokenStream->skipWhitespaces();
 
-				while ('}' !== ($type = $tokenStream->getType())) {
-					switch ($type) {
-						case T_STATIC:
-							$type = $tokenStream->skipWhitespaces()->getType();
-							if (T_DOUBLE_COLON === $type) {
-								// Late static binding call
-								break;
-							} elseif (T_VARIABLE !== $type) {
-								throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
-							}
-
-							while (T_VARIABLE === $type) {
-								$variableName = $tokenStream->getTokenValue();
-								$variableDefinition = array();
-
+					while ('}' !== ($type = $tokenStream->getType())) {
+						switch ($type) {
+							case T_STATIC:
 								$type = $tokenStream->skipWhitespaces()->getType();
-								if ('=' === $type) {
-									$type = $tokenStream->skipWhitespaces()->getType();
-									$level = 0;
-									while ($tokenStream->valid()) {
-										switch ($type) {
-											case '(':
-											case '[':
-											case '{':
-												$level++;
-												break;
-											case ')':
-											case ']':
-											case '}':
-												$level--;
-												break;
-											case ';':
-											case ',':
-												if (0 === $level) {
-													break 2;
-												}
-										}
-
-										$variableDefinition[] = $tokenStream->current();
-										$type = $tokenStream->skipWhitespaces()->getType();
-									}
-
-									if (!$tokenStream->valid()) {
-										throw new Exception\Parse('Invalid end of token stream.', Exception\Parse::PARSE_CHILDREN_ERROR);
-									}
-								}
-
-								$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
-
-								if (',' === $type) {
-									$type = $tokenStream->skipWhitespaces()->getType();
-								} else {
+								if (T_VARIABLE !== $type) {
+									// Late static binding
 									break;
 								}
-							}
 
-							break;
-						case T_FUNCTION:
-							// Anonymous function -> skip to its end
-							if (!$tokenStream->find('{')) {
-								throw new Exception\Parse('Could not find beginning of the anonymous function.', Exception\Parse::PARSE_CHILDREN_ERROR);
-							}
-							// Break missing intentionally
-						case '{':
-						case '[':
-						case '(':
-							$tokenStream->findMatchingBracket()->skipWhitespaces();
-							break;
-						default:
-							$tokenStream->skipWhitespaces();
+								while (T_VARIABLE === $type) {
+									$variableName = $tokenStream->getTokenValue();
+									$variableDefinition = array();
+
+									$type = $tokenStream->skipWhitespaces()->getType();
+									if ('=' === $type) {
+										$type = $tokenStream->skipWhitespaces()->getType();
+										$level = 0;
+										while ($tokenStream->valid()) {
+											switch ($type) {
+												case '(':
+												case '[':
+												case '{':
+												case T_CURLY_OPEN:
+												case T_DOLLAR_OPEN_CURLY_BRACES:
+													$level++;
+													break;
+												case ')':
+												case ']':
+												case '}':
+													$level--;
+													break;
+												case ';':
+												case ',':
+													if (0 === $level) {
+														break 2;
+													}
+											}
+
+											$variableDefinition[] = $tokenStream->current();
+											$type = $tokenStream->skipWhitespaces()->getType();
+										}
+
+										if (!$tokenStream->valid()) {
+											throw new Exception\Parse('Invalid end of token stream.', Exception\Parse::PARSE_CHILDREN_ERROR);
+										}
+									}
+
+									$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
+
+									if (',' === $type) {
+										$type = $tokenStream->skipWhitespaces()->getType();
+									} else {
+										break;
+									}
+								}
+
+								break;
+							case T_FUNCTION:
+								// Anonymous function -> skip to its end
+								if (!$tokenStream->find('{')) {
+									throw new Exception\Parse('Could not find beginning of the anonymous function.', Exception\Parse::PARSE_CHILDREN_ERROR);
+								}
+								// Break missing intentionally
+							case '{':
+							case '[':
+							case '(':
+							case T_CURLY_OPEN:
+							case T_DOLLAR_OPEN_CURLY_BRACES:
+								$tokenStream->findMatchingBracket()->skipWhitespaces();
+								break;
+							default:
+								$tokenStream->skipWhitespaces();
+						}
 					}
+				} else {
+					$tokenStream->findMatchingBracket()->skipWhitespaces();
 				}
 			} elseif (';' !== $type) {
 				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
