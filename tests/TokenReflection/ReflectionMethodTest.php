@@ -107,7 +107,9 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testStaticVariables()
 	{
-		$rfl = $this->getMethodReflection('staticVariables');
+		static $testName = 'staticVariables';
+
+		$rfl = $this->getMethodReflection($testName);
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
 		$this->assertSame(
@@ -123,6 +125,12 @@ class ReflectionMethodTest extends Test
 			),
 			$rfl->token->getStaticVariables()
 		);
+
+		// The same test with parsing method bodies turned off
+		$broker = new Broker(new Broker\Backend\Memory(), Broker::OPTION_DEFAULT & ~Broker::OPTION_PARSE_FUNCTION_BODY);
+		$broker->processFile($this->getFilePath($testName));
+		$reflection = $broker->getClass($this->getClassName($testName))->getMethod($this->getMethodName($testName));
+		$this->assertSame(array(), $reflection->getStaticVariables());
 	}
 
 	/**
