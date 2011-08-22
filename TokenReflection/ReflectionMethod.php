@@ -564,7 +564,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 		$method = clone $this;
 
-		$method->declaringTraitName = $this->declaringClassName;
 		$method->declaringClassName = $parent->getName();
 		if (null !== $name) {
 			$method->originalName = $this->name;
@@ -582,7 +581,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		foreach ($this->parameters as $parameterName => $parameter) {
-			$this->parameters[$parameterName] = $parameter->alias($this);
+			$method->parameters[$parameterName] = $parameter->alias($method);
 		}
 
 		return $method;
@@ -642,6 +641,9 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		$this->declaringClassName = $parent->getName();
+		if ($parent->isTrait()) {
+			$this->declaringTraitName = $parent->getName();
+		}
 		return parent::processParent($parent);
 	}
 
