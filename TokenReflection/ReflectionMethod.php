@@ -116,23 +116,23 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * The original name when importing from a trait.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
-	private $originalName;
+	private $originalName = null;
 
 	/**
 	 * The original method when importing from a trait.
 	 *
-	 * @var \TokenReflection\IReflectionMethod
+	 * @var \TokenReflection\IReflectionMethod|null
 	 */
-	private $original;
+	private $original = null;
 
 	/**
 	 * The original modifiers value when importing from a trait.
 	 *
-	 * @var integer
+	 * @var integer|null
 	 */
-	private $originalModifiers;
+	private $originalModifiers = null;
 
 	/**
 	 * Declaring trait name.
@@ -597,31 +597,31 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns the original name when importing from a trait.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getOriginalName()
 	{
-		return $this->originalName ?: $this->getName();
+		return $this->originalName;
 	}
 
 	/**
 	 * Returns the original method when importing from a trait.
 	 *
-	 * @return \TokenReflection\IReflectionMethod
+	 * @return \TokenReflection\IReflectionMethod|null
 	 */
 	public function getOriginal()
 	{
-		return $this->original ?: $this;
+		return $this->original;
 	}
 
 	/**
 	 * Returns the original modifiers value when importing from a trait.
 	 *
-	 * @return integer
+	 * @return integer|null
 	 */
 	public function getOriginalModifiers()
 	{
-		return $this->originalModifiers ?: $this->getModifiers();
+		return $this->originalModifiers;
 	}
 
 	/**
