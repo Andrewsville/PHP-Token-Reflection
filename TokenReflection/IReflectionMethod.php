@@ -161,6 +161,13 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	public function getOriginalName();
 
 	/**
+	 * Returns the original method when importing from a trait.
+	 *
+	 * @return \TokenReflection\IReflectionMethod
+	 */
+	public function getOriginal();
+
+	/**
 	 * Returns the original modifiers value when importing from a trait.
 	 *
 	 * @return integer

@@ -273,6 +273,16 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
+	 * Returns the original method when importing from a trait.
+	 *
+	 * @return \TokenReflection\IReflectionMethod
+	 */
+	public function getOriginal()
+	{
+		return $this;
+	}
+
+	/**
 	 * Returns the original modifiers value when importing from a trait.
 	 *
 	 * @return integer

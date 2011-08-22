@@ -121,6 +121,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $originalName;
 
 	/**
+	 * The original method when importing from a trait.
+	 *
+	 * @var \TokenReflection\IReflectionMethod
+	 */
+	private $original;
+
+	/**
 	 * The original modifiers value when importing from a trait.
 	 *
 	 * @var integer
@@ -595,6 +602,16 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	public function getOriginalName()
 	{
 		return $this->originalName ?: $this->getName();
+	}
+
+	/**
+	 * Returns the original method when importing from a trait.
+	 *
+	 * @return \TokenReflection\IReflectionMethod
+	 */
+	public function getOriginal()
+	{
+		return $this->original ?: $this;
 	}
 
 	/**
