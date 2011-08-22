@@ -1,6 +1,6 @@
 <?php
 
-trait t1 {
+trait TokenReflection_Test_ClassTraitsTrait1 {
 	protected $t1Protected = 't1pro';
 
 	private $t1Private = 't1pri';
@@ -20,34 +20,34 @@ trait t1 {
 	public function publicf() {}
 }
 
-trait t2 {
-	use t1 {privatef as t2privatef;}
+trait TokenReflection_Test_ClassTraitsTrait2 {
+	use TokenReflection_Test_ClassTraitsTrait1 {privatef as t2privatef;}
 
 	private function privatef() {}
 }
 
-trait t3 {
+trait TokenReflection_Test_ClassTraitsTrait3 {
 	public $t1Public = 't3';
 
 	private function privatef() {}
 }
 
-trait t4 {
+trait TokenReflection_Test_ClassTraitsTrait4 {
 	protected $t1Protected = 't4';
 
 	private function privatef() {}
 }
 
-class c1 {
-	use t1 {publicf as private privatef2; protectedf as public publicf3; publicf as publicfOriginal;}
+class TokenReflection_Test_ClassTraits {
+	use TokenReflection_Test_ClassTraitsTrait1 {publicf as private privatef2; protectedf as public publicf3; publicf as publicfOriginal;}
 }
 
-class c2 {
-	use t2;
+class TokenReflection_Test_ClassTraits2 {
+	use TokenReflection_Test_ClassTraitsTrait2;
 }
 
-class c3 {
-	use t1;
+class TokenReflection_Test_ClassTrait3 {
+	use TokenReflection_Test_ClassTraitsTrait1;
 }
 
 

@@ -1146,7 +1146,6 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		$names = $parentClass ? $parentClass->getTraitNames() : array();
 		foreach (array_reverse($this->traits) as $traitName) {
-			$names = array_merge($names, $this->getBroker()->getClass($traitName)->getTraitNames());
 			$names[] = $traitName;
 		}
 
@@ -1925,6 +1924,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 									$methodName = substr($leftSide, $pos + 2);
 									$className = Resolver::resolveClassFQN(substr($leftSide, 0, $pos), $this->aliases, $this->namespaceName);
 									$leftSide = $className . '::' . $methodName;
+
+									$this->traitAliases[$rightSide[0]] = $leftSide;
+								} else {
+									$this->traitAliases[$rightSide[0]] = '(null)::' . $leftSide;
 								}
 
 								$this->traitImports[$leftSide][] = $rightSide;

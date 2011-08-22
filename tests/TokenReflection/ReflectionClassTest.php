@@ -770,9 +770,15 @@ class ReflectionClassTest extends Test
 			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
 			'interface', 'noInterface', 'interfaces', 'noInterfaces',
 			'iterator', 'noIterator', 'parent', 'noParent',
-			'userDefined', 'noNamespace'
+			'userDefined', 'noNamespace',
+			'traits'
 		);
 		foreach ($tests as $test) {
+			if ('traits' === $test && PHP_VERSION_ID < 50400) {
+				// Test traits only on PHP >= 5.4
+				continue;
+			}
+
 			$rfl = $this->getClassReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionClass::export($this->getClassName($test), true), ReflectionClass::export($this->getBroker(), $this->getClassName($test), true));
@@ -783,28 +789,49 @@ class ReflectionClassTest extends Test
 	}
 
 	/**
-	 * Tests traits support using the internal reflection.
+	 * Tests traits support comparing with the internal reflection.
 	 *
 	 * For PHP 5.4+ only.
 	 */
 	public function testTraits()
 	{
 		if (PHP_VERSION_ID < 50400) {
-			$this->markTestSkipped('Requires PHP 5.4 or newer.');
+			$this->markTestSkipped('Requires PHP 5.4 or higher.');
 		}
 
+		static $classes = array(
+			'TokenReflection_Test_ClassTraitsTrait1',
+			'TokenReflection_Test_ClassTraitsTrait2',
+			'TokenReflection_Test_ClassTraitsTrait3',
+			'TokenReflection_Test_ClassTraitsTrait4',
+			'TokenReflection_Test_ClassTraits',
+			'TokenReflection_Test_ClassTraits2',
+			'TokenReflection_Test_ClassTrait3'
+		);
+
+		require_once $this->getFilePath('traits');
+		$this->getBroker()->process($this->getFilePath('traits'));
+
+		foreach ($classes as $className) {
+			$token = $this->getBroker()->getClass($className);
+			$internal = new \ReflectionClass($className);
+
+			$this->assertSame($internal->isTrait(), $token->isTrait(), $className);
+			$this->assertSame($internal->getTraitAliases(), $token->getTraitAliases(), $className);
+			$this->assertSame($internal->getTraitNames(), $token->getTraitNames(), $className);
+			$this->assertSame(count($internal->getTraits()), count($token->getTraits()), $className);
+			foreach ($internal->getTraits() as $trait) {
+				$this->assertTrue($token->usesTrait($trait->getName()), $className);
+			}
+		}
 	}
 
 	/**
-	 * Tests traits support by hand.
-	 *
-	 * Needed only for PHP < 5.4.
+	 * Tests traits support comparing with expected values.
 	 */
 	public function testTraits2()
 	{
-		if (PHP_VERSION_ID >= 50400) {
-			$this->markTestSkipped('Needed only for PHP older than 5.4.');
-		}
+
 
 	}
 }
