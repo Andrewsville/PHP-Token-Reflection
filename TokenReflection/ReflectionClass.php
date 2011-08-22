@@ -1449,7 +1449,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				continue;
 			}
 			// Indent
-			$string = "\n    " . preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
+			$string = "\n    ";
+			if (null !== $method->getDeclaringTraitName()) {
+				$string .= "\n    ";
+			}
+
+			$string .= preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
 			// Add inherits
 			if ($method->getDeclaringClassName() !== $this->getName()) {
 				$string = preg_replace(
