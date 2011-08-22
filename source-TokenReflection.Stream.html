@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.0" />
+	<meta name="generator" content="ApiGen 2.0.3" />
 	<meta name="robots" content="noindex" />
 
 	<title>File Stream.php | PHP Token Reflection</title>
@@ -120,7 +120,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0 beta 4
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0 beta 7
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -213,7 +213,7 @@
 <a href="#95" id="95" class="l"> 95: </a>            }
 <a href="#96" id="96" class="l"> 96: </a>        }
 <a href="#97" id="97" class="l"> 97: </a>
-<a href="#98" id="98" class="l"> 98: </a>        <span class="php-var">$this</span>-&gt;<span class="php-keyword2">count</span> = <span class="php-keyword2">count</span>(<span class="php-var">$stream</span>);
+<a href="#98" id="98" class="l"> 98: </a>        <span class="php-var">$this</span>-&gt;<span class="php-keyword2">count</span> = <span class="php-keyword2">count</span>(<span class="php-var">$this</span>-&gt;tokens);
 <a href="#99" id="99" class="l"> 99: </a>    }
 <a href="#100" id="100" class="l">100: </a>
 <a href="#101" id="101" class="l">101: </a>    <span class="php-comment">/**
@@ -289,281 +289,283 @@
 <a href="#171" id="171" class="l">171: </a>        <span class="php-keyword1">static</span> <span class="php-var">$brackets</span> = <span class="php-keyword2">array</span>(
 <a href="#172" id="172" class="l">172: </a>            <span class="php-quote">'('</span> =&gt; <span class="php-quote">')'</span>,
 <a href="#173" id="173" class="l">173: </a>            <span class="php-quote">'{'</span> =&gt; <span class="php-quote">'}'</span>,
-<a href="#174" id="174" class="l">174: </a>            <span class="php-quote">'['</span> =&gt; <span class="php-quote">']'</span>
-<a href="#175" id="175" class="l">175: </a>        );
-<a href="#176" id="176" class="l">176: </a>
-<a href="#177" id="177" class="l">177: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;valid()) {
-<a href="#178" id="178" class="l">178: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Out of array.'</span>, Exception\Runtime::DOES_NOT_EXIST);
-<a href="#179" id="179" class="l">179: </a>        }
-<a href="#180" id="180" class="l">180: </a>
-<a href="#181" id="181" class="l">181: </a>        <span class="php-var">$position</span> = <span class="php-var">$this</span>-&gt;position;
+<a href="#174" id="174" class="l">174: </a>            <span class="php-quote">'['</span> =&gt; <span class="php-quote">']'</span>,
+<a href="#175" id="175" class="l">175: </a>            T_CURLY_OPEN =&gt; <span class="php-quote">'}'</span>,
+<a href="#176" id="176" class="l">176: </a>            T_DOLLAR_OPEN_CURLY_BRACES =&gt; <span class="php-quote">'}'</span>
+<a href="#177" id="177" class="l">177: </a>        );
+<a href="#178" id="178" class="l">178: </a>
+<a href="#179" id="179" class="l">179: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;valid()) {
+<a href="#180" id="180" class="l">180: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Out of array.'</span>, Exception\Runtime::DOES_NOT_EXIST);
+<a href="#181" id="181" class="l">181: </a>        }
 <a href="#182" id="182" class="l">182: </a>
-<a href="#183" id="183" class="l">183: </a>        <span class="php-var">$bracket</span> = <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position][<span class="php-num">0</span>];
+<a href="#183" id="183" class="l">183: </a>        <span class="php-var">$position</span> = <span class="php-var">$this</span>-&gt;position;
 <a href="#184" id="184" class="l">184: </a>
-<a href="#185" id="185" class="l">185: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$brackets</span>[<span class="php-var">$bracket</span>])) {
-<a href="#186" id="186" class="l">186: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no usable bracket at position &quot;%d&quot; in file &quot;%s&quot;.'</span>, <span class="php-var">$position</span>, <span class="php-var">$this</span>-&gt;fileName), Exception\Runtime::DOES_NOT_EXIST);
-<a href="#187" id="187" class="l">187: </a>        }
-<a href="#188" id="188" class="l">188: </a>
-<a href="#189" id="189" class="l">189: </a>        <span class="php-var">$searching</span> = <span class="php-var">$brackets</span>[<span class="php-var">$bracket</span>];
+<a href="#185" id="185" class="l">185: </a>        <span class="php-var">$bracket</span> = <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position][<span class="php-num">0</span>];
+<a href="#186" id="186" class="l">186: </a>
+<a href="#187" id="187" class="l">187: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$brackets</span>[<span class="php-var">$bracket</span>])) {
+<a href="#188" id="188" class="l">188: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no usable bracket at position &quot;%d&quot; in file &quot;%s&quot;.'</span>, <span class="php-var">$position</span>, <span class="php-var">$this</span>-&gt;fileName), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#189" id="189" class="l">189: </a>        }
 <a href="#190" id="190" class="l">190: </a>
-<a href="#191" id="191" class="l">191: </a>        <span class="php-var">$level</span> = <span class="php-num">0</span>;
-<a href="#192" id="192" class="l">192: </a>        <span class="php-keyword1">while</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position])) {
-<a href="#193" id="193" class="l">193: </a>            <span class="php-var">$type</span> = <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position][<span class="php-num">0</span>];
-<a href="#194" id="194" class="l">194: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$searching</span> === <span class="php-var">$type</span>) {
-<a href="#195" id="195" class="l">195: </a>                <span class="php-var">$level</span>--;
-<a href="#196" id="196" class="l">196: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-var">$bracket</span> === <span class="php-var">$type</span> || (<span class="php-var">$searching</span> === <span class="php-quote">'}'</span> &amp;&amp; (T_CURLY_OPEN === <span class="php-var">$type</span> || T_DOLLAR_OPEN_CURLY_BRACES === <span class="php-var">$type</span>))) {
-<a href="#197" id="197" class="l">197: </a>                <span class="php-var">$level</span>++;
-<a href="#198" id="198" class="l">198: </a>            }
-<a href="#199" id="199" class="l">199: </a>
-<a href="#200" id="200" class="l">200: </a>            <span class="php-keyword1">if</span> (<span class="php-num">0</span> === <span class="php-var">$level</span>) {
-<a href="#201" id="201" class="l">201: </a>                <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#202" id="202" class="l">202: </a>            }
-<a href="#203" id="203" class="l">203: </a>
-<a href="#204" id="204" class="l">204: </a>            <span class="php-var">$this</span>-&gt;position++;
-<a href="#205" id="205" class="l">205: </a>        }
-<a href="#206" id="206" class="l">206: </a>
-<a href="#207" id="207" class="l">207: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Could not find the end bracket &quot;%s&quot; of the bracket at position &quot;%d&quot; in file &quot;%s&quot;.'</span>, <span class="php-var">$searching</span>, <span class="php-var">$position</span>, <span class="php-var">$this</span>-&gt;fileName), Exception\Runtime::DOES_NOT_EXIST);
-<a href="#208" id="208" class="l">208: </a>    }
-<a href="#209" id="209" class="l">209: </a>
-<a href="#210" id="210" class="l">210: </a>    <span class="php-comment">/**
-</span><a href="#211" id="211" class="l">211: </a><span class="php-comment">     * Skips whitespaces and comments next to the current position.
-</span><a href="#212" id="212" class="l">212: </a><span class="php-comment">     *
-</span><a href="#213" id="213" class="l">213: </a><span class="php-comment">     * @return \TokenReflection\Stream
-</span><a href="#214" id="214" class="l">214: </a><span class="php-comment">     */</span>
-<a href="#215" id="215" class="l">215: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> skipWhitespaces()
-<a href="#216" id="216" class="l">216: </a>    {
-<a href="#217" id="217" class="l">217: </a>        <span class="php-keyword1">static</span> <span class="php-var">$skipped</span> = <span class="php-keyword2">array</span>(T_WHITESPACE =&gt; <span class="php-keyword1">true</span>, T_COMMENT =&gt; <span class="php-keyword1">true</span>);
-<a href="#218" id="218" class="l">218: </a>
-<a href="#219" id="219" class="l">219: </a>        <span class="php-keyword1">do</span> {
-<a href="#220" id="220" class="l">220: </a>            <span class="php-var">$this</span>-&gt;position++;
-<a href="#221" id="221" class="l">221: </a>        } <span class="php-keyword1">while</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position]) &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$skipped</span>[<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position][<span class="php-num">0</span>]]));
-<a href="#222" id="222" class="l">222: </a>
-<a href="#223" id="223" class="l">223: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#224" id="224" class="l">224: </a>    }
-<a href="#225" id="225" class="l">225: </a>
-<a href="#226" id="226" class="l">226: </a>    <span class="php-comment">/**
-</span><a href="#227" id="227" class="l">227: </a><span class="php-comment">     * Checks if there is a token of the given type at the given position.
-</span><a href="#228" id="228" class="l">228: </a><span class="php-comment">     *
-</span><a href="#229" id="229" class="l">229: </a><span class="php-comment">     * @param integer|string $type Token type
-</span><a href="#230" id="230" class="l">230: </a><span class="php-comment">     * @param integer $position Position; if none given, consider the current iteration position
-</span><a href="#231" id="231" class="l">231: </a><span class="php-comment">     * @return boolean
-</span><a href="#232" id="232" class="l">232: </a><span class="php-comment">     */</span>
-<a href="#233" id="233" class="l">233: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> is(<span class="php-var">$type</span>, <span class="php-var">$position</span> = -<span class="php-num">1</span>)
-<a href="#234" id="234" class="l">234: </a>    {
-<a href="#235" id="235" class="l">235: </a>        <span class="php-keyword1">return</span> <span class="php-var">$type</span> === <span class="php-var">$this</span>-&gt;<span class="php-keyword2">getType</span>(<span class="php-var">$position</span>);
-<a href="#236" id="236" class="l">236: </a>    }
-<a href="#237" id="237" class="l">237: </a>
-<a href="#238" id="238" class="l">238: </a>    <span class="php-comment">/**
-</span><a href="#239" id="239" class="l">239: </a><span class="php-comment">     * Returns the type of a token.
-</span><a href="#240" id="240" class="l">240: </a><span class="php-comment">     *
-</span><a href="#241" id="241" class="l">241: </a><span class="php-comment">     * @param integer $position Token position; if none given, consider the current iteration position
-</span><a href="#242" id="242" class="l">242: </a><span class="php-comment">     * @return string|integer|null
-</span><a href="#243" id="243" class="l">243: </a><span class="php-comment">     */</span>
-<a href="#244" id="244" class="l">244: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">getType</span>(<span class="php-var">$position</span> = -<span class="php-num">1</span>)
-<a href="#245" id="245" class="l">245: </a>    {
-<a href="#246" id="246" class="l">246: </a>        <span class="php-keyword1">if</span> (-<span class="php-num">1</span> === <span class="php-var">$position</span>) {
-<a href="#247" id="247" class="l">247: </a>            <span class="php-var">$position</span> = <span class="php-var">$this</span>-&gt;position;
-<a href="#248" id="248" class="l">248: </a>        }
-<a href="#249" id="249" class="l">249: </a>
-<a href="#250" id="250" class="l">250: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>][<span class="php-num">0</span>] : <span class="php-keyword1">null</span>;
-<a href="#251" id="251" class="l">251: </a>    }
-<a href="#252" id="252" class="l">252: </a>
-<a href="#253" id="253" class="l">253: </a>    <span class="php-comment">/**
-</span><a href="#254" id="254" class="l">254: </a><span class="php-comment">     * Returns the current token value.
-</span><a href="#255" id="255" class="l">255: </a><span class="php-comment">     *
-</span><a href="#256" id="256" class="l">256: </a><span class="php-comment">     * @param integer $position Token position; if none given, consider the current iteration position
-</span><a href="#257" id="257" class="l">257: </a><span class="php-comment">     * @return stirng
-</span><a href="#258" id="258" class="l">258: </a><span class="php-comment">     */</span>
-<a href="#259" id="259" class="l">259: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTokenValue(<span class="php-var">$position</span> = -<span class="php-num">1</span>)
-<a href="#260" id="260" class="l">260: </a>    {
-<a href="#261" id="261" class="l">261: </a>        <span class="php-keyword1">if</span> (-<span class="php-num">1</span> === <span class="php-var">$position</span>) {
-<a href="#262" id="262" class="l">262: </a>            <span class="php-var">$position</span> = <span class="php-var">$this</span>-&gt;position;
-<a href="#263" id="263" class="l">263: </a>        }
-<a href="#264" id="264" class="l">264: </a>
-<a href="#265" id="265" class="l">265: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>][<span class="php-num">1</span>] : <span class="php-keyword1">null</span>;
-<a href="#266" id="266" class="l">266: </a>    }
-<a href="#267" id="267" class="l">267: </a>
-<a href="#268" id="268" class="l">268: </a>    <span class="php-comment">/**
-</span><a href="#269" id="269" class="l">269: </a><span class="php-comment">     * Returns the token type name.
-</span><a href="#270" id="270" class="l">270: </a><span class="php-comment">     *
-</span><a href="#271" id="271" class="l">271: </a><span class="php-comment">     * @param integer $position Token position; if none given, consider the current iteration position
-</span><a href="#272" id="272" class="l">272: </a><span class="php-comment">     * @return string|null
-</span><a href="#273" id="273" class="l">273: </a><span class="php-comment">     */</span>
-<a href="#274" id="274" class="l">274: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTokenName(<span class="php-var">$position</span> = -<span class="php-num">1</span>)
-<a href="#275" id="275" class="l">275: </a>    {
-<a href="#276" id="276" class="l">276: </a>        <span class="php-var">$type</span> = <span class="php-var">$this</span>-&gt;<span class="php-keyword2">getType</span>(<span class="php-var">$position</span>);
-<a href="#277" id="277" class="l">277: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">is_string</span>(<span class="php-var">$type</span>) ? <span class="php-var">$type</span> : <span class="php-keyword2">token_name</span>(<span class="php-var">$type</span>);
-<a href="#278" id="278" class="l">278: </a>    }
-<a href="#279" id="279" class="l">279: </a>
-<a href="#280" id="280" class="l">280: </a>    <span class="php-comment">/**
-</span><a href="#281" id="281" class="l">281: </a><span class="php-comment">     * Stream serialization.
-</span><a href="#282" id="282" class="l">282: </a><span class="php-comment">     *
-</span><a href="#283" id="283" class="l">283: </a><span class="php-comment">     * @return string
-</span><a href="#284" id="284" class="l">284: </a><span class="php-comment">     */</span>
-<a href="#285" id="285" class="l">285: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">serialize</span>()
-<a href="#286" id="286" class="l">286: </a>    {
-<a href="#287" id="287" class="l">287: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">serialize</span>(<span class="php-keyword2">array</span>(<span class="php-var">$this</span>-&gt;fileName, <span class="php-var">$this</span>-&gt;tokens));
-<a href="#288" id="288" class="l">288: </a>    }
-<a href="#289" id="289" class="l">289: </a>
-<a href="#290" id="290" class="l">290: </a>    <span class="php-comment">/**
-</span><a href="#291" id="291" class="l">291: </a><span class="php-comment">     * Restores the stream from the serialized state.
-</span><a href="#292" id="292" class="l">292: </a><span class="php-comment">     *
-</span><a href="#293" id="293" class="l">293: </a><span class="php-comment">     * @param string $serialized Serialized form
-</span><a href="#294" id="294" class="l">294: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime On unserialization error
-</span><a href="#295" id="295" class="l">295: </a><span class="php-comment">     */</span>
-<a href="#296" id="296" class="l">296: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">unserialize</span>(<span class="php-var">$serialized</span>)
-<a href="#297" id="297" class="l">297: </a>    {
-<a href="#298" id="298" class="l">298: </a>        <span class="php-var">$data</span> = @<span class="php-keyword2">unserialize</span>(<span class="php-var">$serialized</span>);
-<a href="#299" id="299" class="l">299: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">false</span> === <span class="php-var">$data</span>) {
-<a href="#300" id="300" class="l">300: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Could not deserialize the serialized data.'</span>, Exception\Runtime::SERIALIZATION_ERROR);
-<a href="#301" id="301" class="l">301: </a>        }
-<a href="#302" id="302" class="l">302: </a>        <span class="php-keyword1">if</span> (<span class="php-num">2</span> !== <span class="php-keyword2">count</span>(<span class="php-var">$data</span>) || !<span class="php-keyword2">is_string</span>(<span class="php-var">$data</span>[<span class="php-num">0</span>]) || !<span class="php-keyword2">is_array</span>(<span class="php-var">$data</span>[<span class="php-num">1</span>])) {
-<a href="#303" id="303" class="l">303: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Invalid serialization data.'</span>, Exception\Runtime::SERIALIZATION_ERROR);
-<a href="#304" id="304" class="l">304: </a>        }
-<a href="#305" id="305" class="l">305: </a>
-<a href="#306" id="306" class="l">306: </a>        <span class="php-var">$this</span>-&gt;fileName = <span class="php-var">$data</span>[<span class="php-num">0</span>];
-<a href="#307" id="307" class="l">307: </a>        <span class="php-var">$this</span>-&gt;tokens = <span class="php-var">$data</span>[<span class="php-num">1</span>];
-<a href="#308" id="308" class="l">308: </a>        <span class="php-var">$this</span>-&gt;<span class="php-keyword2">count</span> = <span class="php-keyword2">count</span>(<span class="php-var">$this</span>-&gt;tokens);
-<a href="#309" id="309" class="l">309: </a>        <span class="php-var">$this</span>-&gt;position = <span class="php-num">0</span>;
-<a href="#310" id="310" class="l">310: </a>    }
-<a href="#311" id="311" class="l">311: </a>
-<a href="#312" id="312" class="l">312: </a>    <span class="php-comment">/**
-</span><a href="#313" id="313" class="l">313: </a><span class="php-comment">     * Checks of there is a token with the given index.
-</span><a href="#314" id="314" class="l">314: </a><span class="php-comment">     *
-</span><a href="#315" id="315" class="l">315: </a><span class="php-comment">     * @param integer $offset Token index
-</span><a href="#316" id="316" class="l">316: </a><span class="php-comment">     * @return boolean
-</span><a href="#317" id="317" class="l">317: </a><span class="php-comment">     */</span>
-<a href="#318" id="318" class="l">318: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetExists(<span class="php-var">$offset</span>)
-<a href="#319" id="319" class="l">319: </a>    {
-<a href="#320" id="320" class="l">320: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$offset</span>]);
-<a href="#321" id="321" class="l">321: </a>    }
-<a href="#322" id="322" class="l">322: </a>
-<a href="#323" id="323" class="l">323: </a>    <span class="php-comment">/**
-</span><a href="#324" id="324" class="l">324: </a><span class="php-comment">     * Removes a token.
-</span><a href="#325" id="325" class="l">325: </a><span class="php-comment">     *
-</span><a href="#326" id="326" class="l">326: </a><span class="php-comment">     * Unsupported.
+<a href="#191" id="191" class="l">191: </a>        <span class="php-var">$searching</span> = <span class="php-var">$brackets</span>[<span class="php-var">$bracket</span>];
+<a href="#192" id="192" class="l">192: </a>
+<a href="#193" id="193" class="l">193: </a>        <span class="php-var">$level</span> = <span class="php-num">0</span>;
+<a href="#194" id="194" class="l">194: </a>        <span class="php-keyword1">while</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position])) {
+<a href="#195" id="195" class="l">195: </a>            <span class="php-var">$type</span> = <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position][<span class="php-num">0</span>];
+<a href="#196" id="196" class="l">196: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$searching</span> === <span class="php-var">$type</span>) {
+<a href="#197" id="197" class="l">197: </a>                <span class="php-var">$level</span>--;
+<a href="#198" id="198" class="l">198: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-var">$bracket</span> === <span class="php-var">$type</span> || (<span class="php-var">$searching</span> === <span class="php-quote">'}'</span> &amp;&amp; (<span class="php-quote">'{'</span> === <span class="php-var">$type</span> || T_CURLY_OPEN === <span class="php-var">$type</span> || T_DOLLAR_OPEN_CURLY_BRACES === <span class="php-var">$type</span>))) {
+<a href="#199" id="199" class="l">199: </a>                <span class="php-var">$level</span>++;
+<a href="#200" id="200" class="l">200: </a>            }
+<a href="#201" id="201" class="l">201: </a>
+<a href="#202" id="202" class="l">202: </a>            <span class="php-keyword1">if</span> (<span class="php-num">0</span> === <span class="php-var">$level</span>) {
+<a href="#203" id="203" class="l">203: </a>                <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#204" id="204" class="l">204: </a>            }
+<a href="#205" id="205" class="l">205: </a>
+<a href="#206" id="206" class="l">206: </a>            <span class="php-var">$this</span>-&gt;position++;
+<a href="#207" id="207" class="l">207: </a>        }
+<a href="#208" id="208" class="l">208: </a>
+<a href="#209" id="209" class="l">209: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Could not find the end bracket &quot;%s&quot; of the bracket at position &quot;%d&quot; in file &quot;%s&quot;.'</span>, <span class="php-var">$searching</span>, <span class="php-var">$position</span>, <span class="php-var">$this</span>-&gt;fileName), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#210" id="210" class="l">210: </a>    }
+<a href="#211" id="211" class="l">211: </a>
+<a href="#212" id="212" class="l">212: </a>    <span class="php-comment">/**
+</span><a href="#213" id="213" class="l">213: </a><span class="php-comment">     * Skips whitespaces and comments next to the current position.
+</span><a href="#214" id="214" class="l">214: </a><span class="php-comment">     *
+</span><a href="#215" id="215" class="l">215: </a><span class="php-comment">     * @return \TokenReflection\Stream
+</span><a href="#216" id="216" class="l">216: </a><span class="php-comment">     */</span>
+<a href="#217" id="217" class="l">217: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> skipWhitespaces()
+<a href="#218" id="218" class="l">218: </a>    {
+<a href="#219" id="219" class="l">219: </a>        <span class="php-keyword1">static</span> <span class="php-var">$skipped</span> = <span class="php-keyword2">array</span>(T_WHITESPACE =&gt; <span class="php-keyword1">true</span>, T_COMMENT =&gt; <span class="php-keyword1">true</span>);
+<a href="#220" id="220" class="l">220: </a>
+<a href="#221" id="221" class="l">221: </a>        <span class="php-keyword1">do</span> {
+<a href="#222" id="222" class="l">222: </a>            <span class="php-var">$this</span>-&gt;position++;
+<a href="#223" id="223" class="l">223: </a>        } <span class="php-keyword1">while</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position]) &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$skipped</span>[<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position][<span class="php-num">0</span>]]));
+<a href="#224" id="224" class="l">224: </a>
+<a href="#225" id="225" class="l">225: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#226" id="226" class="l">226: </a>    }
+<a href="#227" id="227" class="l">227: </a>
+<a href="#228" id="228" class="l">228: </a>    <span class="php-comment">/**
+</span><a href="#229" id="229" class="l">229: </a><span class="php-comment">     * Checks if there is a token of the given type at the given position.
+</span><a href="#230" id="230" class="l">230: </a><span class="php-comment">     *
+</span><a href="#231" id="231" class="l">231: </a><span class="php-comment">     * @param integer|string $type Token type
+</span><a href="#232" id="232" class="l">232: </a><span class="php-comment">     * @param integer $position Position; if none given, consider the current iteration position
+</span><a href="#233" id="233" class="l">233: </a><span class="php-comment">     * @return boolean
+</span><a href="#234" id="234" class="l">234: </a><span class="php-comment">     */</span>
+<a href="#235" id="235" class="l">235: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> is(<span class="php-var">$type</span>, <span class="php-var">$position</span> = -<span class="php-num">1</span>)
+<a href="#236" id="236" class="l">236: </a>    {
+<a href="#237" id="237" class="l">237: </a>        <span class="php-keyword1">return</span> <span class="php-var">$type</span> === <span class="php-var">$this</span>-&gt;<span class="php-keyword2">getType</span>(<span class="php-var">$position</span>);
+<a href="#238" id="238" class="l">238: </a>    }
+<a href="#239" id="239" class="l">239: </a>
+<a href="#240" id="240" class="l">240: </a>    <span class="php-comment">/**
+</span><a href="#241" id="241" class="l">241: </a><span class="php-comment">     * Returns the type of a token.
+</span><a href="#242" id="242" class="l">242: </a><span class="php-comment">     *
+</span><a href="#243" id="243" class="l">243: </a><span class="php-comment">     * @param integer $position Token position; if none given, consider the current iteration position
+</span><a href="#244" id="244" class="l">244: </a><span class="php-comment">     * @return string|integer|null
+</span><a href="#245" id="245" class="l">245: </a><span class="php-comment">     */</span>
+<a href="#246" id="246" class="l">246: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">getType</span>(<span class="php-var">$position</span> = -<span class="php-num">1</span>)
+<a href="#247" id="247" class="l">247: </a>    {
+<a href="#248" id="248" class="l">248: </a>        <span class="php-keyword1">if</span> (-<span class="php-num">1</span> === <span class="php-var">$position</span>) {
+<a href="#249" id="249" class="l">249: </a>            <span class="php-var">$position</span> = <span class="php-var">$this</span>-&gt;position;
+<a href="#250" id="250" class="l">250: </a>        }
+<a href="#251" id="251" class="l">251: </a>
+<a href="#252" id="252" class="l">252: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>][<span class="php-num">0</span>] : <span class="php-keyword1">null</span>;
+<a href="#253" id="253" class="l">253: </a>    }
+<a href="#254" id="254" class="l">254: </a>
+<a href="#255" id="255" class="l">255: </a>    <span class="php-comment">/**
+</span><a href="#256" id="256" class="l">256: </a><span class="php-comment">     * Returns the current token value.
+</span><a href="#257" id="257" class="l">257: </a><span class="php-comment">     *
+</span><a href="#258" id="258" class="l">258: </a><span class="php-comment">     * @param integer $position Token position; if none given, consider the current iteration position
+</span><a href="#259" id="259" class="l">259: </a><span class="php-comment">     * @return stirng
+</span><a href="#260" id="260" class="l">260: </a><span class="php-comment">     */</span>
+<a href="#261" id="261" class="l">261: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTokenValue(<span class="php-var">$position</span> = -<span class="php-num">1</span>)
+<a href="#262" id="262" class="l">262: </a>    {
+<a href="#263" id="263" class="l">263: </a>        <span class="php-keyword1">if</span> (-<span class="php-num">1</span> === <span class="php-var">$position</span>) {
+<a href="#264" id="264" class="l">264: </a>            <span class="php-var">$position</span> = <span class="php-var">$this</span>-&gt;position;
+<a href="#265" id="265" class="l">265: </a>        }
+<a href="#266" id="266" class="l">266: </a>
+<a href="#267" id="267" class="l">267: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$position</span>][<span class="php-num">1</span>] : <span class="php-keyword1">null</span>;
+<a href="#268" id="268" class="l">268: </a>    }
+<a href="#269" id="269" class="l">269: </a>
+<a href="#270" id="270" class="l">270: </a>    <span class="php-comment">/**
+</span><a href="#271" id="271" class="l">271: </a><span class="php-comment">     * Returns the token type name.
+</span><a href="#272" id="272" class="l">272: </a><span class="php-comment">     *
+</span><a href="#273" id="273" class="l">273: </a><span class="php-comment">     * @param integer $position Token position; if none given, consider the current iteration position
+</span><a href="#274" id="274" class="l">274: </a><span class="php-comment">     * @return string|null
+</span><a href="#275" id="275" class="l">275: </a><span class="php-comment">     */</span>
+<a href="#276" id="276" class="l">276: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTokenName(<span class="php-var">$position</span> = -<span class="php-num">1</span>)
+<a href="#277" id="277" class="l">277: </a>    {
+<a href="#278" id="278" class="l">278: </a>        <span class="php-var">$type</span> = <span class="php-var">$this</span>-&gt;<span class="php-keyword2">getType</span>(<span class="php-var">$position</span>);
+<a href="#279" id="279" class="l">279: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">is_string</span>(<span class="php-var">$type</span>) ? <span class="php-var">$type</span> : <span class="php-keyword2">token_name</span>(<span class="php-var">$type</span>);
+<a href="#280" id="280" class="l">280: </a>    }
+<a href="#281" id="281" class="l">281: </a>
+<a href="#282" id="282" class="l">282: </a>    <span class="php-comment">/**
+</span><a href="#283" id="283" class="l">283: </a><span class="php-comment">     * Stream serialization.
+</span><a href="#284" id="284" class="l">284: </a><span class="php-comment">     *
+</span><a href="#285" id="285" class="l">285: </a><span class="php-comment">     * @return string
+</span><a href="#286" id="286" class="l">286: </a><span class="php-comment">     */</span>
+<a href="#287" id="287" class="l">287: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">serialize</span>()
+<a href="#288" id="288" class="l">288: </a>    {
+<a href="#289" id="289" class="l">289: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">serialize</span>(<span class="php-keyword2">array</span>(<span class="php-var">$this</span>-&gt;fileName, <span class="php-var">$this</span>-&gt;tokens));
+<a href="#290" id="290" class="l">290: </a>    }
+<a href="#291" id="291" class="l">291: </a>
+<a href="#292" id="292" class="l">292: </a>    <span class="php-comment">/**
+</span><a href="#293" id="293" class="l">293: </a><span class="php-comment">     * Restores the stream from the serialized state.
+</span><a href="#294" id="294" class="l">294: </a><span class="php-comment">     *
+</span><a href="#295" id="295" class="l">295: </a><span class="php-comment">     * @param string $serialized Serialized form
+</span><a href="#296" id="296" class="l">296: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime On unserialization error
+</span><a href="#297" id="297" class="l">297: </a><span class="php-comment">     */</span>
+<a href="#298" id="298" class="l">298: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">unserialize</span>(<span class="php-var">$serialized</span>)
+<a href="#299" id="299" class="l">299: </a>    {
+<a href="#300" id="300" class="l">300: </a>        <span class="php-var">$data</span> = @<span class="php-keyword2">unserialize</span>(<span class="php-var">$serialized</span>);
+<a href="#301" id="301" class="l">301: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">false</span> === <span class="php-var">$data</span>) {
+<a href="#302" id="302" class="l">302: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Could not deserialize the serialized data.'</span>, Exception\Runtime::SERIALIZATION_ERROR);
+<a href="#303" id="303" class="l">303: </a>        }
+<a href="#304" id="304" class="l">304: </a>        <span class="php-keyword1">if</span> (<span class="php-num">2</span> !== <span class="php-keyword2">count</span>(<span class="php-var">$data</span>) || !<span class="php-keyword2">is_string</span>(<span class="php-var">$data</span>[<span class="php-num">0</span>]) || !<span class="php-keyword2">is_array</span>(<span class="php-var">$data</span>[<span class="php-num">1</span>])) {
+<a href="#305" id="305" class="l">305: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Invalid serialization data.'</span>, Exception\Runtime::SERIALIZATION_ERROR);
+<a href="#306" id="306" class="l">306: </a>        }
+<a href="#307" id="307" class="l">307: </a>
+<a href="#308" id="308" class="l">308: </a>        <span class="php-var">$this</span>-&gt;fileName = <span class="php-var">$data</span>[<span class="php-num">0</span>];
+<a href="#309" id="309" class="l">309: </a>        <span class="php-var">$this</span>-&gt;tokens = <span class="php-var">$data</span>[<span class="php-num">1</span>];
+<a href="#310" id="310" class="l">310: </a>        <span class="php-var">$this</span>-&gt;<span class="php-keyword2">count</span> = <span class="php-keyword2">count</span>(<span class="php-var">$this</span>-&gt;tokens);
+<a href="#311" id="311" class="l">311: </a>        <span class="php-var">$this</span>-&gt;position = <span class="php-num">0</span>;
+<a href="#312" id="312" class="l">312: </a>    }
+<a href="#313" id="313" class="l">313: </a>
+<a href="#314" id="314" class="l">314: </a>    <span class="php-comment">/**
+</span><a href="#315" id="315" class="l">315: </a><span class="php-comment">     * Checks of there is a token with the given index.
+</span><a href="#316" id="316" class="l">316: </a><span class="php-comment">     *
+</span><a href="#317" id="317" class="l">317: </a><span class="php-comment">     * @param integer $offset Token index
+</span><a href="#318" id="318" class="l">318: </a><span class="php-comment">     * @return boolean
+</span><a href="#319" id="319" class="l">319: </a><span class="php-comment">     */</span>
+<a href="#320" id="320" class="l">320: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetExists(<span class="php-var">$offset</span>)
+<a href="#321" id="321" class="l">321: </a>    {
+<a href="#322" id="322" class="l">322: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$offset</span>]);
+<a href="#323" id="323" class="l">323: </a>    }
+<a href="#324" id="324" class="l">324: </a>
+<a href="#325" id="325" class="l">325: </a>    <span class="php-comment">/**
+</span><a href="#326" id="326" class="l">326: </a><span class="php-comment">     * Removes a token.
 </span><a href="#327" id="327" class="l">327: </a><span class="php-comment">     *
-</span><a href="#328" id="328" class="l">328: </a><span class="php-comment">     * @param integer $offset Position
-</span><a href="#329" id="329" class="l">329: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime Unsupported
-</span><a href="#330" id="330" class="l">330: </a><span class="php-comment">     */</span>
-<a href="#331" id="331" class="l">331: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetUnset(<span class="php-var">$offset</span>)
-<a href="#332" id="332" class="l">332: </a>    {
-<a href="#333" id="333" class="l">333: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Removing of tokens from the stream is not supported.'</span>, Exception\Runtime::UNSUPPORTED);
-<a href="#334" id="334" class="l">334: </a>    }
-<a href="#335" id="335" class="l">335: </a>
-<a href="#336" id="336" class="l">336: </a>    <span class="php-comment">/**
-</span><a href="#337" id="337" class="l">337: </a><span class="php-comment">     * Returns a token at the given index.
-</span><a href="#338" id="338" class="l">338: </a><span class="php-comment">     *
-</span><a href="#339" id="339" class="l">339: </a><span class="php-comment">     * @param integer $offset Token index
-</span><a href="#340" id="340" class="l">340: </a><span class="php-comment">     * @return mixed
-</span><a href="#341" id="341" class="l">341: </a><span class="php-comment">     */</span>
-<a href="#342" id="342" class="l">342: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetGet(<span class="php-var">$offset</span>)
-<a href="#343" id="343" class="l">343: </a>    {
-<a href="#344" id="344" class="l">344: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$offset</span>]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$offset</span>] : <span class="php-keyword1">null</span>;
-<a href="#345" id="345" class="l">345: </a>    }
-<a href="#346" id="346" class="l">346: </a>
-<a href="#347" id="347" class="l">347: </a>    <span class="php-comment">/**
-</span><a href="#348" id="348" class="l">348: </a><span class="php-comment">     * Sets a value of a particular token.
-</span><a href="#349" id="349" class="l">349: </a><span class="php-comment">     *
-</span><a href="#350" id="350" class="l">350: </a><span class="php-comment">     * Unsupported
+</span><a href="#328" id="328" class="l">328: </a><span class="php-comment">     * Unsupported.
+</span><a href="#329" id="329" class="l">329: </a><span class="php-comment">     *
+</span><a href="#330" id="330" class="l">330: </a><span class="php-comment">     * @param integer $offset Position
+</span><a href="#331" id="331" class="l">331: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime Unsupported
+</span><a href="#332" id="332" class="l">332: </a><span class="php-comment">     */</span>
+<a href="#333" id="333" class="l">333: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetUnset(<span class="php-var">$offset</span>)
+<a href="#334" id="334" class="l">334: </a>    {
+<a href="#335" id="335" class="l">335: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Removing of tokens from the stream is not supported.'</span>, Exception\Runtime::UNSUPPORTED);
+<a href="#336" id="336" class="l">336: </a>    }
+<a href="#337" id="337" class="l">337: </a>
+<a href="#338" id="338" class="l">338: </a>    <span class="php-comment">/**
+</span><a href="#339" id="339" class="l">339: </a><span class="php-comment">     * Returns a token at the given index.
+</span><a href="#340" id="340" class="l">340: </a><span class="php-comment">     *
+</span><a href="#341" id="341" class="l">341: </a><span class="php-comment">     * @param integer $offset Token index
+</span><a href="#342" id="342" class="l">342: </a><span class="php-comment">     * @return mixed
+</span><a href="#343" id="343" class="l">343: </a><span class="php-comment">     */</span>
+<a href="#344" id="344" class="l">344: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetGet(<span class="php-var">$offset</span>)
+<a href="#345" id="345" class="l">345: </a>    {
+<a href="#346" id="346" class="l">346: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$offset</span>]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$offset</span>] : <span class="php-keyword1">null</span>;
+<a href="#347" id="347" class="l">347: </a>    }
+<a href="#348" id="348" class="l">348: </a>
+<a href="#349" id="349" class="l">349: </a>    <span class="php-comment">/**
+</span><a href="#350" id="350" class="l">350: </a><span class="php-comment">     * Sets a value of a particular token.
 </span><a href="#351" id="351" class="l">351: </a><span class="php-comment">     *
-</span><a href="#352" id="352" class="l">352: </a><span class="php-comment">     * @param integer $offset Position
-</span><a href="#353" id="353" class="l">353: </a><span class="php-comment">     * @param mixed $value Value
-</span><a href="#354" id="354" class="l">354: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime Unsupported
-</span><a href="#355" id="355" class="l">355: </a><span class="php-comment">     */</span>
-<a href="#356" id="356" class="l">356: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetSet(<span class="php-var">$offset</span>, <span class="php-var">$value</span>)
-<a href="#357" id="357" class="l">357: </a>    {
-<a href="#358" id="358" class="l">358: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Setting token values is not supported.'</span>, Exception\Runtime::UNSUPPORTED);
-<a href="#359" id="359" class="l">359: </a>    }
-<a href="#360" id="360" class="l">360: </a>
-<a href="#361" id="361" class="l">361: </a>    <span class="php-comment">/**
-</span><a href="#362" id="362" class="l">362: </a><span class="php-comment">     * Returns the current internal pointer value.
-</span><a href="#363" id="363" class="l">363: </a><span class="php-comment">     *
-</span><a href="#364" id="364" class="l">364: </a><span class="php-comment">     * @return integer
-</span><a href="#365" id="365" class="l">365: </a><span class="php-comment">     */</span>
-<a href="#366" id="366" class="l">366: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">key</span>()
-<a href="#367" id="367" class="l">367: </a>    {
-<a href="#368" id="368" class="l">368: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;position;
-<a href="#369" id="369" class="l">369: </a>    }
-<a href="#370" id="370" class="l">370: </a>
-<a href="#371" id="371" class="l">371: </a>    <span class="php-comment">/**
-</span><a href="#372" id="372" class="l">372: </a><span class="php-comment">     * Advances the internal pointer.
-</span><a href="#373" id="373" class="l">373: </a><span class="php-comment">     *
-</span><a href="#374" id="374" class="l">374: </a><span class="php-comment">     * @return \TokenReflection\Stream
-</span><a href="#375" id="375" class="l">375: </a><span class="php-comment">     */</span>
-<a href="#376" id="376" class="l">376: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">next</span>()
-<a href="#377" id="377" class="l">377: </a>    {
-<a href="#378" id="378" class="l">378: </a>        <span class="php-var">$this</span>-&gt;position++;
-<a href="#379" id="379" class="l">379: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#380" id="380" class="l">380: </a>    }
-<a href="#381" id="381" class="l">381: </a>
-<a href="#382" id="382" class="l">382: </a>    <span class="php-comment">/**
-</span><a href="#383" id="383" class="l">383: </a><span class="php-comment">     * Sets the internal pointer to zero.
-</span><a href="#384" id="384" class="l">384: </a><span class="php-comment">     *
-</span><a href="#385" id="385" class="l">385: </a><span class="php-comment">     * @return \TokenReflection\Stream
-</span><a href="#386" id="386" class="l">386: </a><span class="php-comment">     */</span>
-<a href="#387" id="387" class="l">387: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">rewind</span>()
-<a href="#388" id="388" class="l">388: </a>    {
-<a href="#389" id="389" class="l">389: </a>        <span class="php-var">$this</span>-&gt;position = <span class="php-num">0</span>;
-<a href="#390" id="390" class="l">390: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#391" id="391" class="l">391: </a>    }
-<a href="#392" id="392" class="l">392: </a>
-<a href="#393" id="393" class="l">393: </a>    <span class="php-comment">/**
-</span><a href="#394" id="394" class="l">394: </a><span class="php-comment">     * Returns the current token.
-</span><a href="#395" id="395" class="l">395: </a><span class="php-comment">     *
-</span><a href="#396" id="396" class="l">396: </a><span class="php-comment">     * @return array|null
-</span><a href="#397" id="397" class="l">397: </a><span class="php-comment">     */</span>
-<a href="#398" id="398" class="l">398: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">current</span>()
-<a href="#399" id="399" class="l">399: </a>    {
-<a href="#400" id="400" class="l">400: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position] : <span class="php-keyword1">null</span>;
-<a href="#401" id="401" class="l">401: </a>    }
-<a href="#402" id="402" class="l">402: </a>
-<a href="#403" id="403" class="l">403: </a>    <span class="php-comment">/**
-</span><a href="#404" id="404" class="l">404: </a><span class="php-comment">     * Checks if there is a token on the current position.
-</span><a href="#405" id="405" class="l">405: </a><span class="php-comment">     *
-</span><a href="#406" id="406" class="l">406: </a><span class="php-comment">     * @return boolean
-</span><a href="#407" id="407" class="l">407: </a><span class="php-comment">     */</span>
-<a href="#408" id="408" class="l">408: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> valid()
-<a href="#409" id="409" class="l">409: </a>    {
-<a href="#410" id="410" class="l">410: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position]);
-<a href="#411" id="411" class="l">411: </a>    }
-<a href="#412" id="412" class="l">412: </a>
-<a href="#413" id="413" class="l">413: </a>    <span class="php-comment">/**
-</span><a href="#414" id="414" class="l">414: </a><span class="php-comment">     * Returns the number of tokens in the stream.
-</span><a href="#415" id="415" class="l">415: </a><span class="php-comment">     *
-</span><a href="#416" id="416" class="l">416: </a><span class="php-comment">     * @return integer
-</span><a href="#417" id="417" class="l">417: </a><span class="php-comment">     */</span>
-<a href="#418" id="418" class="l">418: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">count</span>()
-<a href="#419" id="419" class="l">419: </a>    {
-<a href="#420" id="420" class="l">420: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;<span class="php-keyword2">count</span>;
-<a href="#421" id="421" class="l">421: </a>    }
-<a href="#422" id="422" class="l">422: </a>
-<a href="#423" id="423" class="l">423: </a>    <span class="php-comment">/**
-</span><a href="#424" id="424" class="l">424: </a><span class="php-comment">     * Sets the internal pointer to the given value.
-</span><a href="#425" id="425" class="l">425: </a><span class="php-comment">     *
-</span><a href="#426" id="426" class="l">426: </a><span class="php-comment">     * @param integer $position New position
-</span><a href="#427" id="427" class="l">427: </a><span class="php-comment">     * @return \TokenReflection\Stream
-</span><a href="#428" id="428" class="l">428: </a><span class="php-comment">     */</span>
-<a href="#429" id="429" class="l">429: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> seek(<span class="php-var">$position</span>)
-<a href="#430" id="430" class="l">430: </a>    {
-<a href="#431" id="431" class="l">431: </a>        <span class="php-var">$this</span>-&gt;position = (int) <span class="php-var">$position</span>;
-<a href="#432" id="432" class="l">432: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#433" id="433" class="l">433: </a>    }
-<a href="#434" id="434" class="l">434: </a>
-<a href="#435" id="435" class="l">435: </a>    <span class="php-comment">/**
-</span><a href="#436" id="436" class="l">436: </a><span class="php-comment">     * Returns the stream source code.
-</span><a href="#437" id="437" class="l">437: </a><span class="php-comment">     *
-</span><a href="#438" id="438" class="l">438: </a><span class="php-comment">     * @return string
-</span><a href="#439" id="439" class="l">439: </a><span class="php-comment">     */</span>
-<a href="#440" id="440" class="l">440: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __toString()
-<a href="#441" id="441" class="l">441: </a>    {
-<a href="#442" id="442" class="l">442: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getSource();
-<a href="#443" id="443" class="l">443: </a>    }
-<a href="#444" id="444" class="l">444: </a>}
-<a href="#445" id="445" class="l">445: </a></code></pre>
+</span><a href="#352" id="352" class="l">352: </a><span class="php-comment">     * Unsupported
+</span><a href="#353" id="353" class="l">353: </a><span class="php-comment">     *
+</span><a href="#354" id="354" class="l">354: </a><span class="php-comment">     * @param integer $offset Position
+</span><a href="#355" id="355" class="l">355: </a><span class="php-comment">     * @param mixed $value Value
+</span><a href="#356" id="356" class="l">356: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime Unsupported
+</span><a href="#357" id="357" class="l">357: </a><span class="php-comment">     */</span>
+<a href="#358" id="358" class="l">358: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> offsetSet(<span class="php-var">$offset</span>, <span class="php-var">$value</span>)
+<a href="#359" id="359" class="l">359: </a>    {
+<a href="#360" id="360" class="l">360: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-quote">'Setting token values is not supported.'</span>, Exception\Runtime::UNSUPPORTED);
+<a href="#361" id="361" class="l">361: </a>    }
+<a href="#362" id="362" class="l">362: </a>
+<a href="#363" id="363" class="l">363: </a>    <span class="php-comment">/**
+</span><a href="#364" id="364" class="l">364: </a><span class="php-comment">     * Returns the current internal pointer value.
+</span><a href="#365" id="365" class="l">365: </a><span class="php-comment">     *
+</span><a href="#366" id="366" class="l">366: </a><span class="php-comment">     * @return integer
+</span><a href="#367" id="367" class="l">367: </a><span class="php-comment">     */</span>
+<a href="#368" id="368" class="l">368: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">key</span>()
+<a href="#369" id="369" class="l">369: </a>    {
+<a href="#370" id="370" class="l">370: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;position;
+<a href="#371" id="371" class="l">371: </a>    }
+<a href="#372" id="372" class="l">372: </a>
+<a href="#373" id="373" class="l">373: </a>    <span class="php-comment">/**
+</span><a href="#374" id="374" class="l">374: </a><span class="php-comment">     * Advances the internal pointer.
+</span><a href="#375" id="375" class="l">375: </a><span class="php-comment">     *
+</span><a href="#376" id="376" class="l">376: </a><span class="php-comment">     * @return \TokenReflection\Stream
+</span><a href="#377" id="377" class="l">377: </a><span class="php-comment">     */</span>
+<a href="#378" id="378" class="l">378: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">next</span>()
+<a href="#379" id="379" class="l">379: </a>    {
+<a href="#380" id="380" class="l">380: </a>        <span class="php-var">$this</span>-&gt;position++;
+<a href="#381" id="381" class="l">381: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#382" id="382" class="l">382: </a>    }
+<a href="#383" id="383" class="l">383: </a>
+<a href="#384" id="384" class="l">384: </a>    <span class="php-comment">/**
+</span><a href="#385" id="385" class="l">385: </a><span class="php-comment">     * Sets the internal pointer to zero.
+</span><a href="#386" id="386" class="l">386: </a><span class="php-comment">     *
+</span><a href="#387" id="387" class="l">387: </a><span class="php-comment">     * @return \TokenReflection\Stream
+</span><a href="#388" id="388" class="l">388: </a><span class="php-comment">     */</span>
+<a href="#389" id="389" class="l">389: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">rewind</span>()
+<a href="#390" id="390" class="l">390: </a>    {
+<a href="#391" id="391" class="l">391: </a>        <span class="php-var">$this</span>-&gt;position = <span class="php-num">0</span>;
+<a href="#392" id="392" class="l">392: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#393" id="393" class="l">393: </a>    }
+<a href="#394" id="394" class="l">394: </a>
+<a href="#395" id="395" class="l">395: </a>    <span class="php-comment">/**
+</span><a href="#396" id="396" class="l">396: </a><span class="php-comment">     * Returns the current token.
+</span><a href="#397" id="397" class="l">397: </a><span class="php-comment">     *
+</span><a href="#398" id="398" class="l">398: </a><span class="php-comment">     * @return array|null
+</span><a href="#399" id="399" class="l">399: </a><span class="php-comment">     */</span>
+<a href="#400" id="400" class="l">400: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">current</span>()
+<a href="#401" id="401" class="l">401: </a>    {
+<a href="#402" id="402" class="l">402: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position]) ? <span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position] : <span class="php-keyword1">null</span>;
+<a href="#403" id="403" class="l">403: </a>    }
+<a href="#404" id="404" class="l">404: </a>
+<a href="#405" id="405" class="l">405: </a>    <span class="php-comment">/**
+</span><a href="#406" id="406" class="l">406: </a><span class="php-comment">     * Checks if there is a token on the current position.
+</span><a href="#407" id="407" class="l">407: </a><span class="php-comment">     *
+</span><a href="#408" id="408" class="l">408: </a><span class="php-comment">     * @return boolean
+</span><a href="#409" id="409" class="l">409: </a><span class="php-comment">     */</span>
+<a href="#410" id="410" class="l">410: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> valid()
+<a href="#411" id="411" class="l">411: </a>    {
+<a href="#412" id="412" class="l">412: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;tokens[<span class="php-var">$this</span>-&gt;position]);
+<a href="#413" id="413" class="l">413: </a>    }
+<a href="#414" id="414" class="l">414: </a>
+<a href="#415" id="415" class="l">415: </a>    <span class="php-comment">/**
+</span><a href="#416" id="416" class="l">416: </a><span class="php-comment">     * Returns the number of tokens in the stream.
+</span><a href="#417" id="417" class="l">417: </a><span class="php-comment">     *
+</span><a href="#418" id="418" class="l">418: </a><span class="php-comment">     * @return integer
+</span><a href="#419" id="419" class="l">419: </a><span class="php-comment">     */</span>
+<a href="#420" id="420" class="l">420: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <span class="php-keyword2">count</span>()
+<a href="#421" id="421" class="l">421: </a>    {
+<a href="#422" id="422" class="l">422: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;<span class="php-keyword2">count</span>;
+<a href="#423" id="423" class="l">423: </a>    }
+<a href="#424" id="424" class="l">424: </a>
+<a href="#425" id="425" class="l">425: </a>    <span class="php-comment">/**
+</span><a href="#426" id="426" class="l">426: </a><span class="php-comment">     * Sets the internal pointer to the given value.
+</span><a href="#427" id="427" class="l">427: </a><span class="php-comment">     *
+</span><a href="#428" id="428" class="l">428: </a><span class="php-comment">     * @param integer $position New position
+</span><a href="#429" id="429" class="l">429: </a><span class="php-comment">     * @return \TokenReflection\Stream
+</span><a href="#430" id="430" class="l">430: </a><span class="php-comment">     */</span>
+<a href="#431" id="431" class="l">431: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> seek(<span class="php-var">$position</span>)
+<a href="#432" id="432" class="l">432: </a>    {
+<a href="#433" id="433" class="l">433: </a>        <span class="php-var">$this</span>-&gt;position = (int) <span class="php-var">$position</span>;
+<a href="#434" id="434" class="l">434: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#435" id="435" class="l">435: </a>    }
+<a href="#436" id="436" class="l">436: </a>
+<a href="#437" id="437" class="l">437: </a>    <span class="php-comment">/**
+</span><a href="#438" id="438" class="l">438: </a><span class="php-comment">     * Returns the stream source code.
+</span><a href="#439" id="439" class="l">439: </a><span class="php-comment">     *
+</span><a href="#440" id="440" class="l">440: </a><span class="php-comment">     * @return string
+</span><a href="#441" id="441" class="l">441: </a><span class="php-comment">     */</span>
+<a href="#442" id="442" class="l">442: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __toString()
+<a href="#443" id="443" class="l">443: </a>    {
+<a href="#444" id="444" class="l">444: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getSource();
+<a href="#445" id="445" class="l">445: </a>    }
+<a href="#446" id="446" class="l">446: </a>}
+<a href="#447" id="447" class="l">447: </a></code></pre>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/apigen/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>

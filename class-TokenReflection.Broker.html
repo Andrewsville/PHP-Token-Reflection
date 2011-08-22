@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.0" />
+	<meta name="generator" content="ApiGen 2.0.3" />
 
 	<title>Class TokenReflection\Broker | PHP Token Reflection</title>
 
@@ -154,12 +154,12 @@
 		<td><div class="position">
 		<a class="anchor" href="#___construct">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#70" title="Go to source code">__construct</a>(
+				<a href="source-TokenReflection.Broker.html#100" title="Go to source code">__construct</a>(
 				<a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a>
 				
 				<var>$backend</var>, 
-				boolean
-				<var>$storingTokenStream</var> = <span class="php-keyword1">true</span>
+				integer
+				<var>$options</var> = <code><a href="class-TokenReflection.Broker.html#OPTION_DEFAULT">TokenReflection\Broker::<b>OPTION_DEFAULT</b></a></code>
 		)</code>
 
 		<div class="short">
@@ -176,8 +176,85 @@
 				<div class="smallList"><dl>
 					<dt><var>$backend</var></dt>
 					<dd><code><code><a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a></code></code><br /> Broker backend instance</dd>
-					<dt><var>$storingTokenStream</var></dt>
-					<dd><code>boolean</code><br /> Determines if token streams should by stored in backend</dd>
+					<dt><var>$options</var></dt>
+					<dd><code>integer</code><br /> Broker/parsing options</dd>
+				</dl></div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getOptions" id="_getOptions">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_getOptions">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Broker.html#122" title="Go to source code">getOptions</a>(
+		)</code>
+
+		<div class="short">
+			Returns broker/parser options.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns broker/parser options.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="smallList">
+					<code>integer</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isOptionSet" id="_isOptionSet">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td><div class="position">
+		<a class="anchor" href="#_isOptionSet">#</a>
+		<code class="nowrap">
+				<a href="source-TokenReflection.Broker.html#132" title="Go to source code">isOptionSet</a>(
+				integer
+				<var>$option</var>
+		)</code>
+
+		<div class="short">
+			Returns if a particular option setting is set.
+		</div>
+
+		<div class="detailed">
+			
+<p>Returns if a particular option setting is set.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="smallList"><dl>
+					<dt><var>$option</var></dt>
+					<dd><code>integer</code><br /> Option setting</dd>
 				</dl></div>
 
 
@@ -199,7 +276,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_processFile">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#90" title="Go to source code">processFile</a>(
+				<a href="source-TokenReflection.Broker.html#142" title="Go to source code">processFile</a>(
 				string
 				<var>$fileName</var>, 
 				boolean
@@ -251,7 +328,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_processPhar">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#126" title="Go to source code">processPhar</a>(
+				<a href="source-TokenReflection.Broker.html#178" title="Go to source code">processPhar</a>(
 				string
 				<var>$fileName</var>, 
 				boolean
@@ -303,7 +380,7 @@
 		<td><div class="position">
 		<a class="anchor" href="#_processDirectory">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#158" title="Go to source code">processDirectory</a>(
+				<a href="source-TokenReflection.Broker.html#210" title="Go to source code">processDirectory</a>(
 				string
 				<var>$path</var>, 
 				boolean
@@ -357,7 +434,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_process">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#187" title="Go to source code">process</a>(
+				<a href="source-TokenReflection.Broker.html#239" title="Go to source code">process</a>(
 				string
 				<var>$path</var>, 
 				boolean
@@ -409,7 +486,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_hasNamespace">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#216" title="Go to source code">hasNamespace</a>(
+				<a href="source-TokenReflection.Broker.html#268" title="Go to source code">hasNamespace</a>(
 				string
 				<var>$namespaceName</var>
 		)</code>
@@ -453,7 +530,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getNamespace">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#227" title="Go to source code">getNamespace</a>(
+				<a href="source-TokenReflection.Broker.html#279" title="Go to source code">getNamespace</a>(
 				string
 				<var>$namespaceName</var>
 		)</code>
@@ -497,7 +574,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_hasClass">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#249" title="Go to source code">hasClass</a>(
+				<a href="source-TokenReflection.Broker.html#301" title="Go to source code">hasClass</a>(
 				string
 				<var>$className</var>
 		)</code>
@@ -541,7 +618,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getClass">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#260" title="Go to source code">getClass</a>(
+				<a href="source-TokenReflection.Broker.html#312" title="Go to source code">getClass</a>(
 				string
 				<var>$className</var>
 		)</code>
@@ -585,7 +662,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getClasses">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#278" title="Go to source code">getClasses</a>(
+				<a href="source-TokenReflection.Broker.html#330" title="Go to source code">getClasses</a>(
 				integer
 				<var>$types</var> = <code><a href="class-TokenReflection.Broker.Backend.html#TOKENIZED_CLASSES">TokenReflection\Broker\Backend::<b>TOKENIZED_CLASSES</b></a></code>
 		)</code>
@@ -629,7 +706,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_hasConstant">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#289" title="Go to source code">hasConstant</a>(
+				<a href="source-TokenReflection.Broker.html#341" title="Go to source code">hasConstant</a>(
 				string
 				<var>$constantName</var>
 		)</code>
@@ -673,7 +750,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getConstant">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#300" title="Go to source code">getConstant</a>(
+				<a href="source-TokenReflection.Broker.html#352" title="Go to source code">getConstant</a>(
 				string
 				<var>$constantName</var>
 		)</code>
@@ -717,7 +794,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getConstants">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#321" title="Go to source code">getConstants</a>(
+				<a href="source-TokenReflection.Broker.html#373" title="Go to source code">getConstants</a>(
 		)</code>
 
 		<div class="short">
@@ -754,7 +831,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_hasFunction">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#331" title="Go to source code">hasFunction</a>(
+				<a href="source-TokenReflection.Broker.html#383" title="Go to source code">hasFunction</a>(
 				string
 				<var>$functionName</var>
 		)</code>
@@ -798,7 +875,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getFunction">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#342" title="Go to source code">getFunction</a>(
+				<a href="source-TokenReflection.Broker.html#394" title="Go to source code">getFunction</a>(
 				string
 				<var>$functionName</var>
 		)</code>
@@ -842,7 +919,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getFunctions">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#363" title="Go to source code">getFunctions</a>(
+				<a href="source-TokenReflection.Broker.html#415" title="Go to source code">getFunctions</a>(
 		)</code>
 
 		<div class="short">
@@ -879,7 +956,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getFileTokens">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#373" title="Go to source code">getFileTokens</a>(
+				<a href="source-TokenReflection.Broker.html#425" title="Go to source code">getFileTokens</a>(
 				string
 				<var>$fileName</var>
 		)</code>
@@ -927,7 +1004,7 @@ objects.</p>
 		<td><div class="position">
 		<a class="anchor" href="#_getRealPath">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Broker.html#389" title="Go to source code">getRealPath</a>(
+				<a href="source-TokenReflection.Broker.html#441" title="Go to source code">getRealPath</a>(
 				string
 				<var>$path</var>
 		)</code>
@@ -964,6 +1041,81 @@ objects.</p>
 
 	<table class="summary" id="constants">
 	<caption>Constants summary</caption>
+	<tr data-order="OPTION_SAVE_TOKEN_STREAM" id="OPTION_SAVE_TOKEN_STREAM">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			integer
+		</code></td>
+		<td width="1%"><code>
+				<a href="source-TokenReflection.Broker.html#28" title="Go to source code"><b>OPTION_SAVE_TOKEN_STREAM</b></a>
+		</code></td>
+		<td width="1%"><code><span class="php-num">0x0001</span></code></td>
+		<td><div class="position">
+			<a href="#OPTION_SAVE_TOKEN_STREAM" class="anchor">#</a>
+			<div class="short">
+				Turns on saving of parsed token streams.
+			</div>
+
+			<div class="detailed">
+				
+<p>Turns on saving of parsed token streams.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="OPTION_PARSE_FUNCTION_BODY" id="OPTION_PARSE_FUNCTION_BODY">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			integer
+		</code></td>
+		<td width="1%"><code>
+				<a href="source-TokenReflection.Broker.html#35" title="Go to source code"><b>OPTION_PARSE_FUNCTION_BODY</b></a>
+		</code></td>
+		<td width="1%"><code><span class="php-num">0x0002</span></code></td>
+		<td><div class="position">
+			<a href="#OPTION_PARSE_FUNCTION_BODY" class="anchor">#</a>
+			<div class="short">
+				Turns on parsing function/method body.
+			</div>
+
+			<div class="detailed">
+				
+<p>Turns on parsing function/method body.</p>
+
+<p>This effectively turns on parsing of static variables in
+functions/methods.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="OPTION_DEFAULT" id="OPTION_DEFAULT">
+
+		<td class="right" width="1%"><code class="nowrap">
+			
+			integer
+		</code></td>
+		<td width="1%"><code>
+				<a href="source-TokenReflection.Broker.html#44" title="Go to source code"><b>OPTION_DEFAULT</b></a>
+		</code></td>
+		<td width="1%"><code><span class="php-num">0x0003</span></code></td>
+		<td><div class="position">
+			<a href="#OPTION_DEFAULT" class="anchor">#</a>
+			<div class="short">
+				Default options.
+			</div>
+
+			<div class="detailed">
+				
+<p>Default options.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
 	<tr data-order="CACHE_NAMESPACE" id="CACHE_NAMESPACE">
 
 		<td class="right" width="1%"><code class="nowrap">
@@ -971,7 +1123,7 @@ objects.</p>
 			string
 		</code></td>
 		<td width="1%"><code>
-				<a href="source-TokenReflection.Broker.html#28" title="Go to source code"><b>CACHE_NAMESPACE</b></a>
+				<a href="source-TokenReflection.Broker.html#51" title="Go to source code"><b>CACHE_NAMESPACE</b></a>
 		</code></td>
 		<td width="1%"><code><span class="php-quote">'namespace'</span></code></td>
 		<td><div class="position">
@@ -995,7 +1147,7 @@ objects.</p>
 			string
 		</code></td>
 		<td width="1%"><code>
-				<a href="source-TokenReflection.Broker.html#35" title="Go to source code"><b>CACHE_CLASS</b></a>
+				<a href="source-TokenReflection.Broker.html#58" title="Go to source code"><b>CACHE_CLASS</b></a>
 		</code></td>
 		<td width="1%"><code><span class="php-quote">'class'</span></code></td>
 		<td><div class="position">
@@ -1019,7 +1171,7 @@ objects.</p>
 			string
 		</code></td>
 		<td width="1%"><code>
-				<a href="source-TokenReflection.Broker.html#42" title="Go to source code"><b>CACHE_CONSTANT</b></a>
+				<a href="source-TokenReflection.Broker.html#65" title="Go to source code"><b>CACHE_CONSTANT</b></a>
 		</code></td>
 		<td width="1%"><code><span class="php-quote">'constant'</span></code></td>
 		<td><div class="position">
@@ -1043,7 +1195,7 @@ objects.</p>
 			string
 		</code></td>
 		<td width="1%"><code>
-				<a href="source-TokenReflection.Broker.html#49" title="Go to source code"><b>CACHE_FUNCTION</b></a>
+				<a href="source-TokenReflection.Broker.html#72" title="Go to source code"><b>CACHE_FUNCTION</b></a>
 		</code></td>
 		<td width="1%"><code><span class="php-quote">'function'</span></code></td>
 		<td><div class="position">
@@ -1068,7 +1220,7 @@ objects.</p>
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/apigen/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>

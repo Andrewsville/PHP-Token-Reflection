@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.0" />
+	<meta name="generator" content="ApiGen 2.0.3" />
 
 	<title>Class TokenReflection\Stream | PHP Token Reflection</title>
 
@@ -127,13 +127,13 @@
 		<dd style="padding-left:0px">
 <b>TokenReflection\Stream</b>			
 			 implements 
-Serializable, 
-			
-ArrayAccess, 
+SeekableIterator, 
 			
 Countable, 
 			
-SeekableIterator
+ArrayAccess, 
+			
+Serializable
 			
 		</dd>
 	</dl>
@@ -422,7 +422,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_skipWhitespaces">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#210" title="Go to source code">skipWhitespaces</a>(
+				<a href="source-TokenReflection.Stream.html#212" title="Go to source code">skipWhitespaces</a>(
 		)</code>
 
 		<div class="short">
@@ -459,7 +459,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_is">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#226" title="Go to source code">is</a>(
+				<a href="source-TokenReflection.Stream.html#228" title="Go to source code">is</a>(
 				integer|string
 				<var>$type</var>, 
 				integer
@@ -507,7 +507,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_getType">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#238" title="Go to source code">getType</a>(
+				<a href="source-TokenReflection.Stream.html#240" title="Go to source code">getType</a>(
 				integer
 				<var>$position</var> = -<span class="php-num">1</span>
 		)</code>
@@ -551,7 +551,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_getTokenValue">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#253" title="Go to source code">getTokenValue</a>(
+				<a href="source-TokenReflection.Stream.html#255" title="Go to source code">getTokenValue</a>(
 				integer
 				<var>$position</var> = -<span class="php-num">1</span>
 		)</code>
@@ -595,7 +595,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_getTokenName">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#268" title="Go to source code">getTokenName</a>(
+				<a href="source-TokenReflection.Stream.html#270" title="Go to source code">getTokenName</a>(
 				integer
 				<var>$position</var> = -<span class="php-num">1</span>
 		)</code>
@@ -639,7 +639,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_serialize">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#280" title="Go to source code">serialize</a>(
+				<a href="source-TokenReflection.Stream.html#282" title="Go to source code">serialize</a>(
 		)</code>
 
 		<div class="short">
@@ -678,7 +678,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_unserialize">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#290" title="Go to source code">unserialize</a>(
+				<a href="source-TokenReflection.Stream.html#292" title="Go to source code">unserialize</a>(
 				string
 				<var>$serialized</var>
 		)</code>
@@ -724,7 +724,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetExists">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#312" title="Go to source code">offsetExists</a>(
+				<a href="source-TokenReflection.Stream.html#314" title="Go to source code">offsetExists</a>(
 				integer
 				<var>$offset</var>
 		)</code>
@@ -770,7 +770,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetUnset">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#323" title="Go to source code">offsetUnset</a>(
+				<a href="source-TokenReflection.Stream.html#325" title="Go to source code">offsetUnset</a>(
 				integer
 				<var>$offset</var>
 		)</code>
@@ -818,7 +818,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetGet">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#336" title="Go to source code">offsetGet</a>(
+				<a href="source-TokenReflection.Stream.html#338" title="Go to source code">offsetGet</a>(
 				integer
 				<var>$offset</var>
 		)</code>
@@ -864,7 +864,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_offsetSet">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#347" title="Go to source code">offsetSet</a>(
+				<a href="source-TokenReflection.Stream.html#349" title="Go to source code">offsetSet</a>(
 				integer
 				<var>$offset</var>, 
 				mixed
@@ -916,7 +916,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_key">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#361" title="Go to source code">key</a>(
+				<a href="source-TokenReflection.Stream.html#363" title="Go to source code">key</a>(
 		)</code>
 
 		<div class="short">
@@ -955,7 +955,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_next">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#371" title="Go to source code">next</a>(
+				<a href="source-TokenReflection.Stream.html#373" title="Go to source code">next</a>(
 		)</code>
 
 		<div class="short">
@@ -994,7 +994,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_rewind">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#382" title="Go to source code">rewind</a>(
+				<a href="source-TokenReflection.Stream.html#384" title="Go to source code">rewind</a>(
 		)</code>
 
 		<div class="short">
@@ -1033,7 +1033,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_current">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#393" title="Go to source code">current</a>(
+				<a href="source-TokenReflection.Stream.html#395" title="Go to source code">current</a>(
 		)</code>
 
 		<div class="short">
@@ -1072,7 +1072,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_valid">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#403" title="Go to source code">valid</a>(
+				<a href="source-TokenReflection.Stream.html#405" title="Go to source code">valid</a>(
 		)</code>
 
 		<div class="short">
@@ -1111,7 +1111,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_count">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#413" title="Go to source code">count</a>(
+				<a href="source-TokenReflection.Stream.html#415" title="Go to source code">count</a>(
 		)</code>
 
 		<div class="short">
@@ -1150,7 +1150,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#_seek">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#423" title="Go to source code">seek</a>(
+				<a href="source-TokenReflection.Stream.html#425" title="Go to source code">seek</a>(
 				integer
 				<var>$position</var>
 		)</code>
@@ -1196,7 +1196,7 @@ SeekableIterator
 		<td><div class="position">
 		<a class="anchor" href="#___toString">#</a>
 		<code class="nowrap">
-				<a href="source-TokenReflection.Stream.html#435" title="Go to source code">__toString</a>(
+				<a href="source-TokenReflection.Stream.html#437" title="Go to source code">__toString</a>(
 		)</code>
 
 		<div class="short">
@@ -1231,7 +1231,7 @@ SeekableIterator
 </div>
 
 		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/Andrewsville/apigen">ApiGen</a>.<br />
+			PHP Token Reflection API documentation generated by <a href="http://github.com/apigen/apigen">ApiGen</a>.<br />
 			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
 		</div>
 	</div>
