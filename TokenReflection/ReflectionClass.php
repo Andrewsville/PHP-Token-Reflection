@@ -726,20 +726,25 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							$imports[] = null;
 						}
 
-						if (isset($methods[$newName])) {
-							throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $newName), Exception\Runtime::ALREADY_EXISTS);
-						}
+						if (!isset($this->methods[$newName])) {
+							if (isset($methods[$newName])) {
+								throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $newName), Exception\Runtime::ALREADY_EXISTS);
+							}
 
-						$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
+							$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
+						}
 					}
 				}
 
 				if (!in_array(null, $imports)) {
-					if (isset($methods[$methodName])) {
-						throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $methodName), Exception\Runtime::ALREADY_EXISTS);
-					}
+					if (!isset($this->methods[$methodName])) {
+						if (isset($methods[$methodName])) {
+							var_dump($imports, $this->traitImports, $this->traitAliases);
+							throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $methodName), Exception\Runtime::ALREADY_EXISTS);
+						}
 
-					$methods[$methodName] = $traitMethod->alias($this);
+						$methods[$methodName] = $traitMethod->alias($this);
+					}
 				}
 			}
 		}
