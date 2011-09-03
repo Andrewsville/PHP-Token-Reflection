@@ -1939,7 +1939,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 									throw new Exception\Parse('A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', Exception\Parse::PARSE_CHILDREN_ERROR);
 								}
 
-								$this->traitImports[Resolver::resolveClassFQN($rightSide[1], $this->aliases, $this->namespaceName) . '::' . $methodName][] = null;
+								$this->traitImports[Resolver::resolveClassFQN($rightSide[0], $this->aliases, $this->namespaceName) . '::' . $methodName][] = null;
 							}
 
 							if (',' === $type) {
