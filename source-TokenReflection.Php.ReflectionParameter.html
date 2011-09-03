@@ -99,7 +99,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0 beta 7
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0 RC 1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -310,57 +310,67 @@
 <a href="#213" id="213" class="l">213: </a>    }
 <a href="#214" id="214" class="l">214: </a>
 <a href="#215" id="215" class="l">215: </a>    <span class="php-comment">/**
-</span><a href="#216" id="216" class="l">216: </a><span class="php-comment">     * Magic __get method.
+</span><a href="#216" id="216" class="l">216: </a><span class="php-comment">     * Returns if the paramter value can be passed by value.
 </span><a href="#217" id="217" class="l">217: </a><span class="php-comment">     *
-</span><a href="#218" id="218" class="l">218: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#219" id="219" class="l">219: </a><span class="php-comment">     * @return mixed
-</span><a href="#220" id="220" class="l">220: </a><span class="php-comment">     */</span>
-<a href="#221" id="221" class="l">221: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
-<a href="#222" id="222" class="l">222: </a>    {
-<a href="#223" id="223" class="l">223: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionBase::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#224" id="224" class="l">224: </a>    }
-<a href="#225" id="225" class="l">225: </a>
-<a href="#226" id="226" class="l">226: </a>    <span class="php-comment">/**
-</span><a href="#227" id="227" class="l">227: </a><span class="php-comment">     * Magic __isset method.
-</span><a href="#228" id="228" class="l">228: </a><span class="php-comment">     *
-</span><a href="#229" id="229" class="l">229: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#230" id="230" class="l">230: </a><span class="php-comment">     * @return boolean
-</span><a href="#231" id="231" class="l">231: </a><span class="php-comment">     */</span>
-<a href="#232" id="232" class="l">232: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __<span class="php-keyword1">isset</span>(<span class="php-var">$key</span>)
-<a href="#233" id="233" class="l">233: </a>    {
-<a href="#234" id="234" class="l">234: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionBase::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#235" id="235" class="l">235: </a>    }
-<a href="#236" id="236" class="l">236: </a>
-<a href="#237" id="237" class="l">237: </a>    <span class="php-comment">/**
-</span><a href="#238" id="238" class="l">238: </a><span class="php-comment">     * Creates a reflection instance.
-</span><a href="#239" id="239" class="l">239: </a><span class="php-comment">     *
-</span><a href="#240" id="240" class="l">240: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
-</span><a href="#241" id="241" class="l">241: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
-</span><a href="#242" id="242" class="l">242: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionParameter
-</span><a href="#243" id="243" class="l">243: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
-</span><a href="#244" id="244" class="l">244: </a><span class="php-comment">     */</span>
-<a href="#245" id="245" class="l">245: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
-<a href="#246" id="246" class="l">246: </a>    {
-<a href="#247" id="247" class="l">247: </a>        <span class="php-keyword1">static</span> <span class="php-var">$cache</span> = <span class="php-keyword2">array</span>();
-<a href="#248" id="248" class="l">248: </a>
-<a href="#249" id="249" class="l">249: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionParameter) {
-<a href="#250" id="250" class="l">250: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Invalid reflection instance provided: &quot;%s&quot;, ReflectionParameter expected.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$internalReflection</span>)), Exception\Runtime::INVALID_ARGUMENT);
-<a href="#251" id="251" class="l">251: </a>        }
-<a href="#252" id="252" class="l">252: </a>
-<a href="#253" id="253" class="l">253: </a>        <span class="php-var">$class</span> = <span class="php-var">$internalReflection</span>-&gt;getDeclaringClass();
-<a href="#254" id="254" class="l">254: </a>        <span class="php-var">$function</span> = <span class="php-var">$internalReflection</span>-&gt;getDeclaringFunction();
-<a href="#255" id="255" class="l">255: </a>
-<a href="#256" id="256" class="l">256: </a>        <span class="php-var">$key</span> = <span class="php-var">$class</span> ? <span class="php-var">$class</span>-&gt;getName() . <span class="php-quote">'::'</span> : <span class="php-quote">''</span>;
-<a href="#257" id="257" class="l">257: </a>        <span class="php-var">$key</span> .= <span class="php-var">$function</span>-&gt;getName() . <span class="php-quote">'('</span> . <span class="php-var">$internalReflection</span>-&gt;getName() . <span class="php-quote">')'</span>;
+</span><a href="#218" id="218" class="l">218: </a><span class="php-comment">     * @return boolean
+</span><a href="#219" id="219" class="l">219: </a><span class="php-comment">     */</span>
+<a href="#220" id="220" class="l">220: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> canBePassedByValue()
+<a href="#221" id="221" class="l">221: </a>    {
+<a href="#222" id="222" class="l">222: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">method_exists</span>(<span class="php-var">$this</span>, <span class="php-quote">'canBePassedByValue'</span>) ? parent::canBePassedByValue() : !<span class="php-var">$this</span>-&gt;isPassedByReference();
+<a href="#223" id="223" class="l">223: </a>    }
+<a href="#224" id="224" class="l">224: </a>
+<a href="#225" id="225" class="l">225: </a>    <span class="php-comment">/**
+</span><a href="#226" id="226" class="l">226: </a><span class="php-comment">     * Magic __get method.
+</span><a href="#227" id="227" class="l">227: </a><span class="php-comment">     *
+</span><a href="#228" id="228" class="l">228: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#229" id="229" class="l">229: </a><span class="php-comment">     * @return mixed
+</span><a href="#230" id="230" class="l">230: </a><span class="php-comment">     */</span>
+<a href="#231" id="231" class="l">231: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
+<a href="#232" id="232" class="l">232: </a>    {
+<a href="#233" id="233" class="l">233: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionBase::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#234" id="234" class="l">234: </a>    }
+<a href="#235" id="235" class="l">235: </a>
+<a href="#236" id="236" class="l">236: </a>    <span class="php-comment">/**
+</span><a href="#237" id="237" class="l">237: </a><span class="php-comment">     * Magic __isset method.
+</span><a href="#238" id="238" class="l">238: </a><span class="php-comment">     *
+</span><a href="#239" id="239" class="l">239: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#240" id="240" class="l">240: </a><span class="php-comment">     * @return boolean
+</span><a href="#241" id="241" class="l">241: </a><span class="php-comment">     */</span>
+<a href="#242" id="242" class="l">242: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __<span class="php-keyword1">isset</span>(<span class="php-var">$key</span>)
+<a href="#243" id="243" class="l">243: </a>    {
+<a href="#244" id="244" class="l">244: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionBase::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#245" id="245" class="l">245: </a>    }
+<a href="#246" id="246" class="l">246: </a>
+<a href="#247" id="247" class="l">247: </a>    <span class="php-comment">/**
+</span><a href="#248" id="248" class="l">248: </a><span class="php-comment">     * Creates a reflection instance.
+</span><a href="#249" id="249" class="l">249: </a><span class="php-comment">     *
+</span><a href="#250" id="250" class="l">250: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
+</span><a href="#251" id="251" class="l">251: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
+</span><a href="#252" id="252" class="l">252: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionParameter
+</span><a href="#253" id="253" class="l">253: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
+</span><a href="#254" id="254" class="l">254: </a><span class="php-comment">     */</span>
+<a href="#255" id="255" class="l">255: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
+<a href="#256" id="256" class="l">256: </a>    {
+<a href="#257" id="257" class="l">257: </a>        <span class="php-keyword1">static</span> <span class="php-var">$cache</span> = <span class="php-keyword2">array</span>();
 <a href="#258" id="258" class="l">258: </a>
-<a href="#259" id="259" class="l">259: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$cache</span>[<span class="php-var">$key</span>])) {
-<a href="#260" id="260" class="l">260: </a>            <span class="php-var">$cache</span>[<span class="php-var">$key</span>] = <span class="php-keyword1">new</span> self(<span class="php-var">$class</span> ? <span class="php-keyword2">array</span>(<span class="php-var">$class</span>-&gt;getName(), <span class="php-var">$function</span>-&gt;getName()) : <span class="php-var">$function</span>-&gt;getName(), <span class="php-var">$internalReflection</span>-&gt;getName(), <span class="php-var">$broker</span>, <span class="php-var">$function</span>);
+<a href="#259" id="259" class="l">259: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionParameter) {
+<a href="#260" id="260" class="l">260: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Invalid reflection instance provided: &quot;%s&quot;, ReflectionParameter expected.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$internalReflection</span>)), Exception\Runtime::INVALID_ARGUMENT);
 <a href="#261" id="261" class="l">261: </a>        }
 <a href="#262" id="262" class="l">262: </a>
-<a href="#263" id="263" class="l">263: </a>        <span class="php-keyword1">return</span> <span class="php-var">$cache</span>[<span class="php-var">$key</span>];
-<a href="#264" id="264" class="l">264: </a>    }
-<a href="#265" id="265" class="l">265: </a>}
-<a href="#266" id="266" class="l">266: </a></code></pre>
+<a href="#263" id="263" class="l">263: </a>        <span class="php-var">$class</span> = <span class="php-var">$internalReflection</span>-&gt;getDeclaringClass();
+<a href="#264" id="264" class="l">264: </a>        <span class="php-var">$function</span> = <span class="php-var">$internalReflection</span>-&gt;getDeclaringFunction();
+<a href="#265" id="265" class="l">265: </a>
+<a href="#266" id="266" class="l">266: </a>        <span class="php-var">$key</span> = <span class="php-var">$class</span> ? <span class="php-var">$class</span>-&gt;getName() . <span class="php-quote">'::'</span> : <span class="php-quote">''</span>;
+<a href="#267" id="267" class="l">267: </a>        <span class="php-var">$key</span> .= <span class="php-var">$function</span>-&gt;getName() . <span class="php-quote">'('</span> . <span class="php-var">$internalReflection</span>-&gt;getName() . <span class="php-quote">')'</span>;
+<a href="#268" id="268" class="l">268: </a>
+<a href="#269" id="269" class="l">269: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$cache</span>[<span class="php-var">$key</span>])) {
+<a href="#270" id="270" class="l">270: </a>            <span class="php-var">$cache</span>[<span class="php-var">$key</span>] = <span class="php-keyword1">new</span> self(<span class="php-var">$class</span> ? <span class="php-keyword2">array</span>(<span class="php-var">$class</span>-&gt;getName(), <span class="php-var">$function</span>-&gt;getName()) : <span class="php-var">$function</span>-&gt;getName(), <span class="php-var">$internalReflection</span>-&gt;getName(), <span class="php-var">$broker</span>, <span class="php-var">$function</span>);
+<a href="#271" id="271" class="l">271: </a>        }
+<a href="#272" id="272" class="l">272: </a>
+<a href="#273" id="273" class="l">273: </a>        <span class="php-keyword1">return</span> <span class="php-var">$cache</span>[<span class="php-var">$key</span>];
+<a href="#274" id="274" class="l">274: </a>    }
+<a href="#275" id="275" class="l">275: </a>}
+<a href="#276" id="276" class="l">276: </a></code></pre>
 
 		<div id="footer">
 			PHP Token Reflection API documentation generated by <a href="http://github.com/apigen/apigen">ApiGen</a>.<br />

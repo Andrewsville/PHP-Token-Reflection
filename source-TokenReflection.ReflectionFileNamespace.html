@@ -120,7 +120,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0 beta 7
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0 RC 1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -388,63 +388,63 @@
 <a href="#270" id="270" class="l">270: </a>                <span class="php-keyword1">case</span> T_ABSTRACT:
 <a href="#271" id="271" class="l">271: </a>                <span class="php-keyword1">case</span> T_FINAL:
 <a href="#272" id="272" class="l">272: </a>                <span class="php-keyword1">case</span> T_CLASS:
-<a href="#273" id="273" class="l">273: </a>                <span class="php-keyword1">case</span> T_INTERFACE:
-<a href="#274" id="274" class="l">274: </a>                    <span class="php-var">$class</span> = <span class="php-keyword1">new</span> ReflectionClass(<span class="php-var">$tokenStream</span>, <span class="php-var">$this</span>-&gt;getBroker(), <span class="php-var">$this</span>);
-<a href="#275" id="275" class="l">275: </a>                    <span class="php-var">$this</span>-&gt;classes[<span class="php-var">$class</span>-&gt;getName()] = <span class="php-var">$class</span>;
-<a href="#276" id="276" class="l">276: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
-<a href="#277" id="277" class="l">277: </a>                    <span class="php-keyword1">break</span>;
-<a href="#278" id="278" class="l">278: </a>                <span class="php-keyword1">case</span> T_CONST:
-<a href="#279" id="279" class="l">279: </a>                    <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
-<a href="#280" id="280" class="l">280: </a>                    <span class="php-keyword1">while</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_STRING)) {
-<a href="#281" id="281" class="l">281: </a>                        <span class="php-var">$constant</span> = <span class="php-keyword1">new</span> ReflectionConstant(<span class="php-var">$tokenStream</span>, <span class="php-var">$this</span>-&gt;getBroker(), <span class="php-var">$this</span>);
-<a href="#282" id="282" class="l">282: </a>                        <span class="php-var">$this</span>-&gt;constants[<span class="php-var">$constant</span>-&gt;getName()] = <span class="php-var">$constant</span>;
-<a href="#283" id="283" class="l">283: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">','</span>)) {
-<a href="#284" id="284" class="l">284: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
-<a href="#285" id="285" class="l">285: </a>                        } <span class="php-keyword1">else</span> {
-<a href="#286" id="286" class="l">286: </a>                            <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
-<a href="#287" id="287" class="l">287: </a>                        }
-<a href="#288" id="288" class="l">288: </a>                    }
-<a href="#289" id="289" class="l">289: </a>                    <span class="php-keyword1">break</span>;
-<a href="#290" id="290" class="l">290: </a>                <span class="php-keyword1">case</span> T_FUNCTION:
-<a href="#291" id="291" class="l">291: </a>                    <span class="php-var">$position</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">key</span>() + <span class="php-num">1</span>;
-<a href="#292" id="292" class="l">292: </a>                    <span class="php-keyword1">while</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$skipped</span>[<span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>(<span class="php-var">$position</span>)])) {
-<a href="#293" id="293" class="l">293: </a>                        <span class="php-var">$position</span>++;
-<a href="#294" id="294" class="l">294: </a>                    }
-<a href="#295" id="295" class="l">295: </a>                    <span class="php-keyword1">if</span> (<span class="php-quote">'('</span> === <span class="php-var">$type</span>) {
-<a href="#296" id="296" class="l">296: </a>                        <span class="php-comment">// Skipping anonymous functions</span>
-<a href="#297" id="297" class="l">297: </a>
-<a href="#298" id="298" class="l">298: </a>                        <span class="php-var">$tokenStream</span>
-<a href="#299" id="299" class="l">299: </a>                            -&gt;seek(<span class="php-var">$position</span>)
-<a href="#300" id="300" class="l">300: </a>                            -&gt;findMatchingBracket()
-<a href="#301" id="301" class="l">301: </a>                            -&gt;skipWhiteSpaces();
-<a href="#302" id="302" class="l">302: </a>
-<a href="#303" id="303" class="l">303: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_USE)) {
-<a href="#304" id="304" class="l">304: </a>                            <span class="php-var">$tokenStream</span>
-<a href="#305" id="305" class="l">305: </a>                                -&gt;skipWhitespaces()
-<a href="#306" id="306" class="l">306: </a>                                -&gt;findMatchingBracket()
-<a href="#307" id="307" class="l">307: </a>                                -&gt;skipWhitespaces();
-<a href="#308" id="308" class="l">308: </a>                        }
-<a href="#309" id="309" class="l">309: </a>
-<a href="#310" id="310" class="l">310: </a>                        <span class="php-var">$tokenStream</span>
-<a href="#311" id="311" class="l">311: </a>                            -&gt;findMatchingBracket()
-<a href="#312" id="312" class="l">312: </a>                            -&gt;<span class="php-keyword2">next</span>();
-<a href="#313" id="313" class="l">313: </a>
-<a href="#314" id="314" class="l">314: </a>                        <span class="php-keyword1">continue</span>;
-<a href="#315" id="315" class="l">315: </a>                    }
-<a href="#316" id="316" class="l">316: </a>
-<a href="#317" id="317" class="l">317: </a>                    <span class="php-var">$function</span> = <span class="php-keyword1">new</span> ReflectionFunction(<span class="php-var">$tokenStream</span>, <span class="php-var">$this</span>-&gt;getBroker(), <span class="php-var">$this</span>);
-<a href="#318" id="318" class="l">318: </a>                    <span class="php-var">$this</span>-&gt;functions[<span class="php-var">$function</span>-&gt;getName()] = <span class="php-var">$function</span>;
-<a href="#319" id="319" class="l">319: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
-<a href="#320" id="320" class="l">320: </a>                    <span class="php-keyword1">break</span>;
-<a href="#321" id="321" class="l">321: </a>                <span class="php-keyword1">default</span>:
-<a href="#322" id="322" class="l">322: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
-<a href="#323" id="323" class="l">323: </a>                    <span class="php-keyword1">break</span>;
-<a href="#324" id="324" class="l">324: </a>            }
-<a href="#325" id="325" class="l">325: </a>        }
-<a href="#326" id="326" class="l">326: </a>
-<a href="#327" id="327" class="l">327: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#328" id="328" class="l">328: </a>    }
-<a href="#329" id="329" class="l">329: </a>
+<a href="#273" id="273" class="l">273: </a>                <span class="php-keyword1">case</span> T_TRAIT:
+<a href="#274" id="274" class="l">274: </a>                <span class="php-keyword1">case</span> T_INTERFACE:
+<a href="#275" id="275" class="l">275: </a>                    <span class="php-var">$class</span> = <span class="php-keyword1">new</span> ReflectionClass(<span class="php-var">$tokenStream</span>, <span class="php-var">$this</span>-&gt;getBroker(), <span class="php-var">$this</span>);
+<a href="#276" id="276" class="l">276: </a>                    <span class="php-var">$this</span>-&gt;classes[<span class="php-var">$class</span>-&gt;getName()] = <span class="php-var">$class</span>;
+<a href="#277" id="277" class="l">277: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#278" id="278" class="l">278: </a>                    <span class="php-keyword1">break</span>;
+<a href="#279" id="279" class="l">279: </a>                <span class="php-keyword1">case</span> T_CONST:
+<a href="#280" id="280" class="l">280: </a>                    <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#281" id="281" class="l">281: </a>                    <span class="php-keyword1">while</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_STRING)) {
+<a href="#282" id="282" class="l">282: </a>                        <span class="php-var">$constant</span> = <span class="php-keyword1">new</span> ReflectionConstant(<span class="php-var">$tokenStream</span>, <span class="php-var">$this</span>-&gt;getBroker(), <span class="php-var">$this</span>);
+<a href="#283" id="283" class="l">283: </a>                        <span class="php-var">$this</span>-&gt;constants[<span class="php-var">$constant</span>-&gt;getName()] = <span class="php-var">$constant</span>;
+<a href="#284" id="284" class="l">284: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">','</span>)) {
+<a href="#285" id="285" class="l">285: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#286" id="286" class="l">286: </a>                        } <span class="php-keyword1">else</span> {
+<a href="#287" id="287" class="l">287: </a>                            <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#288" id="288" class="l">288: </a>                        }
+<a href="#289" id="289" class="l">289: </a>                    }
+<a href="#290" id="290" class="l">290: </a>                    <span class="php-keyword1">break</span>;
+<a href="#291" id="291" class="l">291: </a>                <span class="php-keyword1">case</span> T_FUNCTION:
+<a href="#292" id="292" class="l">292: </a>                    <span class="php-var">$position</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">key</span>() + <span class="php-num">1</span>;
+<a href="#293" id="293" class="l">293: </a>                    <span class="php-keyword1">while</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$skipped</span>[<span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>(<span class="php-var">$position</span>)])) {
+<a href="#294" id="294" class="l">294: </a>                        <span class="php-var">$position</span>++;
+<a href="#295" id="295" class="l">295: </a>                    }
+<a href="#296" id="296" class="l">296: </a>                    <span class="php-keyword1">if</span> (<span class="php-quote">'('</span> === <span class="php-var">$type</span>) {
+<a href="#297" id="297" class="l">297: </a>                        <span class="php-comment">// Skipping anonymous functions</span>
+<a href="#298" id="298" class="l">298: </a>
+<a href="#299" id="299" class="l">299: </a>                        <span class="php-var">$tokenStream</span>
+<a href="#300" id="300" class="l">300: </a>                            -&gt;seek(<span class="php-var">$position</span>)
+<a href="#301" id="301" class="l">301: </a>                            -&gt;findMatchingBracket()
+<a href="#302" id="302" class="l">302: </a>                            -&gt;skipWhiteSpaces();
+<a href="#303" id="303" class="l">303: </a>
+<a href="#304" id="304" class="l">304: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_USE)) {
+<a href="#305" id="305" class="l">305: </a>                            <span class="php-var">$tokenStream</span>
+<a href="#306" id="306" class="l">306: </a>                                -&gt;skipWhitespaces()
+<a href="#307" id="307" class="l">307: </a>                                -&gt;findMatchingBracket()
+<a href="#308" id="308" class="l">308: </a>                                -&gt;skipWhitespaces();
+<a href="#309" id="309" class="l">309: </a>                        }
+<a href="#310" id="310" class="l">310: </a>
+<a href="#311" id="311" class="l">311: </a>                        <span class="php-var">$tokenStream</span>
+<a href="#312" id="312" class="l">312: </a>                            -&gt;findMatchingBracket()
+<a href="#313" id="313" class="l">313: </a>                            -&gt;<span class="php-keyword2">next</span>();
+<a href="#314" id="314" class="l">314: </a>
+<a href="#315" id="315" class="l">315: </a>                        <span class="php-keyword1">continue</span>;
+<a href="#316" id="316" class="l">316: </a>                    }
+<a href="#317" id="317" class="l">317: </a>
+<a href="#318" id="318" class="l">318: </a>                    <span class="php-var">$function</span> = <span class="php-keyword1">new</span> ReflectionFunction(<span class="php-var">$tokenStream</span>, <span class="php-var">$this</span>-&gt;getBroker(), <span class="php-var">$this</span>);
+<a href="#319" id="319" class="l">319: </a>                    <span class="php-var">$this</span>-&gt;functions[<span class="php-var">$function</span>-&gt;getName()] = <span class="php-var">$function</span>;
+<a href="#320" id="320" class="l">320: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#321" id="321" class="l">321: </a>                    <span class="php-keyword1">break</span>;
+<a href="#322" id="322" class="l">322: </a>                <span class="php-keyword1">default</span>:
+<a href="#323" id="323" class="l">323: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#324" id="324" class="l">324: </a>                    <span class="php-keyword1">break</span>;
+<a href="#325" id="325" class="l">325: </a>            }
+<a href="#326" id="326" class="l">326: </a>        }
+<a href="#327" id="327" class="l">327: </a>
+<a href="#328" id="328" class="l">328: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#329" id="329" class="l">329: </a>    }
 <a href="#330" id="330" class="l">330: </a>}
 <a href="#331" id="331" class="l">331: </a></code></pre>
 
