@@ -5,7 +5,7 @@
 		http://pear.php.net/dtd/package-2.0
 		http://pear.php.net/dtd/package-2.0.xsd">
 <name>TokenReflection</name>
-<channel>pear.kukulich.cz</channel>
+<channel>pear.andrewsville.cz</channel>
 <summary>PHP reflection replacement.</summary>
 <description>
 	Reflection library that does not need to load the source code and uses just the tokenized source code. Compatible with the PHP reflection and adds many useful features.
