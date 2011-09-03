@@ -868,6 +868,31 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Creates a new class instance without using a constructor.
+	 *
+	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 */
+	public function newInstanceWithoutConstructor()
+	{
+		if ($this->isInternal()) {
+			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; only user defined classes can be instantiated.', $this->name), Exception\Runtime::UNSUPPORTED);
+		}
+
+		foreach ($this->getParentClasses() as $parent) {
+			if ($parent->isInternal()) {
+				throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; only user defined classes can be instantiated.', $this->name), Exception\Runtime::UNSUPPORTED);
+			}
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			return parent::newInstanceWithoutConstructor();
+		}
+
+		return unserialize(sprintf('O:%d:"%s":0:{}', strlen($this->getName()), $this->getName()));
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance

@@ -873,4 +873,78 @@ class ReflectionClassTest extends Test
 			$this->assertSame($definition[5], count($reflection->getTraitMethods()), $className);
 		}
 	}
+
+	/**
+	 * Tests creating class instances without calling the constructor.
+	 */
+	public function testNewInstanceWithoutConstructor()
+	{
+		require_once $this->getFilePath('newInstanceWithoutConstructor');
+		$this->getBroker()->process($this->getFilePath('newInstanceWithoutConstructor'));
+
+		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor1');
+		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token);
+
+		try {
+			$token->newInstanceWithoutConstructor();
+			$this->fail('TokenReflection\Exception\Runtime expected.');
+		} catch (\Exception $e) {
+			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+
+			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+				throw $e;
+			}
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			// Try the internal reflection
+			$internal = new \ReflectionClass('TokenReflection_Test_NewInstanceWithoutConstructor1');
+			try {
+				$internal->newInstanceWithoutConstructor();
+				$this->fail('ReflectionException expected.');
+			} catch (\Exception $e) {
+				$this->assertInstanceOf('ReflectionException', $e);
+			}
+		}
+
+		$token = $this->getBroker()->getClass('Exception');
+		$this->assertInstanceOf('TokenReflection\Php\ReflectionClass', $token);
+
+		try {
+			$token->newInstanceWithoutConstructor();
+			$this->fail('TokenReflection\Exception\Runtime expected.');
+		} catch (\Exception $e) {
+			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+
+			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+				throw $e;
+			}
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			// Try the internal reflection
+			$internal = new \ReflectionClass('Exception');
+			try {
+				$internal->newInstanceWithoutConstructor();
+				$this->fail('ReflectionException expected.');
+			} catch (\Exception $e) {
+				$this->assertInstanceOf('ReflectionException', $e);
+			}
+		}
+
+		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
+		$internal = new \ReflectionClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
+		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token);
+
+		$instance = $token->newInstanceWithoutConstructor();
+		$this->assertFalse($instance->check);
+
+		$instance2 = $token->newInstanceArgs();
+		$this->assertTrue($instance2->check);
+
+		if (PHP_VERSION_ID >= 50400) {
+			// Try the internal reflection
+			$this->assertEquals($internal->newInstanceWithoutConstructor(), $token->newInstanceWithoutConstructor());
+		}
+	}
 }

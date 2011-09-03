@@ -548,6 +548,14 @@ interface IReflectionClass extends IReflection
 	public function isInstance($object);
 
 	/**
+	 * Creates a new class instance without using a constructor.
+	 *
+	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 */
+	public function newInstanceWithoutConstructor();
+
+	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
 	 * Use any number of constructor parameters as function parameters.

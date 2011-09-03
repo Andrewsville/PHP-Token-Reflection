@@ -1350,6 +1350,22 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
+	 * Creates a new class instance without using a constructor.
+	 *
+	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 */
+	public function newInstanceWithoutConstructor()
+	{
+		if (!class_exists($this->name, true)) {
+			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; class does not exist.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		$reflection = new \TokenReflection\Php\ReflectionClass($this->getName(), $this->getBroker());
+		return $reflection->newInstanceWithoutConstructor();
+	}
+
+	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
 	 * Use any number of constructor parameters as function parameters.
