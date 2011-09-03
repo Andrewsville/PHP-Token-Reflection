@@ -140,6 +140,13 @@ interface IReflectionParameter extends IReflection
 	public function isPassedByReference();
 
 	/**
+	 * Returns if the paramter value can be passed by value.
+	 *
+	 * @return boolean
+	 */
+	public function canBePassedByValue();
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string

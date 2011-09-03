@@ -244,6 +244,77 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns traits used by this class.
+	 *
+	 * @return array
+	 */
+	public function getTraits()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns names of used traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitNames()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns method aliases from traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitAliases()
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class is a trait.
+	 *
+	 * @return boolean
+	 */
+	public function isTrait()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the class uses a particular trait.
+	 *
+	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @return bool
+	 */
+	public function usesTrait($trait)
+	{
+		return false;
+	}
+
+	/**
 	 * Returns if objects of this class are cloneable.
 	 *
 	 * Introduced in PHP 5.4.
@@ -490,6 +561,28 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasTraitMethod($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns method reflections imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getTraitMethods($filter = null)
+	{
+		return array();
+	}
+
+	/**
 	 * Returns if the class defines the given constant.
 	 *
 	 * @param string $name Constant name.
@@ -634,6 +727,28 @@ class ReflectionClass implements IReflectionClass
 	 * @return array
 	 */
 	public function getOwnProperties($filter = null)
+	{
+		return array();
+	}
+
+	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasTraitProperty($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns property reflections imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getTraitProperties($filter = null)
 	{
 		return array();
 	}
@@ -790,6 +905,22 @@ class ReflectionClass implements IReflectionClass
 		}
 
 		return $this->name === get_class($object) || is_subclass_of($object, $this->name);
+	}
+
+	/**
+	 * Creates a new class instance without using a constructor.
+	 *
+	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 */
+	public function newInstanceWithoutConstructor()
+	{
+		if (!class_exists($this->name, true)) {
+			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; class does not exist.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		$reflection = new \TokenReflection\Php\ReflectionClass($this->name, $this->getBroker());
+		return $reflection->newInstanceWithoutConstructor();
 	}
 
 	/**

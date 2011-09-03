@@ -18,6 +18,11 @@ namespace TokenReflection;
 use TokenReflection\Exception;
 use SeekableIterator, Countable, ArrayAccess, Serializable;
 
+// Ensure that we check if we have a native support of traits
+if (!defined('NATIVE_TRAITS')) {
+	require_once __DIR__ . '/Broker.php';
+}
+
 /**
  * Token stream iterator.
  */
@@ -83,6 +88,15 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 
 		foreach ($stream as $position => $token) {
 			if (is_array($token)) {
+				if (!NATIVE_TRAITS && T_STRING === $token[0]) {
+					$lValue = strtolower($token[1]);
+					if ('trait' === $lValue) {
+						$token[0] = T_TRAIT;
+					} elseif ('insteadof' === $lValue) {
+						$token[0] = T_INSTEADOF;
+					}
+				}
+
 				$this->tokens[] = $token;
 			} else {
 				$previous = $this->tokens[$position - 1];
@@ -276,7 +290,15 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	public function getTokenName($position = -1)
 	{
 		$type = $this->getType($position);
-		return is_string($type) ? $type : token_name($type);
+		if (is_string($type)) {
+			return $type;
+		} elseif (T_TRAIT === $type) {
+			return 'T_TRAIT';
+		} elseif (T_INSTEADOF === $type) {
+			return 'T_INSTEADOF';
+		}
+
+		return token_name($type);
 	}
 
 	/**

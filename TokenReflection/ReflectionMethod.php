@@ -114,6 +114,34 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $modifiersComplete = false;
 
 	/**
+	 * The original name when importing from a trait.
+	 *
+	 * @var string|null
+	 */
+	private $originalName = null;
+
+	/**
+	 * The original method when importing from a trait.
+	 *
+	 * @var \TokenReflection\IReflectionMethod|null
+	 */
+	private $original = null;
+
+	/**
+	 * The original modifiers value when importing from a trait.
+	 *
+	 * @var integer|null
+	 */
+	private $originalModifiers = null;
+
+	/**
+	 * Declaring trait name.
+	 *
+	 * @var string
+	 */
+	private $declaringTraitName;
+
+	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return \TokenReflection\ReflectionClass|null
@@ -510,6 +538,113 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @param object $object Object
+	 * @return \Closure
+	 */
+	public function getClosure($object){
+		return null;
+	}
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosureThis()
+	{
+		return null;
+	}
+
+	/**
+	 * Creates a method alias of the given name and access level for the given class.
+	 *
+	 * @param \TokenReflection\ReflectionClass $parent New parent class
+	 * @param string $name New method name
+	 * @param integer $accessLevel New access level
+	 * @return \TokenReflection\ReflectionMethod
+	 */
+	public function alias(ReflectionClass $parent, $name = null, $accessLevel = null)
+	{
+		static $possibleLevels = array(InternalReflectionMethod::IS_PUBLIC => true, InternalReflectionMethod::IS_PROTECTED => true, InternalReflectionMethod::IS_PRIVATE => true);
+
+		$method = clone $this;
+
+		$method->declaringClassName = $parent->getName();
+		if (null !== $name) {
+			$method->originalName = $this->name;
+			$method->name = $name;
+		}
+		if (null !== $accessLevel) {
+			if (!isset($possibleLevels[$accessLevel])) {
+				throw new Exception\Parse(sprintf('Invalid method access level: "%s".', $accessLevel), Exception\Parse::PARSE_CHILDREN_ERROR);
+			}
+
+			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);
+			$method->modifiers |= $accessLevel;
+
+			$method->originalModifiers = $this->getModifiers();
+		}
+
+		foreach ($this->parameters as $parameterName => $parameter) {
+			$method->parameters[$parameterName] = $parameter->alias($method);
+		}
+
+		return $method;
+	}
+
+	/**
+	 * Returns the original name when importing from a trait.
+	 *
+	 * @return string|null
+	 */
+	public function getOriginalName()
+	{
+		return $this->originalName;
+	}
+
+	/**
+	 * Returns the original method when importing from a trait.
+	 *
+	 * @return \TokenReflection\IReflectionMethod|null
+	 */
+	public function getOriginal()
+	{
+		return $this->original;
+	}
+
+	/**
+	 * Returns the original modifiers value when importing from a trait.
+	 *
+	 * @return integer|null
+	 */
+	public function getOriginalModifiers()
+	{
+		return $this->originalModifiers;
+	}
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait()
+	{
+		return null === $this->declaringTraitName ? null : $this->getBroker()->getClass($this->declaringTraitName);
+	}
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName()
+	{
+		return $this->declaringTraitName;
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
@@ -523,6 +658,9 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		$this->declaringClassName = $parent->getName();
+		if ($parent->isTrait()) {
+			$this->declaringTraitName = $parent->getName();
+		}
 		return parent::processParent($parent);
 	}
 

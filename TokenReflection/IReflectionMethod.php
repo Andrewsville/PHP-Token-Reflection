@@ -137,4 +137,54 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @return boolean
 	 */
 	public function setAccessible($accessible);
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @param object $object Object
+	 * @return \Closure
+	 */
+	public function getClosure($object);
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosureThis();
+
+	/**
+	 * Returns the original name when importing from a trait.
+	 *
+	 * @return string|null
+	 */
+	public function getOriginalName();
+
+	/**
+	 * Returns the original method when importing from a trait.
+	 *
+	 * @return \TokenReflection\IReflectionMethod|null
+	 */
+	public function getOriginal();
+
+	/**
+	 * Returns the original modifiers value when importing from a trait.
+	 *
+	 * @return integer|null
+	 */
+	public function getOriginalModifiers();
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait();
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName();
 }

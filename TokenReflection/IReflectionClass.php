@@ -266,6 +266,22 @@ interface IReflectionClass extends IReflection
 	public function getOwnMethods($filter = null);
 
 	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasTraitMethod($name);
+
+	/**
+	 * Returns method reflections imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getTraitMethods($filter = null);
+
+	/**
 	 * Returns if the class defines the given constant.
 	 *
 	 * @param string $name Constant name.
@@ -369,6 +385,22 @@ interface IReflectionClass extends IReflection
 	public function getOwnProperties($filter = null);
 
 	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasTraitProperty($name);
+
+	/**
+	 * Returns property reflections imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getTraitProperties($filter = null);
+
+	/**
 	 * Returns default properties.
 	 *
 	 * @return array
@@ -450,6 +482,63 @@ interface IReflectionClass extends IReflection
 	public function getIndirectImplementerNames();
 
 	/**
+	 * Returns if it is possible to create an instance of this class.
+	 *
+	 * @return boolean
+	 */
+	public function isInstantiable();
+
+	/**
+	 * Returns traits used by this class.
+	 *
+	 * @return array
+	 */
+	public function getTraits();
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits();
+
+	/**
+	 * Returns names of used traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitNames();
+
+	/**
+	 * Returns names of traits used by this class an not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames();
+
+	/**
+	 * Returns method aliases from traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitAliases();
+
+	/**
+	 * Returns if the class uses a particular trait.
+	 *
+	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @return bool
+	 */
+	public function usesTrait($trait);
+
+	/**
+	 * Returns if the class is a trait.
+	 *
+	 * @return boolean
+	 */
+	public function isTrait();
+
+	/**
 	 * Returns if the given object is an instance of this class.
 	 *
 	 * @param object $object Instance
@@ -457,6 +546,14 @@ interface IReflectionClass extends IReflection
 	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
 	 */
 	public function isInstance($object);
+
+	/**
+	 * Creates a new class instance without using a constructor.
+	 *
+	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 */
+	public function newInstanceWithoutConstructor();
 
 	/**
 	 * Creates a new instance using variable number of parameters.

@@ -243,6 +243,76 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @param object $object Object
+	 * @return \Closure
+	 */
+	public function getClosure($object){
+		return null;
+	}
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosureThis()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the original name when importing from a trait.
+	 *
+	 * @return string
+	 */
+	public function getOriginalName()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the original method when importing from a trait.
+	 *
+	 * @return null
+	 */
+	public function getOriginal()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the original modifiers value when importing from a trait.
+	 *
+	 * @return null
+	 */
+	public function getOriginalModifiers()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName()
+	{
+		return null;
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance

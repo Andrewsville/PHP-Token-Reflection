@@ -46,4 +46,12 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 * @return mixed
 	 */
 	public function invokeArgs(array $args);
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosure();
+
 }

@@ -171,6 +171,14 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function isSubclassOf($class)
 	{
+		if (is_object($class)) {
+			if (!$class instanceof InternalReflectionClass && !$class instanceof IReflectionClass) {
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($class)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$class = $class->getName();
+		}
+
 		return in_array($class, $this->getParentClassNameList());
 	}
 
@@ -229,12 +237,21 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
-			if ($interface instanceof InternalReflectionClass || $interface instanceof IReflectionClass) {
-				$interfaceName = $interface->getName();
-			} else {
+			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
 				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
 			}
+
+			$interfaceName = $interface->getName();
+
+			if (!$interface->isInterface()) {
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
+			}
 		} else {
+			$reflection = $this->getBroker()->getClass($interface);
+			if (!$reflection->isInterface()) {
+				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interface), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
 			$interfaceName = $interface;
 		}
 
@@ -386,6 +403,30 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 * @todo
+	 */
+	public function hasTraitMethod($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns method reflections imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 * @todo
+	 */
+	public function getTraitMethods($filter = null)
+	{
+		return array();
+	}
+
+	/**
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
@@ -525,6 +566,30 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		return array_filter($this->getProperties($filter), function(ReflectionProperty $property) use ($me) {
 			return $property->getDeclaringClass()->getName() === $me;
 		});
+	}
+
+	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 * @todo
+	 */
+	public function hasTraitProperty($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns property reflections imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 * @todo
+	 */
+	public function getTraitProperties($filter = null)
+	{
+		return array();
 	}
 
 	/**
@@ -705,6 +770,126 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	final public function __isset($key)
 	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
+	}
+
+	/**
+	 * Returns traits used by this class.
+	 *
+	 * @return array
+	 */
+	public function getTraits()
+	{
+		return NATIVE_TRAITS ? parent::getTraits() : array();
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits()
+	{
+		if (!NATIVE_TRAITS) {
+			return array();
+		}
+
+		$parent = $this->getParentClass();
+		return $parent ? array_diff_key($this->getTraits(), $parent->getTraits()) : $this->getTraits();
+	}
+
+	/**
+	 * Returns names of used traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitNames()
+	{
+		return NATIVE_TRAITS ? parent::getTraitNames() : array();
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames()
+	{
+		return array_keys($this->getOwnTraits());
+	}
+
+	/**
+	 * Returns method aliases from traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitAliases()
+	{
+		return NATIVE_TRAITS ? parent::getTraitAliases() : array();
+	}
+
+	/**
+	 * Returns if the class is a trait.
+	 *
+	 * @return boolean
+	 */
+	public function isTrait()
+	{
+		return NATIVE_TRAITS && parent::isTrait();
+	}
+
+	/**
+	 * Returns if the class uses a particular trait.
+	 *
+	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @return bool
+	 */
+	public function usesTrait($trait)
+	{
+		if (is_object($trait)) {
+			if (!$trait instanceof InternalReflectionClass && !$trait instanceof TokenReflection\IReflectionClass) {
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$traitName = $trait->getName();
+
+			if (!$trait->isTrait()) {
+				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $traitName), Exception\Runtime::INVALID_ARGUMENT);
+			}
+		} else {
+			$reflection = $this->getBroker()->getClass($trait);
+			if (!$reflection->isTrait()) {
+				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $trait), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$traitName = $trait;
+		}
+
+		return in_array($traitName, $this->getTraitNames());
+	}
+
+	/**
+	 * Creates a new class instance without using a constructor.
+	 *
+	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 */
+	public function newInstanceWithoutConstructor()
+	{
+		if ($this->isInternal()) {
+			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; only user defined classes can be instantiated.', $this->name), Exception\Runtime::UNSUPPORTED);
+		}
+
+		foreach ($this->getParentClasses() as $parent) {
+			if ($parent->isInternal()) {
+				throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; only user defined classes can be instantiated.', $this->name), Exception\Runtime::UNSUPPORTED);
+			}
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			return parent::newInstanceWithoutConstructor();
+		}
+
+		return unserialize(sprintf('O:%d:"%s":0:{}', strlen($this->getName()), $this->getName()));
 	}
 
 	/**
