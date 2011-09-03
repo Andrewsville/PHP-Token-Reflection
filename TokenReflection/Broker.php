@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 beta 7
  *
  * LICENSE
  *
@@ -32,6 +32,29 @@ if (!NATIVE_TRAITS) {
  */
 class Broker
 {
+	/**
+	 * Turns on saving of parsed token streams.
+	 *
+	 * @var integer
+	 */
+	const OPTION_SAVE_TOKEN_STREAM = 0x0001;
+
+	/**
+	 * Turns on parsing function/method body.
+	 *
+	 * This effectively turns on parsing of static variables in functions/methods.
+	 *
+	 * @var integer
+	 */
+	const OPTION_PARSE_FUNCTION_BODY = 0x0002;
+
+	/**
+	 * Default options.
+	 *
+	 * @var integer
+	 */
+	const OPTION_DEFAULT = 0x0003;
+
 	/**
 	 * Cache identifier for namespaces.
 	 *
@@ -75,12 +98,19 @@ class Broker
 	private $cache;
 
 	/**
+	 * Broker/parser options.
+	 *
+	 * @var integer
+	 */
+	private $options;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param \TokenReflection\Broker\Backend $backend Broker backend instance
-	 * @param boolean $storingTokenStream Determines if token streams should by stored in backend
+	 * @param integer $options Broker/parsing options
 	 */
-	public function __construct(Broker\Backend $backend, $storingTokenStream = true)
+	public function __construct(Broker\Backend $backend, $options = self::OPTION_DEFAULT)
 	{
 		$this->cache = array(
 			self::CACHE_NAMESPACE => array(),
@@ -89,9 +119,31 @@ class Broker
 			self::CACHE_FUNCTION => array()
 		);
 
+		$this->options = $options;
+
 		$this->backend = $backend
 			->setBroker($this)
-			->setStoringTokenStreams($storingTokenStream);
+			->setStoringTokenStreams((bool) ($options & self::OPTION_SAVE_TOKEN_STREAM));
+	}
+
+	/**
+	 * Returns broker/parser options.
+	 *
+	 * @return integer
+	 */
+	public function getOptions()
+	{
+		return $this->options;
+	}
+
+	/**
+	 * Returns if a particular option setting is set.
+	 *
+	 * @param integer $option Option setting
+	 */
+	public function isOptionSet($option)
+	{
+		return (bool) ($this->options & $option);
 	}
 
 	/**

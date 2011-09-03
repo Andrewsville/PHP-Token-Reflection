@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 beta 7
  *
  * LICENSE
  *
@@ -109,7 +109,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 			}
 		}
 
-		$this->count = count($stream);
+		$this->count = count($this->tokens);
 	}
 
 	/**

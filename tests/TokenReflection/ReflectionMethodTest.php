@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 beta 7
  *
  * LICENSE
  *
@@ -88,6 +88,18 @@ class ReflectionMethodTest extends Test
 
 		$this->assertSame(array(), $rfl->token->getMethod('method4')->getAnnotations());
 		$this->assertNull($rfl->token->getMethod('method4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$this->assertSame($grandParent->token->getMethod('method1')->getAnnotation('throws'), $parent->token->getMethod('method1')->getAnnotation('throws'));
+		$this->assertSame($grandParent->token->getMethod('method1')->getAnnotation('throws'), $rfl->token->getMethod('method1')->getAnnotation('throws'));
+		$this->assertSame(array('Exception'), $grandParent->token->getMethod('method1')->getAnnotation('throws'));
+		$this->assertSame(array('string'), $parent->token->getMethod('method1')->getAnnotation('return'));
+
+		$this->assertSame($grandParent->token->getMethod('method2')->getAnnotation('return'), $parent->token->getMethod('method2')->getAnnotation('return'));
+		$this->assertSame($parent->token->getMethod('method2')->getAnnotation('return'), $rfl->token->getMethod('method2')->getAnnotation('return'));
+		$this->assertSame(array('mixed'), $parent->token->getMethod('method2')->getAnnotation('return'));
+
+		$this->assertSame($parent->token->getMethod('method3')->getAnnotation('return'), $rfl->token->getMethod('method3')->getAnnotation('return'));
+		$this->assertSame(array('boolean'), $rfl->token->getMethod('method3')->getAnnotation('return'));
 	}
 
 	/**
@@ -95,7 +107,9 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testStaticVariables()
 	{
-		$rfl = $this->getMethodReflection('staticVariables');
+		static $testName = 'staticVariables';
+
+		$rfl = $this->getMethodReflection($testName);
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
 		$this->assertSame(
@@ -111,6 +125,12 @@ class ReflectionMethodTest extends Test
 			),
 			$rfl->token->getStaticVariables()
 		);
+
+		// The same test with parsing method bodies turned off
+		$broker = new Broker(new Broker\Backend\Memory(), Broker::OPTION_DEFAULT & ~Broker::OPTION_PARSE_FUNCTION_BODY);
+		$broker->processFile($this->getFilePath($testName));
+		$reflection = $broker->getClass($this->getClassName($testName))->getMethod($this->getMethodName($testName));
+		$this->assertSame(array(), $reflection->getStaticVariables());
 	}
 
 	/**
