@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 7
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -17,6 +17,13 @@ namespace TokenReflection;
 
 use TokenReflection\Broker, TokenReflection\Exception;
 use RecursiveDirectoryIterator, RecursiveIteratorIterator;
+
+// Detect if we have native traits support
+define('NATIVE_TRAITS', defined('T_TRAIT'));
+if (!NATIVE_TRAITS) {
+	define('T_TRAIT', -1);
+	define('T_INSTEADOF', -2);
+}
 
 /**
  * Reflection broker.

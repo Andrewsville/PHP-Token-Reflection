@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 7
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -48,7 +48,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @var array
 	 */
-	private $parameters = array();
+	protected $parameters = array();
 
 	/**
 	 * Static variables defined within the function/method.
@@ -214,6 +214,22 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 		}
 
 		return $this->staticVariables;
+	}
+
+	/**
+	 * Creates aliases to parameters.
+	 *
+	 * @throws \TokenReflection\Exception\Runtime When called on a ReflectionFunction instance
+	 */
+	protected final function aliasParameters()
+	{
+		if (!$this instanceof ReflectionMethod) {
+			throw new Exception\Runtime('Only method parameters can be aliased.', Exception\Runtime::UNSUPPORTED);
+		}
+
+		foreach ($this->parameters as $index => $parameter) {
+			$this->parameters[$index] = $parameter->alias($this);
+		}
 	}
 
 	/**

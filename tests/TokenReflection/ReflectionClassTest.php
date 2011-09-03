@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 7
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -770,8 +770,13 @@ class ReflectionClassTest extends Test
 			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
 			'interface', 'noInterface', 'interfaces', 'noInterfaces',
 			'iterator', 'noIterator', 'parent', 'noParent',
-			'userDefined', 'noNamespace'
+			'userDefined', 'noNamespace',
 		);
+		if (PHP_VERSION_ID >= 50400) {
+			// Test traits only on PHP >= 5.4
+			$tests[] = 'traits';
+		}
+
 		foreach ($tests as $test) {
 			$rfl = $this->getClassReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
@@ -780,5 +785,166 @@ class ReflectionClassTest extends Test
 
 		$this->assertSame(InternalReflectionClass::export('ReflectionClass', true), ReflectionClass::export($this->getBroker(), 'ReflectionClass', true));
 		$this->assertSame(InternalReflectionClass::export(new InternalReflectionClass('ReflectionClass'), true), ReflectionClass::export($this->getBroker(), new InternalReflectionClass('ReflectionClass'), true));
+	}
+
+	/**
+	 * Tests traits support comparing with the internal reflection.
+	 *
+	 * For PHP 5.4+ only.
+	 */
+	public function testTraits()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Requires PHP 5.4 or higher.');
+		}
+
+		static $classes = array(
+			'TokenReflection_Test_ClassTraitsTrait1',
+			'TokenReflection_Test_ClassTraitsTrait2',
+			'TokenReflection_Test_ClassTraitsTrait3',
+			'TokenReflection_Test_ClassTraitsTrait4',
+			'TokenReflection_Test_ClassTraits',
+			'TokenReflection_Test_ClassTraits2',
+			'TokenReflection_Test_ClassTraits3',
+			'TokenReflection_Test_ClassTraits4'
+		);
+
+		require_once $this->getFilePath('traits');
+		$this->getBroker()->process($this->getFilePath('traits'));
+
+		foreach ($classes as $className) {
+			$token = $this->getBroker()->getClass($className);
+			$internal = new \ReflectionClass($className);
+
+			$this->assertSame($internal->isTrait(), $token->isTrait(), $className);
+			$this->assertSame($internal->getTraitAliases(), $token->getTraitAliases(), $className);
+			$this->assertSame($internal->getTraitNames(), $token->getTraitNames(), $className);
+			$this->assertSame(count($internal->getTraits()), count($token->getTraits()), $className);
+			foreach ($internal->getTraits() as $trait) {
+				$this->assertTrue($token->usesTrait($trait->getName()), $className);
+			}
+		}
+	}
+
+	/**
+	 * Tests traits support comparing with expected values.
+	 */
+	public function testTraits2()
+	{
+		static $expected = array(
+			'TokenReflection_Test_ClassTraitsTrait1' => array(true, array(), array(), array(), 0, 0),
+			'TokenReflection_Test_ClassTraitsTrait2' => array(true, array('t2privatef' => '(null)::privatef'), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 3),
+			'TokenReflection_Test_ClassTraitsTrait3' => array(true, array(), array(), array(), 0, 0),
+			'TokenReflection_Test_ClassTraitsTrait4' => array(true, array(), array(), array(), 0, 0),
+			'TokenReflection_Test_ClassTraits' => array(false, array('privatef2' => '(null)::publicf', 'publicf3' => '(null)::protectedf', 'publicfOriginal' => '(null)::publicf'), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 6),
+			'TokenReflection_Test_ClassTraits2' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait2'), array('TokenReflection_Test_ClassTraitsTrait2'), 6, 3),
+			'TokenReflection_Test_ClassTraits3' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 2),
+			'TokenReflection_Test_ClassTraits4' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'), array('TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'), 2, 1)
+		);
+
+		$this->getBroker()->process($this->getFilePath('traits'));
+		foreach ($expected as $className => $definition) {
+			$reflection = $this->getBroker()->getClass($className);
+
+			$this->assertSame($definition[0], $reflection->isTrait(), $className);
+			$this->assertSame($definition[1], $reflection->getTraitAliases(), $className);
+			$this->assertSame($definition[2], $reflection->getTraitNames(), $className);
+			$this->assertSame(count($definition[2]), count($reflection->getTraits()), $className);
+			foreach ($definition[2] as $traitName) {
+				$this->assertTrue($reflection->usesTrait($traitName), $className);
+			}
+
+			$this->assertSame($definition[3], $reflection->getOwnTraitNames(), $className);
+			$this->assertSame(count($definition[3]), count($reflection->getOwnTraits()), $className);
+			foreach ($definition[3] as $traitName) {
+				$this->assertTrue($reflection->usesTrait($traitName), $className);
+			}
+
+			foreach ($reflection->getTraitProperties() as $property) {
+				$this->assertTrue($reflection->hasProperty($property->getName()), $className);
+				$this->assertNotNull($property->getDeclaringTraitName(), $className);
+			}
+			$this->assertSame($definition[4], count($reflection->getTraitProperties()), $className);
+
+			foreach ($reflection->getTraitMethods() as $method) {
+				$this->assertTrue($reflection->hasMethod($method->getName()), $className);
+				$this->assertNotNull($method->getDeclaringTraitName(), $className);
+			}
+			$this->assertSame($definition[5], count($reflection->getTraitMethods()), $className);
+		}
+	}
+
+	/**
+	 * Tests creating class instances without calling the constructor.
+	 */
+	public function testNewInstanceWithoutConstructor()
+	{
+		require_once $this->getFilePath('newInstanceWithoutConstructor');
+		$this->getBroker()->process($this->getFilePath('newInstanceWithoutConstructor'));
+
+		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor1');
+		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token);
+
+		try {
+			$token->newInstanceWithoutConstructor();
+			$this->fail('TokenReflection\Exception\Runtime expected.');
+		} catch (\Exception $e) {
+			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+
+			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+				throw $e;
+			}
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			// Try the internal reflection
+			$internal = new \ReflectionClass('TokenReflection_Test_NewInstanceWithoutConstructor1');
+			try {
+				$internal->newInstanceWithoutConstructor();
+				$this->fail('ReflectionException expected.');
+			} catch (\Exception $e) {
+				$this->assertInstanceOf('ReflectionException', $e);
+			}
+		}
+
+		$token = $this->getBroker()->getClass('Exception');
+		$this->assertInstanceOf('TokenReflection\Php\ReflectionClass', $token);
+
+		try {
+			$token->newInstanceWithoutConstructor();
+			$this->fail('TokenReflection\Exception\Runtime expected.');
+		} catch (\Exception $e) {
+			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+
+			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+				throw $e;
+			}
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			// Try the internal reflection
+			$internal = new \ReflectionClass('Exception');
+			try {
+				$internal->newInstanceWithoutConstructor();
+				$this->fail('ReflectionException expected.');
+			} catch (\Exception $e) {
+				$this->assertInstanceOf('ReflectionException', $e);
+			}
+		}
+
+		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
+		$internal = new \ReflectionClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
+		$this->assertInstanceOf('TokenReflection\ReflectionClass', $token);
+
+		$instance = $token->newInstanceWithoutConstructor();
+		$this->assertFalse($instance->check);
+
+		$instance2 = $token->newInstanceArgs();
+		$this->assertTrue($instance2->check);
+
+		if (PHP_VERSION_ID >= 50400) {
+			// Try the internal reflection
+			$this->assertEquals($internal->newInstanceWithoutConstructor(), $token->newInstanceWithoutConstructor());
+		}
 	}
 }

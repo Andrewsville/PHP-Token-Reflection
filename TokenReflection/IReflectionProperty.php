@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 7
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -140,4 +140,18 @@ interface IReflectionProperty extends IReflection
 	 * @return string
 	 */
 	public function __toString();
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait();
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName();
 }

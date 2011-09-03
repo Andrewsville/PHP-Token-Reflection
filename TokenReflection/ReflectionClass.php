@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 7
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -16,7 +16,7 @@
 namespace TokenReflection;
 
 use TokenReflection\Exception;
-use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty;
+use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty, ReflectionMethod as InternalReflectionMethod;
 
 /**
  * Tokenized class reflection.
@@ -32,14 +32,30 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	const IS_INTERFACE = 0x80;
 
 	/**
-	 * Method implements interfaces.
+	 * Modifier for determining if the reflected object is a trait.
+	 *
+	 * @var integer
+	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l150
+	 */
+	const IS_TRAIT = 0x120;
+
+	/**
+	 * Class implements interfaces.
 	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l152
-	 * ZEND_ACC_IMPLEMENT_INTERFACES
 	 *
 	 * @var integer
 	 */
 	const IMPLEMENTS_INTERFACES = 0x80000;
+
+	/**
+	 * Class implements traits.
+	 *
+	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l181
+	 *
+	 * @var integer
+	 */
+	const IMPLEMENTS_TRAITS = 0x400000;
 
 	/**
 	 * Class namespace name.
@@ -54,6 +70,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @var integer
 	 */
 	private $modifiers = 0;
+
+	/**
+	 * Class type (class/interface/trait).
+	 *
+	 * @var integer
+	 */
+	private $type = 0;
 
 	/**
 	 * Determines if modifiers are complete.
@@ -77,7 +100,35 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	private $interfaces = array();
 
 	/**
-	 * Methods reflections.
+	 * Used trait names.
+	 *
+	 * @var array
+	 */
+	private $traits = array();
+
+	/**
+	 * Aliases used at trait methods.
+	 *
+	 * Compatible with the internal reflection.
+	 *
+	 * @var array
+	 */
+	private $traitAliases = array();
+
+	/**
+	 * Trait importing rules.
+	 *
+	 * [<trait>::]<method> => array(
+	 *    array(<new-name>, [<access-level>])|null
+	 * 	  [, ...]
+	 * )
+	 *
+	 * @var array
+	 */
+	private $traitImports = array();
+
+	/**
+	 * Stores if the class definition is complete.
 	 *
 	 * @var array
 	 */
@@ -174,6 +225,10 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 			}
 
+			if (!empty($this->traits)) {
+				$this->modifiers |= self::IMPLEMENTS_TRAITS;
+			}
+
 			$this->modifiersComplete = true;
 			foreach ($this->getParentClasses() as $parentClass) {
 				if ($parentClass instanceof Dummy\ReflectionClass) {
@@ -184,6 +239,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			if ($this->modifiersComplete) {
 				foreach ($this->getInterfaces() as $interface) {
 					if ($interface instanceof Dummy\ReflectionClass) {
+						$this->modifiersComplete = false;
+						break;
+					}
+				}
+			}
+			if ($this->modifiersComplete) {
+				foreach ($this->getTraits() as $trait) {
+					if ($trait instanceof Dummy\ReflectionClass) {
 						$this->modifiersComplete = false;
 						break;
 					}
@@ -285,6 +348,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Returns true if the class implements the Traversable interface.
 	 *
 	 * @return boolean
+	 * @todo traits
 	 */
 	public function isIterateable()
 	{
@@ -549,6 +613,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$methods = $this->methods;
 
+		foreach ($this->getTraitMethods() as $traitMethod) {
+			if (!isset($methods[$traitMethod->getName()])) {
+				$methods[$traitMethod->getName()] = $traitMethod;
+			}
+		}
+
 		if (null !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getMethods(null) as $parentMethod) {
 				if (!isset($methods[$parentMethod->getName()])) {
@@ -597,6 +667,91 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		if (null !== $filter) {
 			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
 				return $method->is($filter);
+			});
+		}
+
+		return array_values($methods);
+	}
+
+	/**
+	 * Returns if the class imports the given method from traits.
+	 *
+	 * @param string $name Method name
+	 * @return boolean
+	 */
+	public function hasTraitMethod($name)
+	{
+		if (isset($this->methods[$name])) {
+			return false;
+		}
+
+		foreach ($this->getOwnTraits() as $trait) {
+			if ($trait->hasMethod($name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns reflections of method imported from traits.
+	 *
+	 * @param integer $filter Methods filter
+	 * @return array
+	 */
+	public function getTraitMethods($filter = null)
+	{
+		$methods = array();
+
+		foreach ($this->getOwnTraits() as $trait) {
+			$traitName = $trait->getName();
+			foreach ($trait->getMethods(null) as $traitMethod) {
+				$methodName = $traitMethod->getName();
+
+				$imports = array();
+				if (isset($this->traitImports[$traitName . '::' . $methodName])) {
+					$imports = $this->traitImports[$traitName . '::' . $methodName];
+				}
+				if (isset($this->traitImports[$methodName])) {
+					$imports = empty($imports) ? $this->traitImports[$methodName] : array_merge($imports, $this->traitImports[$methodName]);
+				}
+
+				foreach ($imports as $import) {
+					if (null !== $import) {
+						list($newName, $accessLevel) = $import;
+
+						if ('' === $newName) {
+							$newName = $methodName;
+							$imports[] = null;
+						}
+
+						if (!isset($this->methods[$newName])) {
+							if (isset($methods[$newName])) {
+								throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $newName), Exception\Runtime::ALREADY_EXISTS);
+							}
+
+							$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
+						}
+					}
+				}
+
+				if (!in_array(null, $imports)) {
+					if (!isset($this->methods[$methodName])) {
+						if (isset($methods[$methodName])) {
+							var_dump($imports, $this->traitImports, $this->traitAliases);
+							throw new Exception\Runtime(sprintf('Trait method "%s" was already imported.', $methodName), Exception\Runtime::ALREADY_EXISTS);
+						}
+
+						$methods[$methodName] = $traitMethod->alias($this);
+					}
+				}
+			}
+		}
+
+		if (null !== $filter) {
+			$methods = array_filter($methods, function(IReflectionMethod $method) use ($filter) {
+				return (bool) ($method->getModifiers() & $filter);
 			});
 		}
 
@@ -785,6 +940,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	{
 		$properties = $this->properties;
 
+		foreach ($this->getTraitProperties(null) as $traitProperty) {
+			if (!isset($properties[$traitProperty->getName()])) {
+				$properties[$traitProperty->getName()] = $traitProperty->alias($this);
+			}
+		}
+
 		if (null !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getProperties(null) as $parentProperty) {
 				if (!isset($properties[$parentProperty->getName()])) {
@@ -825,6 +986,54 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		if (null !== $filter) {
 			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
+				return (bool) ($property->getModifiers() & $filter);
+			});
+		}
+
+		return array_values($properties);
+	}
+
+	/**
+	 * Returns if the class imports the given property from traits.
+	 *
+	 * @param string $name Property name
+	 * @return boolean
+	 */
+	public function hasTraitProperty($name)
+	{
+		if (isset($this->properties[$name])) {
+			return false;
+		}
+
+		foreach ($this->getOwnTraits() as $trait) {
+			if ($trait->hasProperty($name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns reflections of properties imported from traits.
+	 *
+	 * @param integer $filter Properties filter
+	 * @return array
+	 */
+	public function getTraitProperties($filter = null)
+	{
+		$properties = array();
+
+		foreach ($this->getOwnTraits() as $trait) {
+			foreach ($trait->getProperties(null) as $traitProperty) {
+				if (!isset($this->properties[$traitProperty->getName()]) && !isset($properties[$traitProperty->getName()])) {
+					$properties[$traitProperty->getName()] = $traitProperty->alias($this);
+				}
+			}
+		}
+
+		if (null !== $filter) {
+			$properties = array_filter($properties, function(IReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
@@ -893,6 +1102,119 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		}
 
 		throw new Exception\Runtime(sprintf('There is no static property "%s" in class "%s".', $name, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+	}
+
+	/**
+	 * Returns traits used by this class.
+	 *
+	 * @return array
+	 */
+	public function getTraits()
+	{
+		$traitNames = $this->getTraitNames();
+		if (empty($traitNames)) {
+			return array();
+		}
+
+		$broker = $this->getBroker();
+		return array_combine($traitNames, array_map(function($traitName) use ($broker) {
+			return $broker->getClass($traitName);
+		}, $traitNames));
+	}
+
+	/**
+	 * Returns traits used by this class and not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraits()
+	{
+		$ownTraitNames = $this->getOwnTraitNames();
+		if (empty($ownTraitNames)) {
+			return array();
+		}
+
+		$broker = $this->getBroker();
+		return array_combine($ownTraitNames, array_map(function($traitName) use ($broker) {
+			return $broker->getClass($traitName);
+		}, $ownTraitNames));
+	}
+
+	/**
+	 * Returns names of used traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitNames()
+	{
+		$parentClass = $this->getParentClass();
+
+		$names = $parentClass ? $parentClass->getTraitNames() : array();
+		foreach ($this->traits as $traitName) {
+			$names[] = $traitName;
+		}
+
+		return array_unique($names);
+	}
+
+	/**
+	 * Returns names of traits used by this class an not its parents.
+	 *
+	 * @return array
+	 */
+	public function getOwnTraitNames()
+	{
+		return $this->traits;
+	}
+
+	/**
+	 * Returns method aliases from traits.
+	 *
+	 * @return array
+	 */
+	public function getTraitAliases()
+	{
+		return $this->traitAliases;
+	}
+
+	/**
+	 * Returns if the class is a trait.
+	 *
+	 * @return boolean
+	 */
+	public function isTrait()
+	{
+		return self::IS_TRAIT === $this->type;
+	}
+
+	/**
+	 * Returns if the class uses a particular trait.
+	 *
+	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @return bool
+	 */
+	public function usesTrait($trait)
+	{
+		if (is_object($trait)) {
+			if (!$trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
+				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$traitName = $trait->getName();
+
+			if (!$trait->isTrait()) {
+				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $traitName), Exception\Runtime::INVALID_ARGUMENT);
+			}
+		} else {
+			$reflection = $this->getBroker()->getClass($trait);
+			if (!$reflection->isTrait()) {
+				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $trait), Exception\Runtime::INVALID_ARGUMENT);
+			}
+
+			$traitName = $trait;
+		}
+
+		return in_array($traitName, $this->getTraitNames());
 	}
 
 	/**
@@ -1028,6 +1350,22 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	}
 
 	/**
+	 * Creates a new class instance without using a constructor.
+	 *
+	 * @return object
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 */
+	public function newInstanceWithoutConstructor()
+	{
+		if (!class_exists($this->name, true)) {
+			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; class does not exist.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
+		}
+
+		$reflection = new \TokenReflection\Php\ReflectionClass($this->getName(), $this->getBroker());
+		return $reflection->newInstanceWithoutConstructor();
+	}
+
+	/**
 	 * Creates a new instance using variable number of parameters.
 	 *
 	 * Use any number of constructor parameters as function parameters.
@@ -1131,7 +1469,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				continue;
 			}
 			// Indent
-			$string = "\n    " . preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
+			$string = "\n    ";
+			if (null !== $method->getDeclaringTraitName()) {
+				$string .= "\n    ";
+			}
+
+			$string .= preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
 			// Add inherits
 			if ($method->getDeclaringClassName() !== $this->getName()) {
 				$string = preg_replace(
@@ -1290,7 +1633,14 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						break;
 					case T_INTERFACE:
 						$this->modifiers = self::IS_INTERFACE;
-						// break missing on purpose
+						$this->type = self::IS_INTERFACE;
+						$tokenStream->skipWhitespaces();
+						break 2;
+					case T_TRAIT:
+						$this->modifiers = self::IS_TRAIT;
+						$this->type = self::IS_TRAIT;
+						$tokenStream->skipWhitespaces();
+						break 2;
 					case T_CLASS:
 						$tokenStream->skipWhitespaces();
 						break 2;
@@ -1505,6 +1855,127 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							$tokenStream->next();
 						}
 					}
+					break;
+				case T_USE:
+					$tokenStream->skipWhitespaces();
+
+					while (true) {
+						$traitName = '';
+						$type = $tokenStream->getType();
+						while (T_STRING === $type || T_NS_SEPARATOR === $type) {
+							$traitName .= $tokenStream->getTokenValue();
+							$type = $tokenStream->skipWhitespaces()->getType();
+						}
+
+						if ('' === trim($traitName, '\\')) {
+							throw new Exception\Parse('Empty trait name found.', Exception\Parse::PARSE_CHILDREN_ERROR);
+						}
+
+						$this->traits[] = Resolver::resolveClassFQN($traitName, $this->aliases, $this->namespaceName);
+
+						if (';' === $type) { // End of "use"
+							$tokenStream->skipWhitespaces();
+							break;
+						} elseif (',' === $type) { // Next trait name follows
+							$tokenStream->skipWhitespaces();
+							continue;
+						} elseif ('{' !== $type) { // Unexpected token
+							throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+						}
+
+						// Aliases definition
+						$type = $tokenStream->skipWhitespaces()->getType();
+						while (true) {
+							if ('}' === $type) {
+								$tokenStream->skipWhitespaces();
+								break 2;
+							}
+
+							$leftSide = '';
+							$rightSide = array('', null);
+							$alias = true;
+
+							while (T_STRING === $type || T_NS_SEPARATOR === $type || T_DOUBLE_COLON === $type) {
+								$leftSide .= $tokenStream->getTokenValue();
+								$type = $tokenStream->skipWhitespaces()->getType();
+							}
+
+							if (T_INSTEADOF === $type) {
+								$alias = false;
+							} elseif (T_AS !== $type) {
+								throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+							}
+
+							$type = $tokenStream->skipWhitespaces()->getType();
+
+							if (T_PUBLIC === $type || T_PROTECTED === $type || T_PRIVATE === $type) {
+								if (!$alias) {
+									throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+								}
+
+								switch ($type) {
+									case T_PUBLIC:
+										$type = InternalReflectionMethod::IS_PUBLIC;
+										break;
+									case T_PROTECTED:
+										$type = InternalReflectionMethod::IS_PROTECTED;
+										break;
+									case T_PRIVATE:
+										$type = InternalReflectionMethod::IS_PRIVATE;
+										break;
+								}
+
+								$rightSide[1] = $type;
+								$type = $tokenStream->skipWhitespaces()->getType();
+							}
+
+
+							while (T_STRING === $type || (T_NS_SEPARATOR === $type && !$alias)) {
+								$rightSide[0] .= $tokenStream->getTokenValue();
+								$type = $tokenStream->skipWhitespaces()->getType();
+							}
+
+							if (empty($leftSide)) {
+								throw new Exception\Parse('An empty method name was found.', Exception\Parse::PARSE_CHILDREN_ERROR);
+							}
+
+							if ($alias) {
+								// Alias
+								if ($pos = strpos($leftSide, '::')) {
+									$methodName = substr($leftSide, $pos + 2);
+									$className = Resolver::resolveClassFQN(substr($leftSide, 0, $pos), $this->aliases, $this->namespaceName);
+									$leftSide = $className . '::' . $methodName;
+
+									$this->traitAliases[$rightSide[0]] = $leftSide;
+								} else {
+									$this->traitAliases[$rightSide[0]] = '(null)::' . $leftSide;
+								}
+
+								$this->traitImports[$leftSide][] = $rightSide;
+							} else {
+								// Insteadof
+								if ($pos = strpos($leftSide, '::')) {
+									$methodName = substr($leftSide, $pos + 2);
+								} else {
+									throw new Exception\Parse('A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', Exception\Parse::PARSE_CHILDREN_ERROR);
+								}
+
+								$this->traitImports[Resolver::resolveClassFQN($rightSide[0], $this->aliases, $this->namespaceName) . '::' . $methodName][] = null;
+							}
+
+							if (',' === $type) {
+								$tokenStream->skipWhitespaces();
+								continue;
+							} elseif (';' !== $type) {
+								throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+							}
+
+							$type = $tokenStream->skipWhitespaces()->getType();
+						}
+
+						throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
+					}
+
 					break;
 				default:
 					$tokenStream->next();

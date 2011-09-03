@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 7
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -138,6 +138,13 @@ interface IReflectionParameter extends IReflection
 	 * @return boolean
 	 */
 	public function isPassedByReference();
+
+	/**
+	 * Returns if the paramter value can be passed by value.
+	 *
+	 * @return boolean
+	 */
+	public function canBePassedByValue();
 
 	/**
 	 * Returns the string representation of the reflection object.

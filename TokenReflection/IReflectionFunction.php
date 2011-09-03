@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 7
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -46,4 +46,12 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 * @return mixed
 	 */
 	public function invokeArgs(array $args);
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosure();
+
 }
