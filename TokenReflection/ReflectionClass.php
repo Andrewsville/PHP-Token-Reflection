@@ -1145,7 +1145,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 		$parentClass = $this->getParentClass();
 
 		$names = $parentClass ? $parentClass->getTraitNames() : array();
-		foreach (array_reverse($this->traits) as $traitName) {
+		foreach ($this->traits as $traitName) {
 			$names[] = $traitName;
 		}
 
@@ -1159,7 +1159,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 */
 	public function getOwnTraitNames()
 	{
-		return array_reverse($this->traits);
+		return $this->traits;
 	}
 
 	/**
