@@ -771,14 +771,13 @@ class ReflectionClassTest extends Test
 			'interface', 'noInterface', 'interfaces', 'noInterfaces',
 			'iterator', 'noIterator', 'parent', 'noParent',
 			'userDefined', 'noNamespace',
-			'traits'
 		);
-		foreach ($tests as $test) {
-			if ('traits' === $test && PHP_VERSION_ID < 50400) {
-				// Test traits only on PHP >= 5.4
-				continue;
-			}
+		if (PHP_VERSION_ID >= 50400) {
+			// Test traits only on PHP >= 5.4
+			$tests[] = 'traits';
+		}
 
+		foreach ($tests as $test) {
 			$rfl = $this->getClassReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionClass::export($this->getClassName($test), true), ReflectionClass::export($this->getBroker(), $this->getClassName($test), true));
@@ -806,7 +805,8 @@ class ReflectionClassTest extends Test
 			'TokenReflection_Test_ClassTraitsTrait4',
 			'TokenReflection_Test_ClassTraits',
 			'TokenReflection_Test_ClassTraits2',
-			'TokenReflection_Test_ClassTrait3'
+			'TokenReflection_Test_ClassTraits3',
+			'TokenReflection_Test_ClassTraits4'
 		);
 
 		require_once $this->getFilePath('traits');
@@ -831,7 +831,46 @@ class ReflectionClassTest extends Test
 	 */
 	public function testTraits2()
 	{
+		static $expected = array(
+			'TokenReflection_Test_ClassTraitsTrait1' => array(true, array(), array(), array(), 0, 0),
+			'TokenReflection_Test_ClassTraitsTrait2' => array(true, array('t2privatef' => '(null)::privatef'), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 3),
+			'TokenReflection_Test_ClassTraitsTrait3' => array(true, array(), array(), array(), 0, 0),
+			'TokenReflection_Test_ClassTraitsTrait4' => array(true, array(), array(), array(), 0, 0),
+			'TokenReflection_Test_ClassTraits' => array(false, array('privatef2' => '(null)::publicf', 'publicf3' => '(null)::protectedf', 'publicfOriginal' => '(null)::publicf'), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 6),
+			'TokenReflection_Test_ClassTraits2' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait2'), array('TokenReflection_Test_ClassTraitsTrait2'), 6, 3),
+			'TokenReflection_Test_ClassTraits3' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 2),
+			'TokenReflection_Test_ClassTraits4' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'), array('TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'), 2, 1)
+		);
 
+		$this->getBroker()->process($this->getFilePath('traits'));
+		foreach ($expected as $className => $definition) {
+			$reflection = $this->getBroker()->getClass($className);
 
+			$this->assertSame($definition[0], $reflection->isTrait(), $className);
+			$this->assertSame($definition[1], $reflection->getTraitAliases(), $className);
+			$this->assertSame($definition[2], $reflection->getTraitNames(), $className);
+			$this->assertSame(count($definition[2]), count($reflection->getTraits()), $className);
+			foreach ($definition[2] as $traitName) {
+				$this->assertTrue($reflection->usesTrait($traitName), $className);
+			}
+
+			$this->assertSame($definition[3], $reflection->getOwnTraitNames(), $className);
+			$this->assertSame(count($definition[3]), count($reflection->getOwnTraits()), $className);
+			foreach ($definition[3] as $traitName) {
+				$this->assertTrue($reflection->usesTrait($traitName), $className);
+			}
+
+			foreach ($reflection->getTraitProperties() as $property) {
+				$this->assertTrue($reflection->hasProperty($property->getName()), $className);
+				$this->assertNotNull($property->getDeclaringTraitName(), $className);
+			}
+			$this->assertSame($definition[4], count($reflection->getTraitProperties()), $className);
+
+			foreach ($reflection->getTraitMethods() as $method) {
+				$this->assertTrue($reflection->hasMethod($method->getName()), $className);
+				$this->assertNotNull($method->getDeclaringTraitName(), $className);
+			}
+			$this->assertSame($definition[5], count($reflection->getTraitMethods()), $className);
+		}
 	}
 }
