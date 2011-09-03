@@ -29,7 +29,7 @@
 </version>
 <stability>
 	<release>beta</release>
-	<api>beta</api>
+	<api>stable</api>
 </stability>
 <license uri="https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/LICENSE">New BSD</license>
 <notes>-</notes>
