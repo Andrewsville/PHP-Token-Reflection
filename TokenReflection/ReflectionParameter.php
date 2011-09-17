@@ -146,8 +146,8 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Returns the default value.
 	 *
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the property is not optional
-	 * @throws \TokenReflection\Exception\Runtime If the property has no default value
+	 * @throws \TokenReflection\Exception\Runtime If the property is not optional.
+	 * @throws \TokenReflection\Exception\Runtime If the property has no default value.
 	 */
 	public function getDefaultValue()
 	{
@@ -236,7 +236,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Returns the required class name of the value.
 	 *
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If the type hint class FQN could not be determined
+	 * @throws \TokenReflection\Exception\Runtime If the type hint class FQN could not be determined.
 	 */
 	public function getClassName()
 	{
@@ -302,7 +302,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Returns if the parameter is optional.
 	 *
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If it is not possible to determine if the parameter is optional
+	 * @throws \TokenReflection\Exception\Runtime If it is not possible to determine if the parameter is optional.
 	 */
 	public function isOptional()
 	{
@@ -371,7 +371,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 
 		if ($this->isDefaultValueAvailable()) {
 			$default = ' = ';
-			if (is_null($this->getDefaultValue())) {
+			if (null === $this->getDefaultValue()) {
 				$default .= 'NULL';
 			} elseif (is_array($this->getDefaultValue())) {
 				$default .= 'Array';
@@ -405,7 +405,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * @param string $parameter Parameter name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $function, $parameter, $return = false)
 	{
@@ -456,7 +456,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -499,7 +499,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the type hint class name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the type hint class name could not be determined.
 	 */
 	private function parseTypeHint(Stream $tokenStream)
 	{
@@ -553,8 +553,8 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined
-	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined.
+	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
@@ -578,7 +578,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the default value could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the default value could not be determined.
 	 */
 	private function parseDefaultValue(Stream $tokenStream)
 	{

@@ -109,8 +109,8 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 *
 	 * @param integer|string $parameter Parameter name or position
 	 * @return \TokenReflection\Php\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name.
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position.
 	 */
 	public function getParameter($parameter)
 	{
@@ -198,7 +198,8 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 *
 	 * @return \Closure
 	 */
-	public function getClosure(){
+	public function getClosure()
+	{
 		return null;
 	}
 
@@ -208,7 +209,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionFunction
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

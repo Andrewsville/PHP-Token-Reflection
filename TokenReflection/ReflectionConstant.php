@@ -23,7 +23,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Name of the declaring class.
 	 *
-	 * @var String
+	 * @var string
 	 */
 	private $declaringClassName;
 
@@ -172,7 +172,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 * @param string $constant Constant name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $constant, $return = false)
 	{
@@ -214,7 +214,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -272,7 +272,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
@@ -305,7 +305,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined.
 	 */
 	private function parseValue(Stream $tokenStream, IReflection $parent)
 	{

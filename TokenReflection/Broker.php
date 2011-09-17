@@ -140,6 +140,7 @@ class Broker
 	 * Returns if a particular option setting is set.
 	 *
 	 * @param integer $option Option setting
+	 * @return boolean
 	 */
 	public function isOptionSet($option)
 	{
@@ -152,7 +153,7 @@ class Broker
 	 * @param string $fileName Filename
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|\TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given file could not be processed
+	 * @throws \TokenReflection\Exception\Parse If the given file could not be processed.
 	 */
 	public function processFile($fileName, $returnReflectionFile = false)
 	{
@@ -188,7 +189,7 @@ class Broker
 	 * @param string $fileName Archive filename.
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array of \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given archive could not be processed
+	 * @throws \TokenReflection\Exception\Parse If the given archive could not be processed.
 	 */
 	public function processPhar($fileName, $returnReflectionFile = false)
 	{
@@ -220,7 +221,7 @@ class Broker
 	 * @param string $path Directora path
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array of \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed
+	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed.
 	 */
 	public function processDirectory($path, $returnReflectionFile = false)
 	{
@@ -249,7 +250,7 @@ class Broker
 	 * @param string $path Path
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array|\TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the target could not be processed
+	 * @throws \TokenReflection\Exception\Parse If the target could not be processed.
 	 */
 	public function process($path, $returnReflectionFile = false)
 	{
@@ -434,7 +435,7 @@ class Broker
 	 *
 	 * @param string $fileName File name
 	 * @return \TokenReflection\Stream|null
-	 * @throws \TokenReflection\Exception\Runtime If there is no stored token stream for the provided filename
+	 * @throws \TokenReflection\Exception\Runtime If there is no stored token stream for the provided filename.
 	 */
 	public function getFileTokens($fileName)
 	{

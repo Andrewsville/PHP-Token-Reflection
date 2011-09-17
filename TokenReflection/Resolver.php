@@ -32,7 +32,7 @@ class Resolver
 	 *
 	 * Prevents from creating instances.
 	 *
-	 * @throws LogicException When trying to create a class instance
+	 * @throws LogicException When trying to create a class instance.
 	 */
 	final public function __construct()
 	{
@@ -76,8 +76,8 @@ class Resolver
 	 * @param array $tokens Tokenized definition
 	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
 	 * @return string
-	 * @throws \TokenReflection\Exception\Runtime If invalid reflection object is given
-	 * @throws \TokenReflection\Exception\Runtime If invalid source code is given
+	 * @throws \TokenReflection\Exception\Runtime If invalid reflection object is given.
+	 * @throws \TokenReflection\Exception\Runtime If invalid source code is given.
 	 */
 	final public static function getValueDefinition(array $tokens, ReflectionBase $reflection)
 	{
@@ -99,7 +99,7 @@ class Resolver
 			foreach ($constants as $constant) {
 				try {
 					if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
-						// handle self:: and parent:: definitions
+						// Handle self:: and parent:: definitions
 
 						if ($reflection instanceof ReflectionConstant) {
 							throw new Exception\Runtime('Constants cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);

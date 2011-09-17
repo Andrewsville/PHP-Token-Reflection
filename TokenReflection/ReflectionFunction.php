@@ -48,7 +48,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	public function __toString()
 	{
 		$parameters = '';
-		if ($this->getNumberOfParameters() > 0 ) {
+		if ($this->getNumberOfParameters() > 0) {
 			$buffer = '';
 			foreach ($this->getParameters() as $parameter) {
 				$buffer .= "\n    " . $parameter->__toString();
@@ -78,7 +78,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 * @param string $function Function name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $function, $return = false)
 	{
@@ -109,9 +109,9 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * Calls the function.
 	 *
-	 * @param mixed $args Function parameter values
+	 * @param array $args Function parameter values
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist.
 	 */
 	public function invokeArgs(array $args = array())
 	{
@@ -137,7 +137,8 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 *
 	 * @return \Closure
 	 */
-	public function getClosure(){
+	public function getClosure()
+	{
 		return null;
 	}
 
@@ -146,7 +147,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{

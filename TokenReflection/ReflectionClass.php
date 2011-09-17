@@ -360,7 +360,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string|object $class Class name or reflection object
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not a reflection class instance
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not a reflection class instance.
 	 */
 	public function isSubclassOf($class)
 	{
@@ -440,7 +440,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface.
 	 */
 	public function implementsInterface($interface)
 	{
@@ -586,7 +586,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Method name
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist.
 	 */
 	public function getMethod($name)
 	{
@@ -699,6 +699,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param integer $filter Methods filter
 	 * @return array
+	 * @throws \TokenReflection\Exception\Runtime If trait method was already imported.
 	 */
 	public function getTraitMethods($filter = null)
 	{
@@ -784,7 +785,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Constant name
 	 * @return mixed|boolean
-	 * @throws \TokenReflection\Exception\Runtime On error
+	 * @throws \TokenReflection\Exception\Runtime On error.
 	 */
 	public function getConstant($name)
 	{
@@ -804,7 +805,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Constant name
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist.
 	 */
 	public function getConstantReflection($name)
 	{
@@ -913,7 +914,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist.
 	 */
 	public function getProperty($name)
 	{
@@ -1088,8 +1089,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param string $name Property name
 	 * @param mixed $default Default value
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist.
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible.
 	 */
 	public function getStaticPropertyValue($name, $default = null)
 	{
@@ -1191,7 +1192,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Returns if the class uses a particular trait.
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-	 * @return bool
+	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If invalid parameter has been provided.
 	 */
 	public function usesTrait($trait)
 	{
@@ -1338,7 +1340,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param object $object Instance
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
+	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object.
 	 */
 	public function isInstance($object)
 	{
@@ -1353,7 +1355,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * Creates a new class instance without using a constructor.
 	 *
 	 * @return object
-	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class.
 	 */
 	public function newInstanceWithoutConstructor()
 	{
@@ -1383,7 +1385,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param array $args Array of constructor parameters
 	 * @return object
-	 * @throws \TokenReflection\Exception\Runtime If the required class does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the required class does not exist.
 	 */
 	public function newInstanceArgs(array $args = array())
 	{
@@ -1400,8 +1402,8 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist.
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible.
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
@@ -1523,7 +1525,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param string|object $className Class name or class instance
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $className, $return = false)
 	{
@@ -1582,7 +1584,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -1616,7 +1618,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse If class modifiers could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If class modifiers could not be parsed.
 	 */
 	private function parseModifiers(Stream $tokenStream)
 	{
@@ -1662,7 +1664,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
@@ -1691,7 +1693,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse If parent class name could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If parent class name could not be parsed.
 	 */
 	private function parseParent(Stream $tokenStream, ReflectionBase $parent = null)
 	{
@@ -1744,7 +1746,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse On error while parsing interfaces
+	 * @throws \TokenReflection\Exception\Parse On error while parsing interfaces.
 	 */
 	private function parseInterfaces(Stream $tokenStream, ReflectionBase $parent = null)
 	{
@@ -1796,6 +1798,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\Exception\Parse If parse error has been detected.
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
@@ -1873,13 +1876,16 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 						$this->traits[] = Resolver::resolveClassFQN($traitName, $this->aliases, $this->namespaceName);
 
-						if (';' === $type) { // End of "use"
+						if (';' === $type) {
+							// End of "use"
 							$tokenStream->skipWhitespaces();
 							break;
-						} elseif (',' === $type) { // Next trait name follows
+						} elseif (',' === $type) {
+							// Next trait name follows
 							$tokenStream->skipWhitespaces();
 							continue;
-						} elseif ('{' !== $type) { // Unexpected token
+						} elseif ('{' !== $type) {
+							// Unexpected token
 							throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
 						}
 
@@ -1923,12 +1929,13 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 									case T_PRIVATE:
 										$type = InternalReflectionMethod::IS_PRIVATE;
 										break;
+									default:
+										break;
 								}
 
 								$rightSide[1] = $type;
 								$type = $tokenStream->skipWhitespaces()->getType();
 							}
-
 
 							while (T_STRING === $type || (T_NS_SEPARATOR === $type && !$alias)) {
 								$rightSide[0] .= $tokenStream->getTokenValue();

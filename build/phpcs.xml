@@ -3,4 +3,8 @@
 	<description>TokenReflection coding standards</description>
 
 	<rule ref="Kukulich" />
+
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
+		<severity>0</severity>
+	</rule>
 </ruleset>

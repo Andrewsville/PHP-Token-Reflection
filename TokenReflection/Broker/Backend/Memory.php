@@ -90,7 +90,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $namespaceName Namespace name
 	 * @return \TokenReflection\IReflectionNamespace
-	 * @throws \TokenReflection\Exception\Runtime If the requested namespace does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested namespace does not exist.
 	 */
 	public function getNamespace($namespaceName)
 	{
@@ -236,7 +236,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $constantName Constant name
 	 * @return \TokenReflection\IReflectionConstant
-	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist.
 	 */
 	public function getConstant($constantName)
 	{
@@ -327,7 +327,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $functionName Function name
 	 * @return \TokenReflection\IReflectionFunction
-	 * @throws \TokenReflection\Exception\Runtime If the requested function does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested function does not exist.
 	 */
 	public function getFunction($functionName)
 	{
@@ -390,7 +390,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $fileName File name
 	 * @return \TokenReflection\Stream
-	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed
+	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed.
 	 */
 	public function getFileTokens($fileName)
 	{

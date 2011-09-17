@@ -250,7 +250,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

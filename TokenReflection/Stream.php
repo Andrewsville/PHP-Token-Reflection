@@ -62,8 +62,8 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Creates a token substream.
 	 *
 	 * @param string $fileName File name
-	 * @throws \TokenReflection\Exception\Parse If tokenizer PHP extension is missing
-	 * @throws \TokenReflection\Exception\Parse If file does not exist or is not readable
+	 * @throws \TokenReflection\Exception\Parse If tokenizer PHP extension is missing.
+	 * @throws \TokenReflection\Exception\Parse If file does not exist or is not readable.
 	 */
 	public function __construct($fileName)
 	{
@@ -176,9 +176,9 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Returns the position of the token with the matching bracket.
 	 *
 	 * @return \TokenReflection\Stream
-	 * @throws \TokenReflection\Exception\Runtime If out of the array
-	 * @throws \TokenReflection\Exception\Runtime If there is no brancket at the current position
-	 * @throws \TokenReflection\Exception\Runtime If the matching bracket could not be found
+	 * @throws \TokenReflection\Exception\Runtime If out of the array.
+	 * @throws \TokenReflection\Exception\Runtime If there is no brancket at the current position.
+	 * @throws \TokenReflection\Exception\Runtime If the matching bracket could not be found.
 	 */
 	public function findMatchingBracket()
 	{
@@ -315,7 +315,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Restores the stream from the serialized state.
 	 *
 	 * @param string $serialized Serialized form
-	 * @throws \TokenReflection\Exception\Runtime On unserialization error
+	 * @throws \TokenReflection\Exception\Runtime On unserialization error.
 	 */
 	public function unserialize($serialized)
 	{
@@ -350,7 +350,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 * Unsupported.
 	 *
 	 * @param integer $offset Position
-	 * @throws \TokenReflection\Exception\Runtime Unsupported
+	 * @throws \TokenReflection\Exception\Runtime Unsupported.
 	 */
 	public function offsetUnset($offset)
 	{
@@ -375,7 +375,7 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	 *
 	 * @param integer $offset Position
 	 * @param mixed $value Value
-	 * @throws \TokenReflection\Exception\Runtime Unsupported
+	 * @throws \TokenReflection\Exception\Runtime Unsupported.
 	 */
 	public function offsetSet($offset, $value)
 	{
