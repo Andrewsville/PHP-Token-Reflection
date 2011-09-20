@@ -121,8 +121,7 @@ abstract class ReflectionBase implements IReflection
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @throws \TokenReflection\Exception\Runtime If the token stream is empty.
-	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed.
+	 * @throws \TokenReflection\Exception\Runtime If the token stream is empty could not be parsed
 	 */
 	public final function __construct(Stream $tokenStream, Broker $broker, IReflection $parent)
 	{

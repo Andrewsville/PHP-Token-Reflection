@@ -157,8 +157,10 @@ class Memory implements Broker\Backend
 		try {
 			$ns = $this->getNamespace(
 				($boundary = strrpos($className, '\\'))
-					? substr($className, 0, $boundary)        // Class within a namespace
-					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME  // Class without a namespace
+				// Class within a namespace
+				? substr($className, 0, $boundary)
+				// Class without a namespace
+				: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
 
 			return $ns->getClass($className);
@@ -341,8 +343,10 @@ class Memory implements Broker\Backend
 		try {
 			$ns = $this->getNamespace(
 				($boundary = strrpos($functionName, '\\'))
-					? substr($functionName, 0, $boundary)     // Function within a namespace
-					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME  // Function wihout a namespace
+				// Function within a namespace
+				? substr($functionName, 0, $boundary)
+				// Function wihout a namespace
+				: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
 
 			return $ns->getFunction($functionName);

@@ -172,16 +172,18 @@ class ReflectionAnnotation
 		if (false !== $this->docComment) {
 			// Parse docblock
 			$name = self::SHORT_DESCRIPTION;
-			$docblock = trim(preg_replace(
-				array(
-					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
-					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
-					'~^/\\*\\*~',
-					'~\\*/$~'
-				),
-				'',
-				$this->docComment
-			));
+			$docblock = trim(
+				preg_replace(
+					array(
+						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
+						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
+						'~^/\\*\\*~',
+						'~\\*/$~'
+					),
+					'',
+					$this->docComment
+				)
+			);
 			foreach (explode("\n", $docblock) as $line) {
 				$line = preg_replace('~^\\*\\s?~', '', trim($line));
 
