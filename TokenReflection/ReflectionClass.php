@@ -118,6 +118,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Trait importing rules.
 	 *
+	 * Format:
 	 * [<trait>::]<method> => array(
 	 *    array(<new-name>, [<access-level>])|null
 	 * 	  [, ...]
