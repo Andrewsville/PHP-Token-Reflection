@@ -1193,7 +1193,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If invalid parameter has been provided.
+	 * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
 	 */
 	public function usesTrait($trait)
 	{
@@ -1798,7 +1798,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @param \TokenReflection\Stream $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse If parse error has been detected.
+	 * @throws \TokenReflection\Exception\Parse If parse error was detected.
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{

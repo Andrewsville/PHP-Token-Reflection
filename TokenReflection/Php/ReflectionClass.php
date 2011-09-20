@@ -168,7 +168,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string|object $class Class name or reflection object
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If invalid parameter has been provided.
+	 * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
 	 */
 	public function isSubclassOf($class)
 	{
@@ -843,7 +843,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If invalid parameter has been provided.
+	 * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
 	 */
 	public function usesTrait($trait)
 	{

@@ -76,8 +76,8 @@ class Resolver
 	 * @param array $tokens Tokenized definition
 	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
 	 * @return string
-	 * @throws \TokenReflection\Exception\Runtime If invalid reflection object is given.
-	 * @throws \TokenReflection\Exception\Runtime If invalid source code is given.
+	 * @throws \TokenReflection\Exception\Runtime If an invalid reflection object was provided.
+	 * @throws \TokenReflection\Exception\Runtime If an invalid source code was provided.
 	 */
 	final public static function getValueDefinition(array $tokens, ReflectionBase $reflection)
 	{

@@ -261,7 +261,7 @@ class ReflectionAnnotation
 	/**
 	 * Inherits annotations from parent classes/methods/properties if needed.
 	 *
-	 * @throws \TokenReflection\Exception\Parse If unsupported reflection has been used.
+	 * @throws \TokenReflection\Exception\Parse If unsupported reflection was used.
 	 */
 	private function inheritAnnotations()
 	{

@@ -565,7 +565,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param string $name New method name
 	 * @param integer $accessLevel New access level
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Parse If invalid method access level has been found.
+	 * @throws \TokenReflection\Exception\Parse If an invalid method access level was found.
 	 */
 	public function alias(ReflectionClass $parent, $name = null, $accessLevel = null)
 	{
