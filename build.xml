@@ -35,16 +35,16 @@
 		<exec executable="phpmd${executableExtension}">
 			<arg path="${source}" />
 			<arg value="xml" />
-			<arg value="${basedir}/build/phpmd.xml" />
+			<arg path="${basedir}/build/phpmd.xml" />
 			<arg value="--reportfile" />
-			<arg value="${basedir}/build/logs/pmd.xml" />
+			<arg path="${basedir}/build/logs/pmd.xml" />
 		</exec>
 	</target>
 
 	<target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
 		<exec executable="phpcpd${executableExtension}">
 			<arg value="--log-pmd" />
-			<arg value="${basedir}/build/logs/pmd-cpd.xml" />
+			<arg path="${basedir}/build/logs/pmd-cpd.xml" />
 			<arg path="${source}" />
 		</exec>
 	</target>
@@ -52,7 +52,7 @@
 	<target name="phploc" description="Generate phploc.csv using PHPLOC">
 		<exec executable="phploc${executableExtension}">
 			<arg value="--log-csv" />
-			<arg value="${basedir}/build/logs/phploc.csv" />
+			<arg path="${basedir}/build/logs/phploc.csv" />
 			<arg path="${source}" />
 		</exec>
 	</target>
@@ -82,7 +82,8 @@
 
 	<target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
 		<exec executable="phpunit${executableExtension}" failonerror="true">
-			<arg value="--configuration=${basedir}/build/phpunit.xml" />
+			<arg value="--configuration" />
+			<arg path="${basedir}/build/phpunit.xml" />
 		</exec>
 	</target>
 

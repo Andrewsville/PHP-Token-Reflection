@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="TokenReflection">
-	<description>TokenReflection coding standards</description>
+	<description>TokenReflection coding standard</description>
 
 	<rule ref="Kukulich" />
 
