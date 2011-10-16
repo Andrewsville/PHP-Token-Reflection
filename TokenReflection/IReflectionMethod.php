@@ -134,7 +134,6 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * Sets a method to be accessible or not.
 	 *
 	 * @param boolean $accessible If the method should be accessible.
-	 * @return boolean
 	 */
 	public function setAccessible($accessible);
 
