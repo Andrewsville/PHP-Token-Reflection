@@ -59,6 +59,11 @@
 				<file name="ReflectionParameter.php" role="php" />
 				<file name="ReflectionProperty.php" role="php" />
 			</dir>
+			<dir name="Stream">
+				<file name="StreamBase.php" role="php" />
+				<file name="FileStream.php" role="php" />
+				<file name="StringStream.php" role="php" />
+			</dir>
 			<file name="Broker.php" role="php" />
 			<file name="Exception.php" role="php" />
 			<file name="IReflection.php" role="php" />
@@ -84,7 +89,6 @@
 			<file name="ReflectionParameter.php" role="php" />
 			<file name="ReflectionProperty.php" role="php" />
 			<file name="Resolver.php" role="php" />
-			<file name="Stream.php" role="php" />
 		</dir>
 		<file name="LICENSE" role="doc" />
 		<file name="README.md" role="doc" />

@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 
 /**
  * Reflection of a namespace parsed from a file.
@@ -109,7 +109,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 */
@@ -121,7 +121,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses the namespace name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 * @throws \TokenReflection\Exception\Parse If the namespace name could not be determined.
 	 */
@@ -175,7 +175,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 * @throws \TokenReflection\Exception\Parse If child elements could not be parsed.

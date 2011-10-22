@@ -35,13 +35,14 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns class reflections.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getClassReflection($test)
+	protected function getClassReflection($test, $fromString = false)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getClassInternalReflection($test);
-		$reflection->token = $this->getClassTokenReflection($test);
+		$reflection->token = $this->getClassTokenReflection($test, $fromString);
 		return $reflection;
 	}
 
@@ -49,13 +50,14 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns method reflections.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getMethodReflection($test)
+	protected function getMethodReflection($test, $fromString = false)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getMethodInternalReflection($test);
-		$reflection->token = $this->getMethodTokenReflection($test);
+		$reflection->token = $this->getMethodTokenReflection($test, $fromString);
 		return $reflection;
 	}
 
@@ -63,13 +65,14 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns property reflections.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getPropertyReflection($test)
+	protected function getPropertyReflection($test, $fromString = false)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getPropertyInternalReflection($test);
-		$reflection->token = $this->getPropertyTokenReflection($test);
+		$reflection->token = $this->getPropertyTokenReflection($test, $fromString);
 		return $reflection;
 	}
 
@@ -77,13 +80,14 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns function reflections.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getFunctionReflection($test)
+	protected function getFunctionReflection($test, $fromString = false)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getFunctionInternalReflection($test);
-		$reflection->token = $this->getFunctionTokenReflection($test);
+		$reflection->token = $this->getFunctionTokenReflection($test, $fromString);
 		return $reflection;
 	}
 
@@ -91,13 +95,14 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns parameter reflections.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getParameterReflection($test)
+	protected function getParameterReflection($test, $fromString = false)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getParameterInternalReflection($test);
-		$reflection->token = $this->getParameterTokenReflection($test);
+		$reflection->token = $this->getParameterTokenReflection($test, $fromString);
 		return $reflection;
 	}
 
@@ -165,12 +170,18 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized class reflection.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \TokenReflection\ReflectionClass
 	 */
-	protected function getClassTokenReflection($test)
+	protected function getClassTokenReflection($test, $fromString = false)
 	{
 		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath($test));
+		if ($fromString) {
+			$source = file_get_contents($fileName = $this->getFilePath($test));
+			$broker->processString($source, $fileName);
+		} else {
+			$broker->processFile($this->getFilePath($test));
+		}
 		return $broker->getClass($this->getClassName($test));
 	}
 
@@ -178,45 +189,54 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized method reflection.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \TokenReflection\ReflectionMethod
 	 */
-	protected function getMethodTokenReflection($test)
+	protected function getMethodTokenReflection($test, $fromString = false)
 	{
-		return $this->getClassTokenReflection($test)->getMethod($this->getMethodName($test));
+		return $this->getClassTokenReflection($test, $fromString)->getMethod($this->getMethodName($test));
 	}
 
 	/**
 	 * Returns tokenized property reflection.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \TokenReflection\ReflectionProperty
 	 */
-	protected function getPropertyTokenReflection($test)
+	protected function getPropertyTokenReflection($test, $fromString = false)
 	{
-		return $this->getClassTokenReflection($test)->getProperty($this->getPropertyName($test));
+		return $this->getClassTokenReflection($test, $fromString)->getProperty($this->getPropertyName($test));
 	}
 
 	/**
 	 * Returns tokenized constant reflection.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \TokenReflection\ReflectionConstant
 	 */
-	protected function getConstantTokenReflection($test)
+	protected function getConstantTokenReflection($test, $fromString = false)
 	{
-		return $this->getClassTokenReflection($test)->getConstantReflection($this->getConstantName($test));
+		return $this->getClassTokenReflection($test, $fromString)->getConstantReflection($this->getConstantName($test));
 	}
 
 	/**
 	 * Returns tokenized function reflection.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \TokenReflection\ReflectionFunction
 	 */
-	protected function getFunctionTokenReflection($test)
+	protected function getFunctionTokenReflection($test, $fromString = false)
 	{
 		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath($test));
+		if ($fromString) {
+			$source = file_get_contents($fileName = $this->getFilePath($test));
+			$broker->processString($source, $fileName);
+		} else {
+			$broker->processFile($this->getFilePath($test));
+		}
 		return $broker->getFunction($this->getFunctionName($test));
 	}
 
@@ -224,12 +244,18 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized parameter reflection.
 	 *
 	 * @param string $test
+	 * @param boolean $fromString
 	 * @return \TokenReflection\ReflectionParameter
 	 */
-	protected function getParameterTokenReflection($test)
+	protected function getParameterTokenReflection($test, $fromString = false)
 	{
 		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath($test));
+		if ($fromString) {
+			$source = file_get_contents($fileName = $this->getFilePath($test));
+			$broker->processString($source, $fileName);
+		} else {
+			$broker->processFile($this->getFilePath($test));
+		}
 		$parameters = $broker->getFunction($this->getFunctionName($test))->getParameters();
 		return $parameters[0];
 	}

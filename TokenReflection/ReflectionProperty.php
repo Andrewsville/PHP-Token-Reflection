@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 use ReflectionProperty as InternalReflectionProperty, ReflectionClass as InternalReflectionClass;
 
 /**
@@ -414,7 +414,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionProperty
 	 */
@@ -429,7 +429,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\ReflectionClass $class Defining class
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If the modifiers value cannot be determined.
@@ -492,7 +492,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Parses the property name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionProperty
 	 * @throws \TokenReflection\Exception\Parse If the property name could not be determined.
 	 */
@@ -516,7 +516,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Parses the propety default value.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionProperty
 	 * @throws \TokenReflection\Exception\Parse If the property default value could not be determined.
 	 */

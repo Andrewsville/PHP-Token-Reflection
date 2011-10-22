@@ -16,7 +16,7 @@
 namespace TokenReflection\Broker\Backend;
 
 use TokenReflection;
-use TokenReflection\Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
+use TokenReflection\Stream\StreamBase as Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
 
 /**
  * Memory broker backend.
@@ -393,7 +393,7 @@ class Memory implements Broker\Backend
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return \TokenReflection\Stream
+	 * @return \TokenReflection\Stream\StreamBase
 	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed.
 	 */
 	public function getFileTokens($fileName)

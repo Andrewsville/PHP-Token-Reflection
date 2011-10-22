@@ -247,6 +247,10 @@ class ReflectionFunctionTest extends Test
 			$rfl = $this->getFunctionReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionFunction::export($this->getFunctionName($test), true), ReflectionFunction::export($this->getBroker(), $this->getFunctionName($test), true));
+
+			// Test loading from a string
+			$rfl = $this->getFunctionReflection($test, true);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 
 		$this->assertSame(InternalReflectionFunction::export('strpos', true), ReflectionFunction::export($this->getBroker(), 'strpos', true));

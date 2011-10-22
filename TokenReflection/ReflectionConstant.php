@@ -15,6 +15,8 @@
 
 namespace TokenReflection;
 
+use TokenReflection\Stream\StreamBase as Stream;
+
 /**
  * Tokenized constant reflection.
  */
@@ -233,7 +235,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Find the appropriate docblock.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection
 	 * @return \TokenReflection\ReflectionConstant
 	 */
@@ -256,7 +258,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionConstant
 	 */
@@ -270,7 +272,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Parses the constant name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionConstant
 	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined.
 	 */
@@ -302,7 +304,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Parses the constant value.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionConstant
 	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined.

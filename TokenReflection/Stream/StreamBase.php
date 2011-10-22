@@ -13,27 +13,27 @@
  * @author Jaroslav Hanslík
  */
 
-namespace TokenReflection;
+namespace TokenReflection\Stream;
 
 use TokenReflection\Exception;
 use SeekableIterator, Countable, ArrayAccess, Serializable;
 
 // Ensure that we check if we have a native support of traits
 if (!defined('NATIVE_TRAITS')) {
-	require_once __DIR__ . '/Broker.php';
+	require_once __DIR__ . '/../Broker.php';
 }
 
 /**
- * Token stream iterator.
+ * Token stream iterator base class.
  */
-class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
+abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, Serializable
 {
 	/**
 	 * Token source file name.
 	 *
 	 * @var string
 	 */
-	private $fileName = 'unknown';
+	protected $fileName = 'unknown';
 
 	/**
 	 * Tokens storage.
@@ -59,30 +59,25 @@ class Stream implements SeekableIterator, Countable, ArrayAccess, Serializable
 	/**
 	 * Constructor.
 	 *
-	 * Creates a token substream.
+	 * Protected to ensure that the concrete implementation will override it.
 	 *
-	 * @param string $fileName File name
 	 * @throws \TokenReflection\Exception\Parse If tokenizer PHP extension is missing.
-	 * @throws \TokenReflection\Exception\Parse If file does not exist or is not readable.
 	 */
-	public function __construct($fileName)
+	protected function __construct()
 	{
 		if (!extension_loaded('tokenizer')) {
 			throw new Exception\Parse('The tokenizer PHP extension is not loaded.', Exception\Parse::UNSUPPORTED);
 		}
+	}
 
-		$this->fileName = Broker::getRealPath($fileName);
-
-		if (false === $this->fileName) {
-			throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
-		}
-
-		$contents = file_get_contents($this->fileName);
-		if (false === $contents) {
-			throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
-		}
-
-		$stream = @token_get_all(str_replace(array("\r\n", "\r"), "\n", $contents));
+	/**
+	 * Extracts tokens from a source code.
+	 *
+	 * @param string $source Source code
+	 */
+	protected final function processSource($source)
+	{
+		$stream = @token_get_all(str_replace(array("\r\n", "\r"), "\n", $source));
 
 		static $checkLines = array(T_COMMENT => true, T_WHITESPACE => true, T_DOC_COMMENT => true, T_INLINE_HTML => true, T_ENCAPSED_AND_WHITESPACE => true, T_CONSTANT_ENCAPSED_STRING => true);
 

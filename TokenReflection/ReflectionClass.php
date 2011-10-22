@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty, ReflectionMethod as InternalReflectionMethod;
 
 /**
@@ -1601,7 +1601,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
 	 */
@@ -1617,7 +1617,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If class modifiers could not be parsed.
 	 */
@@ -1663,7 +1663,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Parses the class/interface name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined.
 	 */
@@ -1691,7 +1691,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Parses the parent class.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If parent class name could not be parsed.
@@ -1744,7 +1744,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Parses implemented interfaces.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse On error while parsing interfaces.
@@ -1796,7 +1796,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If parse error was detected.
