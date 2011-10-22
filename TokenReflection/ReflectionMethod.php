@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 use ReflectionMethod as InternalReflectionMethod, ReflectionClass as InternalReflectionClass;
 
 /**
@@ -669,7 +669,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionMethod
 	 * @throws \TokenReflection\Exception\Parse If the class could not be parsed.
@@ -686,7 +686,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Parses base method modifiers (abstract, final, public, ...).
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionMethod
 	 * @throws \TokenReflection\Exception\Parse If basic modifiers could not be parsed.
 	 */

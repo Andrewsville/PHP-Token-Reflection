@@ -15,6 +15,8 @@
 
 namespace TokenReflection;
 
+use TokenReflection\Stream\StreamBase as Stream;
+
 /**
  * Processed file class.
  */
@@ -30,7 +32,7 @@ class ReflectionFile implements IReflection
 	/**
 	 * File token stream.
 	 *
-	 * @var \TokenReflection\Stream
+	 * @var \TokenReflection\Stream\StreamBase
 	 */
 	private $tokenStream = null;
 
@@ -44,7 +46,7 @@ class ReflectionFile implements IReflection
 	/**
 	 * Constructor.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token stream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
 	public function __construct(Stream $tokenStream, Broker $broker)
@@ -144,7 +146,7 @@ class ReflectionFile implements IReflection
 	/**
 	 * Returns the file token stream.
 	 *
-	 * @return \TokenReflection\Stream
+	 * @return \TokenReflection\Stream\StreamBase
 	 */
 	public function getTokenStream()
 	{

@@ -143,7 +143,7 @@ interface Backend
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return \TokenReflection\Stream
+	 * @return \TokenReflection\Stream\StreamBase
 	 */
 	public function getFileTokens($fileName);
 

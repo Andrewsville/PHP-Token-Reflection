@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 
 /**
  * Base abstract class for tokenized function and method.
@@ -235,7 +235,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses if the function/method returns its value as reference.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
 	 * @throws \TokenReflection\Exception\Parse If could not be determined if the function\method returns its value by reference.
 	 */
@@ -266,7 +266,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses the function/method name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionMethod
 	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined.
 	 */
@@ -290,7 +290,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
 	 */
@@ -304,7 +304,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses function/method parameters.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
 	 * @throws \TokenReflection\Exception\Parse If parameters could not be parsed.
 	 */
@@ -343,7 +343,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses static variables.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
 	 * @throws \TokenReflection\Exception\Parse If static variables could not be parsed.
 	 */

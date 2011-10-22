@@ -148,7 +148,44 @@ class Broker
 	}
 
 	/**
-	 * Parses a file a returns the appropriate reflection object.
+	 * Parses a string with the PHP source code using the given file name and returns the appropriate reflection object.
+	 *
+	 * @param string $source PHP source code
+	 * @param string $fileName Used file name
+	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
+	 * @return boolean|\TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\Parse If the given file could not be processed.
+	 */
+	public function processString($source, $fileName, $returnReflectionFile = false)
+	{
+		try {
+			if ($this->backend->isFileProcessed($fileName)) {
+				$tokens = $this->backend->getFileTokens($fileName);
+			} else {
+				$tokens = new Stream\StringStream($source, $fileName);
+			}
+
+			$reflectionFile = new ReflectionFile($tokens, $this);
+			if (!$this->backend->isFileProcessed($fileName)) {
+				$this->backend->addFile($reflectionFile);
+
+				// Clear the cache - leave only tokenized reflections
+				foreach ($this->cache as $type => $cached) {
+					if (!empty($cached)) {
+						$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
+							return $reflection->isTokenized();
+						});
+					}
+				}
+			}
+			return $returnReflectionFile ? $reflectionFile : true;
+		} catch (Exception $e) {
+			throw new Exception\Parse('Could not process the source code.', 0, $e);
+		}
+	}
+
+	/**
+	 * Parses a file and returns the appropriate reflection object.
 	 *
 	 * @param string $fileName Filename
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
@@ -161,7 +198,7 @@ class Broker
 			if ($this->backend->isFileProcessed($fileName)) {
 				$tokens = $this->backend->getFileTokens($fileName);
 			} else {
-				$tokens = new Stream($fileName);
+				$tokens = new Stream\FileStream($fileName);
 			}
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
@@ -434,7 +471,7 @@ class Broker
 	 * Returns an array of tokens from a processed file.
 	 *
 	 * @param string $fileName File name
-	 * @return \TokenReflection\Stream|null
+	 * @return \TokenReflection\Stream\StreamBase|null
 	 * @throws \TokenReflection\Exception\Runtime If there is no stored token stream for the provided filename.
 	 */
 	public function getFileTokens($fileName)

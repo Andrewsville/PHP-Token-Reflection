@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 use ReflectionFunction as InternalReflectionFunction;
 
 /**
@@ -163,7 +163,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFunction
 	 */

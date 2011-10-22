@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 use ReflectionParameter as InternalReflectionParameter;
 
 /**
@@ -481,7 +481,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionParameter
 	 */
@@ -497,7 +497,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Parses the type hint.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
 	 * @throws \TokenReflection\Exception\Parse If the type hint class name could not be determined.
 	 */
@@ -535,7 +535,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Parses if parameter value is passed by reference.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
 	 */
 	private function parsePassedByReference(Stream $tokenStream)
@@ -551,7 +551,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Parses the constant name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
 	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined.
 	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined.
@@ -576,7 +576,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	/**
 	 * Parses the parameter default value.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
 	 * @throws \TokenReflection\Exception\Parse If the default value could not be determined.
 	 */
