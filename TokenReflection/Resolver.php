@@ -97,33 +97,102 @@ class Resolver
 		if (!empty($constants)) {
 			$replacements = array();
 			foreach ($constants as $constant) {
+				$value = '';
+
 				try {
-					if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
-						// Handle self:: and parent:: definitions
+					switch ($constant) {
+						case '__LINE__':
+							// @todo line breaks
+							$value = $reflection->getStartLine();
+							break;
+						case '__FILE__':
+							$value = $reflection->getFileName();
+							break;
+						case '__DIR__':
+							$value = dirname($reflection->getFileName());
+							break;
+						case '__FUNCTION__':
+							if ($reflection instanceof IReflectionParameter) {
+								$value = $reflection->getDeclaringFunctionName();
+							} elseif ($reflection instanceof IReflectionFunctionBase) {
+								$value = $reflection->getName();
+							}
+							break;
+						case '__CLASS__':
+							if ($reflection instanceof IReflectionConstant || $reflection instanceof IReflectionParameter || $reflection instanceof IReflectionProperty || $reflection instanceof IReflectionMethod) {
+								$value = $reflection->getDeclaringClassName() ?: '';
+							}
+							break;
+						case '__TRAIT__':
+							// defined only inside traits
 
-						if ($reflection instanceof ReflectionConstant) {
-							throw new Exception\Runtime('Constants cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
-						} elseif ($reflection instanceof ReflectionParameter && null === $reflection->getDeclaringClassName()) {
-							throw new Exception\Runtime('Function parameters cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
-						}
 
-						if (0 === stripos($constant, 'self::')) {
-							$className = $reflection->getDeclaringClassName();
-						} else {
-							$declaringClass = $reflection->getDeclaringClass();
-							$className = $declaringClass->getParentClassName() ?: self::CONSTANT_NOT_FOUND;
-						}
+							$value = self::CONSTANT_NOT_FOUND;
+							break;
+						case '__METHOD__':
+							if ($reflection instanceof IReflectionParameter) {
+								if (null !== $reflection->getDeclaringClassName()) {
+									$value = $reflection->getDeclaringClassName() . '::' . $reflection->getDeclaringFunctionName();
+								} else {
+									$value = $reflection->getDeclaringFunctionName();
+								}
+							} elseif ($reflection instanceof IReflectionConstant || $reflection instanceof IReflectionProperty) {
+								$value = $reflection->getDeclaringClassName() ?: '';
+							} elseif ($reflection instanceof IReflectionFunctionBase) {
+								if (null !== $reflection->getDeclaringClassName()) {
+									$value = $reflection->getDeclaringClassName() . '::' . $reflection->getName();
+								} else {
+									$value = $reflection->getName();
+								}
+							}
+							break;
+						case '__NAMESPACE__':
+							if (($reflection instanceof IReflectionConstant && null !== $reflection->getDeclaringClassName()) || $reflection instanceof IReflectionProperty) {
+								$value = $reflection->getDeclaringClass()->getNamespaceName();
+							} elseif ($reflection instanceof IReflectionParameter) {
+								if (null !== $reflection->getDeclaringClassName()) {
+									$value = $reflection->getDeclaringClass()->getNamespaceName();
+								} else {
+									$value = $reflection->getDeclaringFunction()->getNamespaceName();
+								}
+							} elseif ($reflection instanceof IReflectionFunctionBase) {
+								if (null !== $reflection->getDeclaringClassName()) {
+									$value = $reflection->getDeclaringClass()->getNamespaceName();
+								} else {
+									$value = $reflection->getNamespaceName();
+								}
+							} else {
+								$value = $reflection->getNamespaceName();
+							}
+							break;
+						default:
+							if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
+								// Handle self:: and parent:: definitions
 
-						$constantName = $className . substr($constant, strpos($constant, '::'));
-					} else {
-						$constantName = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
-						if ($cnt = strspn($constant, '\\')) {
-							$constantName = str_repeat('\\', $cnt) . $constantName;
-						}
+								if ($reflection instanceof ReflectionConstant) {
+									throw new Exception\Runtime('Constants cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
+								} elseif ($reflection instanceof ReflectionParameter && null === $reflection->getDeclaringClassName()) {
+									throw new Exception\Runtime('Function parameters cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
+								}
+
+								if (0 === stripos($constant, 'self::')) {
+									$className = $reflection->getDeclaringClassName();
+								} else {
+									$declaringClass = $reflection->getDeclaringClass();
+									$className = $declaringClass->getParentClassName() ?: self::CONSTANT_NOT_FOUND;
+								}
+
+								$constantName = $className . substr($constant, strpos($constant, '::'));
+							} else {
+								$constantName = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
+								if ($cnt = strspn($constant, '\\')) {
+									$constantName = str_repeat('\\', $cnt) . $constantName;
+								}
+							}
+
+							$reflection = $reflection->getBroker()->getConstant($constantName);
+							$value = $reflection->getValue();
 					}
-
-					$reflection = $reflection->getBroker()->getConstant($constantName);
-					$value = $reflection->getValue();
 				} catch (Exception\Runtime $e) {
 					$value = self::CONSTANT_NOT_FOUND;
 				}
@@ -170,11 +239,23 @@ class Resolver
 	 */
 	final public static function findConstants(array $tokens, ReflectionBase $reflection)
 	{
-		static $accepted = array(T_DOUBLE_COLON => true, T_STRING => true, T_NS_SEPARATOR => true);
+		static $accepted = array(
+			T_DOUBLE_COLON => true,
+			T_STRING => true,
+			T_NS_SEPARATOR => true,
+			T_CLASS_C => true,
+			T_DIR => true,
+			T_FILE => true,
+			T_FUNC_C => true,
+			T_LINE => true,
+			T_METHOD_C => true,
+			T_NS_C => true,
+			T_TRAIT_C => true
+		);
 		static $dontResolve = array('true' => true, 'false' => true, 'null' => true);
 
 		// Adding a dummy token to the end
-		$tokens[] = array(-1);
+		$tokens[] = array(null);
 
 		$constants = array();
 		$constant = '';

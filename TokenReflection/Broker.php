@@ -22,7 +22,8 @@ use RecursiveDirectoryIterator, RecursiveIteratorIterator;
 define('NATIVE_TRAITS', defined('T_TRAIT'));
 if (!NATIVE_TRAITS) {
 	define('T_TRAIT', -1);
-	define('T_INSTEADOF', -2);
+	define('T_TRAIT_C', -2);
+	define('T_INSTEADOF', -3);
 }
 
 /**
