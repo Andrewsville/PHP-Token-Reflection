@@ -116,6 +116,9 @@ class ReflectionConstantTest extends Test
 		foreach ($tests as $test => $expected) {
 			$this->assertSame($expected, $this->getConstantTokenReflection($test)->__toString());
 			$this->assertSame($expected, ReflectionConstant::export($this->getBroker(), $this->getClassName($test), $this->getConstantName($test), true));
+
+			// Test loading from a string
+			$this->assertSame($expected, $this->getConstantTokenReflection($test, true)->__toString());
 		}
 
 		$this->assertSame("Constant [ integer E_NOTICE ] { 8 }\n", ReflectionConstant::export($this->getBroker(), null, 'E_NOTICE', true));

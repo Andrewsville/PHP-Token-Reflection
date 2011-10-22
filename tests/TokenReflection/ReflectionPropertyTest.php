@@ -301,14 +301,22 @@ class ReflectionPropertyTest extends Test
 			$rfl = $this->getPropertyReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionProperty::export($this->getClassName($test), $test, true), ReflectionProperty::export($this->getBroker(), $this->getClassName($test), $test, true));
+
+			// Test loading from a string
+			$rfl = $this->getPropertyReflection($test, true);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 
 		$rfl = $this->getClassReflection('modifiers');
+		$rfl_fromString = $this->getClassReflection('modifiers');
 		foreach (array('public', 'protected', 'private') as $name) {
 			$internal = $rfl->internal->getProperty($name);
 			$token = $rfl->token->getProperty($name);
 			$this->assertSame($internal->__toString(), $token->__toString());
 			$this->assertSame(InternalReflectionProperty::export($this->getClassName('modifiers'), $name, true), ReflectionProperty::export($this->getBroker(), $this->getClassName('modifiers'), $name, true));
+
+			// Test loading from a string
+			$this->assertSame($internal->__toString(), $rfl_fromString->token->getProperty($name)->__toString());
 		}
 
 		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', true), ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', true));
