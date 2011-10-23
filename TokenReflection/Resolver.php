@@ -124,10 +124,14 @@ class Resolver
 							}
 							break;
 						case '__TRAIT__':
-							// defined only inside traits
-
-
-							$value = self::CONSTANT_NOT_FOUND;
+							if ($reflection instanceof IReflectionMethod || $reflection instanceof IReflectionProperty) {
+								$value = $reflection->getDeclaringTraitName() ?: '';
+							} elseif ($reflection instanceof IReflectionParameter) {
+								$method = $reflection->getDeclaringFunction();
+								if ($method instanceof IReflectionMethod) {
+									$value = $method->getDeclaringTraitName() ?: '';
+								}
+							}
 							break;
 						case '__METHOD__':
 							if ($reflection instanceof IReflectionParameter) {

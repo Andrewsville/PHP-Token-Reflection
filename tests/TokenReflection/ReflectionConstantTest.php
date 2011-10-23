@@ -226,4 +226,124 @@ class ReflectionConstantTest extends Test
 		}
 	}
 
+	/**
+	 * Tests the __TRAIT__ magic constant.
+	 *
+	 * For PHP >= 5.4 only.
+	 */
+	public function testMagicConstants54()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped();
+		}
+
+		$broker = new Broker(new Broker\Backend\Memory());
+		$broker->process($this->getFilePath('magic54'));
+
+		require_once ($this->getFilePath('magic54'));
+
+		$internal_constants = get_defined_constants(true);
+		$internal_constants = $internal_constants['user'];
+
+		$token_constants = $broker->getConstants();
+		$this->assertSame(2, count($token_constants));
+
+		foreach ($token_constants as $name => $reflection) {
+			$this->assertTrue(isset($internal_constants[$name]));
+			$this->assertSame($internal_constants[$name], $reflection->getValue(), $name);
+		}
+
+		$classes = array(
+			'TokenReflection_Test_ConstantMagic54Trait',
+			'TokenReflection_Test_ConstantMagic54',
+			'TokenReflection_Test_ConstantMagic54WithTrait',
+			'ns\\TokenReflection_Test_ConstantMagic54Trait',
+			'ns\\TokenReflection_Test_ConstantMagic54',
+			'ns\\TokenReflection_Test_ConstantMagic54WithTrait',
+			'ns2\\TokenReflection_Test_ConstantMagic54',
+			'ns2\\TokenReflection_Test_ConstantMagic54WithTrait',
+			'ns3\\TokenReflection_Test_ConstantMagic54',
+			'ns3\\TokenReflection_Test_ConstantMagic54WithTrait'
+		);
+		foreach ($classes as $class) {
+			$token = $broker->getClass($class);
+			$internal = new \ReflectionClass($class);
+
+			$this->assertSame($internal->isTrait(), $token->isTrait());
+
+			if (!$internal->isTrait()) {
+				$instance = new $class();
+			}
+
+			// Constants
+			if ($internal->isTrait()) {
+				$this->assertSame(0, count($internal->getConstants()));
+			} else {
+				$this->assertSame(1, count($internal->getConstants()));
+			}
+
+			$this->assertSame(count($internal->getConstants()), count($token->getConstantReflections()), $class);
+
+			foreach ($internal->getConstants() as $name => $value) {
+				$this->assertTrue($token->hasConstant($name), sprintf('%s::%s', $class, $name));
+				$this->assertSame($value, $token->getConstantReflection($name)->getValue(), sprintf('%s::%s', $class, $name));
+				$this->assertSame($value, $token->getConstant($name), sprintf('%s::%s', $class, $name));
+			}
+
+			// Properties
+			$this->assertGreaterThan(0, count($internal->getProperties()));
+			$this->assertSame(count($internal->getProperties()), count($token->getProperties()), $class);
+
+			foreach ($internal->getProperties() as $reflection) {
+				$name = $reflection->getName();
+
+				$this->assertTrue($token->hasProperty($name), sprintf('%s::$%s', $class, $name));
+				$this->assertSame($reflection->isStatic(), $token->getProperty($name)->isStatic());
+
+				if ($reflection->isStatic()) {
+					$this->assertSame($internal->getStaticPropertyValue($name), $token->getStaticPropertyValue($name), sprintf('%s::$%s', $class, $name));
+				} elseif (!$internal->isTrait()) {
+					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getValue($instance), sprintf('%s::$%s', $class, $name));
+					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getDefaultValue(), sprintf('%s::$%s', $class, $name));
+				}
+			}
+
+			// Methods
+			$this->assertGreaterThanOrEqual(1, count($internal->getMethods()));
+			$this->assertSame(count($internal->getMethods()), count($token->getMethods()), $class);
+
+			foreach ($internal->getMethods() as $method) {
+				$name = $method->getName();
+
+				$this->assertTrue($token->hasMethod($name), sprintf('%s::%s()', $class, $name));
+
+				$token_method = $token->getMethod($name);
+
+				// Parameters
+				$this->assertGreaterThan(0, $method->getNumberOfParameters(), sprintf('%s::%s()', $class, $name));
+				$this->assertSame($method->getNumberOfParameters(), count($method->getParameters()), sprintf('%s::%s()', $class, $name));
+
+				foreach ($method->getParameters() as $parameter) {
+					$parameter_name = $parameter->getName();
+					$token_parameter = $token_method->getParameter($parameter->getPosition());
+
+					$this->assertTrue($parameter->isDefaultValueAvailable(), sprintf('%s::%s(%s)', $class, $name, $parameter_name));
+					$this->assertSame($parameter->isDefaultValueAvailable(), $token_parameter->isDefaultValueAvailable(), sprintf('%s::%s(%s)', $class, $name, $parameter_name));
+
+					$this->assertSame($parameter->getDefaultValue(), $token_parameter->getDefaultValue(), sprintf('%s::%s(%s)', $class, $name, $parameter_name));
+				}
+
+				// Static variables
+				$internal_variables = $method->getStaticVariables();
+
+				$token_variables = $token_method->getStaticVariables();
+				$this->assertSame(count($internal_variables), count($token_variables), sprintf('%s::%s()', $class, $name));
+
+				foreach ($internal_variables as $variable_name => $variable_value) {
+					$this->assertTrue(isset($token_variables[$variable_name]), sprintf('%s::%s()::%s', $class, $name, $variable_name));
+					$this->assertSame($variable_value, $token_variables[$variable_name], sprintf('%s::%s()::%s', $class, $name, $variable_name));
+				}
+			}
+		}
+	}
 }
