@@ -4,6 +4,11 @@ namespace
 {
 	const CONST_TRAIT = __TRAIT__;
 
+	function constantMagic54($trait = __TRAIT__)
+	{
+		static $trait = __TRAIT__;
+	}
+
 	trait TokenReflection_Test_ConstantMagic54Trait
 	{
 
@@ -51,6 +56,11 @@ namespace
 namespace ns
 {
 	const CONST_TRAIT = __TRAIT__;
+
+	function constantMagic54($trait = __TRAIT__)
+	{
+		static $trait = __TRAIT__;
+	}
 
 	trait TokenReflection_Test_ConstantMagic54Trait
 	{

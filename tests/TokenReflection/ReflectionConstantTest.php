@@ -145,6 +145,41 @@ class ReflectionConstantTest extends Test
 			$this->assertSame($internal_constants[$name], $reflection->getValue(), $name);
 		}
 
+		$token_functions = $broker->getFunctions();
+		$this->assertSame(2, count($token_functions));
+
+		foreach ($token_functions as $name => $token_function) {
+			$this->assertTrue(function_exists($name));
+
+			$function = new \ReflectionFunction($name);
+
+			// Parameters
+			$this->assertGreaterThan(0, $function->getNumberOfParameters(), sprintf('%s()', $name));
+			$this->assertSame($function->getNumberOfParameters(), count($function->getParameters()), sprintf('%s()', $name));
+
+			foreach ($function->getParameters() as $parameter) {
+				$parameter_name = $parameter->getName();
+				$token_parameter = $token_function->getParameter($parameter->getPosition());
+
+				$this->assertTrue($parameter->isDefaultValueAvailable(), sprintf('%s(%s)', $name, $parameter_name));
+				$this->assertSame($parameter->isDefaultValueAvailable(), $token_parameter->isDefaultValueAvailable(), sprintf('%s(%s)', $name, $parameter_name));
+
+				$this->assertSame($parameter->getDefaultValue(), $token_parameter->getDefaultValue(), sprintf('%s(%s)', $name, $parameter_name));
+			}
+
+			// Static variables
+			$internal_variables = $function->getStaticVariables();
+			$this->assertGreaterThan(0, count($internal_variables), sprintf('%s()', $name));
+
+			$token_variables = $token_function->getStaticVariables();
+			$this->assertSame(count($internal_variables), count($token_variables), sprintf('%s()', $name));
+
+			foreach ($internal_variables as $variable_name => $variable_value) {
+				$this->assertTrue(isset($token_variables[$variable_name]), sprintf('%s()::%s', $name, $variable_name));
+				$this->assertSame($variable_value, $token_variables[$variable_name], sprintf('%s()::%s', $name, $variable_name));
+			}
+		}
+
 		$classes = array(
 			'TokenReflection_Test_ConstantMagic',
 			'ns\\TokenReflection_Test_ConstantMagic',
@@ -251,6 +286,41 @@ class ReflectionConstantTest extends Test
 		foreach ($token_constants as $name => $reflection) {
 			$this->assertTrue(isset($internal_constants[$name]));
 			$this->assertSame($internal_constants[$name], $reflection->getValue(), $name);
+		}
+
+		$token_functions = $broker->getFunctions();
+		$this->assertSame(2, count($token_functions));
+
+		foreach ($token_functions as $name => $token_function) {
+			$this->assertTrue(function_exists($name));
+
+			$function = new \ReflectionFunction($name);
+
+			// Parameters
+			$this->assertGreaterThan(0, $function->getNumberOfParameters(), sprintf('%s()', $name));
+			$this->assertSame($function->getNumberOfParameters(), count($function->getParameters()), sprintf('%s()', $name));
+
+			foreach ($function->getParameters() as $parameter) {
+				$parameter_name = $parameter->getName();
+				$token_parameter = $token_function->getParameter($parameter->getPosition());
+
+				$this->assertTrue($parameter->isDefaultValueAvailable(), sprintf('%s(%s)', $name, $parameter_name));
+				$this->assertSame($parameter->isDefaultValueAvailable(), $token_parameter->isDefaultValueAvailable(), sprintf('%s(%s)', $name, $parameter_name));
+
+				$this->assertSame($parameter->getDefaultValue(), $token_parameter->getDefaultValue(), sprintf('%s(%s)', $name, $parameter_name));
+			}
+
+			// Static variables
+			$internal_variables = $function->getStaticVariables();
+			$this->assertGreaterThan(0, count($internal_variables), sprintf('%s()', $name));
+
+			$token_variables = $token_function->getStaticVariables();
+			$this->assertSame(count($internal_variables), count($token_variables), sprintf('%s()', $name));
+
+			foreach ($internal_variables as $variable_name => $variable_value) {
+				$this->assertTrue(isset($token_variables[$variable_name]), sprintf('%s()::%s', $name, $variable_name));
+				$this->assertSame($variable_value, $token_variables[$variable_name], sprintf('%s()::%s', $name, $variable_name));
+			}
 		}
 
 		$classes = array(

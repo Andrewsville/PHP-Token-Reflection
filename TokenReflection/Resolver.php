@@ -142,12 +142,10 @@ class Resolver
 								}
 							} elseif ($reflection instanceof IReflectionConstant || $reflection instanceof IReflectionProperty) {
 								$value = $reflection->getDeclaringClassName() ?: '';
-							} elseif ($reflection instanceof IReflectionFunctionBase) {
-								if (null !== $reflection->getDeclaringClassName()) {
-									$value = $reflection->getDeclaringClassName() . '::' . $reflection->getName();
-								} else {
-									$value = $reflection->getName();
-								}
+							} elseif ($reflection instanceof IReflectionMethod) {
+								$value = $reflection->getDeclaringClassName() . '::' . $reflection->getName();
+							} elseif ($reflection instanceof IReflectionFunction) {
+								$value = $reflection->getName();
 							}
 							break;
 						case '__NAMESPACE__':
@@ -159,12 +157,8 @@ class Resolver
 								} else {
 									$value = $reflection->getDeclaringFunction()->getNamespaceName();
 								}
-							} elseif ($reflection instanceof IReflectionFunctionBase) {
-								if (null !== $reflection->getDeclaringClassName()) {
-									$value = $reflection->getDeclaringClass()->getNamespaceName();
-								} else {
-									$value = $reflection->getNamespaceName();
-								}
+							} elseif ($reflection instanceof IReflectionMethod) {
+								$value = $reflection->getDeclaringClass()->getNamespaceName();
 							} else {
 								$value = $reflection->getNamespaceName();
 							}
