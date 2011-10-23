@@ -370,7 +370,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	{
 		$property = clone $this;
 		$property->declaringClassName = $parent->getName();
-		$property->declaringTraitName = $this->declaringClassName;
 		return $property;
 	}
 
@@ -408,6 +407,9 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		}
 
 		$this->declaringClassName = $parent->getName();
+		if ($parent->isTrait()) {
+			$this->declaringTraitName = $parent->getName();
+		}
 		return parent::processParent($parent);
 	}
 
