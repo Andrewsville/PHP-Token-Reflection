@@ -169,15 +169,21 @@ class ReflectionConstantTest extends Test
 			}
 
 			// Properties
-			$this->assertSame(7, count($internal->getProperties()));
+			$this->assertSame(14, count($internal->getProperties()));
 			$this->assertSame(count($internal->getProperties()), count($token->getProperties()), $class);
 
 			foreach ($internal->getProperties() as $reflection) {
 				$name = $reflection->getName();
 
 				$this->assertTrue($token->hasProperty($name), sprintf('%s::$%s', $class, $name));
-				$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getValue($instance), sprintf('%s::$%s', $class, $name));
-				$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getDefaultValue(), sprintf('%s::$%s', $class, $name));
+				$this->assertSame($reflection->isStatic(), $token->getProperty($name)->isStatic());
+
+				if ($reflection->isStatic()) {
+					$this->assertSame($internal->getStaticPropertyValue($name), $token->getStaticPropertyValue($name));
+				} else {
+					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getValue($instance), sprintf('%s::$%s', $class, $name));
+					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getDefaultValue(), sprintf('%s::$%s', $class, $name));
+				}
 			}
 
 			// Methods

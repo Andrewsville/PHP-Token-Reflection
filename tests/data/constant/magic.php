@@ -28,6 +28,14 @@ namespace
 		public $function = __FUNCTION__;
 		public $method = __METHOD__;
 
+		public static $s_namespace = __NAMESPACE__;
+		public static $s_class = __CLASS__;
+		public static $s_file = __FILE__;
+		public static $s_dir = __DIR__;
+		public static $s_line = __LINE__;
+		public static $s_function = __FUNCTION__;
+		public static $s_method = __METHOD__;
+
 		public function foo($namespace = __NAMESPACE__, $class = __CLASS__, $file = __FILE__, $dir = __DIR__, $line = __LINE__, $function = __FUNCTION__, $method = __METHOD__, $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__))
 		{
 			static $namespace = __NAMESPACE__;
@@ -69,6 +77,14 @@ namespace ns
 		public $line = __LINE__;
 		public $function = __FUNCTION__;
 		public $method = __METHOD__;
+
+		public static $s_namespace = __NAMESPACE__;
+		public static $s_class = __CLASS__;
+		public static $s_file = __FILE__;
+		public static $s_dir = __DIR__;
+		public static $s_line = __LINE__;
+		public static $s_function = __FUNCTION__;
+		public static $s_method = __METHOD__;
 
 		public function foo(
 			$namespace = __NAMESPACE__,
