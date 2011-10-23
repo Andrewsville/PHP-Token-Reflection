@@ -179,7 +179,7 @@ class ReflectionConstantTest extends Test
 				$this->assertSame($reflection->isStatic(), $token->getProperty($name)->isStatic());
 
 				if ($reflection->isStatic()) {
-					$this->assertSame($internal->getStaticPropertyValue($name), $token->getStaticPropertyValue($name));
+					$this->assertSame($internal->getStaticPropertyValue($name), $token->getStaticPropertyValue($name), sprintf('%s::$%s', $class, $name));
 				} else {
 					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getValue($instance), sprintf('%s::$%s', $class, $name));
 					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getDefaultValue(), sprintf('%s::$%s', $class, $name));
