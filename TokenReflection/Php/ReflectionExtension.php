@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -263,7 +263,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionExtension
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

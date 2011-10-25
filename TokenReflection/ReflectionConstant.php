@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -15,6 +15,8 @@
 
 namespace TokenReflection;
 
+use TokenReflection\Stream\StreamBase as Stream;
+
 /**
  * Tokenized constant reflection.
  */
@@ -23,7 +25,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Name of the declaring class.
 	 *
-	 * @var String
+	 * @var string
 	 */
 	private $declaringClassName;
 
@@ -172,7 +174,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 * @param string $constant Constant name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $constant, $return = false)
 	{
@@ -214,7 +216,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -233,7 +235,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Find the appropriate docblock.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection
 	 * @return \TokenReflection\ReflectionConstant
 	 */
@@ -256,7 +258,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionConstant
 	 */
@@ -270,9 +272,9 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Parses the constant name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
@@ -302,10 +304,10 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	/**
 	 * Parses the constant value.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined.
 	 */
 	private function parseValue(Stream $tokenStream, IReflection $parent)
 	{
@@ -316,7 +318,24 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 
 			$tokenStream->skipWhitespaces();
 
-			static $acceptedTokens = array('-' => true, '+' => true, T_STRING => true, T_NS_SEPARATOR => true, T_CONSTANT_ENCAPSED_STRING => true, T_DNUMBER => true, T_LNUMBER => true, T_DOUBLE_COLON => true);
+			static $acceptedTokens = array(
+				'-' => true,
+				'+' => true,
+				T_STRING => true,
+				T_NS_SEPARATOR => true,
+				T_CONSTANT_ENCAPSED_STRING => true,
+				T_DNUMBER => true,
+				T_LNUMBER => true,
+				T_DOUBLE_COLON => true,
+				T_CLASS_C => true,
+				T_DIR => true,
+				T_FILE => true,
+				T_FUNC_C => true,
+				T_LINE => true,
+				T_METHOD_C => true,
+				T_NS_C => true,
+				T_TRAIT_C => true
+			);
 			while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
 				$this->valueDefinition[] = $tokenStream->current();
 				$tokenStream->next();

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -14,6 +14,8 @@
  */
 
 namespace TokenReflection;
+
+use TokenReflection\Stream\StreamBase as Stream;
 
 /**
  * Processed file class.
@@ -30,7 +32,7 @@ class ReflectionFile implements IReflection
 	/**
 	 * File token stream.
 	 *
-	 * @var \TokenReflection\Stream
+	 * @var \TokenReflection\Stream\StreamBase
 	 */
 	private $tokenStream = null;
 
@@ -44,7 +46,7 @@ class ReflectionFile implements IReflection
 	/**
 	 * Constructor.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token stream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
 	public function __construct(Stream $tokenStream, Broker $broker)
@@ -111,8 +113,7 @@ class ReflectionFile implements IReflection
 	/**
 	 * Returns the string representation of the reflection object.
 	 *
-	 * @return string
-	 * @throws \TokenReflection\Exception\Runtime
+	 * @throws \TokenReflection\Exception\Runtime If the method is called, because it's unsupported.
 	 */
 	public function __toString()
 	{
@@ -125,8 +126,7 @@ class ReflectionFile implements IReflection
 	 * @param \TokenReflection\Broker $broker Broker instance
 	 * @param string $argument Reflection object name
 	 * @param boolean $return Return the export instead of outputting it
-	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime
+	 * @throws \TokenReflection\Exception\Runtime If the method is called, because it's unsupported.
 	 */
 	public static function export(Broker $broker, $argument, $return = false)
 	{
@@ -146,7 +146,7 @@ class ReflectionFile implements IReflection
 	/**
 	 * Returns the file token stream.
 	 *
-	 * @return \TokenReflection\Stream
+	 * @return \TokenReflection\Stream\StreamBase
 	 */
 	public function getTokenStream()
 	{
@@ -189,7 +189,7 @@ class ReflectionFile implements IReflection
 	 * Prepares namespace reflections from the file.
 	 *
 	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed.
 	 */
 	private function parse()
 	{
@@ -211,11 +211,12 @@ class ReflectionFile implements IReflection
 						case T_COMMENT:
 							break;
 						case T_DECLARE:
+							// Intentionally twice call of skipWhitespaces()
 							$this->tokenStream
 								->skipWhitespaces()
 								->findMatchingBracket()
 								->skipWhitespaces()
-								->skipWhitespaces(); // Intentionally twice
+								->skipWhitespaces();
 							break;
 						case T_NAMESPACE:
 							break 2;
@@ -235,7 +236,6 @@ class ReflectionFile implements IReflection
 					}
 				}
 			}
-
 
 			return $this;
 		} catch (Exception $e) {

@@ -4,7 +4,7 @@ In short, this library emulates the PHP reflection model using the tokenized PHP
 
 ## Brief history
 
-Everything started with [ApiGen](https://github.com/nette/apigen). It is a pretty cool tool for generating documentation. It uses docblocks and... yes, reflection. It makes perfect sense, because reflection is - besides other things - a great tool for generating documentation, however it has its limitations by design. The biggest one is that you have to include/require the described source. It means that:
+Everything started with [ApiGen](http://apigen.org). It is a pretty cool tool for generating documentation. It uses docblocks and... yes, reflection. It makes perfect sense, because reflection is - besides other things - a great tool for generating documentation, however it has its limitations by design. The biggest one is that you have to include/require the described source. It means that:
 
 * the described source affects the generator's environment,
 * it is very memory-consuming,

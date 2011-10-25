@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -488,6 +488,10 @@ class ReflectionMethodTest extends Test
 			$rfl = $this->getMethodReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionMethod::export($this->getClassName($test), $test, true), ReflectionMethod::export($this->getBroker(), $this->getClassName($test), $test, true));
+
+			$rfl = $this->getMethodReflection($test, true);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+			$this->assertSame(InternalReflectionMethod::export($this->getClassName($test), $test, true), ReflectionMethod::export($this->getBroker(), $this->getClassName($test), $test, true));
 		}
 
 		$tests = array(
@@ -500,10 +504,12 @@ class ReflectionMethodTest extends Test
 		);
 		foreach ($tests as $class => $classTests) {
 			$rfl = $this->getClassReflection($class);
+			$rfl_fromString = $this->getClassReflection($class, true);
 			foreach ($classTests as $method) {
 				// @todo inherits not supported yet
 				$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl->internal->getMethod($method)->__toString()), $rfl->token->getMethod($method)->__toString());
 				$this->assertSame(preg_replace('~, inherits [\w]+~', '', InternalReflectionMethod::export($this->getClassName($class), $method, true)), ReflectionMethod::export($this->getBroker(), $this->getClassName($class), $method, true));
+				$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl_fromString->internal->getMethod($method)->__toString()), $rfl_fromString->token->getMethod($method)->__toString());
 			}
 		}
 

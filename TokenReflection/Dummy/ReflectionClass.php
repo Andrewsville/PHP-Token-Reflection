@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -307,7 +307,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class uses a particular trait.
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-	 * @return bool
+	 * @return boolean
 	 */
 	public function usesTrait($trait)
 	{
@@ -425,7 +425,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface.
 	 */
 	public function implementsInterface($interface)
 	{
@@ -520,7 +520,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a method reflection.
 	 *
 	 * @param string $name Method name
-	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist.
 	 */
 	public function getMethod($name)
 	{
@@ -597,7 +597,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a constant value.
 	 *
 	 * @param string $name Constant name
-	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist.
 	 */
 	public function getConstant($name)
 	{
@@ -608,7 +608,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
-	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist.
 	 */
 	public function getConstantReflection($name)
 	{
@@ -647,7 +647,7 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
-	 * Returns constants declared by this class, not its parents
+	 * Returns constants declared by this class, not its parents.
 	 *
 	 * @return array
 	 */
@@ -702,7 +702,7 @@ class ReflectionClass implements IReflectionClass
 	 * Return a property reflections.
 	 *
 	 * @param string $name Property name
-	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist.
 	 */
 	public function getProperty($name)
 	{
@@ -768,7 +768,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @param mixed $default Default value
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist.
 	 */
 	public function getStaticPropertyValue($name, $default = null)
 	{
@@ -896,7 +896,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param object $object Instance
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object
+	 * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object.
 	 */
 	public function isInstance($object)
 	{
@@ -911,7 +911,7 @@ class ReflectionClass implements IReflectionClass
 	 * Creates a new class instance without using a constructor.
 	 *
 	 * @return object
-	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class.
 	 */
 	public function newInstanceWithoutConstructor()
 	{
@@ -941,7 +941,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param array $args Array of constructor parameters
 	 * @return object
-	 * @throws \TokenReflection\Exception\Runtime If the required class does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the required class does not exist.
 	 */
 	public function newInstanceArgs(array $args = array())
 	{
@@ -958,7 +958,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
-	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist.
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{

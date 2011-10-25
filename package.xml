@@ -22,14 +22,14 @@
 	<email>kontakt@kukulich.cz</email>
 	<active>yes</active>
 </developer>
-<date>2011-09-04</date>
+<date>2011-10-25</date>
 <version>
-	<release>1.0.0RC1</release>
+	<release>1.0.0RC2</release>
 	<api>1.0.0</api>
 </version>
 <stability>
 	<release>beta</release>
-	<api>beta</api>
+	<api>stable</api>
 </stability>
 <license uri="https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/LICENSE">New BSD</license>
 <notes>-</notes>
@@ -59,6 +59,11 @@
 				<file name="ReflectionParameter.php" role="php" />
 				<file name="ReflectionProperty.php" role="php" />
 			</dir>
+			<dir name="Stream">
+				<file name="StreamBase.php" role="php" />
+				<file name="FileStream.php" role="php" />
+				<file name="StringStream.php" role="php" />
+			</dir>
 			<file name="Broker.php" role="php" />
 			<file name="Exception.php" role="php" />
 			<file name="IReflection.php" role="php" />
@@ -84,7 +89,6 @@
 			<file name="ReflectionParameter.php" role="php" />
 			<file name="ReflectionProperty.php" role="php" />
 			<file name="Resolver.php" role="php" />
-			<file name="Stream.php" role="php" />
 		</dir>
 		<file name="LICENSE" role="doc" />
 		<file name="README.md" role="doc" />

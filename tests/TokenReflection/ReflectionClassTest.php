@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -781,6 +781,10 @@ class ReflectionClassTest extends Test
 			$rfl = $this->getClassReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionClass::export($this->getClassName($test), true), ReflectionClass::export($this->getBroker(), $this->getClassName($test), true));
+
+			// Test loading from a string
+			$rfl = $this->getClassReflection($test, true);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 
 		$this->assertSame(InternalReflectionClass::export('ReflectionClass', true), ReflectionClass::export($this->getBroker(), 'ReflectionClass', true));

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 
 /**
  * Reflection of a namespace parsed from a file.
@@ -95,7 +95,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -109,7 +109,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFileNamespace
 	 */
@@ -121,9 +121,9 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses the namespace name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFileNamespace
-	 * @throws \TokenReflection\Exception\Parse If the namespace name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the namespace name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
@@ -175,10 +175,10 @@ class ReflectionFileNamespace extends ReflectionBase
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFileNamespace
-	 * @throws \TokenReflection\Exception\Parse If child elements could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If child elements could not be parsed.
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
@@ -246,9 +246,9 @@ class ReflectionFileNamespace extends ReflectionBase
 							// Next namespace in the current "use" definition
 							continue;
 						}
-					throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
-				}
 
+						throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+					}
 
 				case T_COMMENT:
 				case T_DOC_COMMENT:

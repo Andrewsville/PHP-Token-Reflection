@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 
 /**
  * Basic abstract TokenReflection class.
@@ -118,10 +118,10 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Constructor.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @throws \TokenReflection\Exception\Parse If the token stream is empty
+	 * @throws \TokenReflection\Exception\Runtime If the token stream is empty
 	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
 	 */
 	public final function __construct(Stream $tokenStream, Broker $broker, IReflection $parent)
@@ -384,7 +384,7 @@ abstract class ReflectionBase implements IReflection
 	 * @param \TokenReflection\IReflection $object Reflection object
 	 * @param string $key Variable name
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the requested parameter does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested parameter does not exist.
 	 */
 	final public static function get(IReflection $object, $key)
 	{
@@ -448,7 +448,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Find the appropriate docblock.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection
 	 * @return \TokenReflection\ReflectionBase
 	 */
@@ -494,7 +494,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Saves the start line number.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token susbtream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token susbtream
 	 * @return \TokenReflection\ReflectionBase
 	 */
 	private final function parseStartLine(Stream $tokenStream)
@@ -510,7 +510,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Saves the end line number.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token susbtream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token susbtream
 	 * @return \TokenReflection\ReflectionBase
 	 */
 	private final function parseEndLine(Stream $tokenStream)
@@ -526,7 +526,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
 	 */
@@ -535,7 +535,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Parses the reflection object name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionBase
 	 */
 	abstract protected function parseName(Stream $tokenStream);
@@ -543,7 +543,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\Reflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
 	 */

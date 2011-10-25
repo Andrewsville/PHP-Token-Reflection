@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -141,7 +141,7 @@ class ReflectionAnnotation
 	 *
 	 * @param array $templates Docblock templates
 	 * @return \TokenReflection\ReflectionAnnotation
-	 * @throws \TokenReflection\Exception\Runtime If an invalid annotation template was provided
+	 * @throws \TokenReflection\Exception\Runtime If an invalid annotation template was provided.
 	 */
 	public function setTemplates(array $templates)
 	{
@@ -172,16 +172,18 @@ class ReflectionAnnotation
 		if (false !== $this->docComment) {
 			// Parse docblock
 			$name = self::SHORT_DESCRIPTION;
-			$docblock = trim(preg_replace(
-				array(
-					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
-					'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
-					'~^/\\*\\*~',
-					'~\\*/$~'
-				),
-				'',
-				$this->docComment
-			));
+			$docblock = trim(
+				preg_replace(
+					array(
+						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
+						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
+						'~^/\\*\\*~',
+						'~\\*/$~'
+					),
+					'',
+					$this->docComment
+				)
+			);
 			foreach (explode("\n", $docblock) as $line) {
 				$line = preg_replace('~^\\*\\s?~', '', trim($line));
 
@@ -259,7 +261,7 @@ class ReflectionAnnotation
 	/**
 	 * Inherits annotations from parent classes/methods/properties if needed.
 	 *
-	 * @throws \TokenReflection\Exception\Parse If unsupported reflection has been used
+	 * @throws \TokenReflection\Exception\Parse If unsupported reflection was used.
 	 */
 	private function inheritAnnotations()
 	{
@@ -271,12 +273,9 @@ class ReflectionAnnotation
 			throw new Exception\Parse(sprintf('Unsupported reflection type: "%s".', get_class($this->reflection)), Exception\Parse::UNSUPPORTED);
 		}
 
-		$parents = array_filter(
-			array_merge(array($declaringClass->getParentClass()), $declaringClass->getOwnInterfaces()),
-			function ($class) {
-				return $class instanceof ReflectionClass;
-			}
-		);
+		$parents = array_filter(array_merge(array($declaringClass->getParentClass()), $declaringClass->getOwnInterfaces()), function($class) {
+			return $class instanceof ReflectionClass;
+		});
 
 		// In case of properties and methods, look for a property/method of the same name and return
 		// and array of such members.

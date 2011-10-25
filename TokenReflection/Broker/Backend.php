@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -143,7 +143,7 @@ interface Backend
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return \TokenReflection\Stream
+	 * @return \TokenReflection\Stream\StreamBase
 	 */
 	public function getFileTokens($fileName);
 

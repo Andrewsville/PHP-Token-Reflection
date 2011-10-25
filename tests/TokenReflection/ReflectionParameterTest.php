@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -193,6 +193,10 @@ class ReflectionParameterTest extends Test
 			$rfl = $this->getParameterReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, true), ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, true));
+
+			// Test loading from a string
+			$rfl = $this->getParameterReflection($test, true);
+			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 
 		$this->assertSame(InternalReflectionParameter::export('strpos', 0, true), ReflectionParameter::export($this->getBroker(), 'strpos', 0, true));

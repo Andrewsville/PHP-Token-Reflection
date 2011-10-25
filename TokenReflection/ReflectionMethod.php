@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 use ReflectionMethod as InternalReflectionMethod, ReflectionClass as InternalReflectionClass;
 
 /**
@@ -276,7 +276,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	public function is($filter = null)
 	{
-		// self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT
+		// See self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT
 		static $computedModifiers = 0x808;
 
 		if (null === $filter || ($this->modifiers & $filter)) {
@@ -312,7 +312,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * Returns the method prototype.
 	 *
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the method has no prototype
+	 * @throws \TokenReflection\Exception\Runtime If the method has no prototype.
 	 */
 	public function getPrototype()
 	{
@@ -352,6 +352,16 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns static variables.
+	 *
+	 * @return array
+	 */
+	public function getStaticVariables()
+	{
+		return $this->declaringClassName === $this->declaringTraitName || null === $this->declaringTraitName ? parent::getStaticVariables() : array();
+	}
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string
@@ -385,7 +395,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		$parameters = '';
-		if ($this->getNumberOfParameters() > 0 ) {
+		if ($this->getNumberOfParameters() > 0) {
 			$buffer = '';
 			foreach ($this->getParameters() as $parameter) {
 				$buffer .= "\n    " . $parameter->__toString();
@@ -427,7 +437,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param string $method Method name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $method, $return = false)
 	{
@@ -466,7 +476,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param object $object Class instance
 	 * @param array $args Method parameter values
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If it is not possible to invoke the method
+	 * @throws \TokenReflection\Exception\Runtime If it is not possible to invoke the method.
 	 */
 	public function invokeArgs($object, array $args = array())
 	{
@@ -543,7 +553,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param object $object Object
 	 * @return \Closure
 	 */
-	public function getClosure($object){
+	public function getClosure($object)
+	{
 		return null;
 	}
 
@@ -564,6 +575,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param string $name New method name
 	 * @param integer $accessLevel New access level
 	 * @return \TokenReflection\ReflectionMethod
+	 * @throws \TokenReflection\Exception\Parse If an invalid method access level was found.
 	 */
 	public function alias(ReflectionClass $parent, $name = null, $accessLevel = null)
 	{
@@ -649,7 +661,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -667,10 +679,10 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Parse If the class could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If the class could not be parsed.
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
@@ -684,9 +696,9 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Parses base method modifiers (abstract, final, public, ...).
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Parse If basic modifiers could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If basic modifiers could not be parsed.
 	 */
 	private function parseBaseModifiers(Stream $tokenStream)
 	{

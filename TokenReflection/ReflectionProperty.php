@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 use ReflectionProperty as InternalReflectionProperty, ReflectionClass as InternalReflectionClass;
 
 /**
@@ -132,7 +132,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 *
 	 * @param object $object
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If it is not possible to return the property value
+	 * @throws \TokenReflection\Exception\Runtime If it is not possible to return the property value.
 	 */
 	public function getValue($object)
 	{
@@ -263,7 +263,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 * @param string $property Property name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $property, $return = false)
 	{
@@ -319,7 +319,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 *
 	 * @param object $object Class instance
 	 * @param mixed $value Poperty value
-	 * @throws \TokenReflection\Exception\Runtime If it is not possible to set the property value
+	 * @throws \TokenReflection\Exception\Runtime If it is not possible to set the property value.
 	 */
 	public function setValue($object, $value)
 	{
@@ -370,7 +370,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	{
 		$property = clone $this;
 		$property->declaringClassName = $parent->getName();
-		$property->declaringTraitName = $this->declaringClassName;
 		return $property;
 	}
 
@@ -399,7 +398,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided
+	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
 	{
@@ -408,13 +407,16 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		}
 
 		$this->declaringClassName = $parent->getName();
+		if ($parent->isTrait()) {
+			$this->declaringTraitName = $parent->getName();
+		}
 		return parent::processParent($parent);
 	}
 
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionProperty
 	 */
@@ -429,10 +431,10 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\ReflectionClass $class Defining class
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Parse If the modifiers value cannot be determined
+	 * @throws \TokenReflection\Exception\Parse If the modifiers value cannot be determined.
 	 */
 	private function parseModifiers(Stream $tokenStream, ReflectionClass $class)
 	{
@@ -492,9 +494,9 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Parses the property name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Parse If the property name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the property name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
@@ -516,9 +518,9 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	/**
 	 * Parses the propety default value.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Parse If the property default value could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the property default value could not be determined.
 	 */
 	private function parseDefaultValue(Stream $tokenStream)
 	{
@@ -559,7 +561,6 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 
 				$this->defaultValueDefinition[] = $tokenStream->current();
 				$tokenStream->next();
-
 			}
 
 			if (',' !== $type && ';' !== $type) {

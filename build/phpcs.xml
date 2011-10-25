@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="TokenReflection">
+	<description>TokenReflection coding standard</description>
+
+	<rule ref="Kukulich" />
+
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
+		<severity>0</severity>
+	</rule>
+</ruleset>

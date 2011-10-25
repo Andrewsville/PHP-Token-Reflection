@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -134,7 +134,6 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * Sets a method to be accessible or not.
 	 *
 	 * @param boolean $accessible If the method should be accessible.
-	 * @return boolean
 	 */
 	public function setAccessible($accessible);
 
