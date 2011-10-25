@@ -318,7 +318,24 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 
 			$tokenStream->skipWhitespaces();
 
-			static $acceptedTokens = array('-' => true, '+' => true, T_STRING => true, T_NS_SEPARATOR => true, T_CONSTANT_ENCAPSED_STRING => true, T_DNUMBER => true, T_LNUMBER => true, T_DOUBLE_COLON => true);
+			static $acceptedTokens = array(
+				'-' => true,
+				'+' => true,
+				T_STRING => true,
+				T_NS_SEPARATOR => true,
+				T_CONSTANT_ENCAPSED_STRING => true,
+				T_DNUMBER => true,
+				T_LNUMBER => true,
+				T_DOUBLE_COLON => true,
+				T_CLASS_C => true,
+				T_DIR => true,
+				T_FILE => true,
+				T_FUNC_C => true,
+				T_LINE => true,
+				T_METHOD_C => true,
+				T_NS_C => true,
+				T_TRAIT_C => true
+			);
 			while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
 				$this->valueDefinition[] = $tokenStream->current();
 				$tokenStream->next();
