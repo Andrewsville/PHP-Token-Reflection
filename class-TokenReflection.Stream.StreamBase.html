@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="generator" content="ApiGen 2.2.0">
+
+	<title>Class TokenReflection\Stream\StreamBase | PHP Token Reflection</title>
+
+	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
+	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript">
+		var ApiGen = ApiGen || {};
+		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
+	</script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+		<div id="groups">
+
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.html">Broker</a>
+						<span></span>
+						<ul>
+				<li><a href="namespace-TokenReflection.Broker.Backend.html">Backend</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Php.html">Php</a>
+						</li>
+				<li class="active"><a href="namespace-TokenReflection.Stream.html">Stream</a>
+						</li>
+							</ul></li>
+			</ul>
+		</div>
+
+		<hr>
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-TokenReflection.Stream.FileStream.html">FileStream</a></li>
+				<li class="active"><a href="class-TokenReflection.Stream.StreamBase.html">StreamBase</a></li>
+				<li><a href="class-TokenReflection.Stream.StringStream.html">StringStream</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text">
+		<input type="submit" value="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-TokenReflection.Stream.html" title="Summary of TokenReflection\Stream"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+			<li>
+				<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class StreamBase</h1>
+
+	<div class="description">
+	
+<p>Token stream iterator base class.</p>
+
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+<b>TokenReflection\Stream\StreamBase</b>			
+			 implements 
+SeekableIterator, 
+			
+Countable, 
+			
+ArrayAccess, 
+			
+Serializable
+			
+			
+		</dd>
+	</dl>
+
+	<div>
+		<h4>Direct known subclasses</h4>
+			<a href="class-TokenReflection.Stream.FileStream.html">TokenReflection\Stream\FileStream</a>, 
+			<a href="class-TokenReflection.Stream.StringStream.html">TokenReflection\Stream\StringStream</a>
+	</div>
+
+
+
+
+
+
+	<div class="info">
+		<b>Abstract</b><br>
+		
+		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a>\<a href="namespace-TokenReflection.Stream.html">Stream</a><br>
+
+		<b>Located at</b> <a href="source-class-TokenReflection.Stream.StreamBase.html#26" title="Go to source code">Stream/StreamBase.php</a><br>
+	</div>
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			
+			 protected 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#59" title="Go to source code">__construct</a>( )</code>
+
+		<div class="description short">
+			
+<p>Constructor.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Constructor.</p>
+
+<p>Protected to ensure that the concrete implementation will override it.</p>
+
+
+
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br>If tokenizer PHP extension is missing.<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="processSource" id="_processSource">
+
+		<td class="attributes"><code>
+			
+			final protected 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_processSource">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#73" title="Go to source code">processSource</a>( <span>string <var>$source</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Extracts tokens from a source code.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Extracts tokens from a source code.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$source</var></dt>
+					<dd><code>string</code><br> Source code</dd>
+				</dl></div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFileName" id="_getFileName">
+
+		<td class="attributes"><code>
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFileName">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#112" title="Go to source code">getFileName</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the file name this is a part of.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the file name this is a part of.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getSource" id="_getSource">
+
+		<td class="attributes"><code>
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getSource">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#122" title="Go to source code">getSource</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the original source code.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the original source code.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getSourcePart" id="_getSourcePart">
+
+		<td class="attributes"><code>
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getSourcePart">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#132" title="Go to source code">getSourcePart</a>( <span>mixed <var>$start</var> = <span class="php-keyword1">null</span></span>, <span>mixed <var>$end</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns a part of the source code.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns a part of the source code.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$start</var></dt>
+					<dd><code>mixed</code><br> Start offset</dd>
+					<dt><var>$end</var></dt>
+					<dd><code>mixed</code><br> End offset</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="find" id="_find">
+
+		<td class="attributes"><code>
+			
+			 public 
+			TokenReflection\Stream|boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_find">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#151" title="Go to source code">find</a>( <span>integer|string <var>$type</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Finds the position of the token of the given type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Finds the position of the token of the given type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$type</var></dt>
+					<dd><code>integer|string</code><br> Token type</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>TokenReflection\Stream|boolean</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="findMatchingBracket" id="_findMatchingBracket">
+
+		<td class="attributes"><code>
+			
+			 public 
+			TokenReflection\Stream
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_findMatchingBracket">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#172" title="Go to source code">findMatchingBracket</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the position of the token with the matching bracket.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the position of the token with the matching bracket.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>TokenReflection\Stream</code><br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>If out of the array.<br>
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>If there is no brancket at the current position.<br>
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>If the matching bracket could not be found.<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="skipWhitespaces" id="_skipWhitespaces">
+
+		<td class="attributes"><code>
+			
+			 public 
+			TokenReflection\Stream
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_skipWhitespaces">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#223" title="Go to source code">skipWhitespaces</a>( )</code>
+
+		<div class="description short">
+			
+<p>Skips whitespaces and comments next to the current position.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Skips whitespaces and comments next to the current position.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>TokenReflection\Stream</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="is" id="_is">
+
+		<td class="attributes"><code>
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_is">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#239" title="Go to source code">is</a>( <span>integer|string <var>$type</var></span>, <span>integer <var>$position</var> = -<span class="php-num">1</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Checks if there is a token of the given type at the given position.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Checks if there is a token of the given type at the given position.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$type</var></dt>
+					<dd><code>integer|string</code><br> Token type</dd>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br> Position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getType" id="_getType">
+
+		<td class="attributes"><code>
+			
+			 public 
+			string|integer|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getType">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#251" title="Go to source code">getType</a>( <span>integer <var>$position</var> = -<span class="php-num">1</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns the type of a token.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the type of a token.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br> Token position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string|integer|null</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTokenValue" id="_getTokenValue">
+
+		<td class="attributes"><code>
+			
+			 public 
+			stirng
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTokenValue">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#266" title="Go to source code">getTokenValue</a>( <span>integer <var>$position</var> = -<span class="php-num">1</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns the current token value.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the current token value.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br> Token position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>stirng</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTokenName" id="_getTokenName">
+
+		<td class="attributes"><code>
+			
+			 public 
+			string|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTokenName">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#281" title="Go to source code">getTokenName</a>( <span>integer <var>$position</var> = -<span class="php-num">1</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns the token type name.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the token type name.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br> Token position; if none given, consider the current iteration position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string|null</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="serialize" id="_serialize">
+
+		<td class="attributes"><code>
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_serialize">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#301" title="Go to source code">serialize</a>( )</code>
+
+		<div class="description short">
+			
+<p>Stream serialization.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Stream serialization.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Serializable::serialize</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="unserialize" id="_unserialize">
+
+		<td class="attributes"><code>
+			
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_unserialize">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#311" title="Go to source code">unserialize</a>( <span>string <var>$serialized</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Restores the stream from the serialized state.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Restores the stream from the serialized state.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$serialized</var></dt>
+					<dd><code>string</code><br> Serialized form</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>On unserialization error.<br>
+				</div>
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Serializable::unserialize</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetExists" id="_offsetExists">
+
+		<td class="attributes"><code>
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetExists">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#333" title="Go to source code">offsetExists</a>( <span>integer <var>$offset</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Checks of there is a token with the given index.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Checks of there is a token with the given index.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd><code>integer</code><br> Token index</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>ArrayAccess::offsetExists</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetUnset" id="_offsetUnset">
+
+		<td class="attributes"><code>
+			
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetUnset">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#344" title="Go to source code">offsetUnset</a>( <span>integer <var>$offset</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Removes a token.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Removes a token.</p>
+
+<p>Unsupported.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd><code>integer</code><br> Position</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>Unsupported.<br>
+				</div>
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>ArrayAccess::offsetUnset</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetGet" id="_offsetGet">
+
+		<td class="attributes"><code>
+			
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetGet">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#357" title="Go to source code">offsetGet</a>( <span>integer <var>$offset</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns a token at the given index.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns a token at the given index.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd><code>integer</code><br> Token index</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>ArrayAccess::offsetGet</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetSet" id="_offsetSet">
+
+		<td class="attributes"><code>
+			
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetSet">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#368" title="Go to source code">offsetSet</a>( <span>integer <var>$offset</var></span>, <span>mixed <var>$value</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Sets a value of a particular token.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Sets a value of a particular token.</p>
+
+<p>Unsupported</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd><code>integer</code><br> Position</dd>
+					<dt><var>$value</var></dt>
+					<dd><code>mixed</code><br> Value</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>Unsupported.<br>
+				</div>
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>ArrayAccess::offsetSet</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="key" id="_key">
+
+		<td class="attributes"><code>
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_key">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#382" title="Go to source code">key</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the current internal pointer value.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the current internal pointer value.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Iterator::key</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="next" id="_next">
+
+		<td class="attributes"><code>
+			
+			 public 
+			TokenReflection\Stream
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_next">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#392" title="Go to source code">next</a>( )</code>
+
+		<div class="description short">
+			
+<p>Advances the internal pointer.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Advances the internal pointer.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>TokenReflection\Stream</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Iterator::next</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="rewind" id="_rewind">
+
+		<td class="attributes"><code>
+			
+			 public 
+			TokenReflection\Stream
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_rewind">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#403" title="Go to source code">rewind</a>( )</code>
+
+		<div class="description short">
+			
+<p>Sets the internal pointer to zero.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Sets the internal pointer to zero.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>TokenReflection\Stream</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Iterator::rewind</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="current" id="_current">
+
+		<td class="attributes"><code>
+			
+			 public 
+			array|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_current">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#414" title="Go to source code">current</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the current token.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the current token.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array|null</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Iterator::current</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="valid" id="_valid">
+
+		<td class="attributes"><code>
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_valid">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#424" title="Go to source code">valid</a>( )</code>
+
+		<div class="description short">
+			
+<p>Checks if there is a token on the current position.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Checks if there is a token on the current position.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Iterator::valid</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="count" id="_count">
+
+		<td class="attributes"><code>
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_count">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#434" title="Go to source code">count</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the number of tokens in the stream.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the number of tokens in the stream.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>Countable::count</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="seek" id="_seek">
+
+		<td class="attributes"><code>
+			
+			 public 
+			TokenReflection\Stream
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_seek">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#444" title="Go to source code">seek</a>( <span>integer <var>$position</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Sets the internal pointer to the given value.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Sets the internal pointer to the given value.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$position</var></dt>
+					<dd><code>integer</code><br> New position</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>TokenReflection\Stream</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code>SeekableIterator::seek</code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__toString" id="___toString">
+
+		<td class="attributes"><code>
+			
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___toString">#</a>
+		<code><a href="source-class-TokenReflection.Stream.StreamBase.html#456" title="Go to source code">__toString</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the stream source code.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the stream source code.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+	<table class="summary" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="fileName" id="$fileName">
+
+		<td class="attributes"><code>
+			
+			protected 
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-TokenReflection.Stream.StreamBase.html#31" title="Go to source code"><var>$fileName</var></a>
+		</td>
+		<td class="value"><code><span class="php-quote">'unknown'</span></code></td>
+		<td class="description"><div>
+			<a href="#$fileName" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Token source file name.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Token source file name.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+</div>
+
+	<div id="footer">
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.0.3" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="generator" content="ApiGen 2.2.0">
 
 	<title>Tree | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
-	<script type="text/javascript" src="elementlist.js?3520989432"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
+	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
+	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript">
+		var ApiGen = ApiGen || {};
+		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
+	</script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
 
 </head>
 
 <body>
-<div id="main">
-<div id="leftWrapper">
-	<div id="left">
+<div id="left">
+	<div id="menu">
 		<a href="index.html" title="Overview"><span>Overview</span></a>
 
-		<div id="entities">
+		<div id="groups">
 
 			<h3>Namespaces</h3>
 			<ul>
@@ -37,11 +40,15 @@
 						</li>
 				<li><a href="namespace-TokenReflection.Php.html">Php</a>
 						</li>
+				<li><a href="namespace-TokenReflection.Stream.html">Stream</a>
+						</li>
 							</ul></li>
 			</ul>
+		</div>
 
-			<hr />
+		<hr>
 
+		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
 				<li><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></li>
@@ -67,7 +74,9 @@
 				<li><a href="class-TokenReflection.ReflectionParameter.html">TokenReflection\ReflectionParameter</a></li>
 				<li><a href="class-TokenReflection.ReflectionProperty.html">TokenReflection\ReflectionProperty</a></li>
 				<li><a href="class-TokenReflection.Resolver.html">TokenReflection\Resolver</a></li>
-				<li><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a></li>
+				<li><a href="class-TokenReflection.Stream.FileStream.html">TokenReflection\Stream\FileStream</a></li>
+				<li><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></li>
+				<li><a href="class-TokenReflection.Stream.StringStream.html">TokenReflection\Stream\StringStream</a></li>
 			</ul>
 
 			<h3>Interfaces</h3>
@@ -86,6 +95,7 @@
 				<li><a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a></li>
 			</ul>
 
+
 			<h3>Exceptions</h3>
 			<ul>
 				<li><a href="class-TokenReflection.Exception.html">TokenReflection\Exception</a></li>
@@ -97,43 +107,50 @@
 		</div>
 	</div>
 </div>
-<div id="rightWrapper">
-	<div id="right">
-		<form id="search">
-			<input type="hidden" name="cx" value="" />
-			<input type="hidden" name="ie" value="UTF-8" />
-			<input type="text" name="q" class="text" />
-			<input type="submit" value="Search" />
-		</form>
 
-		<div id="navigation">
-			<ul>
-				<li>
-					<a href="index.html" title="Overview"><span>Overview</span></a>
-				</li>
-				<li>
-<span>Namespace</span>				</li>
-				<li>
-<span>Class</span>				</li>
-			</ul>
-			<ul>
-				<li class="active">
-<span>Tree</span>				</li>
-				<li>
-					<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
-				</li>
-			</ul>
-		</div>
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text">
+		<input type="submit" value="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+<span>Namespace</span>			</li>
+			<li>
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li class="active">
+<span>Tree</span>			</li>
+			<li>
+				<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
 
 <div id="content">
 	<h1>Tree</h1>
 
 		<h3>Classes</h3>
-<div class="classtree">
+<div class="tree">
 	<ul>
 
 			<li><div class="notlast">ReflectionClass			 implements 
 Reflector
+			
+			
 			</div>
 
 				<ul>
@@ -143,12 +160,16 @@ Reflector
 				<a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>, 
 			
 				<a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a>
+			
+			
 			</div>
 
 				</ul></li>
 
 			<li><div class="notlast">ReflectionExtension			 implements 
 Reflector
+			
+			
 			</div>
 
 				<ul>
@@ -158,17 +179,23 @@ Reflector
 				<a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>, 
 			
 				<a href="class-TokenReflection.IReflectionExtension.html">TokenReflection\IReflectionExtension</a>
+			
+			
 			</div>
 
 				</ul></li>
 
 			<li><div class="notlast">ReflectionFunctionAbstract			 implements 
 Reflector
+			
+			
 			</div>
 
 				<ul>
 
-			<li><div class="notlast">ReflectionFunction			</div>
+			<li><div class="notlast">ReflectionFunction			
+			
+			</div>
 
 				<ul>
 
@@ -177,11 +204,15 @@ Reflector
 				<a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>, 
 			
 				<a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a>
+			
+			
 			</div>
 
 				</ul></li>
 
-			<li class="last"><div class="last">ReflectionMethod			</div>
+			<li class="last"><div class="last">ReflectionMethod			
+			
+			</div>
 
 				<ul>
 
@@ -190,12 +221,16 @@ Reflector
 				<a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>, 
 			
 				<a href="class-TokenReflection.IReflectionMethod.html">TokenReflection\IReflectionMethod</a>
+			
+			
 			</div>
 
 				</ul></li></ul></li>
 
 			<li><div class="notlast">ReflectionParameter			 implements 
 Reflector
+			
+			
 			</div>
 
 				<ul>
@@ -205,12 +240,16 @@ Reflector
 				<a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>, 
 			
 				<a href="class-TokenReflection.IReflectionParameter.html">TokenReflection\IReflectionParameter</a>
+			
+			
 			</div>
 
 				</ul></li>
 
 			<li><div class="notlast">ReflectionProperty			 implements 
 Reflector
+			
+			
 			</div>
 
 				<ul>
@@ -220,11 +259,15 @@ Reflector
 				<a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>, 
 			
 				<a href="class-TokenReflection.IReflectionProperty.html">TokenReflection\IReflectionProperty</a>
+			
+			
 			</div>
 
 				</ul></li>
 
 			<li><div class="notlast"><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a>
+			
+			
 			</div>
 
 				</li>
@@ -232,6 +275,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.Broker.Backend.Memory.html">TokenReflection\Broker\Backend\Memory</a>
 			 implements 
 				<a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a>
+			
+			
 			</div>
 
 				</li>
@@ -239,6 +284,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.Dummy.ReflectionClass.html">TokenReflection\Dummy\ReflectionClass</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a>
+			
+			
 			</div>
 
 				</li>
@@ -248,11 +295,15 @@ Reflector
 				<a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>, 
 			
 				<a href="class-TokenReflection.IReflectionConstant.html">TokenReflection\IReflectionConstant</a>
+			
+			
 			</div>
 
 				</li>
 
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionAnnotation.html">TokenReflection\ReflectionAnnotation</a>
+			
+			
 			</div>
 
 				</li>
@@ -260,6 +311,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionBase.html">TokenReflection\ReflectionBase</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				<ul>
@@ -267,6 +320,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionClass.html">TokenReflection\ReflectionClass</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a>
+			
+			
 			</div>
 
 				</li>
@@ -274,11 +329,15 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionConstant.html">TokenReflection\IReflectionConstant</a>
+			
+			
 			</div>
 
 				</li>
 
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionFileNamespace.html">TokenReflection\ReflectionFileNamespace</a>
+			
+			
 			</div>
 
 				</li>
@@ -286,6 +345,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionFunctionBase.html">TokenReflection\ReflectionFunctionBase</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionFunctionBase.html">TokenReflection\IReflectionFunctionBase</a>
+			
+			
 			</div>
 
 				<ul>
@@ -293,6 +354,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a>
+			
+			
 			</div>
 
 				</li>
@@ -300,6 +363,8 @@ Reflector
 			<li class="last"><div class="last"><a href="class-TokenReflection.ReflectionMethod.html">TokenReflection\ReflectionMethod</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionMethod.html">TokenReflection\IReflectionMethod</a>
+			
+			
 			</div>
 
 				</ul></li>
@@ -307,6 +372,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionParameter.html">TokenReflection\ReflectionParameter</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionParameter.html">TokenReflection\IReflectionParameter</a>
+			
+			
 			</div>
 
 				</li>
@@ -314,6 +381,8 @@ Reflector
 			<li class="last"><div class="last"><a href="class-TokenReflection.ReflectionProperty.html">TokenReflection\ReflectionProperty</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionProperty.html">TokenReflection\IReflectionProperty</a>
+			
+			
 			</div>
 
 				</ul></li>
@@ -321,6 +390,8 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -328,16 +399,20 @@ Reflector
 			<li><div class="notlast"><a href="class-TokenReflection.ReflectionNamespace.html">TokenReflection\ReflectionNamespace</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionNamespace.html">TokenReflection\IReflectionNamespace</a>
+			
+			
 			</div>
 
 				</li>
 
 			<li><div class="notlast"><a href="class-TokenReflection.Resolver.html">TokenReflection\Resolver</a>
+			
+			
 			</div>
 
 				</li>
 
-			<li class="last"><div class="last"><a href="class-TokenReflection.Stream.html">TokenReflection\Stream</a>
+			<li class="last"><div class="last"><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a>
 			 implements 
 SeekableIterator, 
 			
@@ -346,23 +421,43 @@ Countable,
 ArrayAccess, 
 			
 Serializable
+			
+			
+			</div>
+
+				<ul>
+
+			<li><div class="notlast"><a href="class-TokenReflection.Stream.FileStream.html">TokenReflection\Stream\FileStream</a>
+			
+			
+			</div>
+
+				</li>
+
+			<li class="last"><div class="last"><a href="class-TokenReflection.Stream.StringStream.html">TokenReflection\Stream\StringStream</a>
+			
+			
 			</div>
 
 		</li>
-		
+		</ul></li>
 	</ul>
 </div>
 
 		<h3>Interfaces</h3>
-<div class="classtree">
+<div class="tree">
 	<ul>
 
 			<li><div class="notlast"><a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a>
+			
+			
 			</div>
 
 				</li>
 
 			<li><div class="notlast"><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -370,6 +465,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -377,6 +474,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionConstant.html">TokenReflection\IReflectionConstant</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -384,6 +483,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionExtension.html">TokenReflection\IReflectionExtension</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -391,6 +492,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionFunction.html">TokenReflection\IReflectionFunction</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionFunctionBase.html">TokenReflection\IReflectionFunctionBase</a>
+			
+			
 			</div>
 
 				</li>
@@ -398,6 +501,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionFunctionBase.html">TokenReflection\IReflectionFunctionBase</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -405,6 +510,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionMethod.html">TokenReflection\IReflectionMethod</a>
 			 implements 
 				<a href="class-TokenReflection.IReflectionFunctionBase.html">TokenReflection\IReflectionFunctionBase</a>
+			
+			
 			</div>
 
 				</li>
@@ -412,6 +519,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionNamespace.html">TokenReflection\IReflectionNamespace</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -419,6 +528,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionParameter.html">TokenReflection\IReflectionParameter</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -426,6 +537,8 @@ Serializable
 			<li><div class="notlast"><a href="class-TokenReflection.IReflectionProperty.html">TokenReflection\IReflectionProperty</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 				</li>
@@ -433,6 +546,8 @@ Serializable
 			<li class="last"><div class="last"><a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a>
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
 			</div>
 
 		</li>
@@ -440,25 +555,34 @@ Serializable
 	</ul>
 </div>
 
+
 		<h3>Exceptions</h3>
-<div class="classtree">
+<div class="tree">
 	<ul>
 
-			<li class="last"><div class="last">Exception			</div>
+			<li class="last"><div class="last">Exception			
+			
+			</div>
 
 				<ul>
 
 			<li class="last"><div class="last"><a href="class-TokenReflection.Exception.html">TokenReflection\Exception</a>
+			
+			
 			</div>
 
 				<ul>
 
 			<li><div class="notlast"><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a>
+			
+			
 			</div>
 
 				</li>
 
 			<li class="last"><div class="last"><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a>
+			
+			
 			</div>
 
 		</li>
@@ -467,10 +591,8 @@ Serializable
 </div>
 </div>
 
-		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/apigen/apigen">ApiGen</a>.<br />
-			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
-		</div>
+	<div id="footer">
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
 	</div>
 </div>
 </div>

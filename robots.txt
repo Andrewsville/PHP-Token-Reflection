@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: http://andrewsville.github.com/PHP-Token-Reflection/sitemap.xml

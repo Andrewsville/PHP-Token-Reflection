@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.0.3" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="generator" content="ApiGen 2.2.0">
 
 	<title>Interface TokenReflection\Php\IReflection | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?4060439551"></script>
-	<script type="text/javascript" src="elementlist.js?3520989432"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1518964193" />
+	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
+	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript">
+		var ApiGen = ApiGen || {};
+		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
+	</script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
 
 </head>
 
 <body>
-<div id="main">
-<div id="leftWrapper">
-	<div id="left">
+<div id="left">
+	<div id="menu">
 		<a href="index.html" title="Overview"><span>Overview</span></a>
 
-		<div id="entities">
+		<div id="groups">
 
 			<h3>Namespaces</h3>
 			<ul>
@@ -37,11 +40,15 @@
 						</li>
 				<li class="active"><a href="namespace-TokenReflection.Php.html">Php</a>
 						</li>
+				<li><a href="namespace-TokenReflection.Stream.html">Stream</a>
+						</li>
 							</ul></li>
 			</ul>
+		</div>
 
-			<hr />
+		<hr>
 
+		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
 				<li><a href="class-TokenReflection.Php.ReflectionClass.html">ReflectionClass</a></li>
@@ -60,40 +67,46 @@
 
 
 
+
 		</div>
 	</div>
 </div>
-<div id="rightWrapper">
-	<div id="right">
-		<form id="search">
-			<input type="hidden" name="cx" value="" />
-			<input type="hidden" name="ie" value="UTF-8" />
-			<input type="text" name="q" class="text" />
-			<input type="submit" value="Search" />
-		</form>
 
-		<div id="navigation">
-			<ul>
-				<li>
-					<a href="index.html" title="Overview"><span>Overview</span></a>
-				</li>
-				<li>
-					<a href="namespace-TokenReflection.Php.html" title="Summary of TokenReflection\Php"><span>Namespace</span></a>
-				</li>
-				<li class="active">
-<span>Class</span>				</li>
-			</ul>
-			<ul>
-				<li>
-					<a href="tree.html" title="Tree view of classes, interfaces and exceptions"><span>Tree</span></a>
-				</li>
-				<li>
-					<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
-				</li>
-			</ul>
-		</div>
+<div id="splitter"></div>
 
-<div id="content">
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text">
+		<input type="submit" value="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-TokenReflection.Php.html" title="Summary of TokenReflection\Php"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+			<li>
+				<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
 	<h1>Interface IReflection</h1>
 
 	<div class="description">
@@ -110,13 +123,14 @@
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
 			
+			
 		</dd>
 	</dl>
 
 
 
 	<div>
-		<h4>Direct Known Implementers</h4>
+		<h4>Direct known implementers</h4>
 			<a href="class-TokenReflection.Php.ReflectionClass.html">TokenReflection\Php\ReflectionClass</a>, 
 			<a href="class-TokenReflection.Php.ReflectionConstant.html">TokenReflection\Php\ReflectionConstant</a>, 
 			<a href="class-TokenReflection.Php.ReflectionExtension.html">TokenReflection\Php\ReflectionExtension</a>, 
@@ -127,12 +141,14 @@
 	</div>
 
 
+
+
 	<div class="info">
 		
 		
-		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a>\<a href="namespace-TokenReflection.Php.html">Php</a><br />
+		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a>\<a href="namespace-TokenReflection.Php.html">Php</a><br>
 
-		<b>Located at</b> <a href="source-TokenReflection.Php.IReflection.html#21" title="Go to source code">Php/IReflection.php</a><br />
+		<b>Located at</b> <a href="source-class-TokenReflection.Php.IReflection.html#21" title="Go to source code">Php/IReflection.php</a><br>
 	</div>
 
 
@@ -140,7 +156,7 @@
 	<caption>Methods summary</caption>
 	<tr data-order="getNamespaceAliases" id="_getNamespaceAliases">
 
-		<td class="right" width="1%"><code class="nowrap">
+		<td class="attributes"><code>
 			
 			 public 
 			array
@@ -148,17 +164,17 @@
 			</code>
 		</td>
 
-		<td><div class="position">
+		<td class="name"><div>
 		<a class="anchor" href="#_getNamespaceAliases">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.IReflection.html#28" title="Go to source code">getNamespaceAliases</a>(
-		)</code>
+		<code><a href="source-class-TokenReflection.Php.IReflection.html#28" title="Go to source code">getNamespaceAliases</a>( )</code>
 
-		<div class="short">
-			Returns imported namespaces and aliases from the declaring namespace.
+		<div class="description short">
+			
+<p>Returns imported namespaces and aliases from the declaring namespace.</p>
+
 		</div>
 
-		<div class="detailed">
+		<div class="description detailed hidden">
 			
 <p>Returns imported namespaces and aliases from the declaring namespace.</p>
 
@@ -166,8 +182,8 @@
 
 
 				<h4>Returns</h4>
-				<div class="smallList">
-					<code>array</code><br />
+				<div class="list">
+					<code>array</code><br>
 				</div>
 
 
@@ -177,7 +193,7 @@
 	</tr>
 	<tr data-order="create" id="_create">
 
-		<td class="right" width="1%"><code class="nowrap">
+		<td class="attributes"><code>
 			
 			 public static
 			<code><a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a></code>
@@ -185,38 +201,33 @@
 			</code>
 		</td>
 
-		<td><div class="position">
+		<td class="name"><div>
 		<a class="anchor" href="#_create">#</a>
-		<code class="nowrap">
-				<a href="source-TokenReflection.Php.IReflection.html#35" title="Go to source code">create</a>(
-				Reflector				
-				<var>$internalReflection</var>, 
-				<a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a>
-				
-				<var>$broker</var>
-		)</code>
+		<code><a href="source-class-TokenReflection.Php.IReflection.html#35" title="Go to source code">create</a>( <span>Reflector <var>$internalReflection</var></span>, <span><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a> <var>$broker</var></span> )</code>
 
-		<div class="short">
-			Creates a reflection instance.
+		<div class="description short">
+			
+<p>Creates a reflection instance.</p>
+
 		</div>
 
-		<div class="detailed">
+		<div class="description detailed hidden">
 			
 <p>Creates a reflection instance.</p>
 
 
 
 				<h4>Parameters</h4>
-				<div class="smallList"><dl>
+				<div class="list"><dl>
 					<dt><var>$internalReflection</var></dt>
-					<dd><code>Reflector</code><br /> Internal reflection instance</dd>
+					<dd><code>Reflector</code><br> Internal reflection instance</dd>
 					<dt><var>$broker</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br /> Reflection broker instance</dd>
+					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br> Reflection broker instance</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
-				<div class="smallList">
-					<code><code><a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a></code></code><br />
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Php.IReflection.html">TokenReflection\Php\IReflection</a></code></code><br>
 				</div>
 
 
@@ -226,9 +237,8 @@
 	</tr>
 	</table>
 
-
-	<table class="summary methods">
-	<caption>Methods Inherited From <a href="class-TokenReflection.IReflection.html#methods">TokenReflection\IReflection</a></caption>
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-TokenReflection.IReflection.html#methods">TokenReflection\IReflection</a></caption>
 	<tr>
 		<td><code>
 <a href="class-TokenReflection.IReflection.html#___get">__get()</a>, 
@@ -246,12 +256,13 @@
 
 
 
+
+
+
 </div>
 
-		<div id="footer">
-			PHP Token Reflection API documentation generated by <a href="http://github.com/apigen/apigen">ApiGen</a>.<br />
-			Generated using the <a href="https://github.com/Andrewsville/PHP-Token-Reflection" title="All your tokens are belong to us">TokenReflection</a> library.
-		</div>
+	<div id="footer">
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
 	</div>
 </div>
 </div>

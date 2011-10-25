@@ -22,6 +22,9 @@
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.Php.html</loc>
 </url>
 <url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.Stream.html</loc>
+</url>
+<url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Broker.html</loc>
 </url>
 <url>
@@ -91,7 +94,13 @@
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Resolver.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Stream.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Stream.FileStream.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Stream.StreamBase.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Stream.StringStream.html</loc>
 </url>
 <url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Broker.Backend.html</loc>
