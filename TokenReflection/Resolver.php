@@ -106,8 +106,7 @@ class Resolver
 
 		$constants = self::findConstants($tokens, $reflection);
 		if (!empty($constants)) {
-			$replacements = array();
-			foreach ($constants as $constant) {
+			foreach (array_reverse($constants, true) as $offset => $constant) {
 				$value = '';
 
 				try {
@@ -204,15 +203,8 @@ class Resolver
 					$value = self::CONSTANT_NOT_FOUND;
 				}
 
-				$replacements[$constant] = var_export($value, true);
+				$source = substr_replace($source, var_export($value, true), $offset, strlen($constant));
 			}
-			uksort($replacements, function($a, $b) {
-				$ca = strspn($a, '\\');
-				$cb = strspn($b, '\\');
-				return $ca === $cb ? strcasecmp($b, $a) : $cb - $ca;
-			});
-
-			$source = strtr($source, $replacements);
 		}
 
 		return eval(sprintf('return %s;', $source));
@@ -266,16 +258,21 @@ class Resolver
 
 		$constants = array();
 		$constant = '';
+		$offset = 0;
 		foreach ($tokens as $token) {
 			if (isset($accepted[$token[0]])) {
 				$constant .= $token[1];
 			} elseif ('' !== $constant) {
 				if (!isset($dontResolve[strtolower($constant)])) {
-					$constants[$constant] = true;
+					$constants[$offset - strlen($constant)] = $constant;
 				}
 				$constant = '';
 			}
+
+			if (null !== $token[0]) {
+				$offset += strlen($token[1]);
+			}
 		}
-		return array_keys($constants);
+		return $constants;
 	}
 }

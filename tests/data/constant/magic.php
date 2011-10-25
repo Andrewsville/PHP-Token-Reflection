@@ -19,7 +19,7 @@ namespace
 		static $line = __LINE__;
 		static $function = __FUNCTION__;
 		static $method = __METHOD__;
-		static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
+		static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__, '__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__');
 	}
 
 	class TokenReflection_Test_ConstantMagic
