@@ -91,6 +91,17 @@ class Resolver
 			throw new Exception\Runtime(sprintf('Invalid reflection object given: "%s" ("%s")', get_class($reflection), $reflection->getName()), Exception\Runtime::INVALID_ARGUMENT);
 		}
 
+		// Process __LINE__ constants; replace with the line number of the corresponding token
+		foreach ($tokens as $index => $token) {
+			if (T_LINE === $token[0]) {
+				$tokens[$index] = array(
+					T_LNUMBER,
+					$token[2],
+					$token[2]
+				);
+			}
+		}
+
 		$source = self::getSourceCode($tokens);
 
 		$constants = self::findConstants($tokens, $reflection);
@@ -102,9 +113,7 @@ class Resolver
 				try {
 					switch ($constant) {
 						case '__LINE__':
-							// @todo line breaks
-							$value = $reflection->getStartLine();
-							break;
+							throw new Exception\Runtime('__LINE__ constant cannot be resolved this way.', Exception\Runtime::INVALID_ARGUMENT);
 						case '__FILE__':
 							$value = $reflection->getFileName();
 							break;
@@ -244,8 +253,8 @@ class Resolver
 			T_CLASS_C => true,
 			T_DIR => true,
 			T_FILE => true,
-			T_FUNC_C => true,
 			T_LINE => true,
+			T_FUNC_C => true,
 			T_METHOD_C => true,
 			T_NS_C => true,
 			T_TRAIT_C => true

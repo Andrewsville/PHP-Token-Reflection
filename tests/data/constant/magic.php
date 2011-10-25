@@ -16,10 +16,10 @@ namespace
 		static $class = __CLASS__;
 		static $file = __FILE__;
 		static $dir = __DIR__;
-//		static $line = __LINE__;
+		static $line = __LINE__;
 		static $function = __FUNCTION__;
 		static $method = __METHOD__;
-//		static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
+		static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
 	}
 
 	class TokenReflection_Test_ConstantMagic
@@ -54,10 +54,10 @@ namespace
 			static $class = __CLASS__;
 			static $file = __FILE__;
 			static $dir = __DIR__;
-//			static $line = __LINE__;
+			static $line = __LINE__;
 			static $function = __FUNCTION__;
 			static $method = __METHOD__;
-//			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
+			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
 		}
 	}
 }
@@ -78,10 +78,10 @@ namespace ns
 		static $class = __CLASS__;
 		static $file = __FILE__;
 		static $dir = __DIR__;
-//		static $line = __LINE__;
+		static $line = __LINE__;
 		static $function = __FUNCTION__;
 		static $method = __METHOD__;
-//		static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
+		static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
 	}
 
 	class TokenReflection_Test_ConstantMagic
@@ -115,7 +115,7 @@ namespace ns
 			$class = __CLASS__,
 			$file = __FILE__,
 			$dir = __DIR__,
-//			$line = __LINE__,
+			$line = __LINE__,
 			$function = __FUNCTION__,
 			$method = __METHOD__,
 			$all = array(
@@ -123,7 +123,7 @@ namespace ns
 				__CLASS__,
 				__FILE__,
 				__DIR__,
-//				__LINE__,
+				__LINE__,
 				__FUNCTION__,
 				__METHOD__
 			)
@@ -133,10 +133,10 @@ namespace ns
 			static $class = __CLASS__;
 			static $file = __FILE__;
 			static $dir = __DIR__;
-//			static $line = __LINE__;
+			static $line = __LINE__;
 			static $function = __FUNCTION__;
 			static $method = __METHOD__;
-//			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
+			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
 		}
 	}
 }
@@ -151,10 +151,10 @@ namespace ns2
 			static $class = __CLASS__;
 			static $file = __FILE__;
 			static $dir = __DIR__;
-//			static $line = __LINE__;
+			static $line = __LINE__;
 			static $function = __FUNCTION__;
 			static $method = __METHOD__;
-//			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
+			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
 		}
 	}
 }
@@ -169,10 +169,10 @@ namespace ns3
 			static $class = __CLASS__;
 			static $file = __FILE__;
 			static $dir = __DIR__;
-//			static $line = __LINE__;
+			static $line = __LINE__;
 			static $function = __FUNCTION__;
 			static $method = __METHOD__;
-//			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
+			static $all = array(__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__);
 		}
 	}
 }
