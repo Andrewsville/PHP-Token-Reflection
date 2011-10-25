@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -143,7 +143,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param string $className Class name
 	 * @return \TokenReflection\ReflectionClass
-	 * @throws \TokenReflection\Exception\Runtime If the requested class reflection does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested class reflection does not exist.
 	 */
 	public function getClass($className)
 	{
@@ -212,7 +212,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param string $constantName Constant name
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Runtime If the required constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the required constant does not exist.
 	 */
 	public function getConstant($constantName)
 	{
@@ -281,7 +281,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param string $functionName Function name
 	 * @return \TokenReflection\ReflectionFunction
-	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist.
 	 */
 	public function getFunction($functionName)
 	{
@@ -382,7 +382,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * @param string $namespace Namespace name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist
+	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $namespace, $return = false)
 	{
@@ -404,9 +404,9 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Adds a namespace part from a file.
 	 *
 	 * @param \TokenReflection\ReflectionFileNamespace $namespace Namespace part
-	 * @throws \TokenReflection\Exception\Runtime If one of classes form the namespace are already defined
-	 * @throws \TokenReflection\Exception\Runtime If one of functions form the namespace are already defined
-	 * @throws \TokenReflection\Exception\Runtime If one of constants form the namespace are already defined
+	 * @throws \TokenReflection\Exception\Runtime If one of classes form the namespace are already defined.
+	 * @throws \TokenReflection\Exception\Runtime If one of functions form the namespace are already defined.
+	 * @throws \TokenReflection\Exception\Runtime If one of constants form the namespace are already defined.
 	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
@@ -440,7 +440,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * Impossible for namespaces.
 	 *
-	 * @throws \TokenReflection\Exception\Runtime
+	 * @throws \TokenReflection\Exception\Runtime If the method is called, because it's unsupported.
 	 */
 	public function getSource()
 	{

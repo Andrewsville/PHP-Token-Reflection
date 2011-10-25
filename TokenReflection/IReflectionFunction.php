@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -42,7 +42,7 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	/**
 	 * Calls the function.
 	 *
-	 * @param mixed $args Function parameter values
+	 * @param array $args Function parameter values
 	 * @return mixed
 	 */
 	public function invokeArgs(array $args);

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -130,8 +130,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 *
 	 * @param integer|string $parameter Parameter name or position
 	 * @return \TokenReflection\Php\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name.
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position.
 	 */
 	public function getParameter($parameter)
 	{
@@ -178,7 +178,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
 	 *
 	 * @param boolean $accessible
-	 * @throws \TokenReflection\Exception\Runtime If run on PHP version < 5.3.2
+	 * @throws \TokenReflection\Exception\Runtime If run on PHP version < 5.3.2.
 	 */
 	public function setAccessible($accessible)
 	{
@@ -248,7 +248,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * @param object $object Object
 	 * @return \Closure
 	 */
-	public function getClosure($object){
+	public function getClosure($object)
+	{
 		return null;
 	}
 
@@ -318,7 +319,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\IReflection
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

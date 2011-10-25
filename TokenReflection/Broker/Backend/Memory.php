@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -16,7 +16,7 @@
 namespace TokenReflection\Broker\Backend;
 
 use TokenReflection;
-use TokenReflection\Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
+use TokenReflection\Stream\StreamBase as Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
 
 /**
  * Memory broker backend.
@@ -90,7 +90,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $namespaceName Namespace name
 	 * @return \TokenReflection\IReflectionNamespace
-	 * @throws \TokenReflection\Exception\Runtime If the requested namespace does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested namespace does not exist.
 	 */
 	public function getNamespace($namespaceName)
 	{
@@ -157,8 +157,10 @@ class Memory implements Broker\Backend
 		try {
 			$ns = $this->getNamespace(
 				($boundary = strrpos($className, '\\'))
-					? substr($className, 0, $boundary)        // Class within a namespace
-					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME  // Class without a namespace
+				// Class within a namespace
+				? substr($className, 0, $boundary)
+				// Class without a namespace
+				: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
 
 			return $ns->getClass($className);
@@ -236,7 +238,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $constantName Constant name
 	 * @return \TokenReflection\IReflectionConstant
-	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist.
 	 */
 	public function getConstant($constantName)
 	{
@@ -327,7 +329,7 @@ class Memory implements Broker\Backend
 	 *
 	 * @param string $functionName Function name
 	 * @return \TokenReflection\IReflectionFunction
-	 * @throws \TokenReflection\Exception\Runtime If the requested function does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested function does not exist.
 	 */
 	public function getFunction($functionName)
 	{
@@ -341,8 +343,10 @@ class Memory implements Broker\Backend
 		try {
 			$ns = $this->getNamespace(
 				($boundary = strrpos($functionName, '\\'))
-					? substr($functionName, 0, $boundary)     // Function within a namespace
-					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME  // Function wihout a namespace
+				// Function within a namespace
+				? substr($functionName, 0, $boundary)
+				// Function wihout a namespace
+				: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
 
 			return $ns->getFunction($functionName);
@@ -389,8 +393,8 @@ class Memory implements Broker\Backend
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return \TokenReflection\Stream
-	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed
+	 * @return \TokenReflection\Stream\StreamBase
+	 * @throws \TokenReflection\Exception\Runtime If the requested file was not processed.
 	 */
 	public function getFileTokens($fileName)
 	{

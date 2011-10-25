@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Exception;
+use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 
 /**
  * Base abstract class for tokenized function and method.
@@ -143,8 +143,8 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @param integer|string $parameter Parameter name or position
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name.
+	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position.
 	 */
 	public function getParameter($parameter)
 	{
@@ -219,7 +219,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Creates aliases to parameters.
 	 *
-	 * @throws \TokenReflection\Exception\Runtime When called on a ReflectionFunction instance
+	 * @throws \TokenReflection\Exception\Runtime When called on a ReflectionFunction instance.
 	 */
 	protected final function aliasParameters()
 	{
@@ -235,9 +235,9 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses if the function/method returns its value as reference.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
-	 * @throws \TokenReflection\Exception\Parse If could not be determined if the function\method returns its value by reference
+	 * @throws \TokenReflection\Exception\Parse If could not be determined if the function\method returns its value by reference.
 	 */
 	final protected function parseReturnsReference(Stream $tokenStream)
 	{
@@ -266,9 +266,9 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses the function/method name.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined
+	 * @throws \TokenReflection\Exception\Parse If the class name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
@@ -290,7 +290,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionBase
 	 */
@@ -304,9 +304,9 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses function/method parameters.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
-	 * @throws \TokenReflection\Exception\Parse If parameters could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If parameters could not be parsed.
 	 */
 	final protected function parseParameters(Stream $tokenStream)
 	{
@@ -343,9 +343,9 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	/**
 	 * Parses static variables.
 	 *
-	 * @param \TokenReflection\Stream $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionFunctionBase
-	 * @throws \TokenReflection\Exception\Parse If static variables could not be parsed
+	 * @throws \TokenReflection\Exception\Parse If static variables could not be parsed.
 	 */
 	final protected function parseStaticVariables(Stream $tokenStream)
 	{
@@ -391,6 +391,8 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 													if (0 === $level) {
 														break 2;
 													}
+												default:
+													break;
 											}
 
 											$variableDefinition[] = $tokenStream->current();
@@ -427,6 +429,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 								break;
 							default:
 								$tokenStream->skipWhitespaces();
+								break;
 						}
 					}
 				} else {

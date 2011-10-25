@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 1
+ * Version 1.0.0 RC 2
  *
  * LICENSE
  *
@@ -168,6 +168,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string|object $class Class name or reflection object
 	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
 	 */
 	public function isSubclassOf($class)
 	{
@@ -232,7 +233,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface
+	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface.
 	 */
 	public function implementsInterface($interface)
 	{
@@ -334,7 +335,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Method name
 	 * @return \TokenReflection\Php\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist.
 	 */
 	public function getMethod($name)
 	{
@@ -431,7 +432,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Constant name
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception If the requested constant does not exist
+	 * @throws \TokenReflection\Exception If the requested constant does not exist.
 	 */
 	public function getConstantReflection($name)
 	{
@@ -472,7 +473,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
-	 * Returns constants declared by this class, not its parents
+	 * Returns constants declared by this class, not its parents.
 	 *
 	 * @return array
 	 */
@@ -500,7 +501,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\Php\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist
+	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist.
 	 */
 	public function getProperty($name)
 	{
@@ -841,7 +842,8 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * Returns if the class uses a particular trait.
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-	 * @return bool
+	 * @return boolean
+	 * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
 	 */
 	public function usesTrait($trait)
 	{
@@ -871,7 +873,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * Creates a new class instance without using a constructor.
 	 *
 	 * @return object
-	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class
+	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class.
 	 */
 	public function newInstanceWithoutConstructor()
 	{
@@ -898,7 +900,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionClass
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided
+	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
