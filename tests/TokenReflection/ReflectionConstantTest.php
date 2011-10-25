@@ -269,7 +269,7 @@ class ReflectionConstantTest extends Test
 	public function testMagicConstants54()
 	{
 		if (PHP_VERSION_ID < 50400) {
-			$this->markTestSkipped();
+			$this->markTestSkipped('PHP >= 5.4 only');
 		}
 
 		$broker = new Broker(new Broker\Backend\Memory());
@@ -412,6 +412,192 @@ class ReflectionConstantTest extends Test
 				foreach ($internal_variables as $variable_name => $variable_value) {
 					$this->assertTrue(isset($token_variables[$variable_name]), sprintf('%s::%s()::%s', $class, $name, $variable_name));
 					$this->assertSame($variable_value, $token_variables[$variable_name], sprintf('%s::%s()::%s', $class, $name, $variable_name));
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tests the __TRAIT__ magic constant.
+	 *
+	 * For PHP < 5.4 only.
+	 */
+	public function testMagicConstants54using53()
+	{
+		if (PHP_VERSION_ID >= 50400) {
+			$this->markTestSkipped('PHP < 5.4 only');
+		}
+
+		$broker = new Broker(new Broker\Backend\Memory());
+		$broker->process($this->getFilePath('magic54'));
+
+		$token_constants = $broker->getConstants();
+		static $expected_constants = array('CONST_TRAIT' => '', 'ns\CONST_TRAIT' => '');
+
+		$this->assertSame(count($expected_constants), count($token_constants));
+		foreach ($token_constants as $name => $reflection) {
+			$this->assertArrayHasKey($name, $expected_constants);
+			$this->assertSame($expected_constants[$name], $reflection->getValue());
+		}
+
+		$token_functions = $broker->getFunctions();
+		static $expected_functions = array(
+			'constantMagic54' => array(
+				array('trait' => ''),
+				array('trait' => '')
+			),
+			'ns\\constantMagic54' => array(
+				array('trait' => ''),
+				array('trait' => '')
+			)
+		);
+
+		$this->assertSame(count($expected_functions), count($token_functions));
+		foreach ($token_functions as $name => $token_function) {
+			$this->assertArrayHasKey($name, $expected_functions);
+
+			// Parameters
+			$this->assertSame(count($expected_functions[$name][0]), $token_function->getNumberOfParameters(), sprintf('%s()', $name));
+			$this->assertSame($token_function->getNumberOfParameters(), count($token_function->getParameters()), sprintf('%s()', $name));
+
+			foreach ($token_function->getParameters() as $parameter) {
+				$parameter_name = $parameter->getName();
+
+				$this->assertArrayHasKey($parameter_name, $expected_functions[$name][0]);
+				$this->assertTrue($parameter->isDefaultValueAvailable(), sprintf('%s(%s)', $name, $parameter_name));
+				$this->assertSame($expected_functions[$name][0][$parameter_name], $parameter->getDefaultValue(), sprintf('%s(%s)', $name, $parameter_name));
+			}
+
+			// Static variables
+			$token_variables = $token_function->getStaticVariables();
+			$this->assertSame(count($expected_functions[$name][1]), count($token_variables), sprintf('%s()', $name));
+
+			foreach ($token_variables as $variable_name => $variable_value) {
+				$this->assertArrayHasKey($variable_name, $expected_functions[$name][1]);
+				$this->assertSame($expected_functions[$name][1][$variable_name], $variable_value);
+			}
+		}
+
+		$token_classes = $broker->getClasses();
+		static $expected_classes = array(
+			'TokenReflection_Test_ConstantMagic54Trait' => array(
+				true,
+				array(),
+				array('t_trait' => array(false, 'TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'TokenReflection_Test_ConstantMagic54Trait')),
+				array('t_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'TokenReflection_Test_ConstantMagic54Trait')))
+			),
+			'TokenReflection_Test_ConstantMagic54' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('trait' => array(false, ''), 'strait' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')))
+			),
+			'TokenReflection_Test_ConstantMagic54WithTrait' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('t_trait' => array(false, 'TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array())),
+			),
+			'ns\\TokenReflection_Test_ConstantMagic54Trait' => array(
+				true,
+				array(),
+				array('t_trait' => array(false, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'ns\\TokenReflection_Test_ConstantMagic54Trait')),
+				array('t_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait')))
+			),
+			'ns\\TokenReflection_Test_ConstantMagic54' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('trait' => array(false, ''), 'strait' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')))
+			),
+			'ns\\TokenReflection_Test_ConstantMagic54WithTrait' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('t_trait' => array(false, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array())),
+			),
+			'ns2\\TokenReflection_Test_ConstantMagic54' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('trait' => array(false, ''), 'strait' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')))
+			),
+			'ns2\\TokenReflection_Test_ConstantMagic54WithTrait' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('t_trait' => array(false, 'TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array())),
+			),
+			'ns3\\TokenReflection_Test_ConstantMagic54' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('trait' => array(false, ''), 'strait' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')))
+			),
+			'ns3\\TokenReflection_Test_ConstantMagic54WithTrait' => array(
+				false,
+				array('CONST_TRAIT' => ''),
+				array('t_trait' => array(false, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array())),
+			),
+		);
+
+		$this->assertSame(count($expected_classes), count($token_classes));
+		foreach ($token_classes as $name => $token) {
+			$this->assertTrue(isset($expected_classes[$name]), $name);
+
+			$this->assertSame($expected_classes[$name][0], $token->isTrait(), $name);
+
+			// Constants
+			$this->assertSame(count($expected_classes[$name][1]), count($token->getConstants()), $name);
+			foreach ($token->getConstants() as $constant_name => $value) {
+				$this->assertArrayHasKey($constant_name, $expected_classes[$name][1], sprintf('%s::%s', $name, $constant_name));
+				$this->assertSame($expected_classes[$name][1][$constant_name], $value, sprintf('%s::%s', $name, $constant_name));
+			}
+
+
+			// Properties
+			$this->assertSame(count($expected_classes[$name][2]), count($token->getProperties()), $name);
+			foreach ($token->getProperties() as $reflection) {
+				$property_name = $reflection->getName();
+
+				$this->assertArrayHasKey($property_name, $expected_classes[$name][2], sprintf('%s::$%s', $name, $property_name));
+				$this->assertSame($expected_classes[$name][2][$property_name][0], $token->getProperty($property_name)->isStatic(), sprintf('%s::$%s', $name, $property_name));
+
+				if ($reflection->isStatic()) {
+					$this->assertSame($expected_classes[$name][2][$property_name][1], $token->getStaticPropertyValue($property_name), sprintf('%s::$%s', $name, $property_name));
+				} else {
+					$this->assertSame($expected_classes[$name][2][$property_name][1], $token->getProperty($property_name)->getDefaultValue(), sprintf('%s::$%s', $name, $property_name));
+				}
+			}
+
+			// Methods
+			$this->assertSame(count($expected_classes[$name][3]), count($token->getMethods()), $name);
+			foreach ($token->getMethods() as $method) {
+				$method_name = $method->getName();
+
+				$this->assertArrayHasKey($method_name, $expected_classes[$name][3], sprintf('%s::%s()', $name, $method_name));
+
+				// Parameters
+				$this->assertSame(count($expected_classes[$name][3][$method_name][0]), $method->getNumberOfParameters(), sprintf('%s::%s()', $name, $method_name));
+				$this->assertSame($method->getNumberOfParameters(), count($method->getParameters()), sprintf('%s::%s()', $name, $method_name));
+
+				foreach ($method->getParameters() as $parameter) {
+					$parameter_name = $parameter->getName();
+
+					$this->assertArrayHasKey($parameter_name, $expected_classes[$name][3][$method_name][0], sprintf('%s::%s(%s)', $name, $method_name, $parameter_name));
+
+					$this->assertTrue($parameter->isDefaultValueAvailable(), sprintf('%s::%s(%s)', $name, $method_name, $parameter_name));
+					$this->assertSame($expected_classes[$name][3][$method_name][0][$parameter_name], $parameter->getDefaultValue(), sprintf('%s::%s(%s)', $name, $method_name, $parameter_name));
+				}
+
+				// Static variables
+				$token_variables = $method->getStaticVariables();
+				$this->assertSame(count($expected_classes[$name][3][$method_name][1]), count($token_variables), sprintf('%s::%s()', $name, $method_name));
+
+				foreach ($token_variables as $variable_name => $variable_value) {
+					$this->assertArrayHasKey($variable_name, $expected_classes[$name][3][$method_name][1], sprintf('%s::%s()::%s', $name, $method_name, $variable_name));
+					$this->assertSame($expected_classes[$name][3][$method_name][1][$variable_name], $variable_value, sprintf('%s::%s()::%s', $name, $method_name, $variable_name));
 				}
 			}
 		}
