@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -130,6 +130,15 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	public function getNamespaceAliases()
 	{
 		return $this->aliases;
+	}
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosure(){
+		return null;
 	}
 
 	/**

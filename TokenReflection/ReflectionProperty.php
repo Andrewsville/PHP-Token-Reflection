@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -74,6 +74,13 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 * @var boolean
 	 */
 	private $accessible = false;
+
+	/**
+	 * Declaring trait name.
+	 *
+	 * @var string
+	 */
+	private $declaringTraitName;
 
 	/**
 	 * Returns a reflection of the declaring class.
@@ -351,6 +358,40 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	public function getNamespaceAliases()
 	{
 		return $this->getDeclaringClass()->getNamespaceAliases();
+	}
+
+	/**
+	 * Creates a property alias for the given class.
+	 *
+	 * @param \TokenReflection\ReflectionClass $parent New parent class
+	 * @return \TokenReflection\ReflectionProperty
+	 */
+	public function alias(ReflectionClass $parent)
+	{
+		$property = clone $this;
+		$property->declaringClassName = $parent->getName();
+		$property->declaringTraitName = $this->declaringClassName;
+		return $property;
+	}
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait()
+	{
+		return null === $this->declaringTraitName ? null : $this->getBroker()->getClass($this->declaringTraitName);
+	}
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName()
+	{
+		return $this->declaringTraitName;
 	}
 
 	/**

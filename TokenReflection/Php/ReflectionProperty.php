@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -208,6 +208,26 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getNamespaceAliases()
 	{
 		return array();
+	}
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return \TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName()
+	{
+		return null;
 	}
 
 	/**

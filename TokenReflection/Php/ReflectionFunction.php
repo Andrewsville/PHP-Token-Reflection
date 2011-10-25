@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -191,6 +191,15 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	final public function __isset($key)
 	{
 		return TokenReflection\ReflectionBase::exists($this, $key);
+	}
+
+	/**
+	 * Returns the function/method as closure.
+	 *
+	 * @return \Closure
+	 */
+	public function getClosure(){
+		return null;
 	}
 
 	/**

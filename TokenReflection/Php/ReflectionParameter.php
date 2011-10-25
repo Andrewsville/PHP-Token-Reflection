@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -210,6 +210,16 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	public function getNamespaceAliases()
 	{
 		return array();
+	}
+
+	/**
+	 * Returns if the paramter value can be passed by value.
+	 *
+	 * @return boolean
+	 */
+	public function canBePassedByValue()
+	{
+		return method_exists($this, 'canBePassedByValue') ? parent::canBePassedByValue() : !$this->isPassedByReference();
 	}
 
 	/**

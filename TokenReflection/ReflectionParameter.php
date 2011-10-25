@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -339,6 +339,16 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	}
 
 	/**
+	 * Returns if the paramter value can be passed by value.
+	 *
+	 * @return boolean
+	 */
+	public function canBePassedByValue()
+	{
+		return !$this->isPassedByReference();
+	}
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string
@@ -423,6 +433,22 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	public function getNamespaceAliases()
 	{
 		return $this->getDeclaringFunction()->getNamespaceAliases();
+	}
+
+	/**
+	 * Creates a parameter alias for the given method.
+	 *
+	 * @param \TokenReflection\ReflectionMethod $parent New parent method
+	 * @return \TokenReflection\ReflectionParameter
+	 */
+	public function alias(ReflectionMethod $parent)
+	{
+		$parameter = clone $this;
+
+		$parameter->declaringClassName = $parent->getDeclaringClassName();
+		$parameter->declaringFunctionName = $parent->getName();
+
+		return $parameter;
 	}
 
 	/**

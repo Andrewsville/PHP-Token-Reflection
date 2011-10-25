@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 beta 6
+ * Version 1.0.0 RC 1
  *
  * LICENSE
  *
@@ -270,6 +270,7 @@ class ReflectionFileNamespace extends ReflectionBase
 				case T_ABSTRACT:
 				case T_FINAL:
 				case T_CLASS:
+				case T_TRAIT:
 				case T_INTERFACE:
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
 					$this->classes[$class->getName()] = $class;
@@ -326,5 +327,4 @@ class ReflectionFileNamespace extends ReflectionBase
 
 		return $this;
 	}
-
 }
