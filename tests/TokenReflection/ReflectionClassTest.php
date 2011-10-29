@@ -73,6 +73,13 @@ class ReflectionClassTest extends Test
 		$this->assertSame(array(), $rfl->token->getConstants());
 		$this->assertSame(array(), $rfl->token->getOwnConstants());
 		$this->assertSame(array(), $rfl->token->getOwnConstantReflections());
+
+		$token = $this->getBroker()->getClass('RecursiveDirectoryIterator');
+		$this->assertTrue($token->hasConstant('CURRENT_AS_PATHNAME'));
+		$this->assertFalse($token->hasOwnConstant('CURRENT_AS_PATHNAME'));
+		$this->assertSame(0, count($token->getOwnConstants()));
+		$this->assertSame(0, count($token->getOwnConstantReflections()));
+		$this->assertSame('FilesystemIterator', $token->getConstantReflection('CURRENT_AS_PATHNAME')->getDeclaringClassName());
 	}
 
 	/**
