@@ -295,7 +295,7 @@ class Broker
 		if (is_dir($path)) {
 			return $this->processDirectory($path, $returnReflectionFile);
 		} elseif (is_file($path)) {
-			if (preg_match('~\\.phar$~i', $path)) {
+			if (preg_match('~\\.phar(?:$|\\.)~i', $path)) {
 				try {
 					return $this->processPhar($path, $returnReflectionFile);
 				} catch (Exception\Parse $e) {
