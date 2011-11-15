@@ -72,6 +72,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * @param mixed $value Constant value
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\Php\ReflectionClass $parent Defining class reflection
+	 * @throws \TokenReflection\Exception\Parse If real parent class could not be determined.
 	 */
 	public function __construct($name, $value, Broker $broker, ReflectionClass $parent = null)
 	{
