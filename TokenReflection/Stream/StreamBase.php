@@ -223,15 +223,16 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Skips whitespaces and comments next to the current position.
 	 *
-	 * @return \TokenReflection\Stream
+	 * @param boolean $skipDocBlocks Skip docblocks as well
+	 * @return \TokenReflection\Stream\StreamBase
 	 */
-	public function skipWhitespaces()
+	public function skipWhitespaces($skipDocBlocks = false)
 	{
-		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true);
+		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
 
 		do {
 			$this->position++;
-		} while (isset($this->tokens[$this->position]) && isset($skipped[$this->tokens[$this->position][0]]));
+		} while (isset($this->tokens[$this->position]) && isset($skipped[$this->tokens[$this->position][0]]) && ($skipDocBlocks || $this->tokens[$this->position][0] !== T_DOC_COMMENT));
 
 		return $this;
 	}
