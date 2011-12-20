@@ -257,11 +257,12 @@ class Broker
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
 	 * @param string $path Directora path
+	 * @param string|array $filters Filename filters
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array of \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed.
+	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed
 	 */
-	public function processDirectory($path, $returnReflectionFile = false)
+	public function processDirectory($path, $filters = array(), $returnReflectionFile = false)
 	{
 		try {
 			$realPath = realpath($path);
@@ -272,7 +273,19 @@ class Broker
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
 				if ($entry->isFile()) {
-					$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
+					$process = empty($filters);
+					if (!$process) {
+						foreach ((array) $filters as $filter) {
+							if (fnmatch($filter, $entry->getPathName(), FNM_NOESCAPE)) {
+								$process = true;
+								break;
+							}
+						}
+					}
+
+					if ($process) {
+						$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
+					}
 				}
 			}
 
