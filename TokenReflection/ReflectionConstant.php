@@ -280,7 +280,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	{
 		try {
 			if ($tokenStream->is(T_CONST)) {
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 			}
 
 			if (!$tokenStream->is(T_STRING)) {
@@ -293,7 +293,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			return $this;
 		} catch (Exception $e) {
@@ -316,7 +316,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 				throw new Exception\Parse('Could not find the definition start.', Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			static $acceptedTokens = array(
 				'-' => true,

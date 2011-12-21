@@ -246,13 +246,13 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 				throw new Exception\Parse('Could not find the function keyword.', Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			$type = $tokenStream->getType();
 
 			if ('&' === $type) {
 				$this->returnsReference = true;
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 			} elseif (T_STRING !== $type) {
 				throw new Exception\Parse(sprintf('Invalid token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
@@ -279,7 +279,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 
 			$this->name = $tokenStream->getTokenValue();
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			return $this;
 		} catch (Exception $e) {
@@ -317,7 +317,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 
 			static $accepted = array(T_NS_SEPARATOR => true, T_STRING => true, T_ARRAY => true, T_VARIABLE => true, '&' => true);
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			while (null !== ($type = $tokenStream->getType()) && ')' !== $type) {
 				if (isset($accepted[$type])) {
@@ -329,7 +329,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 					break;
 				}
 
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 			}
 
 			$tokenStream->skipWhitespaces();
@@ -353,12 +353,12 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 			$type = $tokenStream->getType();
 			if ('{' === $type) {
 				if ($this->getBroker()->isOptionSet(Broker::OPTION_PARSE_FUNCTION_BODY)) {
-					$tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces(true);
 
 					while ('}' !== ($type = $tokenStream->getType())) {
 						switch ($type) {
 							case T_STATIC:
-								$type = $tokenStream->skipWhitespaces()->getType();
+								$type = $tokenStream->skipWhitespaces(true)->getType();
 								if (T_VARIABLE !== $type) {
 									// Late static binding
 									break;
@@ -368,9 +368,9 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 									$variableName = $tokenStream->getTokenValue();
 									$variableDefinition = array();
 
-									$type = $tokenStream->skipWhitespaces()->getType();
+									$type = $tokenStream->skipWhitespaces(true)->getType();
 									if ('=' === $type) {
-										$type = $tokenStream->skipWhitespaces()->getType();
+										$type = $tokenStream->skipWhitespaces(true)->getType();
 										$level = 0;
 										while ($tokenStream->valid()) {
 											switch ($type) {
@@ -396,7 +396,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 											}
 
 											$variableDefinition[] = $tokenStream->current();
-											$type = $tokenStream->skipWhitespaces()->getType();
+											$type = $tokenStream->skipWhitespaces(true)->getType();
 										}
 
 										if (!$tokenStream->valid()) {
@@ -407,7 +407,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 									$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
 
 									if (',' === $type) {
-										$type = $tokenStream->skipWhitespaces()->getType();
+										$type = $tokenStream->skipWhitespaces(true)->getType();
 									} else {
 										break;
 									}
@@ -425,7 +425,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 							case '(':
 							case T_CURLY_OPEN:
 							case T_DOLLAR_OPEN_CURLY_BRACES:
-								$tokenStream->findMatchingBracket()->skipWhitespaces();
+								$tokenStream->findMatchingBracket()->skipWhitespaces(true);
 								break;
 							default:
 								$tokenStream->skipWhitespaces();

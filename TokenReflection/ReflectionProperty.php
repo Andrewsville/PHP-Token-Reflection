@@ -457,7 +457,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 					break 2;
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 		}
 
 		if (InternalReflectionProperty::IS_STATIC === $this->modifiers) {
@@ -507,7 +507,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 
 			$this->name = substr($tokenStream->getTokenValue(), 1);
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			return $this;
 		} catch (Exception $e) {
@@ -532,7 +532,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		}
 
 		if ('=' === $type) {
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 		}
 
 		try {
