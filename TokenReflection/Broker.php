@@ -482,6 +482,38 @@ class Broker
 	}
 
 	/**
+	 * Returns if the broker contains a file reflection of the given name.
+	 *
+	 * @param string $fileName File name
+	 * @return boolean
+	 */
+	public function hasFile($fileName)
+	{
+		return $this->backend->hasFile($fileName);
+	}
+
+	/**
+	 * Returns a reflection object of a file.
+	 *
+	 * @param string $fileName File name
+	 * @return \TokenReflection\ReflectionFile|null
+	 */
+	public function getFile($fileName)
+	{
+		return $this->backend->getFile($fileName);
+	}
+
+	/**
+	 * Returns all processed files reflections.
+	 *
+	 * @return array
+	 */
+	public function getFiles()
+	{
+		return $this->backend->getFiles();
+	}
+
+	/**
 	 * Returns an array of tokens from a processed file.
 	 *
 	 * @param string $fileName File name
