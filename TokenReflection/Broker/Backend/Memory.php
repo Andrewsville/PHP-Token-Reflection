@@ -409,10 +409,11 @@ class Memory implements Broker\Backend
 	/**
 	 * Adds a file to the backend storage.
 	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @param \TokenReflection\ReflectionFile $file File reflection object
 	 * @return \TokenReflection\Broker\Backend\Memory
 	 */
-	public function addFile(TokenReflection\ReflectionFile $file)
+	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file)
 	{
 		foreach ($file->getNamespaces() as $fileNamespace) {
 			$namespaceName = $fileNamespace->getName();
@@ -423,7 +424,7 @@ class Memory implements Broker\Backend
 			$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 		}
 
-		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $file->getTokenStream() : true;
+		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : true;
 
 		// Reset all-*-cache
 		$this->allClasses = null;

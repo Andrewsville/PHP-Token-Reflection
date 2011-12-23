@@ -30,11 +30,11 @@ class ReflectionFile implements IReflection
 	private $namespaces = array();
 
 	/**
-	 * File token stream.
+	 * File name.
 	 *
-	 * @var \TokenReflection\Stream\StreamBase
+	 * @var string
 	 */
-	private $tokenStream = null;
+	private $name;
 
 	/**
 	 * Reflection broker.
@@ -51,9 +51,10 @@ class ReflectionFile implements IReflection
 	 */
 	public function __construct(Stream $tokenStream, Broker $broker)
 	{
-		$this->tokenStream = $tokenStream;
 		$this->broker = $broker;
-		$this->parse();
+		$this->name = $tokenStream->getFileName();
+
+		$this->parse($tokenStream);
 	}
 
 	/**
@@ -63,7 +64,7 @@ class ReflectionFile implements IReflection
 	 */
 	public function getName()
 	{
-		return $this->tokenStream->getFileName();
+		return $this->name;
 	}
 
 	/**
@@ -140,17 +141,7 @@ class ReflectionFile implements IReflection
 	 */
 	public function getSource()
 	{
-		return (string) $this->tokenStream;
-	}
-
-	/**
-	 * Returns the file token stream.
-	 *
-	 * @return \TokenReflection\Stream\StreamBase
-	 */
-	public function getTokenStream()
-	{
-		return $this->tokenStream;
+		return (string) $this->broker->getFileTokens($this->getName());
 	}
 
 	/**
@@ -188,23 +179,24 @@ class ReflectionFile implements IReflection
 	/**
 	 * Prepares namespace reflections from the file.
 	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @return \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed.
 	 */
-	private function parse()
+	private function parse(Stream $tokenStream)
 	{
-		if ($this->tokenStream->count() <= 1) {
+		if ($tokenStream->count() <= 1) {
 			// No PHP content
 			return $this;
 		}
 
 		try {
-			if (!$this->tokenStream->is(T_OPEN_TAG)) {
-				$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
+			if (!$tokenStream->is(T_OPEN_TAG)) {
+				$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 			} else {
-				$this->tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces();
 
-				while (null !== ($type = $this->tokenStream->getType())) {
+				while (null !== ($type = $tokenStream->getType())) {
 					switch ($type) {
 						case T_WHITESPACE:
 						case T_DOC_COMMENT:
@@ -212,7 +204,7 @@ class ReflectionFile implements IReflection
 							break;
 						case T_DECLARE:
 							// Intentionally twice call of skipWhitespaces()
-							$this->tokenStream
+							$tokenStream
 								->skipWhitespaces()
 								->findMatchingBracket()
 								->skipWhitespaces()
@@ -221,18 +213,18 @@ class ReflectionFile implements IReflection
 						case T_NAMESPACE:
 							break 2;
 						default:
-							$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
+							$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 							return $this;
 					}
 
-					$this->tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces();
 				}
 
-				while (null !== ($type = $this->tokenStream->getType())) {
+				while (null !== ($type = $tokenStream->getType())) {
 					if (T_NAMESPACE === $type) {
-						$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
+						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 					} else {
-						$this->tokenStream->skipWhitespaces();
+						$tokenStream->skipWhitespaces();
 					}
 				}
 			}

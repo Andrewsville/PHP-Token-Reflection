@@ -168,7 +168,7 @@ class Broker
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($reflectionFile);
+				$this->backend->addFile($tokens, $reflectionFile);
 
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
@@ -204,7 +204,7 @@ class Broker
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($reflectionFile);
+				$this->backend->addFile($tokens, $reflectionFile);
 
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {

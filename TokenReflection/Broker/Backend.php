@@ -150,10 +150,11 @@ interface Backend
 	/**
 	 * Adds a file to the backend storage.
 	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @param \TokenReflection\ReflectionFile $file File reflection object
 	 * @return \TokenReflection\Broker\Backend
 	 */
-	public function addFile(TokenReflection\ReflectionFile $file);
+	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file);
 
 	/**
 	 * Sets the reflection broker instance.
