@@ -140,6 +140,30 @@ interface Backend
 	public function isFileProcessed($fileName);
 
 	/**
+	 * Returns if a file with the given filename has been processed.
+	 *
+	 * @param string $fileName File name
+	 * @return boolean
+	 */
+	public function hasFile($fileName);
+
+	/**
+	 * Returns a file reflection.
+	 *
+	 * @param string $fileName File name
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\Runtime If the requested file has not been processed
+	 */
+	public function getFile($fileName);
+
+	/**
+	 * Returns file reflections.
+	 *
+	 * @return array
+	 */
+	public function getFiles();
+
+	/**
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name

@@ -61,6 +61,13 @@ class Memory implements Broker\Backend
 	private $tokenStreams = array();
 
 	/**
+	 * Processed files storage.
+	 *
+	 * @var array
+	 */
+	private $files = array();
+
+	/**
 	 * Reflection broker.
 	 *
 	 * @var \TokenReflection\Broker
@@ -73,6 +80,43 @@ class Memory implements Broker\Backend
 	 * @var boolean
 	 */
 	private $storingTokenStreams;
+
+	/**
+	 * Returns if a file with the given filename has been processed.
+	 *
+	 * @param string $fileName File name
+	 * @return boolean
+	 */
+	public function hasFile($fileName)
+	{
+		return isset($this->files[$fileName]);
+	}
+
+	/**
+	 * Returns a file reflection.
+	 *
+	 * @param string $fileName File name
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\Runtime If the requested file has not been processed
+	 */
+	public function getFile($fileName)
+	{
+		if (!isset($this->files[$fileName])) {
+			throw new Exception\Runtime(sprintf('File %s has not been processed.', $fileName), TokenReflection\Exception::DOES_NOT_EXIST);
+		}
+
+		return $this->files[$fileName];
+	}
+
+	/**
+	 * Returns file reflections.
+	 *
+	 * @return array
+	 */
+	public function getFiles()
+	{
+		return $this->files;
+	}
 
 	/**
 	 * Returns if there was such namespace processed (FQN expected).
@@ -425,6 +469,7 @@ class Memory implements Broker\Backend
 		}
 
 		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : true;
+		$this->files[$file->getName()] = $file;
 
 		// Reset all-*-cache
 		$this->allClasses = null;
