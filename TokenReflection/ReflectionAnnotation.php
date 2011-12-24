@@ -66,7 +66,7 @@ class ReflectionAnnotation
 	/**
 	 * Parent reflection object.
 	 *
-	 * @var \TokenReflection\ReflectionBase
+	 * @var \TokenReflection\IReflection
 	 */
 	private $reflection;
 
@@ -76,7 +76,7 @@ class ReflectionAnnotation
 	 * @param \TokenReflection\ReflectionBase $reflection Parent reflection object
 	 * @param string|boolean $docComment Docblock definition
 	 */
-	public function __construct(ReflectionBase $reflection, $docComment = false)
+	public function __construct(IReflection $reflection, $docComment = false)
 	{
 		$this->reflection = $reflection;
 		$this->docComment = $docComment ?: false;
@@ -219,12 +219,14 @@ class ReflectionAnnotation
 			});
 		}
 
-		// Merge docblock templates
-		$this->mergeTemplates();
+		if ($this->reflection instanceof ReflectionBase) {
+			// Merge docblock templates
+			$this->mergeTemplates();
 
-		// Process docblock inheritance for supported reflections
-		if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
-			$this->inheritAnnotations();
+			// Process docblock inheritance for supported reflections
+			if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
+				$this->inheritAnnotations();
+			}
 		}
 	}
 
