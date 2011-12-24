@@ -958,26 +958,4 @@ class ReflectionClassTest extends Test
 			$this->assertEquals($internal->newInstanceWithoutConstructor(), $token->newInstanceWithoutConstructor());
 		}
 	}
-
-	/**
-	 * Tests returning file reflections.
-	 */
-	public function testReturningFileReflection()
-	{
-		$rfl = $this->getClassReflection('interfaces');
-		$this->assertSame($rfl->token->getFileName(), $rfl->token->getFileReflection()->getName());
-	}
-
-	/**
-	 * Tests throwing exceptions when requesting reflections of files that were not processed.
-	 *
-	 * @expectedException \TokenReflection\Exception\Runtime
-	 */
-	public function testExceptionReturningFileReflection()
-	{
-		$broker = $this->getBroker();
-
-		$this->assertFalse($broker->hasFile('#non~Existent#'));
-		$broker->getFile('#non~Existent#');
-	}
 }

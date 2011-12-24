@@ -192,7 +192,9 @@ class ReflectionBrokerTest extends Test
 					'doc-comment.php',
 					'doc-comment.php',
 					'doc-comment.php',
-					'doc-comment.php'
+					'doc-comment.php',
+					'doc-comment.php',
+					'no-doc-comment.php'
 				)
 			),
 			array(
