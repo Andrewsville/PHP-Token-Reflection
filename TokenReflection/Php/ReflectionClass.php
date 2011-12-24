@@ -408,7 +408,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Method name
 	 * @return boolean
-	 * @todo
+	 * @todo Impossible with the current status of reflection
 	 */
 	public function hasTraitMethod($name)
 	{
@@ -420,7 +420,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param integer $filter Methods filter
 	 * @return array
-	 * @todo
+	 * @todo Impossible with the current status of reflection
 	 */
 	public function getTraitMethods($filter = null)
 	{
@@ -574,7 +574,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Property name
 	 * @return boolean
-	 * @todo
+	 * @todo Impossible with the current status of reflection
 	 */
 	public function hasTraitProperty($name)
 	{
@@ -586,7 +586,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param integer $filter Properties filter
 	 * @return array
-	 * @todo
+	 * @todo Impossible with the current status of reflection
 	 */
 	public function getTraitProperties($filter = null)
 	{
