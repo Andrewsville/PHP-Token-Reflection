@@ -44,6 +44,20 @@ class ReflectionFile implements IReflection
 	private $broker;
 
 	/**
+	 * Docblock definition.
+	 *
+	 * @var \TokenReflection\ReflectionAnnotation|boolean
+	 */
+	protected $docComment;
+
+	/**
+	 * Parsed docblock definition.
+	 *
+	 * @var array
+	 */
+	private $parsedDocComment;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
@@ -145,6 +159,48 @@ class ReflectionFile implements IReflection
 	}
 
 	/**
+	 * Returns the appropriate docblock definition.
+	 *
+	 * @return string|boolean
+	 */
+	public function getDocComment()
+	{
+		return $this->docComment->getDocComment();
+	}
+
+	/**
+	 * Checks if there is a particular annotation.
+	 *
+	 * @param string $name Annotation name
+	 * @return boolean
+	 */
+	final public function hasAnnotation($name)
+	{
+		return $this->docComment->hasAnnotation($name);
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
+	 * @return string|array|null
+	 */
+	final public function getAnnotation($name)
+	{
+		return $this->docComment->getAnnotation($name);
+	}
+
+	/**
+	 * Returns all annotations.
+	 *
+	 * @return array
+	 */
+	final public function getAnnotations()
+	{
+		return $this->docComment->getAnnotations();
+	}
+
+	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
 	 * @return \TokenReflection\Broker
@@ -190,6 +246,8 @@ class ReflectionFile implements IReflection
 			return $this;
 		}
 
+		$docCommentPosition = null;
+
 		try {
 			if (!$tokenStream->is(T_OPEN_TAG)) {
 				$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
@@ -198,8 +256,11 @@ class ReflectionFile implements IReflection
 
 				while (null !== ($type = $tokenStream->getType())) {
 					switch ($type) {
-						case T_WHITESPACE:
 						case T_DOC_COMMENT:
+							if (null === $docCommentPosition) {
+								$docCommentPosition = $tokenStream->key();
+							}
+						case T_WHITESPACE:
 						case T_COMMENT:
 							break;
 						case T_DECLARE:
@@ -211,10 +272,12 @@ class ReflectionFile implements IReflection
 								->skipWhitespaces();
 							break;
 						case T_NAMESPACE:
+							$docCommentPosition = $docCommentPosition ?: -1;
 							break 2;
 						default:
+							$docCommentPosition = $docCommentPosition ?: -1;
 							$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
-							return $this;
+							break 2;
 					}
 
 					$tokenStream->skipWhitespaces();
@@ -228,6 +291,11 @@ class ReflectionFile implements IReflection
 					}
 				}
 			}
+
+			if (null !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
+				$docCommentPosition = null;
+			}
+			$this->docComment = new ReflectionAnnotation($this, null !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : null);
 
 			return $this;
 		} catch (Exception $e) {
