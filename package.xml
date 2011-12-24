@@ -22,13 +22,13 @@
 	<email>kontakt@kukulich.cz</email>
 	<active>yes</active>
 </developer>
-<date>2011-10-25</date>
+<date>2011-12-24</date>
 <version>
-	<release>1.0.0RC2</release>
+	<release>1.0.0</release>
 	<api>1.0.0</api>
 </version>
 <stability>
-	<release>beta</release>
+	<release>stable</release>
 	<api>stable</api>
 </stability>
 <license uri="https://github.com/Andrewsville/PHP-Token-Reflection/blob/master/LICENSE">New BSD</license>
@@ -80,6 +80,7 @@
 			<file name="ReflectionBase.php" role="php" />
 			<file name="ReflectionClass.php" role="php" />
 			<file name="ReflectionConstant.php" role="php" />
+			<file name="ReflectionElement.php" role="php" />
 			<file name="ReflectionFile.php" role="php" />
 			<file name="ReflectionFileNamespace.php" role="php" />
 			<file name="ReflectionFunction.php" role="php" />

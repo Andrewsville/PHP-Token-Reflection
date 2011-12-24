@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -72,6 +72,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * @param mixed $value Constant value
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\Php\ReflectionClass $parent Defining class reflection
+	 * @throws \TokenReflection\Exception\Parse If real parent class could not be determined.
 	 */
 	public function __construct($name, $value, Broker $broker, ReflectionClass $parent = null)
 	{
@@ -80,8 +81,35 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 		$this->broker = $broker;
 
 		if (null !== $parent) {
-			$this->declaringClassName = $parent->getName();
-			$this->userDefined = $parent->isUserDefined();
+			$realParent = null;
+
+			$parentConstants = $parent->getOwnConstants();
+			if (isset($parentConstants[$name])) {
+				$realParent = $parent;
+			}
+
+			foreach ($parent->getParentClasses() as $grandParent) {
+				$grandParentConstants = $grandParent->getOwnConstants();
+				if (isset($grandParentConstants[$name])) {
+					$realParent = $grandParent;
+					break;
+				}
+			}
+
+			foreach ($parent->getInterfaces() as $interface) {
+				$interfaceConstants = $interface->getOwnConstants();
+				if (isset($interfaceConstants[$name])) {
+					$realParent = $interface;
+					break;
+				}
+			}
+
+			if (null === $realParent) {
+				throw new Exception\Parse('Could not determine constant real parent class.', Exception::DOES_NOT_EXIST);
+			}
+
+			$this->declaringClassName = $realParent->getName();
+			$this->userDefined = $realParent->isUserDefined();
 		} else {
 			$declared = get_defined_constants(false);
 			if (!isset($declared[$name])) {
@@ -372,7 +400,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionBase::get($this, $key);
+		return TokenReflection\ReflectionElement::get($this, $key);
 	}
 
 	/**
@@ -383,7 +411,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
+		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -168,7 +168,7 @@ class Broker
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($reflectionFile);
+				$this->backend->addFile($tokens, $reflectionFile);
 
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
@@ -204,7 +204,7 @@ class Broker
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($reflectionFile);
+				$this->backend->addFile($tokens, $reflectionFile);
 
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
@@ -257,11 +257,12 @@ class Broker
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
 	 * @param string $path Directora path
+	 * @param string|array $filters Filename filters
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array of \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed.
+	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed
 	 */
-	public function processDirectory($path, $returnReflectionFile = false)
+	public function processDirectory($path, $filters = array(), $returnReflectionFile = false)
 	{
 		try {
 			$realPath = realpath($path);
@@ -272,7 +273,19 @@ class Broker
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
 				if ($entry->isFile()) {
-					$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
+					$process = empty($filters);
+					if (!$process) {
+						foreach ((array) $filters as $filter) {
+							if (fnmatch($filter, $entry->getPathName(), FNM_NOESCAPE)) {
+								$process = true;
+								break;
+							}
+						}
+					}
+
+					if ($process) {
+						$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
+					}
 				}
 			}
 
@@ -295,7 +308,7 @@ class Broker
 		if (is_dir($path)) {
 			return $this->processDirectory($path, $returnReflectionFile);
 		} elseif (is_file($path)) {
-			if (preg_match('~\\.phar$~i', $path)) {
+			if (preg_match('~\\.phar(?:$|\\.)~i', $path)) {
 				try {
 					return $this->processPhar($path, $returnReflectionFile);
 				} catch (Exception\Parse $e) {
@@ -466,6 +479,38 @@ class Broker
 	public function getFunctions()
 	{
 		return $this->backend->getFunctions();
+	}
+
+	/**
+	 * Returns if the broker contains a file reflection of the given name.
+	 *
+	 * @param string $fileName File name
+	 * @return boolean
+	 */
+	public function hasFile($fileName)
+	{
+		return $this->backend->hasFile($fileName);
+	}
+
+	/**
+	 * Returns a reflection object of a file.
+	 *
+	 * @param string $fileName File name
+	 * @return \TokenReflection\ReflectionFile|null
+	 */
+	public function getFile($fileName)
+	{
+		return $this->backend->getFile($fileName);
+	}
+
+	/**
+	 * Returns all processed files reflections.
+	 *
+	 * @return array
+	 */
+	public function getFiles()
+	{
+		return $this->backend->getFiles();
 	}
 
 	/**

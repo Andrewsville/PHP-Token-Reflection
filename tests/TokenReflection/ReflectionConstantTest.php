@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -53,6 +53,22 @@ class ReflectionConstantTest extends Test
 
 		$token = $this->getConstantTokenReflection('noComment');
 		$this->assertFalse($token->getDocComment());
+	}
+
+	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $constants = array('DOC_COMMENT', 'DOC_COMMENT_COPY', 'DOC_COMMENT_COPY2');
+
+		$reflection = $this->getClassTokenReflection('docCommentCopydoc');
+		foreach ($constants as $constant) {
+			$this->assertSame('This is a constant.', $reflection->getConstantReflection($constant)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constant);
+		}
+
+		$this->assertSame('This is another constant.', $reflection->getConstantReflection('DOC_COMMENT_COPY_CLASS')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame(null, $reflection->getConstantReflection('DOC_COMMENT_COPY_NO')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 	}
 
 	/**
