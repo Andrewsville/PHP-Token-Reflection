@@ -96,6 +96,7 @@ class ReflectionBrokerTest extends Test
 					'abstract-implicit.php',
 					'constants.php',
 					'doc-comment.php',
+					'doc-comment-copydoc.php',
 					'doc-comment-inheritance.php',
 					'double-properties.php',
 					'final.php',
@@ -168,6 +169,7 @@ class ReflectionBrokerTest extends Test
 				'*constant' . DIRECTORY_SEPARATOR . '*.php',
 				array(
 					'doc-comment.php',
+					'doc-comment-copydoc.php',
 					'in-namespace.php',
 					'lines.php',
 					'magic.php',
