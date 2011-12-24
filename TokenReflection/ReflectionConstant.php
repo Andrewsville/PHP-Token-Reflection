@@ -20,7 +20,7 @@ use TokenReflection\Stream\StreamBase as Stream;
 /**
  * Tokenized constant reflection.
  */
-class ReflectionConstant extends ReflectionBase implements IReflectionConstant
+class ReflectionConstant extends ReflectionElement implements IReflectionConstant
 {
 	/**
 	 * Name of the declaring class.
@@ -215,7 +215,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)

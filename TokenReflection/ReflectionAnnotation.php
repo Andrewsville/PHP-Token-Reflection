@@ -66,7 +66,7 @@ class ReflectionAnnotation
 	/**
 	 * Parent reflection object.
 	 *
-	 * @var \TokenReflection\IReflection
+	 * @var \TokenReflection\ReflectionBase
 	 */
 	private $reflection;
 
@@ -76,7 +76,7 @@ class ReflectionAnnotation
 	 * @param \TokenReflection\ReflectionBase $reflection Parent reflection object
 	 * @param string|boolean $docComment Docblock definition
 	 */
-	public function __construct(IReflection $reflection, $docComment = false)
+	public function __construct(ReflectionBase $reflection, $docComment = false)
 	{
 		$this->reflection = $reflection;
 		$this->docComment = $docComment ?: false;
@@ -175,8 +175,8 @@ class ReflectionAnnotation
 			$docblock = trim(
 				preg_replace(
 					array(
-						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
-						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
+						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_START, '~') . '~',
+						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_END, '~') . '$~',
 						'~^/\\*\\*~',
 						'~\\*/$~'
 					),
@@ -219,7 +219,7 @@ class ReflectionAnnotation
 			});
 		}
 
-		if ($this->reflection instanceof ReflectionBase) {
+		if ($this->reflection instanceof ReflectionElement) {
 			// Merge docblock templates
 			$this->mergeTemplates();
 

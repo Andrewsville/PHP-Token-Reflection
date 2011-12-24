@@ -179,7 +179,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionBase::get($this, $key);
+		return TokenReflection\ReflectionElement::get($this, $key);
 	}
 
 	/**
@@ -190,7 +190,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
+		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
 	/**

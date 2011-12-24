@@ -20,7 +20,7 @@ use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 /**
  * Base abstract class for tokenized function and method.
  */
-abstract class ReflectionFunctionBase extends ReflectionBase implements IReflectionFunctionBase
+abstract class ReflectionFunctionBase extends ReflectionElement implements IReflectionFunctionBase
 {
 	/**
 	 * Function/method namespace name.
@@ -292,7 +292,7 @@ abstract class ReflectionFunctionBase extends ReflectionBase implements IReflect
 	 *
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 */
 	final protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{

@@ -230,7 +230,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionBase::get($this, $key);
+		return TokenReflection\ReflectionElement::get($this, $key);
 	}
 
 	/**
@@ -241,7 +241,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionBase::exists($this, $key);
+		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
 	/**
