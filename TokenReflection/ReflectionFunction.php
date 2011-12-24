@@ -146,7 +146,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)

@@ -21,7 +21,7 @@ use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalRe
 /**
  * Tokenized class reflection.
  */
-class ReflectionClass extends ReflectionBase implements IReflectionClass
+class ReflectionClass extends ReflectionElement implements IReflectionClass
 {
 	/**
 	 * Modifier for determining if the reflected object is an interface.
@@ -1696,7 +1696,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If parent class name could not be parsed.
 	 */
-	private function parseParent(Stream $tokenStream, ReflectionBase $parent = null)
+	private function parseParent(Stream $tokenStream, ReflectionElement $parent = null)
 	{
 		if (!$tokenStream->is(T_EXTENDS)) {
 			return $this;
@@ -1749,7 +1749,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse On error while parsing interfaces.
 	 */
-	private function parseInterfaces(Stream $tokenStream, ReflectionBase $parent = null)
+	private function parseInterfaces(Stream $tokenStream, ReflectionElement $parent = null)
 	{
 		if (!$tokenStream->is(T_IMPLEMENTS)) {
 			return $this;

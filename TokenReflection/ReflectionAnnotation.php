@@ -175,8 +175,8 @@ class ReflectionAnnotation
 			$docblock = trim(
 				preg_replace(
 					array(
-						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_START, '~') . '~',
-						'~^' . preg_quote(ReflectionBase::DOCBLOCK_TEMPLATE_END, '~') . '$~',
+						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_START, '~') . '~',
+						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_END, '~') . '$~',
 						'~^/\\*\\*~',
 						'~\\*/$~'
 					),
@@ -219,12 +219,14 @@ class ReflectionAnnotation
 			});
 		}
 
-		// Merge docblock templates
-		$this->mergeTemplates();
+		if ($this->reflection instanceof ReflectionElement) {
+			// Merge docblock templates
+			$this->mergeTemplates();
 
-		// Process docblock inheritance for supported reflections
-		if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
-			$this->inheritAnnotations();
+			// Process docblock inheritance for supported reflections
+			if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
+				$this->inheritAnnotations();
+			}
 		}
 	}
 

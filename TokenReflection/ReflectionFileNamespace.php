@@ -20,7 +20,7 @@ use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 /**
  * Reflection of a namespace parsed from a file.
  */
-class ReflectionFileNamespace extends ReflectionBase
+class ReflectionFileNamespace extends ReflectionElement
 {
 	/**
 	 * List of class reflections.
@@ -94,7 +94,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)

@@ -16,7 +16,7 @@
 namespace TokenReflection\Dummy;
 
 use TokenReflection;
-use TokenReflection\Broker, TokenReflection\IReflectionClass, TokenReflection\ReflectionBase;
+use TokenReflection\Broker, TokenReflection\IReflectionClass, TokenReflection\ReflectionElement;
 use ReflectionClass as InternalReflectionClass, TokenReflection\Exception;
 
 /**
@@ -1023,7 +1023,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	final public function __get($key)
 	{
-		return ReflectionBase::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 	/**
@@ -1034,6 +1034,6 @@ class ReflectionClass implements IReflectionClass
 	 */
 	final public function __isset($key)
 	{
-		return ReflectionBase::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 }

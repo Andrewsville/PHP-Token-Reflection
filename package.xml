@@ -80,6 +80,7 @@
 			<file name="ReflectionBase.php" role="php" />
 			<file name="ReflectionClass.php" role="php" />
 			<file name="ReflectionConstant.php" role="php" />
+			<file name="ReflectionElement.php" role="php" />
 			<file name="ReflectionFile.php" role="php" />
 			<file name="ReflectionFileNamespace.php" role="php" />
 			<file name="ReflectionFunction.php" role="php" />

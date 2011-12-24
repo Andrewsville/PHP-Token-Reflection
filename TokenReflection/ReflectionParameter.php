@@ -21,7 +21,7 @@ use ReflectionParameter as InternalReflectionParameter;
 /**
  * Tokenized function/method parameter reflection.
  */
-class ReflectionParameter extends ReflectionBase implements IReflectionParameter
+class ReflectionParameter extends ReflectionElement implements IReflectionParameter
 {
 	/**
 	 * The parameter requires an array as its value.
@@ -455,7 +455,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)

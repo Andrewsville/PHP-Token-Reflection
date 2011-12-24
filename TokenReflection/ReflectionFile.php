@@ -20,7 +20,7 @@ use TokenReflection\Stream\StreamBase as Stream;
 /**
  * Processed file class.
  */
-class ReflectionFile implements IReflection
+class ReflectionFile extends ReflectionBase
 {
 	/**
 	 * Namespaces list.
@@ -28,78 +28,6 @@ class ReflectionFile implements IReflection
 	 * @var array
 	 */
 	private $namespaces = array();
-
-	/**
-	 * File name.
-	 *
-	 * @var string
-	 */
-	private $name;
-
-	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
-	 * @param \TokenReflection\Broker $broker Reflection broker
-	 */
-	public function __construct(Stream $tokenStream, Broker $broker)
-	{
-		$this->broker = $broker;
-		$this->name = $tokenStream->getFileName();
-
-		$this->parse($tokenStream);
-	}
-
-	/**
-	 * Returns the file name.
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
-	 * Returns if the file is internal.
-	 *
-	 * Always false.
-	 *
-	 * @return boolean
-	 */
-	public function isInternal()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the file is user defined.
-	 *
-	 * Always true.
-	 *
-	 * @return boolean
-	 */
-	public function isUserDefined()
-	{
-		return true;
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return true;
-	}
 
 	/**
 	 * Returns an array of namespaces in the current file.
@@ -145,50 +73,23 @@ class ReflectionFile implements IReflection
 	}
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
+	 * Parses the token substream and prepares namespace reflections from the file.
 	 *
-	 * @return \TokenReflection\Broker
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return boolean
-	 */
-	final public function __isset($key)
-	{
-		return ReflectionBase::exists($this, $key);
-	}
-
-	/**
-	 * Prepares namespace reflections from the file.
-	 *
-	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed.
 	 */
-	private function parse(Stream $tokenStream)
+	protected function parseStream(Stream $tokenStream, IReflection $parent = null)
 	{
-		if ($tokenStream->count() <= 1) {
+		$this->name = $tokenStream->getFileName();
+
+		if (1 === $tokenStream->count()) {
 			// No PHP content
 			return $this;
 		}
+
+		$docCommentPosition = null;
 
 		try {
 			if (!$tokenStream->is(T_OPEN_TAG)) {
@@ -198,8 +99,11 @@ class ReflectionFile implements IReflection
 
 				while (null !== ($type = $tokenStream->getType())) {
 					switch ($type) {
-						case T_WHITESPACE:
 						case T_DOC_COMMENT:
+							if (null === $docCommentPosition) {
+								$docCommentPosition = $tokenStream->key();
+							}
+						case T_WHITESPACE:
 						case T_COMMENT:
 							break;
 						case T_DECLARE:
@@ -211,10 +115,12 @@ class ReflectionFile implements IReflection
 								->skipWhitespaces();
 							break;
 						case T_NAMESPACE:
+							$docCommentPosition = $docCommentPosition ?: -1;
 							break 2;
 						default:
+							$docCommentPosition = $docCommentPosition ?: -1;
 							$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
-							return $this;
+							break 2;
 					}
 
 					$tokenStream->skipWhitespaces();
@@ -228,6 +134,11 @@ class ReflectionFile implements IReflection
 					}
 				}
 			}
+
+			if (null !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
+				$docCommentPosition = null;
+			}
+			$this->docComment = new ReflectionAnnotation($this, null !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : null);
 
 			return $this;
 		} catch (Exception $e) {
