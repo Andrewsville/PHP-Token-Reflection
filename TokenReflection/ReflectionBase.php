@@ -180,6 +180,17 @@ abstract class ReflectionBase implements IReflection
 	}
 
 	/**
+	 * Returns a file reflection.
+	 *
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\Runtime If the file is not stored inside the broker
+	 */
+	public function getFileReflection()
+	{
+		return $this->getBroker()->getFile($this->fileName);
+	}
+
+	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer

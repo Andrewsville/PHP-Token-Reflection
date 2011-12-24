@@ -168,7 +168,7 @@ class Broker
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($reflectionFile);
+				$this->backend->addFile($tokens, $reflectionFile);
 
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
@@ -204,7 +204,7 @@ class Broker
 
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($reflectionFile);
+				$this->backend->addFile($tokens, $reflectionFile);
 
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
@@ -479,6 +479,38 @@ class Broker
 	public function getFunctions()
 	{
 		return $this->backend->getFunctions();
+	}
+
+	/**
+	 * Returns if the broker contains a file reflection of the given name.
+	 *
+	 * @param string $fileName File name
+	 * @return boolean
+	 */
+	public function hasFile($fileName)
+	{
+		return $this->backend->hasFile($fileName);
+	}
+
+	/**
+	 * Returns a reflection object of a file.
+	 *
+	 * @param string $fileName File name
+	 * @return \TokenReflection\ReflectionFile|null
+	 */
+	public function getFile($fileName)
+	{
+		return $this->backend->getFile($fileName);
+	}
+
+	/**
+	 * Returns all processed files reflections.
+	 *
+	 * @return array
+	 */
+	public function getFiles()
+	{
+		return $this->backend->getFiles();
 	}
 
 	/**
