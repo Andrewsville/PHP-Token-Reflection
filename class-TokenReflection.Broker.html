@@ -2,17 +2,17 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.2.0">
+	<meta name="generator" content="ApiGen 2.3.0">
 
 	<title>Class TokenReflection\Broker | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
-	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
+	<script type="text/javascript" src="elementlist.js?2625982823"></script>
 	<script type="text/javascript">
 		var ApiGen = ApiGen || {};
 		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
 	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
 
 </head>
 
@@ -56,6 +56,7 @@
 				<li><a href="class-TokenReflection.ReflectionBase.html">ReflectionBase</a></li>
 				<li><a href="class-TokenReflection.ReflectionClass.html">ReflectionClass</a></li>
 				<li><a href="class-TokenReflection.ReflectionConstant.html">ReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.ReflectionElement.html">ReflectionElement</a></li>
 				<li><a href="class-TokenReflection.ReflectionFile.html">ReflectionFile</a></li>
 				<li><a href="class-TokenReflection.ReflectionFileNamespace.html">ReflectionFileNamespace</a></li>
 				<li><a href="class-TokenReflection.ReflectionFunction.html">ReflectionFunction</a></li>
@@ -434,7 +435,7 @@ returns the appropriate reflection object.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_processDirectory">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#256" title="Go to source code">processDirectory</a>( <span>string <var>$path</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#256" title="Go to source code">processDirectory</a>( <span>string <var>$path</var></span>, <span>string|array <var>$filters</var> = <span class="php-keyword1">array</span>()</span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -454,6 +455,8 @@ objects.</p>
 				<div class="list"><dl>
 					<dt><var>$path</var></dt>
 					<dd><code>string</code><br> Directora path</dd>
+					<dt><var>$filters</var></dt>
+					<dd><code>string|array</code><br> Filename filters</dd>
 					<dt><var>$returnReflectionFile</var></dt>
 					<dd><code>boolean</code><br> Returns the appropriate \TokenReflection\ReflectionFile instance(s)</dd>
 				</dl></div>
@@ -465,7 +468,7 @@ objects.</p>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br>If the given directory could not be processed.<br>
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br>If the given directory could not be processed<br>
 				</div>
 
 
@@ -484,7 +487,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_process">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#285" title="Go to source code">process</a>( <span>string <var>$path</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#298" title="Go to source code">process</a>( <span>string <var>$path</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -532,7 +535,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasNamespace">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#314" title="Go to source code">hasNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#327" title="Go to source code">hasNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -574,7 +577,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespace">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#325" title="Go to source code">getNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#338" title="Go to source code">getNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -616,7 +619,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasClass">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#347" title="Go to source code">hasClass</a>( <span>string <var>$className</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#360" title="Go to source code">hasClass</a>( <span>string <var>$className</var></span> )</code>
 
 		<div class="description short">
 			
@@ -658,7 +661,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getClass">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#358" title="Go to source code">getClass</a>( <span>string <var>$className</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#371" title="Go to source code">getClass</a>( <span>string <var>$className</var></span> )</code>
 
 		<div class="description short">
 			
@@ -700,7 +703,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getClasses">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#376" title="Go to source code">getClasses</a>( <span>integer <var>$types</var> = <code><a href="class-TokenReflection.Broker.Backend.html#TOKENIZED_CLASSES">TokenReflection\Broker\Backend::<b>TOKENIZED_CLASSES</b></a></code></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#389" title="Go to source code">getClasses</a>( <span>integer <var>$types</var> = <code><a href="class-TokenReflection.Broker.Backend.html#TOKENIZED_CLASSES">TokenReflection\Broker\Backend::<b>TOKENIZED_CLASSES</b></a></code></span> )</code>
 
 		<div class="description short">
 			
@@ -742,7 +745,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasConstant">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#387" title="Go to source code">hasConstant</a>( <span>string <var>$constantName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#400" title="Go to source code">hasConstant</a>( <span>string <var>$constantName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -784,7 +787,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstant">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#398" title="Go to source code">getConstant</a>( <span>string <var>$constantName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#411" title="Go to source code">getConstant</a>( <span>string <var>$constantName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -826,7 +829,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstants">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#419" title="Go to source code">getConstants</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#432" title="Go to source code">getConstants</a>( )</code>
 
 		<div class="description short">
 			
@@ -863,7 +866,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFunction">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#429" title="Go to source code">hasFunction</a>( <span>string <var>$functionName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#442" title="Go to source code">hasFunction</a>( <span>string <var>$functionName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -905,7 +908,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFunction">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#440" title="Go to source code">getFunction</a>( <span>string <var>$functionName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#453" title="Go to source code">getFunction</a>( <span>string <var>$functionName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -947,7 +950,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFunctions">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#461" title="Go to source code">getFunctions</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#474" title="Go to source code">getFunctions</a>( )</code>
 
 		<div class="description short">
 			
@@ -958,6 +961,127 @@ objects.</p>
 		<div class="description detailed hidden">
 			
 <p>Returns all functions from all namespaces.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasFile" id="_hasFile">
+
+		<td class="attributes"><code>
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasFile">#</a>
+		<code><a href="source-class-TokenReflection.Broker.html#484" title="Go to source code">hasFile</a>( <span>string <var>$fileName</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns if the broker contains a file reflection of the given name.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns if the broker contains a file reflection of the given name.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fileName</var></dt>
+					<dd><code>string</code><br> File name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFile" id="_getFile">
+
+		<td class="attributes"><code>
+			
+			 public 
+			<code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code>|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFile">#</a>
+		<code><a href="source-class-TokenReflection.Broker.html#495" title="Go to source code">getFile</a>( <span>string <var>$fileName</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns a reflection object of a file.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns a reflection object of a file.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fileName</var></dt>
+					<dd><code>string</code><br> File name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code>|null</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFiles" id="_getFiles">
+
+		<td class="attributes"><code>
+			
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFiles">#</a>
+		<code><a href="source-class-TokenReflection.Broker.html#506" title="Go to source code">getFiles</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns all processed files reflections.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns all processed files reflections.</p>
 
 
 
@@ -984,7 +1108,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFileTokens">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#471" title="Go to source code">getFileTokens</a>( <span>string <var>$fileName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#516" title="Go to source code">getFileTokens</a>( <span>string <var>$fileName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1030,7 +1154,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getRealPath">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#487" title="Go to source code">getRealPath</a>( <span>string <var>$path</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#532" title="Go to source code">getRealPath</a>( <span>string <var>$path</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1268,7 +1392,7 @@ functions/methods.</p>
 </div>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.3.0</a>
 	</div>
 </div>
 </div>

@@ -2,17 +2,17 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.2.0">
+	<meta name="generator" content="ApiGen 2.3.0">
 
 	<title>Class TokenReflection\ReflectionFile | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
-	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
+	<script type="text/javascript" src="elementlist.js?2625982823"></script>
 	<script type="text/javascript">
 		var ApiGen = ApiGen || {};
 		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
 	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
 
 </head>
 
@@ -56,6 +56,7 @@
 				<li><a href="class-TokenReflection.ReflectionBase.html">ReflectionBase</a></li>
 				<li><a href="class-TokenReflection.ReflectionClass.html">ReflectionClass</a></li>
 				<li><a href="class-TokenReflection.ReflectionConstant.html">ReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.ReflectionElement.html">ReflectionElement</a></li>
 				<li class="active"><a href="class-TokenReflection.ReflectionFile.html">ReflectionFile</a></li>
 				<li><a href="class-TokenReflection.ReflectionFileNamespace.html">ReflectionFileNamespace</a></li>
 				<li><a href="class-TokenReflection.ReflectionFunction.html">ReflectionFunction</a></li>
@@ -137,9 +138,16 @@
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
-<b>TokenReflection\ReflectionFile</b>			
+			<a href="class-TokenReflection.ReflectionBase.html">TokenReflection\ReflectionBase</a>
+			
 			 implements 
 				<a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a>
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b>TokenReflection\ReflectionFile</b>			
 			
 			
 		</dd>
@@ -162,206 +170,6 @@
 
 	<table class="summary" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="__construct" id="___construct">
-
-		<td class="attributes"><code>
-			
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#46" title="Go to source code">__construct</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a> <var>$broker</var></span> )</code>
-
-		<div class="description short">
-			
-<p>Constructor.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Constructor.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token stream</dd>
-					<dt><var>$broker</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br> Reflection broker</dd>
-				</dl></div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getName" id="_getName">
-
-		<td class="attributes"><code>
-			
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#59" title="Go to source code">getName</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns the file name.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns the file name.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>string</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_getName">TokenReflection\IReflection::getName</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="isInternal" id="_isInternal">
-
-		<td class="attributes"><code>
-			
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_isInternal">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#69" title="Go to source code">isInternal</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns if the file is internal.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns if the file is internal.</p>
-
-<p>Always false.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_isInternal">TokenReflection\IReflection::isInternal</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="isUserDefined" id="_isUserDefined">
-
-		<td class="attributes"><code>
-			
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_isUserDefined">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#81" title="Go to source code">isUserDefined</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns if the file is user defined.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns if the file is user defined.</p>
-
-<p>Always true.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_isUserDefined">TokenReflection\IReflection::isUserDefined</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="isTokenized" id="_isTokenized">
-
-		<td class="attributes"><code>
-			
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_isTokenized">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#93" title="Go to source code">isTokenized</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns if the current reflection comes from a tokenized source.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns if the current reflection comes from a tokenized source.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_isTokenized">TokenReflection\IReflection::isTokenized</a></code></div>
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="getNamespaces" id="_getNamespaces">
 
 		<td class="attributes"><code>
@@ -374,7 +182,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespaces">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#103" title="Go to source code">getNamespaces</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionFile.html#32" title="Go to source code">getNamespaces</a>( )</code>
 
 		<div class="description short">
 			
@@ -411,7 +219,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___toString">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#113" title="Go to source code">__toString</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionFile.html#42" title="Go to source code">__toString</a>( )</code>
 
 		<div class="description short">
 			
@@ -448,7 +256,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_export">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#123" title="Go to source code">export</a>( <span><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a> <var>$broker</var></span>, <span>string <var>$argument</var></span>, <span>boolean <var>$return</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionFile.html#52" title="Go to source code">export</a>( <span><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a> <var>$broker</var></span>, <span>string <var>$argument</var></span>, <span>boolean <var>$return</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -494,7 +302,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getSource">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#136" title="Go to source code">getSource</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionFile.html#65" title="Go to source code">getSource</a>( )</code>
 
 		<div class="description short">
 			
@@ -519,169 +327,78 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getTokenStream" id="_getTokenStream">
+	<tr data-order="parseStream" id="_parseStream">
 
 		<td class="attributes"><code>
 			
-			 public 
-			<code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code>
+			 protected 
+			<code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_getTokenStream">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#146" title="Go to source code">getTokenStream</a>( )</code>
+		<a class="anchor" href="#_parseStream">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionFile.html#75" title="Go to source code">parseStream</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
-<p>Returns the file token stream.</p>
+<p>Parses the token substream and prepares namespace reflections from the
+file.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Returns the file token stream.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getBroker" id="_getBroker">
-
-		<td class="attributes"><code>
-			
-			 public 
-			<code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getBroker">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#156" title="Go to source code">getBroker</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns the reflection broker used by this reflection object.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns the reflection broker used by this reflection object.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_getBroker">TokenReflection\IReflection::getBroker</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="__get" id="___get">
-
-		<td class="attributes"><code>
-			
-			final public 
-			mixed
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#___get">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#166" title="Go to source code">__get</a>( <span>string <var>$key</var></span> )</code>
-
-		<div class="description short">
-			
-<p>Magic __get method.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Magic __get method.</p>
+<p>Parses the token substream and prepares namespace reflections from the
+file.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$key</var></dt>
-					<dd><code>string</code><br> Variable name</dd>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dt><var>$parent</var></dt>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br> Parent reflection object</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>mixed</code><br>
+					<code><code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code></code><br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br>If the file could not be parsed.<br>
 				</div>
 
 
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#___get">TokenReflection\IReflection::__get</a></code></div>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="__isset" id="___isset">
+	</table>
 
-		<td class="attributes"><code>
-			
-			final public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#___isset">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFile.html#177" title="Go to source code">__isset</a>( <span>string <var>$key</var></span> )</code>
-
-		<div class="description short">
-			
-<p>Magic __isset method.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Magic __isset method.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$key</var></dt>
-					<dd><code>string</code><br> Variable name</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#___isset">TokenReflection\IReflection::__isset</a></code></div>
-		</div>
-		</div></td>
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-TokenReflection.ReflectionBase.html#methods">TokenReflection\ReflectionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.ReflectionBase.html#___construct">__construct()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#___get">__get()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#___isset">__isset()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_exists">exists()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_get">get()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getAnnotation">getAnnotation()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getAnnotations">getAnnotations()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getBroker">getBroker()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getDocComment">getDocComment()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_getName">getName()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_hasAnnotation">hasAnnotation()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isDeprecated">isDeprecated()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isInternal">isInternal()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isTokenized">isTokenized()</a>, 
+<a href="class-TokenReflection.ReflectionBase.html#_isUserDefined">isUserDefined()</a>
+		</code></td>
 	</tr>
 	</table>
 
@@ -691,12 +408,20 @@
 
 
 
-
+	<table class="summary inherited">
+	<caption>Properties inherited from <a href="class-TokenReflection.ReflectionBase.html#properties">TokenReflection\ReflectionBase</a></caption>
+	<tr>
+		<td><code>
+<a href="class-TokenReflection.ReflectionBase.html#$docComment"><var>$docComment</var></a>, 
+<a href="class-TokenReflection.ReflectionBase.html#$name"><var>$name</var></a>
+		</code></td>
+	</tr>
+	</table>
 
 </div>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.3.0</a>
 	</div>
 </div>
 </div>

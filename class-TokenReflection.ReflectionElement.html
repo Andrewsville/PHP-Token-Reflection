@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="generator" content="ApiGen 2.3.0">
 
-	<title>Class TokenReflection\ReflectionConstant | PHP Token Reflection</title>
+	<title>Class TokenReflection\ReflectionElement | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
 	<script type="text/javascript" src="elementlist.js?2625982823"></script>
@@ -55,8 +55,8 @@
 				<li><a href="class-TokenReflection.ReflectionAnnotation.html">ReflectionAnnotation</a></li>
 				<li><a href="class-TokenReflection.ReflectionBase.html">ReflectionBase</a></li>
 				<li><a href="class-TokenReflection.ReflectionClass.html">ReflectionClass</a></li>
-				<li class="active"><a href="class-TokenReflection.ReflectionConstant.html">ReflectionConstant</a></li>
-				<li><a href="class-TokenReflection.ReflectionElement.html">ReflectionElement</a></li>
+				<li><a href="class-TokenReflection.ReflectionConstant.html">ReflectionConstant</a></li>
+				<li class="active"><a href="class-TokenReflection.ReflectionElement.html">ReflectionElement</a></li>
 				<li><a href="class-TokenReflection.ReflectionFile.html">ReflectionFile</a></li>
 				<li><a href="class-TokenReflection.ReflectionFileNamespace.html">ReflectionFileNamespace</a></li>
 				<li><a href="class-TokenReflection.ReflectionFunction.html">ReflectionFunction</a></li>
@@ -128,11 +128,14 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class ReflectionConstant</h1>
+	<h1>Class ReflectionElement</h1>
 
 	<div class="description">
 	
-<p>Tokenized constant reflection.</p>
+<p>Basic class for reflection elements.</p>
+
+<p>Defines a variety of common methods. All reflections are descendants of this
+class.</p>
 
 	</div>
 
@@ -147,39 +150,89 @@
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-			<a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a>
-			
-			
-			
-		</dd>
-		<dd style="padding-left:60px">
-			<img src="resources/inherit.png" alt="Extended by">
-<b>TokenReflection\ReflectionConstant</b>			
-			 implements 
-				<a href="class-TokenReflection.IReflectionConstant.html">TokenReflection\IReflectionConstant</a>
+<b>TokenReflection\ReflectionElement</b>			
 			
 			
 		</dd>
 	</dl>
 
+	<div>
+		<h4>Direct known subclasses</h4>
+			<a href="class-TokenReflection.ReflectionClass.html">TokenReflection\ReflectionClass</a>, 
+			<a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a>, 
+			<a href="class-TokenReflection.ReflectionFileNamespace.html">TokenReflection\ReflectionFileNamespace</a>, 
+			<a href="class-TokenReflection.ReflectionFunctionBase.html">TokenReflection\ReflectionFunctionBase</a>, 
+			<a href="class-TokenReflection.ReflectionParameter.html">TokenReflection\ReflectionParameter</a>, 
+			<a href="class-TokenReflection.ReflectionProperty.html">TokenReflection\ReflectionProperty</a>
+	</div>
 
+	<div>
+		<h4>Indirect known subclasses</h4>
+			<a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a>, 
+			<a href="class-TokenReflection.ReflectionMethod.html">TokenReflection\ReflectionMethod</a>
+	</div>
 
 
 
 
 
 	<div class="info">
-		
+		<b>Abstract</b><br>
 		
 		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a><br>
 
-		<b>Located at</b> <a href="source-class-TokenReflection.ReflectionConstant.html#20" title="Go to source code">ReflectionConstant.php</a><br>
+		<b>Located at</b> <a href="source-class-TokenReflection.ReflectionElement.html#20" title="Go to source code">ReflectionElement.php</a><br>
 	</div>
 
 
 	<table class="summary" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="getShortName" id="_getShortName">
+	<tr data-order="parseStream" id="_parseStream">
+
+		<td class="attributes"><code>
+			
+			final protected 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parseStream">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#90" title="Go to source code">parseStream</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Parses the token substream.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Parses the token substream.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dt><var>$parent</var></dt>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br> Parent reflection object</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>If the token stream is empty<br>
+					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br>If the token stream could not be parsed<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getName" id="_getName">
 
 		<td class="attributes"><code>
 			
@@ -190,18 +243,18 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_getShortName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#60" title="Go to source code">getShortName</a>( )</code>
+		<a class="anchor" href="#_getName">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#128" title="Go to source code">getName</a>( )</code>
 
 		<div class="description short">
 			
-<p>Returns the unqualified name (UQN).</p>
+<p>Returns the name (FQN).</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Returns the unqualified name (UQN).</p>
+<p>Returns the name (FQN).</p>
 
 
 
@@ -214,89 +267,11 @@
 
 
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#_getShortName">TokenReflection\IReflectionConstant::getShortName</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_getName">TokenReflection\IReflection::getName</a></code></div>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getDeclaringClassName" id="_getDeclaringClassName">
-
-		<td class="attributes"><code>
-			
-			 public 
-			string|null
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getDeclaringClassName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#75" title="Go to source code">getDeclaringClassName</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns the name of the declaring class.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns the name of the declaring class.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>string|null</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#_getDeclaringClassName">TokenReflection\IReflectionConstant::getDeclaringClassName</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getDeclaringClass" id="_getDeclaringClass">
-
-		<td class="attributes"><code>
-			
-			 public 
-			<code><a href="class-TokenReflection.ReflectionClass.html">TokenReflection\ReflectionClass</a></code>|null
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getDeclaringClass">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#85" title="Go to source code">getDeclaringClass</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns a reflection of the declaring class.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns a reflection of the declaring class.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><code><a href="class-TokenReflection.ReflectionClass.html">TokenReflection\ReflectionClass</a></code>|null</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#_getDeclaringClass">TokenReflection\IReflectionConstant::getDeclaringClass</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getNamespaceName" id="_getNamespaceName">
+	<tr data-order="getFileName" id="_getFileName">
 
 		<td class="attributes"><code>
 			
@@ -307,18 +282,18 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_getNamespaceName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#99" title="Go to source code">getNamespaceName</a>( )</code>
+		<a class="anchor" href="#_getFileName">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#138" title="Go to source code">getFileName</a>( )</code>
 
 		<div class="description short">
 			
-<p>Returns the namespace name.</p>
+<p>Returns the file name the reflection object is defined in.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Returns the namespace name.</p>
+<p>Returns the file name the reflection object is defined in.</p>
 
 
 
@@ -330,12 +305,164 @@
 
 
 
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#_getNamespaceName">TokenReflection\IReflectionConstant::getNamespaceName</a></code></div>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="inNamespace" id="_inNamespace">
+	<tr data-order="getFileReflection" id="_getFileReflection">
+
+		<td class="attributes"><code>
+			
+			 public 
+			<code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFileReflection">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#148" title="Go to source code">getFileReflection</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns a file reflection.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns a file reflection.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code></code><br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>If the file is not stored inside the broker<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getStartLine" id="_getStartLine">
+
+		<td class="attributes"><code>
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getStartLine">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#159" title="Go to source code">getStartLine</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the definition start line number in the file.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the definition start line number in the file.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getEndLine" id="_getEndLine">
+
+		<td class="attributes"><code>
+			
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getEndLine">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#169" title="Go to source code">getEndLine</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the definition end line number in the file.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the definition end line number in the file.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getExtension" id="_getExtension">
+
+		<td class="attributes"><code>
+			
+			 public 
+			null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getExtension">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#179" title="Go to source code">getExtension</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the PHP extension reflection.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the PHP extension reflection.</p>
+
+<p>Alwyas returns null - everything is user defined.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>null</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getExtensionName" id="_getExtensionName">
 
 		<td class="attributes"><code>
 			
@@ -346,18 +473,20 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_inNamespace">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#109" title="Go to source code">inNamespace</a>( )</code>
+		<a class="anchor" href="#_getExtensionName">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#191" title="Go to source code">getExtensionName</a>( )</code>
 
 		<div class="description short">
 			
-<p>Returns if the class is defined within a namespace.</p>
+<p>Returns the PHP extension name.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Returns if the class is defined within a namespace.</p>
+<p>Returns the PHP extension name.</p>
+
+<p>Alwyas returns false - everything is user defined.</p>
 
 
 
@@ -369,51 +498,10 @@
 
 
 
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#_inNamespace">TokenReflection\IReflectionConstant::inNamespace</a></code></div>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getValue" id="_getValue">
-
-		<td class="attributes"><code>
-			
-			 public 
-			mixed
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getValue">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#119" title="Go to source code">getValue</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns the constant value.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns the constant value.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>mixed</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#_getValue">TokenReflection\IReflectionConstant::getValue</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getValueDefinition" id="_getValueDefinition">
+	<tr data-order="getSource" id="_getSource">
 
 		<td class="attributes"><code>
 			
@@ -424,57 +512,18 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_getValueDefinition">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#134" title="Go to source code">getValueDefinition</a>( )</code>
+		<a class="anchor" href="#_getSource">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#203" title="Go to source code">getSource</a>( )</code>
 
 		<div class="description short">
 			
-<p>Returns the constant value definition.</p>
+<p>Returns the appropriate source code part.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Returns the constant value definition.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>string</code><br>
-				</div>
-
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#_getValueDefinition">TokenReflection\IReflectionConstant::getValueDefinition</a></code></div>
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="getOriginalValueDefinition" id="_getOriginalValueDefinition">
-
-		<td class="attributes"><code>
-			
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getOriginalValueDefinition">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#144" title="Go to source code">getOriginalValueDefinition</a>( )</code>
-
-		<div class="description short">
-			
-<p>Returns the originaly provided value definition.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-<p>Returns the originaly provided value definition.</p>
+<p>Returns the appropriate source code part.</p>
 
 
 
@@ -489,92 +538,75 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="__toString" id="___toString">
+	<tr data-order="getStartPosition" id="_getStartPosition">
 
 		<td class="attributes"><code>
 			
 			 public 
-			string
+			integer
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#___toString">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#154" title="Go to source code">__toString</a>( )</code>
+		<a class="anchor" href="#_getStartPosition">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#213" title="Go to source code">getStartPosition</a>( )</code>
 
 		<div class="description short">
 			
-<p>Returns the string representation of the reflection object.</p>
+<p>Returns the start position in the file token stream.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Returns the string representation of the reflection object.</p>
+<p>Returns the start position in the file token stream.</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>string</code><br>
+					<code>integer</code><br>
 				</div>
 
 
 
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionConstant.html#___toString">TokenReflection\IReflectionConstant::__toString</a></code></div>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="export" id="_export">
+	<tr data-order="getEndPosition" id="_getEndPosition">
 
 		<td class="attributes"><code>
 			
-			 public static
-			string|null
+			 public 
+			integer
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_export">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#169" title="Go to source code">export</a>( <span><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a> <var>$broker</var></span>, <span>string|object|null <var>$class</var></span>, <span>string <var>$constant</var></span>, <span>boolean <var>$return</var> = <span class="php-keyword1">false</span></span> )</code>
+		<a class="anchor" href="#_getEndPosition">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#223" title="Go to source code">getEndPosition</a>( )</code>
 
 		<div class="description short">
 			
-<p>Exports a reflected object.</p>
+<p>Returns the end position in the file token stream.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Exports a reflected object.</p>
+<p>Returns the end position in the file token stream.</p>
 
 
 
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$broker</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br> Broker instance</dd>
-					<dt><var>$class</var></dt>
-					<dd><code>string|object|null</code><br> Class name, class instance or null</dd>
-					<dt><var>$constant</var></dt>
-					<dd><code>string</code><br> Constant name</dd>
-					<dt><var>$return</var></dt>
-					<dd><code>boolean</code><br> Return the export instead of outputting it</dd>
-				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>string|null</code><br>
+					<code>integer</code><br>
 				</div>
 
-				<h4>Throws</h4>
-				<div class="list">
-					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>If requested parameter doesn't exist.<br>
-				</div>
 
 
 		</div>
@@ -584,7 +616,7 @@
 
 		<td class="attributes"><code>
 			
-			 public 
+			abstract public 
 			array
 			
 			</code>
@@ -592,7 +624,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespaceAliases">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#204" title="Go to source code">getNamespaceAliases</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#233" title="Go to source code">getNamespaceAliases</a>( )</code>
 
 		<div class="description short">
 			
@@ -603,6 +635,43 @@
 		<div class="description detailed hidden">
 			
 <p>Returns imported namespaces and aliases from the declaring namespace.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDocblockTemplates" id="_getDocblockTemplates">
+
+		<td class="attributes"><code>
+			
+			 protected 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getDocblockTemplates">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#240" title="Go to source code">getDocblockTemplates</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns the stack of docblock templates.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns the stack of docblock templates.</p>
 
 
 
@@ -629,7 +698,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_processParent">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#214" title="Go to source code">processParent</a>( <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#250" title="Go to source code">processParent</a>( <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var></span> )</code>
 
 		<div class="description short">
 			
@@ -646,7 +715,7 @@
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$parent</var></dt>
-					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br> Parent reflection object</dd>
+					<dd><code>TokenReflection\Reflection</code><br> Parent reflection object</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -654,10 +723,6 @@
 					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br>
 				</div>
 
-				<h4>Throws</h4>
-				<div class="list">
-					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br>If an invalid parent reflection object was provided.<br>
-				</div>
 
 
 		</div>
@@ -668,14 +733,14 @@
 		<td class="attributes"><code>
 			
 			 protected 
-			<code><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a></code>
+			<code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseDocComment">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#235" title="Go to source code">parseDocComment</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#262" title="Go to source code">parseDocComment</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var></span> )</code>
 
 		<div class="description short">
 			
@@ -699,7 +764,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><code><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a></code></code><br>
+					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br>
 				</div>
 
 
@@ -711,15 +776,15 @@
 
 		<td class="attributes"><code>
 			
-			 protected 
-			<code><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a></code>
+			abstract protected 
+			<code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parse">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#258" title="Go to source code">parse</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#340" title="Go to source code">parse</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var></span> )</code>
 
 		<div class="description short">
 			
@@ -743,7 +808,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><code><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a></code></code><br>
+					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br>
 				</div>
 
 
@@ -755,25 +820,25 @@
 
 		<td class="attributes"><code>
 			
-			 protected 
-			<code><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a></code>
+			abstract protected 
+			<code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionConstant.html#272" title="Go to source code">parseName</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#349" title="Go to source code">parseName</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span> )</code>
 
 		<div class="description short">
 			
-<p>Parses the constant name.</p>
+<p>Parses the reflection object name.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Parses the constant name.</p>
+<p>Parses the reflection object name.</p>
 
 
 
@@ -785,13 +850,53 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><code><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a></code></code><br>
+					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br>
 				</div>
 
-				<h4>Throws</h4>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="parseChildren" id="_parseChildren">
+
+		<td class="attributes"><code>
+			
+			 protected 
+			<code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parseChildren">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#357" title="Go to source code">parseChildren</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a> <var>$parent</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Parses child reflection objects from the token stream.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Parses child reflection objects from the token stream.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dt><var>$parent</var></dt>
+					<dd><code>TokenReflection\Reflection</code><br> Parent reflection object</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
 				<div class="list">
-					<code><code><a href="class-TokenReflection.Exception.Parse.html">TokenReflection\Exception\Parse</a></code></code><br>If the constant name could not be determined.<br>
+					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br>
 				</div>
+
 
 
 		</div>
@@ -799,26 +904,6 @@
 	</tr>
 	</table>
 
-	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-TokenReflection.ReflectionElement.html#methods">TokenReflection\ReflectionElement</a></caption>
-	<tr>
-		<td><code>
-<a href="class-TokenReflection.ReflectionElement.html#_getDocblockTemplates">getDocblockTemplates()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getEndLine">getEndLine()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getEndPosition">getEndPosition()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getExtension">getExtension()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getExtensionName">getExtensionName()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getFileName">getFileName()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getFileReflection">getFileReflection()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getName">getName()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getSource">getSource()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getStartLine">getStartLine()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_getStartPosition">getStartPosition()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_parseChildren">parseChildren()</a>, 
-<a href="class-TokenReflection.ReflectionElement.html#_parseStream">parseStream()</a>
-		</code></td>
-	</tr>
-	</table>
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-TokenReflection.ReflectionBase.html#methods">TokenReflection\ReflectionBase</a></caption>
 	<tr>
@@ -843,27 +928,99 @@
 
 
 
+	<table class="summary" id="constants">
+	<caption>Constants summary</caption>
+	<tr data-order="DOCBLOCK_TEMPLATE_START" id="DOCBLOCK_TEMPLATE_START">
 
-	<table class="summary inherited">
-	<caption>Constants inherited from <a href="class-TokenReflection.ReflectionElement.html#constants">TokenReflection\ReflectionElement</a></caption>
-	<tr>
-		<td><code>
-<a href="class-TokenReflection.ReflectionElement.html#DOCBLOCK_TEMPLATE_END"><b>DOCBLOCK_TEMPLATE_END</b></a>, 
-<a href="class-TokenReflection.ReflectionElement.html#DOCBLOCK_TEMPLATE_START"><b>DOCBLOCK_TEMPLATE_START</b></a>
+		<td class="attributes"><code>
+			
+			string
 		</code></td>
+		<td class="name"><code>
+				<a href="source-class-TokenReflection.ReflectionElement.html#27" title="Go to source code"><b>DOCBLOCK_TEMPLATE_START</b></a>
+		</code></td>
+		<td class="value"><code><span class="php-quote">'/**#@+'</span></code></td>
+		<td class="description"><div>
+			<a href="#DOCBLOCK_TEMPLATE_START" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Docblock template start.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Docblock template start.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="DOCBLOCK_TEMPLATE_END" id="DOCBLOCK_TEMPLATE_END">
+
+		<td class="attributes"><code>
+			
+			string
+		</code></td>
+		<td class="name"><code>
+				<a href="source-class-TokenReflection.ReflectionElement.html#34" title="Go to source code"><b>DOCBLOCK_TEMPLATE_END</b></a>
+		</code></td>
+		<td class="value"><code><span class="php-quote">'/**#@-*/'</span></code></td>
+		<td class="description"><div>
+			<a href="#DOCBLOCK_TEMPLATE_END" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Docblock template end.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Docblock template end.</p>
+
+
+			</div>
+		</div></td>
 	</tr>
 	</table>
 
 
 
-	<table class="summary inherited">
-	<caption>Properties inherited from <a href="class-TokenReflection.ReflectionElement.html#properties">TokenReflection\ReflectionElement</a></caption>
-	<tr>
-		<td><code>
-<a href="class-TokenReflection.ReflectionElement.html#$docblockTemplates"><var>$docblockTemplates</var></a>
+	<table class="summary" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="docblockTemplates" id="$docblockTemplates">
+
+		<td class="attributes"><code>
+			
+			protected 
+			array
 		</code></td>
+
+		<td class="name">
+				<a href="source-class-TokenReflection.ReflectionElement.html#83" title="Go to source code"><var>$docblockTemplates</var></a>
+		</td>
+		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
+		<td class="description"><div>
+			<a href="#$docblockTemplates" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>Stack of actual docblock templates.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>Stack of actual docblock templates.</p>
+
+
+			</div>
+		</div></td>
 	</tr>
 	</table>
+
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-TokenReflection.ReflectionBase.html#properties">TokenReflection\ReflectionBase</a></caption>
 	<tr>

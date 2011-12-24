@@ -2,17 +2,17 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.2.0">
+	<meta name="generator" content="ApiGen 2.3.0">
 
 	<title>Class TokenReflection\Broker\Backend\Memory | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
-	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
+	<script type="text/javascript" src="elementlist.js?2625982823"></script>
 	<script type="text/javascript">
 		var ApiGen = ApiGen || {};
 		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
 	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
 
 </head>
 
@@ -134,6 +134,137 @@
 
 	<table class="summary" id="methods">
 	<caption>Methods summary</caption>
+	<tr data-order="hasFile" id="_hasFile">
+
+		<td class="attributes"><code>
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasFile">#</a>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#84" title="Go to source code">hasFile</a>( <span>string <var>$fileName</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns if a file with the given filename has been processed.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns if a file with the given filename has been processed.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fileName</var></dt>
+					<dd><code>string</code><br> File name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.Broker.Backend.html#_hasFile">TokenReflection\Broker\Backend::hasFile</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFile" id="_getFile">
+
+		<td class="attributes"><code>
+			
+			 public 
+			<code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFile">#</a>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#95" title="Go to source code">getFile</a>( <span>string <var>$fileName</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Returns a file reflection.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns a file reflection.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fileName</var></dt>
+					<dd><code>string</code><br> File name</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code></code><br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.Exception.Runtime.html">TokenReflection\Exception\Runtime</a></code></code><br>If the requested file has not been processed<br>
+				</div>
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.Broker.Backend.html#_getFile">TokenReflection\Broker\Backend::getFile</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getFiles" id="_getFiles">
+
+		<td class="attributes"><code>
+			
+			 public 
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getFiles">#</a>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#111" title="Go to source code">getFiles</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns file reflections.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns file reflections.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.Broker.Backend.html#_getFiles">TokenReflection\Broker\Backend::getFiles</a></code></div>
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="hasNamespace" id="_hasNamespace">
 
 		<td class="attributes"><code>
@@ -146,7 +277,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasNamespace">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#77" title="Go to source code">hasNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#121" title="Go to source code">hasNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -190,7 +321,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespace">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#88" title="Go to source code">getNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#132" title="Go to source code">getNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -238,7 +369,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespaces">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#109" title="Go to source code">getNamespaces</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#153" title="Go to source code">getNamespaces</a>( )</code>
 
 		<div class="description short">
 			
@@ -275,7 +406,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasClass">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#119" title="Go to source code">hasClass</a>( <span>string <var>$className</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#163" title="Go to source code">hasClass</a>( <span>string <var>$className</var></span> )</code>
 
 		<div class="description short">
 			
@@ -319,7 +450,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getClass">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#143" title="Go to source code">getClass</a>( <span>string <var>$className</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#187" title="Go to source code">getClass</a>( <span>string <var>$className</var></span> )</code>
 
 		<div class="description short">
 			
@@ -363,7 +494,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getClasses">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#179" title="Go to source code">getClasses</a>( <span>integer <var>$type</var> = self::TOKENIZED_CLASSES</span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#223" title="Go to source code">getClasses</a>( <span>integer <var>$type</var> = self::TOKENIZED_CLASSES</span> )</code>
 
 		<div class="description short">
 			
@@ -407,7 +538,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasConstant">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#200" title="Go to source code">hasConstant</a>( <span>string <var>$constantName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#244" title="Go to source code">hasConstant</a>( <span>string <var>$constantName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -451,7 +582,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstant">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#236" title="Go to source code">getConstant</a>( <span>string <var>$constantName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#280" title="Go to source code">getConstant</a>( <span>string <var>$constantName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -499,7 +630,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstants">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#284" title="Go to source code">getConstants</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#328" title="Go to source code">getConstants</a>( )</code>
 
 		<div class="description short">
 			
@@ -538,7 +669,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFunction">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#303" title="Go to source code">hasFunction</a>( <span>string <var>$functionName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#347" title="Go to source code">hasFunction</a>( <span>string <var>$functionName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -582,7 +713,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFunction">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#327" title="Go to source code">getFunction</a>( <span>string <var>$functionName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#371" title="Go to source code">getFunction</a>( <span>string <var>$functionName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -630,7 +761,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFunctions">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#362" title="Go to source code">getFunctions</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#406" title="Go to source code">getFunctions</a>( )</code>
 
 		<div class="description short">
 			
@@ -669,7 +800,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isFileProcessed">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#381" title="Go to source code">isFileProcessed</a>( <span>string <var>$fileName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#425" title="Go to source code">isFileProcessed</a>( <span>string <var>$fileName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -713,7 +844,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFileTokens">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#392" title="Go to source code">getFileTokens</a>( <span>string <var>$fileName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#436" title="Go to source code">getFileTokens</a>( <span>string <var>$fileName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -761,7 +892,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addFile">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#409" title="Go to source code">addFile</a>( <span><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a> <var>$file</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#453" title="Go to source code">addFile</a>( <span><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a> <var>$tokenStream</var></span>, <span><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a> <var>$file</var></span> )</code>
 
 		<div class="description short">
 			
@@ -777,6 +908,8 @@
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token stream</dd>
 					<dt><var>$file</var></dt>
 					<dd><code><code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code></code><br> File reflection object</dd>
 				</dl></div>
@@ -805,7 +938,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setBroker">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#435" title="Go to source code">setBroker</a>( <span><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a> <var>$broker</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#481" title="Go to source code">setBroker</a>( <span><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a> <var>$broker</var></span> )</code>
 
 		<div class="description short">
 			
@@ -849,7 +982,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getBroker">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#447" title="Go to source code">getBroker</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#493" title="Go to source code">getBroker</a>( )</code>
 
 		<div class="description short">
 			
@@ -888,7 +1021,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setStoringTokenStreams">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#457" title="Go to source code">setStoringTokenStreams</a>( <span>boolean <var>$store</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#503" title="Go to source code">setStoringTokenStreams</a>( <span>boolean <var>$store</var></span> )</code>
 
 		<div class="description short">
 			
@@ -932,7 +1065,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getStoringTokenStreams">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#469" title="Go to source code">getStoringTokenStreams</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#515" title="Go to source code">getStoringTokenStreams</a>( )</code>
 
 		<div class="description short">
 			
@@ -971,7 +1104,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseClassLists">#</a>
-		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#479" title="Go to source code">parseClassLists</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.Backend.Memory.html#525" title="Go to source code">parseClassLists</a>( )</code>
 
 		<div class="description short">
 			
@@ -1019,7 +1152,7 @@
 </div>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.3.0</a>
 	</div>
 </div>
 </div>

@@ -2,18 +2,18 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.2.0">
+	<meta name="generator" content="ApiGen 2.3.0">
 	<meta name="robots" content="noindex">
 
 	<title>File Broker/Backend.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
-	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
+	<script type="text/javascript" src="elementlist.js?2625982823"></script>
 	<script type="text/javascript">
 		var ApiGen = ApiGen || {};
 		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
 	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
 
 </head>
 
@@ -102,7 +102,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0 RC 2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -240,55 +240,80 @@
 <a href="#140" id="140" class="l">140: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isFileProcessed(<span class="php-var">$fileName</span>);
 <a href="#141" id="141" class="l">141: </a>
 <a href="#142" id="142" class="l">142: </a>    <span class="php-comment">/**
-</span><a href="#143" id="143" class="l">143: </a><span class="php-comment">     * Returns an array of tokens for a particular file.
+</span><a href="#143" id="143" class="l">143: </a><span class="php-comment">     * Returns if a file with the given filename has been processed.
 </span><a href="#144" id="144" class="l">144: </a><span class="php-comment">     *
 </span><a href="#145" id="145" class="l">145: </a><span class="php-comment">     * @param string $fileName File name
-</span><a href="#146" id="146" class="l">146: </a><span class="php-comment">     * @return \TokenReflection\Stream\StreamBase
+</span><a href="#146" id="146" class="l">146: </a><span class="php-comment">     * @return boolean
 </span><a href="#147" id="147" class="l">147: </a><span class="php-comment">     */</span>
-<a href="#148" id="148" class="l">148: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getFileTokens(<span class="php-var">$fileName</span>);
+<a href="#148" id="148" class="l">148: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> hasFile(<span class="php-var">$fileName</span>);
 <a href="#149" id="149" class="l">149: </a>
 <a href="#150" id="150" class="l">150: </a>    <span class="php-comment">/**
-</span><a href="#151" id="151" class="l">151: </a><span class="php-comment">     * Adds a file to the backend storage.
+</span><a href="#151" id="151" class="l">151: </a><span class="php-comment">     * Returns a file reflection.
 </span><a href="#152" id="152" class="l">152: </a><span class="php-comment">     *
-</span><a href="#153" id="153" class="l">153: </a><span class="php-comment">     * @param \TokenReflection\ReflectionFile $file File reflection object
-</span><a href="#154" id="154" class="l">154: </a><span class="php-comment">     * @return \TokenReflection\Broker\Backend
-</span><a href="#155" id="155" class="l">155: </a><span class="php-comment">     */</span>
-<a href="#156" id="156" class="l">156: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> addFile(TokenReflection\ReflectionFile <span class="php-var">$file</span>);
-<a href="#157" id="157" class="l">157: </a>
-<a href="#158" id="158" class="l">158: </a>    <span class="php-comment">/**
-</span><a href="#159" id="159" class="l">159: </a><span class="php-comment">     * Sets the reflection broker instance.
-</span><a href="#160" id="160" class="l">160: </a><span class="php-comment">     *
-</span><a href="#161" id="161" class="l">161: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker
-</span><a href="#162" id="162" class="l">162: </a><span class="php-comment">     * @return \TokenReflection\Broker\Backend
+</span><a href="#153" id="153" class="l">153: </a><span class="php-comment">     * @param string $fileName File name
+</span><a href="#154" id="154" class="l">154: </a><span class="php-comment">     * @return \TokenReflection\ReflectionFile
+</span><a href="#155" id="155" class="l">155: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested file has not been processed
+</span><a href="#156" id="156" class="l">156: </a><span class="php-comment">     */</span>
+<a href="#157" id="157" class="l">157: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getFile(<span class="php-var">$fileName</span>);
+<a href="#158" id="158" class="l">158: </a>
+<a href="#159" id="159" class="l">159: </a>    <span class="php-comment">/**
+</span><a href="#160" id="160" class="l">160: </a><span class="php-comment">     * Returns file reflections.
+</span><a href="#161" id="161" class="l">161: </a><span class="php-comment">     *
+</span><a href="#162" id="162" class="l">162: </a><span class="php-comment">     * @return array
 </span><a href="#163" id="163" class="l">163: </a><span class="php-comment">     */</span>
-<a href="#164" id="164" class="l">164: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setBroker(TokenReflection\Broker <span class="php-var">$broker</span>);
+<a href="#164" id="164" class="l">164: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getFiles();
 <a href="#165" id="165" class="l">165: </a>
 <a href="#166" id="166" class="l">166: </a>    <span class="php-comment">/**
-</span><a href="#167" id="167" class="l">167: </a><span class="php-comment">     * Returns the reflection broker instance.
+</span><a href="#167" id="167" class="l">167: </a><span class="php-comment">     * Returns an array of tokens for a particular file.
 </span><a href="#168" id="168" class="l">168: </a><span class="php-comment">     *
-</span><a href="#169" id="169" class="l">169: </a><span class="php-comment">     * @return \TokenReflection\Broker $broker Reflection broker
-</span><a href="#170" id="170" class="l">170: </a><span class="php-comment">     */</span>
-<a href="#171" id="171" class="l">171: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker();
-<a href="#172" id="172" class="l">172: </a>
-<a href="#173" id="173" class="l">173: </a>    <span class="php-comment">/**
-</span><a href="#174" id="174" class="l">174: </a><span class="php-comment">     * Sets if token streams are stored in the backend.
-</span><a href="#175" id="175" class="l">175: </a><span class="php-comment">     *
-</span><a href="#176" id="176" class="l">176: </a><span class="php-comment">     * @param boolean $store
-</span><a href="#177" id="177" class="l">177: </a><span class="php-comment">     * @return \TokenReflection\Broker\Backend
-</span><a href="#178" id="178" class="l">178: </a><span class="php-comment">     */</span>
-<a href="#179" id="179" class="l">179: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setStoringTokenStreams(<span class="php-var">$store</span>);
-<a href="#180" id="180" class="l">180: </a>
-<a href="#181" id="181" class="l">181: </a>    <span class="php-comment">/**
-</span><a href="#182" id="182" class="l">182: </a><span class="php-comment">     * Returns if token streams are stored in the backend.
-</span><a href="#183" id="183" class="l">183: </a><span class="php-comment">     *
-</span><a href="#184" id="184" class="l">184: </a><span class="php-comment">     * @return boolean
-</span><a href="#185" id="185" class="l">185: </a><span class="php-comment">     */</span>
-<a href="#186" id="186" class="l">186: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getStoringTokenStreams();
-<a href="#187" id="187" class="l">187: </a>}
-<a href="#188" id="188" class="l">188: </a></code></pre>
+</span><a href="#169" id="169" class="l">169: </a><span class="php-comment">     * @param string $fileName File name
+</span><a href="#170" id="170" class="l">170: </a><span class="php-comment">     * @return \TokenReflection\Stream\StreamBase
+</span><a href="#171" id="171" class="l">171: </a><span class="php-comment">     */</span>
+<a href="#172" id="172" class="l">172: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getFileTokens(<span class="php-var">$fileName</span>);
+<a href="#173" id="173" class="l">173: </a>
+<a href="#174" id="174" class="l">174: </a>    <span class="php-comment">/**
+</span><a href="#175" id="175" class="l">175: </a><span class="php-comment">     * Adds a file to the backend storage.
+</span><a href="#176" id="176" class="l">176: </a><span class="php-comment">     *
+</span><a href="#177" id="177" class="l">177: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
+</span><a href="#178" id="178" class="l">178: </a><span class="php-comment">     * @param \TokenReflection\ReflectionFile $file File reflection object
+</span><a href="#179" id="179" class="l">179: </a><span class="php-comment">     * @return \TokenReflection\Broker\Backend
+</span><a href="#180" id="180" class="l">180: </a><span class="php-comment">     */</span>
+<a href="#181" id="181" class="l">181: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> addFile(TokenReflection\Stream\StreamBase <span class="php-var">$tokenStream</span>, TokenReflection\ReflectionFile <span class="php-var">$file</span>);
+<a href="#182" id="182" class="l">182: </a>
+<a href="#183" id="183" class="l">183: </a>    <span class="php-comment">/**
+</span><a href="#184" id="184" class="l">184: </a><span class="php-comment">     * Sets the reflection broker instance.
+</span><a href="#185" id="185" class="l">185: </a><span class="php-comment">     *
+</span><a href="#186" id="186" class="l">186: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker
+</span><a href="#187" id="187" class="l">187: </a><span class="php-comment">     * @return \TokenReflection\Broker\Backend
+</span><a href="#188" id="188" class="l">188: </a><span class="php-comment">     */</span>
+<a href="#189" id="189" class="l">189: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setBroker(TokenReflection\Broker <span class="php-var">$broker</span>);
+<a href="#190" id="190" class="l">190: </a>
+<a href="#191" id="191" class="l">191: </a>    <span class="php-comment">/**
+</span><a href="#192" id="192" class="l">192: </a><span class="php-comment">     * Returns the reflection broker instance.
+</span><a href="#193" id="193" class="l">193: </a><span class="php-comment">     *
+</span><a href="#194" id="194" class="l">194: </a><span class="php-comment">     * @return \TokenReflection\Broker $broker Reflection broker
+</span><a href="#195" id="195" class="l">195: </a><span class="php-comment">     */</span>
+<a href="#196" id="196" class="l">196: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker();
+<a href="#197" id="197" class="l">197: </a>
+<a href="#198" id="198" class="l">198: </a>    <span class="php-comment">/**
+</span><a href="#199" id="199" class="l">199: </a><span class="php-comment">     * Sets if token streams are stored in the backend.
+</span><a href="#200" id="200" class="l">200: </a><span class="php-comment">     *
+</span><a href="#201" id="201" class="l">201: </a><span class="php-comment">     * @param boolean $store
+</span><a href="#202" id="202" class="l">202: </a><span class="php-comment">     * @return \TokenReflection\Broker\Backend
+</span><a href="#203" id="203" class="l">203: </a><span class="php-comment">     */</span>
+<a href="#204" id="204" class="l">204: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setStoringTokenStreams(<span class="php-var">$store</span>);
+<a href="#205" id="205" class="l">205: </a>
+<a href="#206" id="206" class="l">206: </a>    <span class="php-comment">/**
+</span><a href="#207" id="207" class="l">207: </a><span class="php-comment">     * Returns if token streams are stored in the backend.
+</span><a href="#208" id="208" class="l">208: </a><span class="php-comment">     *
+</span><a href="#209" id="209" class="l">209: </a><span class="php-comment">     * @return boolean
+</span><a href="#210" id="210" class="l">210: </a><span class="php-comment">     */</span>
+<a href="#211" id="211" class="l">211: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getStoringTokenStreams();
+<a href="#212" id="212" class="l">212: </a>}
+<a href="#213" id="213" class="l">213: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.3.0</a>
 	</div>
 </div>
 </div>

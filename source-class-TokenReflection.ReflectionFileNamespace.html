@@ -2,18 +2,18 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.2.0">
+	<meta name="generator" content="ApiGen 2.3.0">
 	<meta name="robots" content="noindex">
 
 	<title>File ReflectionFileNamespace.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1969147233"></script>
-	<script type="text/javascript" src="elementlist.js?2206563403"></script>
+	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
+	<script type="text/javascript" src="elementlist.js?2625982823"></script>
 	<script type="text/javascript">
 		var ApiGen = ApiGen || {};
 		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
 	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3389751099">
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
 
 </head>
 
@@ -57,6 +57,7 @@
 				<li><a href="class-TokenReflection.ReflectionBase.html">ReflectionBase</a></li>
 				<li><a href="class-TokenReflection.ReflectionClass.html">ReflectionClass</a></li>
 				<li><a href="class-TokenReflection.ReflectionConstant.html">ReflectionConstant</a></li>
+				<li><a href="class-TokenReflection.ReflectionElement.html">ReflectionElement</a></li>
 				<li><a href="class-TokenReflection.ReflectionFile.html">ReflectionFile</a></li>
 				<li class="active"><a href="class-TokenReflection.ReflectionFileNamespace.html">ReflectionFileNamespace</a></li>
 				<li><a href="class-TokenReflection.ReflectionFunction.html">ReflectionFunction</a></li>
@@ -132,7 +133,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0 RC 2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -150,7 +151,7 @@
 <a href="#20" id="20" class="l"> 20: </a><span class="php-comment">/**
 </span><a href="#21" id="21" class="l"> 21: </a><span class="php-comment"> * Reflection of a namespace parsed from a file.
 </span><a href="#22" id="22" class="l"> 22: </a><span class="php-comment"> */</span>
-<a href="#23" id="23" class="l"> 23: </a><span class="php-keyword1">class</span> ReflectionFileNamespace <span class="php-keyword1">extends</span> ReflectionBase
+<a href="#23" id="23" class="l"> 23: </a><span class="php-keyword1">class</span> ReflectionFileNamespace <span class="php-keyword1">extends</span> ReflectionElement
 <a href="#24" id="24" class="l"> 24: </a>{
 <a href="#25" id="25" class="l"> 25: </a>    <span class="php-comment">/**
 </span><a href="#26" id="26" class="l"> 26: </a><span class="php-comment">     * List of class reflections.
@@ -224,7 +225,7 @@
 </span><a href="#94" id="94" class="l"> 94: </a><span class="php-comment">     * Processes the parent reflection object.
 </span><a href="#95" id="95" class="l"> 95: </a><span class="php-comment">     *
 </span><a href="#96" id="96" class="l"> 96: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#97" id="97" class="l"> 97: </a><span class="php-comment">     * @return \TokenReflection\ReflectionBase
+</span><a href="#97" id="97" class="l"> 97: </a><span class="php-comment">     * @return \TokenReflection\ReflectionElement
 </span><a href="#98" id="98" class="l"> 98: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 </span><a href="#99" id="99" class="l"> 99: </a><span class="php-comment">     */</span>
 <a href="#100" id="100" class="l">100: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> processParent(IReflection <span class="php-var">$parent</span>)
@@ -279,7 +280,7 @@
 <a href="#149" id="149" class="l">149: </a>                        <span class="php-keyword1">break</span> <span class="php-num">2</span>;
 <a href="#150" id="150" class="l">150: </a>                }
 <a href="#151" id="151" class="l">151: </a>
-<a href="#152" id="152" class="l">152: </a>                <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#152" id="152" class="l">152: </a>                <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#153" id="153" class="l">153: </a>            }
 <a href="#154" id="154" class="l">154: </a>
 <a href="#155" id="155" class="l">155: </a>            <span class="php-var">$name</span> = <span class="php-keyword2">ltrim</span>(<span class="php-var">$name</span>, <span class="php-quote">'\\'</span>);
@@ -321,7 +322,7 @@
 <a href="#191" id="191" class="l">191: </a>                        <span class="php-var">$namespaceName</span> = <span class="php-quote">''</span>;
 <a href="#192" id="192" class="l">192: </a>                        <span class="php-var">$alias</span> = <span class="php-keyword1">null</span>;
 <a href="#193" id="193" class="l">193: </a>
-<a href="#194" id="194" class="l">194: </a>                        <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#194" id="194" class="l">194: </a>                        <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#195" id="195" class="l">195: </a>
 <a href="#196" id="196" class="l">196: </a>                        <span class="php-keyword1">while</span> (<span class="php-keyword1">true</span>) {
 <a href="#197" id="197" class="l">197: </a>                            <span class="php-keyword1">switch</span> (<span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>()) {
@@ -332,7 +333,7 @@
 <a href="#202" id="202" class="l">202: </a>                                <span class="php-keyword1">default</span>:
 <a href="#203" id="203" class="l">203: </a>                                    <span class="php-keyword1">break</span> <span class="php-num">2</span>;
 <a href="#204" id="204" class="l">204: </a>                            }
-<a href="#205" id="205" class="l">205: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#205" id="205" class="l">205: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#206" id="206" class="l">206: </a>                        }
 <a href="#207" id="207" class="l">207: </a>                        <span class="php-var">$namespaceName</span> = <span class="php-keyword2">ltrim</span>(<span class="php-var">$namespaceName</span>, <span class="php-quote">'\\'</span>);
 <a href="#208" id="208" class="l">208: </a>
@@ -344,7 +345,7 @@
 <a href="#214" id="214" class="l">214: </a>
 <a href="#215" id="215" class="l">215: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_AS)) {
 <a href="#216" id="216" class="l">216: </a>                            <span class="php-comment">// Alias defined</span>
-<a href="#217" id="217" class="l">217: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#217" id="217" class="l">217: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#218" id="218" class="l">218: </a>
 <a href="#219" id="219" class="l">219: </a>                            <span class="php-keyword1">if</span> (!<span class="php-var">$tokenStream</span>-&gt;is(T_STRING)) {
 <a href="#220" id="220" class="l">220: </a>                                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'The imported namespace &quot;%s&quot; seems aliased but the alias name could not be determined.'</span>, <span class="php-var">$namespaceName</span>), Exception\Parse::PARSE_ELEMENT_ERROR);
@@ -352,7 +353,7 @@
 <a href="#222" id="222" class="l">222: </a>
 <a href="#223" id="223" class="l">223: </a>                            <span class="php-var">$alias</span> = <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
 <a href="#224" id="224" class="l">224: </a>
-<a href="#225" id="225" class="l">225: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#225" id="225" class="l">225: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#226" id="226" class="l">226: </a>                        } <span class="php-keyword1">else</span> {
 <a href="#227" id="227" class="l">227: </a>                            <span class="php-comment">// No explicit alias</span>
 <a href="#228" id="228" class="l">228: </a>                            <span class="php-keyword1">if</span> (<span class="php-keyword1">false</span> !== (<span class="php-var">$pos</span> = <span class="php-keyword2">strrpos</span>(<span class="php-var">$namespaceName</span>, <span class="php-quote">'\\'</span>))) {
@@ -407,12 +408,12 @@
 <a href="#277" id="277" class="l">277: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
 <a href="#278" id="278" class="l">278: </a>                    <span class="php-keyword1">break</span>;
 <a href="#279" id="279" class="l">279: </a>                <span class="php-keyword1">case</span> T_CONST:
-<a href="#280" id="280" class="l">280: </a>                    <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#280" id="280" class="l">280: </a>                    <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#281" id="281" class="l">281: </a>                    <span class="php-keyword1">while</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_STRING)) {
 <a href="#282" id="282" class="l">282: </a>                        <span class="php-var">$constant</span> = <span class="php-keyword1">new</span> ReflectionConstant(<span class="php-var">$tokenStream</span>, <span class="php-var">$this</span>-&gt;getBroker(), <span class="php-var">$this</span>);
 <a href="#283" id="283" class="l">283: </a>                        <span class="php-var">$this</span>-&gt;constants[<span class="php-var">$constant</span>-&gt;getName()] = <span class="php-var">$constant</span>;
 <a href="#284" id="284" class="l">284: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">','</span>)) {
-<a href="#285" id="285" class="l">285: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces();
+<a href="#285" id="285" class="l">285: </a>                            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#286" id="286" class="l">286: </a>                        } <span class="php-keyword1">else</span> {
 <a href="#287" id="287" class="l">287: </a>                            <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
 <a href="#288" id="288" class="l">288: </a>                        }
@@ -429,13 +430,13 @@
 <a href="#299" id="299" class="l">299: </a>                        <span class="php-var">$tokenStream</span>
 <a href="#300" id="300" class="l">300: </a>                            -&gt;seek(<span class="php-var">$position</span>)
 <a href="#301" id="301" class="l">301: </a>                            -&gt;findMatchingBracket()
-<a href="#302" id="302" class="l">302: </a>                            -&gt;skipWhiteSpaces();
+<a href="#302" id="302" class="l">302: </a>                            -&gt;skipWhiteSpaces(<span class="php-keyword1">true</span>);
 <a href="#303" id="303" class="l">303: </a>
 <a href="#304" id="304" class="l">304: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_USE)) {
 <a href="#305" id="305" class="l">305: </a>                            <span class="php-var">$tokenStream</span>
-<a href="#306" id="306" class="l">306: </a>                                -&gt;skipWhitespaces()
+<a href="#306" id="306" class="l">306: </a>                                -&gt;skipWhitespaces(<span class="php-keyword1">true</span>)
 <a href="#307" id="307" class="l">307: </a>                                -&gt;findMatchingBracket()
-<a href="#308" id="308" class="l">308: </a>                                -&gt;skipWhitespaces();
+<a href="#308" id="308" class="l">308: </a>                                -&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
 <a href="#309" id="309" class="l">309: </a>                        }
 <a href="#310" id="310" class="l">310: </a>
 <a href="#311" id="311" class="l">311: </a>                        <span class="php-var">$tokenStream</span>
@@ -461,7 +462,7 @@
 <a href="#331" id="331" class="l">331: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.2.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.3.0</a>
 	</div>
 </div>
 </div>
