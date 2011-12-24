@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -74,12 +74,12 @@ class Resolver
 	 * Returns a property/parameter/constant/static variable value definition.
 	 *
 	 * @param array $tokens Tokenized definition
-	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
+	 * @param \TokenReflection\ReflectionElement $reflection Caller reflection
 	 * @return string
 	 * @throws \TokenReflection\Exception\Runtime If an invalid reflection object was provided.
 	 * @throws \TokenReflection\Exception\Runtime If an invalid source code was provided.
 	 */
-	final public static function getValueDefinition(array $tokens, ReflectionBase $reflection)
+	final public static function getValueDefinition(array $tokens, ReflectionElement $reflection)
 	{
 		if ($reflection instanceof ReflectionConstant || $reflection instanceof ReflectionFunction) {
 			$namespace = $reflection->getNamespaceName();
@@ -233,10 +233,10 @@ class Resolver
 	 * Finds constant names in the token definition.
 	 *
 	 * @param array $tokens Tokenized source code
-	 * @param \TokenReflection\ReflectionBase $reflection Caller reflection
+	 * @param \TokenReflection\ReflectionElement $reflection Caller reflection
 	 * @return array
 	 */
-	final public static function findConstants(array $tokens, ReflectionBase $reflection)
+	final public static function findConstants(array $tokens, ReflectionElement $reflection)
 	{
 		static $accepted = array(
 			T_DOUBLE_COLON => true,

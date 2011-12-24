@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -21,7 +21,7 @@ use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalRe
 /**
  * Tokenized class reflection.
  */
-class ReflectionClass extends ReflectionBase implements IReflectionClass
+class ReflectionClass extends ReflectionElement implements IReflectionClass
 {
 	/**
 	 * Modifier for determining if the reflected object is an interface.
@@ -1637,21 +1637,21 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					case T_INTERFACE:
 						$this->modifiers = self::IS_INTERFACE;
 						$this->type = self::IS_INTERFACE;
-						$tokenStream->skipWhitespaces();
+						$tokenStream->skipWhitespaces(true);
 						break 2;
 					case T_TRAIT:
 						$this->modifiers = self::IS_TRAIT;
 						$this->type = self::IS_TRAIT;
-						$tokenStream->skipWhitespaces();
+						$tokenStream->skipWhitespaces(true);
 						break 2;
 					case T_CLASS:
-						$tokenStream->skipWhitespaces();
+						$tokenStream->skipWhitespaces(true);
 						break 2;
 					default:
 						break;
 				}
 
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 			}
 
 			return $this;
@@ -1680,7 +1680,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			return $this;
 		} catch (Exception $e) {
@@ -1696,7 +1696,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse If parent class name could not be parsed.
 	 */
-	private function parseParent(Stream $tokenStream, ReflectionBase $parent = null)
+	private function parseParent(Stream $tokenStream, ReflectionElement $parent = null)
 	{
 		if (!$tokenStream->is(T_EXTENDS)) {
 			return $this;
@@ -1704,7 +1704,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 		try {
 			while (true) {
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 
 				$parentClassName = '';
 				while (true) {
@@ -1717,7 +1717,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							break 2;
 					}
 
-					$tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces(true);
 				}
 
 				$parentClassName = Resolver::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
@@ -1749,7 +1749,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 	 * @return \TokenReflection\ReflectionClass
 	 * @throws \TokenReflection\Exception\Parse On error while parsing interfaces.
 	 */
-	private function parseInterfaces(Stream $tokenStream, ReflectionBase $parent = null)
+	private function parseInterfaces(Stream $tokenStream, ReflectionElement $parent = null)
 	{
 		if (!$tokenStream->is(T_IMPLEMENTS)) {
 			return $this;
@@ -1763,7 +1763,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 			while (true) {
 				$interfaceName = '';
 
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 				while (true) {
 					switch ($tokenStream->getType()) {
 						case T_STRING:
@@ -1774,7 +1774,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							break 2;
 					}
 
-					$tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces(true);
 				}
 
 				$this->interfaces[] = Resolver::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
@@ -1849,26 +1849,26 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 					$tokenStream->next();
 					break;
 				case T_CONST:
-					$tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces(true);
 					while ($tokenStream->is(T_STRING)) {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
 						if ($tokenStream->is(',')) {
-							$tokenStream->skipWhitespaces();
+							$tokenStream->skipWhitespaces(true);
 						} else {
 							$tokenStream->next();
 						}
 					}
 					break;
 				case T_USE:
-					$tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces(true);
 
 					while (true) {
 						$traitName = '';
 						$type = $tokenStream->getType();
 						while (T_STRING === $type || T_NS_SEPARATOR === $type) {
 							$traitName .= $tokenStream->getTokenValue();
-							$type = $tokenStream->skipWhitespaces()->getType();
+							$type = $tokenStream->skipWhitespaces(true)->getType();
 						}
 
 						if ('' === trim($traitName, '\\')) {
@@ -1891,7 +1891,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 						}
 
 						// Aliases definition
-						$type = $tokenStream->skipWhitespaces()->getType();
+						$type = $tokenStream->skipWhitespaces(true)->getType();
 						while (true) {
 							if ('}' === $type) {
 								$tokenStream->skipWhitespaces();
@@ -1904,7 +1904,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 
 							while (T_STRING === $type || T_NS_SEPARATOR === $type || T_DOUBLE_COLON === $type) {
 								$leftSide .= $tokenStream->getTokenValue();
-								$type = $tokenStream->skipWhitespaces()->getType();
+								$type = $tokenStream->skipWhitespaces(true)->getType();
 							}
 
 							if (T_INSTEADOF === $type) {
@@ -1913,7 +1913,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 								throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);
 							}
 
-							$type = $tokenStream->skipWhitespaces()->getType();
+							$type = $tokenStream->skipWhitespaces(true)->getType();
 
 							if (T_PUBLIC === $type || T_PROTECTED === $type || T_PRIVATE === $type) {
 								if (!$alias) {
@@ -1935,12 +1935,12 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 								}
 
 								$rightSide[1] = $type;
-								$type = $tokenStream->skipWhitespaces()->getType();
+								$type = $tokenStream->skipWhitespaces(true)->getType();
 							}
 
 							while (T_STRING === $type || (T_NS_SEPARATOR === $type && !$alias)) {
 								$rightSide[0] .= $tokenStream->getTokenValue();
-								$type = $tokenStream->skipWhitespaces()->getType();
+								$type = $tokenStream->skipWhitespaces(true)->getType();
 							}
 
 							if (empty($leftSide)) {
@@ -1972,7 +1972,7 @@ class ReflectionClass extends ReflectionBase implements IReflectionClass
 							}
 
 							if (',' === $type) {
-								$tokenStream->skipWhitespaces();
+								$tokenStream->skipWhitespaces(true);
 								continue;
 							} elseif (';' !== $type) {
 								throw new Exception\Parse(sprintf('Unexpected token found: "%s".', $tokenStream->getTokenName()), Exception\Parse::PARSE_CHILDREN_ERROR);

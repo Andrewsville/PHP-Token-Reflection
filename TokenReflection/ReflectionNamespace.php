@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -465,7 +465,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 */
 	final public function __get($key)
 	{
-		return ReflectionBase::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 	/**
@@ -476,6 +476,6 @@ class ReflectionNamespace implements IReflectionNamespace
 	 */
 	final public function __isset($key)
 	{
-		return ReflectionBase::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 }

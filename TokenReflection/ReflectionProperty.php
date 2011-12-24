@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -21,7 +21,7 @@ use ReflectionProperty as InternalReflectionProperty, ReflectionClass as Interna
 /**
  * Tokenized class property reflection.
  */
-class ReflectionProperty extends ReflectionBase implements IReflectionProperty
+class ReflectionProperty extends ReflectionElement implements IReflectionProperty
 {
 	/**
 	 * Access level of this property has changed from the original implementation.
@@ -397,7 +397,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
@@ -457,7 +457,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 					break 2;
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 		}
 
 		if (InternalReflectionProperty::IS_STATIC === $this->modifiers) {
@@ -507,7 +507,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 
 			$this->name = substr($tokenStream->getTokenValue(), 1);
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			return $this;
 		} catch (Exception $e) {
@@ -532,7 +532,7 @@ class ReflectionProperty extends ReflectionBase implements IReflectionProperty
 		}
 
 		if ('=' === $type) {
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 		}
 
 		try {

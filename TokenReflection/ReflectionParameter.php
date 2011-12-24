@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -21,7 +21,7 @@ use ReflectionParameter as InternalReflectionParameter;
 /**
  * Tokenized function/method parameter reflection.
  */
-class ReflectionParameter extends ReflectionBase implements IReflectionParameter
+class ReflectionParameter extends ReflectionElement implements IReflectionParameter
 {
 	/**
 	 * The parameter requires an array as its value.
@@ -455,7 +455,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
@@ -509,13 +509,13 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 			if (T_ARRAY === $type) {
 				$this->typeHint = self::ARRAY_TYPE_HINT;
 				$this->originalTypeHint = self::ARRAY_TYPE_HINT;
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 			} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
 				$className = '';
 				do {
 					$className .= $tokenStream->getTokenValue();
 
-					$tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces(true);
 					$type = $tokenStream->getType();
 				} while (T_STRING === $type || T_NS_SEPARATOR === $type);
 
@@ -542,7 +542,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	{
 		if ($tokenStream->is('&')) {
 			$this->passedByReference = true;
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 		}
 
 		return $this;
@@ -565,7 +565,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 
 			$this->name = substr($tokenStream->getTokenValue(), 1);
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			return $this;
 		} catch (Exception $e) {
@@ -584,7 +584,7 @@ class ReflectionParameter extends ReflectionBase implements IReflectionParameter
 	{
 		try {
 			if ($tokenStream->is('=')) {
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 
 				$level = 0;
 				while (null !== ($type = $tokenStream->getType())) {

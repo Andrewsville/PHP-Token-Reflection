@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -20,7 +20,7 @@ use TokenReflection\Stream\StreamBase as Stream;
 /**
  * Tokenized constant reflection.
  */
-class ReflectionConstant extends ReflectionBase implements IReflectionConstant
+class ReflectionConstant extends ReflectionElement implements IReflectionConstant
 {
 	/**
 	 * Name of the declaring class.
@@ -215,7 +215,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
@@ -280,7 +280,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 	{
 		try {
 			if ($tokenStream->is(T_CONST)) {
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 			}
 
 			if (!$tokenStream->is(T_STRING)) {
@@ -293,7 +293,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			return $this;
 		} catch (Exception $e) {
@@ -316,7 +316,7 @@ class ReflectionConstant extends ReflectionBase implements IReflectionConstant
 				throw new Exception\Parse('Could not find the definition start.', Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
-			$tokenStream->skipWhitespaces();
+			$tokenStream->skipWhitespaces(true);
 
 			static $acceptedTokens = array(
 				'-' => true,

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -20,7 +20,7 @@ use TokenReflection\Exception, TokenReflection\Stream\StreamBase as Stream;
 /**
  * Reflection of a namespace parsed from a file.
  */
-class ReflectionFileNamespace extends ReflectionBase
+class ReflectionFileNamespace extends ReflectionElement
 {
 	/**
 	 * List of class reflections.
@@ -94,7 +94,7 @@ class ReflectionFileNamespace extends ReflectionBase
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @return \TokenReflection\ReflectionBase
+	 * @return \TokenReflection\ReflectionElement
 	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent)
@@ -149,7 +149,7 @@ class ReflectionFileNamespace extends ReflectionBase
 						break 2;
 				}
 
-				$tokenStream->skipWhitespaces();
+				$tokenStream->skipWhitespaces(true);
 			}
 
 			$name = ltrim($name, '\\');
@@ -191,7 +191,7 @@ class ReflectionFileNamespace extends ReflectionBase
 						$namespaceName = '';
 						$alias = null;
 
-						$tokenStream->skipWhitespaces();
+						$tokenStream->skipWhitespaces(true);
 
 						while (true) {
 							switch ($tokenStream->getType()) {
@@ -202,7 +202,7 @@ class ReflectionFileNamespace extends ReflectionBase
 								default:
 									break 2;
 							}
-							$tokenStream->skipWhitespaces();
+							$tokenStream->skipWhitespaces(true);
 						}
 						$namespaceName = ltrim($namespaceName, '\\');
 
@@ -214,7 +214,7 @@ class ReflectionFileNamespace extends ReflectionBase
 
 						if ($tokenStream->is(T_AS)) {
 							// Alias defined
-							$tokenStream->skipWhitespaces();
+							$tokenStream->skipWhitespaces(true);
 
 							if (!$tokenStream->is(T_STRING)) {
 								throw new Exception\Parse(sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), Exception\Parse::PARSE_ELEMENT_ERROR);
@@ -222,7 +222,7 @@ class ReflectionFileNamespace extends ReflectionBase
 
 							$alias = $tokenStream->getTokenValue();
 
-							$tokenStream->skipWhitespaces();
+							$tokenStream->skipWhitespaces(true);
 						} else {
 							// No explicit alias
 							if (false !== ($pos = strrpos($namespaceName, '\\'))) {
@@ -277,12 +277,12 @@ class ReflectionFileNamespace extends ReflectionBase
 					$tokenStream->next();
 					break;
 				case T_CONST:
-					$tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces(true);
 					while ($tokenStream->is(T_STRING)) {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
 						if ($tokenStream->is(',')) {
-							$tokenStream->skipWhitespaces();
+							$tokenStream->skipWhitespaces(true);
 						} else {
 							$tokenStream->next();
 						}
@@ -299,13 +299,13 @@ class ReflectionFileNamespace extends ReflectionBase
 						$tokenStream
 							->seek($position)
 							->findMatchingBracket()
-							->skipWhiteSpaces();
+							->skipWhiteSpaces(true);
 
 						if ($tokenStream->is(T_USE)) {
 							$tokenStream
-								->skipWhitespaces()
+								->skipWhitespaces(true)
 								->findMatchingBracket()
-								->skipWhitespaces();
+								->skipWhitespaces(true);
 						}
 
 						$tokenStream

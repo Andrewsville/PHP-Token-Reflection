@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -20,7 +20,7 @@ use TokenReflection\Stream\StreamBase as Stream;
 /**
  * Processed file class.
  */
-class ReflectionFile implements IReflection
+class ReflectionFile extends ReflectionBase
 {
 	/**
 	 * Namespaces list.
@@ -28,77 +28,6 @@ class ReflectionFile implements IReflection
 	 * @var array
 	 */
 	private $namespaces = array();
-
-	/**
-	 * File token stream.
-	 *
-	 * @var \TokenReflection\Stream\StreamBase
-	 */
-	private $tokenStream = null;
-
-	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
-	 * @param \TokenReflection\Broker $broker Reflection broker
-	 */
-	public function __construct(Stream $tokenStream, Broker $broker)
-	{
-		$this->tokenStream = $tokenStream;
-		$this->broker = $broker;
-		$this->parse();
-	}
-
-	/**
-	 * Returns the file name.
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->tokenStream->getFileName();
-	}
-
-	/**
-	 * Returns if the file is internal.
-	 *
-	 * Always false.
-	 *
-	 * @return boolean
-	 */
-	public function isInternal()
-	{
-		return false;
-	}
-
-	/**
-	 * Returns if the file is user defined.
-	 *
-	 * Always true.
-	 *
-	 * @return boolean
-	 */
-	public function isUserDefined()
-	{
-		return true;
-	}
-
-	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return boolean
-	 */
-	public function isTokenized()
-	{
-		return true;
-	}
 
 	/**
 	 * Returns an array of namespaces in the current file.
@@ -140,102 +69,76 @@ class ReflectionFile implements IReflection
 	 */
 	public function getSource()
 	{
-		return (string) $this->tokenStream;
+		return (string) $this->broker->getFileTokens($this->getName());
 	}
 
 	/**
-	 * Returns the file token stream.
+	 * Parses the token substream and prepares namespace reflections from the file.
 	 *
-	 * @return \TokenReflection\Stream\StreamBase
-	 */
-	public function getTokenStream()
-	{
-		return $this->tokenStream;
-	}
-
-	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return \TokenReflection\Broker
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	final public function __get($key)
-	{
-		return ReflectionBase::get($this, $key);
-	}
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return boolean
-	 */
-	final public function __isset($key)
-	{
-		return ReflectionBase::exists($this, $key);
-	}
-
-	/**
-	 * Prepares namespace reflections from the file.
-	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFile
 	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed.
 	 */
-	private function parse()
+	protected function parseStream(Stream $tokenStream, IReflection $parent = null)
 	{
-		if ($this->tokenStream->count() <= 1) {
+		$this->name = $tokenStream->getFileName();
+
+		if (1 === $tokenStream->count()) {
 			// No PHP content
 			return $this;
 		}
 
-		try {
-			if (!$this->tokenStream->is(T_OPEN_TAG)) {
-				$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
-			} else {
-				$this->tokenStream->skipWhitespaces();
+		$docCommentPosition = null;
 
-				while (null !== ($type = $this->tokenStream->getType())) {
+		try {
+			if (!$tokenStream->is(T_OPEN_TAG)) {
+				$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+			} else {
+				$tokenStream->skipWhitespaces();
+
+				while (null !== ($type = $tokenStream->getType())) {
 					switch ($type) {
-						case T_WHITESPACE:
 						case T_DOC_COMMENT:
+							if (null === $docCommentPosition) {
+								$docCommentPosition = $tokenStream->key();
+							}
+						case T_WHITESPACE:
 						case T_COMMENT:
 							break;
 						case T_DECLARE:
 							// Intentionally twice call of skipWhitespaces()
-							$this->tokenStream
+							$tokenStream
 								->skipWhitespaces()
 								->findMatchingBracket()
 								->skipWhitespaces()
 								->skipWhitespaces();
 							break;
 						case T_NAMESPACE:
+							$docCommentPosition = $docCommentPosition ?: -1;
 							break 2;
 						default:
-							$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
-							return $this;
+							$docCommentPosition = $docCommentPosition ?: -1;
+							$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+							break 2;
 					}
 
-					$this->tokenStream->skipWhitespaces();
+					$tokenStream->skipWhitespaces();
 				}
 
-				while (null !== ($type = $this->tokenStream->getType())) {
+				while (null !== ($type = $tokenStream->getType())) {
 					if (T_NAMESPACE === $type) {
-						$this->namespaces[] = new ReflectionFileNamespace($this->tokenStream, $this->broker, $this);
+						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 					} else {
-						$this->tokenStream->skipWhitespaces();
+						$tokenStream->skipWhitespaces();
 					}
 				}
 			}
+
+			if (null !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
+				$docCommentPosition = null;
+			}
+			$this->docComment = new ReflectionAnnotation($this, null !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : null);
 
 			return $this;
 		} catch (Exception $e) {

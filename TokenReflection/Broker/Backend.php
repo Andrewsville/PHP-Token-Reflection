@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.0 RC 2
+ * Version 1.0.0
  *
  * LICENSE
  *
@@ -140,6 +140,30 @@ interface Backend
 	public function isFileProcessed($fileName);
 
 	/**
+	 * Returns if a file with the given filename has been processed.
+	 *
+	 * @param string $fileName File name
+	 * @return boolean
+	 */
+	public function hasFile($fileName);
+
+	/**
+	 * Returns a file reflection.
+	 *
+	 * @param string $fileName File name
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\Runtime If the requested file has not been processed
+	 */
+	public function getFile($fileName);
+
+	/**
+	 * Returns file reflections.
+	 *
+	 * @return array
+	 */
+	public function getFiles();
+
+	/**
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
@@ -150,10 +174,11 @@ interface Backend
 	/**
 	 * Adds a file to the backend storage.
 	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @param \TokenReflection\ReflectionFile $file File reflection object
 	 * @return \TokenReflection\Broker\Backend
 	 */
-	public function addFile(TokenReflection\ReflectionFile $file);
+	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file);
 
 	/**
 	 * Sets the reflection broker instance.
