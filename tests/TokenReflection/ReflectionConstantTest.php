@@ -56,6 +56,22 @@ class ReflectionConstantTest extends Test
 	}
 
 	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $constants = array('DOC_COMMENT', 'DOC_COMMENT_COPY', 'DOC_COMMENT_COPY2');
+
+		$reflection = $this->getClassTokenReflection('docCommentCopydoc');
+		foreach ($constants as $constant) {
+			$this->assertSame('This is a constant.', $reflection->getConstantReflection($constant)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constant);
+		}
+
+		$this->assertSame('This is another constant.', $reflection->getConstantReflection('DOC_COMMENT_COPY_CLASS')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame(null, $reflection->getConstantReflection('DOC_COMMENT_COPY_NO')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+	}
+
+	/**
 	 * Tests different types of constant value.
 	 */
 	public function testTypes()

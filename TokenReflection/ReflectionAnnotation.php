@@ -41,6 +41,15 @@ class ReflectionAnnotation
 	const LONG_DESCRIPTION = ' long_description';
 
 	/**
+	 * Copydoc recursion stack.
+	 *
+	 * Prevents from infinite loops when using the @copydoc annotation.
+	 *
+	 * @var array
+	 */
+	private static $copydocStack = array();
+
+	/**
 	 * List of applied templates.
 	 *
 	 * @var array
@@ -219,6 +228,11 @@ class ReflectionAnnotation
 			});
 		}
 
+		// Copy annotations if the @copydoc tag is present.
+		if (!empty($this->annotations['copydoc'])) {
+			$this->copyAnnotation();
+		}
+
 		// Merge docblock templates
 		$this->mergeTemplates();
 
@@ -226,6 +240,77 @@ class ReflectionAnnotation
 		if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 			$this->inheritAnnotations();
 		}
+	}
+
+	/**
+	 * Copies annotations if the @copydoc tag is present.
+	 */
+	private function copyAnnotation()
+	{
+		self::$copydocStack[] = $this->reflection;
+		$broker = $this->reflection->getBroker();
+
+		$parentNames = $this->annotations['copydoc'];
+		unset($this->annotations['copydoc']);
+
+		foreach ($parentNames as $parentName) {
+			try {
+				if ($this->reflection instanceof ReflectionClass) {
+					$parent = $broker->getClass($parentName);
+					if ($parent instanceof Dummy\ReflectionClass) {
+						// The class to copy from does not exist
+						return;
+					}
+				} elseif ($this->reflection instanceof ReflectionFunction) {
+					$parent = $broker->getFunction($parentName);
+				} elseif ($this->reflection instanceof ReflectionConstant && null === $this->reflection->getDeclaringClassName()) {
+					$parent = $broker->getConstant($parentName);
+				} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionParameter || $this->reflection instanceof ReflectionConstant) {
+					if (false !== strpos($parentName, '::')) {
+						list($className, $parentName) = explode('::', $parentName, 2);
+						$class = $broker->getClass($className);
+					} else {
+						$class = $this->reflection->getDeclaringClass();
+					}
+
+					if ($class instanceof Dummy\ReflectionClass) {
+						// The source element class does not exist
+						return;
+					}
+
+					if ($this->reflection instanceof ReflectionMethod) {
+						$parent = $class->getMethod(rtrim($parentName, '()'));
+					} elseif ($this->reflection instanceof ReflectionConstant) {
+						$parent = $class->getConstantReflection($parentName);
+					} else {
+						$parent = $class->getProperty($parentName);
+					}
+				}
+
+				if (!empty($parent)) {
+					// Don't get into an infinite recursion loop
+					if (in_array($parent, self::$copydocStack, true)) {
+						throw new Exception\Runtime('Infinite loop detected.', Exception\Runtime::INVALID_ARGUMENT);
+					}
+
+					self::$copydocStack[] = $parent;
+
+					// We can get into an infinite loop here (e.g. when two methods @copydoc from each other)
+					foreach ($parent->getAnnotations() as $name => $value) {
+						// Add annotations that are not already present
+						if (empty($this->annotations[$name])) {
+							$this->annotations[$name] = $value;
+						}
+					}
+
+					array_pop(self::$copydocStack);
+				}
+			} catch (Exception $e) {
+				// Fall through
+			}
+		}
+
+		array_pop(self::$copydocStack);
 	}
 
 	/**

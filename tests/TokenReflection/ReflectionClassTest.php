@@ -653,6 +653,71 @@ class ReflectionClassTest extends Test
 	}
 
 	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testDocCommentCopydoc()
+	{
+		require_once $this->getFilePath('docCommentCopydoc');
+		$this->getBroker()->processFile($this->getFilePath('docCommentCopydoc'));
+
+		$parent = new \stdClass();
+		$parent->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentCopydocParent');
+		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentCopydocParent');
+		$this->assertSame($parent->internal->getDocComment(), $parent->token->getDocComment());
+
+		$rfl = new \stdClass();
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentCopydocFound');
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentCopydocFound');
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame('Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame('Long description.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+
+		$rfl = new \stdClass();
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentCopydocOverwritten');
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentCopydocOverwritten');
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame('Whatever.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame('Long description.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame(array('None'), $rfl->token->getAnnotation('license'));
+		$this->assertSame(array('Another author'), $rfl->token->getAnnotation('author'));
+
+		$rfl = new \stdClass();
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentCopydocDouble');
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentCopydocDouble');
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame('Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame('Long description.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame(array('None'), $rfl->token->getAnnotation('license'));
+		$this->assertSame(array('Author'), $rfl->token->getAnnotation('author'));
+
+		$rfl = new \stdClass();
+		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentCopydocRecursive');
+		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentCopydocRecursive');
+		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+		$this->assertSame('Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame('Long description.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame(array('None'), $rfl->token->getAnnotation('license'));
+		$this->assertSame(array('Author'), $rfl->token->getAnnotation('author'));
+
+		static $emptys = array(
+			'TokenReflection_Test_ClassDocCommentCopydocNotFound',
+			'TokenReflection_Test_ClassDocCommentCopydocCircle11',
+			'TokenReflection_Test_ClassDocCommentCopydocCircle12',
+			'TokenReflection_Test_ClassDocCommentCopydocCircle21',
+			'TokenReflection_Test_ClassDocCommentCopydocCircle22',
+			'TokenReflection_Test_ClassDocCommentCopydocCircle23',
+			'TokenReflection_Test_ClassDocCommentCopydocCircleSelf'
+		);
+		foreach ($emptys as $empty) {
+			$rfl = new \stdClass();
+			$rfl->internal = new InternalReflectionClass($empty);
+			$rfl->token = $this->getBroker()->getClass($empty);
+			$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
+			$this->assertSame(array(), $rfl->token->getAnnotations());
+		}
+	}
+
+	/**
 	 * Tests if class is defined in namespace.
 	 */
 	public function testInNamespace()
