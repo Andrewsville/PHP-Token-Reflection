@@ -16,7 +16,7 @@
 namespace TokenReflection\Broker\Backend;
 
 use TokenReflection;
-use TokenReflection\Stream\StreamBase as Stream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
+use TokenReflection\Stream\FileStream, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\Php, TokenReflection\Dummy;
 
 /**
  * Memory broker backend.
@@ -447,7 +447,7 @@ class Memory implements Broker\Backend
 			throw new Exception\Runtime(sprintf('File "%s" was not processed yet.', $fileName), Exception\Runtime::DOES_NOT_EXIST);
 		}
 
-		return true === $this->tokenStreams[$realName] ? new Stream($realName) : $this->tokenStreams[$realName];
+		return true === $this->tokenStreams[$realName] ? new FileStream($realName) : $this->tokenStreams[$realName];
 	}
 
 	/**
