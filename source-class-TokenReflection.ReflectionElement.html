@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.3.0">
+	<meta name="generator" content="ApiGen 2.4.0">
 	<meta name="robots" content="noindex">
 
 	<title>File ReflectionElement.php | PHP Token Reflection</title>
@@ -133,7 +133,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.0
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -411,7 +411,7 @@
 <a href="#280" id="280" class="l">280: </a>                <span class="php-var">$this</span>-&gt;docComment = <span class="php-keyword1">new</span> ReflectionAnnotation(<span class="php-var">$this</span>, <span class="php-var">$value</span>);
 <a href="#281" id="281" class="l">281: </a>                <span class="php-var">$this</span>-&gt;startPosition--;
 <a href="#282" id="282" class="l">282: </a>            }
-<a href="#283" id="283" class="l">283: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_DOC_COMMENT, <span class="php-var">$position</span> - <span class="php-num">2</span>)) {
+<a href="#283" id="283" class="l">283: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_DOC_COMMENT, <span class="php-var">$position</span> - <span class="php-num">2</span>) &amp;&amp; <span class="php-keyword2">substr_count</span>(<span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">1</span>), <span class="php-quote">&quot;\n&quot;</span>) &lt; <span class="php-num">2</span>) {
 <a href="#284" id="284" class="l">284: </a>            <span class="php-var">$value</span> = <span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">2</span>);
 <a href="#285" id="285" class="l">285: </a>            <span class="php-keyword1">if</span> (self::DOCBLOCK_TEMPLATE_END !== <span class="php-var">$value</span>) {
 <a href="#286" id="286" class="l">286: </a>                <span class="php-var">$this</span>-&gt;docComment = <span class="php-keyword1">new</span> ReflectionAnnotation(<span class="php-var">$this</span>, <span class="php-var">$value</span>);
@@ -420,7 +420,7 @@
 <a href="#289" id="289" class="l">289: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_COMMENT, <span class="php-var">$position</span> - <span class="php-num">1</span>) &amp;&amp; <span class="php-keyword2">preg_match</span>(<span class="php-quote">'~^'</span> . <span class="php-keyword2">preg_quote</span>(self::DOCBLOCK_TEMPLATE_START, <span class="php-quote">'~'</span>) . <span class="php-quote">'~'</span>, <span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">1</span>))) {
 <a href="#290" id="290" class="l">290: </a>            <span class="php-var">$this</span>-&gt;docComment = <span class="php-keyword1">new</span> ReflectionAnnotation(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">1</span>));
 <a href="#291" id="291" class="l">291: </a>            <span class="php-var">$this</span>-&gt;startPosition--;
-<a href="#292" id="292" class="l">292: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_COMMENT, <span class="php-var">$position</span> - <span class="php-num">2</span>) &amp;&amp; <span class="php-keyword2">preg_match</span>(<span class="php-quote">'~^'</span> . <span class="php-keyword2">preg_quote</span>(self::DOCBLOCK_TEMPLATE_START, <span class="php-quote">'~'</span>) . <span class="php-quote">'~'</span>, <span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">2</span>))) {
+<a href="#292" id="292" class="l">292: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_COMMENT, <span class="php-var">$position</span> - <span class="php-num">2</span>) &amp;&amp; <span class="php-keyword2">substr_count</span>(<span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">1</span>), <span class="php-quote">&quot;\n&quot;</span>) &lt; <span class="php-num">2</span> &amp;&amp; <span class="php-keyword2">preg_match</span>(<span class="php-quote">'~^'</span> . <span class="php-keyword2">preg_quote</span>(self::DOCBLOCK_TEMPLATE_START, <span class="php-quote">'~'</span>) . <span class="php-quote">'~'</span>, <span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">2</span>))) {
 <a href="#293" id="293" class="l">293: </a>            <span class="php-var">$this</span>-&gt;docComment = <span class="php-keyword1">new</span> ReflectionAnnotation(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>-&gt;getTokenValue(<span class="php-var">$position</span> - <span class="php-num">2</span>));
 <a href="#294" id="294" class="l">294: </a>            <span class="php-var">$this</span>-&gt;startPosition -= <span class="php-num">2</span>;
 <a href="#295" id="295" class="l">295: </a>        }
@@ -501,7 +501,7 @@
 <a href="#370" id="370" class="l">370: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.3.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.4.0</a>
 	</div>
 </div>
 </div>
