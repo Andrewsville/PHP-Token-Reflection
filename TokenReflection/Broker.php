@@ -351,7 +351,7 @@ class Broker
 
 		$namespace = $this->backend->getNamespace($namespaceName);
 		if (null !== $namespace) {
-			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespaceName;
+			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespace;
 		}
 
 		return $namespace;
