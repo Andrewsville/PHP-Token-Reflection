@@ -274,13 +274,14 @@ abstract class ReflectionElement extends ReflectionBase
 		}
 
 		$position = $tokenStream->key();
+
 		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
 			$value = $tokenStream->getTokenValue($position - 1);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
 				$this->docComment = new ReflectionAnnotation($this, $value);
 				$this->startPosition--;
 			}
-		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2) && substr_count($tokenStream->getTokenValue($position - 1), "\n") < 2) {
+		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
 			$value = $tokenStream->getTokenValue($position - 2);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
 				$this->docComment = new ReflectionAnnotation($this, $value);

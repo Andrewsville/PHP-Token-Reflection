@@ -98,6 +98,7 @@ class ReflectionBrokerTest extends Test
 					'doc-comment.php',
 					'doc-comment-copydoc.php',
 					'doc-comment-inheritance.php',
+					'doc-comment-many-lines.php',
 					'double-properties.php',
 					'final.php',
 					'in-namespace.php',
