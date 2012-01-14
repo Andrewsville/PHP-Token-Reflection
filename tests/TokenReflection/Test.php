@@ -32,6 +32,17 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	protected $type;
 
 	/**
+	 * Return a tokenized file reflection.
+	 *
+	 * @param mixed $test
+	 * @return \TokenReflection\ReflectionFile
+	 */
+	protected function getFileTokenReflection($test)
+	{
+		return $this->getBroker()->processFile($this->getFilePath($test), true);
+	}
+
+	/**
 	 * Returns class reflections.
 	 *
 	 * @param string $test

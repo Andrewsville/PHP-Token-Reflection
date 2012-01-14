@@ -25,6 +25,21 @@ require_once __DIR__ . '/../bootstrap.php';
 class ReflectionBrokerTest extends Test
 {
 	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
+	protected $type = 'broker';
+
+	/**
+	 * Tests processing of an empty file.
+	 */
+	public function testEmptyFileProcessing()
+	{
+		$this->getFileTokenReflection('empty');
+	}
+
+	/**
 	 * Tests filenames filtering.
 	 *
 	 * @dataProvider filenameFilterProvider

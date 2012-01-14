@@ -88,6 +88,24 @@ abstract class ReflectionElement extends ReflectionBase
 	protected $docblockTemplates = array();
 
 	/**
+	 * Constructor.
+	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+	 * @param \TokenReflection\Broker $broker Reflection broker
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @throws \TokenReflection\Exception\Runtime If the token stream is empty
+	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
+	 */
+	final public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = null)
+	{
+		if (0 === $tokenStream->count()) {
+			throw new Exception\Runtime('Reflection token stream must not be empty.', Exception\Runtime::INVALID_ARGUMENT);
+		}
+
+		parent::__construct($tokenStream, $broker, $parent);
+	}
+
+	/**
 	 * Parses the token substream.
 	 *
 	 * @param Stream\StreamBase $tokenStream Token substream
