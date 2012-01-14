@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -422,9 +422,13 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return $this
-			->parseModifiers($tokenStream, $parent)
-			->parseName($tokenStream)
+		$this->parseModifiers($tokenStream, $parent);
+
+		if (false === $this->docComment->getDocComment()) {
+			$this->parseDocComment($tokenStream, $parent);
+		}
+
+		return $this->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
 	}
 

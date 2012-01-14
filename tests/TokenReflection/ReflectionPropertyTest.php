@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -50,9 +50,12 @@ class ReflectionPropertyTest extends Test
 	 */
 	public function testComment()
 	{
-		$rfl = $this->getPropertyReflection('docComment');
-		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
-		$this->assertSame("/**\n\t * This is a property.\n\t */", $rfl->token->getDocComment());
+		$rfl = $this->getClassReflection('docComment');
+		foreach ($rfl->internal->getProperties() as $property) {
+			$this->assertFalse(false === $property->getDocComment(), $property->getName());
+			$this->assertTrue($rfl->token->hasProperty($property->getName()), $property->getName());
+			$this->assertSame($property->getDocComment(), $rfl->token->getProperty($property->getName())->getDocComment(), $property->getName());
+		}
 
 		$rfl = $this->getPropertyReflection('noComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());

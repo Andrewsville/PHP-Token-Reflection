@@ -87,6 +87,6 @@ The library requires PHP 5.3 with the [tokenizer extension](http://cz.php.net/ma
 
 ## Current status
 
-We have most features implemented and are heading towards the 1.0 relase.
+The current version is 1.0.2. It should support the vast majority of PHP internal reflection features and add many more.
 
-Every commit (fingers crossed) is checked against our unit tests and every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 branch, the 5.4dev version and actual trunk.
+Every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 branch, the 5.4dev version and actual trunk.

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -84,7 +84,7 @@ class ReflectionFile extends ReflectionBase
 	{
 		$this->name = $tokenStream->getFileName();
 
-		if (1 === $tokenStream->count()) {
+		if (1 >= $tokenStream->count()) {
 			// No PHP content
 			return $this;
 		}

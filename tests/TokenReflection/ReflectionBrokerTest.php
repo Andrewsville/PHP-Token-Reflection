@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -24,6 +24,21 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 class ReflectionBrokerTest extends Test
 {
+	/**
+	 * Element type.
+	 *
+	 * @var string
+	 */
+	protected $type = 'broker';
+
+	/**
+	 * Tests processing of an empty file.
+	 */
+	public function testEmptyFileProcessing()
+	{
+		$this->getFileTokenReflection('empty');
+	}
+
 	/**
 	 * Tests filenames filtering.
 	 *
@@ -98,6 +113,7 @@ class ReflectionBrokerTest extends Test
 					'doc-comment.php',
 					'doc-comment-copydoc.php',
 					'doc-comment-inheritance.php',
+					'doc-comment-many-lines.php',
 					'double-properties.php',
 					'final.php',
 					'in-namespace.php',

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection\Stream;
 
-use TokenReflection\Broker as Broker;
+use TokenReflection\Broker as Broker, TokenReflection\Exception;
 
 /**
  * Token stream iterator created from a file.
