@@ -290,7 +290,7 @@ abstract class ReflectionElement extends ReflectionBase
 		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
 			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 1));
 			$this->startPosition--;
-		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && substr_count($tokenStream->getTokenValue($position - 1), "\n") < 2 && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
+		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
 			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 2));
 			$this->startPosition -= 2;
 		}
