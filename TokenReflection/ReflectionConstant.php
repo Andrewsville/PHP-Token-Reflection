@@ -264,6 +264,14 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
+		if ($tokenStream->is(T_CONST)) {
+			$tokenStream->skipWhitespaces(true);
+		}
+
+		if (false === $this->docComment->getDocComment()) {
+			parent::parseDocComment($tokenStream, $parent);
+		}
+
 		return $this
 			->parseName($tokenStream)
 			->parseValue($tokenStream, $parent);
@@ -279,10 +287,6 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	protected function parseName(Stream $tokenStream)
 	{
 		try {
-			if ($tokenStream->is(T_CONST)) {
-				$tokenStream->skipWhitespaces(true);
-			}
-
 			if (!$tokenStream->is(T_STRING)) {
 				throw new Exception\Parse('The constant name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
