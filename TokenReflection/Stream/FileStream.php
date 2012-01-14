@@ -15,7 +15,7 @@
 
 namespace TokenReflection\Stream;
 
-use TokenReflection\Broker as Broker;
+use TokenReflection\Broker as Broker, TokenReflection\Exception;
 
 /**
  * Token stream iterator created from a file.
