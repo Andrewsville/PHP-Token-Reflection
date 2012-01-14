@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -48,8 +48,11 @@ class ReflectionConstantTest extends Test
 	 */
 	public function testComment()
 	{
-		$token = $this->getConstantTokenReflection('docComment');
-		$this->assertSame("/**\n\t * This is a constant.\n\t */", $token->getDocComment());
+		$rfl = $this->getClassReflection('docComment');
+		foreach (array_keys($rfl->internal->getConstants()) as $constant) {
+			$this->assertTrue($rfl->token->hasConstant($constant), $constant);
+			$this->assertFalse(false === $rfl->token->getConstantReflection($constant)->getDocComment(), $constant);
+		}
 
 		$token = $this->getConstantTokenReflection('noComment');
 		$this->assertFalse($token->getDocComment());

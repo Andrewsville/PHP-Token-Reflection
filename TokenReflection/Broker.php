@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -306,7 +306,7 @@ class Broker
 	public function process($path, $returnReflectionFile = false)
 	{
 		if (is_dir($path)) {
-			return $this->processDirectory($path, $returnReflectionFile);
+			return $this->processDirectory($path, array(), $returnReflectionFile);
 		} elseif (is_file($path)) {
 			if (preg_match('~\\.phar(?:$|\\.)~i', $path)) {
 				try {
@@ -351,7 +351,7 @@ class Broker
 
 		$namespace = $this->backend->getNamespace($namespaceName);
 		if (null !== $namespace) {
-			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespaceName;
+			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespace;
 		}
 
 		return $namespace;

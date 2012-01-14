@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * LICENSE
  *
@@ -86,6 +86,24 @@ abstract class ReflectionElement extends ReflectionBase
 	 * @var array
 	 */
 	protected $docblockTemplates = array();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+	 * @param \TokenReflection\Broker $broker Reflection broker
+	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @throws \TokenReflection\Exception\Runtime If the token stream is empty
+	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
+	 */
+	final public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = null)
+	{
+		if (0 === $tokenStream->count()) {
+			throw new Exception\Runtime('Reflection token stream must not be empty.', Exception\Runtime::INVALID_ARGUMENT);
+		}
+
+		parent::__construct($tokenStream, $broker, $parent);
+	}
 
 	/**
 	 * Parses the token substream.
@@ -274,13 +292,14 @@ abstract class ReflectionElement extends ReflectionBase
 		}
 
 		$position = $tokenStream->key();
+
 		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
 			$value = $tokenStream->getTokenValue($position - 1);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
 				$this->docComment = new ReflectionAnnotation($this, $value);
 				$this->startPosition--;
 			}
-		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2) && substr_count($tokenStream->getTokenValue($position - 1), "\n") < 2) {
+		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
 			$value = $tokenStream->getTokenValue($position - 2);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
 				$this->docComment = new ReflectionAnnotation($this, $value);
@@ -289,7 +308,7 @@ abstract class ReflectionElement extends ReflectionBase
 		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
 			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 1));
 			$this->startPosition--;
-		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && substr_count($tokenStream->getTokenValue($position - 1), "\n") < 2 && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
+		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
 			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 2));
 			$this->startPosition -= 2;
 		}
