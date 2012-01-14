@@ -133,7 +133,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.1
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.2
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -215,7 +215,7 @@
 <a href="#84" id="84" class="l"> 84: </a>    {
 <a href="#85" id="85" class="l"> 85: </a>        <span class="php-var">$this</span>-&gt;name = <span class="php-var">$tokenStream</span>-&gt;getFileName();
 <a href="#86" id="86" class="l"> 86: </a>
-<a href="#87" id="87" class="l"> 87: </a>        <span class="php-keyword1">if</span> (<span class="php-num">1</span> === <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">count</span>()) {
+<a href="#87" id="87" class="l"> 87: </a>        <span class="php-keyword1">if</span> (<span class="php-num">1</span> &gt;= <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">count</span>()) {
 <a href="#88" id="88" class="l"> 88: </a>            <span class="php-comment">// No PHP content</span>
 <a href="#89" id="89" class="l"> 89: </a>            <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
 <a href="#90" id="90" class="l"> 90: </a>        }

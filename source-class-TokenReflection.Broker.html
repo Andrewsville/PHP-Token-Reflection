@@ -133,7 +133,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.1
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.2
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -437,7 +437,7 @@
 <a href="#306" id="306" class="l">306: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> process(<span class="php-var">$path</span>, <span class="php-var">$returnReflectionFile</span> = <span class="php-keyword1">false</span>)
 <a href="#307" id="307" class="l">307: </a>    {
 <a href="#308" id="308" class="l">308: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_dir</span>(<span class="php-var">$path</span>)) {
-<a href="#309" id="309" class="l">309: </a>            <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;processDirectory(<span class="php-var">$path</span>, <span class="php-var">$returnReflectionFile</span>);
+<a href="#309" id="309" class="l">309: </a>            <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;processDirectory(<span class="php-var">$path</span>, <span class="php-keyword1">array</span>(), <span class="php-var">$returnReflectionFile</span>);
 <a href="#310" id="310" class="l">310: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-keyword2">is_file</span>(<span class="php-var">$path</span>)) {
 <a href="#311" id="311" class="l">311: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword2">preg_match</span>(<span class="php-quote">'~\\.phar(?:$|\\.)~i'</span>, <span class="php-var">$path</span>)) {
 <a href="#312" id="312" class="l">312: </a>                <span class="php-keyword1">try</span> {
@@ -482,7 +482,7 @@
 <a href="#351" id="351" class="l">351: </a>
 <a href="#352" id="352" class="l">352: </a>        <span class="php-var">$namespace</span> = <span class="php-var">$this</span>-&gt;backend-&gt;getNamespace(<span class="php-var">$namespaceName</span>);
 <a href="#353" id="353" class="l">353: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> !== <span class="php-var">$namespace</span>) {
-<a href="#354" id="354" class="l">354: </a>            <span class="php-var">$this</span>-&gt;cache[self::CACHE_NAMESPACE][<span class="php-var">$namespaceName</span>] = <span class="php-var">$namespaceName</span>;
+<a href="#354" id="354" class="l">354: </a>            <span class="php-var">$this</span>-&gt;cache[self::CACHE_NAMESPACE][<span class="php-var">$namespaceName</span>] = <span class="php-var">$namespace</span>;
 <a href="#355" id="355" class="l">355: </a>        }
 <a href="#356" id="356" class="l">356: </a>
 <a href="#357" id="357" class="l">357: </a>        <span class="php-keyword1">return</span> <span class="php-var">$namespace</span>;
