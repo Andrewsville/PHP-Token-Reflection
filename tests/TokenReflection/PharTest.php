@@ -40,6 +40,10 @@ class PharTest extends Test
 		if (!extension_loaded('phar')) {
 			$this->markTestSkipped('The phar extension is required');
 		}
+
+		if (ini_get('phar.readonly')) {
+			$this->markTestSkipped('The phar extension must not be set to read-only.');
+		}
 	}
 
 	/**
@@ -77,54 +81,76 @@ class PharTest extends Test
 
 	/**
 	 * Tests the PHAR file format.
-	 *
-	 * @dataProvider pharProvider
-	 * @param array $metadata Comparison metadata
-	 * @param \TokenReflection\Broker $filesystem Filesystem TR broker
-	 * @param \TokenReflection\Broker $phar PHAR TR broker
 	 */
-	public function testPharArchive(array $metadata, Broker $filesystem, Broker $phar)
+	public function testPharArchive()
 	{
-		$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		foreach ($this->prepareData() as $testData) {
+			list($metadata, $filesystem, $phar) = $testData;
+
+			$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		}
 	}
 
 	/**
 	 * Tests the zipped PHAR file format.
-	 *
-	 * @dataProvider zippedPharProvider
-	 * @param array $metadata Comparison metadata
-	 * @param \TokenReflection\Broker $filesystem Filesystem TR broker
-	 * @param \TokenReflection\Broker $phar PHAR TR broker
 	 */
-	public function testZippedPharArchive(array $metadata, Broker $filesystem, Broker $phar)
+	public function testZippedPharArchive()
 	{
-		$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		if (!extension_loaded('zip')) {
+			$this->markTestSkipped('The zip extension is required to run this test.');
+		}
+
+		foreach ($this->prepareData(Phar::ZIP) as $testData) {
+			list($metadata, $filesystem, $phar) = $testData;
+
+			$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		}
 	}
 
 	/**
 	 * Tests the gzipped PHAR file format.
-	 *
-	 * @dataProvider gzippedPharProvider
-	 * @param array $metadata Comparison metadata
-	 * @param \TokenReflection\Broker $filesystem Filesystem TR broker
-	 * @param \TokenReflection\Broker $phar PHAR TR broker
 	 */
-	public function testGZippedPharArchive(array $metadata, Broker $filesystem, Broker $phar)
+	public function testGZippedPharArchive()
 	{
-		$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		if (!extension_loaded('zlib')) {
+			$this->markTestSkipped('The zlib extension is required to run this test.');
+		}
+
+		$testData = array_merge(
+			$this->prepareData(Phar::PHAR, Phar::GZ, false),
+			$this->prepareData(Phar::TAR, Phar::GZ, false),
+			$this->prepareData(Phar::PHAR, Phar::GZ, true),
+			$this->prepareData(Phar::TAR, Phar::GZ, true)
+		);
+
+		foreach ($testData as $testItem) {
+			list($metadata, $filesystem, $phar) = $testItem;
+
+			$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		}
 	}
 
 	/**
 	 * Tests the bzipped PHAR file format.
-	 *
-	 * @dataProvider bzippedPharProvider
-	 * @param array $metadata Comparison metadata
-	 * @param \TokenReflection\Broker $filesystem Filesystem TR broker
-	 * @param \TokenReflection\Broker $phar PHAR TR broker
 	 */
-	public function testBZippedPharArchive(array $metadata, Broker $filesystem, Broker $phar)
+	public function testBZippedPharArchive()
 	{
-		$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		if (!extension_loaded('bz2')) {
+			$this->markTestSkipped('The zlib extension is required to run this test.');
+		}
+
+		$testData = array_merge(
+			$this->prepareData(Phar::PHAR, Phar::BZ2, false),
+			$this->prepareData(Phar::TAR, Phar::BZ2, false),
+			$this->prepareData(Phar::PHAR, Phar::BZ2, true),
+			$this->prepareData(Phar::TAR, Phar::BZ2, true)
+		);
+
+		foreach ($testData as $testItem) {
+			list($metadata, $filesystem, $phar) = $testItem;
+
+			$this->archiveTest($filesystem, $phar, $metadata['format'], $metadata['compression'], $metadata['wholeArchive']);
+		}
 	}
 
 	/**
@@ -181,6 +207,11 @@ class PharTest extends Test
 
 		$data = array();
 		foreach ($iterator as $item) {
+			if ('broker' === $item->getFileName()) {
+				// Skipping the borker directory because of PHP bug #53872
+				continue;
+			}
+
 			if ($item->isDir() && !$item->isDot()) {
 				$ext = '.phar';
 				$fileName = $dirName . DIRECTORY_SEPARATOR . uniqid($format . $compression);
@@ -204,20 +235,20 @@ class PharTest extends Test
 				unset($phar);
 
 				$dataItem = array(
-					'metadata' => array(
+					array(
 						'format' => $format,
 						'compression' => $compression,
 						'wholeArchive' => $wholeArchive,
-					),
+					)
 				);
 
 				$broker = new Broker(new Broker\Backend\Memory(), 0);
 				$broker->processDirectory($item->getPathName());
-				$dataItem['fsBroker'] = $broker;
+				$dataItem[] = $broker;
 
 				$broker2 = new Broker(new Broker\Backend\Memory(), 0);
 				$broker2->process($fileName . $ext);
-				$dataItem['pharBroker'] = $broker2;
+				$dataItem[] = $broker2;
 
 				$data[] = $dataItem;
 			}
@@ -226,67 +257,5 @@ class PharTest extends Test
 		$this->cleanUpTemporaryStorage($dirName);
 
 		return $data;
-	}
-
-	/**
-	 * Plain PHAR data provider.
-	 *
-	 * @return array
-	 */
-	public function pharProvider()
-	{
-		return $this->prepareData();
-	}
-
-	/**
-	 * Zipped PHAR data provider.
-	 *
-	 * @return array
-	 */
-	public function zippedPharProvider()
-	{
-		if (!extension_loaded('zip')) {
-			$this->markTestSkipped('The zip extension is required to run this test.');
-		}
-
-		return $this->prepareData(Phar::ZIP);
-	}
-
-	/**
-	 * Gzipped PHAR data provider.
-	 *
-	 * @return array
-	 */
-	public function gzippedPharProvider()
-	{
-		if (!extension_loaded('zlib')) {
-			$this->markTestSkipped('The zlib extension is required to run this test.');
-		}
-
-		return array_merge(
-			$this->prepareData(Phar::PHAR, Phar::GZ, false),
-			$this->prepareData(Phar::TAR, Phar::GZ, false),
-			$this->prepareData(Phar::PHAR, Phar::GZ, true),
-			$this->prepareData(Phar::TAR, Phar::GZ, true)
-		);
-	}
-
-	/**
-	 * Bzipped PHAR data provider.
-	 *
-	 * @return array
-	 */
-	public function bzippedPharProvider()
-	{
-		if (!extension_loaded('bz2')) {
-			$this->markTestSkipped('The zlib extension is required to run this test.');
-		}
-
-		return array_merge(
-			$this->prepareData(Phar::PHAR, Phar::BZ2, false),
-			$this->prepareData(Phar::TAR, Phar::BZ2, false),
-			$this->prepareData(Phar::PHAR, Phar::BZ2, true),
-			$this->prepareData(Phar::TAR, Phar::BZ2, true)
-		);
 	}
 }
