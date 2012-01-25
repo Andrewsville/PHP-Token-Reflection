@@ -19,8 +19,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Abstract test.
- *
- * @author Jaroslav Hanslík
  */
 abstract class Test extends \PHPUnit_Framework_TestCase
 {

@@ -19,8 +19,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Broker test.
- *
- * @author Ondřej Nešpor
  */
 class ReflectionBrokerTest extends Test
 {

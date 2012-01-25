@@ -19,9 +19,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Constant test.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class ReflectionConstantTest extends Test
 {

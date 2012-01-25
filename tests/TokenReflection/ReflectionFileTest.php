@@ -21,8 +21,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Class test.
- *
- * @author Ondřej Nešpor
  */
 class ReflectionFileTest extends Test
 {

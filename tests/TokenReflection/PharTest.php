@@ -26,9 +26,6 @@ require_once __DIR__ . '/../bootstrap.php';
  * archive types, lets the broker parse every archive and compares if the same
  * classes, constants and functions were parsed like when parsing a directory
  * of files.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class PharTest extends Test
 {
