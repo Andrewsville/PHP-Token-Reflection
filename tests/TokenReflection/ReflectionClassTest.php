@@ -629,11 +629,11 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
-    /**
-     * Test getting of documentation comment, when after docComment many line breaks.
-     */
-    public function testDocCommentManyLines()
-    {
+	/**
+	 * Test getting of documentation comment, when after docComment many line breaks.
+	 */
+	public function testDocCommentManyLines()
+	{
 		$rfl = $this->getClassReflection('docCommentManyLines');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame("/**\n * TokenReflection_Test_ClassDocCommentManyLines.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */", $rfl->token->getDocComment());
@@ -641,7 +641,7 @@ class ReflectionClassTest extends Test
 		$rfl = $this->getClassReflection('noDocComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
-    }
+	}
 
 	/**
 	 * Tests getting of inherited documentation comment.
