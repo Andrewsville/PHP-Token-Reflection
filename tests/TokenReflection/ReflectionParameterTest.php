@@ -225,4 +225,22 @@ class ReflectionParameterTest extends Test
 		$this->assertSame($grandParent->token->getAnnotation('param'), $parent->token->getAnnotation('param'));
 		$this->assertSame(count($grandParent->token->getAnnotation('param')), count($rfl->token->getAnnotation('param')));
 	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$rfl = $this->getFunctionReflection('54features');
+
+		$this->assertSame(3, $rfl->internal->getNumberOfParameters());
+		foreach ($rfl->internal->getParameters() as $internal){
+			$token = $rfl->token->getParameter($internal->getPosition());
+			$this->assertSame($internal->getDefaultValue(), $token->getDefaultValue());
+		}
+	}
 }

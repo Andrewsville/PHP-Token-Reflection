@@ -325,4 +325,33 @@ class ReflectionPropertyTest extends Test
 		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', true), ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', true));
 		$this->assertSame(InternalReflectionProperty::export(new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true), ReflectionProperty::export($this->getBroker(), new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true));
 	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$tests = array('public', 'protected', 'private');
+
+		$rfl = $this->getClassReflection('54features');
+		$class = $rfl->internal->newInstance();
+
+		foreach ($tests as $test) {
+			$this->assertTrue($rfl->internal->hasProperty($test));
+			$this->assertTrue($rfl->token->hasProperty($test));
+
+			$internal = $rfl->internal->getProperty($test);
+			$token = $rfl->token->getProperty($test);
+
+			$internal->setAccessible(true);
+			$token->setAccessible(true);
+
+			$this->assertSame($internal->getValue($class), $token->getValue($class));
+			$this->assertSame($internal->getValue($class), $token->getDefaultValue());
+		}
+	}
 }
