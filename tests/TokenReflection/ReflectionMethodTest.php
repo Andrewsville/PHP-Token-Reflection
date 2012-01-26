@@ -513,4 +513,24 @@ class ReflectionMethodTest extends Test
 		$this->assertSame(InternalReflectionMethod::export('ReflectionMethod', 'isFinal', true), ReflectionMethod::export($this->getBroker(), 'ReflectionMethod', 'isFinal', true));
 		$this->assertSame(InternalReflectionMethod::export(new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true), ReflectionMethod::export($this->getBroker(), new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true));
 	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$rfl = $this->getMethodReflection('features54');
+
+		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
+		$this->assertSame(
+			array(
+				'one' => 21
+			),
+			$rfl->token->getStaticVariables()
+		);
+	}
 }

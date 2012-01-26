@@ -252,4 +252,24 @@ class ReflectionFunctionTest extends Test
 
 		$this->assertSame(InternalReflectionFunction::export('strpos', true), ReflectionFunction::export($this->getBroker(), 'strpos', true));
 	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$rfl = $this->getFunctionReflection('54features');
+
+		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
+		$this->assertSame(
+			array(
+				'one' => 21
+			),
+			$rfl->token->getStaticVariables()
+		);
+	}
 }
