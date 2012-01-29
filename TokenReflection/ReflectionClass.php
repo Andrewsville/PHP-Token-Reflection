@@ -1473,9 +1473,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 			// Indent
 			$string = "\n    ";
-			if (null !== $method->getDeclaringTraitName()) {
-				$string .= "\n    ";
-			}
 
 			$string .= preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
 			// Add inherits
