@@ -359,12 +359,6 @@ class ReflectionAnnotation
 			$declaringClass = $this->reflection;
 		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 			$declaringClass = $this->reflection->getDeclaringClass();
-		} else {
-			throw new Exception\RuntimeException(
-				$this->reflection,
-				sprintf('Unsupported reflection type: "%s" found when trying to inherit annotaions.', get_class($this->reflection)),
-				Exception\RuntimeException::INVALID_ARGUMENT
-			);
 		}
 
 		$parents = array_filter(array_merge(array($declaringClass->getParentClass()), $declaringClass->getOwnInterfaces()), function($class) {
