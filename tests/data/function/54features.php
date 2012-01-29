@@ -2,5 +2,7 @@
 
 function tokenReflectionFunction54features()
 {
-	static $one = 0b010101;
+	static $one = [];
+	static $two = [[1], '2', [[[[true]]]]];
+	static $three = 0b010101;
 }

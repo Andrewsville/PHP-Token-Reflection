@@ -528,7 +528,9 @@ class ReflectionMethodTest extends Test
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
 		$this->assertSame(
 			array(
-				'one' => 21
+				'one' => array(),
+				'two' => array(array(1), '2', array(array(array(array(true))))),
+				'three' => 21
 			),
 			$rfl->token->getStaticVariables()
 		);
