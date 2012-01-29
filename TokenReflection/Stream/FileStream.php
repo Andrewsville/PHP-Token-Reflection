@@ -40,7 +40,7 @@ class FileStream extends StreamBase
 			throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
 		}
 
-		$contents = file_get_contents($this->fileName);
+		$contents = @file_get_contents($this->fileName);
 		if (false === $contents) {
 			throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
 		}
