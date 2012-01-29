@@ -24,6 +24,7 @@ if (!NATIVE_TRAITS) {
 	define('T_TRAIT', -1);
 	define('T_TRAIT_C', -2);
 	define('T_INSTEADOF', -3);
+	define('T_CALLABLE', -4);
 }
 
 /**

@@ -91,6 +91,8 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 						$token[0] = T_INSTEADOF;
 					} elseif ('__TRAIT__' === $token[1]) {
 						$token[0] = T_TRAIT_C;
+					} elseif ('callable' === $lValue) {
+						$token[0] = T_CALLABLE;
 					}
 				}
 
