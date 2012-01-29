@@ -109,8 +109,8 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 *
 	 * @param integer|string $parameter Parameter name or position
 	 * @return \TokenReflection\Php\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name.
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position.
+	 * @throws \TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
+	 * @throws \TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
 	 */
 	public function getParameter($parameter)
 	{
@@ -118,7 +118,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 		if (is_numeric($parameter)) {
 			if (!isset($parameters[$parameter])) {
-				throw new Exception\Runtime(sprintf('There is no parameter at position "%d" in function "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException($this, sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 
 			return $parameters[$parameter];
@@ -129,7 +129,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 				}
 			}
 
-			throw new Exception\Runtime(sprintf('There is no parameter "%s" in function "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException($this, sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -209,12 +209,12 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionFunction
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		if (!$internalReflection instanceof InternalReflectionFunction) {
-			throw new Exception\Runtime(sprintf('Invalid reflection instance provided: "%s", ReflectionFunction expected.', get_class($internalReflection)), Exception\Runtime::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionFunction expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		return $broker->getFunction($internalReflection->getName());

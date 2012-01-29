@@ -76,8 +76,8 @@ class Resolver
 	 * @param array $tokens Tokenized definition
 	 * @param \TokenReflection\ReflectionElement $reflection Caller reflection
 	 * @return string
-	 * @throws \TokenReflection\Exception\Runtime If an invalid reflection object was provided.
-	 * @throws \TokenReflection\Exception\Runtime If an invalid source code was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid reflection object was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid source code was provided.
 	 */
 	final public static function getValueDefinition(array $tokens, ReflectionElement $reflection)
 	{
@@ -88,7 +88,7 @@ class Resolver
 		} elseif ($reflection instanceof ReflectionProperty || $reflection instanceof ReflectionMethod) {
 			$namespace = $reflection->getDeclaringClass()->getNamespaceName();
 		} else {
-			throw new Exception\Runtime(sprintf('Invalid reflection object given: "%s" ("%s")', get_class($reflection), $reflection->getName()), Exception\Runtime::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException($reflection, 'Invalid reflection object given.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		// Process __LINE__ constants; replace with the line number of the corresponding token
@@ -112,7 +112,7 @@ class Resolver
 				try {
 					switch ($constant) {
 						case '__LINE__':
-							throw new Exception\Runtime('__LINE__ constant cannot be resolved this way.', Exception\Runtime::INVALID_ARGUMENT);
+							throw new Exception\RuntimeException($reflection, '__LINE__ constant cannot be resolved this way.', Exception\RuntimeException::UNSUPPORTED);
 						case '__FILE__':
 							$value = $reflection->getFileName();
 							break;
@@ -176,9 +176,9 @@ class Resolver
 								// Handle self:: and parent:: definitions
 
 								if ($reflection instanceof ReflectionConstant) {
-									throw new Exception\Runtime('Constants cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
+									throw new Exception\RuntimeException($reflection, 'Constants cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED);
 								} elseif ($reflection instanceof ReflectionParameter && null === $reflection->getDeclaringClassName()) {
-									throw new Exception\Runtime('Function parameters cannot use self:: and parent:: references.', Exception\Runtime::INVALID_ARGUMENT);
+									throw new Exception\RuntimeException($reflection, 'Function parameters cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED);
 								}
 
 								if (0 === stripos($constant, 'self::')) {
@@ -199,7 +199,7 @@ class Resolver
 							$reflection = $reflection->getBroker()->getConstant($constantName);
 							$value = $reflection->getValue();
 					}
-				} catch (Exception\Runtime $e) {
+				} catch (Exception\RuntimeException $e) {
 					$value = self::CONSTANT_NOT_FOUND;
 				}
 

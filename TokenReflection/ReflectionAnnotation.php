@@ -150,18 +150,19 @@ class ReflectionAnnotation
 	 *
 	 * @param array $templates Docblock templates
 	 * @return \TokenReflection\ReflectionAnnotation
-	 * @throws \TokenReflection\Exception\Runtime If an invalid annotation template was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid annotation template was provided.
 	 */
 	public function setTemplates(array $templates)
 	{
 		foreach ($templates as $template) {
 			if (!$template instanceof ReflectionAnnotation) {
-				throw new Exception\Runtime(
+				throw new Exception\RuntimeException(
+					$this->reflection,
 					sprintf(
 						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
 						is_object($template) ? get_class($template) : gettype($template)
 					),
-					Exception\Runtime::INVALID_ARGUMENT
+					Exception\RuntimeException::INVALID_ARGUMENT
 				);
 			}
 		}
@@ -246,6 +247,8 @@ class ReflectionAnnotation
 
 	/**
 	 * Copies annotations if the @copydoc tag is present.
+	 *
+	 * @throws \TokenReflection\Exception\RuntimeException When stuck in an infinite loop when resolving the @copydoc tag.
 	 */
 	private function copyAnnotation()
 	{
@@ -292,7 +295,7 @@ class ReflectionAnnotation
 				if (!empty($parent)) {
 					// Don't get into an infinite recursion loop
 					if (in_array($parent, self::$copydocStack, true)) {
-						throw new Exception\Runtime('Infinite loop detected.', Exception\Runtime::INVALID_ARGUMENT);
+						throw new Exception\RuntimeException($this->reflection, 'Infinite loop detected when copying annotations using the @copydoc tag..', Exception\RuntimeException::INVALID_ARGUMENT);
 					}
 
 					self::$copydocStack[] = $parent;
@@ -307,8 +310,8 @@ class ReflectionAnnotation
 
 					array_pop(self::$copydocStack);
 				}
-			} catch (Exception $e) {
-				// Fall through
+			} catch (Exception\BaseException $e) {
+				// Ignoring links to non existent elements, ...
 			}
 		}
 
@@ -348,7 +351,7 @@ class ReflectionAnnotation
 	/**
 	 * Inherits annotations from parent classes/methods/properties if needed.
 	 *
-	 * @throws \TokenReflection\Exception\Parse If unsupported reflection was used.
+	 * @throws \TokenReflection\Exception\RuntimeException If unsupported reflection was used.
 	 */
 	private function inheritAnnotations()
 	{
@@ -357,7 +360,11 @@ class ReflectionAnnotation
 		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 			$declaringClass = $this->reflection->getDeclaringClass();
 		} else {
-			throw new Exception\Parse(sprintf('Unsupported reflection type: "%s".', get_class($this->reflection)), Exception\Parse::UNSUPPORTED);
+			throw new Exception\RuntimeException(
+				$this->reflection,
+				sprintf('Unsupported reflection type: "%s" found when trying to inherit annotaions.', get_class($this->reflection)),
+				Exception\RuntimeException::INVALID_ARGUMENT
+			);
 		}
 
 		$parents = array_filter(array_merge(array($declaringClass->getParentClass()), $declaringClass->getOwnInterfaces()), function($class) {
@@ -370,14 +377,8 @@ class ReflectionAnnotation
 		if ($this->reflection instanceof ReflectionProperty) {
 			$name = $this->reflection->getName();
 			foreach ($parents as $parent) {
-				try {
+				if ($parent->hasProperty($name)) {
 					$parentDefinitions[] = $parent->getProperty($name);
-				} catch (Exception\Runtime $e) {
-					if (Exception\Runtime::DOES_NOT_EXIST === $e->getCode()) {
-						continue;
-					}
-
-					throw $e;
 				}
 			}
 
@@ -385,14 +386,8 @@ class ReflectionAnnotation
 		} elseif ($this->reflection instanceof ReflectionMethod) {
 			$name = $this->reflection->getName();
 			foreach ($parents as $parent) {
-				try {
+				if ($parent->hasMethod($name)) {
 					$parentDefinitions[] = $parent->getMethod($name);
-				} catch (Exception\Runtime $e) {
-					if (Exception\Runtime::DOES_NOT_EXIST === $e->getCode()) {
-						continue;
-					}
-
-					throw $e;
 				}
 			}
 

@@ -69,7 +69,7 @@ class ReflectionFileTest extends Test
 	/**
 	 * Tests throwing exceptions when requesting reflections of files that were not processed.
 	 *
-	 * @expectedException \TokenReflection\Exception\Runtime
+	 * @expectedException \TokenReflection\Exception\BrokerException
 	 */
 	public function testExceptionReturningFileReflection()
 	{

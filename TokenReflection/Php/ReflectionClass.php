@@ -168,13 +168,13 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string|object $class Class name or reflection object
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
 	 */
 	public function isSubclassOf($class)
 	{
 		if (is_object($class)) {
 			if (!$class instanceof InternalReflectionClass && !$class instanceof IReflectionClass) {
-				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($class)), Exception\Runtime::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException($this, 'Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT);
 			}
 
 			$class = $class->getName();
@@ -233,24 +233,24 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface.
+	 * @throws \TokenReflection\Exception\RuntimeException If the provided parameter is not an interface.
 	 */
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
 			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
-				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\Runtime::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException($this, 'Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT);
 			}
 
 			$interfaceName = $interface->getName();
 
 			if (!$interface->isInterface()) {
-				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interfaceName), Exception\Runtime::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException($this, sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($interface);
 			if (!$reflection->isInterface()) {
-				throw new Exception\Runtime(sprintf('"%s" is not an interface.', $interface), Exception\Runtime::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException($this, sprintf('"%s" is not an interface.', $interface), Exception\RuntimeException::INVALID_ARGUMENT);
 			}
 
 			$interfaceName = $interface;
@@ -335,7 +335,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Method name
 	 * @return \TokenReflection\Php\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the requested method does not exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If the requested method does not exist.
 	 */
 	public function getMethod($name)
 	{
@@ -345,7 +345,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		throw new Exception\Runtime(sprintf('There is no method %s in class %s', $name, $this->name), Exception::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException($this, sprintf('Method %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -432,7 +432,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Constant name
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception If the requested constant does not exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If the requested constant does not exist.
 	 */
 	public function getConstantReflection($name)
 	{
@@ -440,7 +440,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			return new ReflectionConstant($name, $this->getConstant($name), $this->broker, $this);
 		}
 
-		throw new Exception\Runtime(sprintf('Constant "%s" is not defined in class "%s"', $name, $this->getName()), Exception::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException($this, sprintf('Constant "%s" does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -501,7 +501,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param string $name Property name
 	 * @return \TokenReflection\Php\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Runtime If the requested property does not exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If the requested property does not exist.
 	 */
 	public function getProperty($name)
 	{
@@ -511,7 +511,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		throw new Exception\Runtime(sprintf('There is no property %s in class %s', $name, $this->getName()), Exception::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException($this, sprintf('Property %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -843,24 +843,24 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
 	 */
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
 			if (!$trait instanceof InternalReflectionClass && !$trait instanceof TokenReflection\IReflectionClass) {
-				throw new Exception\Runtime(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\Runtime::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException($this, 'Parameter must be a string or an instance of trait reflection.', Exception\RuntimeException::INVALID_ARGUMENT);
 			}
 
 			$traitName = $trait->getName();
 
 			if (!$trait->isTrait()) {
-				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $traitName), Exception\Runtime::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException($this, sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($trait);
 			if (!$reflection->isTrait()) {
-				throw new Exception\Runtime(sprintf('"%s" is not a trait.', $trait), Exception\Runtime::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException($this, sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT);
 			}
 
 			$traitName = $trait;
@@ -873,17 +873,17 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * Creates a new class instance without using a constructor.
 	 *
 	 * @return object
-	 * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class.
+	 * @throws \TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
 	 */
 	public function newInstanceWithoutConstructor()
 	{
 		if ($this->isInternal()) {
-			throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; only user defined classes can be instantiated.', $this->name), Exception\Runtime::UNSUPPORTED);
+			throw new Exception\RuntimeException($this, 'Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED);
 		}
 
 		foreach ($this->getParentClasses() as $parent) {
 			if ($parent->isInternal()) {
-				throw new Exception\Runtime(sprintf('Could not create an instance of class "%s"; only user defined classes can be instantiated.', $this->name), Exception\Runtime::UNSUPPORTED);
+				throw new Exception\RuntimeException($this, 'Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED);
 			}
 		}
 
@@ -900,12 +900,12 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionClass
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		if (!$internalReflection instanceof InternalReflectionClass) {
-			throw new Exception\Runtime(sprintf('Invalid reflection instance provided (%s), ReflectionClass expected.', get_class($internalReflection)));
+			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionClass expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		return $broker->getClass($internalReflection->getName());

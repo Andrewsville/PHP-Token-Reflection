@@ -158,12 +158,12 @@ class ReflectionPropertyTest extends Test
 
 			try {
 				$token->getValue($object);
-				$this->fail('Expected exception \TokenReflection\Exception.');
+				$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 			} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 				throw $e;
 			} catch (\Exception $e) {
 				// Correctly thrown exception
-				$this->assertInstanceOf('TokenReflection\Exception', $e);
+				$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 			}
 
 			$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));

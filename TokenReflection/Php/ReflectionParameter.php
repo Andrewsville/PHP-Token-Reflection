@@ -250,14 +250,14 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionParameter) {
-			throw new Exception\Runtime(sprintf('Invalid reflection instance provided: "%s", ReflectionParameter expected.', get_class($internalReflection)), Exception\Runtime::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionParameter expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		$class = $internalReflection->getDeclaringClass();

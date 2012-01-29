@@ -123,12 +123,12 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->hasProperty('nonExistent'));
 		try {
 			$rfl->token->getProperty('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$this->assertSame($rfl->internal->getStaticPropertyValue('publicStatic'), $rfl->token->getStaticPropertyValue('publicStatic'));
@@ -136,22 +136,22 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->getStaticPropertyValue('protectedStatic');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->getStaticPropertyValue('privateStatic');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$this->assertSame($rfl->internal->setStaticPropertyValue('publicStatic', false), $rfl->token->setStaticPropertyValue('publicStatic', false));
@@ -161,22 +161,22 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->setStaticPropertyValue('protectedStatic', 0);
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->setStaticPropertyValue('privateStatic', '');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$rfl = $this->getClassReflection('noProperties');
@@ -195,32 +195,32 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->getProperty('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->getStaticPropertyValue('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->setStaticPropertyValue('property', 'property');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$rfl = $this->getClassReflection('doubleProperties');
@@ -357,12 +357,12 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->hasMethod('nonExistent'));
 		try {
 			$rfl->token->getMethod('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$rfl = $this->getClassReflection('noMethods');
@@ -373,12 +373,12 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->getMethod('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$this->assertSame($rfl->internal->hasMethod('nonExistent'), $rfl->token->hasMethod('nonExistent'));
@@ -974,11 +974,11 @@ class ReflectionClassTest extends Test
 
 		try {
 			$token->newInstanceWithoutConstructor();
-			$this->fail('TokenReflection\Exception\Runtime expected.');
+			$this->fail('TokenReflection\Exception\RuntimeException expected.');
 		} catch (\Exception $e) {
-			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 
-			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+			if ($e->getCode() !== Exception\RuntimeException::UNSUPPORTED) {
 				throw $e;
 			}
 		}
@@ -999,11 +999,11 @@ class ReflectionClassTest extends Test
 
 		try {
 			$token->newInstanceWithoutConstructor();
-			$this->fail('TokenReflection\Exception\Runtime expected.');
+			$this->fail('TokenReflection\Exception\RuntimeException expected.');
 		} catch (\Exception $e) {
-			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 
-			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+			if ($e->getCode() !== Exception\RuntimeException::UNSUPPORTED) {
 				throw $e;
 			}
 		}

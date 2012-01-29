@@ -399,22 +399,22 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$token->invoke(new \Exception(), 1, 2);
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$token->invokeArgs(new \Exception(), array(1, 2));
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$internal = $rfl->internal->getMethod('protectedInvoke');
@@ -422,22 +422,22 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$token->invoke($object, 1, 2);
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$token->invokeArgs($object, array(1, 2));
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		if (PHP_VERSION_ID >= 50302) {
@@ -463,12 +463,12 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$rfl->token->getPrototype();
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 	}
 

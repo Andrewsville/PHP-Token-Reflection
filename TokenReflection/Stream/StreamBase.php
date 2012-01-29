@@ -61,12 +61,12 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 *
 	 * Protected to ensure that the concrete implementation will override it.
 	 *
-	 * @throws \TokenReflection\Exception\Parse If tokenizer PHP extension is missing.
+	 * @throws \TokenReflection\Exception\StreamException If tokenizer PHP extension is missing.
 	 */
 	protected function __construct()
 	{
 		if (!extension_loaded('tokenizer')) {
-			throw new Exception\Parse('The tokenizer PHP extension is not loaded.', Exception\Parse::UNSUPPORTED);
+			throw new Exception\StreamException($this, 'The tokenizer PHP extension is not loaded.', Exception\StreamException::PHP_EXT_MISSING);
 		}
 	}
 
@@ -175,9 +175,9 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * Returns the position of the token with the matching bracket.
 	 *
 	 * @return \TokenReflection\Stream
-	 * @throws \TokenReflection\Exception\Runtime If out of the array.
-	 * @throws \TokenReflection\Exception\Runtime If there is no brancket at the current position.
-	 * @throws \TokenReflection\Exception\Runtime If the matching bracket could not be found.
+	 * @throws \TokenReflection\Exception\RuntimeException If out of the token stream.
+	 * @throws \TokenReflection\Exception\RuntimeException If there is no bracket at the current position.
+	 * @throws \TokenReflection\Exception\RuntimeException If the matching bracket could not be found.
 	 */
 	public function findMatchingBracket()
 	{
@@ -190,7 +190,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 		);
 
 		if (!$this->valid()) {
-			throw new Exception\Runtime('Out of array.', Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\StreamException($this, 'Out of token stream.', Exception\StreamException::READ_BEYOND_EOS);
 		}
 
 		$position = $this->position;
@@ -198,7 +198,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 		$bracket = $this->tokens[$this->position][0];
 
 		if (!isset($brackets[$bracket])) {
-			throw new Exception\Runtime(sprintf('There is no usable bracket at position "%d" in file "%s".', $position, $this->fileName), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\StreamException($this, sprintf('There is no usable bracket at position "%d".', $position), Exception\StreamException::DOES_NOT_EXIST);
 		}
 
 		$searching = $brackets[$bracket];
@@ -219,7 +219,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			$this->position++;
 		}
 
-		throw new Exception\Runtime(sprintf('Could not find the end bracket "%s" of the bracket at position "%d" in file "%s".', $searching, $position, $this->fileName), Exception\Runtime::DOES_NOT_EXIST);
+		throw new Exception\StreamException($this, sprintf('Could not find the end bracket "%s" of the bracket at position "%d".', $searching, $position), Exception\StreamException::DOES_NOT_EXIST);
 	}
 
 	/**
@@ -315,16 +315,16 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * Restores the stream from the serialized state.
 	 *
 	 * @param string $serialized Serialized form
-	 * @throws \TokenReflection\Exception\Runtime On unserialization error.
+	 * @throws \TokenReflection\Exception\StreamException On deserialization error.
 	 */
 	public function unserialize($serialized)
 	{
 		$data = @unserialize($serialized);
 		if (false === $data) {
-			throw new Exception\Runtime('Could not deserialize the serialized data.', Exception\Runtime::SERIALIZATION_ERROR);
+			throw new Exception\StreamException($this, 'Could not deserialize the serialized data.', Exception\StreamException::SERIALIZATION_ERROR);
 		}
 		if (2 !== count($data) || !is_string($data[0]) || !is_array($data[1])) {
-			throw new Exception\Runtime('Invalid serialization data.', Exception\Runtime::SERIALIZATION_ERROR);
+			throw new Exception\StreamException($this, 'Invalid serialization data.', Exception\StreamException::SERIALIZATION_ERROR);
 		}
 
 		$this->fileName = $data[0];
@@ -350,11 +350,11 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * Unsupported.
 	 *
 	 * @param integer $offset Position
-	 * @throws \TokenReflection\Exception\Runtime Unsupported.
+	 * @throws \TokenReflection\Exception\StreamException Unsupported.
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new Exception\Runtime('Removing of tokens from the stream is not supported.', Exception\Runtime::UNSUPPORTED);
+		throw new Exception\StreamException($this, 'Removing of tokens from the stream is not supported.', Exception\StreamException::UNSUPPORTED);
 	}
 
 	/**
@@ -375,11 +375,11 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 *
 	 * @param integer $offset Position
 	 * @param mixed $value Value
-	 * @throws \TokenReflection\Exception\Runtime Unsupported.
+	 * @throws \TokenReflection\Exception\StreamException Unsupported.
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new Exception\Runtime('Setting token values is not supported.', Exception\Runtime::UNSUPPORTED);
+		throw new Exception\StreamException($this, 'Setting token values is not supported.', Exception\StreamException::UNSUPPORTED);
 	}
 
 	/**

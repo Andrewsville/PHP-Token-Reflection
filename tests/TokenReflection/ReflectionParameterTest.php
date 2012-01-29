@@ -90,12 +90,12 @@ class ReflectionParameterTest extends Test
 
 		try {
 			$rfl->token->getDefaultValue();
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 	}
 
