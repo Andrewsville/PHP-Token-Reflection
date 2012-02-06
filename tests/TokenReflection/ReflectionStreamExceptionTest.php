@@ -20,7 +20,7 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * Broker test.
  */
-class ReflectionExceptionTest extends Test
+class ReflectionStreamExceptionTest extends Test
 {
 	/**
 	 * Test type.
@@ -97,8 +97,10 @@ class ReflectionExceptionTest extends Test
 	{
 		$file = $this->getFilePath('~#nonexistent#~');
 
-		$this->assertFalse(is_file($file));
-		$stream = new \TokenReflection\Stream\FileStream($file);
+		if (is_file($file)) {
+			$this->markTestSkipped(sprintf('File %s exists.', $file));
+		}
+		$stream = new Stream\FileStream($file);
 	}
 
 	/**
@@ -110,8 +112,10 @@ class ReflectionExceptionTest extends Test
 	{
 		$file = $this->getFilePath('stream') . '/~#nonexistent#~';
 
-		$this->assertFalse(is_file($file));
-		$stream = new \TokenReflection\Stream\FileStream($file);
+		if (is_file($file)) {
+			$this->markTestSkipped(sprintf('File %s exists.', $file));
+		}
+		$stream = new Stream\FileStream($file);
 	}
 
 	/**
@@ -122,6 +126,6 @@ class ReflectionExceptionTest extends Test
 	 */
 	private function getFileStream($name)
 	{
-		return new \TokenReflection\Stream\FileStream($this->getFilePath($name));
+		return new Stream\FileStream($this->getFilePath($name));
 	}
 }
