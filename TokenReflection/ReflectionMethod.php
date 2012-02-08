@@ -362,6 +362,16 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return sprintf('%s::%s', null !== $this->declaringClassName ?: $this->declaringTraitName, parent::getPrettyName());
+	}
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string

@@ -61,6 +61,16 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string

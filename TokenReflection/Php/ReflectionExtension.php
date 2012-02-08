@@ -216,6 +216,16 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->getName();
+	}
+
+	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
 	 * @return \TokenReflection\Broker

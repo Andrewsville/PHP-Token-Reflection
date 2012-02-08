@@ -341,6 +341,16 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return str_replace('()', '($' . $this->name . ')', $this->getDeclaringFunction()->getPrettyName());
+	}
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string

@@ -212,6 +212,16 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return null === $this->declaringClassName ? parent::getPrettyName() : sprintf('%s::%s', $this->declaringClassName, $this->name);
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

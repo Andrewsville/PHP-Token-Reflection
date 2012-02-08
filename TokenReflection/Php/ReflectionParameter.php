@@ -223,6 +223,16 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return str_replace('()', '($' . $this->getName() . ')', $this->getDeclaringFunction()->getPrettyName());
+	}
+
+	/**
 	 * Magic __get method.
 	 *
 	 * @param string $key Variable name

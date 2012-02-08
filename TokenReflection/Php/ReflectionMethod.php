@@ -314,6 +314,16 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return sprintf('%s::%s()', $this->getDeclaringClassName(), $this->getName());
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance

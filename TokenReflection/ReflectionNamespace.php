@@ -330,6 +330,16 @@ class ReflectionNamespace implements IReflectionNamespace
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string

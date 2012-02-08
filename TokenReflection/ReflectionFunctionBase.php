@@ -217,6 +217,16 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->name . '()';
+	}
+
+	/**
 	 * Creates aliases to parameters.
 	 *
 	 * @throws \TokenReflection\Exception\RuntimeException When called on a ReflectionFunction instance.

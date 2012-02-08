@@ -125,16 +125,6 @@ abstract class ReflectionElement extends ReflectionBase
 	}
 
 	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string

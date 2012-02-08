@@ -323,6 +323,16 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return null === $this->declaringClassName ? $this->name : sprintf('%s::%s', $this->declaringClassName, $this->name);
+	}
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string

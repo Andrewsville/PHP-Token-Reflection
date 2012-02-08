@@ -1034,4 +1034,26 @@ class ReflectionClassTest extends Test
 			$this->assertEquals($internal->newInstanceWithoutConstructor(), $token->newInstanceWithoutConstructor());
 		}
 	}
+
+	/**
+	 * Tests returning pretty class names.
+	 */
+	public function testPrettyNames()
+	{
+		static $names = array(
+			'ns1\\TokenReflection_Test_ClassPrettyNames',
+			'ns2\\ns3\\ns4\\TokenReflection_Test_ClassPrettyNames2',
+			'TokenReflection_Test_ClassPrettyNames3'
+		);
+
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('pretty-names'));
+
+		foreach ($names as $name) {
+			$this->assertTrue($broker->hasClass($name), $name);
+
+			$rfl = $broker->getClass($name);
+			$this->assertSame($rfl->getName(), $rfl->getPrettyName(), $name);
+		}
+	}
 }

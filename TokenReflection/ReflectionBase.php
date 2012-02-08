@@ -195,6 +195,16 @@ abstract class ReflectionBase implements IReflection
 	abstract public function getSource();
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Magic __get method.
 	 *
 	 * @param string $key Variable name

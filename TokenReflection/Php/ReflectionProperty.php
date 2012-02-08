@@ -231,6 +231,16 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return sprintf('%s::$%s', $this->getDeclaringClassName(), $this->getName());
+	}
+
+	/**
 	 * Magic __get method.
 	 *
 	 * @param string $key Variable name

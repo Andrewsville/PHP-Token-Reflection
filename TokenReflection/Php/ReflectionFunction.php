@@ -204,6 +204,16 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->getName() . '()';
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance

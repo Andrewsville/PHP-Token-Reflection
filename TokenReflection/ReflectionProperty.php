@@ -388,6 +388,16 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return sprintf('%s::$%s', null !== $this->declaringClassName ?: $this->declaringTraitName, $this->name);
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

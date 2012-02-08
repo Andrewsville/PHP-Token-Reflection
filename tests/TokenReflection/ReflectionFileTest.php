@@ -44,6 +44,8 @@ class ReflectionFileTest extends Test
 		$fileReflection = $this->getBroker()->getFile($fileName);
 		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
 
+		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
+
 		$this->assertTrue($fileReflection->hasAnnotation('package'));
 		$this->assertTrue($fileReflection->hasAnnotation('author'));
 		$this->assertFalse($fileReflection->hasAnnotation('licence'));
