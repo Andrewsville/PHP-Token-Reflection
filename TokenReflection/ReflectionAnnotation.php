@@ -267,10 +267,10 @@ class ReflectionAnnotation
 						return;
 					}
 				} elseif ($this->reflection instanceof ReflectionFunction) {
-					$parent = $broker->getFunction($parentName);
+					$parent = $broker->getFunction(rtrim($parentName, '()'));
 				} elseif ($this->reflection instanceof ReflectionConstant && null === $this->reflection->getDeclaringClassName()) {
 					$parent = $broker->getConstant($parentName);
-				} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionParameter || $this->reflection instanceof ReflectionConstant) {
+				} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty || $this->reflection instanceof ReflectionConstant) {
 					if (false !== strpos($parentName, '::')) {
 						list($className, $parentName) = explode('::', $parentName, 2);
 						$class = $broker->getClass($className);
@@ -288,7 +288,7 @@ class ReflectionAnnotation
 					} elseif ($this->reflection instanceof ReflectionConstant) {
 						$parent = $class->getConstantReflection($parentName);
 					} else {
-						$parent = $class->getProperty($parentName);
+						$parent = $class->getProperty(ltrim($parentName, '$'));
 					}
 				}
 
@@ -444,17 +444,22 @@ class ReflectionAnnotation
 			if (0 !== $this->reflection->getNumberOfParameters() && (empty($this->annotations['param']) || count($this->annotations['param']) < $this->reflection->getNumberOfParameters())) {
 				// In case of methods check if we need and can inherit parameter descriptions
 				$params = isset($this->annotations['param']) ? $this->annotations['param'] : array();
+				$complete = false;
 				foreach ($parents as $parent) {
 					if ($parent->hasAnnotation('param')) {
 						$parentParams = array_slice($parent->getAnnotation('param'), count($params));
 
-						while (!empty($parentParams)) {
+						while (!empty($parentParams) && !$complete) {
 							array_push($params, array_shift($parentParams));
 
 							if (count($params) === $this->reflection->getNumberOfParameters()) {
-								break 2;
+								$complete = true;
 							}
 						}
+					}
+
+					if ($complete) {
+						break;
 					}
 				}
 

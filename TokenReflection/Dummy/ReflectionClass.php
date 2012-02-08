@@ -16,7 +16,7 @@
 namespace TokenReflection\Dummy;
 
 use TokenReflection;
-use TokenReflection\Broker, TokenReflection\IReflectionClass, TokenReflection\ReflectionElement;
+use TokenReflection\Broker, TokenReflection\IReflectionClass, TokenReflection\ReflectionBase;
 use ReflectionClass as InternalReflectionClass, TokenReflection\Exception;
 
 /**
@@ -792,14 +792,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getDirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
-			if (!$class->isSubclassOf($that)) {
-				return false;
-			}
-
-			return null === $class->getParentClassName() || !$class->getParentClass()->isSubClassOf($that);
-		});
+		return array();
 	}
 
 	/**
@@ -809,7 +802,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getDirectSubclassNames()
 	{
-		return array_keys($this->getDirectSubclasses());
+		return array();
 	}
 
 	/**
@@ -819,14 +812,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getIndirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
-			if (!$class->isSubclassOf($that)) {
-				return false;
-			}
-
-			return null !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($that);
-		});
+		return array();
 	}
 
 	/**
@@ -836,7 +822,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getIndirectSubclassNames()
 	{
-		return array_keys($this->getIndirectSubclasses());
+		return array();
 	}
 
 	/**
@@ -846,18 +832,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getDirectImplementers()
 	{
-		if (!$this->isInterface()) {
-			return array();
-		}
-
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
-			if (!$class->implementsInterface($that)) {
-				return false;
-			}
-
-			return null === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($that);
-		});
+		return array();
 	}
 
 	/**
@@ -867,7 +842,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getDirectImplementerNames()
 	{
-		return array_keys($this->getDirectImplementers());
+		return array();
 	}
 
 	/**
@@ -877,18 +852,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getIndirectImplementers()
 	{
-		if (!$this->isInterface()) {
-			return array();
-		}
-
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function(IReflectionClass $class) use ($that) {
-			if (!$class->implementsInterface($that)) {
-				return false;
-			}
-
-			return null !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($this);
-		});
+		return array();
 	}
 
 	/**
@@ -898,7 +862,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getIndirectImplementerNames()
 	{
-		return array_keys($this->getIndirectImplementers());
+		return array();
 	}
 
 	/**
@@ -1033,7 +997,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	final public function __get($key)
 	{
-		return ReflectionElement::get($this, $key);
+		return ReflectionBase::get($this, $key);
 	}
 
 	/**
@@ -1044,6 +1008,6 @@ class ReflectionClass implements IReflectionClass
 	 */
 	final public function __isset($key)
 	{
-		return ReflectionElement::exists($this, $key);
+		return ReflectionBase::exists($this, $key);
 	}
 }

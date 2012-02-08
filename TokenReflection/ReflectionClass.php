@@ -741,7 +741,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				if (!in_array(null, $imports)) {
 					if (!isset($this->methods[$methodName])) {
 						if (isset($methods[$methodName])) {
-							var_dump($imports, $this->traitImports, $this->traitAliases);
 							throw new Exception\RuntimeException($this, sprintf('Trait method "%s" was already imported.', $methodName), Exception\RuntimeException::ALREADY_EXISTS);
 						}
 

@@ -170,7 +170,8 @@ class Memory implements Broker\Backend
 	{
 		$className = ltrim($className, '\\');
 		if ($pos = strrpos($className, '\\')) {
-			$namespace = substr($className, $pos);
+			$namespace = substr($className, 0, $pos);
+
 			if (!isset($this->namespaces[$namespace])) {
 				return false;
 			}
@@ -209,11 +210,6 @@ class Memory implements Broker\Backend
 
 			return $ns->getClass($className);
 		} catch (Exception\BaseException $e) {
-			if (Exception\BaseException::DOES_NOT_EXIST !== $e->getCode()) {
-				// @todo
-				throw $e;
-			}
-
 			if (isset($declared[$className])) {
 				$reflection = new Php\ReflectionClass($className, $this->broker);
 				if ($reflection->isInternal()) {
@@ -267,7 +263,7 @@ class Memory implements Broker\Backend
 			$parent = $this->getClass($className);
 		} else {
 			if ($pos = strrpos($constantName, '\\')) {
-				$namespace = substr($constantName, $pos);
+				$namespace = substr($constantName, 0, $pos);
 				if (!$this->hasNamespace($namespace)) {
 					return false;
 				}
@@ -356,7 +352,7 @@ class Memory implements Broker\Backend
 	{
 		$functionName = ltrim($functionName, '\\');
 		if ($pos = strrpos($functionName, '\\')) {
-			$namespace = substr($functionName, $pos);
+			$namespace = substr($functionName, 0, $pos);
 			if (!isset($this->namespaces[$namespace])) {
 				return false;
 			}

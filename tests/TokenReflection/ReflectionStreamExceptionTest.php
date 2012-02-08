@@ -18,7 +18,7 @@ namespace TokenReflection;
 require_once __DIR__ . '/../bootstrap.php';
 
 /**
- * Broker test.
+ * StreamException test.
  */
 class ReflectionStreamExceptionTest extends Test
 {

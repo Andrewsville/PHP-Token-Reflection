@@ -138,8 +138,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if (!$declaringClass->isInstance($object)) {
-//			var_dump($this->declaringClassName, get_class($object));
-//			die;
 			throw new Exception\RuntimeException($this, 'The given class is not an instance or subclass of the current class.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
