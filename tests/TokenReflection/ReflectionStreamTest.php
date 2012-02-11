@@ -18,16 +18,16 @@ namespace TokenReflection;
 require_once __DIR__ . '/../bootstrap.php';
 
 /**
- * StreamException test.
+ * Stream test.
  */
-class ReflectionStreamExceptionTest extends Test
+class ReflectionStreamTest extends Test
 {
 	/**
 	 * Test type.
 	 *
 	 * @var string
 	 */
-	protected $type = 'exception';
+	protected $type = 'stream';
 
 	/**
 	 * Tests the (im)possibility to unset a token from a token stream.
@@ -36,7 +36,7 @@ class ReflectionStreamExceptionTest extends Test
 	 */
 	public function testUnsetException()
 	{
-		$stream = $this->getFileStream('stream');
+		$stream = $this->getFileStream('invalid');
 		unset($stream[666]);
 	}
 
@@ -47,7 +47,7 @@ class ReflectionStreamExceptionTest extends Test
 	 */
 	public function testSetException()
 	{
-		$stream = $this->getFileStream('stream');
+		$stream = $this->getFileStream('invalid');
 		$stream[0] = null;
 	}
 
@@ -58,7 +58,7 @@ class ReflectionStreamExceptionTest extends Test
 	 */
 	public function testFindMatchingBracketException1()
 	{
-		$this->getFileStream('stream')->findMatchingBracket();
+		$this->getFileStream('invalid')->findMatchingBracket();
 	}
 
 	/**
@@ -68,7 +68,7 @@ class ReflectionStreamExceptionTest extends Test
 	 */
 	public function testFindMatchingBracketException2()
 	{
-		$stream = $this->getFileStream('stream');
+		$stream = $this->getFileStream('invalid');
 		$this->assertInstanceOf('\TokenReflection\Stream\FileStream', $stream->find('{'));
 
 		$stream->findMatchingBracket();
@@ -81,7 +81,7 @@ class ReflectionStreamExceptionTest extends Test
 	 */
 	public function testFindMatchingBracketException3()
 	{
-		$stream = $this->getFileStream('stream');
+		$stream = $this->getFileStream('invalid');
 		$stream->seek(count($stream));
 
 		$this->assertFalse($stream->valid());
@@ -95,7 +95,7 @@ class ReflectionStreamExceptionTest extends Test
 	 */
 	public function testOpeningNonExistentFileException1()
 	{
-		$file = $this->getFilePath('~#nonexistent#~');
+		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
 
 		if (is_file($file)) {
 			$this->markTestSkipped(sprintf('File %s exists.', $file));
@@ -110,7 +110,7 @@ class ReflectionStreamExceptionTest extends Test
 	 */
 	public function testOpeningNonExistentFileException2()
 	{
-		$file = $this->getFilePath('stream') . '/~#nonexistent#~';
+		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~' . DIRECTORY_SEPARATOR . '~#nonexistent#~';
 
 		if (is_file($file)) {
 			$this->markTestSkipped(sprintf('File %s exists.', $file));
