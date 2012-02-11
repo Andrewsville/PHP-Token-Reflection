@@ -152,12 +152,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function getDefaultValue()
 	{
 		if (!$this->isOptional()) {
-			throw new Exception\RuntimeException($this, 'Property is not optional.', Exception\RuntimeException::UNSUPPORTED);
+			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 
 		if (is_array($this->defaultValueDefinition)) {
 			if (0 === count($this->defaultValueDefinition)) {
-				throw new Exception\RuntimeException($this, 'Property has no default value.', Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Property has no default value.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
@@ -248,24 +248,24 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			if (null !== $this->declaringClassName) {
 				$parent = $this->getDeclaringClass();
 				if (null === $parent) {
-					throw new Exception\RuntimeException($this, 'Could not load class reflection.', Exception\RuntimeException::DOES_NOT_EXIST);
+					throw new Exception\RuntimeException('Could not load class reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			} else {
 				$parent = $this->getDeclaringFunction();
 				if (null === $parent || !$parent->isTokenized()) {
-					throw new Exception\RuntimeException($this, 'Could not load function reflection.', Exception\RuntimeException::DOES_NOT_EXIST);
+					throw new Exception\RuntimeException('Could not load function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			}
 
 			$lTypeHint = strtolower($this->originalTypeHint);
 			if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
 				if (null === $this->declaringClassName) {
-					throw new Exception\RuntimeException($this, 'Parameter type hint cannot be "self" nor "parent" when not a method.', Exception\RuntimeException::UNSUPPORTED);
+					throw new Exception\RuntimeException('Parameter type hint cannot be "self" nor "parent" when not a method.', Exception\RuntimeException::UNSUPPORTED, $this);
 				}
 
 				if ('parent' === $lTypeHint) {
 					if ($parent->isInterface() || null === $parent->getParentClassName()) {
-						throw new Exception\RuntimeException($this, 'Class has no parent.', Exception\RuntimeException::DOES_NOT_EXIST);
+						throw new Exception\RuntimeException('Class has no parent.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 					}
 
 					$this->typeHint = $parent->getParentClassName();
@@ -305,7 +305,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if (null === $this->isOptional) {
 			$function = $this->getDeclaringFunction();
 			if (null === $function) {
-				throw new Exception\RuntimeException($this, 'Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			$this->isOptional = true;
@@ -416,7 +416,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 		$function = $broker->getFunction($functionName);
 		if (null === $function) {
-			throw new Exception\RuntimeException(null, sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$parameter = $function->getParameter($parameterName);
 

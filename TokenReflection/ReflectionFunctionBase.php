@@ -150,7 +150,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	{
 		if (is_numeric($parameter)) {
 			if (!isset($this->parameters[$parameter])) {
-				throw new Exception\RuntimeException($this, sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			return $this->parameters[$parameter];
 		} else {
@@ -160,7 +160,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 				}
 			}
 
-			throw new Exception\RuntimeException($this, sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
 
@@ -234,7 +234,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	protected final function aliasParameters()
 	{
 		if (!$this instanceof ReflectionMethod) {
-			throw new Exception\RuntimeException($this, 'Only method parameters can be aliased.', Exception\RuntimeException::UNSUPPORTED);
+			throw new Exception\RuntimeException('Only method parameters can be aliased.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 
 		foreach ($this->parameters as $index => $parameter) {

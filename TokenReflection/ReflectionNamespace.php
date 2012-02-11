@@ -153,7 +153,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		if (!isset($this->classes[$className])) {
-			throw new Exception\RuntimeException($this, sprintf('Class "%s" does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Class "%s" does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		return $this->classes[$className];
@@ -222,7 +222,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		if (!isset($this->constants[$constantName])) {
-			throw new Exception\RuntimeException($this, sprintf('Constant "%s" does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		return $this->constants[$constantName];
@@ -291,7 +291,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		if (!isset($this->functions[$functionName])) {
-			throw new Exception\RuntimeException($this, sprintf('Function "%s" does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Function "%s" does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		return $this->functions[$functionName];
@@ -400,7 +400,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 		$namespace = $broker->getNamespace($namespaceName);
 		if (null === $namespace) {
-			throw new Exception\RuntimeException(null, sprintf('Namespace %s does not exist.', $namespaceName), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Namespace %s does not exist.', $namespaceName), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 
 		if ($return) {
@@ -425,7 +425,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$classes = $namespace->getClasses();
 		foreach ($this->classes as $className => $reflection) {
 			if (isset($classes[$className])) {
-				throw new Exception\RuntimeException($this, sprintf('Class "%s" is already defined; in file "%s".', $className, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS);
+				throw new Exception\RuntimeException(sprintf('Class "%s" is already defined; in file "%s".', $className, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
 			}
 		}
 		$this->classes = array_merge($this->classes, $classes);
@@ -433,7 +433,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$functions = $namespace->getFunctions();
 		foreach ($this->functions as $functionName => $reflection) {
 			if (isset($functions[$functionName])) {
-				throw new Exception\RuntimeException($this, sprintf('Function "%s" is already defined; in file "%s".', $functionName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS);
+				throw new Exception\RuntimeException(sprintf('Function "%s" is already defined; in file "%s".', $functionName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
 			}
 		}
 		$this->functions = array_merge($this->functions, $functions);
@@ -441,7 +441,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$constants = $namespace->getConstants();
 		foreach ($this->constants as $constantName => $reflection) {
 			if (isset($constants[$constantName])) {
-				throw new Exception\RuntimeException($this, sprintf('Constant "%s" is already defined; in file "%s".', $constantName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS);
+				throw new Exception\RuntimeException(sprintf('Constant "%s" is already defined; in file "%s".', $constantName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
 			}
 		}
 		$this->constants = array_merge($this->constants, $constants);
@@ -456,7 +456,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 */
 	public function getSource()
 	{
-		throw new Exception\RuntimeException($this, 'Cannot export source code of a namespace.', Exception\RuntimeException::UNSUPPORTED);
+		throw new Exception\RuntimeException('Cannot export source code of a namespace.', Exception\RuntimeException::UNSUPPORTED, $this);
 	}
 
 	/**

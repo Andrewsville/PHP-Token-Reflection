@@ -381,4 +381,14 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($internal->getValue($class), $token->getDefaultValue());
 		}
 	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalPropertyReflectionCreate()
+	{
+		Php\ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getBroker());
+	}
 }

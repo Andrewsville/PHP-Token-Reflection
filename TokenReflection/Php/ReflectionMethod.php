@@ -139,7 +139,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 		if (is_numeric($parameter)) {
 			if (!isset($parameters[$parameter])) {
-				throw new Exception\RuntimeException($this, sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			return $parameters[$parameter];
@@ -150,7 +150,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 				}
 			}
 
-			throw new Exception\RuntimeException($this, sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
 
@@ -183,7 +183,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	public function setAccessible($accessible)
 	{
 		if (PHP_VERSION_ID < 50302) {
-			throw new Exception\RuntimeException($this, sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\RuntimeException::UNSUPPORTED);
+			throw new Exception\RuntimeException(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 
 		parent::setAccessible($accessible);
@@ -336,7 +336,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionMethod) {
-			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionMethod expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionMethod expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();

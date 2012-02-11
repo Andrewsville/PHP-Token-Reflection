@@ -345,7 +345,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		if (empty($this->prototype)) {
-			throw new Exception\RuntimeException($this, 'Method has no prototype.', Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException('Method has no prototype.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		return $this->prototype;
@@ -456,7 +456,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 		$class = $broker->getClass($className);
 		if ($class instanceof Dummy\ReflectionClass) {
-			throw new Exception\RuntimeException(null, sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$method = $class->getMethod($methodName);
 
@@ -492,7 +492,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if (!$declaringClass->isInstance($object)) {
-			throw new Exception\RuntimeException($this, sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 
 		if ($this->isPublic()) {
@@ -508,7 +508,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			return $value;
 		}
 
-		throw new Exception\RuntimeException($this, 'Only public methods can be invoked.', Exception\RuntimeException::NOT_ACCESSBILE);
+		throw new Exception\RuntimeException('Only public methods can be invoked.', Exception\RuntimeException::NOT_ACCESSBILE, $this);
 	}
 
 	/**
@@ -596,7 +596,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 		if (null !== $accessLevel) {
 			if (!isset($possibleLevels[$accessLevel])) {
-				throw new Exception\RuntimeException($this, sprintf('Invalid method access level: "%s".', $accessLevel), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('Invalid method access level: "%s".', $accessLevel), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);

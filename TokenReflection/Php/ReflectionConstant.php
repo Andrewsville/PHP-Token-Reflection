@@ -105,7 +105,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 			}
 
 			if (null === $realParent) {
-				throw new Exception\RuntimeException($this, 'Could not determine constant real parent class.', Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Could not determine constant real parent class.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			$this->declaringClassName = $realParent->getName();
@@ -363,14 +363,15 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 		$constantName = $constant;
 
 		if (null === $className) {
-			$constant = $broker->getConstant($constantName);
-			if (null === $constant) {
-				throw new Exception\RuntimeException(null, sprintf('Constant %s does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST);
+			try {
+				$constant = $broker->getConstant($constantName);
+			} catch (Exception\BrokerException $e) {
+				throw new Exception\RuntimeException(sprintf('Constant %s does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 		} else {
 			$class = $broker->getClass($className);
 			if ($class instanceof Dummy\ReflectionClass) {
-				throw new Exception\RuntimeException(null, sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 			$constant = $class->getConstantReflection($constantName);
 		}

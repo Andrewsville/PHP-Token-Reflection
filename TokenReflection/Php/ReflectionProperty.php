@@ -275,7 +275,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionProperty) {
-			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionProperty expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();

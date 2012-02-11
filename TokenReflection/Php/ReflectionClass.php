@@ -174,7 +174,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	{
 		if (is_object($class)) {
 			if (!$class instanceof InternalReflectionClass && !$class instanceof IReflectionClass) {
-				throw new Exception\RuntimeException($this, 'Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException('Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$class = $class->getName();
@@ -239,18 +239,18 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	{
 		if (is_object($interface)) {
 			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
-				throw new Exception\RuntimeException($this, 'Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException('Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$interfaceName = $interface->getName();
 
 			if (!$interface->isInterface()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($interface);
 			if (!$reflection->isInterface()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not an interface.', $interface), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interface), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$interfaceName = $interface;
@@ -345,7 +345,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('Method %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('Method %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -440,7 +440,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			return new ReflectionConstant($name, $this->getConstant($name), $this->broker, $this);
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('Constant "%s" does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('Constant "%s" does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -511,7 +511,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			}
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('Property %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('Property %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -849,18 +849,18 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	{
 		if (is_object($trait)) {
 			if (!$trait instanceof InternalReflectionClass && !$trait instanceof TokenReflection\IReflectionClass) {
-				throw new Exception\RuntimeException($this, 'Parameter must be a string or an instance of trait reflection.', Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException('Parameter must be a string or an instance of trait reflection.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$traitName = $trait->getName();
 
 			if (!$trait->isTrait()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($trait);
 			if (!$reflection->isTrait()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$traitName = $trait;
@@ -878,12 +878,12 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public function newInstanceWithoutConstructor()
 	{
 		if ($this->isInternal()) {
-			throw new Exception\RuntimeException($this, 'Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED);
+			throw new Exception\RuntimeException('Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 
 		foreach ($this->getParentClasses() as $parent) {
 			if ($parent->isInternal()) {
-				throw new Exception\RuntimeException($this, 'Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED);
+				throw new Exception\RuntimeException('Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED, $this);
 			}
 		}
 
@@ -915,7 +915,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		if (!$internalReflection instanceof InternalReflectionClass) {
-			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionClass expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionClass expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		return $broker->getClass($internalReflection->getName());

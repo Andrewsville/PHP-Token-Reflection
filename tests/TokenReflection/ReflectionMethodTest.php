@@ -557,4 +557,44 @@ class ReflectionMethodTest extends Test
 			$rfl->token->getStaticVariables()
 		);
 	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalMethodReflectionCreate()
+	{
+		Php\ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalMethodGetParameter1()
+	{
+		$this->getInternalMethodReflection()->getParameter('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalMethodGetParameter2()
+	{
+		$this->getInternalMethodReflection()->getParameter(999);
+	}
+
+	/**
+	 * Returns an internal method reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionMethod
+	 */
+	private function getInternalMethodReflection()
+	{
+		return $this->getBroker()->getClass('Exception')->getConstructor();
+	}
 }

@@ -46,11 +46,11 @@ final class RuntimeException extends BaseException
 	/**
 	 * Constructor.
 	 *
-	 * @param \TokenReflection\IReflection $sender Reflection element
 	 * @param string $message Exception message
 	 * @param integer $code Exception code
+	 * @param \TokenReflection\IReflection $sender Reflection element
 	 */
-	public function __construct(IReflection $sender, $message, $code)
+	public function __construct($message, $code, IReflection $sender = null)
 	{
 		parent::__construct($message, $code);
 

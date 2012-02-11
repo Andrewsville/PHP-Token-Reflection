@@ -184,12 +184,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		if (null === $className) {
 			$constant = $broker->getConstant($constantName);
 			if (null === $constant) {
-				throw new Exception\RuntimeException(null, 'Constant does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Constant does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 		} else {
 			$class = $broker->getClass($className);
 			if ($class instanceof Dummy\ReflectionClass) {
-				throw new Exception\RuntimeException($class, 'Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $class);
 			}
 			$constant = $class->getConstantReflection($constantName);
 		}

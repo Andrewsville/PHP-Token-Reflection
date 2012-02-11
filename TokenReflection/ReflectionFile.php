@@ -46,7 +46,7 @@ class ReflectionFile extends ReflectionBase
 	 */
 	public function __toString()
 	{
-		throw new Exception\RuntimeException($this, '__toString is not supported.', Exception\RuntimeException::UNSUPPORTED);
+		throw new Exception\RuntimeException('__toString is not supported.', Exception\RuntimeException::UNSUPPORTED, $this);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class ReflectionFile extends ReflectionBase
 	 */
 	public static function export(Broker $broker, $argument, $return = false)
 	{
-		throw new Exception\RuntimeException(null, 'Export is not supported.', Exception\RuntimeException::UNSUPPORTED);
+		throw new Exception\RuntimeException('Export is not supported.', Exception\RuntimeException::UNSUPPORTED);
 	}
 
 	/**

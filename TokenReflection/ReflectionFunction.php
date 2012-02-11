@@ -86,7 +86,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 		$function = $broker->getFunction($functionName);
 		if (null === $function) {
-			throw new Exception\RuntimeException(null, sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 
 		if ($return) {
@@ -116,7 +116,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	public function invokeArgs(array $args = array())
 	{
 		if (!function_exists($this->getName())) {
-			throw new Exception\RuntimeException($this, 'Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		return call_user_func_array($this->getName(), $args);

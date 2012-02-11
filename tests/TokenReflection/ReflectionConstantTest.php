@@ -655,4 +655,34 @@ class ReflectionConstantTest extends Test
 			$this->assertSame($name, $rfl->getPrettyName(), $name);
 		}
 	}
+
+	/**
+	 * Tests an exception thrown when trying to get instance of TokenReflection\Php\ReflectionConstant and providing an invalid parent reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalConstantConstructor()
+	{
+		new Php\ReflectionConstant('foo', 'bar', $this->getBroker(), new Php\ReflectionClass('Exception', $this->getBroker()));
+	}
+
+	/**
+	 * Tests an exception thrown when trying to export an constant.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalConstantExport1()
+	{
+		Php\ReflectionConstant::export($this->getBroker(), null, '~non-existent~', true);
+	}
+
+	/**
+	 * Tests an exception thrown when trying to export an constant.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalConstantExport2()
+	{
+		Php\ReflectionConstant::export($this->getBroker(), '~non-existent~', '~non-existent~', true);
+	}
 }

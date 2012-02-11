@@ -138,7 +138,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if (!$declaringClass->isInstance($object)) {
-			throw new Exception\RuntimeException($this, 'The given class is not an instance or subclass of the current class.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('The given class is not an instance or subclass of the current class.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 
 		if ($this->isPublic()) {
@@ -154,7 +154,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			return $value;
 		}
 
-		throw new Exception\RuntimeException($this, 'Only public and accessible properties can return their values.', Exception\RuntimeException::NOT_ACCESSBILE);
+		throw new Exception\RuntimeException('Only public and accessible properties can return their values.', Exception\RuntimeException::NOT_ACCESSBILE, $this);
 	}
 
 	/**
@@ -268,7 +268,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 		$class = $broker->getClass($className);
 		if ($class instanceof Dummy\ReflectionClass) {
-			throw new Exception\RuntimeException(null, sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$property = $class->getProperty($propertyName);
 
@@ -321,7 +321,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if (!$declaringClass->isInstance($object)) {
-			throw new Exception\RuntimeException($this, 'Instance of or subclass expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Instance of or subclass expected.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 
 		if ($this->isPublic()) {
@@ -338,7 +338,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 				$this->setDefaultValue($value);
 			}
 		} else {
-			throw new Exception\RuntimeException($this, 'Only public and accessible properties can be set.', Exception\RuntimeException::NOT_ACCESSBILE);
+			throw new Exception\RuntimeException('Only public and accessible properties can be set.', Exception\RuntimeException::NOT_ACCESSBILE, $this);
 		}
 	}
 

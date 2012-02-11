@@ -280,7 +280,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionExtension) {
-			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionExtension expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		if (!isset($cache[$internalReflection->getName()])) {

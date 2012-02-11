@@ -251,7 +251,7 @@ abstract class ReflectionBase implements IReflection
 			}
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('Cannot read property "%s".', $key), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('Cannot read property "%s".', $key), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**

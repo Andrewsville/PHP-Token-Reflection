@@ -447,18 +447,18 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		if (is_object($interface)) {
 			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
-				throw new Exception\RuntimeException($this, sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$interfaceName = $interface->getName();
 
 			if (!$interface->isInterface()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($interface);
 			if (!$reflection->isInterface()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not an interface.', $interface), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interface), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$interfaceName = $interface;
@@ -601,7 +601,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('There is no method "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('There is no method "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -730,7 +730,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 						if (!isset($this->methods[$newName])) {
 							if (isset($methods[$newName])) {
-								throw new Exception\RuntimeException($this, sprintf('Trait method "%s" was already imported.', $newName), Exception\RuntimeException::ALREADY_EXISTS);
+								throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $newName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 							}
 
 							$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
@@ -741,7 +741,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				if (!in_array(null, $imports)) {
 					if (!isset($this->methods[$methodName])) {
 						if (isset($methods[$methodName])) {
-							throw new Exception\RuntimeException($this, sprintf('Trait method "%s" was already imported.', $methodName), Exception\RuntimeException::ALREADY_EXISTS);
+							throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 						}
 
 						$methods[$methodName] = $traitMethod->alias($this);
@@ -814,7 +814,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('There is no constant "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('There is no constant "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -923,7 +923,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('There is no property "%s".', $name, $this->name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('There is no property "%s".', $name, $this->name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -1091,13 +1091,13 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
 			if (!$property->isPublic() && !$property->isAccessible()) {
-				throw new Exception\RuntimeException($this, sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE);
+				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
 			}
 
 			return $property->getDefaultValue();
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -1194,18 +1194,18 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		if (is_object($trait)) {
 			if (!$trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
-				throw new Exception\RuntimeException($this, sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$traitName = $trait->getName();
 
 			if (!$trait->isTrait()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($trait);
 			if (!$reflection->isTrait()) {
-				throw new Exception\RuntimeException($this, sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT);
+				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$traitName = $trait;
@@ -1340,7 +1340,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function isInstance($object)
 	{
 		if (!is_object($object)) {
-			throw new Exception\RuntimeException($this, sprintf('Parameter must be an object, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException( sprintf('Parameter must be an object, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 
 		return $this->name === get_class($object) || is_subclass_of($object, $this->getName());
@@ -1355,7 +1355,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function newInstanceWithoutConstructor()
 	{
 		if (!class_exists($this->name, true)) {
-			throw new Exception\RuntimeException($this, 'Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		$reflection = new \TokenReflection\Php\ReflectionClass($this->getName(), $this->getBroker());
@@ -1385,7 +1385,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function newInstanceArgs(array $args = array())
 	{
 		if (!class_exists($this->name, true)) {
-			throw new Exception\RuntimeException($this, 'Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		$reflection = new InternalReflectionClass($this->name);
@@ -1404,14 +1404,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
 			if (!$property->isPublic() && !$property->isAccessible()) {
-				throw new Exception\RuntimeException($this, sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE);
+				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
 			}
 
 			$property->setDefaultValue($value);
 			return;
 		}
 
-		throw new Exception\RuntimeException($this, sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**
@@ -1530,7 +1530,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 		$class = $broker->getClass($className);
 		if ($class instanceof Dummy\ReflectionClass) {
-			throw new Exception\RuntimeException(null, 'Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 
 		if ($return) {

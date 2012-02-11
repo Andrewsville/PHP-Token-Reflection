@@ -118,7 +118,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 		if (is_numeric($parameter)) {
 			if (!isset($parameters[$parameter])) {
-				throw new Exception\RuntimeException($this, sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			return $parameters[$parameter];
@@ -129,7 +129,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 				}
 			}
 
-			throw new Exception\RuntimeException($this, sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
 
@@ -224,7 +224,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		if (!$internalReflection instanceof InternalReflectionFunction) {
-			throw new Exception\RuntimeException(null, 'Invalid reflection instance provided, ReflectionFunction expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		return $broker->getFunction($internalReflection->getName());
