@@ -156,35 +156,30 @@ class Broker
 	 * @param string $fileName Used file name
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|\TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\BrokerException If the given source code could not be processed.
 	 */
 	public function processString($source, $fileName, $returnReflectionFile = false)
 	{
-		try {
-			if ($this->backend->isFileProcessed($fileName)) {
-				$tokens = $this->backend->getFileTokens($fileName);
-			} else {
-				$tokens = new Stream\StringStream($source, $fileName);
-			}
+		if ($this->backend->isFileProcessed($fileName)) {
+			$tokens = $this->backend->getFileTokens($fileName);
+		} else {
+			$tokens = new Stream\StringStream($source, $fileName);
+		}
 
-			$reflectionFile = new ReflectionFile($tokens, $this);
-			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($tokens, $reflectionFile);
+		$reflectionFile = new ReflectionFile($tokens, $this);
+		if (!$this->backend->isFileProcessed($fileName)) {
+			$this->backend->addFile($tokens, $reflectionFile);
 
-				// Clear the cache - leave only tokenized reflections
-				foreach ($this->cache as $type => $cached) {
-					if (!empty($cached)) {
-						$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
-							return $reflection->isTokenized();
-						});
-					}
+			// Clear the cache - leave only tokenized reflections
+			foreach ($this->cache as $type => $cached) {
+				if (!empty($cached)) {
+					$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
+						return $reflection->isTokenized();
+					});
 				}
 			}
-
-			return $returnReflectionFile ? $reflectionFile : true;
-		} catch (Exception\StreamException $e) {
-			throw new Exception\BrokerException($this, 'Could not process the source string.', 0, $e);
 		}
+
+		return $returnReflectionFile ? $reflectionFile : true;
 	}
 
 	/**
@@ -236,15 +231,15 @@ class Broker
 	 */
 	public function processPhar($fileName, $returnReflectionFile = false)
 	{
+		if (!is_file($fileName)) {
+			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+		}
+
+		if (!extension_loaded('Phar')) {
+			throw new Exception\BrokerException($this, 'The PHAR PHP extension is not loaded.', Exception\BrokerException::PHP_EXT_MISSING);
+		}
+
 		try {
-			if (!is_file($fileName)) {
-				throw new Exception\BrokerException($fileName, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
-			}
-
-			if (!extension_loaded('Phar')) {
-				throw new Exception\BrokerException($fileName, 'The PHAR PHP extension is not loaded.', Exception\BrokerException::PHP_EXT_MISSING);
-			}
-
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new \Phar($fileName)) as $entry) {
 				if ($entry->isFile()) {
@@ -270,12 +265,12 @@ class Broker
 	 */
 	public function processDirectory($path, $filters = array(), $returnReflectionFile = false)
 	{
-		try {
-			$realPath = realpath($path);
-			if (!is_dir($realPath)) {
-				throw new Exception\BrokerException($path, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
-			}
+		$realPath = realpath($path);
+		if (!is_dir($realPath)) {
+			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+		}
 
+		try {
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
 				if ($entry->isFile()) {
@@ -320,7 +315,7 @@ class Broker
 
 			return $this->processFile($path, $returnReflectionFile);
 		} else {
-			throw new Exception\BrokerException($path, 'The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+			throw new Exception\BrokerException($this, 'The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
 

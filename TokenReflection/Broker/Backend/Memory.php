@@ -318,8 +318,7 @@ class Memory implements Broker\Backend
 				}
 			}
 
-			// @todo
-			throw $e;
+			throw new Exception\BrokerException($this->getBroker(), sprintf('Constant %s does not exist.', $constantName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -397,8 +396,7 @@ class Memory implements Broker\Backend
 				return new Php\ReflectionFunction($functionName, $this->broker);
 			}
 
-			// @todo
-			throw $e;
+			throw new Exception\BrokerException($this->getBroker(), sprintf('Function %s does not exist.', $functionName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
 
