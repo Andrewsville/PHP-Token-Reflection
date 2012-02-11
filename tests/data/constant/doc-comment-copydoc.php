@@ -35,3 +35,18 @@ class TokenReflection_Test_ConstantDocCommentCopydoc2
 	 */
 	const DOC_COMMENT = 'doc-comment';
 }
+
+/**
+ * Comment.
+ */
+const CONSTANT_DOC_COMMENT_COPYDOC = 1;
+
+/**
+ * @copydoc CONSTANT_DOC_COMMENT_COPYDOC
+ */
+const CONSTANT_DOC_COMMENT_COPYDOC2 = 2;
+
+/**
+ * @copydoc NONEXISTENT_CONSTANT
+ */
+const CONSTANT_DOC_COMMENT_COPYDOC3 = 2;

@@ -55,6 +55,26 @@ class ReflectionFileTest extends Test
 	}
 
 	/**
+	 * Tests file level docblocks.
+	 */
+	public function testNoDocComment()
+	{
+		$fileName = $this->getFilePath('noDocComment');
+		$this->getBroker()->processFile($fileName);
+
+		$this->assertTrue($this->getBroker()->hasFile($fileName));
+
+		$fileReflection = $this->getBroker()->getFile($fileName);
+		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+
+		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
+
+		$this->assertFalse($fileReflection->hasAnnotation('package'));
+		$this->assertFalse($fileReflection->hasAnnotation('author'));
+		$this->assertFalse($fileReflection->getDocComment());
+	}
+
+	/**
 	 * Tests returning file reflections.
 	 */
 	public function testReturningFileReflection()

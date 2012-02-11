@@ -62,13 +62,27 @@ class ReflectionConstantTest extends Test
 	{
 		static $constants = array('DOC_COMMENT', 'DOC_COMMENT_COPY', 'DOC_COMMENT_COPY2');
 
-		$reflection = $this->getClassTokenReflection('docCommentCopydoc');
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('docCommentCopydoc'));
+
+		$this->assertTrue($broker->hasClass('TokenReflection_Test_ConstantDocCommentCopydoc'));
+		$reflection = $broker->getClass('TokenReflection_Test_ConstantDocCommentCopydoc');
 		foreach ($constants as $constant) {
 			$this->assertSame('This is a constant.', $reflection->getConstantReflection($constant)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constant);
 		}
 
 		$this->assertSame('This is another constant.', $reflection->getConstantReflection('DOC_COMMENT_COPY_CLASS')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertSame(null, $reflection->getConstantReflection('DOC_COMMENT_COPY_NO')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+
+		static $topLevelConstants = array(
+			'CONSTANT_DOC_COMMENT_COPYDOC' => 'Comment.',
+			'CONSTANT_DOC_COMMENT_COPYDOC2' => 'Comment.',
+			'CONSTANT_DOC_COMMENT_COPYDOC3' => null,
+		);
+		foreach ($topLevelConstants as $constantName => $shortDescription) {
+			$this->assertTrue($broker->hasConstant($constantName), $constantName);
+			$this->assertSame($shortDescription, $broker->getConstant($constantName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constantName);
+		}
 	}
 
 	/**
@@ -616,6 +630,29 @@ class ReflectionConstantTest extends Test
 					$this->assertSame($expected_classes[$name][3][$method_name][1][$variable_name], $variable_value, sprintf('%s::%s()::%s', $name, $method_name, $variable_name));
 				}
 			}
+		}
+	}
+
+	/**
+	 * Tests returning pretty constant names.
+	 */
+	public function testPrettyNames()
+	{
+		static $names = array(
+			'ns1\\CONST_PRETTY_NAMES_1',
+			'CONST_PRETTY_NAMES_1',
+			'ns1\\ConstPrettyNames::INTERNAL',
+			'ConstPrettyNames::INTERNAL',
+		);
+
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('pretty-names'));
+
+		foreach ($names as $name) {
+			$this->assertTrue($broker->hasConstant($name), $name);
+
+			$rfl = $broker->getConstant($name);
+			$this->assertSame($name, $rfl->getPrettyName(), $name);
 		}
 	}
 }

@@ -54,9 +54,39 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($property->getDocComment(), $rfl->token->getProperty($property->getName())->getDocComment(), $property->getName());
 		}
 
+		$propertyName = 'docComment';
+		$this->assertTrue($rfl->token->hasProperty($propertyName));
+
+		/** @var \TokenReflection\ReflectionProperty */
+		$tokenProperty = $rfl->token->getProperty($propertyName);
+		$this->assertTrue($tokenProperty->hasAnnotation('var'));
+		$this->assertSame(array("String It is a string\nand this comment has multiple\nlines."), $tokenProperty->getAnnotation('var'));
+
 		$rfl = $this->getPropertyReflection('noComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
+	}
+
+	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $properties = array(
+			'property' => 'This is a property.',
+			'property2' => 'This is a property.',
+			'property3' => 'This is a property.',
+			'property4' => 'This is a property.',
+			'property5' => null,
+			'property6' => null,
+			'property7' => null
+		);
+
+		$class = $this->getClassTokenReflection('docCommentCopydoc');
+		foreach ($properties as $propertyName => $shortDescription) {
+			$this->assertTrue($class->hasProperty($propertyName), $propertyName);
+			$this->assertSame($shortDescription, $class->getProperty($propertyName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $propertyName);
+		}
 	}
 
 	/**

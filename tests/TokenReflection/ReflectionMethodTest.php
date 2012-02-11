@@ -58,6 +58,28 @@ class ReflectionMethodTest extends Test
 	}
 
 	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $methods = array(
+			'method' => 'This is a method.',
+			'method2' => 'This is a method.',
+			'method3' => 'This is a method.',
+			'method4' => 'This is a method.',
+			'method5' => 'This is a method.',
+			'method6' => null,
+			'method7' => null
+		);
+
+		$class = $this->getClassTokenReflection('docCommentCopydoc');
+		foreach ($methods as $methodName => $shortDescription) {
+			$this->assertTrue($class->hasMethod($methodName), $methodName);
+			$this->assertSame($shortDescription, $class->getMethod($methodName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $methodName);
+		}
+	}
+
+	/**
 	 * Tests getting of inherited documentation comment.
 	 */
 	public function testDocCommentInheritance()
