@@ -46,7 +46,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function __construct($className, Broker $broker)
 	{
-		$this->name = $className;
+		$this->name = ltrim($className, '\\');
 		$this->broker = $broker;
 	}
 
@@ -88,7 +88,8 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getNamespaceName()
 	{
-		return '';
+		$pos = strrpos($this->name, '\\');
+		return false === $pos ? '' : substr($this->name, 0, $pos);
 	}
 
 	/**
@@ -98,7 +99,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function inNamespace()
 	{
-		return false;
+		return false !== strrpos($this->name, '\\');
 	}
 
 	/**
