@@ -32,6 +32,135 @@ class ReflectionClassTest extends Test
 	protected $type = 'class';
 
 	/**
+	 * Tests the dummy class reflection interface.
+	 */
+	public function testDummyClass()
+	{
+		static $classNames = array(
+			'ns\\non-existent',
+			'non-existent'
+		);
+
+		$broker = $this->getBroker();
+
+		foreach ($classNames as $className) {
+			$this->assertFalse($broker->hasClass($className));
+
+			$class = $broker->getClass($className);
+			$this->assertInstanceOf('TokenReflection\Dummy\ReflectionClass', $class);
+
+			$nameParts = explode('\\', $className);
+			if (1 === count($nameParts)) {
+				$shortName = $nameParts[0];
+				$namespaceName = '';
+			} else {
+				$shortName = array_pop($nameParts);
+				$namespaceName = implode('\\', $nameParts);
+			}
+
+			$this->assertSame($className, $class->getName());
+			$this->assertSame($className, $class->getPrettyName());
+			$this->assertSame($shortName, $class->getShortName());
+			$this->assertSame($namespaceName, $class->getNamespaceName());
+
+			if (empty($namespaceName)) {
+				$this->assertFalse($class->inNamespace());
+			} else {
+				$this->assertTrue($class->inNamespace());
+			}
+
+			$this->assertNull($class->getExtension());
+			$this->assertFalse($class->getExtensionName());
+
+			$this->assertNull($class->getFileName());
+			$this->assertNull($class->getEndLine());
+			$this->assertNull($class->getStartLine());
+
+			$this->assertFalse($class->getDocComment());
+			$this->assertSame(array(), $class->getAnnotations());
+			$this->assertFalse($class->hasAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+			$this->assertNull($class->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+
+			$this->assertSame(0, $class->getModifiers());
+
+			$this->assertFalse($class->isAbstract());
+			$this->assertFalse($class->isFinal());
+			$this->assertFalse($class->isInternal());
+			$this->assertFalse($class->isInterface());
+			$this->assertFalse($class->isException());
+			$this->assertFalse($class->isInstantiable());
+			$this->assertFalse($class->isCloneable());
+			$this->assertFalse($class->isIterateable());
+			$this->assertFalse($class->isInternal());
+			$this->assertFalse($class->isUserDefined());
+			$this->assertFalse($class->isTokenized());
+			$this->assertFalse($class->isComplete());
+
+			$this->assertFalse($class->isTrait());
+			$this->assertSame(array(), $class->getTraits());
+			$this->assertSame(array(), $class->getTraitNames());
+			$this->assertSame(array(), $class->getOwnTraits());
+			$this->assertSame(array(), $class->getOwnTraitNames());
+			$this->assertSame(array(), $class->getTraitAliases());
+			$this->assertFalse($class->usesTrait('Any'));
+
+			$this->assertFalse($class->isSubclassOf('Any'));
+			$this->assertFalse($class->getParentClass());
+			$this->assertNull($class->getParentClassName());
+			$this->assertSame(array(), $class->getParentClasses());
+			$this->assertSame(array(), $class->getParentClassNameList());
+
+			$this->assertFalse($class->implementsInterface('Traversable'));
+			$this->assertFalse($class->implementsInterface($broker->getClass('Traversable')));
+			$this->assertSame(array(), $class->getInterfaces());
+			$this->assertSame(array(), $class->getOwnInterfaces());
+			$this->assertSame(array(), $class->getInterfaceNames());
+			$this->assertSame(array(), $class->getOwnInterfaceNames());
+
+			$this->assertNull($class->getConstructor());
+			$this->assertNull($class->getDestructor());
+
+			$this->assertFalse($class->hasMethod('Any'));
+			$this->assertFalse($class->hasOwnMethod('Any'));
+			$this->assertFalse($class->hasTraitMethod('Any'));
+			$this->assertSame(array(), $class->getMethods());
+			$this->assertSame(array(), $class->getOwnMethods());
+			$this->assertSame(array(), $class->getTraitMethods());
+
+			$this->assertFalse($class->hasConstant('Any'));
+			$this->assertFalse($class->hasOwnConstant('Any'));
+			$this->assertSame(array(), $class->getConstants());
+			$this->assertSame(array(), $class->getOwnConstants());
+			$this->assertSame(array(), $class->getConstantReflections());
+			$this->assertSame(array(), $class->getOwnConstantReflections());
+
+			$this->assertSame(array(), $class->getDefaultProperties());
+			$this->assertFalse($class->hasProperty('Any'));
+			$this->assertFalse($class->hasOwnProperty('Any'));
+			$this->assertFalse($class->hasTraitProperty('Any'));
+			$this->assertSame(array(), $class->getProperties());
+			$this->assertSame(array(), $class->getOwnProperties());
+			$this->assertSame(array(), $class->getTraitProperties());
+			$this->assertSame(array(), $class->getStaticProperties());
+
+			$this->assertSame(array(), $class->getDirectSubclasses());
+			$this->assertSame(array(), $class->getDirectSubclassNames());
+			$this->assertSame(array(), $class->getDirectImplementers());
+			$this->assertSame(array(), $class->getDirectImplementerNames());
+			$this->assertSame(array(), $class->getIndirectSubclasses());
+			$this->assertSame(array(), $class->getIndirectSubclassNames());
+			$this->assertSame(array(), $class->getIndirectImplementers());
+			$this->assertSame(array(), $class->getIndirectImplementerNames());
+
+			$this->assertFalse($class->isInstance(new \Exception()));
+
+			$this->assertSame('', $class->getSource());
+
+			$this->assertSame($broker, $class->getBroker());
+		}
+	}
+
+	/**
 	 * Tests getting of class constants.
 	 */
 	public function testConstants()
