@@ -53,4 +53,14 @@ class BrokerException extends BaseException
 	{
 		return $this->broker;
 	}
+
+	/**
+	 * Returns an exception description detail.
+	 *
+	 * @return string
+	 */
+	protected function getDetail()
+	{
+		return '';
+	}
 }

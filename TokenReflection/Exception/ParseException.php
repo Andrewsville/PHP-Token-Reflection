@@ -88,20 +88,21 @@ class ParseException extends StreamException
 
 		$this->sender = $sender;
 
-		$token = current($tokenStream);
-		$position = key($tokenStream);
+		$token = $tokenStream->current();
+		$position = $tokenStream->key();
+
 		if (!empty($token) && !empty($position)) {
 			$this->token = $token;
 
 			$line = $this->token[2];
 
 			$min = $position;
-			while (isset($tokenStream[$min]) && $line - $tokenStream[$min][2] < self::SOURCE_LINES_AROUND) {
+			while (isset($tokenStream[$min - 1]) && $line - $tokenStream[$min][2] < self::SOURCE_LINES_AROUND) {
 				$min--;
 			}
 
 			$max = $position;
-			while (isset($tokenStream[$max]) && $tokenStream[$max][2] - $line < self::SOURCE_LINES_AROUND) {
+			while (isset($tokenStream[$max + 1]) && $tokenStream[$max][2] - $line < self::SOURCE_LINES_AROUND) {
 				$max++;
 			}
 
@@ -132,16 +133,35 @@ class ParseException extends StreamException
 	/**
 	 * Returns the source code part around the token.
 	 *
+	 * @param boolean $lineNumbers Returns the source code part with line numbers
 	 * @return string|null
 	 */
-	public function getSourcePart()
+	public function getSourcePart($lineNumbers = false)
 	{
-		if (!empty($this->scopeBoundaries)) {
-			list($lo, $hi) = $this->scopeBoundaries;
-			return $this->getStream()->getSourcePart($lo, $hi);
+		if (empty($this->scopeBoundaries)) {
+			return null;
 		}
 
-		return null;
+		list($lo, $hi) = $this->scopeBoundaries;
+		$stream = $this->getStream();
+
+		$code = $stream->getSourcePart($lo, $hi);
+
+		if ($lineNumbers) {
+			$lines = explode("\n", $code);
+
+			$startLine = $stream[$lo][2];
+			$width = strlen($startLine + count($lines) - 1);
+
+			$code = implode(
+				"\n",
+				array_map(function($line) use(&$startLine, $width) {
+					return str_pad($startLine++, $width, ' ', STR_PAD_LEFT) . ': ' . $line;
+				}, $lines)
+			);
+		}
+
+		return $code;
 	}
 
 	/**
@@ -152,5 +172,28 @@ class ParseException extends StreamException
 	public function getSender()
 	{
 		return $this->sender;
+	}
+
+	/**
+	 * Returns an exception description detail.
+	 *
+	 * @return string
+	 */
+	protected function getDetail()
+	{
+		if (0 === $this->getStream()->count()) {
+			return parent::getDetail() . 'The token stream was empty.';
+		} elseif (empty($this->token)) {
+			return parent::getDetail() . 'The token stream was read out of its bounds.';
+		} else {
+			return parent::getDetail() .
+				sprintf(
+					"\nThe cause of the exception was the %s token (line %s) in following part of %s source code:\n\n%s",
+					StreamBase::getTokenName($this->token[0]),
+					$this->token[2],
+					$this->sender && $this->sender->getName() ? $this->sender->getPrettyName() : 'the',
+					$this->getSourcePart(true)
+				);
+		}
 	}
 }

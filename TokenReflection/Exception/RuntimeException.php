@@ -66,4 +66,14 @@ final class RuntimeException extends BaseException
 	{
 		return $this->sender;
 	}
+
+	/**
+	 * Returns an exception description detail.
+	 *
+	 * @return string
+	 */
+	protected function getDetail()
+	{
+		return null === $this->sender ? '' : sprintf('Thrown when working with "%s".', $this->sender->getPrettyName());
+	}
 }

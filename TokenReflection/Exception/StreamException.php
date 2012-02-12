@@ -83,4 +83,14 @@ class StreamException extends BaseException
 	{
 		return $this->stream->getFileName();
 	}
+
+	/**
+	 * Returns an exception description detail.
+	 *
+	 * @return string
+	 */
+	protected function getDetail()
+	{
+		return sprintf('Thrown when working with file "%s" token stream.', $this->getFileName());
+	}
 }

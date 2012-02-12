@@ -51,9 +51,45 @@ abstract class BaseException extends RuntimeException
 	const UNSUPPORTED = 4;
 
 	/**
-	 * Returns a textual description of the exception.
+	 * Returns an exception description detail.
 	 *
 	 * @return string
 	 */
-	//abstract function __toString();
+	protected abstract function getDetail();
+
+	/**
+	 * Returns an exception description as string.
+	 *
+	 * @return string
+	 */
+	final public function getOutput()
+	{
+		$detail = $this->getDetail();
+
+		return sprintf(
+			"exception '%s'%s in %s on line %d\n%s\nStack trace:\n%s",
+			get_class($this),
+			$this->getMessage() ? " with message '" . $this->getMessage() . "'" : '',
+			$this->getFile(),
+			$this->getLine(),
+			empty($detail) ? '' : $detail . "\n",
+			$this->getTraceAsString()
+		);
+	}
+
+	/**
+	 * Returns the exception details as string.
+	 *
+	 * @return string
+	 */
+	final public function __toString()
+	{
+		$output = '';
+
+		if ($ex = $this->getPrevious()) {
+			$output .= (string) $ex . "\n\nNext ";
+		}
+
+		return $output . $this->getOutput() . "\n";
+	}
 }
