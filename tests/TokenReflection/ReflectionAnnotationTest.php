@@ -39,7 +39,7 @@ class ReflectionAnnotationTest extends Test
 	public function testAnnotationInvalidTemplate()
 	{
 		$broker = $this->getBroker();
-		$broker->processString('<? class AnnotationInvalidTemplate {}', 'annotationInvalidTemplate.php');
+		$broker->processString('<?php class AnnotationInvalidTemplate {}', 'annotationInvalidTemplate.php');
 
 		$this->assertTrue($broker->hasClass('AnnotationInvalidTemplate'));
 		$class = $broker->getClass('AnnotationInvalidTemplate');
