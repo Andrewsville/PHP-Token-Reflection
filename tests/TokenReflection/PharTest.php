@@ -207,6 +207,9 @@ class PharTest extends Test
 			if ('broker' === $item->getFileName()) {
 				// Skipping the borker directory because of PHP bug #53872
 				continue;
+			} elseif ('parseerror' === $item->getFileName()) {
+				// Skipping invalid PHP files
+				continue;
 			}
 
 			if ($item->isDir() && !$item->isDot()) {

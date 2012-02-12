@@ -20,14 +20,14 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * Stream test.
  */
-class ReflectionStreamTest extends Test
+class StreamTest extends Test
 {
 	/**
 	 * Test type.
 	 *
 	 * @var string
 	 */
-	protected $type = 'stream';
+	protected $type = 'parseerror';
 
 	/**
 	 * Tests the (im)possibility to unset a token from a token stream.
@@ -36,7 +36,7 @@ class ReflectionStreamTest extends Test
 	 */
 	public function testUnsetException()
 	{
-		$stream = $this->getFileStream('invalid');
+		$stream = $this->getFileStream('invalid-stream');
 		unset($stream[666]);
 	}
 
@@ -47,7 +47,7 @@ class ReflectionStreamTest extends Test
 	 */
 	public function testSetException()
 	{
-		$stream = $this->getFileStream('invalid');
+		$stream = $this->getFileStream('invalid-stream');
 		$stream[0] = null;
 	}
 
@@ -58,7 +58,7 @@ class ReflectionStreamTest extends Test
 	 */
 	public function testFindMatchingBracketException1()
 	{
-		$this->getFileStream('invalid')->findMatchingBracket();
+		$this->getFileStream('invalid-stream')->findMatchingBracket();
 	}
 
 	/**
@@ -68,7 +68,7 @@ class ReflectionStreamTest extends Test
 	 */
 	public function testFindMatchingBracketException2()
 	{
-		$stream = $this->getFileStream('invalid');
+		$stream = $this->getFileStream('invalid-stream');
 		$this->assertInstanceOf('\TokenReflection\Stream\FileStream', $stream->find('{'));
 
 		$stream->findMatchingBracket();
@@ -81,7 +81,7 @@ class ReflectionStreamTest extends Test
 	 */
 	public function testFindMatchingBracketException3()
 	{
-		$stream = $this->getFileStream('invalid');
+		$stream = $this->getFileStream('invalid-stream');
 		$stream->seek(count($stream));
 
 		$this->assertFalse($stream->valid());
