@@ -287,15 +287,27 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * @param integer $position Token position; if none given, consider the current iteration position
 	 * @return string|null
 	 */
-	public function getTokenName($position = -1)
+	public function getStreamTokenName($position = -1)
 	{
-		$type = $this->getType($position);
+		return null === ($type = $this->getType($position)) ? null : self::getTokenName($type);
+	}
+
+	/**
+	 * Returns the token type name.
+	 *
+	 * @param integer $type Token type
+	 * @return string|null
+	 */
+	public static function getTokenName($type)
+	{
 		if (is_string($type)) {
 			return $type;
 		} elseif (T_TRAIT === $type) {
 			return 'T_TRAIT';
 		} elseif (T_INSTEADOF === $type) {
 			return 'T_INSTEADOF';
+		} elseif (T_CALLABLE === $type) {
+			return 'T_CALLABLE';
 		}
 
 		return token_name($type);
