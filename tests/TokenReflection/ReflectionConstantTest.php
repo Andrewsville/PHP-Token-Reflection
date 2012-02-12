@@ -526,7 +526,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 			'ns\\TokenReflection_Test_ConstantMagic54Trait' => array(
 				true,
@@ -544,7 +544,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 			'ns2\\TokenReflection_Test_ConstantMagic54' => array(
 				false,
@@ -556,7 +556,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 			'ns3\\TokenReflection_Test_ConstantMagic54' => array(
 				false,
@@ -568,7 +568,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 		);
 
