@@ -65,7 +65,6 @@ abstract class ReflectionBase implements IReflection
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
 	 */
 	public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = null)
 	{
@@ -196,6 +195,16 @@ abstract class ReflectionBase implements IReflection
 	abstract public function getSource();
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Magic __get method.
 	 *
 	 * @param string $key Variable name
@@ -223,7 +232,7 @@ abstract class ReflectionBase implements IReflection
 	 * @param \TokenReflection\IReflection $object Reflection object
 	 * @param string $key Variable name
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the requested parameter does not exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If the requested parameter does not exist.
 	 */
 	final public static function get(IReflection $object, $key)
 	{
@@ -242,7 +251,7 @@ abstract class ReflectionBase implements IReflection
 			}
 		}
 
-		throw new Exception\Runtime(sprintf('Cannot read %s "%s" property "%s".', get_class($object), $object->getName(), $key), Exception\Runtime::DOES_NOT_EXIST);
+		throw new Exception\RuntimeException(sprintf('Cannot read property "%s".', $key), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 	/**

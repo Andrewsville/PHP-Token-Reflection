@@ -58,6 +58,28 @@ class ReflectionFunctionTest extends Test
 	}
 
 	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $functions = array(
+			'tokenReflectionFunctionDocCommentCopydoc' => 'This is a function.',
+			'tokenReflectionFunctionDocCommentCopydoc2' => 'This is a function.',
+			'tokenReflectionFunctionDocCommentCopydoc3' => 'This is a function.',
+			'tokenReflectionFunctionDocCommentCopydoc4' => null,
+			'tokenReflectionFunctionDocCommentCopydoc5' => null,
+		);
+
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('docCommentCopydoc'));
+
+		foreach ($functions as $functionName => $shortDescription) {
+			$this->assertTrue($broker->hasFunction($functionName), $functionName);
+			$this->assertSame($shortDescription, $broker->getFunction($functionName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $functionName);
+		}
+	}
+
+	/**
 	 * Tests getting of static variables.
 	 */
 	public function testStaticVariables()
@@ -273,5 +295,45 @@ class ReflectionFunctionTest extends Test
 			),
 			$rfl->token->getStaticVariables()
 		);
+	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalFunctionReflectionCreate()
+	{
+		Php\ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalFunctionGetParameter1()
+	{
+		$this->getInternalFunctionReflection()->getParameter('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalFunctionGetParameter2()
+	{
+		$this->getInternalFunctionReflection()->getParameter(999);
+	}
+
+	/**
+	 * Returns an internal function reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionFunction
+	 */
+	private function getInternalFunctionReflection()
+	{
+		return $this->getBroker()->getFunction('create_function');
 	}
 }

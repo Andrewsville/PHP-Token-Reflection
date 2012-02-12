@@ -46,8 +46,11 @@
 				<file name="ReflectionClass.php" role="php" />
 			</dir>
 			<dir name="Exception">
-				<file name="Parse.php" role="php" />
-				<file name="Runtime.php" role="php" />
+				<file name="BaseException.php" role="php" />
+				<file name="BrokerException.php" role="php" />
+				<file name="ParseException.php" role="php" />
+				<file name="RuntimeException.php" role="php" />
+				<file name="StreamException.php" role="php" />
 			</dir>
 			<dir name="Php">
 				<file name="IReflection.php" role="php" />
@@ -65,7 +68,6 @@
 				<file name="StringStream.php" role="php" />
 			</dir>
 			<file name="Broker.php" role="php" />
-			<file name="Exception.php" role="php" />
 			<file name="IReflection.php" role="php" />
 			<file name="IReflectionClass.php" role="php" />
 			<file name="IReflectionConstant.php" role="php" />

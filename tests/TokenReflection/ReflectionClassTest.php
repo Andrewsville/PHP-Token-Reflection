@@ -32,6 +32,416 @@ class ReflectionClassTest extends Test
 	protected $type = 'class';
 
 	/**
+	 * Tests the dummy class reflection interface.
+	 */
+	public function testDummyClass()
+	{
+		static $classNames = array(
+			'ns\\non-existent',
+			'non-existent'
+		);
+
+		$broker = $this->getBroker();
+
+		foreach ($classNames as $className) {
+			$this->assertFalse($broker->hasClass($className));
+
+			$class = $broker->getClass($className);
+			$this->assertInstanceOf('TokenReflection\Dummy\ReflectionClass', $class);
+
+			$nameParts = explode('\\', $className);
+			if (1 === count($nameParts)) {
+				$shortName = $nameParts[0];
+				$namespaceName = '';
+			} else {
+				$shortName = array_pop($nameParts);
+				$namespaceName = implode('\\', $nameParts);
+			}
+
+			$this->assertSame($className, $class->getName());
+			$this->assertSame($className, $class->getPrettyName());
+			$this->assertSame($shortName, $class->getShortName());
+			$this->assertSame($namespaceName, $class->getNamespaceName());
+
+			if (empty($namespaceName)) {
+				$this->assertFalse($class->inNamespace());
+			} else {
+				$this->assertTrue($class->inNamespace());
+			}
+
+			$this->assertNull($class->getExtension());
+			$this->assertFalse($class->getExtensionName());
+
+			$this->assertNull($class->getFileName());
+			$this->assertNull($class->getEndLine());
+			$this->assertNull($class->getStartLine());
+
+			$this->assertFalse($class->getDocComment());
+			$this->assertSame(array(), $class->getAnnotations());
+			$this->assertFalse($class->hasAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+			$this->assertNull($class->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+
+			$this->assertSame(0, $class->getModifiers());
+
+			$this->assertFalse($class->isAbstract());
+			$this->assertFalse($class->isFinal());
+			$this->assertFalse($class->isInternal());
+			$this->assertFalse($class->isInterface());
+			$this->assertFalse($class->isException());
+			$this->assertFalse($class->isInstantiable());
+			$this->assertFalse($class->isCloneable());
+			$this->assertFalse($class->isIterateable());
+			$this->assertFalse($class->isInternal());
+			$this->assertFalse($class->isUserDefined());
+			$this->assertFalse($class->isTokenized());
+			$this->assertFalse($class->isComplete());
+
+			$this->assertFalse($class->isTrait());
+			$this->assertSame(array(), $class->getTraits());
+			$this->assertSame(array(), $class->getTraitNames());
+			$this->assertSame(array(), $class->getOwnTraits());
+			$this->assertSame(array(), $class->getOwnTraitNames());
+			$this->assertSame(array(), $class->getTraitAliases());
+			$this->assertFalse($class->usesTrait('Any'));
+
+			$this->assertFalse($class->isSubclassOf('Any'));
+			$this->assertFalse($class->getParentClass());
+			$this->assertNull($class->getParentClassName());
+			$this->assertSame(array(), $class->getParentClasses());
+			$this->assertSame(array(), $class->getParentClassNameList());
+
+			$this->assertFalse($class->implementsInterface('Traversable'));
+			$this->assertFalse($class->implementsInterface($broker->getClass('Traversable')));
+			$this->assertSame(array(), $class->getInterfaces());
+			$this->assertSame(array(), $class->getOwnInterfaces());
+			$this->assertSame(array(), $class->getInterfaceNames());
+			$this->assertSame(array(), $class->getOwnInterfaceNames());
+
+			$this->assertNull($class->getConstructor());
+			$this->assertNull($class->getDestructor());
+
+			$this->assertFalse($class->hasMethod('Any'));
+			$this->assertFalse($class->hasOwnMethod('Any'));
+			$this->assertFalse($class->hasTraitMethod('Any'));
+			$this->assertSame(array(), $class->getMethods());
+			$this->assertSame(array(), $class->getOwnMethods());
+			$this->assertSame(array(), $class->getTraitMethods());
+
+			$this->assertFalse($class->hasConstant('Any'));
+			$this->assertFalse($class->hasOwnConstant('Any'));
+			$this->assertSame(array(), $class->getConstants());
+			$this->assertSame(array(), $class->getOwnConstants());
+			$this->assertSame(array(), $class->getConstantReflections());
+			$this->assertSame(array(), $class->getOwnConstantReflections());
+
+			$this->assertSame(array(), $class->getDefaultProperties());
+			$this->assertFalse($class->hasProperty('Any'));
+			$this->assertFalse($class->hasOwnProperty('Any'));
+			$this->assertFalse($class->hasTraitProperty('Any'));
+			$this->assertSame(array(), $class->getProperties());
+			$this->assertSame(array(), $class->getOwnProperties());
+			$this->assertSame(array(), $class->getTraitProperties());
+			$this->assertSame(array(), $class->getStaticProperties());
+
+			$this->assertSame(array(), $class->getDirectSubclasses());
+			$this->assertSame(array(), $class->getDirectSubclassNames());
+			$this->assertSame(array(), $class->getDirectImplementers());
+			$this->assertSame(array(), $class->getDirectImplementerNames());
+			$this->assertSame(array(), $class->getIndirectSubclasses());
+			$this->assertSame(array(), $class->getIndirectSubclassNames());
+			$this->assertSame(array(), $class->getIndirectImplementers());
+			$this->assertSame(array(), $class->getIndirectImplementerNames());
+
+			$this->assertFalse($class->isInstance(new \Exception()));
+
+			$this->assertSame('', $class->getSource());
+
+			$this->assertSame($broker, $class->getBroker());
+		}
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid object.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassImplementsInterface1()
+	{
+		$this->getDummyClassReflection()->implementsInterface(new \Exception());
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid object.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassImplementsInterface2()
+	{
+		$this->getDummyClassReflection()->implementsInterface($this->getBroker()->getClass('Exception'));
+	}
+
+	/**
+	 * Tests an exception thrown when getting a method from a dummy class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassGetMethod()
+	{
+		$this->getDummyClassReflection()->getMethod('any');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a property from a dummy class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassGetProperty()
+	{
+		$this->getDummyClassReflection()->getProperty('any');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a static property from a dummy class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassGetStaticProperty()
+	{
+		$this->getDummyClassReflection()->getStaticPropertyValue('any', null);
+	}
+
+	/**
+	 * Tests an exception thrown when setting a static property from a dummy class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassSetStaticProperty()
+	{
+		$this->getDummyClassReflection()->setStaticPropertyValue('foo', 'bar');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a constant value from a dummy class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassGetConstantValue()
+	{
+		$this->getDummyClassReflection()->getConstant('any');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a constant reflection from a dummy class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassGetConstantReflection()
+	{
+		$this->getDummyClassReflection()->getConstantReflection('any');
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid argument to isInstance() method.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyClassIsInstance()
+	{
+		$this->getDummyClassReflection()->isInstance(true);
+	}
+
+	/**
+	 * Tests an exception thrown when trying to instantiate a non existent class.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyNewInstanceWithoutConstructor()
+	{
+		$this->getDummyClassReflection()->newInstanceWithoutConstructor();
+	}
+
+	/**
+	 * Tests an exception thrown when trying to instantiate a non existent class.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyNewInstance()
+	{
+		$this->getDummyClassReflection()->newInstance(null);
+	}
+
+	/**
+	 * Tests an exception thrown when trying to instantiate a non existent class.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testDummyNewInstanceArgs()
+	{
+		$this->getDummyClassReflection()->newInstanceArgs();
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid object.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassIsSubclassOf()
+	{
+		$this->getInternalClassReflection()->isSubclassOf(new \Exception());
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid object.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassImplementsInterface1()
+	{
+		$this->getInternalClassReflection()->implementsInterface(new \Exception());
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid object.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassImplementsInterface2()
+	{
+		$this->getInternalClassReflection()->implementsInterface($this->getBroker()->getClass('Exception'));
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid class name.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassImplementsInterface3()
+	{
+		$this->getInternalClassReflection()->implementsInterface('Exception');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a method from an internal class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassGetMethod()
+	{
+		$this->getDummyClassReflection()->getMethod('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a property from an internal class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassGetProperty()
+	{
+		$this->getDummyClassReflection()->getProperty('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a static property from an internal class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassGetStaticProperty()
+	{
+		$this->getDummyClassReflection()->getStaticPropertyValue('~non-existent~', null);
+	}
+
+	/**
+	 * Tests an exception thrown when setting a static property from an internal class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassSetStaticProperty()
+	{
+		$this->getDummyClassReflection()->setStaticPropertyValue('~non', 'existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a constant value from an internal class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassGetConstantValue()
+	{
+		$this->getDummyClassReflection()->getConstant('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when getting a constant reflection from an internal class reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassGetConstantReflection()
+	{
+		$this->getDummyClassReflection()->getConstantReflection('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid object.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassUsesTrait1()
+	{
+		$this->getInternalClassReflection()->usesTrait(new \Exception());
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid object.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassUsesTrait2()
+	{
+		$this->getInternalClassReflection()->usesTrait($this->getBroker()->getClass('Exception'));
+	}
+
+	/**
+	 * Tests an exception thrown when providing an invalid class name.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassUsesTrait3()
+	{
+		$this->getInternalClassReflection()->usesTrait('Exception');
+	}
+
+	/**
+	 * Tests an exception thrown when it is impossible to create an instance without invoking the constructor.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassNewInstanceWithoutConstructor1()
+	{
+		$this->getInternalClassReflection()->newInstanceWithoutConstructor();
+	}
+
+	/**
+	 * Tests an exception thrown when it is impossible to create an instance without invoking the constructor.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassNewInstanceWithoutConstructor2()
+	{
+		$reflection = new Php\ReflectionClass('TokenReflection\Exception\RuntimeException', $this->getBroker());
+		$reflection->newInstanceWithoutConstructor();
+	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalClassReflectionCreate()
+	{
+		Php\ReflectionClass::create(new \ReflectionFunction('create_function'), $this->getBroker());
+	}
+
+	/**
 	 * Tests getting of class constants.
 	 */
 	public function testConstants()
@@ -123,12 +533,12 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->hasProperty('nonExistent'));
 		try {
 			$rfl->token->getProperty('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$this->assertSame($rfl->internal->getStaticPropertyValue('publicStatic'), $rfl->token->getStaticPropertyValue('publicStatic'));
@@ -136,22 +546,22 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->getStaticPropertyValue('protectedStatic');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->getStaticPropertyValue('privateStatic');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$this->assertSame($rfl->internal->setStaticPropertyValue('publicStatic', false), $rfl->token->setStaticPropertyValue('publicStatic', false));
@@ -161,22 +571,22 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->setStaticPropertyValue('protectedStatic', 0);
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->setStaticPropertyValue('privateStatic', '');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$rfl = $this->getClassReflection('noProperties');
@@ -195,32 +605,32 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->getProperty('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->getStaticPropertyValue('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$rfl->token->setStaticPropertyValue('property', 'property');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$rfl = $this->getClassReflection('doubleProperties');
@@ -357,12 +767,12 @@ class ReflectionClassTest extends Test
 		$this->assertFalse($rfl->token->hasMethod('nonExistent'));
 		try {
 			$rfl->token->getMethod('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$rfl = $this->getClassReflection('noMethods');
@@ -373,12 +783,12 @@ class ReflectionClassTest extends Test
 
 		try {
 			$rfl->token->getMethod('nonExistent');
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$this->assertSame($rfl->internal->hasMethod('nonExistent'), $rfl->token->hasMethod('nonExistent'));
@@ -974,11 +1384,11 @@ class ReflectionClassTest extends Test
 
 		try {
 			$token->newInstanceWithoutConstructor();
-			$this->fail('TokenReflection\Exception\Runtime expected.');
+			$this->fail('TokenReflection\Exception\RuntimeException expected.');
 		} catch (\Exception $e) {
-			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 
-			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+			if ($e->getCode() !== Exception\RuntimeException::UNSUPPORTED) {
 				throw $e;
 			}
 		}
@@ -999,11 +1409,11 @@ class ReflectionClassTest extends Test
 
 		try {
 			$token->newInstanceWithoutConstructor();
-			$this->fail('TokenReflection\Exception\Runtime expected.');
+			$this->fail('TokenReflection\Exception\RuntimeException expected.');
 		} catch (\Exception $e) {
-			$this->assertInstanceOf('TokenReflection\Exception\Runtime', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 
-			if ($e->getCode() !== Exception\Runtime::UNSUPPORTED) {
+			if ($e->getCode() !== Exception\RuntimeException::UNSUPPORTED) {
 				throw $e;
 			}
 		}
@@ -1033,5 +1443,53 @@ class ReflectionClassTest extends Test
 			// Try the internal reflection
 			$this->assertEquals($internal->newInstanceWithoutConstructor(), $token->newInstanceWithoutConstructor());
 		}
+	}
+
+	/**
+	 * Tests returning pretty class names.
+	 */
+	public function testPrettyNames()
+	{
+		static $names = array(
+			'ns1\\TokenReflection_Test_ClassPrettyNames',
+			'ns2\\ns3\\ns4\\TokenReflection_Test_ClassPrettyNames2',
+			'TokenReflection_Test_ClassPrettyNames3'
+		);
+
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('pretty-names'));
+
+		foreach ($names as $name) {
+			$this->assertTrue($broker->hasClass($name), $name);
+
+			$rfl = $broker->getClass($name);
+			$this->assertSame($rfl->getName(), $rfl->getPrettyName(), $name);
+		}
+	}
+
+	/**
+	 * Returns an internal class reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionClass
+	 */
+	private function getInternalClassReflection()
+	{
+		return $this->getBroker()->getClass('Exception');
+	}
+
+	/**
+	 * Returns a non existent class reflection.
+	 *
+	 * @return \TokenReflection\Dummy\ReflectionClass
+	 */
+	private function getDummyClassReflection()
+	{
+		static $className = 'foo_bar';
+
+		if (class_exists($className, false)) {
+			$this->markTestSkipped(sprintf('Class %s exists.', $className));
+		}
+
+		return $this->getBroker()->getClass($className);
 	}
 }

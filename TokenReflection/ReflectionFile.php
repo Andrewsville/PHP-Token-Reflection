@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Stream\StreamBase as Stream;
+use TokenReflection\Stream\StreamBase as Stream, TokenReflection\Exception;
 
 /**
  * Processed file class.
@@ -42,11 +42,11 @@ class ReflectionFile extends ReflectionBase
 	/**
 	 * Returns the string representation of the reflection object.
 	 *
-	 * @throws \TokenReflection\Exception\Runtime If the method is called, because it's unsupported.
+	 * @throws \TokenReflection\Exception\RuntimeException If the method is called, because it's unsupported.
 	 */
 	public function __toString()
 	{
-		throw new Exception\Runtime('__toString is not supported.', Exception\Runtime::UNSUPPORTED);
+		throw new Exception\RuntimeException('__toString is not supported.', Exception\RuntimeException::UNSUPPORTED, $this);
 	}
 
 	/**
@@ -55,11 +55,11 @@ class ReflectionFile extends ReflectionBase
 	 * @param \TokenReflection\Broker $broker Broker instance
 	 * @param string $argument Reflection object name
 	 * @param boolean $return Return the export instead of outputting it
-	 * @throws \TokenReflection\Exception\Runtime If the method is called, because it's unsupported.
+	 * @throws \TokenReflection\Exception\RuntimeException If the method is called, because it's unsupported.
 	 */
 	public static function export(Broker $broker, $argument, $return = false)
 	{
-		throw new Exception\Runtime('Export is not supported.', Exception\Runtime::UNSUPPORTED);
+		throw new Exception\RuntimeException('Export is not supported.', Exception\RuntimeException::UNSUPPORTED);
 	}
 
 	/**
@@ -78,7 +78,6 @@ class ReflectionFile extends ReflectionBase
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the file could not be parsed.
 	 */
 	protected function parseStream(Stream $tokenStream, IReflection $parent = null)
 	{
@@ -91,58 +90,54 @@ class ReflectionFile extends ReflectionBase
 
 		$docCommentPosition = null;
 
-		try {
-			if (!$tokenStream->is(T_OPEN_TAG)) {
-				$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
-			} else {
+		if (!$tokenStream->is(T_OPEN_TAG)) {
+			$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+		} else {
+			$tokenStream->skipWhitespaces();
+
+			while (null !== ($type = $tokenStream->getType())) {
+				switch ($type) {
+					case T_DOC_COMMENT:
+						if (null === $docCommentPosition) {
+							$docCommentPosition = $tokenStream->key();
+						}
+					case T_WHITESPACE:
+					case T_COMMENT:
+						break;
+					case T_DECLARE:
+						// Intentionally twice call of skipWhitespaces()
+						$tokenStream
+							->skipWhitespaces()
+							->findMatchingBracket()
+							->skipWhitespaces()
+							->skipWhitespaces();
+						break;
+					case T_NAMESPACE:
+						$docCommentPosition = $docCommentPosition ?: -1;
+						break 2;
+					default:
+						$docCommentPosition = $docCommentPosition ?: -1;
+						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+						break 2;
+				}
+
 				$tokenStream->skipWhitespaces();
+			}
 
-				while (null !== ($type = $tokenStream->getType())) {
-					switch ($type) {
-						case T_DOC_COMMENT:
-							if (null === $docCommentPosition) {
-								$docCommentPosition = $tokenStream->key();
-							}
-						case T_WHITESPACE:
-						case T_COMMENT:
-							break;
-						case T_DECLARE:
-							// Intentionally twice call of skipWhitespaces()
-							$tokenStream
-								->skipWhitespaces()
-								->findMatchingBracket()
-								->skipWhitespaces()
-								->skipWhitespaces();
-							break;
-						case T_NAMESPACE:
-							$docCommentPosition = $docCommentPosition ?: -1;
-							break 2;
-						default:
-							$docCommentPosition = $docCommentPosition ?: -1;
-							$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
-							break 2;
-					}
-
+			while (null !== ($type = $tokenStream->getType())) {
+				if (T_NAMESPACE === $type) {
+					$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+				} else {
 					$tokenStream->skipWhitespaces();
 				}
-
-				while (null !== ($type = $tokenStream->getType())) {
-					if (T_NAMESPACE === $type) {
-						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
-					} else {
-						$tokenStream->skipWhitespaces();
-					}
-				}
 			}
-
-			if (null !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
-				$docCommentPosition = null;
-			}
-			$this->docComment = new ReflectionAnnotation($this, null !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : null);
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse file contents.', Exception\Parse::PARSE_CHILDREN_ERROR, $e);
 		}
+
+		if (null !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
+			$docCommentPosition = null;
+		}
+		$this->docComment = new ReflectionAnnotation($this, null !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : null);
+
+		return $this;
 	}
 }

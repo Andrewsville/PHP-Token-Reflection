@@ -231,6 +231,16 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return sprintf('%s::$%s', $this->getDeclaringClassName(), $this->getName());
+	}
+
+	/**
 	 * Magic __get method.
 	 *
 	 * @param string $key Variable name
@@ -258,14 +268,14 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionProperty
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionProperty) {
-			throw new Exception\Runtime(sprintf('Invalid reflection instance provided: "%s", ReflectionProperty expected.', get_class($internalReflection)), Exception\Runtime::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();

@@ -90,12 +90,12 @@ class ReflectionParameterTest extends Test
 
 		try {
 			$rfl->token->getDefaultValue();
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 	}
 
@@ -239,5 +239,15 @@ class ReflectionParameterTest extends Test
 			$token = $rfl->token->getParameter($internal->getPosition());
 			$this->assertSame($internal->getDefaultValue(), $token->getDefaultValue());
 		}
+	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalParameterReflectionCreate()
+	{
+		Php\ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 }

@@ -78,7 +78,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 * @param string $function Function name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $function, $return = false)
 	{
@@ -86,7 +86,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 		$function = $broker->getFunction($functionName);
 		if (null === $function) {
-			throw new Exception\Runtime(sprintf('Function %s() does not exist.', $functionName), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 
 		if ($return) {
@@ -111,12 +111,12 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 *
 	 * @param array $args Function parameter values
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the required function does not exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If the required function does not exist.
 	 */
 	public function invokeArgs(array $args = array())
 	{
 		if (!function_exists($this->getName())) {
-			throw new Exception\Runtime(sprintf('Could not invoke function "%s"; function is not defined.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		return call_user_func_array($this->getName(), $args);
@@ -146,18 +146,19 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionElement
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
+	 * @throws \TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent)
+	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
 		if (!$parent instanceof ReflectionFileNamespace) {
-			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
+			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace.', Exception\ParseException::INVALID_PARENT);
 		}
 
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
-		return parent::processParent($parent);
+		return parent::processParent($parent, $tokenStream);
 	}
 
 	/**

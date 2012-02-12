@@ -44,12 +44,34 @@ class ReflectionFileTest extends Test
 		$fileReflection = $this->getBroker()->getFile($fileName);
 		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
 
+		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
+
 		$this->assertTrue($fileReflection->hasAnnotation('package'));
 		$this->assertTrue($fileReflection->hasAnnotation('author'));
 		$this->assertFalse($fileReflection->hasAnnotation('licence'));
 
 		$this->assertSame(array('package name'), $fileReflection->getAnnotation('package'));
 		$this->assertSame(array('author name'), $fileReflection->getAnnotation('author'));
+	}
+
+	/**
+	 * Tests file level docblocks.
+	 */
+	public function testNoDocComment()
+	{
+		$fileName = $this->getFilePath('noDocComment');
+		$this->getBroker()->processFile($fileName);
+
+		$this->assertTrue($this->getBroker()->hasFile($fileName));
+
+		$fileReflection = $this->getBroker()->getFile($fileName);
+		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+
+		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
+
+		$this->assertFalse($fileReflection->hasAnnotation('package'));
+		$this->assertFalse($fileReflection->hasAnnotation('author'));
+		$this->assertFalse($fileReflection->getDocComment());
 	}
 
 	/**
@@ -69,7 +91,7 @@ class ReflectionFileTest extends Test
 	/**
 	 * Tests throwing exceptions when requesting reflections of files that were not processed.
 	 *
-	 * @expectedException \TokenReflection\Exception\Runtime
+	 * @expectedException \TokenReflection\Exception\BrokerException
 	 */
 	public function testExceptionReturningFileReflection()
 	{

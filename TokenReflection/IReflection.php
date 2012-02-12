@@ -70,4 +70,11 @@ interface IReflection
 	 * @return boolean
 	 */
 	public function __isset($key);
+
+	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName();
 }

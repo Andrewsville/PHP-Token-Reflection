@@ -156,34 +156,30 @@ class Broker
 	 * @param string $fileName Used file name
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|\TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given file could not be processed.
 	 */
 	public function processString($source, $fileName, $returnReflectionFile = false)
 	{
-		try {
-			if ($this->backend->isFileProcessed($fileName)) {
-				$tokens = $this->backend->getFileTokens($fileName);
-			} else {
-				$tokens = new Stream\StringStream($source, $fileName);
-			}
+		if ($this->backend->isFileProcessed($fileName)) {
+			$tokens = $this->backend->getFileTokens($fileName);
+		} else {
+			$tokens = new Stream\StringStream($source, $fileName);
+		}
 
-			$reflectionFile = new ReflectionFile($tokens, $this);
-			if (!$this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($tokens, $reflectionFile);
+		$reflectionFile = new ReflectionFile($tokens, $this);
+		if (!$this->backend->isFileProcessed($fileName)) {
+			$this->backend->addFile($tokens, $reflectionFile);
 
-				// Clear the cache - leave only tokenized reflections
-				foreach ($this->cache as $type => $cached) {
-					if (!empty($cached)) {
-						$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
-							return $reflection->isTokenized();
-						});
-					}
+			// Clear the cache - leave only tokenized reflections
+			foreach ($this->cache as $type => $cached) {
+				if (!empty($cached)) {
+					$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
+						return $reflection->isTokenized();
+					});
 				}
 			}
-			return $returnReflectionFile ? $reflectionFile : true;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not process the source code.', 0, $e);
 		}
+
+		return $returnReflectionFile ? $reflectionFile : true;
 	}
 
 	/**
@@ -192,7 +188,7 @@ class Broker
 	 * @param string $fileName Filename
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|\TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given file could not be processed.
+	 * @throws \TokenReflection\Exception\BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName, $returnReflectionFile = false)
 	{
@@ -216,9 +212,12 @@ class Broker
 					}
 				}
 			}
+
 			return $returnReflectionFile ? $reflectionFile : true;
-		} catch (Exception $e) {
-			throw new Exception\Parse(sprintf('Could not process file %s.', $fileName), 0, $e);
+		} catch (Exception\ParseException $e) {
+			throw $e;
+		} catch (Exception\StreamException $e) {
+			throw new Exception\BrokerException($this, 'Could not process the file.', 0, $e);
 		}
 	}
 
@@ -228,19 +227,21 @@ class Broker
 	 * @param string $fileName Archive filename.
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array of \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given archive could not be processed.
+	 * @throws \TokenReflection\Exception\BrokerException If the PHAR PHP extension is not loaded.
+	 * @throws \TokenReflection\Exception\BrokerException If the given archive could not be read.
+	 * @throws \TokenReflection\Exception\BrokerException If the given archive could not be processed.
 	 */
 	public function processPhar($fileName, $returnReflectionFile = false)
 	{
+		if (!is_file($fileName)) {
+			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+		}
+
+		if (!extension_loaded('Phar')) {
+			throw new Exception\BrokerException($this, 'The PHAR PHP extension is not loaded.', Exception\BrokerException::PHP_EXT_MISSING);
+		}
+
 		try {
-			if (!is_file($fileName)) {
-				throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
-			}
-
-			if (!extension_loaded('Phar')) {
-				throw new Exception\Parse('The PHAR PHP extension is not loaded.', Exception\Parse::UNSUPPORTED);
-			}
-
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new \Phar($fileName)) as $entry) {
 				if ($entry->isFile()) {
@@ -249,8 +250,10 @@ class Broker
 			}
 
 			return $returnReflectionFile ? $result : true;
-		} catch (\Exception $e) {
-			throw new Exception\Parse(sprintf('Could not process PHAR archive %s.', $fileName), 0, $e);
+		} catch (Exception\ParseException $e) {
+			throw $e;
+		} catch (Exception\StreamException $e) {
+			throw new Exception\BrokerException($this, 'Could not process the archive.', 0, $e);
 		}
 	}
 
@@ -261,16 +264,17 @@ class Broker
 	 * @param string|array $filters Filename filters
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array of \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the given directory could not be processed
+	 * @throws \TokenReflection\Exception\BrokerException If the given directory does not exist.
+	 * @throws \TokenReflection\Exception\BrokerException If the given directory could not be processed.
 	 */
 	public function processDirectory($path, $filters = array(), $returnReflectionFile = false)
 	{
-		try {
-			$realPath = realpath($path);
-			if (!is_dir($realPath)) {
-				throw new Exception\Parse('Directory does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
-			}
+		$realPath = realpath($path);
+		if (!is_dir($realPath)) {
+			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+		}
 
+		try {
 			$result = array();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
 				if ($entry->isFile()) {
@@ -291,8 +295,10 @@ class Broker
 			}
 
 			return $returnReflectionFile ? $result : true;
-		} catch (Exception $e) {
-			throw new Exception\Parse(sprintf('Could not process directory %s.', $path), 0, $e);
+		} catch (Exception\ParseException $e) {
+			throw $e;
+		} catch (Exception\StreamException $e) {
+			throw new Exception\BrokerException($this, 'Could not process the directory.', 0, $e);
 		}
 	}
 
@@ -302,7 +308,7 @@ class Broker
 	 * @param string $path Path
 	 * @param boolean $returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|array|\TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Parse If the target could not be processed.
+	 * @throws \TokenReflection\Exception\BrokerException If the target does not exist.
 	 */
 	public function process($path, $returnReflectionFile = false)
 	{
@@ -310,18 +316,12 @@ class Broker
 			return $this->processDirectory($path, array(), $returnReflectionFile);
 		} elseif (is_file($path)) {
 			if (preg_match('~\\.phar(?:$|\\.)~i', $path)) {
-				try {
-					return $this->processPhar($path, $returnReflectionFile);
-				} catch (Exception\Parse $e) {
-					if (!($ex = $e->getPrevious()) || !($ex instanceof \UnexpectedValueException)) {
-						throw $e;
-					}
-				}
+				return $this->processPhar($path, $returnReflectionFile);
 			}
 
 			return $this->processFile($path, $returnReflectionFile);
 		} else {
-			throw new Exception\Parse(sprintf('Could not process target %s; target does not exist.', $path));
+			throw new Exception\BrokerException($this, 'The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -519,15 +519,10 @@ class Broker
 	 *
 	 * @param string $fileName File name
 	 * @return \TokenReflection\Stream\StreamBase|null
-	 * @throws \TokenReflection\Exception\Runtime If there is no stored token stream for the provided filename.
 	 */
 	public function getFileTokens($fileName)
 	{
-		try {
-			return $this->backend->getFileTokens($fileName);
-		} catch (Exception $e) {
-			throw new Exception\Runtime(sprintf('Could not retrieve token stream for file %s.', $fileName), 0, $e);
-		}
+		return $this->backend->getFileTokens($fileName);
 	}
 
 	/**

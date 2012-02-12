@@ -152,7 +152,7 @@ interface Backend
 	 *
 	 * @param string $fileName File name
 	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Runtime If the requested file has not been processed
+	 * @throws \TokenReflection\Exception\RuntimeException If the requested file has not been processed
 	 */
 	public function getFile($fileName);
 

@@ -93,13 +93,13 @@ abstract class ReflectionElement extends ReflectionBase
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @throws \TokenReflection\Exception\Runtime If the token stream is empty
+	 * @throws \TokenReflection\Exception\RuntimeException If the token stream is empty
 	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
 	 */
 	final public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = null)
 	{
 		if (0 === $tokenStream->count()) {
-			throw new Exception\Runtime('Reflection token stream must not be empty.', Exception\Runtime::INVALID_ARGUMENT);
+			throw new Exception\ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', Exception\ParseException::INVALID_ARGUMENT);
 		}
 
 		parent::__construct($tokenStream, $broker, $parent);
@@ -110,47 +110,18 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @param Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @throws \TokenReflection\Exception\Runtime If the token stream is empty
-	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
 	 */
 	final protected function parseStream(Stream $tokenStream, IReflection $parent = null)
 	{
 		$this->fileName = $tokenStream->getFileName();
 
-		try {
-			$this
-				->processParent($parent)
-				->parseStartLine($tokenStream)
-				->parseDocComment($tokenStream, $parent)
-				->parse($tokenStream, $parent);
-		} catch (Exception $e) {
-			$message = 'Could not parse %s.';
-			if (null !== $this->name) {
-				$message = sprintf($message, get_class($this) . ' ' . $this->getName());
-			} else {
-				$message = sprintf($message, get_class($this));
-			}
-
-			throw new Exception\Parse($message, Exception\Parse::PARSE_ELEMENT_ERROR, $e);
-		}
-
-		try {
-			$this->parseChildren($tokenStream, $parent);
-		} catch (Exception $e) {
-			throw new Exception\Parse(sprintf('Could not parse %s %s child elements.', get_class($this), $this->getName()), Exception\Parse::PARSE_CHILDREN_ERROR, $e);
-		}
-
-		$this->parseEndLine($tokenStream);
-	}
-
-	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
+		$this
+			->processParent($parent, $tokenStream)
+			->parseStartLine($tokenStream)
+			->parseDocComment($tokenStream, $parent)
+			->parse($tokenStream, $parent)
+			->parseChildren($tokenStream, $parent)
+			->parseEndLine($tokenStream);
 	}
 
 	/**
@@ -167,7 +138,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 * Returns a file reflection.
 	 *
 	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\Runtime If the file is not stored inside the broker
+	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
 	{
@@ -269,9 +240,10 @@ abstract class ReflectionElement extends ReflectionBase
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\Reflection $parent Parent reflection object
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionElement
 	 */
-	protected function processParent(IReflection $parent)
+	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
 		// To be defined in child classes
 		return $this;
