@@ -352,16 +352,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 	/**
-	 * Returns static variables.
-	 *
-	 * @return array
-	 */
-	public function getStaticVariables()
-	{
-		return $this->declaringClassName === $this->declaringTraitName || null === $this->declaringTraitName ? parent::getStaticVariables() : array();
-	}
-
-	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
 	 * @return string
