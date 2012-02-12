@@ -357,7 +357,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 		$value = $tokenStream->getTokenValue();
 		if (null === $type || (',' !== $value && ';' !== $value)) {
-			throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\ParseException::LOGICAL_ERROR);
+			throw new Exception\ParseException($this, $tokenStream, 'Invalid value definition.', Exception\ParseException::LOGICAL_ERROR);
 		}
 
 		return $this;
