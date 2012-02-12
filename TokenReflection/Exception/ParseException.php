@@ -61,6 +61,13 @@ class ParseException extends StreamException
 	private $token;
 
 	/**
+	 * The name of the token that caused the exception to be thrown.
+	 *
+	 * @var string|null
+	 */
+	private $tokenName;
+
+	/**
 	 * Boundaries of the token substream around the token.
 	 *
 	 * @var array
@@ -93,6 +100,7 @@ class ParseException extends StreamException
 
 		if (!empty($token) && !empty($position)) {
 			$this->token = $token;
+			$this->tokenName = $tokenStream->getTokenName();
 
 			$line = $this->token[2];
 
@@ -152,11 +160,13 @@ class ParseException extends StreamException
 
 			$startLine = $stream[$lo][2];
 			$width = strlen($startLine + count($lines) - 1);
+			$errorLine = $this->token[2];
+			$actualLine = $startLine;
 
 			$code = implode(
 				"\n",
-				array_map(function($line) use(&$startLine, $width) {
-					return str_pad($startLine++, $width, ' ', STR_PAD_LEFT) . ': ' . $line;
+				array_map(function($line) use(&$actualLine, $width, $errorLine) {
+					return ($actualLine === $errorLine ? '*' : ' ') . str_pad($actualLine++, $width, ' ', STR_PAD_LEFT) . ': ' . $line;
 				}, $lines)
 			);
 		}
@@ -189,7 +199,7 @@ class ParseException extends StreamException
 			return parent::getDetail() .
 				sprintf(
 					"\nThe cause of the exception was the %s token (line %s) in following part of %s source code:\n\n%s",
-					StreamBase::getTokenName($this->token[0]),
+					$this->tokenName,
 					$this->token[2],
 					$this->sender && $this->sender->getName() ? $this->sender->getPrettyName() : 'the',
 					$this->getSourcePart(true)

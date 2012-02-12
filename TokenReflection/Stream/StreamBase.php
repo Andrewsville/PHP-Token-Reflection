@@ -296,6 +296,8 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			return 'T_TRAIT';
 		} elseif (T_INSTEADOF === $type) {
 			return 'T_INSTEADOF';
+		} elseif (T_CALLABLE === $type) {
+			return 'T_CALLABLE';
 		}
 
 		return token_name($type);
