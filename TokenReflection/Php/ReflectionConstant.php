@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -72,7 +72,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * @param mixed $value Constant value
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\Php\ReflectionClass $parent Defining class reflection
-	 * @throws \TokenReflection\Exception\Parse If real parent class could not be determined.
+	 * @throws \TokenReflection\Exception\RuntimeException If real parent class could not be determined.
 	 */
 	public function __construct($name, $value, Broker $broker, ReflectionClass $parent = null)
 	{
@@ -105,7 +105,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 			}
 
 			if (null === $realParent) {
-				throw new Exception\Parse('Could not determine constant real parent class.', Exception::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Could not determine constant real parent class.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			$this->declaringClassName = $realParent->getName();
@@ -323,6 +323,16 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return null === $this->declaringClassName ? $this->name : sprintf('%s::%s', $this->declaringClassName, $this->name);
+	}
+
+	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string
@@ -345,7 +355,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * @param string $constant Constant name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $constant, $return = false)
 	{
@@ -353,14 +363,15 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 		$constantName = $constant;
 
 		if (null === $className) {
-			$constant = $broker->getConstant($constantName);
-			if (null === $constant) {
-				throw new Exception\Runtime(sprintf('Constant %s does not exist.', $constantName), Exception\Runtime::DOES_NOT_EXIST);
+			try {
+				$constant = $broker->getConstant($constantName);
+			} catch (Exception\BrokerException $e) {
+				throw new Exception\RuntimeException(sprintf('Constant %s does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 		} else {
 			$class = $broker->getClass($className);
 			if ($class instanceof Dummy\ReflectionClass) {
-				throw new Exception\Runtime(sprintf('Class %s does not exist.', $className), Exception\Runtime::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 			$constant = $class->getConstantReflection($constantName);
 		}

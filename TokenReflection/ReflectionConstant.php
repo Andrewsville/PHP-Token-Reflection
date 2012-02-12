@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection;
 
-use TokenReflection\Stream\StreamBase as Stream;
+use TokenReflection\Stream\StreamBase as Stream, TokenReflection\Exception;
 
 /**
  * Tokenized constant reflection.
@@ -174,7 +174,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 * @param string $constant Constant name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $constant, $return = false)
 	{
@@ -184,12 +184,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		if (null === $className) {
 			$constant = $broker->getConstant($constantName);
 			if (null === $constant) {
-				throw new Exception\Runtime(sprintf('Constant %s does not exist.', $constantName), Exception\Runtime::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Constant does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 		} else {
 			$class = $broker->getClass($className);
 			if ($class instanceof Dummy\ReflectionClass) {
-				throw new Exception\Runtime(sprintf('Class %s does not exist.', $className), Exception\Runtime::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $class);
 			}
 			$constant = $class->getConstantReflection($constantName);
 		}
@@ -212,13 +212,24 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return null === $this->declaringClassName ? parent::getPrettyName() : sprintf('%s::%s', $this->declaringClassName, $this->name);
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionElement
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
+	 * @throws \TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent)
+	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
 		if ($parent instanceof ReflectionFileNamespace) {
 			$this->namespaceName = $parent->getName();
@@ -226,10 +237,10 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		} elseif ($parent instanceof ReflectionClass) {
 			$this->declaringClassName = $parent->getName();
 		} else {
-			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFileNamespace or TokenReflection\ReflectionClass, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
+			throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), Exception\ParseException::INVALID_PARENT);
 		}
 
-		return parent::processParent($parent);
+		return parent::processParent($parent, $tokenStream);
 	}
 
 	/**
@@ -282,27 +293,23 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 *
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant name could not be determined.
+	 * @throws \TokenReflection\Exception\ParseReflection If the constant name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		try {
-			if (!$tokenStream->is(T_STRING)) {
-				throw new Exception\Parse('The constant name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			if (null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
-				$this->name = $tokenStream->getTokenValue();
-			} else {
-				$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
-			}
-
-			$tokenStream->skipWhitespaces(true);
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse constant name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		if (!$tokenStream->is(T_STRING)) {
+			throw new Exception\ParseException($this, $tokenStream, 'The constant name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
 		}
+
+		if (null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
+			$this->name = $tokenStream->getTokenValue();
+		} else {
+			$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
+		}
+
+		$tokenStream->skipWhitespaces(true);
+
+		return $this;
 	}
 
 	/**
@@ -311,52 +318,48 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @return \TokenReflection\ReflectionConstant
-	 * @throws \TokenReflection\Exception\Parse If the constant value could not be determined.
+	 * @throws \TokenReflection\Exception\ParseException If the constant value could not be determined.
 	 */
 	private function parseValue(Stream $tokenStream, IReflection $parent)
 	{
-		try {
-			if (!$tokenStream->is('=')) {
-				throw new Exception\Parse('Could not find the definition start.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			$tokenStream->skipWhitespaces(true);
-
-			static $acceptedTokens = array(
-				'-' => true,
-				'+' => true,
-				T_STRING => true,
-				T_NS_SEPARATOR => true,
-				T_CONSTANT_ENCAPSED_STRING => true,
-				T_DNUMBER => true,
-				T_LNUMBER => true,
-				T_DOUBLE_COLON => true,
-				T_CLASS_C => true,
-				T_DIR => true,
-				T_FILE => true,
-				T_FUNC_C => true,
-				T_LINE => true,
-				T_METHOD_C => true,
-				T_NS_C => true,
-				T_TRAIT_C => true
-			);
-			while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
-				$this->valueDefinition[] = $tokenStream->current();
-				$tokenStream->next();
-			}
-
-			if (empty($this->valueDefinition)) {
-				throw new Exception\Parse('Value definition is empty.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			$value = $tokenStream->getTokenValue();
-			if (null === $type || (',' !== $value && ';' !== $value)) {
-				throw new Exception\Parse(sprintf('Invalid value definition: "%s".', $this->valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse constant value.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		if (!$tokenStream->is('=')) {
+			throw new Exception\ParseException($this, $tokenStream, 'Could not find the definition start.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
+
+		$tokenStream->skipWhitespaces(true);
+
+		static $acceptedTokens = array(
+			'-' => true,
+			'+' => true,
+			T_STRING => true,
+			T_NS_SEPARATOR => true,
+			T_CONSTANT_ENCAPSED_STRING => true,
+			T_DNUMBER => true,
+			T_LNUMBER => true,
+			T_DOUBLE_COLON => true,
+			T_CLASS_C => true,
+			T_DIR => true,
+			T_FILE => true,
+			T_FUNC_C => true,
+			T_LINE => true,
+			T_METHOD_C => true,
+			T_NS_C => true,
+			T_TRAIT_C => true
+		);
+		while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
+			$this->valueDefinition[] = $tokenStream->current();
+			$tokenStream->next();
+		}
+
+		if (empty($this->valueDefinition)) {
+			throw new Exception\ParseException($this, $tokenStream, 'Value definition is empty.', Exception\ParseException::LOGICAL_ERROR);
+		}
+
+		$value = $tokenStream->getTokenValue();
+		if (null === $type || (',' !== $value && ';' !== $value)) {
+			throw new Exception\ParseException($this, $tokenStream, 'Invalid value definition.', Exception\ParseException::LOGICAL_ERROR);
+		}
+
+		return $this;
 	}
 }

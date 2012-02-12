@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -21,9 +21,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Parameter test.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class ReflectionParameterTest extends Test
 {
@@ -93,12 +90,12 @@ class ReflectionParameterTest extends Test
 
 		try {
 			$rfl->token->getDefaultValue();
-			$this->fail('Expected exception \TokenReflection\Exception.');
+			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 	}
 
@@ -224,5 +221,33 @@ class ReflectionParameterTest extends Test
 
 		$this->assertSame($grandParent->token->getAnnotation('param'), $parent->token->getAnnotation('param'));
 		$this->assertSame(count($grandParent->token->getAnnotation('param')), count($rfl->token->getAnnotation('param')));
+	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$rfl = $this->getFunctionReflection('54features');
+
+		$this->assertSame(3, $rfl->internal->getNumberOfParameters());
+		foreach ($rfl->internal->getParameters() as $internal){
+			$token = $rfl->token->getParameter($internal->getPosition());
+			$this->assertSame($internal->getDefaultValue(), $token->getDefaultValue());
+		}
+	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalParameterReflectionCreate()
+	{
+		Php\ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 }

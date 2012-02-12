@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -216,6 +216,16 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return $this->getName();
+	}
+
+	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
 	 * @return \TokenReflection\Broker
@@ -263,14 +273,14 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\ReflectionExtension
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionExtension) {
-			throw new Exception\Runtime(sprintf('Invalid reflection instance provided: "%s", ReflectionExtension expected.', get_class($internalReflection)), Exception\Runtime::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		if (!isset($cache[$internalReflection->getName()])) {

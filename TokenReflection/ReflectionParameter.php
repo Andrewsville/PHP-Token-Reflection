@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -146,18 +146,18 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * Returns the default value.
 	 *
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If the property is not optional.
-	 * @throws \TokenReflection\Exception\Runtime If the property has no default value.
+	 * @throws \TokenReflection\Exception\RuntimeException If the property is not optional.
+	 * @throws \TokenReflection\Exception\RuntimeException If the property has no default value.
 	 */
 	public function getDefaultValue()
 	{
 		if (!$this->isOptional()) {
-			throw new Exception\Runtime(sprintf('Property "%s" is not optional.', $this->name), Exception\Runtime::UNSUPPORTED);
+			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 
 		if (is_array($this->defaultValueDefinition)) {
 			if (0 === count($this->defaultValueDefinition)) {
-				throw new Exception\Runtime(sprintf('Property "%s" has no default value.', $this->name), Exception\Runtime::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException('Property has no default value.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
@@ -236,7 +236,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * Returns the required class name of the value.
 	 *
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If the type hint class FQN could not be determined.
+	 * @throws \TokenReflection\Exception\RuntimeException If the type hint class FQN could not be determined.
 	 */
 	public function getClassName()
 	{
@@ -244,44 +244,40 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			return null;
 		}
 
-		try {
-			if (null === $this->typeHint && null !== $this->originalTypeHint) {
-				if (null !== $this->declaringClassName) {
-					$parent = $this->getDeclaringClass();
-					if (null === $parent) {
-						throw new Exception\Runtime(sprintf('Could not load class "%s" reflection.', $this->declaringClassName), Exception\Runtime::DOES_NOT_EXIST);
-					}
-				} else {
-					$parent = $this->getDeclaringFunction();
-					if (null === $parent || !$parent->isTokenized()) {
-						throw new Exception\Runtime(sprintf('Could not load function "%s" reflection.', $this->declaringFunctionName), Exception\Runtime::DOES_NOT_EXIST);
-					}
+		if (null === $this->typeHint && null !== $this->originalTypeHint) {
+			if (null !== $this->declaringClassName) {
+				$parent = $this->getDeclaringClass();
+				if (null === $parent) {
+					throw new Exception\RuntimeException('Could not load class reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 				}
-
-				$lTypeHint = strtolower($this->originalTypeHint);
-				if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
-					if (null === $this->declaringClassName) {
-						throw new Exception\Runtime('Parameter type hint cannot be "self" nor "parent" when not a method.', Exception::UNSUPPORTED);
-					}
-
-					if ('parent' === $lTypeHint) {
-						if ($parent->isInterface() || null === $parent->getParentClassName()) {
-							throw new Exception\Runtime(sprintf('Class "%s" has no parent.', $this->declaringClassName), Exception::DOES_NOT_EXIST);
-						}
-
-						$this->typeHint = $parent->getParentClassName();
-					} else {
-						$this->typeHint = $this->declaringClassName;
-					}
-				} else {
-					$this->typeHint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+			} else {
+				$parent = $this->getDeclaringFunction();
+				if (null === $parent || !$parent->isTokenized()) {
+					throw new Exception\RuntimeException('Could not load function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			}
 
-			return $this->typeHint;
-		} catch (Exception\Runtime $e) {
-			throw new Exception\Runtime('Could not determine the class type hint FQN.', 0, $e);
+			$lTypeHint = strtolower($this->originalTypeHint);
+			if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
+				if (null === $this->declaringClassName) {
+					throw new Exception\RuntimeException('Parameter type hint cannot be "self" nor "parent" when not a method.', Exception\RuntimeException::UNSUPPORTED, $this);
+				}
+
+				if ('parent' === $lTypeHint) {
+					if ($parent->isInterface() || null === $parent->getParentClassName()) {
+						throw new Exception\RuntimeException('Class has no parent.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+					}
+
+					$this->typeHint = $parent->getParentClassName();
+				} else {
+					$this->typeHint = $this->declaringClassName;
+				}
+			} else {
+				$this->typeHint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
+			}
 		}
+
+		return $this->typeHint;
 	}
 
 	/**
@@ -302,30 +298,26 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * Returns if the parameter is optional.
 	 *
 	 * @return boolean
-	 * @throws \TokenReflection\Exception\Runtime If it is not possible to determine if the parameter is optional.
+	 * @throws \TokenReflection\Exception\RuntimeException If it is not possible to determine if the parameter is optional.
 	 */
 	public function isOptional()
 	{
-		try {
-			if (null === $this->isOptional) {
-				$function = $this->getDeclaringFunction();
-				if (null === $function) {
-					throw new Exception\Runtime(sprintf('Could not get the declaring function "%s" reflection.', $this->declaringFunctionName), Exception\Runtime::DOES_NOT_EXIST);
-				}
-
-				$this->isOptional = true;
-				foreach (array_slice($function->getParameters(), $this->position) as $reflectionParameter) {
-					if (!$reflectionParameter->isDefaultValueAvailable()) {
-						$this->isOptional = false;
-						break;
-					}
-				}
+		if (null === $this->isOptional) {
+			$function = $this->getDeclaringFunction();
+			if (null === $function) {
+				throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
-			return $this->isOptional;
-		} catch (Exception\Runtime $e) {
-			throw new Exception\Runtime(sprintf('Could not determine if parameter "%s" is optional.', $this->name), 0, $e);
+			$this->isOptional = true;
+			foreach (array_slice($function->getParameters(), $this->position) as $reflectionParameter) {
+				if (!$reflectionParameter->isDefaultValueAvailable()) {
+					$this->isOptional = false;
+					break;
+				}
+			}
 		}
+
+		return $this->isOptional;
 	}
 
 	/**
@@ -346,6 +338,16 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function canBePassedByValue()
 	{
 		return !$this->isPassedByReference();
+	}
+
+	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return str_replace('()', '($' . $this->name . ')', $this->getDeclaringFunction()->getPrettyName());
 	}
 
 	/**
@@ -405,7 +407,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * @param string $parameter Parameter name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $function, $parameter, $return = false)
 	{
@@ -414,7 +416,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 		$function = $broker->getFunction($functionName);
 		if (null === $function) {
-			throw new Exception\Runtime(sprintf('Function %s() does not exist.', $functionName), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$parameter = $function->getParameter($parameterName);
 
@@ -455,13 +457,14 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionElement
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
+	 * @throws \TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent)
+	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
 		if (!$parent instanceof ReflectionFunctionBase) {
-			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionFunctionBase, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
+			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', Exception\ParseException::INVALID_PARENT);
 		}
 
 		// Declaring function name
@@ -475,7 +478,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			$this->declaringClassName = $parent->getDeclaringClassName();
 		}
 
-		return parent::processParent($parent);
+		return parent::processParent($parent, $tokenStream);
 	}
 
 	/**
@@ -499,37 +502,33 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the type hint class name could not be determined.
+	 * @throws \TokenReflection\Exception\ParseException If the type hint class name could not be determined.
 	 */
 	private function parseTypeHint(Stream $tokenStream)
 	{
-		try {
-			$type = $tokenStream->getType();
+		$type = $tokenStream->getType();
 
-			if (T_ARRAY === $type) {
-				$this->typeHint = self::ARRAY_TYPE_HINT;
-				$this->originalTypeHint = self::ARRAY_TYPE_HINT;
+		if (T_ARRAY === $type) {
+			$this->typeHint = self::ARRAY_TYPE_HINT;
+			$this->originalTypeHint = self::ARRAY_TYPE_HINT;
+			$tokenStream->skipWhitespaces(true);
+		} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
+			$className = '';
+			do {
+				$className .= $tokenStream->getTokenValue();
+
 				$tokenStream->skipWhitespaces(true);
-			} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
-				$className = '';
-				do {
-					$className .= $tokenStream->getTokenValue();
+				$type = $tokenStream->getType();
+			} while (T_STRING === $type || T_NS_SEPARATOR === $type);
 
-					$tokenStream->skipWhitespaces(true);
-					$type = $tokenStream->getType();
-				} while (T_STRING === $type || T_NS_SEPARATOR === $type);
-
-				if ('' === ltrim($className, '\\')) {
-					throw new Exception\Parse(sprintf('Invalid class name definition: "%s".', $className), Exception\Parse::PARSE_ELEMENT_ERROR);
-				}
-
-				$this->originalTypeHint = $className;
+			if ('' === ltrim($className, '\\')) {
+				throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid class name definition: "%s".', $className), Exception\ParseException::LOGICAL_ERROR);
 			}
 
-			return $this;
-		} catch (Exception\Parse $e) {
-			throw new Exception\Parse('Could not parse the value constaint class name.', 0, $e);
+			$this->originalTypeHint = $className;
 		}
+
+		return $this;
 	}
 
 	/**
@@ -553,24 +552,19 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined.
-	 * @throws \TokenReflection\Exception\Parse If the parameter name could not be determined.
+	 * @throws \TokenReflection\Exception\ParseException If the parameter name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		try {
-			if (!$tokenStream->is(T_VARIABLE)) {
-				throw new Exception\Parse('The parameter name could not be determined.', Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-
-			$this->name = substr($tokenStream->getTokenValue(), 1);
-
-			$tokenStream->skipWhitespaces(true);
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse parameter name.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+		if (!$tokenStream->is(T_VARIABLE)) {
+			throw new Exception\ParseException($this, $tokenStream, 'The parameter name could not be determined.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
+
+		$this->name = substr($tokenStream->getTokenValue(), 1);
+
+		$tokenStream->skipWhitespaces(true);
+
+		return $this;
 	}
 
 	/**
@@ -578,51 +572,47 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Parse If the default value could not be determined.
+	 * @throws \TokenReflection\Exception\ParseException If the default value could not be determined.
 	 */
 	private function parseDefaultValue(Stream $tokenStream)
 	{
-		try {
-			if ($tokenStream->is('=')) {
-				$tokenStream->skipWhitespaces(true);
+		if ($tokenStream->is('=')) {
+			$tokenStream->skipWhitespaces(true);
 
-				$level = 0;
-				while (null !== ($type = $tokenStream->getType())) {
-					switch ($type) {
-						case ')':
-							if (0 === $level) {
-								break 2;
-							}
-						case '}':
-						case ']':
-							$level--;
-							break;
-						case '(':
-						case '{':
-						case '[':
-							$level++;
-							break;
-						case ',':
-							if (0 === $level) {
-								break 2;
-							}
-							break;
-						default:
-							break;
-					}
-
-					$this->defaultValueDefinition[] = $tokenStream->current();
-					$tokenStream->next();
+			$level = 0;
+			while (null !== ($type = $tokenStream->getType())) {
+				switch ($type) {
+					case ')':
+						if (0 === $level) {
+							break 2;
+						}
+					case '}':
+					case ']':
+						$level--;
+						break;
+					case '(':
+					case '{':
+					case '[':
+						$level++;
+						break;
+					case ',':
+						if (0 === $level) {
+							break 2;
+						}
+						break;
+					default:
+						break;
 				}
 
-				if (')' !== $type && ',' !== $type) {
-					throw new Exception\Parse(sprintf('The property default value is not terminated properly. Expected "," or ")", "%s" found.', $tokenStream->getTokenName()), Exception\Parse::PARSE_ELEMENT_ERROR);
-				}
+				$this->defaultValueDefinition[] = $tokenStream->current();
+				$tokenStream->next();
 			}
 
-			return $this;
-		} catch (Exception\Parse $e) {
-			throw new Exception\Parse('Could not parse the default value.', 0, $e);
+			if (')' !== $type && ',' !== $type) {
+				throw new Exception\ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ")".', Exception\ParseException::UNEXPECTED_TOKEN);
+			}
 		}
+
+		return $this;
 	}
 }

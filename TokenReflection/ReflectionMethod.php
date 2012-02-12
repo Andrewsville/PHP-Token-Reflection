@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -312,7 +312,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * Returns the method prototype.
 	 *
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Runtime If the method has no prototype.
+	 * @throws \TokenReflection\Exception\RuntimeException If the method has no prototype.
 	 */
 	public function getPrototype()
 	{
@@ -326,7 +326,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 				if (!$method->isPrivate()) {
 					try {
 						$prototype = $method->getPrototype();
-					} catch (\Exception $e) {
+					} catch (Exception\RuntimeException $e) {
 						$prototype = $method;
 					}
 				}
@@ -345,20 +345,20 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 
 		if (empty($this->prototype)) {
-			throw new Exception\Runtime(sprintf('Method "%s::%s()" has no prototype.', $this->declaringClassName, $this->name), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException('Method has no prototype.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 
 		return $this->prototype;
 	}
 
 	/**
-	 * Returns static variables.
+	 * Returns an element pretty (docblock compatible) name.
 	 *
-	 * @return array
+	 * @return string
 	 */
-	public function getStaticVariables()
+	public function getPrettyName()
 	{
-		return $this->declaringClassName === $this->declaringTraitName || null === $this->declaringTraitName ? parent::getStaticVariables() : array();
+		return sprintf('%s::%s', null !== $this->declaringClassName ?: $this->declaringTraitName, parent::getPrettyName());
 	}
 
 	/**
@@ -375,7 +375,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		$declaringClassParent = $this->getDeclaringClass()->getParentClass();
 		try {
 			$prototype = ', prototype ' . $this->getPrototype()->getDeclaringClassName();
-		} catch (Exception $e) {
+		} catch (Exception\RuntimeException $e) {
 			if ($declaringClassParent && $declaringClassParent->isInternal()) {
 				$internal = 'internal:' . $parentClass->getExtensionName();
 			}
@@ -437,7 +437,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param string $method Method name
 	 * @param boolean $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
+	 * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $method, $return = false)
 	{
@@ -446,7 +446,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 		$class = $broker->getClass($className);
 		if ($class instanceof Dummy\ReflectionClass) {
-			throw new Exception\Runtime(sprintf('Class %s does not exist.', $className), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$method = $class->getMethod($methodName);
 
@@ -476,33 +476,29 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param object $object Class instance
 	 * @param array $args Method parameter values
 	 * @return mixed
-	 * @throws \TokenReflection\Exception\Runtime If it is not possible to invoke the method.
+	 * @throws \TokenReflection\Exception\RuntimeException If it is not possible to invoke the method.
 	 */
 	public function invokeArgs($object, array $args = array())
 	{
-		try {
-			$declaringClass = $this->getDeclaringClass();
-			if (!$declaringClass->isInstance($object)) {
-				throw new Exception\Runtime(sprintf('Invalid class, "%s" expected "%s" given.', $declaringClass->getName(), get_class($object)), Exception\Runtime::INVALID_ARGUMENT);
-			}
-
-			if ($this->isPublic()) {
-				return call_user_func_array(array($object, $this->getName()), $args);
-			} elseif ($this->isAccessible()) {
-				$refClass = new InternalReflectionClass($object);
-				$refMethod = $refClass->getMethod($this->name);
-
-				$refMethod->setAccessible(true);
-				$value = $refMethod->invokeArgs($object, $args);
-				$refMethod->setAccessible(false);
-
-				return $value;
-			}
-
-			throw new Exception\Runtime('Only public methods can be invoked.', Exception\Runtime::NOT_ACCESSBILE);
-		} catch (Exception\Runtime $e) {
-			throw new Exception\Runtime(sprintf('Could not invoke method "%s::%s()".', $this->declaringClassName, $this->name), 0, $e);
+		$declaringClass = $this->getDeclaringClass();
+		if (!$declaringClass->isInstance($object)) {
+			throw new Exception\RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
+
+		if ($this->isPublic()) {
+			return call_user_func_array(array($object, $this->getName()), $args);
+		} elseif ($this->isAccessible()) {
+			$refClass = new InternalReflectionClass($object);
+			$refMethod = $refClass->getMethod($this->name);
+
+			$refMethod->setAccessible(true);
+			$value = $refMethod->invokeArgs($object, $args);
+			$refMethod->setAccessible(false);
+
+			return $value;
+		}
+
+		throw new Exception\RuntimeException('Only public methods can be invoked.', Exception\RuntimeException::NOT_ACCESSBILE, $this);
 	}
 
 	/**
@@ -575,7 +571,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param string $name New method name
 	 * @param integer $accessLevel New access level
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Parse If an invalid method access level was found.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid method access level was found.
 	 */
 	public function alias(ReflectionClass $parent, $name = null, $accessLevel = null)
 	{
@@ -590,7 +586,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 		if (null !== $accessLevel) {
 			if (!isset($possibleLevels[$accessLevel])) {
-				throw new Exception\Parse(sprintf('Invalid method access level: "%s".', $accessLevel), Exception\Parse::PARSE_CHILDREN_ERROR);
+				throw new Exception\RuntimeException(sprintf('Invalid method access level: "%s".', $accessLevel), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
 			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);
@@ -660,20 +656,21 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionElement
-	 * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
+	 * @throws \TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent)
+	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
 		if (!$parent instanceof ReflectionClass) {
-			throw new Exception\Parse(sprintf('The parent object has to be an instance of TokenReflection\ReflectionClass, "%s" given.', get_class($parent)), Exception\Parse::INVALID_PARENT);
+			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', Exception\ParseException::INVALID_PARENT);
 		}
 
 		$this->declaringClassName = $parent->getName();
 		if ($parent->isTrait()) {
 			$this->declaringTraitName = $parent->getName();
 		}
-		return parent::processParent($parent);
+		return parent::processParent($parent, $tokenStream);
 	}
 
 	/**
@@ -698,49 +695,44 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 *
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionMethod
-	 * @throws \TokenReflection\Exception\Parse If basic modifiers could not be parsed.
 	 */
 	private function parseBaseModifiers(Stream $tokenStream)
 	{
-		try {
-			while (true) {
-				switch ($tokenStream->getType()) {
-					case T_ABSTRACT:
-						$this->modifiers |= InternalReflectionMethod::IS_ABSTRACT;
-						break;
-					case T_FINAL:
-						$this->modifiers |= InternalReflectionMethod::IS_FINAL;
-						break;
-					case T_PUBLIC:
-						$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
-						break;
-					case T_PRIVATE:
-						$this->modifiers |= InternalReflectionMethod::IS_PRIVATE;
-						break;
-					case T_PROTECTED:
-						$this->modifiers |= InternalReflectionMethod::IS_PROTECTED;
-						break;
-					case T_STATIC:
-						$this->modifiers |= InternalReflectionMethod::IS_STATIC;
-						break;
-					case T_FUNCTION:
-					case null:
-						break 2;
-					default:
-						break;
-				}
-
-				$tokenStream->skipWhitespaces();
+		while (true) {
+			switch ($tokenStream->getType()) {
+				case T_ABSTRACT:
+					$this->modifiers |= InternalReflectionMethod::IS_ABSTRACT;
+					break;
+				case T_FINAL:
+					$this->modifiers |= InternalReflectionMethod::IS_FINAL;
+					break;
+				case T_PUBLIC:
+					$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
+					break;
+				case T_PRIVATE:
+					$this->modifiers |= InternalReflectionMethod::IS_PRIVATE;
+					break;
+				case T_PROTECTED:
+					$this->modifiers |= InternalReflectionMethod::IS_PROTECTED;
+					break;
+				case T_STATIC:
+					$this->modifiers |= InternalReflectionMethod::IS_STATIC;
+					break;
+				case T_FUNCTION:
+				case null:
+					break 2;
+				default:
+					break;
 			}
 
-			if (!($this->modifiers & (InternalReflectionMethod::IS_PRIVATE | InternalReflectionMethod::IS_PROTECTED))) {
-				$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
-			}
-
-			return $this;
-		} catch (Exception $e) {
-			throw new Exception\Parse('Could not parse basic modifiers.', Exception\Parse::PARSE_ELEMENT_ERROR, $e);
+			$tokenStream->skipWhitespaces();
 		}
+
+		if (!($this->modifiers & (InternalReflectionMethod::IS_PRIVATE | InternalReflectionMethod::IS_PROTECTED))) {
+			$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
+		}
+
+		return $this;
 	}
 
 	/**

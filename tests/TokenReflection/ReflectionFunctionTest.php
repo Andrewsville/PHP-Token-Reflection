@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -21,9 +21,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Function test.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class ReflectionFunctionTest extends Test
 {
@@ -58,6 +55,28 @@ class ReflectionFunctionTest extends Test
 		$rfl = $this->getFunctionReflection('noComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
+	}
+
+	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $functions = array(
+			'tokenReflectionFunctionDocCommentCopydoc' => 'This is a function.',
+			'tokenReflectionFunctionDocCommentCopydoc2' => 'This is a function.',
+			'tokenReflectionFunctionDocCommentCopydoc3' => 'This is a function.',
+			'tokenReflectionFunctionDocCommentCopydoc4' => null,
+			'tokenReflectionFunctionDocCommentCopydoc5' => null,
+		);
+
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('docCommentCopydoc'));
+
+		foreach ($functions as $functionName => $shortDescription) {
+			$this->assertTrue($broker->hasFunction($functionName), $functionName);
+			$this->assertSame($shortDescription, $broker->getFunction($functionName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $functionName);
+		}
 	}
 
 	/**
@@ -254,5 +273,67 @@ class ReflectionFunctionTest extends Test
 		}
 
 		$this->assertSame(InternalReflectionFunction::export('strpos', true), ReflectionFunction::export($this->getBroker(), 'strpos', true));
+	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$rfl = $this->getFunctionReflection('54features');
+
+		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
+		$this->assertSame(
+			array(
+				'one' => array(),
+				'two' => array(array(1), '2', array(array(array(array(true))))),
+				'three' => 21
+			),
+			$rfl->token->getStaticVariables()
+		);
+	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalFunctionReflectionCreate()
+	{
+		Php\ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalFunctionGetParameter1()
+	{
+		$this->getInternalFunctionReflection()->getParameter('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalFunctionGetParameter2()
+	{
+		$this->getInternalFunctionReflection()->getParameter(999);
+	}
+
+	/**
+	 * Returns an internal function reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionFunction
+	 */
+	private function getInternalFunctionReflection()
+	{
+		return $this->getBroker()->getFunction('create_function');
 	}
 }

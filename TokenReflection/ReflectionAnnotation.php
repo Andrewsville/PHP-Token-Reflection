@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -150,18 +150,19 @@ class ReflectionAnnotation
 	 *
 	 * @param array $templates Docblock templates
 	 * @return \TokenReflection\ReflectionAnnotation
-	 * @throws \TokenReflection\Exception\Runtime If an invalid annotation template was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid annotation template was provided.
 	 */
 	public function setTemplates(array $templates)
 	{
 		foreach ($templates as $template) {
 			if (!$template instanceof ReflectionAnnotation) {
-				throw new Exception\Runtime(
+				throw new Exception\RuntimeException (
 					sprintf(
 						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
 						is_object($template) ? get_class($template) : gettype($template)
 					),
-					Exception\Runtime::INVALID_ARGUMENT
+					Exception\RuntimeException::INVALID_ARGUMENT,
+					$this->reflection
 				);
 			}
 		}
@@ -194,7 +195,7 @@ class ReflectionAnnotation
 				)
 			);
 			foreach (explode("\n", $docblock) as $line) {
-				$line = preg_replace('~^\\*\\s?~', '', trim($line));
+				$line = preg_replace('~^\\*\\s*~', '', trim($line));
 
 				// End of short description
 				if ('' === $line && self::SHORT_DESCRIPTION === $name) {
@@ -246,6 +247,8 @@ class ReflectionAnnotation
 
 	/**
 	 * Copies annotations if the @copydoc tag is present.
+	 *
+	 * @throws \TokenReflection\Exception\RuntimeException When stuck in an infinite loop when resolving the @copydoc tag.
 	 */
 	private function copyAnnotation()
 	{
@@ -264,10 +267,10 @@ class ReflectionAnnotation
 						return;
 					}
 				} elseif ($this->reflection instanceof ReflectionFunction) {
-					$parent = $broker->getFunction($parentName);
+					$parent = $broker->getFunction(rtrim($parentName, '()'));
 				} elseif ($this->reflection instanceof ReflectionConstant && null === $this->reflection->getDeclaringClassName()) {
 					$parent = $broker->getConstant($parentName);
-				} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionParameter || $this->reflection instanceof ReflectionConstant) {
+				} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty || $this->reflection instanceof ReflectionConstant) {
 					if (false !== strpos($parentName, '::')) {
 						list($className, $parentName) = explode('::', $parentName, 2);
 						$class = $broker->getClass($className);
@@ -285,14 +288,14 @@ class ReflectionAnnotation
 					} elseif ($this->reflection instanceof ReflectionConstant) {
 						$parent = $class->getConstantReflection($parentName);
 					} else {
-						$parent = $class->getProperty($parentName);
+						$parent = $class->getProperty(ltrim($parentName, '$'));
 					}
 				}
 
 				if (!empty($parent)) {
 					// Don't get into an infinite recursion loop
 					if (in_array($parent, self::$copydocStack, true)) {
-						throw new Exception\Runtime('Infinite loop detected.', Exception\Runtime::INVALID_ARGUMENT);
+						throw new Exception\RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag..', Exception\RuntimeException::INVALID_ARGUMENT, $this->reflection);
 					}
 
 					self::$copydocStack[] = $parent;
@@ -307,8 +310,8 @@ class ReflectionAnnotation
 
 					array_pop(self::$copydocStack);
 				}
-			} catch (Exception $e) {
-				// Fall through
+			} catch (Exception\BaseException $e) {
+				// Ignoring links to non existent elements, ...
 			}
 		}
 
@@ -348,7 +351,7 @@ class ReflectionAnnotation
 	/**
 	 * Inherits annotations from parent classes/methods/properties if needed.
 	 *
-	 * @throws \TokenReflection\Exception\Parse If unsupported reflection was used.
+	 * @throws \TokenReflection\Exception\RuntimeException If unsupported reflection was used.
 	 */
 	private function inheritAnnotations()
 	{
@@ -356,8 +359,6 @@ class ReflectionAnnotation
 			$declaringClass = $this->reflection;
 		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 			$declaringClass = $this->reflection->getDeclaringClass();
-		} else {
-			throw new Exception\Parse(sprintf('Unsupported reflection type: "%s".', get_class($this->reflection)), Exception\Parse::UNSUPPORTED);
 		}
 
 		$parents = array_filter(array_merge(array($declaringClass->getParentClass()), $declaringClass->getOwnInterfaces()), function($class) {
@@ -370,14 +371,8 @@ class ReflectionAnnotation
 		if ($this->reflection instanceof ReflectionProperty) {
 			$name = $this->reflection->getName();
 			foreach ($parents as $parent) {
-				try {
+				if ($parent->hasProperty($name)) {
 					$parentDefinitions[] = $parent->getProperty($name);
-				} catch (Exception\Runtime $e) {
-					if (Exception\Runtime::DOES_NOT_EXIST === $e->getCode()) {
-						continue;
-					}
-
-					throw $e;
 				}
 			}
 
@@ -385,14 +380,8 @@ class ReflectionAnnotation
 		} elseif ($this->reflection instanceof ReflectionMethod) {
 			$name = $this->reflection->getName();
 			foreach ($parents as $parent) {
-				try {
+				if ($parent->hasMethod($name)) {
 					$parentDefinitions[] = $parent->getMethod($name);
-				} catch (Exception\Runtime $e) {
-					if (Exception\Runtime::DOES_NOT_EXIST === $e->getCode()) {
-						continue;
-					}
-
-					throw $e;
 				}
 			}
 
@@ -455,17 +444,22 @@ class ReflectionAnnotation
 			if (0 !== $this->reflection->getNumberOfParameters() && (empty($this->annotations['param']) || count($this->annotations['param']) < $this->reflection->getNumberOfParameters())) {
 				// In case of methods check if we need and can inherit parameter descriptions
 				$params = isset($this->annotations['param']) ? $this->annotations['param'] : array();
+				$complete = false;
 				foreach ($parents as $parent) {
 					if ($parent->hasAnnotation('param')) {
 						$parentParams = array_slice($parent->getAnnotation('param'), count($params));
 
-						while (!empty($parentParams)) {
+						while (!empty($parentParams) && !$complete) {
 							array_push($params, array_shift($parentParams));
 
 							if (count($params) === $this->reflection->getNumberOfParameters()) {
-								break 2;
+								$complete = true;
 							}
 						}
+					}
+
+					if ($complete) {
+						break;
 					}
 				}
 

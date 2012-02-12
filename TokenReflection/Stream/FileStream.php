@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -28,7 +28,7 @@ class FileStream extends StreamBase
 	 * Creates a token substream from a file.
 	 *
 	 * @param string $fileName File name
-	 * @throws \TokenReflection\Exception\Parse If file does not exist or is not readable.
+	 * @throws \TokenReflection\Exception\StreamException If the file does not exist or is not readable.
 	 */
 	public function __construct($fileName)
 	{
@@ -37,12 +37,12 @@ class FileStream extends StreamBase
 		$this->fileName = Broker::getRealPath($fileName);
 
 		if (false === $this->fileName) {
-			throw new Exception\Parse('File does not exist.', Exception\Parse::FILE_DOES_NOT_EXIST);
+			throw new Exception\StreamException($this, 'File does not exist.', Exception\StreamException::DOES_NOT_EXIST);
 		}
 
-		$contents = file_get_contents($this->fileName);
+		$contents = @file_get_contents($this->fileName);
 		if (false === $contents) {
-			throw new Exception\Parse('File is not readable.', Exception\Parse::FILE_NOT_READABLE);
+			throw new Exception\StreamException($this, 'File is not readable.', Exception\StreamException::NOT_READABLE);
 		}
 
 		$this->processSource($contents);

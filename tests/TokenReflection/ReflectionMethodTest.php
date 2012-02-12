@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -21,9 +21,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Method test.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class ReflectionMethodTest extends Test
 {
@@ -58,6 +55,28 @@ class ReflectionMethodTest extends Test
 		$rfl = $this->getMethodReflection('noComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
+	}
+
+	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $methods = array(
+			'method' => 'This is a method.',
+			'method2' => 'This is a method.',
+			'method3' => 'This is a method.',
+			'method4' => 'This is a method.',
+			'method5' => 'This is a method.',
+			'method6' => null,
+			'method7' => null
+		);
+
+		$class = $this->getClassTokenReflection('docCommentCopydoc');
+		foreach ($methods as $methodName => $shortDescription) {
+			$this->assertTrue($class->hasMethod($methodName), $methodName);
+			$this->assertSame($shortDescription, $class->getMethod($methodName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $methodName);
+		}
 	}
 
 	/**
@@ -402,22 +421,22 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$token->invoke(new \Exception(), 1, 2);
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$token->invokeArgs(new \Exception(), array(1, 2));
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$internal = $rfl->internal->getMethod('protectedInvoke');
@@ -425,22 +444,22 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$token->invoke($object, 1, 2);
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
 			$token->invokeArgs($object, array(1, 2));
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		if (PHP_VERSION_ID >= 50302) {
@@ -466,12 +485,12 @@ class ReflectionMethodTest extends Test
 
 		try {
 			$rfl->token->getPrototype();
-			$this->fail('Expected exception TokenReflection\Exception.');
+			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
 		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception', $e);
+			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 		}
 	}
 
@@ -515,5 +534,67 @@ class ReflectionMethodTest extends Test
 
 		$this->assertSame(InternalReflectionMethod::export('ReflectionMethod', 'isFinal', true), ReflectionMethod::export($this->getBroker(), 'ReflectionMethod', 'isFinal', true));
 		$this->assertSame(InternalReflectionMethod::export(new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true), ReflectionMethod::export($this->getBroker(), new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', true));
+	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$rfl = $this->getMethodReflection('features54');
+
+		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
+		$this->assertSame(
+			array(
+				'one' => array(),
+				'two' => array(array(1), '2', array(array(array(array(true))))),
+				'three' => 21
+			),
+			$rfl->token->getStaticVariables()
+		);
+	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalMethodReflectionCreate()
+	{
+		Php\ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalMethodGetParameter1()
+	{
+		$this->getInternalMethodReflection()->getParameter('~non-existent~');
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get a non-existent parameter.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalMethodGetParameter2()
+	{
+		$this->getInternalMethodReflection()->getParameter(999);
+	}
+
+	/**
+	 * Returns an internal method reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionMethod
+	 */
+	private function getInternalMethodReflection()
+	{
+		return $this->getBroker()->getClass('Exception')->getConstructor();
 	}
 }

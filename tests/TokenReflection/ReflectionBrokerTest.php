@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -19,8 +19,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Broker test.
- *
- * @author Ondřej Nešpor
  */
 class ReflectionBrokerTest extends Test
 {
@@ -77,6 +75,70 @@ class ReflectionBrokerTest extends Test
 		}
 
 		$this->compareFileLists($fileNames, $brokerFileNames);
+	}
+
+	/**
+	 * Tests an exception thrown when a file could not be processed.
+	 *
+	 * @expectedException \TokenReflection\Exception\BrokerException
+	 */
+	public function testFileProcessingError()
+	{
+		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
+
+		if (is_file($file)) {
+			$this->markTestSkipped(sprintf('File %s exists.', $file));
+		}
+
+		$this->getBroker()->processFile($file);
+	}
+
+	/**
+	 * Tests an exception thrown when a file could not be processed.
+	 *
+	 * @expectedException \TokenReflection\Exception\BrokerException
+	 */
+	public function testDirectoryProcessingError()
+	{
+		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~' . DIRECTORY_SEPARATOR . '~#nonexistent#~';
+
+		if (is_dir($file)) {
+			$this->markTestSkipped(sprintf('Directory %s exists.', $file));
+		}
+
+		$this->getBroker()->processDirectory($file);
+	}
+
+	/**
+	 * Tests an exception thrown when a file could not be processed.
+	 *
+	 * @expectedException \TokenReflection\Exception\BrokerException
+	 */
+	public function testPharProcessingError()
+	{
+		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
+
+		if (is_file($file)) {
+			$this->markTestSkipped(sprintf('File %s exists.', $file));
+		}
+
+		$this->getBroker()->processPhar($file);
+	}
+
+	/**
+	 * Tests an exception thrown when a file could not be processed.
+	 *
+	 * @expectedException \TokenReflection\Exception\BrokerException
+	 */
+	public function testProcessingError()
+	{
+		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
+
+		if (is_file($file)) {
+			$this->markTestSkipped(sprintf('File %s exists.', $file));
+		}
+
+		$this->getBroker()->process($file);
 	}
 
 	/**
@@ -137,6 +199,7 @@ class ReflectionBrokerTest extends Test
 					'no-parent.php',
 					'no-properties.php',
 					'parent.php',
+					'pretty-names.php',
 					'private-clone.php',
 					'private-constructor.php',
 					'properties.php',
@@ -192,6 +255,7 @@ class ReflectionBrokerTest extends Test
 					'magic54.php',
 					'no-comment.php',
 					'no-namespace.php',
+					'pretty-names.php',
 					'type-boolean.php',
 					'type-constant.php',
 					'type-float.php',

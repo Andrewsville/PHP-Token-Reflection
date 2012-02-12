@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -21,9 +21,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Property test.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class ReflectionPropertyTest extends Test
 {
@@ -57,9 +54,39 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($property->getDocComment(), $rfl->token->getProperty($property->getName())->getDocComment(), $property->getName());
 		}
 
+		$propertyName = 'docComment';
+		$this->assertTrue($rfl->token->hasProperty($propertyName));
+
+		/** @var \TokenReflection\ReflectionProperty */
+		$tokenProperty = $rfl->token->getProperty($propertyName);
+		$this->assertTrue($tokenProperty->hasAnnotation('var'));
+		$this->assertSame(array("String It is a string\nand this comment has multiple\nlines."), $tokenProperty->getAnnotation('var'));
+
 		$rfl = $this->getPropertyReflection('noComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
+	}
+
+	/**
+	 * Tests getting of copydoc documentation comment.
+	 */
+	public function testCommentCopydoc()
+	{
+		static $properties = array(
+			'property' => 'This is a property.',
+			'property2' => 'This is a property.',
+			'property3' => 'This is a property.',
+			'property4' => 'This is a property.',
+			'property5' => null,
+			'property6' => null,
+			'property7' => null
+		);
+
+		$class = $this->getClassTokenReflection('docCommentCopydoc');
+		foreach ($properties as $propertyName => $shortDescription) {
+			$this->assertTrue($class->hasProperty($propertyName), $propertyName);
+			$this->assertSame($shortDescription, $class->getProperty($propertyName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $propertyName);
+		}
 	}
 
 	/**
@@ -161,12 +188,12 @@ class ReflectionPropertyTest extends Test
 
 			try {
 				$token->getValue($object);
-				$this->fail('Expected exception \TokenReflection\Exception.');
+				$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
 			} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 				throw $e;
 			} catch (\Exception $e) {
 				// Correctly thrown exception
-				$this->assertInstanceOf('TokenReflection\Exception', $e);
+				$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
 			}
 
 			$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));
@@ -324,5 +351,44 @@ class ReflectionPropertyTest extends Test
 
 		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', true), ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', true));
 		$this->assertSame(InternalReflectionProperty::export(new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true), ReflectionProperty::export($this->getBroker(), new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true));
+	}
+
+	/**
+	 * Tests new PHP 5.4 features.
+	 */
+	public function test54features()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Tested only on PHP 5.4+');
+		}
+
+		$tests = array('public', 'protected', 'private');
+
+		$rfl = $this->getClassReflection('54features');
+		$class = $rfl->internal->newInstance();
+
+		foreach ($tests as $test) {
+			$this->assertTrue($rfl->internal->hasProperty($test));
+			$this->assertTrue($rfl->token->hasProperty($test));
+
+			$internal = $rfl->internal->getProperty($test);
+			$token = $rfl->token->getProperty($test);
+
+			$internal->setAccessible(true);
+			$token->setAccessible(true);
+
+			$this->assertSame($internal->getValue($class), $token->getValue($class));
+			$this->assertSame($internal->getValue($class), $token->getDefaultValue());
+		}
+	}
+
+	/**
+	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalPropertyReflectionCreate()
+	{
+		Php\ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 }

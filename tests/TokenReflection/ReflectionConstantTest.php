@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -19,9 +19,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Constant test.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class ReflectionConstantTest extends Test
 {
@@ -65,13 +62,27 @@ class ReflectionConstantTest extends Test
 	{
 		static $constants = array('DOC_COMMENT', 'DOC_COMMENT_COPY', 'DOC_COMMENT_COPY2');
 
-		$reflection = $this->getClassTokenReflection('docCommentCopydoc');
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('docCommentCopydoc'));
+
+		$this->assertTrue($broker->hasClass('TokenReflection_Test_ConstantDocCommentCopydoc'));
+		$reflection = $broker->getClass('TokenReflection_Test_ConstantDocCommentCopydoc');
 		foreach ($constants as $constant) {
 			$this->assertSame('This is a constant.', $reflection->getConstantReflection($constant)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constant);
 		}
 
 		$this->assertSame('This is another constant.', $reflection->getConstantReflection('DOC_COMMENT_COPY_CLASS')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertSame(null, $reflection->getConstantReflection('DOC_COMMENT_COPY_NO')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+
+		static $topLevelConstants = array(
+			'CONSTANT_DOC_COMMENT_COPYDOC' => 'Comment.',
+			'CONSTANT_DOC_COMMENT_COPYDOC2' => 'Comment.',
+			'CONSTANT_DOC_COMMENT_COPYDOC3' => null,
+		);
+		foreach ($topLevelConstants as $constantName => $shortDescription) {
+			$this->assertTrue($broker->hasConstant($constantName), $constantName);
+			$this->assertSame($shortDescription, $broker->getConstant($constantName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constantName);
+		}
 	}
 
 	/**
@@ -515,7 +526,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 			'ns\\TokenReflection_Test_ConstantMagic54Trait' => array(
 				true,
@@ -533,7 +544,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 			'ns2\\TokenReflection_Test_ConstantMagic54' => array(
 				false,
@@ -545,7 +556,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 			'ns3\\TokenReflection_Test_ConstantMagic54' => array(
 				false,
@@ -557,7 +568,7 @@ class ReflectionConstantTest extends Test
 				false,
 				array('CONST_TRAIT' => ''),
 				array('t_trait' => array(false, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 't_strait' => array(true, 'ns\\TokenReflection_Test_ConstantMagic54Trait'), 'trait' => array(false, ''), 'strait' => array(true, ''), 'trait2' => array(false, ''), 'strait2' => array(true, '')),
-				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array())),
+				array('foo' => array(array('trait' => ''), array('trait' => '')), 'bar' => array(array('trait' => ''), array('trait' => '')), 't_foo' => array(array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'), array('trait' => 'ns\\TokenReflection_Test_ConstantMagic54Trait'))),
 			),
 		);
 
@@ -620,5 +631,58 @@ class ReflectionConstantTest extends Test
 				}
 			}
 		}
+	}
+
+	/**
+	 * Tests returning pretty constant names.
+	 */
+	public function testPrettyNames()
+	{
+		static $names = array(
+			'ns1\\CONST_PRETTY_NAMES_1',
+			'CONST_PRETTY_NAMES_1',
+			'ns1\\ConstPrettyNames::INTERNAL',
+			'ConstPrettyNames::INTERNAL',
+		);
+
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('pretty-names'));
+
+		foreach ($names as $name) {
+			$this->assertTrue($broker->hasConstant($name), $name);
+
+			$rfl = $broker->getConstant($name);
+			$this->assertSame($name, $rfl->getPrettyName(), $name);
+		}
+	}
+
+	/**
+	 * Tests an exception thrown when trying to get instance of TokenReflection\Php\ReflectionConstant and providing an invalid parent reflection.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalConstantConstructor()
+	{
+		new Php\ReflectionConstant('foo', 'bar', $this->getBroker(), new Php\ReflectionClass('Exception', $this->getBroker()));
+	}
+
+	/**
+	 * Tests an exception thrown when trying to export an constant.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalConstantExport1()
+	{
+		Php\ReflectionConstant::export($this->getBroker(), null, '~non-existent~', true);
+	}
+
+	/**
+	 * Tests an exception thrown when trying to export an constant.
+	 *
+	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 */
+	public function testInternalConstantExport2()
+	{
+		Php\ReflectionConstant::export($this->getBroker(), '~non-existent~', '~non-existent~', true);
 	}
 }

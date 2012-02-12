@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -130,8 +130,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 *
 	 * @param integer|string $parameter Parameter name or position
 	 * @return \TokenReflection\Php\ReflectionParameter
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter of the given name.
-	 * @throws \TokenReflection\Exception\Runtime If there is no parameter at the given position.
+	 * @throws \TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
+	 * @throws \TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
 	 */
 	public function getParameter($parameter)
 	{
@@ -139,7 +139,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 		if (is_numeric($parameter)) {
 			if (!isset($parameters[$parameter])) {
-				throw new Exception\Runtime(sprintf('There is no parameter at position "%d" in method "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
+				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			return $parameters[$parameter];
@@ -150,7 +150,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 				}
 			}
 
-			throw new Exception\Runtime(sprintf('There is no parameter "%s" in method "%s".', $parameter, $this->getName()), Exception\Runtime::DOES_NOT_EXIST);
+			throw new Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
 
@@ -178,12 +178,12 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
 	 *
 	 * @param boolean $accessible
-	 * @throws \TokenReflection\Exception\Runtime If run on PHP version < 5.3.2.
+	 * @throws \TokenReflection\Exception\RuntimeException If run on PHP version < 5.3.2.
 	 */
 	public function setAccessible($accessible)
 	{
 		if (PHP_VERSION_ID < 50302) {
-			throw new Exception\Runtime(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\Runtime::UNSUPPORTED);
+			throw new Exception\RuntimeException(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 
 		parent::setAccessible($accessible);
@@ -314,19 +314,29 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	public function getPrettyName()
+	{
+		return sprintf('%s::%s()', $this->getDeclaringClassName(), $this->getName());
+	}
+
+	/**
 	 * Creates a reflection instance.
 	 *
 	 * @param \ReflectionClass $internalReflection Internal reflection instance
 	 * @param \TokenReflection\Broker $broker Reflection broker instance
 	 * @return \TokenReflection\Php\IReflection
-	 * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
+	 * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = array();
 
 		if (!$internalReflection instanceof InternalReflectionMethod) {
-			throw new Exception\Runtime(sprintf('Invalid reflection instance provided: "%s", ReflectionMethod expected.', get_class($internalReflection)), Exception\Runtime::INVALID_ARGUMENT);
+			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionMethod expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();

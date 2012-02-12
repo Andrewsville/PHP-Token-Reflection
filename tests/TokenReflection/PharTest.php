@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.0.2
+ * Version 1.1
  *
  * LICENSE
  *
@@ -26,9 +26,6 @@ require_once __DIR__ . '/../bootstrap.php';
  * archive types, lets the broker parse every archive and compares if the same
  * classes, constants and functions were parsed like when parsing a directory
  * of files.
- *
- * @author Jaroslav Hanslík
- * @author Ondřej Nešpor
  */
 class PharTest extends Test
 {
@@ -209,6 +206,9 @@ class PharTest extends Test
 		foreach ($iterator as $item) {
 			if ('broker' === $item->getFileName()) {
 				// Skipping the borker directory because of PHP bug #53872
+				continue;
+			} elseif ('parseerror' === $item->getFileName()) {
+				// Skipping invalid PHP files
 				continue;
 			}
 
