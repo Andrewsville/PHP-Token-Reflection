@@ -45,6 +45,7 @@ class ParseErrorTest extends Test
 	 *
 	 * @param string $testName Test name
 	 * @dataProvider invalidClassSourceCodeProvider
+	 * @expectedException \TokenReflection\Exception\ParseException
 	 */
 	public function testClasses($testName)
 	{
@@ -56,6 +57,7 @@ class ParseErrorTest extends Test
 	 *
 	 * @param string $testName Test name
 	 * @dataProvider invalidConstantSourceCodeProvider
+	 * @expectedException \TokenReflection\Exception\ParseException
 	 */
 	public function testConstants($testName)
 	{
@@ -67,6 +69,7 @@ class ParseErrorTest extends Test
 	 *
 	 * @param string $testName Test name
 	 * @dataProvider invalidFileSourceCodeProvider
+	 * @expectedException \TokenReflection\Exception\ParseException
 	 */
 	public function testFiles($testName)
 	{
@@ -78,6 +81,7 @@ class ParseErrorTest extends Test
 	 *
 	 * @param string $testName Test name
 	 * @dataProvider invalidFunctionBaseSourceCodeProvider
+	 * @expectedException \TokenReflection\Exception\ParseException
 	 */
 	public function testFunctionBases($testName)
 	{
@@ -89,6 +93,7 @@ class ParseErrorTest extends Test
 	 *
 	 * @param string $testName Test name
 	 * @dataProvider invalidParameterSourceCodeProvider
+	 * @expectedException \TokenReflection\Exception\ParseException
 	 */
 	public function testParameter($testName)
 	{
@@ -100,6 +105,7 @@ class ParseErrorTest extends Test
 	 *
 	 * @param string $testName Test name
 	 * @dataProvider invalidPropertySourceCodeProvider
+	 * @expectedException \TokenReflection\Exception\ParseException
 	 */
 	public function testProperty($testName)
 	{
@@ -113,15 +119,8 @@ class ParseErrorTest extends Test
 	 */
 	private function performTest($testName)
 	{
-		try {
-			$broker = $this->getBroker();
-			$broker->processFile($this->getFilePath($testName));
-
-			$this->fail(sprintf('A parse exception was expected for test %s.', $testName));
-		} catch (Exception\BrokerException $e) {
-			$parse = $e->getPrevious();
-			$this->assertInstanceOf('TokenReflection\Exception\ParseException', $parse);
-		}
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath($testName));
 	}
 
 	/**

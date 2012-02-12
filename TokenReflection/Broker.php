@@ -214,6 +214,8 @@ class Broker
 			}
 
 			return $returnReflectionFile ? $reflectionFile : true;
+		} catch (Exception\ParseException $e) {
+			throw $e;
 		} catch (Exception\StreamException $e) {
 			throw new Exception\BrokerException($this, 'Could not process the file.', 0, $e);
 		}
@@ -248,6 +250,8 @@ class Broker
 			}
 
 			return $returnReflectionFile ? $result : true;
+		} catch (Exception\ParseException $e) {
+			throw $e;
 		} catch (Exception\StreamException $e) {
 			throw new Exception\BrokerException($this, 'Could not process the archive.', 0, $e);
 		}
@@ -291,6 +295,8 @@ class Broker
 			}
 
 			return $returnReflectionFile ? $result : true;
+		} catch (Exception\ParseException $e) {
+			throw $e;
 		} catch (Exception\StreamException $e) {
 			throw new Exception\BrokerException($this, 'Could not process the directory.', 0, $e);
 		}
