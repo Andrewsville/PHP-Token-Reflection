@@ -68,6 +68,13 @@ class ParseException extends StreamException
 	private $tokenName;
 
 	/**
+	 * The line where the exception was thrown.
+	 *
+	 * @var integer
+	 */
+	private $exceptionLine;
+
+	/**
 	 * Boundaries of the token substream around the token.
 	 *
 	 * @var array
@@ -103,19 +110,24 @@ class ParseException extends StreamException
 			$this->tokenName = $tokenStream->getTokenName();
 
 			$line = $this->token[2];
-
-			$min = $position;
-			while (isset($tokenStream[$min - 1]) && $line - $tokenStream[$min][2] < self::SOURCE_LINES_AROUND) {
-				$min--;
-			}
-
-			$max = $position;
-			while (isset($tokenStream[$max + 1]) && $tokenStream[$max][2] - $line < self::SOURCE_LINES_AROUND) {
-				$max++;
-			}
-
-			$this->scopeBoundaries = array($min, $max);
+			$min = $max = $position;
+		} else {
+			$min = $max = $tokenStream->count() - 1;
+			$line = $tokenStream[$min][2];
 		}
+
+		$this->exceptionLine = $line;
+
+		while (isset($tokenStream[$min - 1]) && $line - $tokenStream[$min][2] < self::SOURCE_LINES_AROUND) {
+			$min--;
+		}
+
+
+		while (isset($tokenStream[$max + 1]) && $tokenStream[$max][2] - $line < self::SOURCE_LINES_AROUND) {
+			$max++;
+		}
+
+		$this->scopeBoundaries = array($min, $max);
 	}
 
 	/**
@@ -126,6 +138,26 @@ class ParseException extends StreamException
 	public function getToken()
 	{
 		return $this->token;
+	}
+
+	/**
+	 * Returns the name of the token where the problem was detected or NULL if the token stream was empty or an end was reached.
+	 *
+	 * @return string|null
+	 */
+	public function getTokenName()
+	{
+		return $this->tokenName;
+	}
+
+	/**
+	 * Returns the line where the exception was thrown.
+	 *
+	 * @var integer
+	 */
+	public function getExceptionLine()
+	{
+		return $this->exceptionLine;
 	}
 
 	/**
