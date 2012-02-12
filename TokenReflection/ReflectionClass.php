@@ -1956,8 +1956,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 							$type = $tokenStream->skipWhitespaces()->getType();
 						}
-
-						throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 					}
 
 					break;

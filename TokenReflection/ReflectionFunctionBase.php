@@ -276,12 +276,8 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 * @return \TokenReflection\ReflectionMethod
 	 * @throws \TokenReflection\Exception\ParseException If the class name could not be determined.
 	 */
-	protected function parseName(Stream $tokenStream)
+	final protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_STRING)) {
-			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
-		}
-
 		$this->name = $tokenStream->getTokenValue();
 
 		$tokenStream->skipWhitespaces(true);

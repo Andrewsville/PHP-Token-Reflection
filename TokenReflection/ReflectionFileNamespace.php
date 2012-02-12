@@ -229,7 +229,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							}
 						}
 
-						if (isset($aliases[$alias])) {
+						if (isset($this->aliases[$alias])) {
 							throw new Exception\ParseException($this, $tokenStream, sprintf('Namespace alias "%s" already defined.', $alias), Exception\ParseException::LOGICAL_ERROR);
 						}
 
@@ -275,7 +275,7 @@ class ReflectionFileNamespace extends ReflectionElement
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces(true);
-					while ($tokenStream->is(T_STRING)) {
+					do {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
 						if ($tokenStream->is(',')) {
@@ -283,7 +283,7 @@ class ReflectionFileNamespace extends ReflectionElement
 						} else {
 							$tokenStream->next();
 						}
-					}
+					} while ($tokenStream->is(T_STRING));
 					break;
 				case T_FUNCTION:
 					$position = $tokenStream->key() + 1;
