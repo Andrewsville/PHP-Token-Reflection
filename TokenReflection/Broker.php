@@ -277,9 +277,9 @@ class Broker
 					$process = empty($filters);
 					if (!$process) {
 						foreach ((array) $filters as $filter) {
-							if (fnmatch($filter, $entry->getPathName(), FNM_NOESCAPE)) {
-								$process = true;
-								break;
+							$whitelisting = '!' !== $filter{0};
+							if (fnmatch($whitelisting ? $filter : substr($filter, 1), $entry->getPathName(), FNM_NOESCAPE)) {
+								$process = $whitelisting;
 							}
 						}
 					}
