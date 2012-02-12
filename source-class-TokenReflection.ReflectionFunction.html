@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.4.0">
-	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.5.0" />
+	<meta name="robots" content="noindex" />
 
 	<title>File ReflectionFunction.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
-	<script type="text/javascript" src="elementlist.js?2625982823"></script>
-	<script type="text/javascript">
-		var ApiGen = ApiGen || {};
-		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
-	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
+	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
+	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
 
@@ -23,7 +19,6 @@
 		<a href="index.html" title="Overview"><span>Overview</span></a>
 
 		<div id="groups">
-
 			<h3>Namespaces</h3>
 			<ul>
 				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
@@ -47,7 +42,7 @@
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 		<div id="elements">
 			<h3>Classes</h3>
@@ -84,10 +79,6 @@
 			</ul>
 
 
-			<h3>Exceptions</h3>
-			<ul>
-				<li><a href="class-TokenReflection.Exception.html">Exception</a></li>
-			</ul>
 
 
 		</div>
@@ -99,10 +90,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -133,7 +124,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -209,7 +200,7 @@
 </span><a href="#78" id="78" class="l"> 78: </a><span class="php-comment">     * @param string $function Function name
 </span><a href="#79" id="79" class="l"> 79: </a><span class="php-comment">     * @param boolean $return Return the export instead of outputting it
 </span><a href="#80" id="80" class="l"> 80: </a><span class="php-comment">     * @return string|null
-</span><a href="#81" id="81" class="l"> 81: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
+</span><a href="#81" id="81" class="l"> 81: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 </span><a href="#82" id="82" class="l"> 82: </a><span class="php-comment">     */</span>
 <a href="#83" id="83" class="l"> 83: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> export(Broker <span class="php-var">$broker</span>, <span class="php-var">$function</span>, <span class="php-var">$return</span> = <span class="php-keyword1">false</span>)
 <a href="#84" id="84" class="l"> 84: </a>    {
@@ -217,7 +208,7 @@
 <a href="#86" id="86" class="l"> 86: </a>
 <a href="#87" id="87" class="l"> 87: </a>        <span class="php-var">$function</span> = <span class="php-var">$broker</span>-&gt;getFunction(<span class="php-var">$functionName</span>);
 <a href="#88" id="88" class="l"> 88: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$function</span>) {
-<a href="#89" id="89" class="l"> 89: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Function %s() does not exist.'</span>, <span class="php-var">$functionName</span>), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#89" id="89" class="l"> 89: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Function %s() does not exist.'</span>, <span class="php-var">$functionName</span>), Exception\RuntimeException::DOES_NOT_EXIST);
 <a href="#90" id="90" class="l"> 90: </a>        }
 <a href="#91" id="91" class="l"> 91: </a>
 <a href="#92" id="92" class="l"> 92: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$return</span>) {
@@ -242,12 +233,12 @@
 </span><a href="#111" id="111" class="l">111: </a><span class="php-comment">     *
 </span><a href="#112" id="112" class="l">112: </a><span class="php-comment">     * @param array $args Function parameter values
 </span><a href="#113" id="113" class="l">113: </a><span class="php-comment">     * @return mixed
-</span><a href="#114" id="114" class="l">114: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the required function does not exist.
+</span><a href="#114" id="114" class="l">114: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the required function does not exist.
 </span><a href="#115" id="115" class="l">115: </a><span class="php-comment">     */</span>
 <a href="#116" id="116" class="l">116: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> invokeArgs(<span class="php-keyword1">array</span> <span class="php-var">$args</span> = <span class="php-keyword1">array</span>())
 <a href="#117" id="117" class="l">117: </a>    {
 <a href="#118" id="118" class="l">118: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">function_exists</span>(<span class="php-var">$this</span>-&gt;getName())) {
-<a href="#119" id="119" class="l">119: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Could not invoke function &quot;%s&quot;; function is not defined.'</span>, <span class="php-var">$this</span>-&gt;name), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#119" id="119" class="l">119: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not invoke function; function is not defined.'</span>, Exception\RuntimeException::DOES_NOT_EXIST, <span class="php-var">$this</span>);
 <a href="#120" id="120" class="l">120: </a>        }
 <a href="#121" id="121" class="l">121: </a>
 <a href="#122" id="122" class="l">122: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">call_user_func_array</span>(<span class="php-var">$this</span>-&gt;getName(), <span class="php-var">$args</span>);
@@ -277,38 +268,39 @@
 </span><a href="#146" id="146" class="l">146: </a><span class="php-comment">     * Processes the parent reflection object.
 </span><a href="#147" id="147" class="l">147: </a><span class="php-comment">     *
 </span><a href="#148" id="148" class="l">148: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#149" id="149" class="l">149: </a><span class="php-comment">     * @return \TokenReflection\ReflectionElement
-</span><a href="#150" id="150" class="l">150: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
-</span><a href="#151" id="151" class="l">151: </a><span class="php-comment">     */</span>
-<a href="#152" id="152" class="l">152: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> processParent(IReflection <span class="php-var">$parent</span>)
-<a href="#153" id="153" class="l">153: </a>    {
-<a href="#154" id="154" class="l">154: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$parent</span> <span class="php-keyword1">instanceof</span> ReflectionFileNamespace) {
-<a href="#155" id="155" class="l">155: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace, &quot;%s&quot; given.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$parent</span>)), Exception\Parse::INVALID_PARENT);
-<a href="#156" id="156" class="l">156: </a>        }
-<a href="#157" id="157" class="l">157: </a>
-<a href="#158" id="158" class="l">158: </a>        <span class="php-var">$this</span>-&gt;namespaceName = <span class="php-var">$parent</span>-&gt;getName();
-<a href="#159" id="159" class="l">159: </a>        <span class="php-var">$this</span>-&gt;aliases = <span class="php-var">$parent</span>-&gt;getNamespaceAliases();
-<a href="#160" id="160" class="l">160: </a>        <span class="php-keyword1">return</span> parent::processParent(<span class="php-var">$parent</span>);
-<a href="#161" id="161" class="l">161: </a>    }
-<a href="#162" id="162" class="l">162: </a>
-<a href="#163" id="163" class="l">163: </a>    <span class="php-comment">/**
-</span><a href="#164" id="164" class="l">164: </a><span class="php-comment">     * Parses reflected element metadata from the token stream.
-</span><a href="#165" id="165" class="l">165: </a><span class="php-comment">     *
-</span><a href="#166" id="166" class="l">166: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
-</span><a href="#167" id="167" class="l">167: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#168" id="168" class="l">168: </a><span class="php-comment">     * @return \TokenReflection\ReflectionFunction
-</span><a href="#169" id="169" class="l">169: </a><span class="php-comment">     */</span>
-<a href="#170" id="170" class="l">170: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parse(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
-<a href="#171" id="171" class="l">171: </a>    {
-<a href="#172" id="172" class="l">172: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>
-<a href="#173" id="173" class="l">173: </a>            -&gt;parseReturnsReference(<span class="php-var">$tokenStream</span>)
-<a href="#174" id="174" class="l">174: </a>            -&gt;parseName(<span class="php-var">$tokenStream</span>);
-<a href="#175" id="175" class="l">175: </a>    }
-<a href="#176" id="176" class="l">176: </a>}
-<a href="#177" id="177" class="l">177: </a></code></pre>
+</span><a href="#149" id="149" class="l">149: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+</span><a href="#150" id="150" class="l">150: </a><span class="php-comment">     * @return \TokenReflection\ReflectionElement
+</span><a href="#151" id="151" class="l">151: </a><span class="php-comment">     * @throws \TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
+</span><a href="#152" id="152" class="l">152: </a><span class="php-comment">     */</span>
+<a href="#153" id="153" class="l">153: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> processParent(IReflection <span class="php-var">$parent</span>, Stream <span class="php-var">$tokenStream</span>)
+<a href="#154" id="154" class="l">154: </a>    {
+<a href="#155" id="155" class="l">155: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$parent</span> <span class="php-keyword1">instanceof</span> ReflectionFileNamespace) {
+<a href="#156" id="156" class="l">156: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace.'</span>, Exception\ParseException::INVALID_PARENT);
+<a href="#157" id="157" class="l">157: </a>        }
+<a href="#158" id="158" class="l">158: </a>
+<a href="#159" id="159" class="l">159: </a>        <span class="php-var">$this</span>-&gt;namespaceName = <span class="php-var">$parent</span>-&gt;getName();
+<a href="#160" id="160" class="l">160: </a>        <span class="php-var">$this</span>-&gt;aliases = <span class="php-var">$parent</span>-&gt;getNamespaceAliases();
+<a href="#161" id="161" class="l">161: </a>        <span class="php-keyword1">return</span> parent::processParent(<span class="php-var">$parent</span>, <span class="php-var">$tokenStream</span>);
+<a href="#162" id="162" class="l">162: </a>    }
+<a href="#163" id="163" class="l">163: </a>
+<a href="#164" id="164" class="l">164: </a>    <span class="php-comment">/**
+</span><a href="#165" id="165" class="l">165: </a><span class="php-comment">     * Parses reflected element metadata from the token stream.
+</span><a href="#166" id="166" class="l">166: </a><span class="php-comment">     *
+</span><a href="#167" id="167" class="l">167: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+</span><a href="#168" id="168" class="l">168: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
+</span><a href="#169" id="169" class="l">169: </a><span class="php-comment">     * @return \TokenReflection\ReflectionFunction
+</span><a href="#170" id="170" class="l">170: </a><span class="php-comment">     */</span>
+<a href="#171" id="171" class="l">171: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parse(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
+<a href="#172" id="172" class="l">172: </a>    {
+<a href="#173" id="173" class="l">173: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>
+<a href="#174" id="174" class="l">174: </a>            -&gt;parseReturnsReference(<span class="php-var">$tokenStream</span>)
+<a href="#175" id="175" class="l">175: </a>            -&gt;parseName(<span class="php-var">$tokenStream</span>);
+<a href="#176" id="176" class="l">176: </a>    }
+<a href="#177" id="177" class="l">177: </a>}
+<a href="#178" id="178" class="l">178: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.4.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>
 	</div>
 </div>
 </div>

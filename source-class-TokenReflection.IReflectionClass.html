@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.4.0">
-	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.5.0" />
+	<meta name="robots" content="noindex" />
 
 	<title>File IReflectionClass.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
-	<script type="text/javascript" src="elementlist.js?2625982823"></script>
-	<script type="text/javascript">
-		var ApiGen = ApiGen || {};
-		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
-	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
+	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
+	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
 
@@ -23,7 +19,6 @@
 		<a href="index.html" title="Overview"><span>Overview</span></a>
 
 		<div id="groups">
-
 			<h3>Namespaces</h3>
 			<ul>
 				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
@@ -47,7 +42,7 @@
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 		<div id="elements">
 			<h3>Classes</h3>
@@ -84,10 +79,6 @@
 			</ul>
 
 
-			<h3>Exceptions</h3>
-			<ul>
-				<li><a href="class-TokenReflection.Exception.html">Exception</a></li>
-			</ul>
 
 
 		</div>
@@ -99,10 +90,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -133,7 +124,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -309,7 +300,7 @@
 </span><a href="#178" id="178" class="l">178: </a><span class="php-comment">     *
 </span><a href="#179" id="179" class="l">179: </a><span class="php-comment">     * @param string|object $interface Interface name or reflection object
 </span><a href="#180" id="180" class="l">180: </a><span class="php-comment">     * @return boolean
-</span><a href="#181" id="181" class="l">181: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid object was provided as interface.
+</span><a href="#181" id="181" class="l">181: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid object was provided as interface.
 </span><a href="#182" id="182" class="l">182: </a><span class="php-comment">     */</span>
 <a href="#183" id="183" class="l">183: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> implementsInterface(<span class="php-var">$interface</span>);
 <a href="#184" id="184" class="l">184: </a>
@@ -368,7 +359,7 @@
 </span><a href="#237" id="237" class="l">237: </a><span class="php-comment">     *
 </span><a href="#238" id="238" class="l">238: </a><span class="php-comment">     * @param string $name Method name
 </span><a href="#239" id="239" class="l">239: </a><span class="php-comment">     * @return \TokenReflection\IReflectionMethod
-</span><a href="#240" id="240" class="l">240: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested method does not exist.
+</span><a href="#240" id="240" class="l">240: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested method does not exist.
 </span><a href="#241" id="241" class="l">241: </a><span class="php-comment">     */</span>
 <a href="#242" id="242" class="l">242: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getMethod(<span class="php-var">$name</span>);
 <a href="#243" id="243" class="l">243: </a>
@@ -425,7 +416,7 @@
 </span><a href="#294" id="294" class="l">294: </a><span class="php-comment">     *
 </span><a href="#295" id="295" class="l">295: </a><span class="php-comment">     * @param string $name Constant name
 </span><a href="#296" id="296" class="l">296: </a><span class="php-comment">     * @return mixed
-</span><a href="#297" id="297" class="l">297: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist.
+</span><a href="#297" id="297" class="l">297: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested constant does not exist.
 </span><a href="#298" id="298" class="l">298: </a><span class="php-comment">     */</span>
 <a href="#299" id="299" class="l">299: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getConstant(<span class="php-var">$name</span>);
 <a href="#300" id="300" class="l">300: </a>
@@ -434,7 +425,7 @@
 </span><a href="#303" id="303" class="l">303: </a><span class="php-comment">     *
 </span><a href="#304" id="304" class="l">304: </a><span class="php-comment">     * @param string $name Constant name
 </span><a href="#305" id="305" class="l">305: </a><span class="php-comment">     * @return \TokenReflection\IReflectionConstant
-</span><a href="#306" id="306" class="l">306: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested constant does not exist.
+</span><a href="#306" id="306" class="l">306: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested constant does not exist.
 </span><a href="#307" id="307" class="l">307: </a><span class="php-comment">     */</span>
 <a href="#308" id="308" class="l">308: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getConstantReflection(<span class="php-var">$name</span>);
 <a href="#309" id="309" class="l">309: </a>
@@ -487,7 +478,7 @@
 </span><a href="#356" id="356" class="l">356: </a><span class="php-comment">     *
 </span><a href="#357" id="357" class="l">357: </a><span class="php-comment">     * @param string $name Property name
 </span><a href="#358" id="358" class="l">358: </a><span class="php-comment">     * @return \TokenReflection\ReflectionProperty
-</span><a href="#359" id="359" class="l">359: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested property does not exist.
+</span><a href="#359" id="359" class="l">359: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested property does not exist.
 </span><a href="#360" id="360" class="l">360: </a><span class="php-comment">     */</span>
 <a href="#361" id="361" class="l">361: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getProperty(<span class="php-var">$name</span>);
 <a href="#362" id="362" class="l">362: </a>
@@ -551,8 +542,8 @@
 </span><a href="#420" id="420" class="l">420: </a><span class="php-comment">     * @param string $name Property name
 </span><a href="#421" id="421" class="l">421: </a><span class="php-comment">     * @param mixed $default Default value
 </span><a href="#422" id="422" class="l">422: </a><span class="php-comment">     * @return mixed
-</span><a href="#423" id="423" class="l">423: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist.
-</span><a href="#424" id="424" class="l">424: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible.
+</span><a href="#423" id="423" class="l">423: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested static property does not exist.
+</span><a href="#424" id="424" class="l">424: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
 </span><a href="#425" id="425" class="l">425: </a><span class="php-comment">     */</span>
 <a href="#426" id="426" class="l">426: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getStaticPropertyValue(<span class="php-var">$name</span>, <span class="php-var">$default</span> = <span class="php-keyword1">null</span>);
 <a href="#427" id="427" class="l">427: </a>
@@ -674,7 +665,7 @@
 </span><a href="#543" id="543" class="l">543: </a><span class="php-comment">     *
 </span><a href="#544" id="544" class="l">544: </a><span class="php-comment">     * @param object $object Instance
 </span><a href="#545" id="545" class="l">545: </a><span class="php-comment">     * @return boolean
-</span><a href="#546" id="546" class="l">546: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the provided argument is not an object.
+</span><a href="#546" id="546" class="l">546: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the provided argument is not an object.
 </span><a href="#547" id="547" class="l">547: </a><span class="php-comment">     */</span>
 <a href="#548" id="548" class="l">548: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isInstance(<span class="php-var">$object</span>);
 <a href="#549" id="549" class="l">549: </a>
@@ -682,7 +673,7 @@
 </span><a href="#551" id="551" class="l">551: </a><span class="php-comment">     * Creates a new class instance without using a constructor.
 </span><a href="#552" id="552" class="l">552: </a><span class="php-comment">     *
 </span><a href="#553" id="553" class="l">553: </a><span class="php-comment">     * @return object
-</span><a href="#554" id="554" class="l">554: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class.
+</span><a href="#554" id="554" class="l">554: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
 </span><a href="#555" id="555" class="l">555: </a><span class="php-comment">     */</span>
 <a href="#556" id="556" class="l">556: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> newInstanceWithoutConstructor();
 <a href="#557" id="557" class="l">557: </a>
@@ -701,7 +692,7 @@
 </span><a href="#570" id="570" class="l">570: </a><span class="php-comment">     *
 </span><a href="#571" id="571" class="l">571: </a><span class="php-comment">     * @param array $args Array of constructor parameters
 </span><a href="#572" id="572" class="l">572: </a><span class="php-comment">     * @return object
-</span><a href="#573" id="573" class="l">573: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the required class does not exist.
+</span><a href="#573" id="573" class="l">573: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the required class does not exist.
 </span><a href="#574" id="574" class="l">574: </a><span class="php-comment">     */</span>
 <a href="#575" id="575" class="l">575: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> newInstanceArgs(<span class="php-keyword1">array</span> <span class="php-var">$args</span> = <span class="php-keyword1">array</span>());
 <a href="#576" id="576" class="l">576: </a>
@@ -710,8 +701,8 @@
 </span><a href="#579" id="579" class="l">579: </a><span class="php-comment">     *
 </span><a href="#580" id="580" class="l">580: </a><span class="php-comment">     * @param string $name Property name
 </span><a href="#581" id="581" class="l">581: </a><span class="php-comment">     * @param mixed $value Property value
-</span><a href="#582" id="582" class="l">582: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested static property does not exist.
-</span><a href="#583" id="583" class="l">583: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested static property is not accessible.
+</span><a href="#582" id="582" class="l">582: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested static property does not exist.
+</span><a href="#583" id="583" class="l">583: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
 </span><a href="#584" id="584" class="l">584: </a><span class="php-comment">     */</span>
 <a href="#585" id="585" class="l">585: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setStaticPropertyValue(<span class="php-var">$name</span>, <span class="php-var">$value</span>);
 <a href="#586" id="586" class="l">586: </a>
@@ -734,7 +725,7 @@
 <a href="#603" id="603" class="l">603: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.4.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>
 	</div>
 </div>
 </div>

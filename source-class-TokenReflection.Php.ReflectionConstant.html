@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.4.0">
-	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.5.0" />
+	<meta name="robots" content="noindex" />
 
 	<title>File Php/ReflectionConstant.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
-	<script type="text/javascript" src="elementlist.js?2625982823"></script>
-	<script type="text/javascript">
-		var ApiGen = ApiGen || {};
-		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
-	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
+	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
+	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
 
@@ -23,7 +19,6 @@
 		<a href="index.html" title="Overview"><span>Overview</span></a>
 
 		<div id="groups">
-
 			<h3>Namespaces</h3>
 			<ul>
 				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
@@ -47,7 +42,7 @@
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 		<div id="elements">
 			<h3>Classes</h3>
@@ -78,10 +73,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -112,7 +107,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -182,7 +177,7 @@
 </span><a href="#72" id="72" class="l"> 72: </a><span class="php-comment">     * @param mixed $value Constant value
 </span><a href="#73" id="73" class="l"> 73: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker
 </span><a href="#74" id="74" class="l"> 74: </a><span class="php-comment">     * @param \TokenReflection\Php\ReflectionClass $parent Defining class reflection
-</span><a href="#75" id="75" class="l"> 75: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Parse If real parent class could not be determined.
+</span><a href="#75" id="75" class="l"> 75: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If real parent class could not be determined.
 </span><a href="#76" id="76" class="l"> 76: </a><span class="php-comment">     */</span>
 <a href="#77" id="77" class="l"> 77: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __construct(<span class="php-var">$name</span>, <span class="php-var">$value</span>, Broker <span class="php-var">$broker</span>, ReflectionClass <span class="php-var">$parent</span> = <span class="php-keyword1">null</span>)
 <a href="#78" id="78" class="l"> 78: </a>    {
@@ -215,7 +210,7 @@
 <a href="#105" id="105" class="l">105: </a>            }
 <a href="#106" id="106" class="l">106: </a>
 <a href="#107" id="107" class="l">107: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$realParent</span>) {
-<a href="#108" id="108" class="l">108: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-quote">'Could not determine constant real parent class.'</span>, Exception::DOES_NOT_EXIST);
+<a href="#108" id="108" class="l">108: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not determine constant real parent class.'</span>, Exception\RuntimeException::DOES_NOT_EXIST, <span class="php-var">$this</span>);
 <a href="#109" id="109" class="l">109: </a>            }
 <a href="#110" id="110" class="l">110: </a>
 <a href="#111" id="111" class="l">111: </a>            <span class="php-var">$this</span>-&gt;declaringClassName = <span class="php-var">$realParent</span>-&gt;getName();
@@ -433,115 +428,126 @@
 <a href="#323" id="323" class="l">323: </a>    }
 <a href="#324" id="324" class="l">324: </a>
 <a href="#325" id="325" class="l">325: </a>    <span class="php-comment">/**
-</span><a href="#326" id="326" class="l">326: </a><span class="php-comment">     * Returns the string representation of the reflection object.
+</span><a href="#326" id="326" class="l">326: </a><span class="php-comment">     * Returns an element pretty (docblock compatible) name.
 </span><a href="#327" id="327" class="l">327: </a><span class="php-comment">     *
 </span><a href="#328" id="328" class="l">328: </a><span class="php-comment">     * @return string
 </span><a href="#329" id="329" class="l">329: </a><span class="php-comment">     */</span>
-<a href="#330" id="330" class="l">330: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __toString()
+<a href="#330" id="330" class="l">330: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getPrettyName()
 <a href="#331" id="331" class="l">331: </a>    {
-<a href="#332" id="332" class="l">332: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">sprintf</span>(
-<a href="#333" id="333" class="l">333: </a>            <span class="php-quote">&quot;Constant [ %s %s ] { %s }\n&quot;</span>,
-<a href="#334" id="334" class="l">334: </a>            <span class="php-keyword2">gettype</span>(<span class="php-var">$this</span>-&gt;getValue()),
-<a href="#335" id="335" class="l">335: </a>            <span class="php-var">$this</span>-&gt;getName(),
-<a href="#336" id="336" class="l">336: </a>            <span class="php-var">$this</span>-&gt;getValue()
-<a href="#337" id="337" class="l">337: </a>        );
-<a href="#338" id="338" class="l">338: </a>    }
-<a href="#339" id="339" class="l">339: </a>
-<a href="#340" id="340" class="l">340: </a>    <span class="php-comment">/**
-</span><a href="#341" id="341" class="l">341: </a><span class="php-comment">     * Exports a reflected object.
-</span><a href="#342" id="342" class="l">342: </a><span class="php-comment">     *
-</span><a href="#343" id="343" class="l">343: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Broker instance
-</span><a href="#344" id="344" class="l">344: </a><span class="php-comment">     * @param string|object|null $class Class name, class instance or null
-</span><a href="#345" id="345" class="l">345: </a><span class="php-comment">     * @param string $constant Constant name
-</span><a href="#346" id="346" class="l">346: </a><span class="php-comment">     * @param boolean $return Return the export instead of outputting it
-</span><a href="#347" id="347" class="l">347: </a><span class="php-comment">     * @return string|null
-</span><a href="#348" id="348" class="l">348: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
-</span><a href="#349" id="349" class="l">349: </a><span class="php-comment">     */</span>
-<a href="#350" id="350" class="l">350: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> export(Broker <span class="php-var">$broker</span>, <span class="php-var">$class</span>, <span class="php-var">$constant</span>, <span class="php-var">$return</span> = <span class="php-keyword1">false</span>)
-<a href="#351" id="351" class="l">351: </a>    {
-<a href="#352" id="352" class="l">352: </a>        <span class="php-var">$className</span> = <span class="php-keyword2">is_object</span>(<span class="php-var">$class</span>) ? <span class="php-keyword2">get_class</span>(<span class="php-var">$class</span>) : <span class="php-var">$class</span>;
-<a href="#353" id="353" class="l">353: </a>        <span class="php-var">$constantName</span> = <span class="php-var">$constant</span>;
-<a href="#354" id="354" class="l">354: </a>
-<a href="#355" id="355" class="l">355: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$className</span>) {
-<a href="#356" id="356" class="l">356: </a>            <span class="php-var">$constant</span> = <span class="php-var">$broker</span>-&gt;getConstant(<span class="php-var">$constantName</span>);
-<a href="#357" id="357" class="l">357: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$constant</span>) {
-<a href="#358" id="358" class="l">358: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Constant %s does not exist.'</span>, <span class="php-var">$constantName</span>), Exception\Runtime::DOES_NOT_EXIST);
-<a href="#359" id="359" class="l">359: </a>            }
-<a href="#360" id="360" class="l">360: </a>        } <span class="php-keyword1">else</span> {
-<a href="#361" id="361" class="l">361: </a>            <span class="php-var">$class</span> = <span class="php-var">$broker</span>-&gt;getClass(<span class="php-var">$className</span>);
-<a href="#362" id="362" class="l">362: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$class</span> <span class="php-keyword1">instanceof</span> Dummy\ReflectionClass) {
-<a href="#363" id="363" class="l">363: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Class %s does not exist.'</span>, <span class="php-var">$className</span>), Exception\Runtime::DOES_NOT_EXIST);
-<a href="#364" id="364" class="l">364: </a>            }
-<a href="#365" id="365" class="l">365: </a>            <span class="php-var">$constant</span> = <span class="php-var">$class</span>-&gt;getConstantReflection(<span class="php-var">$constantName</span>);
-<a href="#366" id="366" class="l">366: </a>        }
-<a href="#367" id="367" class="l">367: </a>
-<a href="#368" id="368" class="l">368: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$return</span>) {
-<a href="#369" id="369" class="l">369: </a>            <span class="php-keyword1">return</span> <span class="php-var">$constant</span>-&gt;__toString();
-<a href="#370" id="370" class="l">370: </a>        }
-<a href="#371" id="371" class="l">371: </a>
-<a href="#372" id="372" class="l">372: </a>        <span class="php-keyword1">echo</span> <span class="php-var">$constant</span>-&gt;__toString();
-<a href="#373" id="373" class="l">373: </a>    }
-<a href="#374" id="374" class="l">374: </a>
-<a href="#375" id="375" class="l">375: </a>    <span class="php-comment">/**
-</span><a href="#376" id="376" class="l">376: </a><span class="php-comment">     * Returns the reflection broker used by this reflection object.
-</span><a href="#377" id="377" class="l">377: </a><span class="php-comment">     *
-</span><a href="#378" id="378" class="l">378: </a><span class="php-comment">     * @return \TokenReflection\Broker
-</span><a href="#379" id="379" class="l">379: </a><span class="php-comment">     */</span>
-<a href="#380" id="380" class="l">380: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker()
-<a href="#381" id="381" class="l">381: </a>    {
-<a href="#382" id="382" class="l">382: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker;
-<a href="#383" id="383" class="l">383: </a>    }
-<a href="#384" id="384" class="l">384: </a>
-<a href="#385" id="385" class="l">385: </a>    <span class="php-comment">/**
-</span><a href="#386" id="386" class="l">386: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
-</span><a href="#387" id="387" class="l">387: </a><span class="php-comment">     *
-</span><a href="#388" id="388" class="l">388: </a><span class="php-comment">     * @return array
-</span><a href="#389" id="389" class="l">389: </a><span class="php-comment">     */</span>
-<a href="#390" id="390" class="l">390: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases()
-<a href="#391" id="391" class="l">391: </a>    {
-<a href="#392" id="392" class="l">392: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
-<a href="#393" id="393" class="l">393: </a>    }
-<a href="#394" id="394" class="l">394: </a>
-<a href="#395" id="395" class="l">395: </a>    <span class="php-comment">/**
-</span><a href="#396" id="396" class="l">396: </a><span class="php-comment">     * Magic __get method.
-</span><a href="#397" id="397" class="l">397: </a><span class="php-comment">     *
-</span><a href="#398" id="398" class="l">398: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#399" id="399" class="l">399: </a><span class="php-comment">     * @return mixed
+<a href="#332" id="332" class="l">332: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;declaringClassName ? <span class="php-var">$this</span>-&gt;name : <span class="php-keyword2">sprintf</span>(<span class="php-quote">'%s::%s'</span>, <span class="php-var">$this</span>-&gt;declaringClassName, <span class="php-var">$this</span>-&gt;name);
+<a href="#333" id="333" class="l">333: </a>    }
+<a href="#334" id="334" class="l">334: </a>
+<a href="#335" id="335" class="l">335: </a>    <span class="php-comment">/**
+</span><a href="#336" id="336" class="l">336: </a><span class="php-comment">     * Returns the string representation of the reflection object.
+</span><a href="#337" id="337" class="l">337: </a><span class="php-comment">     *
+</span><a href="#338" id="338" class="l">338: </a><span class="php-comment">     * @return string
+</span><a href="#339" id="339" class="l">339: </a><span class="php-comment">     */</span>
+<a href="#340" id="340" class="l">340: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __toString()
+<a href="#341" id="341" class="l">341: </a>    {
+<a href="#342" id="342" class="l">342: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">sprintf</span>(
+<a href="#343" id="343" class="l">343: </a>            <span class="php-quote">&quot;Constant [ %s %s ] { %s }\n&quot;</span>,
+<a href="#344" id="344" class="l">344: </a>            <span class="php-keyword2">gettype</span>(<span class="php-var">$this</span>-&gt;getValue()),
+<a href="#345" id="345" class="l">345: </a>            <span class="php-var">$this</span>-&gt;getName(),
+<a href="#346" id="346" class="l">346: </a>            <span class="php-var">$this</span>-&gt;getValue()
+<a href="#347" id="347" class="l">347: </a>        );
+<a href="#348" id="348" class="l">348: </a>    }
+<a href="#349" id="349" class="l">349: </a>
+<a href="#350" id="350" class="l">350: </a>    <span class="php-comment">/**
+</span><a href="#351" id="351" class="l">351: </a><span class="php-comment">     * Exports a reflected object.
+</span><a href="#352" id="352" class="l">352: </a><span class="php-comment">     *
+</span><a href="#353" id="353" class="l">353: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Broker instance
+</span><a href="#354" id="354" class="l">354: </a><span class="php-comment">     * @param string|object|null $class Class name, class instance or null
+</span><a href="#355" id="355" class="l">355: </a><span class="php-comment">     * @param string $constant Constant name
+</span><a href="#356" id="356" class="l">356: </a><span class="php-comment">     * @param boolean $return Return the export instead of outputting it
+</span><a href="#357" id="357" class="l">357: </a><span class="php-comment">     * @return string|null
+</span><a href="#358" id="358" class="l">358: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+</span><a href="#359" id="359" class="l">359: </a><span class="php-comment">     */</span>
+<a href="#360" id="360" class="l">360: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> export(Broker <span class="php-var">$broker</span>, <span class="php-var">$class</span>, <span class="php-var">$constant</span>, <span class="php-var">$return</span> = <span class="php-keyword1">false</span>)
+<a href="#361" id="361" class="l">361: </a>    {
+<a href="#362" id="362" class="l">362: </a>        <span class="php-var">$className</span> = <span class="php-keyword2">is_object</span>(<span class="php-var">$class</span>) ? <span class="php-keyword2">get_class</span>(<span class="php-var">$class</span>) : <span class="php-var">$class</span>;
+<a href="#363" id="363" class="l">363: </a>        <span class="php-var">$constantName</span> = <span class="php-var">$constant</span>;
+<a href="#364" id="364" class="l">364: </a>
+<a href="#365" id="365" class="l">365: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$className</span>) {
+<a href="#366" id="366" class="l">366: </a>            <span class="php-keyword1">try</span> {
+<a href="#367" id="367" class="l">367: </a>                <span class="php-var">$constant</span> = <span class="php-var">$broker</span>-&gt;getConstant(<span class="php-var">$constantName</span>);
+<a href="#368" id="368" class="l">368: </a>            } <span class="php-keyword1">catch</span> (Exception\BrokerException <span class="php-var">$e</span>) {
+<a href="#369" id="369" class="l">369: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Constant %s does not exist.'</span>, <span class="php-var">$constantName</span>), Exception\RuntimeException::DOES_NOT_EXIST);
+<a href="#370" id="370" class="l">370: </a>            }
+<a href="#371" id="371" class="l">371: </a>        } <span class="php-keyword1">else</span> {
+<a href="#372" id="372" class="l">372: </a>            <span class="php-var">$class</span> = <span class="php-var">$broker</span>-&gt;getClass(<span class="php-var">$className</span>);
+<a href="#373" id="373" class="l">373: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$class</span> <span class="php-keyword1">instanceof</span> Dummy\ReflectionClass) {
+<a href="#374" id="374" class="l">374: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Class %s does not exist.'</span>, <span class="php-var">$className</span>), Exception\RuntimeException::DOES_NOT_EXIST);
+<a href="#375" id="375" class="l">375: </a>            }
+<a href="#376" id="376" class="l">376: </a>            <span class="php-var">$constant</span> = <span class="php-var">$class</span>-&gt;getConstantReflection(<span class="php-var">$constantName</span>);
+<a href="#377" id="377" class="l">377: </a>        }
+<a href="#378" id="378" class="l">378: </a>
+<a href="#379" id="379" class="l">379: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$return</span>) {
+<a href="#380" id="380" class="l">380: </a>            <span class="php-keyword1">return</span> <span class="php-var">$constant</span>-&gt;__toString();
+<a href="#381" id="381" class="l">381: </a>        }
+<a href="#382" id="382" class="l">382: </a>
+<a href="#383" id="383" class="l">383: </a>        <span class="php-keyword1">echo</span> <span class="php-var">$constant</span>-&gt;__toString();
+<a href="#384" id="384" class="l">384: </a>    }
+<a href="#385" id="385" class="l">385: </a>
+<a href="#386" id="386" class="l">386: </a>    <span class="php-comment">/**
+</span><a href="#387" id="387" class="l">387: </a><span class="php-comment">     * Returns the reflection broker used by this reflection object.
+</span><a href="#388" id="388" class="l">388: </a><span class="php-comment">     *
+</span><a href="#389" id="389" class="l">389: </a><span class="php-comment">     * @return \TokenReflection\Broker
+</span><a href="#390" id="390" class="l">390: </a><span class="php-comment">     */</span>
+<a href="#391" id="391" class="l">391: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker()
+<a href="#392" id="392" class="l">392: </a>    {
+<a href="#393" id="393" class="l">393: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker;
+<a href="#394" id="394" class="l">394: </a>    }
+<a href="#395" id="395" class="l">395: </a>
+<a href="#396" id="396" class="l">396: </a>    <span class="php-comment">/**
+</span><a href="#397" id="397" class="l">397: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
+</span><a href="#398" id="398" class="l">398: </a><span class="php-comment">     *
+</span><a href="#399" id="399" class="l">399: </a><span class="php-comment">     * @return array
 </span><a href="#400" id="400" class="l">400: </a><span class="php-comment">     */</span>
-<a href="#401" id="401" class="l">401: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
+<a href="#401" id="401" class="l">401: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases()
 <a href="#402" id="402" class="l">402: </a>    {
-<a href="#403" id="403" class="l">403: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#403" id="403" class="l">403: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
 <a href="#404" id="404" class="l">404: </a>    }
 <a href="#405" id="405" class="l">405: </a>
 <a href="#406" id="406" class="l">406: </a>    <span class="php-comment">/**
-</span><a href="#407" id="407" class="l">407: </a><span class="php-comment">     * Magic __isset method.
+</span><a href="#407" id="407" class="l">407: </a><span class="php-comment">     * Magic __get method.
 </span><a href="#408" id="408" class="l">408: </a><span class="php-comment">     *
 </span><a href="#409" id="409" class="l">409: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#410" id="410" class="l">410: </a><span class="php-comment">     * @return boolean
+</span><a href="#410" id="410" class="l">410: </a><span class="php-comment">     * @return mixed
 </span><a href="#411" id="411" class="l">411: </a><span class="php-comment">     */</span>
-<a href="#412" id="412" class="l">412: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __isset(<span class="php-var">$key</span>)
+<a href="#412" id="412" class="l">412: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
 <a href="#413" id="413" class="l">413: </a>    {
-<a href="#414" id="414" class="l">414: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#414" id="414" class="l">414: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
 <a href="#415" id="415" class="l">415: </a>    }
 <a href="#416" id="416" class="l">416: </a>
 <a href="#417" id="417" class="l">417: </a>    <span class="php-comment">/**
-</span><a href="#418" id="418" class="l">418: </a><span class="php-comment">     * Creates a reflection instance.
+</span><a href="#418" id="418" class="l">418: </a><span class="php-comment">     * Magic __isset method.
 </span><a href="#419" id="419" class="l">419: </a><span class="php-comment">     *
-</span><a href="#420" id="420" class="l">420: </a><span class="php-comment">     * Not supported for constants since there is no internal constant reflection.
-</span><a href="#421" id="421" class="l">421: </a><span class="php-comment">     *
-</span><a href="#422" id="422" class="l">422: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
-</span><a href="#423" id="423" class="l">423: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
-</span><a href="#424" id="424" class="l">424: </a><span class="php-comment">     * @return null
-</span><a href="#425" id="425" class="l">425: </a><span class="php-comment">     */</span>
-<a href="#426" id="426" class="l">426: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
-<a href="#427" id="427" class="l">427: </a>    {
-<a href="#428" id="428" class="l">428: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">null</span>;
-<a href="#429" id="429" class="l">429: </a>    }
-<a href="#430" id="430" class="l">430: </a>}
-<a href="#431" id="431" class="l">431: </a></code></pre>
+</span><a href="#420" id="420" class="l">420: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#421" id="421" class="l">421: </a><span class="php-comment">     * @return boolean
+</span><a href="#422" id="422" class="l">422: </a><span class="php-comment">     */</span>
+<a href="#423" id="423" class="l">423: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __isset(<span class="php-var">$key</span>)
+<a href="#424" id="424" class="l">424: </a>    {
+<a href="#425" id="425" class="l">425: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#426" id="426" class="l">426: </a>    }
+<a href="#427" id="427" class="l">427: </a>
+<a href="#428" id="428" class="l">428: </a>    <span class="php-comment">/**
+</span><a href="#429" id="429" class="l">429: </a><span class="php-comment">     * Creates a reflection instance.
+</span><a href="#430" id="430" class="l">430: </a><span class="php-comment">     *
+</span><a href="#431" id="431" class="l">431: </a><span class="php-comment">     * Not supported for constants since there is no internal constant reflection.
+</span><a href="#432" id="432" class="l">432: </a><span class="php-comment">     *
+</span><a href="#433" id="433" class="l">433: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
+</span><a href="#434" id="434" class="l">434: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
+</span><a href="#435" id="435" class="l">435: </a><span class="php-comment">     * @return null
+</span><a href="#436" id="436" class="l">436: </a><span class="php-comment">     */</span>
+<a href="#437" id="437" class="l">437: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
+<a href="#438" id="438" class="l">438: </a>    {
+<a href="#439" id="439" class="l">439: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">null</span>;
+<a href="#440" id="440" class="l">440: </a>    }
+<a href="#441" id="441" class="l">441: </a>}
+<a href="#442" id="442" class="l">442: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.4.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>
 	</div>
 </div>
 </div>

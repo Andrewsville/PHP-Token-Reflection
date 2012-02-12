@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.4.0">
-	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.5.0" />
+	<meta name="robots" content="noindex" />
 
 	<title>File ReflectionConstant.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
-	<script type="text/javascript" src="elementlist.js?2625982823"></script>
-	<script type="text/javascript">
-		var ApiGen = ApiGen || {};
-		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
-	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
+	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
+	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
 
@@ -23,7 +19,6 @@
 		<a href="index.html" title="Overview"><span>Overview</span></a>
 
 		<div id="groups">
-
 			<h3>Namespaces</h3>
 			<ul>
 				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
@@ -47,7 +42,7 @@
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 		<div id="elements">
 			<h3>Classes</h3>
@@ -84,10 +79,6 @@
 			</ul>
 
 
-			<h3>Exceptions</h3>
-			<ul>
-				<li><a href="class-TokenReflection.Exception.html">Exception</a></li>
-			</ul>
 
 
 		</div>
@@ -99,10 +90,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -133,7 +124,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -146,7 +137,7 @@
 <a href="#15" id="15" class="l"> 15: </a>
 <a href="#16" id="16" class="l"> 16: </a><span class="php-keyword1">namespace</span> TokenReflection;
 <a href="#17" id="17" class="l"> 17: </a>
-<a href="#18" id="18" class="l"> 18: </a><span class="php-keyword1">use</span> TokenReflection\Stream\StreamBase <span class="php-keyword1">as</span> Stream;
+<a href="#18" id="18" class="l"> 18: </a><span class="php-keyword1">use</span> TokenReflection\Stream\StreamBase <span class="php-keyword1">as</span> Stream, TokenReflection\Exception;
 <a href="#19" id="19" class="l"> 19: </a>
 <a href="#20" id="20" class="l"> 20: </a><span class="php-comment">/**
 </span><a href="#21" id="21" class="l"> 21: </a><span class="php-comment"> * Tokenized constant reflection.
@@ -305,7 +296,7 @@
 </span><a href="#174" id="174" class="l">174: </a><span class="php-comment">     * @param string $constant Constant name
 </span><a href="#175" id="175" class="l">175: </a><span class="php-comment">     * @param boolean $return Return the export instead of outputting it
 </span><a href="#176" id="176" class="l">176: </a><span class="php-comment">     * @return string|null
-</span><a href="#177" id="177" class="l">177: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If requested parameter doesn't exist.
+</span><a href="#177" id="177" class="l">177: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 </span><a href="#178" id="178" class="l">178: </a><span class="php-comment">     */</span>
 <a href="#179" id="179" class="l">179: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> export(Broker <span class="php-var">$broker</span>, <span class="php-var">$class</span>, <span class="php-var">$constant</span>, <span class="php-var">$return</span> = <span class="php-keyword1">false</span>)
 <a href="#180" id="180" class="l">180: </a>    {
@@ -315,12 +306,12 @@
 <a href="#184" id="184" class="l">184: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$className</span>) {
 <a href="#185" id="185" class="l">185: </a>            <span class="php-var">$constant</span> = <span class="php-var">$broker</span>-&gt;getConstant(<span class="php-var">$constantName</span>);
 <a href="#186" id="186" class="l">186: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$constant</span>) {
-<a href="#187" id="187" class="l">187: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Constant %s does not exist.'</span>, <span class="php-var">$constantName</span>), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#187" id="187" class="l">187: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Constant does not exist.'</span>, Exception\RuntimeException::DOES_NOT_EXIST);
 <a href="#188" id="188" class="l">188: </a>            }
 <a href="#189" id="189" class="l">189: </a>        } <span class="php-keyword1">else</span> {
 <a href="#190" id="190" class="l">190: </a>            <span class="php-var">$class</span> = <span class="php-var">$broker</span>-&gt;getClass(<span class="php-var">$className</span>);
 <a href="#191" id="191" class="l">191: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$class</span> <span class="php-keyword1">instanceof</span> Dummy\ReflectionClass) {
-<a href="#192" id="192" class="l">192: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Class %s does not exist.'</span>, <span class="php-var">$className</span>), Exception\Runtime::DOES_NOT_EXIST);
+<a href="#192" id="192" class="l">192: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Class does not exist.'</span>, Exception\RuntimeException::DOES_NOT_EXIST, <span class="php-var">$class</span>);
 <a href="#193" id="193" class="l">193: </a>            }
 <a href="#194" id="194" class="l">194: </a>            <span class="php-var">$constant</span> = <span class="php-var">$class</span>-&gt;getConstantReflection(<span class="php-var">$constantName</span>);
 <a href="#195" id="195" class="l">195: </a>        }
@@ -343,158 +334,161 @@
 <a href="#212" id="212" class="l">212: </a>    }
 <a href="#213" id="213" class="l">213: </a>
 <a href="#214" id="214" class="l">214: </a>    <span class="php-comment">/**
-</span><a href="#215" id="215" class="l">215: </a><span class="php-comment">     * Processes the parent reflection object.
+</span><a href="#215" id="215" class="l">215: </a><span class="php-comment">     * Returns an element pretty (docblock compatible) name.
 </span><a href="#216" id="216" class="l">216: </a><span class="php-comment">     *
-</span><a href="#217" id="217" class="l">217: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#218" id="218" class="l">218: </a><span class="php-comment">     * @return \TokenReflection\ReflectionElement
-</span><a href="#219" id="219" class="l">219: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
-</span><a href="#220" id="220" class="l">220: </a><span class="php-comment">     */</span>
-<a href="#221" id="221" class="l">221: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> processParent(IReflection <span class="php-var">$parent</span>)
-<a href="#222" id="222" class="l">222: </a>    {
-<a href="#223" id="223" class="l">223: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$parent</span> <span class="php-keyword1">instanceof</span> ReflectionFileNamespace) {
-<a href="#224" id="224" class="l">224: </a>            <span class="php-var">$this</span>-&gt;namespaceName = <span class="php-var">$parent</span>-&gt;getName();
-<a href="#225" id="225" class="l">225: </a>            <span class="php-var">$this</span>-&gt;aliases = <span class="php-var">$parent</span>-&gt;getNamespaceAliases();
-<a href="#226" id="226" class="l">226: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-var">$parent</span> <span class="php-keyword1">instanceof</span> ReflectionClass) {
-<a href="#227" id="227" class="l">227: </a>            <span class="php-var">$this</span>-&gt;declaringClassName = <span class="php-var">$parent</span>-&gt;getName();
-<a href="#228" id="228" class="l">228: </a>        } <span class="php-keyword1">else</span> {
-<a href="#229" id="229" class="l">229: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace or TokenReflection\ReflectionClass, &quot;%s&quot; given.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$parent</span>)), Exception\Parse::INVALID_PARENT);
-<a href="#230" id="230" class="l">230: </a>        }
-<a href="#231" id="231" class="l">231: </a>
-<a href="#232" id="232" class="l">232: </a>        <span class="php-keyword1">return</span> parent::processParent(<span class="php-var">$parent</span>);
-<a href="#233" id="233" class="l">233: </a>    }
-<a href="#234" id="234" class="l">234: </a>
-<a href="#235" id="235" class="l">235: </a>    <span class="php-comment">/**
-</span><a href="#236" id="236" class="l">236: </a><span class="php-comment">     * Find the appropriate docblock.
-</span><a href="#237" id="237" class="l">237: </a><span class="php-comment">     *
-</span><a href="#238" id="238" class="l">238: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
-</span><a href="#239" id="239" class="l">239: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection
-</span><a href="#240" id="240" class="l">240: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
-</span><a href="#241" id="241" class="l">241: </a><span class="php-comment">     */</span>
-<a href="#242" id="242" class="l">242: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parseDocComment(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
-<a href="#243" id="243" class="l">243: </a>    {
-<a href="#244" id="244" class="l">244: </a>        <span class="php-var">$position</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">key</span>() - <span class="php-num">1</span>;
-<a href="#245" id="245" class="l">245: </a>        <span class="php-keyword1">while</span> (<span class="php-var">$position</span> &gt; <span class="php-num">0</span> &amp;&amp; !<span class="php-var">$tokenStream</span>-&gt;is(T_CONST, <span class="php-var">$position</span>)) {
-<a href="#246" id="246" class="l">246: </a>            <span class="php-var">$position</span>--;
-<a href="#247" id="247" class="l">247: </a>        }
-<a href="#248" id="248" class="l">248: </a>
-<a href="#249" id="249" class="l">249: </a>        <span class="php-var">$actual</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">key</span>();
-<a href="#250" id="250" class="l">250: </a>
-<a href="#251" id="251" class="l">251: </a>        parent::parseDocComment(<span class="php-var">$tokenStream</span>-&gt;seek(<span class="php-var">$position</span>), <span class="php-var">$parent</span>);
-<a href="#252" id="252" class="l">252: </a>
-<a href="#253" id="253" class="l">253: </a>        <span class="php-var">$tokenStream</span>-&gt;seek(<span class="php-var">$actual</span>);
-<a href="#254" id="254" class="l">254: </a>
-<a href="#255" id="255" class="l">255: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#256" id="256" class="l">256: </a>    }
-<a href="#257" id="257" class="l">257: </a>
-<a href="#258" id="258" class="l">258: </a>    <span class="php-comment">/**
-</span><a href="#259" id="259" class="l">259: </a><span class="php-comment">     * Parses reflected element metadata from the token stream.
-</span><a href="#260" id="260" class="l">260: </a><span class="php-comment">     *
-</span><a href="#261" id="261" class="l">261: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
-</span><a href="#262" id="262" class="l">262: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#263" id="263" class="l">263: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
-</span><a href="#264" id="264" class="l">264: </a><span class="php-comment">     */</span>
-<a href="#265" id="265" class="l">265: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parse(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
-<a href="#266" id="266" class="l">266: </a>    {
-<a href="#267" id="267" class="l">267: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_CONST)) {
-<a href="#268" id="268" class="l">268: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
-<a href="#269" id="269" class="l">269: </a>        }
-<a href="#270" id="270" class="l">270: </a>
-<a href="#271" id="271" class="l">271: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">false</span> === <span class="php-var">$this</span>-&gt;docComment-&gt;getDocComment()) {
-<a href="#272" id="272" class="l">272: </a>            parent::parseDocComment(<span class="php-var">$tokenStream</span>, <span class="php-var">$parent</span>);
-<a href="#273" id="273" class="l">273: </a>        }
-<a href="#274" id="274" class="l">274: </a>
-<a href="#275" id="275" class="l">275: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>
-<a href="#276" id="276" class="l">276: </a>            -&gt;parseName(<span class="php-var">$tokenStream</span>)
-<a href="#277" id="277" class="l">277: </a>            -&gt;parseValue(<span class="php-var">$tokenStream</span>, <span class="php-var">$parent</span>);
-<a href="#278" id="278" class="l">278: </a>    }
-<a href="#279" id="279" class="l">279: </a>
-<a href="#280" id="280" class="l">280: </a>    <span class="php-comment">/**
-</span><a href="#281" id="281" class="l">281: </a><span class="php-comment">     * Parses the constant name.
-</span><a href="#282" id="282" class="l">282: </a><span class="php-comment">     *
-</span><a href="#283" id="283" class="l">283: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
-</span><a href="#284" id="284" class="l">284: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
-</span><a href="#285" id="285" class="l">285: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Parse If the constant name could not be determined.
-</span><a href="#286" id="286" class="l">286: </a><span class="php-comment">     */</span>
-<a href="#287" id="287" class="l">287: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parseName(Stream <span class="php-var">$tokenStream</span>)
-<a href="#288" id="288" class="l">288: </a>    {
-<a href="#289" id="289" class="l">289: </a>        <span class="php-keyword1">try</span> {
-<a href="#290" id="290" class="l">290: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$tokenStream</span>-&gt;is(T_STRING)) {
-<a href="#291" id="291" class="l">291: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-quote">'The constant name could not be determined.'</span>, Exception\Parse::PARSE_ELEMENT_ERROR);
-<a href="#292" id="292" class="l">292: </a>            }
-<a href="#293" id="293" class="l">293: </a>
-<a href="#294" id="294" class="l">294: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;namespaceName || <span class="php-var">$this</span>-&gt;namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
-<a href="#295" id="295" class="l">295: </a>                <span class="php-var">$this</span>-&gt;name = <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
-<a href="#296" id="296" class="l">296: </a>            } <span class="php-keyword1">else</span> {
-<a href="#297" id="297" class="l">297: </a>                <span class="php-var">$this</span>-&gt;name = <span class="php-var">$this</span>-&gt;namespaceName . <span class="php-quote">'\\'</span> . <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
-<a href="#298" id="298" class="l">298: </a>            }
-<a href="#299" id="299" class="l">299: </a>
-<a href="#300" id="300" class="l">300: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
-<a href="#301" id="301" class="l">301: </a>
-<a href="#302" id="302" class="l">302: </a>            <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#303" id="303" class="l">303: </a>        } <span class="php-keyword1">catch</span> (Exception <span class="php-var">$e</span>) {
-<a href="#304" id="304" class="l">304: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-quote">'Could not parse constant name.'</span>, Exception\Parse::PARSE_ELEMENT_ERROR, <span class="php-var">$e</span>);
-<a href="#305" id="305" class="l">305: </a>        }
-<a href="#306" id="306" class="l">306: </a>    }
-<a href="#307" id="307" class="l">307: </a>
-<a href="#308" id="308" class="l">308: </a>    <span class="php-comment">/**
-</span><a href="#309" id="309" class="l">309: </a><span class="php-comment">     * Parses the constant value.
-</span><a href="#310" id="310" class="l">310: </a><span class="php-comment">     *
-</span><a href="#311" id="311" class="l">311: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
-</span><a href="#312" id="312" class="l">312: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
-</span><a href="#313" id="313" class="l">313: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
-</span><a href="#314" id="314" class="l">314: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Parse If the constant value could not be determined.
-</span><a href="#315" id="315" class="l">315: </a><span class="php-comment">     */</span>
-<a href="#316" id="316" class="l">316: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parseValue(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
-<a href="#317" id="317" class="l">317: </a>    {
-<a href="#318" id="318" class="l">318: </a>        <span class="php-keyword1">try</span> {
-<a href="#319" id="319" class="l">319: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">'='</span>)) {
-<a href="#320" id="320" class="l">320: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-quote">'Could not find the definition start.'</span>, Exception\Parse::PARSE_ELEMENT_ERROR);
-<a href="#321" id="321" class="l">321: </a>            }
-<a href="#322" id="322" class="l">322: </a>
-<a href="#323" id="323" class="l">323: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
-<a href="#324" id="324" class="l">324: </a>
-<a href="#325" id="325" class="l">325: </a>            <span class="php-keyword1">static</span> <span class="php-var">$acceptedTokens</span> = <span class="php-keyword1">array</span>(
-<a href="#326" id="326" class="l">326: </a>                <span class="php-quote">'-'</span> =&gt; <span class="php-keyword1">true</span>,
-<a href="#327" id="327" class="l">327: </a>                <span class="php-quote">'+'</span> =&gt; <span class="php-keyword1">true</span>,
-<a href="#328" id="328" class="l">328: </a>                T_STRING =&gt; <span class="php-keyword1">true</span>,
-<a href="#329" id="329" class="l">329: </a>                T_NS_SEPARATOR =&gt; <span class="php-keyword1">true</span>,
-<a href="#330" id="330" class="l">330: </a>                T_CONSTANT_ENCAPSED_STRING =&gt; <span class="php-keyword1">true</span>,
-<a href="#331" id="331" class="l">331: </a>                T_DNUMBER =&gt; <span class="php-keyword1">true</span>,
-<a href="#332" id="332" class="l">332: </a>                T_LNUMBER =&gt; <span class="php-keyword1">true</span>,
-<a href="#333" id="333" class="l">333: </a>                T_DOUBLE_COLON =&gt; <span class="php-keyword1">true</span>,
-<a href="#334" id="334" class="l">334: </a>                T_CLASS_C =&gt; <span class="php-keyword1">true</span>,
-<a href="#335" id="335" class="l">335: </a>                T_DIR =&gt; <span class="php-keyword1">true</span>,
-<a href="#336" id="336" class="l">336: </a>                T_FILE =&gt; <span class="php-keyword1">true</span>,
-<a href="#337" id="337" class="l">337: </a>                T_FUNC_C =&gt; <span class="php-keyword1">true</span>,
-<a href="#338" id="338" class="l">338: </a>                T_LINE =&gt; <span class="php-keyword1">true</span>,
-<a href="#339" id="339" class="l">339: </a>                T_METHOD_C =&gt; <span class="php-keyword1">true</span>,
-<a href="#340" id="340" class="l">340: </a>                T_NS_C =&gt; <span class="php-keyword1">true</span>,
-<a href="#341" id="341" class="l">341: </a>                T_TRAIT_C =&gt; <span class="php-keyword1">true</span>
-<a href="#342" id="342" class="l">342: </a>            );
-<a href="#343" id="343" class="l">343: </a>            <span class="php-keyword1">while</span> (<span class="php-keyword1">null</span> !== (<span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>()) &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$acceptedTokens</span>[<span class="php-var">$type</span>])) {
-<a href="#344" id="344" class="l">344: </a>                <span class="php-var">$this</span>-&gt;valueDefinition[] = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
-<a href="#345" id="345" class="l">345: </a>                <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
-<a href="#346" id="346" class="l">346: </a>            }
-<a href="#347" id="347" class="l">347: </a>
-<a href="#348" id="348" class="l">348: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;valueDefinition)) {
-<a href="#349" id="349" class="l">349: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-quote">'Value definition is empty.'</span>, Exception\Parse::PARSE_ELEMENT_ERROR);
-<a href="#350" id="350" class="l">350: </a>            }
-<a href="#351" id="351" class="l">351: </a>
-<a href="#352" id="352" class="l">352: </a>            <span class="php-var">$value</span> = <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
-<a href="#353" id="353" class="l">353: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$type</span> || (<span class="php-quote">','</span> !== <span class="php-var">$value</span> &amp;&amp; <span class="php-quote">';'</span> !== <span class="php-var">$value</span>)) {
-<a href="#354" id="354" class="l">354: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Invalid value definition: &quot;%s&quot;.'</span>, <span class="php-var">$this</span>-&gt;valueDefinition), Exception\Parse::PARSE_ELEMENT_ERROR);
-<a href="#355" id="355" class="l">355: </a>            }
-<a href="#356" id="356" class="l">356: </a>
-<a href="#357" id="357" class="l">357: </a>            <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#358" id="358" class="l">358: </a>        } <span class="php-keyword1">catch</span> (Exception <span class="php-var">$e</span>) {
-<a href="#359" id="359" class="l">359: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Parse(<span class="php-quote">'Could not parse constant value.'</span>, Exception\Parse::PARSE_ELEMENT_ERROR, <span class="php-var">$e</span>);
-<a href="#360" id="360" class="l">360: </a>        }
-<a href="#361" id="361" class="l">361: </a>    }
-<a href="#362" id="362" class="l">362: </a>}
-<a href="#363" id="363" class="l">363: </a></code></pre>
+</span><a href="#217" id="217" class="l">217: </a><span class="php-comment">     * @return string
+</span><a href="#218" id="218" class="l">218: </a><span class="php-comment">     */</span>
+<a href="#219" id="219" class="l">219: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getPrettyName()
+<a href="#220" id="220" class="l">220: </a>    {
+<a href="#221" id="221" class="l">221: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;declaringClassName ? parent::getPrettyName() : <span class="php-keyword2">sprintf</span>(<span class="php-quote">'%s::%s'</span>, <span class="php-var">$this</span>-&gt;declaringClassName, <span class="php-var">$this</span>-&gt;name);
+<a href="#222" id="222" class="l">222: </a>    }
+<a href="#223" id="223" class="l">223: </a>
+<a href="#224" id="224" class="l">224: </a>    <span class="php-comment">/**
+</span><a href="#225" id="225" class="l">225: </a><span class="php-comment">     * Processes the parent reflection object.
+</span><a href="#226" id="226" class="l">226: </a><span class="php-comment">     *
+</span><a href="#227" id="227" class="l">227: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
+</span><a href="#228" id="228" class="l">228: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+</span><a href="#229" id="229" class="l">229: </a><span class="php-comment">     * @return \TokenReflection\ReflectionElement
+</span><a href="#230" id="230" class="l">230: </a><span class="php-comment">     * @throws \TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
+</span><a href="#231" id="231" class="l">231: </a><span class="php-comment">     */</span>
+<a href="#232" id="232" class="l">232: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> processParent(IReflection <span class="php-var">$parent</span>, Stream <span class="php-var">$tokenStream</span>)
+<a href="#233" id="233" class="l">233: </a>    {
+<a href="#234" id="234" class="l">234: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$parent</span> <span class="php-keyword1">instanceof</span> ReflectionFileNamespace) {
+<a href="#235" id="235" class="l">235: </a>            <span class="php-var">$this</span>-&gt;namespaceName = <span class="php-var">$parent</span>-&gt;getName();
+<a href="#236" id="236" class="l">236: </a>            <span class="php-var">$this</span>-&gt;aliases = <span class="php-var">$parent</span>-&gt;getNamespaceAliases();
+<a href="#237" id="237" class="l">237: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-var">$parent</span> <span class="php-keyword1">instanceof</span> ReflectionClass) {
+<a href="#238" id="238" class="l">238: </a>            <span class="php-var">$this</span>-&gt;declaringClassName = <span class="php-var">$parent</span>-&gt;getName();
+<a href="#239" id="239" class="l">239: </a>        } <span class="php-keyword1">else</span> {
+<a href="#240" id="240" class="l">240: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-keyword2">sprintf</span>(<span class="php-quote">'Invalid parent reflection provided: &quot;%s&quot;.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$parent</span>)), Exception\ParseException::INVALID_PARENT);
+<a href="#241" id="241" class="l">241: </a>        }
+<a href="#242" id="242" class="l">242: </a>
+<a href="#243" id="243" class="l">243: </a>        <span class="php-keyword1">return</span> parent::processParent(<span class="php-var">$parent</span>, <span class="php-var">$tokenStream</span>);
+<a href="#244" id="244" class="l">244: </a>    }
+<a href="#245" id="245" class="l">245: </a>
+<a href="#246" id="246" class="l">246: </a>    <span class="php-comment">/**
+</span><a href="#247" id="247" class="l">247: </a><span class="php-comment">     * Find the appropriate docblock.
+</span><a href="#248" id="248" class="l">248: </a><span class="php-comment">     *
+</span><a href="#249" id="249" class="l">249: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+</span><a href="#250" id="250" class="l">250: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection
+</span><a href="#251" id="251" class="l">251: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
+</span><a href="#252" id="252" class="l">252: </a><span class="php-comment">     */</span>
+<a href="#253" id="253" class="l">253: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parseDocComment(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
+<a href="#254" id="254" class="l">254: </a>    {
+<a href="#255" id="255" class="l">255: </a>        <span class="php-var">$position</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">key</span>() - <span class="php-num">1</span>;
+<a href="#256" id="256" class="l">256: </a>        <span class="php-keyword1">while</span> (<span class="php-var">$position</span> &gt; <span class="php-num">0</span> &amp;&amp; !<span class="php-var">$tokenStream</span>-&gt;is(T_CONST, <span class="php-var">$position</span>)) {
+<a href="#257" id="257" class="l">257: </a>            <span class="php-var">$position</span>--;
+<a href="#258" id="258" class="l">258: </a>        }
+<a href="#259" id="259" class="l">259: </a>
+<a href="#260" id="260" class="l">260: </a>        <span class="php-var">$actual</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">key</span>();
+<a href="#261" id="261" class="l">261: </a>
+<a href="#262" id="262" class="l">262: </a>        parent::parseDocComment(<span class="php-var">$tokenStream</span>-&gt;seek(<span class="php-var">$position</span>), <span class="php-var">$parent</span>);
+<a href="#263" id="263" class="l">263: </a>
+<a href="#264" id="264" class="l">264: </a>        <span class="php-var">$tokenStream</span>-&gt;seek(<span class="php-var">$actual</span>);
+<a href="#265" id="265" class="l">265: </a>
+<a href="#266" id="266" class="l">266: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#267" id="267" class="l">267: </a>    }
+<a href="#268" id="268" class="l">268: </a>
+<a href="#269" id="269" class="l">269: </a>    <span class="php-comment">/**
+</span><a href="#270" id="270" class="l">270: </a><span class="php-comment">     * Parses reflected element metadata from the token stream.
+</span><a href="#271" id="271" class="l">271: </a><span class="php-comment">     *
+</span><a href="#272" id="272" class="l">272: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+</span><a href="#273" id="273" class="l">273: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
+</span><a href="#274" id="274" class="l">274: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
+</span><a href="#275" id="275" class="l">275: </a><span class="php-comment">     */</span>
+<a href="#276" id="276" class="l">276: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parse(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
+<a href="#277" id="277" class="l">277: </a>    {
+<a href="#278" id="278" class="l">278: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$tokenStream</span>-&gt;is(T_CONST)) {
+<a href="#279" id="279" class="l">279: </a>            <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
+<a href="#280" id="280" class="l">280: </a>        }
+<a href="#281" id="281" class="l">281: </a>
+<a href="#282" id="282" class="l">282: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">false</span> === <span class="php-var">$this</span>-&gt;docComment-&gt;getDocComment()) {
+<a href="#283" id="283" class="l">283: </a>            parent::parseDocComment(<span class="php-var">$tokenStream</span>, <span class="php-var">$parent</span>);
+<a href="#284" id="284" class="l">284: </a>        }
+<a href="#285" id="285" class="l">285: </a>
+<a href="#286" id="286" class="l">286: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>
+<a href="#287" id="287" class="l">287: </a>            -&gt;parseName(<span class="php-var">$tokenStream</span>)
+<a href="#288" id="288" class="l">288: </a>            -&gt;parseValue(<span class="php-var">$tokenStream</span>, <span class="php-var">$parent</span>);
+<a href="#289" id="289" class="l">289: </a>    }
+<a href="#290" id="290" class="l">290: </a>
+<a href="#291" id="291" class="l">291: </a>    <span class="php-comment">/**
+</span><a href="#292" id="292" class="l">292: </a><span class="php-comment">     * Parses the constant name.
+</span><a href="#293" id="293" class="l">293: </a><span class="php-comment">     *
+</span><a href="#294" id="294" class="l">294: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+</span><a href="#295" id="295" class="l">295: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
+</span><a href="#296" id="296" class="l">296: </a><span class="php-comment">     * @throws \TokenReflection\Exception\ParseReflection If the constant name could not be determined.
+</span><a href="#297" id="297" class="l">297: </a><span class="php-comment">     */</span>
+<a href="#298" id="298" class="l">298: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parseName(Stream <span class="php-var">$tokenStream</span>)
+<a href="#299" id="299" class="l">299: </a>    {
+<a href="#300" id="300" class="l">300: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$tokenStream</span>-&gt;is(T_STRING)) {
+<a href="#301" id="301" class="l">301: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'The constant name could not be determined.'</span>, Exception\ParseException::LOGICAL_ERROR);
+<a href="#302" id="302" class="l">302: </a>        }
+<a href="#303" id="303" class="l">303: </a>
+<a href="#304" id="304" class="l">304: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;namespaceName || <span class="php-var">$this</span>-&gt;namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
+<a href="#305" id="305" class="l">305: </a>            <span class="php-var">$this</span>-&gt;name = <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
+<a href="#306" id="306" class="l">306: </a>        } <span class="php-keyword1">else</span> {
+<a href="#307" id="307" class="l">307: </a>            <span class="php-var">$this</span>-&gt;name = <span class="php-var">$this</span>-&gt;namespaceName . <span class="php-quote">'\\'</span> . <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
+<a href="#308" id="308" class="l">308: </a>        }
+<a href="#309" id="309" class="l">309: </a>
+<a href="#310" id="310" class="l">310: </a>        <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
+<a href="#311" id="311" class="l">311: </a>
+<a href="#312" id="312" class="l">312: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#313" id="313" class="l">313: </a>    }
+<a href="#314" id="314" class="l">314: </a>
+<a href="#315" id="315" class="l">315: </a>    <span class="php-comment">/**
+</span><a href="#316" id="316" class="l">316: </a><span class="php-comment">     * Parses the constant value.
+</span><a href="#317" id="317" class="l">317: </a><span class="php-comment">     *
+</span><a href="#318" id="318" class="l">318: </a><span class="php-comment">     * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+</span><a href="#319" id="319" class="l">319: </a><span class="php-comment">     * @param \TokenReflection\IReflection $parent Parent reflection object
+</span><a href="#320" id="320" class="l">320: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
+</span><a href="#321" id="321" class="l">321: </a><span class="php-comment">     * @throws \TokenReflection\Exception\ParseException If the constant value could not be determined.
+</span><a href="#322" id="322" class="l">322: </a><span class="php-comment">     */</span>
+<a href="#323" id="323" class="l">323: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> parseValue(Stream <span class="php-var">$tokenStream</span>, IReflection <span class="php-var">$parent</span>)
+<a href="#324" id="324" class="l">324: </a>    {
+<a href="#325" id="325" class="l">325: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$tokenStream</span>-&gt;is(<span class="php-quote">'='</span>)) {
+<a href="#326" id="326" class="l">326: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'Could not find the definition start.'</span>, Exception\ParseException::UNEXPECTED_TOKEN);
+<a href="#327" id="327" class="l">327: </a>        }
+<a href="#328" id="328" class="l">328: </a>
+<a href="#329" id="329" class="l">329: </a>        <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
+<a href="#330" id="330" class="l">330: </a>
+<a href="#331" id="331" class="l">331: </a>        <span class="php-keyword1">static</span> <span class="php-var">$acceptedTokens</span> = <span class="php-keyword1">array</span>(
+<a href="#332" id="332" class="l">332: </a>            <span class="php-quote">'-'</span> =&gt; <span class="php-keyword1">true</span>,
+<a href="#333" id="333" class="l">333: </a>            <span class="php-quote">'+'</span> =&gt; <span class="php-keyword1">true</span>,
+<a href="#334" id="334" class="l">334: </a>            T_STRING =&gt; <span class="php-keyword1">true</span>,
+<a href="#335" id="335" class="l">335: </a>            T_NS_SEPARATOR =&gt; <span class="php-keyword1">true</span>,
+<a href="#336" id="336" class="l">336: </a>            T_CONSTANT_ENCAPSED_STRING =&gt; <span class="php-keyword1">true</span>,
+<a href="#337" id="337" class="l">337: </a>            T_DNUMBER =&gt; <span class="php-keyword1">true</span>,
+<a href="#338" id="338" class="l">338: </a>            T_LNUMBER =&gt; <span class="php-keyword1">true</span>,
+<a href="#339" id="339" class="l">339: </a>            T_DOUBLE_COLON =&gt; <span class="php-keyword1">true</span>,
+<a href="#340" id="340" class="l">340: </a>            T_CLASS_C =&gt; <span class="php-keyword1">true</span>,
+<a href="#341" id="341" class="l">341: </a>            T_DIR =&gt; <span class="php-keyword1">true</span>,
+<a href="#342" id="342" class="l">342: </a>            T_FILE =&gt; <span class="php-keyword1">true</span>,
+<a href="#343" id="343" class="l">343: </a>            T_FUNC_C =&gt; <span class="php-keyword1">true</span>,
+<a href="#344" id="344" class="l">344: </a>            T_LINE =&gt; <span class="php-keyword1">true</span>,
+<a href="#345" id="345" class="l">345: </a>            T_METHOD_C =&gt; <span class="php-keyword1">true</span>,
+<a href="#346" id="346" class="l">346: </a>            T_NS_C =&gt; <span class="php-keyword1">true</span>,
+<a href="#347" id="347" class="l">347: </a>            T_TRAIT_C =&gt; <span class="php-keyword1">true</span>
+<a href="#348" id="348" class="l">348: </a>        );
+<a href="#349" id="349" class="l">349: </a>        <span class="php-keyword1">while</span> (<span class="php-keyword1">null</span> !== (<span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>()) &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$acceptedTokens</span>[<span class="php-var">$type</span>])) {
+<a href="#350" id="350" class="l">350: </a>            <span class="php-var">$this</span>-&gt;valueDefinition[] = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
+<a href="#351" id="351" class="l">351: </a>            <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#352" id="352" class="l">352: </a>        }
+<a href="#353" id="353" class="l">353: </a>
+<a href="#354" id="354" class="l">354: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;valueDefinition)) {
+<a href="#355" id="355" class="l">355: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'Value definition is empty.'</span>, Exception\ParseException::LOGICAL_ERROR);
+<a href="#356" id="356" class="l">356: </a>        }
+<a href="#357" id="357" class="l">357: </a>
+<a href="#358" id="358" class="l">358: </a>        <span class="php-var">$value</span> = <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
+<a href="#359" id="359" class="l">359: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$type</span> || (<span class="php-quote">','</span> !== <span class="php-var">$value</span> &amp;&amp; <span class="php-quote">';'</span> !== <span class="php-var">$value</span>)) {
+<a href="#360" id="360" class="l">360: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'Invalid value definition.'</span>, Exception\ParseException::LOGICAL_ERROR);
+<a href="#361" id="361" class="l">361: </a>        }
+<a href="#362" id="362" class="l">362: </a>
+<a href="#363" id="363" class="l">363: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#364" id="364" class="l">364: </a>    }
+<a href="#365" id="365" class="l">365: </a>}
+<a href="#366" id="366" class="l">366: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.4.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>
 	</div>
 </div>
 </div>

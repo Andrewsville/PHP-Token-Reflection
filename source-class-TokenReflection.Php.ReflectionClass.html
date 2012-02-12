@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="generator" content="ApiGen 2.4.0">
-	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.5.0" />
+	<meta name="robots" content="noindex" />
 
 	<title>File Php/ReflectionClass.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?1841058525"></script>
-	<script type="text/javascript" src="elementlist.js?2625982823"></script>
-	<script type="text/javascript">
-		var ApiGen = ApiGen || {};
-		ApiGen.options = {"elementDetailsCollapsed":true,"elementsOrder":"natural"};
-	</script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3295955786">
+	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
+	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
 
@@ -23,7 +19,6 @@
 		<a href="index.html" title="Overview"><span>Overview</span></a>
 
 		<div id="groups">
-
 			<h3>Namespaces</h3>
 			<ul>
 				<li class="active"><a href="namespace-TokenReflection.html">TokenReflection</a>
@@ -47,7 +42,7 @@
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 
 		<div id="elements">
 			<h3>Classes</h3>
@@ -78,10 +73,10 @@
 <div id="right">
 <div id="rightInner">
 	<form id="search">
-		<input type="hidden" name="cx" value="">
-		<input type="hidden" name="ie" value="UTF-8">
-		<input type="text" name="q" class="text">
-		<input type="submit" value="Search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
 	</form>
 
 	<div id="navigation">
@@ -112,7 +107,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.0.2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.1
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -278,13 +273,13 @@
 </span><a href="#168" id="168" class="l">168: </a><span class="php-comment">     *
 </span><a href="#169" id="169" class="l">169: </a><span class="php-comment">     * @param string|object $class Class name or reflection object
 </span><a href="#170" id="170" class="l">170: </a><span class="php-comment">     * @return boolean
-</span><a href="#171" id="171" class="l">171: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
+</span><a href="#171" id="171" class="l">171: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
 </span><a href="#172" id="172" class="l">172: </a><span class="php-comment">     */</span>
 <a href="#173" id="173" class="l">173: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isSubclassOf(<span class="php-var">$class</span>)
 <a href="#174" id="174" class="l">174: </a>    {
 <a href="#175" id="175" class="l">175: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_object</span>(<span class="php-var">$class</span>)) {
 <a href="#176" id="176" class="l">176: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$class</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass &amp;&amp; !<span class="php-var">$class</span> <span class="php-keyword1">instanceof</span> IReflectionClass) {
-<a href="#177" id="177" class="l">177: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Parameter must be a string or an instance of class reflection, &quot;%s&quot; provided.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$class</span>)), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#177" id="177" class="l">177: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Parameter must be a string or an instance of class reflection.'</span>, Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
 <a href="#178" id="178" class="l">178: </a>            }
 <a href="#179" id="179" class="l">179: </a>
 <a href="#180" id="180" class="l">180: </a>            <span class="php-var">$class</span> = <span class="php-var">$class</span>-&gt;getName();
@@ -343,24 +338,24 @@
 </span><a href="#233" id="233" class="l">233: </a><span class="php-comment">     *
 </span><a href="#234" id="234" class="l">234: </a><span class="php-comment">     * @param string|object $interface Interface name or reflection object
 </span><a href="#235" id="235" class="l">235: </a><span class="php-comment">     * @return boolean
-</span><a href="#236" id="236" class="l">236: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the provided parameter is not an interface.
+</span><a href="#236" id="236" class="l">236: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the provided parameter is not an interface.
 </span><a href="#237" id="237" class="l">237: </a><span class="php-comment">     */</span>
 <a href="#238" id="238" class="l">238: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> implementsInterface(<span class="php-var">$interface</span>)
 <a href="#239" id="239" class="l">239: </a>    {
 <a href="#240" id="240" class="l">240: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_object</span>(<span class="php-var">$interface</span>)) {
 <a href="#241" id="241" class="l">241: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$interface</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass &amp;&amp; !<span class="php-var">$interface</span> <span class="php-keyword1">instanceof</span> IReflectionClass) {
-<a href="#242" id="242" class="l">242: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Parameter must be a string or an instance of class reflection, &quot;%s&quot; provided.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$interface</span>)), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#242" id="242" class="l">242: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Parameter must be a string or an instance of class reflection.'</span>, Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
 <a href="#243" id="243" class="l">243: </a>            }
 <a href="#244" id="244" class="l">244: </a>
 <a href="#245" id="245" class="l">245: </a>            <span class="php-var">$interfaceName</span> = <span class="php-var">$interface</span>-&gt;getName();
 <a href="#246" id="246" class="l">246: </a>
 <a href="#247" id="247" class="l">247: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$interface</span>-&gt;isInterface()) {
-<a href="#248" id="248" class="l">248: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not an interface.'</span>, <span class="php-var">$interfaceName</span>), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#248" id="248" class="l">248: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not an interface.'</span>, <span class="php-var">$interfaceName</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
 <a href="#249" id="249" class="l">249: </a>            }
 <a href="#250" id="250" class="l">250: </a>        } <span class="php-keyword1">else</span> {
 <a href="#251" id="251" class="l">251: </a>            <span class="php-var">$reflection</span> = <span class="php-var">$this</span>-&gt;getBroker()-&gt;getClass(<span class="php-var">$interface</span>);
 <a href="#252" id="252" class="l">252: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$reflection</span>-&gt;isInterface()) {
-<a href="#253" id="253" class="l">253: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not an interface.'</span>, <span class="php-var">$interface</span>), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#253" id="253" class="l">253: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not an interface.'</span>, <span class="php-var">$interface</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
 <a href="#254" id="254" class="l">254: </a>            }
 <a href="#255" id="255" class="l">255: </a>
 <a href="#256" id="256" class="l">256: </a>            <span class="php-var">$interfaceName</span> = <span class="php-var">$interface</span>;
@@ -445,7 +440,7 @@
 </span><a href="#335" id="335" class="l">335: </a><span class="php-comment">     *
 </span><a href="#336" id="336" class="l">336: </a><span class="php-comment">     * @param string $name Method name
 </span><a href="#337" id="337" class="l">337: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionMethod
-</span><a href="#338" id="338" class="l">338: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested method does not exist.
+</span><a href="#338" id="338" class="l">338: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested method does not exist.
 </span><a href="#339" id="339" class="l">339: </a><span class="php-comment">     */</span>
 <a href="#340" id="340" class="l">340: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getMethod(<span class="php-var">$name</span>)
 <a href="#341" id="341" class="l">341: </a>    {
@@ -455,7 +450,7 @@
 <a href="#345" id="345" class="l">345: </a>            }
 <a href="#346" id="346" class="l">346: </a>        }
 <a href="#347" id="347" class="l">347: </a>
-<a href="#348" id="348" class="l">348: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no method %s in class %s'</span>, <span class="php-var">$name</span>, <span class="php-var">$this</span>-&gt;name), Exception::DOES_NOT_EXIST);
+<a href="#348" id="348" class="l">348: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Method %s does not exist.'</span>, <span class="php-var">$name</span>), Exception\RuntimeException::DOES_NOT_EXIST, <span class="php-var">$this</span>);
 <a href="#349" id="349" class="l">349: </a>    }
 <a href="#350" id="350" class="l">350: </a>
 <a href="#351" id="351" class="l">351: </a>    <span class="php-comment">/**
@@ -542,7 +537,7 @@
 </span><a href="#432" id="432" class="l">432: </a><span class="php-comment">     *
 </span><a href="#433" id="433" class="l">433: </a><span class="php-comment">     * @param string $name Constant name
 </span><a href="#434" id="434" class="l">434: </a><span class="php-comment">     * @return \TokenReflection\ReflectionConstant
-</span><a href="#435" id="435" class="l">435: </a><span class="php-comment">     * @throws \TokenReflection\Exception If the requested constant does not exist.
+</span><a href="#435" id="435" class="l">435: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested constant does not exist.
 </span><a href="#436" id="436" class="l">436: </a><span class="php-comment">     */</span>
 <a href="#437" id="437" class="l">437: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getConstantReflection(<span class="php-var">$name</span>)
 <a href="#438" id="438" class="l">438: </a>    {
@@ -550,7 +545,7 @@
 <a href="#440" id="440" class="l">440: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">new</span> ReflectionConstant(<span class="php-var">$name</span>, <span class="php-var">$this</span>-&gt;getConstant(<span class="php-var">$name</span>), <span class="php-var">$this</span>-&gt;broker, <span class="php-var">$this</span>);
 <a href="#441" id="441" class="l">441: </a>        }
 <a href="#442" id="442" class="l">442: </a>
-<a href="#443" id="443" class="l">443: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Constant &quot;%s&quot; is not defined in class &quot;%s&quot;'</span>, <span class="php-var">$name</span>, <span class="php-var">$this</span>-&gt;getName()), Exception::DOES_NOT_EXIST);
+<a href="#443" id="443" class="l">443: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Constant &quot;%s&quot; does not exist.'</span>, <span class="php-var">$name</span>), Exception\RuntimeException::DOES_NOT_EXIST, <span class="php-var">$this</span>);
 <a href="#444" id="444" class="l">444: </a>    }
 <a href="#445" id="445" class="l">445: </a>
 <a href="#446" id="446" class="l">446: </a>    <span class="php-comment">/**
@@ -611,7 +606,7 @@
 </span><a href="#501" id="501" class="l">501: </a><span class="php-comment">     *
 </span><a href="#502" id="502" class="l">502: </a><span class="php-comment">     * @param string $name Property name
 </span><a href="#503" id="503" class="l">503: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionProperty
-</span><a href="#504" id="504" class="l">504: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the requested property does not exist.
+</span><a href="#504" id="504" class="l">504: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the requested property does not exist.
 </span><a href="#505" id="505" class="l">505: </a><span class="php-comment">     */</span>
 <a href="#506" id="506" class="l">506: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getProperty(<span class="php-var">$name</span>)
 <a href="#507" id="507" class="l">507: </a>    {
@@ -621,7 +616,7 @@
 <a href="#511" id="511" class="l">511: </a>            }
 <a href="#512" id="512" class="l">512: </a>        }
 <a href="#513" id="513" class="l">513: </a>
-<a href="#514" id="514" class="l">514: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'There is no property %s in class %s'</span>, <span class="php-var">$name</span>, <span class="php-var">$this</span>-&gt;getName()), Exception::DOES_NOT_EXIST);
+<a href="#514" id="514" class="l">514: </a>        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Property %s does not exist.'</span>, <span class="php-var">$name</span>), Exception\RuntimeException::DOES_NOT_EXIST, <span class="php-var">$this</span>);
 <a href="#515" id="515" class="l">515: </a>    }
 <a href="#516" id="516" class="l">516: </a>
 <a href="#517" id="517" class="l">517: </a>    <span class="php-comment">/**
@@ -953,24 +948,24 @@
 </span><a href="#843" id="843" class="l">843: </a><span class="php-comment">     *
 </span><a href="#844" id="844" class="l">844: </a><span class="php-comment">     * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
 </span><a href="#845" id="845" class="l">845: </a><span class="php-comment">     * @return boolean
-</span><a href="#846" id="846" class="l">846: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid parameter was provided.
+</span><a href="#846" id="846" class="l">846: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
 </span><a href="#847" id="847" class="l">847: </a><span class="php-comment">     */</span>
 <a href="#848" id="848" class="l">848: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> usesTrait(<span class="php-var">$trait</span>)
 <a href="#849" id="849" class="l">849: </a>    {
 <a href="#850" id="850" class="l">850: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_object</span>(<span class="php-var">$trait</span>)) {
 <a href="#851" id="851" class="l">851: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$trait</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass &amp;&amp; !<span class="php-var">$trait</span> <span class="php-keyword1">instanceof</span> TokenReflection\IReflectionClass) {
-<a href="#852" id="852" class="l">852: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Parameter must be a string or an instance of trait reflection, &quot;%s&quot; provided.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$trait</span>)), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#852" id="852" class="l">852: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Parameter must be a string or an instance of trait reflection.'</span>, Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
 <a href="#853" id="853" class="l">853: </a>            }
 <a href="#854" id="854" class="l">854: </a>
 <a href="#855" id="855" class="l">855: </a>            <span class="php-var">$traitName</span> = <span class="php-var">$trait</span>-&gt;getName();
 <a href="#856" id="856" class="l">856: </a>
 <a href="#857" id="857" class="l">857: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$trait</span>-&gt;isTrait()) {
-<a href="#858" id="858" class="l">858: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$traitName</span>), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#858" id="858" class="l">858: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$traitName</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
 <a href="#859" id="859" class="l">859: </a>            }
 <a href="#860" id="860" class="l">860: </a>        } <span class="php-keyword1">else</span> {
 <a href="#861" id="861" class="l">861: </a>            <span class="php-var">$reflection</span> = <span class="php-var">$this</span>-&gt;getBroker()-&gt;getClass(<span class="php-var">$trait</span>);
 <a href="#862" id="862" class="l">862: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$reflection</span>-&gt;isTrait()) {
-<a href="#863" id="863" class="l">863: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$trait</span>), Exception\Runtime::INVALID_ARGUMENT);
+<a href="#863" id="863" class="l">863: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$trait</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
 <a href="#864" id="864" class="l">864: </a>            }
 <a href="#865" id="865" class="l">865: </a>
 <a href="#866" id="866" class="l">866: </a>            <span class="php-var">$traitName</span> = <span class="php-var">$trait</span>;
@@ -983,17 +978,17 @@
 </span><a href="#873" id="873" class="l">873: </a><span class="php-comment">     * Creates a new class instance without using a constructor.
 </span><a href="#874" id="874" class="l">874: </a><span class="php-comment">     *
 </span><a href="#875" id="875" class="l">875: </a><span class="php-comment">     * @return object
-</span><a href="#876" id="876" class="l">876: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If the class inherits from an internal class.
+</span><a href="#876" id="876" class="l">876: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
 </span><a href="#877" id="877" class="l">877: </a><span class="php-comment">     */</span>
 <a href="#878" id="878" class="l">878: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> newInstanceWithoutConstructor()
 <a href="#879" id="879" class="l">879: </a>    {
 <a href="#880" id="880" class="l">880: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;isInternal()) {
-<a href="#881" id="881" class="l">881: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Could not create an instance of class &quot;%s&quot;; only user defined classes can be instantiated.'</span>, <span class="php-var">$this</span>-&gt;name), Exception\Runtime::UNSUPPORTED);
+<a href="#881" id="881" class="l">881: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not create an instance; only user defined classes can be instantiated.'</span>, Exception\RuntimeException::UNSUPPORTED, <span class="php-var">$this</span>);
 <a href="#882" id="882" class="l">882: </a>        }
 <a href="#883" id="883" class="l">883: </a>
 <a href="#884" id="884" class="l">884: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$this</span>-&gt;getParentClasses() <span class="php-keyword1">as</span> <span class="php-var">$parent</span>) {
 <a href="#885" id="885" class="l">885: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$parent</span>-&gt;isInternal()) {
-<a href="#886" id="886" class="l">886: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Could not create an instance of class &quot;%s&quot;; only user defined classes can be instantiated.'</span>, <span class="php-var">$this</span>-&gt;name), Exception\Runtime::UNSUPPORTED);
+<a href="#886" id="886" class="l">886: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not create an instance; only user defined classes can be instantiated.'</span>, Exception\RuntimeException::UNSUPPORTED, <span class="php-var">$this</span>);
 <a href="#887" id="887" class="l">887: </a>            }
 <a href="#888" id="888" class="l">888: </a>        }
 <a href="#889" id="889" class="l">889: </a>
@@ -1005,26 +1000,36 @@
 <a href="#895" id="895" class="l">895: </a>    }
 <a href="#896" id="896" class="l">896: </a>
 <a href="#897" id="897" class="l">897: </a>    <span class="php-comment">/**
-</span><a href="#898" id="898" class="l">898: </a><span class="php-comment">     * Creates a reflection instance.
+</span><a href="#898" id="898" class="l">898: </a><span class="php-comment">     * Returns an element pretty (docblock compatible) name.
 </span><a href="#899" id="899" class="l">899: </a><span class="php-comment">     *
-</span><a href="#900" id="900" class="l">900: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
-</span><a href="#901" id="901" class="l">901: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
-</span><a href="#902" id="902" class="l">902: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionClass
-</span><a href="#903" id="903" class="l">903: </a><span class="php-comment">     * @throws \TokenReflection\Exception\Runtime If an invalid internal reflection object was provided.
-</span><a href="#904" id="904" class="l">904: </a><span class="php-comment">     */</span>
-<a href="#905" id="905" class="l">905: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
-<a href="#906" id="906" class="l">906: </a>    {
-<a href="#907" id="907" class="l">907: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass) {
-<a href="#908" id="908" class="l">908: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\Runtime(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Invalid reflection instance provided (%s), ReflectionClass expected.'</span>, <span class="php-keyword2">get_class</span>(<span class="php-var">$internalReflection</span>)));
-<a href="#909" id="909" class="l">909: </a>        }
-<a href="#910" id="910" class="l">910: </a>
-<a href="#911" id="911" class="l">911: </a>        <span class="php-keyword1">return</span> <span class="php-var">$broker</span>-&gt;getClass(<span class="php-var">$internalReflection</span>-&gt;getName());
-<a href="#912" id="912" class="l">912: </a>    }
-<a href="#913" id="913" class="l">913: </a>}
-<a href="#914" id="914" class="l">914: </a></code></pre>
+</span><a href="#900" id="900" class="l">900: </a><span class="php-comment">     * @return string
+</span><a href="#901" id="901" class="l">901: </a><span class="php-comment">     */</span>
+<a href="#902" id="902" class="l">902: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getPrettyName()
+<a href="#903" id="903" class="l">903: </a>    {
+<a href="#904" id="904" class="l">904: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getName();
+<a href="#905" id="905" class="l">905: </a>    }
+<a href="#906" id="906" class="l">906: </a>
+<a href="#907" id="907" class="l">907: </a>    <span class="php-comment">/**
+</span><a href="#908" id="908" class="l">908: </a><span class="php-comment">     * Creates a reflection instance.
+</span><a href="#909" id="909" class="l">909: </a><span class="php-comment">     *
+</span><a href="#910" id="910" class="l">910: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
+</span><a href="#911" id="911" class="l">911: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
+</span><a href="#912" id="912" class="l">912: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionClass
+</span><a href="#913" id="913" class="l">913: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+</span><a href="#914" id="914" class="l">914: </a><span class="php-comment">     */</span>
+<a href="#915" id="915" class="l">915: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
+<a href="#916" id="916" class="l">916: </a>    {
+<a href="#917" id="917" class="l">917: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass) {
+<a href="#918" id="918" class="l">918: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Invalid reflection instance provided, ReflectionClass expected.'</span>, Exception\RuntimeException::INVALID_ARGUMENT);
+<a href="#919" id="919" class="l">919: </a>        }
+<a href="#920" id="920" class="l">920: </a>
+<a href="#921" id="921" class="l">921: </a>        <span class="php-keyword1">return</span> <span class="php-var">$broker</span>-&gt;getClass(<span class="php-var">$internalReflection</span>-&gt;getName());
+<a href="#922" id="922" class="l">922: </a>    }
+<a href="#923" id="923" class="l">923: </a>}
+<a href="#924" id="924" class="l">924: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.4.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>
 	</div>
 </div>
 </div>

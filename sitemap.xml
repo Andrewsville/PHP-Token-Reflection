@@ -142,12 +142,18 @@
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.IReflection.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.BaseException.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.Parse.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.BrokerException.html</loc>
 </url>
 <url>
-	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.Runtime.html</loc>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.ParseException.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.RuntimeException.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.StreamException.html</loc>
 </url>
 </urlset>
