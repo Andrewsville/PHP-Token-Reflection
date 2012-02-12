@@ -24,6 +24,6 @@ set_include_path(
 spl_autoload_register(function($className) {
 	$file = strtr($className, '\\_', DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR) . '.php';
 	if (!function_exists('stream_resolve_include_path') || false !== stream_resolve_include_path($file)) {
-		require_once $file;
+		@include_once $file;
 	}
 });
