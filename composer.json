@@ -1,0 +1,26 @@
+{
+    "name": "andrewsville/php-token-reflection",
+    "type": "library",
+    "description": "Library emulating the PHP internal reflection using just the tokenized source code.",
+    "keywords": ["library", "tokenizer", "reflection"],
+    "homepage": "http://andrewsville.github.com/PHP-Token-Reflection/",
+    "license": "New BSD",
+
+    "authors": [
+        {
+            "name": "Ondřej Nešpor",
+            "email": "andrew@andrewsville.cz",
+            "homepage": "https://twitter.com/Andrewsville"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3",
+    },
+
+    "autoload": {
+        "psr-0": {
+            "TokenReflection": "./"
+        }
+    },
+}
