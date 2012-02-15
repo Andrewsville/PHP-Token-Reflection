@@ -1,6 +1,6 @@
 language: php
 
-phps:
+php:
   - 5.3.0
   - 5.3.1
   - 5.3.2
