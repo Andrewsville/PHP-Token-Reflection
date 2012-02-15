@@ -4,6 +4,9 @@ phps:
   - 5.3
   - 5.4
 
+env:
+  - TRAVISCI=1
+
 branches:
   only:
     - develop

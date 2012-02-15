@@ -34,6 +34,10 @@ class PharTest extends Test
 	 */
 	protected function assertPreConditions()
 	{
+		if (getenv('TRAVISCI')) {
+			$this->markTestSkipped('Not testing PHAR support on Travis CI.');
+		}
+
 		if (!extension_loaded('phar')) {
 			$this->markTestSkipped('The phar extension is required');
 		}
