@@ -1,5 +1,7 @@
 # PHP Token Reflection #
 
+[![Build Status](https://secure.travis-ci.org/Andrewsville/PHP-Token-Reflection.png?branch=develop)](http://travis-ci.org/Andrewsville/PHP-Token-Reflection)
+
 In short, this library emulates the PHP reflection model using the tokenized PHP source.
 
 ## Brief history
