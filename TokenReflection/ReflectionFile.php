@@ -46,7 +46,7 @@ class ReflectionFile extends ReflectionBase
 	 */
 	public function __toString()
 	{
-		throw new Exception\RuntimeException('__toString is not supported.', Exception\RuntimeException::UNSUPPORTED, $this);
+		throw new Exception\RuntimeException('Casting to string is not supported.', Exception\RuntimeException::UNSUPPORTED, $this);
 	}
 
 	/**
