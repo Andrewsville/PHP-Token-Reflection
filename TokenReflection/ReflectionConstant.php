@@ -344,10 +344,15 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			T_LINE => true,
 			T_METHOD_C => true,
 			T_NS_C => true,
-			T_TRAIT_C => true
+			T_TRAIT_C => true,
+			T_COMMENT => false,
+			T_WHITESPACE => false,
+			T_DOC_COMMENT => false
 		);
 		while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
-			$this->valueDefinition[] = $tokenStream->current();
+			if ($acceptedTokens[$type]) {
+				$this->valueDefinition[] = $tokenStream->current();
+			}
 			$tokenStream->next();
 		}
 

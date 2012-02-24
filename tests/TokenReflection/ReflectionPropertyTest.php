@@ -391,4 +391,28 @@ class ReflectionPropertyTest extends Test
 	{
 		Php\ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
+
+	/**
+	 * Tests various constant (mis)definitions.
+	 */
+	public function testValueDefinitions()
+	{
+		static $expected = array(
+			'property1' => true,
+			'property2' => true,
+			'property3' => true,
+			'property4' => true,
+			'property5' => true,
+			'property6' => true,
+			'property7' => true,
+			'property8' => true
+		);
+
+		$rfl = $this->getClassTokenReflection('valueDefinitions');
+
+		foreach ($expected as $name => $value) {
+			$this->assertTrue($rfl->hasProperty($name), $name);
+			$this->assertSame($value, $rfl->getProperty($name)->getDefaultValue(), $name);
+		}
+	}
 }
