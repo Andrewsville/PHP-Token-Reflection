@@ -483,7 +483,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			} elseif ($sibling->isProtected()) {
 				$this->modifiers = InternalReflectionProperty::IS_PROTECTED;
 			} else {
-				throw new Exception\Parse(sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+				throw new Exception\ParseException($this, $tokenStream, sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
 			if ($sibling->isStatic()) {
