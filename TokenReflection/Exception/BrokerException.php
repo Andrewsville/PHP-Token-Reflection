@@ -32,7 +32,7 @@ class BrokerException extends BaseException
 	/**
 	 * Constructor.
 	 *
-	 * @param \TokenReflection\Broker $fileName Processed file name
+	 * @param \TokenReflection\Broker $broker Processed file name
 	 * @param string $message Exception message
 	 * @param integer $code Exception code
 	 * @param \TokenReflection\Exception\StreamException $parent Parent exception

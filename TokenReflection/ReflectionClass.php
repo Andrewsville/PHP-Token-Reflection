@@ -1340,7 +1340,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function isInstance($object)
 	{
 		if (!is_object($object)) {
-			throw new Exception\RuntimeException( sprintf('Parameter must be an object, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+			throw new Exception\RuntimeException(sprintf('Parameter must be an object, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 
 		return $this->name === get_class($object) || is_subclass_of($object, $this->getName());
@@ -1577,6 +1577,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return \TokenReflection\ReflectionClass
+	 * @throws \TokenReflection\ParseException On invalid parent reflection provided
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{

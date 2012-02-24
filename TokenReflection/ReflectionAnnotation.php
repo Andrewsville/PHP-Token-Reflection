@@ -156,7 +156,7 @@ class ReflectionAnnotation
 	{
 		foreach ($templates as $template) {
 			if (!$template instanceof ReflectionAnnotation) {
-				throw new Exception\RuntimeException (
+				throw new Exception\RuntimeException(
 					sprintf(
 						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
 						is_object($template) ? get_class($template) : gettype($template)
@@ -295,7 +295,7 @@ class ReflectionAnnotation
 				if (!empty($parent)) {
 					// Don't get into an infinite recursion loop
 					if (in_array($parent, self::$copydocStack, true)) {
-						throw new Exception\RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag..', Exception\RuntimeException::INVALID_ARGUMENT, $this->reflection);
+						throw new Exception\RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag.', Exception\RuntimeException::INVALID_ARGUMENT, $this->reflection);
 					}
 
 					self::$copydocStack[] = $parent;

@@ -122,7 +122,6 @@ class ParseException extends StreamException
 			$min--;
 		}
 
-
 		while (isset($tokenStream[$max + 1]) && $tokenStream[$max][2] - $line < self::SOURCE_LINES_AROUND) {
 			$max++;
 		}
@@ -153,7 +152,7 @@ class ParseException extends StreamException
 	/**
 	 * Returns the line where the exception was thrown.
 	 *
-	 * @var integer
+	 * @return integer
 	 */
 	public function getExceptionLine()
 	{
@@ -197,7 +196,7 @@ class ParseException extends StreamException
 
 			$code = implode(
 				"\n",
-				array_map(function($line) use(&$actualLine, $width, $errorLine) {
+				array_map(function($line) use (&$actualLine, $width, $errorLine) {
 					return ($actualLine === $errorLine ? '*' : ' ') . str_pad($actualLine++, $width, ' ', STR_PAD_LEFT) . ': ' . $line;
 				}, $lines)
 			);
