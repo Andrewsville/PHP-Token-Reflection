@@ -425,7 +425,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$classes = $namespace->getClasses();
 		foreach ($this->classes as $className => $reflection) {
 			if (isset($classes[$className])) {
-				throw new Exception\RuntimeException(sprintf('Class "%s" is already defined; in file "%s".', $className, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+				throw new Exception\RuntimeException(sprintf('Ambiguous class "%s" found in file "%s" (previously declared in "%s").', $className, $namespace->getFileName(), $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
 			}
 		}
 		$this->classes = array_merge($this->classes, $classes);
@@ -433,7 +433,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$functions = $namespace->getFunctions();
 		foreach ($this->functions as $functionName => $reflection) {
 			if (isset($functions[$functionName])) {
-				throw new Exception\RuntimeException(sprintf('Function "%s" is already defined; in file "%s".', $functionName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+				throw new Exception\RuntimeException(sprintf('Ambiguous function "%s" found in file "%s" (previously declared in "%s").', $functionName, $namespace->getFileName(), $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
 			}
 		}
 		$this->functions = array_merge($this->functions, $functions);
@@ -441,7 +441,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$constants = $namespace->getConstants();
 		foreach ($this->constants as $constantName => $reflection) {
 			if (isset($constants[$constantName])) {
-				throw new Exception\RuntimeException(sprintf('Constant "%s" is already defined; in file "%s".', $constantName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+				throw new Exception\RuntimeException(sprintf('Ambiguous constant "%s" found in file "%s" (previously declared in "%s").', $constantName, $namespace->getFileName(), $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
 			}
 		}
 		$this->constants = array_merge($this->constants, $constants);
