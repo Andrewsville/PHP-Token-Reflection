@@ -230,16 +230,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				$this->modifiers |= self::IMPLEMENTS_TRAITS;
 			}
 
-			$this->modifiersComplete = true;
-			foreach ($this->getParentClasses() as $parentClass) {
-				if ($parentClass instanceof Dummy\ReflectionClass) {
-					$this->modifiersComplete = false;
-					break;
-				}
-			}
+			$this->modifiersComplete = null === $this->parentClassName || $this->getParentClass()->isComplete();
+
 			if ($this->modifiersComplete) {
 				foreach ($this->getInterfaces() as $interface) {
-					if ($interface instanceof Dummy\ReflectionClass) {
+					if (!$interface->isComplete()) {
 						$this->modifiersComplete = false;
 						break;
 					}
@@ -247,7 +242,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 			if ($this->modifiersComplete) {
 				foreach ($this->getTraits() as $trait) {
-					if ($trait instanceof Dummy\ReflectionClass) {
+					if (!$trait->isComplete()) {
 						$this->modifiersComplete = false;
 						break;
 					}
@@ -1184,6 +1179,32 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class definition is valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		if (null !== $this->parentClassName && !$this->getParentClass()->isValid()) {
+			return false;
+		}
+
+		foreach ($this->getInterfaces() as $interface) {
+			if (!$interface->isValid()) {
+				return false;
+			}
+		}
+
+		foreach ($this->getTraits() as $trait) {
+			if (!$trait->isValid()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Returns if the class uses a particular trait.
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
@@ -1526,7 +1547,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		}
 
 		$class = $broker->getClass($className);
-		if ($class instanceof Dummy\ReflectionClass) {
+		if ($class instanceof Invalid\ReflectionClass) {
+			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+		} elseif ($class instanceof Dummy\ReflectionClass) {
 			throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 

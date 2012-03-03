@@ -414,37 +414,72 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Adds a namespace part from a file.
 	 *
 	 * @param \TokenReflection\ReflectionFileNamespace $namespace Namespace part
-	 * @throws \TokenReflection\Exception\RuntimeException If one of classes form the namespace are already defined.
-	 * @throws \TokenReflection\Exception\RuntimeException If one of functions form the namespace are already defined.
-	 * @throws \TokenReflection\Exception\RuntimeException If one of constants form the namespace are already defined.
+	 * @return \TokenReflection\ReflectionNamespace
+	 * @throws \TokenReflection\Exception\RuntimeException If one of classes, functions or constants form the namespace are already defined
 	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
-		// @todo check catching in broker
+		$duplicities = array();
 
-		$classes = $namespace->getClasses();
-		foreach ($this->classes as $className => $reflection) {
-			if (isset($classes[$className])) {
-				throw new Exception\RuntimeException(sprintf('Ambiguous class "%s" found in file "%s" (previously declared in "%s").', $className, $namespace->getFileName(), $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		foreach ($namespace->getClasses() as $reflection) {
+			$className = $reflection->getName();
+
+			if (isset($this->classes[$className])) {
+				$duplicities[] = $reflection;
+
+				if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
+					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->getBroker());
+				}
+			} else {
+				$this->classes[$className] = $reflection;
 			}
 		}
-		$this->classes = array_merge($this->classes, $classes);
 
-		$functions = $namespace->getFunctions();
-		foreach ($this->functions as $functionName => $reflection) {
-			if (isset($functions[$functionName])) {
-				throw new Exception\RuntimeException(sprintf('Ambiguous function "%s" found in file "%s" (previously declared in "%s").', $functionName, $namespace->getFileName(), $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		foreach ($namespace->getFunctions() as $reflection) {
+			$functionName = $reflection->getName();
+
+			if (isset($this->functions[$functionName])) {
+				$duplicities[] = $reflection;
+
+				if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
+					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->getBroker());
+				}
+			} else {
+				$this->functions[$functionName] = $reflection;
 			}
 		}
-		$this->functions = array_merge($this->functions, $functions);
 
-		$constants = $namespace->getConstants();
-		foreach ($this->constants as $constantName => $reflection) {
-			if (isset($constants[$constantName])) {
-				throw new Exception\RuntimeException(sprintf('Ambiguous constant "%s" found in file "%s" (previously declared in "%s").', $constantName, $namespace->getFileName(), $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		foreach ($namespace->getConstants() as $reflection) {
+			$constantName = $reflection->getName();
+
+			if (isset($this->constants[$constantName])) {
+				$duplicities[] = $reflection;
+
+				if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
+					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->getBroker());
+				}
+			} else {
+				$this->constants[$constantName] = $reflection;
 			}
 		}
-		$this->constants = array_merge($this->constants, $constants);
+
+		if (!empty($duplicities)) {
+			$list = array_map(function(ReflectionElement $reflection) {
+				if ($reflection instanceof ReflectionClass) {
+					$type = 'class';
+				} elseif ($reflection instanceof ReflectionFunction) {
+					$type = 'function';
+				} elseif ($reflection instanceof ReflectionConstant) {
+					$type = 'constant';
+				}
+
+				return sprintf('%s %s (declared in %s)', $type, $reflection->getName(), $reflection->getFileName());
+			}, $duplicities);
+
+			throw new Exception\RuntimeException(sprintf('Ambiguous elements found in file %s: %s.', $namespace->getFileName(), implode(', ', $list)), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		}
+
+		return $this;
 	}
 
 	/**

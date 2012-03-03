@@ -45,6 +45,11 @@
 			<dir name="Dummy">
 				<file name="ReflectionClass.php" role="php" />
 			</dir>
+			<dir name="Invalid">
+				<file name="ReflectionClass.php" role="php" />
+				<file name="ReflectionConstant.php" role="php" />
+				<file name="ReflectionFunction.php" role="php" />
+			</dir>
 			<dir name="Exception">
 				<file name="BaseException.php" role="php" />
 				<file name="BrokerException.php" role="php" />

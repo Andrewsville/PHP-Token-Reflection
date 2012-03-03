@@ -981,6 +981,18 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class definition is valid.
+	 *
+	 * Dummy classes are always valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
 	 * @return \TokenReflection\Broker
