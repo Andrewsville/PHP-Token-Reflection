@@ -270,14 +270,14 @@ class ReflectionFileNamespace extends ReflectionElement
 				case T_TRAIT:
 				case T_INTERFACE:
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
-					$this->classes[$class->getName()] = $class;
+					$this->classes[] = $class;
 					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces(true);
 					do {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
-						$this->constants[$constant->getName()] = $constant;
+						$this->constants[] = $constant;
 						if ($tokenStream->is(',')) {
 							$tokenStream->skipWhitespaces(true);
 						} else {
@@ -313,7 +313,7 @@ class ReflectionFileNamespace extends ReflectionElement
 					}
 
 					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
-					$this->functions[$function->getName()] = $function;
+					$this->functions[] = $function;
 					$tokenStream->next();
 					break;
 				default:
