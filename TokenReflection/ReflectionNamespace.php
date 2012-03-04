@@ -421,11 +421,15 @@ class ReflectionNamespace implements IReflectionNamespace
 	{
 		$duplicities = array();
 
-		foreach ($namespace->getClasses() as $reflection) {
-			$className = $reflection->getName();
+		foreach ($namespace->getClasses() as $className => $reflection) {
+			if (!$reflection->isValid()) {
+				$duplicities[] = $reflection;
+			}
 
 			if (isset($this->classes[$className])) {
-				$duplicities[] = $this->classes[$className];
+				if ($reflection->isValid()) {
+					$duplicities[] = $this->classes[$className];
+				}
 
 				if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
 					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
@@ -435,11 +439,15 @@ class ReflectionNamespace implements IReflectionNamespace
 			}
 		}
 
-		foreach ($namespace->getFunctions() as $reflection) {
-			$functionName = $reflection->getName();
+		foreach ($namespace->getFunctions() as $functionName => $reflection) {
+			if (!$reflection->isValid()) {
+				$duplicities[] = $reflection;
+			}
 
 			if (isset($this->functions[$functionName])) {
-				$duplicities[] = $this->functions[$functionName];
+				if ($reflection->isValid()) {
+					$duplicities[] = $this->functions[$functionName];
+				}
 
 				if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
 					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
@@ -449,11 +457,15 @@ class ReflectionNamespace implements IReflectionNamespace
 			}
 		}
 
-		foreach ($namespace->getConstants() as $reflection) {
-			$constantName = $reflection->getName();
+		foreach ($namespace->getConstants() as $constantName => $reflection) {
+			if (!$reflection->isValid()) {
+				$duplicities[] = $reflection;
+			}
 
 			if (isset($this->constants[$constantName])) {
-				$duplicities[] = $this->constants[$constantName];
+				if ($reflection->isValid()) {
+					$duplicities[] = $this->constants[$constantName];
+				}
 
 				if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
 					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());

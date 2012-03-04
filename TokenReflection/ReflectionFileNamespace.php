@@ -270,14 +270,24 @@ class ReflectionFileNamespace extends ReflectionElement
 				case T_TRAIT:
 				case T_INTERFACE:
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
-					$this->classes[] = $class;
+					$className = $class->getName();
+					if (isset($this->classes[$className])) {
+						$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
+					} else {
+						$this->classes[$className] = $class;
+					}
 					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces(true);
 					do {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
-						$this->constants[] = $constant;
+						$constantName = $constant->getName();
+						if (isset($this->constants[$constantName])) {
+							$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
+						} else {
+							$this->constants[$constantName] = $constant;
+						}
 						if ($tokenStream->is(',')) {
 							$tokenStream->skipWhitespaces(true);
 						} else {
@@ -313,7 +323,12 @@ class ReflectionFileNamespace extends ReflectionElement
 					}
 
 					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
-					$this->functions[] = $function;
+					$functionName = $function->getName();
+					if (isset($this->functions[$functionName])) {
+						$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
+					} else {
+						$this->functions[$functionName] = $function;
+					}
 					$tokenStream->next();
 					break;
 				default:
