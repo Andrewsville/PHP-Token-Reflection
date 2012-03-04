@@ -15,7 +15,7 @@
 
 namespace TokenReflection\Invalid;
 
-use TokenReflection\IReflectionFunction, TokenReflection\Exception, TokenReflection\Broker;
+use TokenReflection, TokenReflection\IReflectionFunction, TokenReflection\Exception, TokenReflection\Broker;
 
 /**
  * Invalid function reflection.
@@ -70,6 +70,38 @@ class ReflectionFunction implements IReflectionFunction
 	}
 
 	/**
+	 * Returns the unqualified name (UQN).
+	 *
+	 * @return string
+	 */
+	public function getShortName()
+	{
+		$pos = strrpos($this->name, '\\');
+		return false === $pos ? $this->name : substr($this->name, $pos + 1);
+	}
+
+	/**
+	 * Returns the namespace name.
+	 *
+	 * @return string
+	 */
+	public function getNamespaceName()
+	{
+		$pos = strrpos($this->name, '\\');
+		return false === $pos ? '' : substr($this->name, 0, $pos);
+	}
+
+	/**
+	 * Returns if the class is defined within a namespace.
+	 *
+	 * @return boolean
+	 */
+	public function inNamespace()
+	{
+		return false !== strrpos($this->name, '\\');
+	}
+
+	/**
 	 * Returns if the reflection object is internal.
 	 *
 	 * @return boolean
@@ -120,27 +152,6 @@ class ReflectionFunction implements IReflectionFunction
 	}
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
-	 */
-	public function getNamespaceName()
-	{
-		$pos = strrpos($this->name, '\\');
-		return false === $pos ? '' : substr($this->name, 0, $pos);
-	}
-
-	/**
-	 * Returns if the function/method is defined within a namespace.
-	 *
-	 * @return boolean
-	 */
-	public function inNamespace()
-	{
-		return false !== strpos($this->name, '\\');
-	}
-
-	/**
 	 * Returns the PHP extension reflection.
 	 *
 	 * @return \TokenReflection\IReflectionExtension|null
@@ -171,6 +182,16 @@ class ReflectionFunction implements IReflectionFunction
 	}
 
 	/**
+	 * Returns function modifiers.
+	 *
+	 * @return integer
+	 */
+	public function getModifiers()
+	{
+		return 0;
+	}
+
+	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer
@@ -198,6 +219,38 @@ class ReflectionFunction implements IReflectionFunction
 	public function getDocComment()
 	{
 		return false;
+	}
+
+	/**
+	 * Checks if there is a particular annotation.
+	 *
+	 * @param string $name Annotation name
+	 * @return boolean
+	 */
+	public function hasAnnotation($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
+	 * @return string|array|null
+	 */
+	public function getAnnotation($name)
+	{
+		return null;
+	}
+
+	/**
+	 * Returns all annotations.
+	 *
+	 * @return array
+	 */
+	public function getAnnotations()
+	{
+		return array();
 	}
 
 	/**
@@ -260,7 +313,7 @@ class ReflectionFunction implements IReflectionFunction
 	 */
 	public function getNumberOfParameters()
 	{
-		return -1;
+		return 0;
 	}
 
 	/**
@@ -270,7 +323,7 @@ class ReflectionFunction implements IReflectionFunction
 	 */
 	public function getNumberOfRequiredParameters()
 	{
-		return -1;
+		return 0;
 	}
 
 	/**
@@ -312,6 +365,16 @@ class ReflectionFunction implements IReflectionFunction
 	public function invokeArgs(array $args)
 	{
 		throw new Exception\RuntimeException('Cannot invoke invalid functions', Exception\RuntimeException::UNSUPPORTED, $this);
+	}
+
+	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return array();
 	}
 
 	/**
