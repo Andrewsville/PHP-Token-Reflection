@@ -51,6 +51,7 @@ class DuplicitiesTest extends Test
 		$constant = $broker->getConstant('DUPLICITIES_CONSTANTS_1');
 		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $constant);
 		$this->assertSame($fileName, $constant->getFileName());
+		$this->assertTrue($constant->hasReasons());
 	}
 
 	/**
@@ -75,6 +76,7 @@ class DuplicitiesTest extends Test
 		$function = $broker->getFunction('duplicitiesFunctions1');
 		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $function);
 		$this->assertSame($fileName, $function->getFileName());
+		$this->assertTrue($function->hasReasons());
 	}
 
 	/**
@@ -99,6 +101,7 @@ class DuplicitiesTest extends Test
 		$class = $broker->getClass('duplicitiesClasses1');
 		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $class);
 		$this->assertSame($fileName, $class->getFileName());
+		$this->assertTrue($class->hasReasons());
 	}
 
 	/**
@@ -115,43 +118,53 @@ class DuplicitiesTest extends Test
 			// Expected
 		}
 
-		$this->assertTrue($broker->hasConstant('DUPLICITIES_CONSTANTS_1'));
-		$this->assertTrue($broker->hasConstant('DUPLICITIES_CONSTANTS_2'));
-		$this->assertTrue($broker->hasConstant('DUPLICITIES_FUNCTIONS'));
-		$this->assertTrue($broker->hasConstant('DUPLICITIES_CLASSES'));
-		$this->assertTrue($broker->hasFunction('duplicitiesConstants'));
-		$this->assertTrue($broker->hasFunction('duplicitiesFunctions1'));
-		$this->assertTrue($broker->hasFunction('duplicitiesFunctions2'));
-		$this->assertTrue($broker->hasFunction('duplicitiesClasses'));
-		$this->assertTrue($broker->hasClass('duplicitiesConstants'));
-		$this->assertTrue($broker->hasClass('duplicitiesFunctions'));
-		$this->assertTrue($broker->hasClass('duplicitiesClasses1'));
-		$this->assertTrue($broker->hasClass('duplicitiesClasses2'));
+		static $elements = array(
+			'classes' => array(
+				'duplicitiesConstants',
+				'duplicitiesFunctions',
+				'duplicitiesClasses1',
+				'duplicitiesClasses2'
+			),
+			'functions' => array(
+				'duplicitiesConstants',
+				'duplicitiesFunctions1',
+				'duplicitiesFunctions2',
+				'duplicitiesClasses'
+			),
+			'constants' => array(
+				'DUPLICITIES_CONSTANTS_1',
+				'DUPLICITIES_CONSTANTS_2',
+				'DUPLICITIES_FUNCTIONS',
+				'DUPLICITIES_CLASSES'
+			)
+		);
 
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $broker->getConstant('DUPLICITIES_CONSTANTS_1'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $broker->getConstant('DUPLICITIES_CONSTANTS_2'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $broker->getConstant('DUPLICITIES_FUNCTIONS'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $broker->getConstant('DUPLICITIES_CLASSES'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $broker->getFunction('duplicitiesConstants'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $broker->getFunction('duplicitiesFunctions1'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $broker->getFunction('duplicitiesFunctions2'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $broker->getFunction('duplicitiesClasses'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $broker->getClass('duplicitiesConstants'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $broker->getClass('duplicitiesFunctions'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $broker->getClass('duplicitiesClasses1'));
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $broker->getClass('duplicitiesClasses2'));
+		foreach ($elements as $type => $names) {
+			foreach ($names as $name) {
+				switch ($type) {
+					case 'classes':
+						$this->assertTrue($broker->hasClass($name));
 
-		$this->assertNotSame($fileName, $broker->getConstant('DUPLICITIES_CONSTANTS_1')->getFileName());
-		$this->assertNotSame($fileName, $broker->getConstant('DUPLICITIES_CONSTANTS_2')->getFileName());
-		$this->assertNotSame($fileName, $broker->getConstant('DUPLICITIES_FUNCTIONS')->getFileName());
-		$this->assertNotSame($fileName, $broker->getConstant('DUPLICITIES_CLASSES')->getFileName());
-		$this->assertNotSame($fileName, $broker->getFunction('duplicitiesConstants')->getFileName());
-		$this->assertNotSame($fileName, $broker->getFunction('duplicitiesFunctions1')->getFileName());
-		$this->assertNotSame($fileName, $broker->getFunction('duplicitiesFunctions2')->getFileName());
-		$this->assertNotSame($fileName, $broker->getFunction('duplicitiesClasses')->getFileName());
-		$this->assertNotSame($fileName, $broker->getClass('duplicitiesConstants')->getFileName());
-		$this->assertNotSame($fileName, $broker->getClass('duplicitiesFunctions')->getFileName());
-		$this->assertNotSame($fileName, $broker->getClass('duplicitiesClasses1')->getFileName());
-		$this->assertNotSame($fileName, $broker->getClass('duplicitiesClasses2')->getFileName());
+						$reflection = $broker->getClass($name);
+						$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $reflection);
+						break;
+					case 'functions':
+						$this->assertTrue($broker->hasFunction($name));
+
+						$reflection = $broker->getFunction($name);
+						$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $reflection);
+						break;
+					case 'constants':
+						$this->assertTrue($broker->hasConstant($name));
+
+						$reflection = $broker->getConstant($name);
+						$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $reflection);
+						break;
+				}
+
+				$this->assertTrue($reflection->hasReasons());
+				$this->assertNotSame($fileName, $reflection->getFileName());
+			}
+		}
 	}
 }

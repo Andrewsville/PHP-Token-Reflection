@@ -22,7 +22,7 @@ use TokenReflection, TokenReflection\IReflectionConstant, TokenReflection\Broker
  *
  * The reflected constant is not unique.
  */
-class ReflectionConstant implements IReflectionConstant
+class ReflectionConstant extends ReflectionElement implements IReflectionConstant
 {
 	/**
 	 * Constant name.

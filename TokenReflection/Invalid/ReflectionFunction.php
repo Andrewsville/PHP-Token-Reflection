@@ -22,7 +22,7 @@ use TokenReflection, TokenReflection\IReflectionFunction, TokenReflection\Except
  *
  * The reflected function is not unique.
  */
-class ReflectionFunction implements IReflectionFunction
+class ReflectionFunction extends ReflectionElement implements IReflectionFunction
 {
 	/**
 	 * Class name (FQN).

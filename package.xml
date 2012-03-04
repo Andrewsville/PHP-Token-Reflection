@@ -46,6 +46,7 @@
 				<file name="ReflectionClass.php" role="php" />
 			</dir>
 			<dir name="Invalid">
+				<file name="ReflectionElement.php" role="php" />
 				<file name="ReflectionClass.php" role="php" />
 				<file name="ReflectionConstant.php" role="php" />
 				<file name="ReflectionFunction.php" role="php" />

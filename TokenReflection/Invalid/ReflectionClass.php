@@ -24,7 +24,7 @@ use ReflectionClass as InternalReflectionClass, TokenReflection\Exception;
  *
  * The reflected class is not unique.
  */
-class ReflectionClass implements IReflectionClass
+class ReflectionClass extends ReflectionElement implements IReflectionClass
 {
 	/**
 	 * Class name (FQN).
