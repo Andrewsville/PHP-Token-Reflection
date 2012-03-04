@@ -54,15 +54,7 @@ At the moment we do not support constants declared using the define() function. 
 define('CONSTANT', $a ? 1 : 0);
 ```
 
-The same problem (not knowing the context - more precisely not having a context at all) means that we are unable to parse classes defined conditionally:
-
-```
-if (!class_exists('RuntimeException')) {
-	class RuntimeException extends Exception {}
-}
-```
-
-We have discussed how to solve this problem, we had several possibilities but every one of them had some side effects that were hardly acceptable for us (the most important problem is that the generated documentation depends on the current generator's scope). Eventually we have decided to completely ignore such definitions until there is a better and more stable solution.
+When the library encounters a duplicate class, function or constant name, it converts the previously created reflection into an "invalid reflection" instance. That means that the parser is unable to distinguish between such classes and it is unable to build a proper class tree for example. And it throws an exception. When you catch this exception and continue to work with the Broker instance, the duplicate classes, functions or constants will have only one reflection and it will be an instance of **Invalid\ReflectionClass**, **Invalid\ReflectionFunction** or **Invalid\ReflectionConstant** respectively.
 
 ## Usage
 
