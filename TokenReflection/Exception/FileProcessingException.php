@@ -37,7 +37,11 @@ final class FileProcessingException extends RuntimeException
 	 */
 	public function __construct(array $reasons, ReflectionFile $sender = null)
 	{
-		parent::__construct('There was an error processing the file.', 0, $sender);
+		parent::__construct(
+			null === $sender ? 'There was an error processing the file.' : sprintf('There was an error processing the file %s.', $sender->getName()),
+			0,
+			$sender
+		);
 
 		$this->reasons = $reasons;
 	}
