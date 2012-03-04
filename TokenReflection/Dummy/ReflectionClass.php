@@ -981,6 +981,16 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns if the class is deprecated.
+	 *
+	 * @return boolean
+	 */
+	public function isDeprecated()
+	{
+		return false;
+	}
+
+	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
 	 * @return \TokenReflection\Broker

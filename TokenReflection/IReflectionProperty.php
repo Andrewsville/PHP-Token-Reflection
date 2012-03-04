@@ -154,4 +154,11 @@ interface IReflectionProperty extends IReflection
 	 * @return string|null
 	 */
 	public function getDeclaringTraitName();
+
+	/**
+	 * Returns if the property is deprecated.
+	 *
+	 * @return boolean
+	 */
+	public function isDeprecated();
 }

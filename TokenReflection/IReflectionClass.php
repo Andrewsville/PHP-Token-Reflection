@@ -599,4 +599,11 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function isComplete();
+
+	/**
+	 * Returns if the class is deprecated.
+	 *
+	 * @return boolean
+	 */
+	public function isDeprecated();
 }

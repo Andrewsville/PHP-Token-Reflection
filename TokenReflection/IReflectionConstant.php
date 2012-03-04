@@ -103,4 +103,11 @@ interface IReflectionConstant extends IReflection
 	 * @return string
 	 */
 	public function __toString();
+
+	/**
+	 * Returns if the constant is deprecated.
+	 *
+	 * @return boolean
+	 */
+	public function isDeprecated();
 }
