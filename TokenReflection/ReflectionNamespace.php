@@ -432,7 +432,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				}
 
 				$error = new Exception\RuntimeException(
-					sprintf('Class %s was redeclared in file %s.', $className, $reflection->getFileName()),
+					sprintf('Class %s was redeclared (previously declared in file %s).', $className, $this->classes[$className]->getFileName()),
 					Exception\RuntimeException::ALREADY_EXISTS,
 					$this->classes[$className]
 				);
@@ -460,7 +460,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				}
 
 				$error = new Exception\RuntimeException(
-					sprintf('Function %s was redeclared in file %s.', $functionName, $reflection->getFileName()),
+					sprintf('Function %s was redeclared (previousy declared in file %s).', $functionName, $this->functions[$functionName]->getFileName()),
 					Exception\RuntimeException::ALREADY_EXISTS,
 					$this->functions[$functionName]
 				);
@@ -488,7 +488,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				}
 
 				$error = new Exception\RuntimeException(
-					sprintf('Constant %s was redeclared in file %s.', $constantName, $reflection->getFileName()),
+					sprintf('Constant %s was redeclared (previuosly declared in file %s).', $constantName, $this->constants[$constantName]->getFileName()),
 					Exception\RuntimeException::ALREADY_EXISTS,
 					$this->constants[$constantName]
 				);
