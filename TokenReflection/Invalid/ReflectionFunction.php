@@ -15,7 +15,7 @@
 
 namespace TokenReflection\Invalid;
 
-use TokenReflection, TokenReflection\IReflectionFunction, TokenReflection\Exception, TokenReflection\Broker;
+use TokenReflection, TokenReflection\IReflectionFunction, TokenReflection\Exception, TokenReflection\Broker, TokenReflection\ReflectionBase;
 
 /**
  * Invalid function reflection.
@@ -405,7 +405,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionBase::get($this, $key);
 	}
 
 	/**
@@ -416,6 +416,6 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionBase::exists($this, $key);
 	}
 }

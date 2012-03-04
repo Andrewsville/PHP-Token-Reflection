@@ -1001,6 +1001,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return false;
 	}
 
+	public function isDeprecated()
+	{
+		return false;
+	}
+
 	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *

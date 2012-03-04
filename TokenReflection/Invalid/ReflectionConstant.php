@@ -15,7 +15,7 @@
 
 namespace TokenReflection\Invalid;
 
-use TokenReflection, TokenReflection\IReflectionConstant, TokenReflection\Broker;
+use TokenReflection, TokenReflection\IReflectionConstant, TokenReflection\Broker, TokenReflection\ReflectionBase;
 
 /**
  * Invalid constant reflection.
@@ -316,7 +316,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionBase::get($this, $key);
 	}
 
 	/**
@@ -327,6 +327,6 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionBase::exists($this, $key);
 	}
 }

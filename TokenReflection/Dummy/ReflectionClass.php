@@ -992,6 +992,11 @@ class ReflectionClass implements IReflectionClass
 		return true;
 	}
 
+	public function isDeprecated()
+	{
+		return false;
+	}
+
 	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
