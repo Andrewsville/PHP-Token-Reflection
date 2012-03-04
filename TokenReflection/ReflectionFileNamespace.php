@@ -276,7 +276,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							$this->classes[$className]->addReason(new Exception\ParseException(
 								$this,
 								$tokenStream,
-								'Class is defined multiple times in the file.',
+								sprintf('Class %s is defined multiple times in the file.', $className),
 								Exception\ParseException::ALREADY_EXISTS
 							));
 						}
@@ -299,7 +299,7 @@ class ReflectionFileNamespace extends ReflectionElement
 								$this->constants[$constantName]->addReason(new Exception\ParseException(
 									$this,
 									$tokenStream,
-									'Constant is defined multiple times in the file.',
+									sprintf('Constant %s is defined multiple times in the file.', $constantName),
 									Exception\ParseException::ALREADY_EXISTS
 								));
 							}
@@ -351,7 +351,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							$this->functions[$functionName]->addReason(new Exception\ParseException(
 								$this,
 								$tokenStream,
-								'Function is defined multiple times in the file.',
+								sprintf('Function %s is defined multiple times in the file.', $functionName),
 								Exception\ParseException::ALREADY_EXISTS
 							));
 						}

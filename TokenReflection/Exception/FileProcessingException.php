@@ -63,20 +63,18 @@ final class FileProcessingException extends RuntimeException
 	 */
 	public function getDetail()
 	{
-		$detail = parent::getDetail();
+		if (!empty($this->reasons)) {
+			$reasons = array_map(function(BaseException $reason) {
+				if ($reason instanceof ParseException) {
+					return $reason->getDetail();
+				} else {
+					return $reason->getMessage();
+				}
+			}, $this->reasons);
 
-		$reasons = array_map(function(BaseException $reason) {
-			return get_class($reason) . ' ' . $reason->getDetail();
-		}, $this->reasons);
-
-		if (!empty($reasons)) {
-			if (!empty($detail)) {
-				$detail .= "\n";
-			}
-
-			$detail .= "There were following reasons for this exception:\n" . implode("\n", $reasons);
+			return "There were following reasons for this exception:\n" . implode("\n", $reasons);
 		}
 
-		return $detail;
+		return '';
 	}
 }

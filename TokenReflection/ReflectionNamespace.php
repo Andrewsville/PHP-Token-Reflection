@@ -423,9 +423,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 		foreach ($namespace->getClasses() as $className => $reflection) {
 			if (!$reflection->isValid()) {
-				foreach ($reflection->getReasons() as $reason) {
-					$errors[] = $reason;
-				}
+				$errors = array_merge($errors, $reflection->getReasons());
 			}
 
 			if (isset($this->classes[$className])) {
@@ -434,7 +432,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				}
 
 				$error = new Exception\RuntimeException(
-					sprintf('Class was redeclared in file %s.', $reflection->getFileName()),
+					sprintf('Class %s was redeclared in file %s.', $className, $reflection->getFileName()),
 					Exception\RuntimeException::ALREADY_EXISTS,
 					$this->classes[$className]
 				);
@@ -453,9 +451,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 		foreach ($namespace->getFunctions() as $functionName => $reflection) {
 			if (!$reflection->isValid()) {
-				foreach ($reflection->getReasons() as $reason) {
-					$errors[] = $reason;
-				}
+				$errors = array_merge($errors, $reflection->getReasons());
 			}
 
 			if (isset($this->functions[$functionName])) {
@@ -464,7 +460,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				}
 
 				$error = new Exception\RuntimeException(
-					sprintf('Function was redeclared in file %s.', $reflection->getFileName()),
+					sprintf('Function %s was redeclared in file %s.', $functionName, $reflection->getFileName()),
 					Exception\RuntimeException::ALREADY_EXISTS,
 					$this->functions[$functionName]
 				);
@@ -483,9 +479,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 		foreach ($namespace->getConstants() as $constantName => $reflection) {
 			if (!$reflection->isValid()) {
-				foreach ($reflection->getReasons() as $reason) {
-					$errors[] = $reason;
-				}
+				$errors = array_merge($errors, $reflection->getReasons());
 			}
 
 			if (isset($this->constants[$constantName])) {
@@ -494,7 +488,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				}
 
 				$error = new Exception\RuntimeException(
-					sprintf('Constant was redeclared in file %s.', $reflection->getFileName()),
+					sprintf('Constant %s was redeclared in file %s.', $constantName, $reflection->getFileName()),
 					Exception\RuntimeException::ALREADY_EXISTS,
 					$this->constants[$constantName]
 				);
