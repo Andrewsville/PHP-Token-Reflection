@@ -118,11 +118,35 @@ class ParseException extends StreamException
 
 		$this->exceptionLine = $line;
 
-		while (isset($tokenStream[$min - 1]) && $line - $tokenStream[$min][2] < self::SOURCE_LINES_AROUND) {
+		static $skip = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
+
+		$significant = array();
+		while (isset($tokenStream[$min - 1])) {
+			if (!isset($significant[$tokenStream[$min][2]])) {
+				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
+					break;
+				}
+
+				$significant[$tokenStream[$min][2]] = !isset($skip[$tokenStream[$min][0]]);
+			} else {
+				$significant[$tokenStream[$min][2]] |= !isset($skip[$tokenStream[$min][0]]);
+			}
+
 			$min--;
 		}
 
-		while (isset($tokenStream[$max + 1]) && $tokenStream[$max][2] - $line < self::SOURCE_LINES_AROUND) {
+		$significant = array();
+		while (isset($tokenStream[$max + 1])) {
+			if (!isset($significant[$tokenStream[$max][2]])) {
+				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
+					break;
+				}
+
+				$significant[$tokenStream[$max][2]] = !isset($skip[$tokenStream[$max][0]]);
+			} else {
+				$significant[$tokenStream[$max][2]] |= !isset($skip[$tokenStream[$max][0]]);
+			}
+
 			$max++;
 		}
 
