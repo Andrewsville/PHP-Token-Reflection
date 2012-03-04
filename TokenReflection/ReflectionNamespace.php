@@ -415,24 +415,36 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param \TokenReflection\ReflectionFileNamespace $namespace Namespace part
 	 * @return \TokenReflection\ReflectionNamespace
-	 * @throws \TokenReflection\Exception\RuntimeException If one of classes, functions or constants form the namespace are already defined
+	 * @throws \TokenReflection\Exception\FileProcessingException If one of classes, functions or constants form the namespace are already defined
 	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
-		$duplicities = array();
+		$errors = array();
 
 		foreach ($namespace->getClasses() as $className => $reflection) {
 			if (!$reflection->isValid()) {
-				$duplicities[] = $reflection;
+				foreach ($reflection->getReasons() as $reason) {
+					$errors[] = $reason;
+				}
 			}
 
 			if (isset($this->classes[$className])) {
-				if ($reflection->isValid()) {
-					$duplicities[] = $this->classes[$className];
-				}
-
 				if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
 					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
+				}
+
+				$error = new Exception\RuntimeException(
+					sprintf('Class was redeclared in file %s.', $reflection->getFileName()),
+					Exception\RuntimeException::ALREADY_EXISTS,
+					$this->classes[$className]
+				);
+				$errors[] = $error;
+				$this->classes[$className]->addReason($error);
+
+				if (!$reflection->isValid()) {
+					foreach ($reflection->getReasons() as $reason) {
+						$this->classes[$className]->addReason($reason);
+					}
 				}
 			} else {
 				$this->classes[$className] = $reflection;
@@ -441,16 +453,28 @@ class ReflectionNamespace implements IReflectionNamespace
 
 		foreach ($namespace->getFunctions() as $functionName => $reflection) {
 			if (!$reflection->isValid()) {
-				$duplicities[] = $reflection;
+				foreach ($reflection->getReasons() as $reason) {
+					$errors[] = $reason;
+				}
 			}
 
 			if (isset($this->functions[$functionName])) {
-				if ($reflection->isValid()) {
-					$duplicities[] = $this->functions[$functionName];
-				}
-
 				if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
 					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
+				}
+
+				$error = new Exception\RuntimeException(
+					sprintf('Function was redeclared in file %s.', $reflection->getFileName()),
+					Exception\RuntimeException::ALREADY_EXISTS,
+					$this->functions[$functionName]
+				);
+				$errors[] = $error;
+				$this->functions[$functionName]->addReason($error);
+
+				if (!$reflection->isValid()) {
+					foreach ($reflection->getReasons() as $reason) {
+						$this->functions[$functionName]->addReason($reason);
+					}
 				}
 			} else {
 				$this->functions[$functionName] = $reflection;
@@ -459,39 +483,36 @@ class ReflectionNamespace implements IReflectionNamespace
 
 		foreach ($namespace->getConstants() as $constantName => $reflection) {
 			if (!$reflection->isValid()) {
-				$duplicities[] = $reflection;
+				foreach ($reflection->getReasons() as $reason) {
+					$errors[] = $reason;
+				}
 			}
 
 			if (isset($this->constants[$constantName])) {
-				if ($reflection->isValid()) {
-					$duplicities[] = $this->constants[$constantName];
-				}
-
 				if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
 					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
+				}
+
+				$error = new Exception\RuntimeException(
+					sprintf('Constant was redeclared in file %s.', $reflection->getFileName()),
+					Exception\RuntimeException::ALREADY_EXISTS,
+					$this->constants[$constantName]
+				);
+				$errors[] = $error;
+				$this->constants[$constantName]->addReason($error);
+
+				if (!$reflection->isValid()) {
+					foreach ($reflection->getReasons() as $reason) {
+						$this->constants[$constantName]->addReason($reason);
+					}
 				}
 			} else {
 				$this->constants[$constantName] = $reflection;
 			}
 		}
 
-		if (!empty($duplicities)) {
-			$that = $this;
-			$list = array_map(function(IReflection $reflection) use ($namespace, $that) {
-				if ($reflection instanceof IReflectionClass) {
-					$type = 'class';
-				} elseif ($reflection instanceof IReflectionFunction) {
-					$type = 'function';
-				} elseif ($reflection instanceof IReflectionConstant) {
-					$type = 'constant';
-				} else {
-					throw new Exception\RuntimeException(sprintf('Could not handle ambiguous elements found in file %s.', $namespace->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $that);
-				}
-
-				return sprintf('%s %s (declared in %s)', $type, $reflection->getName(), $reflection->getFileName());
-			}, $duplicities);
-
-			throw new Exception\RuntimeException(sprintf('Ambiguous elements found in file %s: %s.', $namespace->getFileName(), implode(', ', $list)), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		if (!empty($errors)) {
+			throw new Exception\FileProcessingException($errors, null);
 		}
 
 		return $this;

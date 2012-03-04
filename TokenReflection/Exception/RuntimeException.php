@@ -20,15 +20,8 @@ use TokenReflection\IReflection;
 /**
  * Runtime exception raised when working with a reflection element.
  */
-final class RuntimeException extends BaseException
+class RuntimeException extends BaseException
 {
-	/**
-	 * The property/element already exists.
-	 *
-	 * @var integer
-	 */
-	const ALREADY_EXISTS = 3001;
-
 	/**
 	 * The property/method is not accessible.
 	 *
@@ -72,7 +65,7 @@ final class RuntimeException extends BaseException
 	 *
 	 * @return string
 	 */
-	protected function getDetail()
+	public function getDetail()
 	{
 		return null === $this->sender ? '' : sprintf('Thrown when working with "%s".', $this->sender->getPrettyName());
 	}

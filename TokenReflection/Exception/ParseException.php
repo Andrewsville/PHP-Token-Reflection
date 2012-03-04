@@ -220,7 +220,7 @@ class ParseException extends StreamException
 	 *
 	 * @return string
 	 */
-	protected function getDetail()
+	public function getDetail()
 	{
 		if (0 === $this->getStream()->count()) {
 			return parent::getDetail() . 'The token stream was empty.';

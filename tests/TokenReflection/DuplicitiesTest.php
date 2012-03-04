@@ -39,7 +39,7 @@ class DuplicitiesTest extends Test
 			$broker->processFile($fileName = $this->getFilePath('constants'));
 
 			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\RuntimeException $e) {
+		} catch (Exception\FileProcessingException $e) {
 			// Expected
 		}
 
@@ -64,7 +64,7 @@ class DuplicitiesTest extends Test
 			$broker->processFile($fileName = $this->getFilePath('functions'));
 
 			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\RuntimeException $e) {
+		} catch (Exception\FileProcessingException $e) {
 			// Expected
 		}
 
@@ -89,7 +89,7 @@ class DuplicitiesTest extends Test
 			$broker->processFile($fileName = $this->getFilePath('classes'));
 
 			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\RuntimeException $e) {
+		} catch (Exception\FileProcessingException $e) {
 			// Expected
 		}
 
@@ -114,7 +114,7 @@ class DuplicitiesTest extends Test
 			$broker->processFile($fileName = $this->getFilePath('otherfile'));
 
 			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\RuntimeException $e) {
+		} catch (Exception\FileProcessingException $e) {
 			// Expected
 		}
 

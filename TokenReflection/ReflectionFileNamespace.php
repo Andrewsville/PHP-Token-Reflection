@@ -272,7 +272,18 @@ class ReflectionFileNamespace extends ReflectionElement
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
 					$className = $class->getName();
 					if (isset($this->classes[$className])) {
-						$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
+						if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
+							$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
+						}
+
+						if (!$this->classes[$className]->hasReasons()) {
+							$this->classes[$className]->addReason(new Exception\ParseException(
+								$this,
+								$tokenStream,
+								'Class is defined multiple times in the file.',
+								Exception\ParseException::ALREADY_EXISTS
+							));
+						}
 					} else {
 						$this->classes[$className] = $class;
 					}
@@ -284,7 +295,18 @@ class ReflectionFileNamespace extends ReflectionElement
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$constantName = $constant->getName();
 						if (isset($this->constants[$constantName])) {
-							$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
+							if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
+								$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
+							}
+
+							if (!$this->constants[$constantName]->hasReasons()) {
+								$this->constants[$constantName]->addReason(new Exception\ParseException(
+									$this,
+									$tokenStream,
+									'Constant is defined multiple times in the file.',
+									Exception\ParseException::ALREADY_EXISTS
+								));
+							}
 						} else {
 							$this->constants[$constantName] = $constant;
 						}
@@ -325,7 +347,18 @@ class ReflectionFileNamespace extends ReflectionElement
 					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
 					$functionName = $function->getName();
 					if (isset($this->functions[$functionName])) {
-						$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
+						if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
+							$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
+						}
+
+						if (!$this->functions[$functionName]->hasReasons()) {
+							$this->functions[$functionName]->addReason(new Exception\ParseException(
+								$this,
+								$tokenStream,
+								'Function is defined multiple times in the file.',
+								Exception\ParseException::ALREADY_EXISTS
+							));
+						}
 					} else {
 						$this->functions[$functionName] = $function;
 					}

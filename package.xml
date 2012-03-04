@@ -54,6 +54,7 @@
 			<dir name="Exception">
 				<file name="BaseException.php" role="php" />
 				<file name="BrokerException.php" role="php" />
+				<file name="FileProcessingException.php" role="php" />
 				<file name="ParseException.php" role="php" />
 				<file name="RuntimeException.php" role="php" />
 				<file name="StreamException.php" role="php" />
