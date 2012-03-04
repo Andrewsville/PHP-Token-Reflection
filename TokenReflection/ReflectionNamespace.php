@@ -425,10 +425,10 @@ class ReflectionNamespace implements IReflectionNamespace
 			$className = $reflection->getName();
 
 			if (isset($this->classes[$className])) {
-				$duplicities[] = $reflection;
+				$duplicities[] = $this->classes[$className];
 
 				if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
-					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->getBroker());
+					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
 				}
 			} else {
 				$this->classes[$className] = $reflection;
@@ -439,10 +439,10 @@ class ReflectionNamespace implements IReflectionNamespace
 			$functionName = $reflection->getName();
 
 			if (isset($this->functions[$functionName])) {
-				$duplicities[] = $reflection;
+				$duplicities[] = $this->functions[$functionName];
 
 				if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
-					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->getBroker());
+					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
 				}
 			} else {
 				$this->functions[$functionName] = $reflection;
@@ -453,10 +453,10 @@ class ReflectionNamespace implements IReflectionNamespace
 			$constantName = $reflection->getName();
 
 			if (isset($this->constants[$constantName])) {
-				$duplicities[] = $reflection;
+				$duplicities[] = $this->constants[$constantName];
 
 				if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
-					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->getBroker());
+					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
 				}
 			} else {
 				$this->constants[$constantName] = $reflection;
@@ -464,13 +464,16 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		if (!empty($duplicities)) {
-			$list = array_map(function(ReflectionElement $reflection) {
-				if ($reflection instanceof ReflectionClass) {
+			$that = $this;
+			$list = array_map(function(IReflection $reflection) use ($namespace, $that) {
+				if ($reflection instanceof IReflectionClass) {
 					$type = 'class';
-				} elseif ($reflection instanceof ReflectionFunction) {
+				} elseif ($reflection instanceof IReflectionFunction) {
 					$type = 'function';
-				} elseif ($reflection instanceof ReflectionConstant) {
+				} elseif ($reflection instanceof IReflectionConstant) {
 					$type = 'constant';
+				} else {
+					throw new Exception\RuntimeException(sprintf('Could not handle ambiguous elements found in file %s.', $namespace->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $that);
 				}
 
 				return sprintf('%s %s (declared in %s)', $type, $reflection->getName(), $reflection->getFileName());

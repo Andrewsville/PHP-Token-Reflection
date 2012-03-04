@@ -32,6 +32,13 @@ class ReflectionConstant implements IReflectionConstant
 	private $name;
 
 	/**
+	 * Original definition file name.
+	 *
+	 * @var string
+	 */
+	private $fileName;
+
+	/**
 	 * Reflection broker.
 	 *
 	 * @var \TokenReflection\Broker
@@ -42,12 +49,14 @@ class ReflectionConstant implements IReflectionConstant
 	 * Constructor.
 	 *
 	 * @param string $name Constant name
+	 * @param string $fileName Original definiton file name
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
-	public function __construct($name, Broker $broker)
+	public function __construct($name, $fileName, Broker $broker)
 	{
 		$this->name = $name;
 		$this->broker = $broker;
+		$this->fileName = $fileName;
 	}
 
 	/**
@@ -119,7 +128,7 @@ class ReflectionConstant implements IReflectionConstant
 	 */
 	public function getFileName()
 	{
-		return null;
+		return $this->fileName;
 	}
 
 	/**

@@ -25,13 +25,6 @@ use TokenReflection\IReflectionFunction, TokenReflection\Exception, TokenReflect
 class ReflectionFunction implements IReflectionFunction
 {
 	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
-	/**
 	 * Class name (FQN).
 	 *
 	 * @var string
@@ -39,15 +32,31 @@ class ReflectionFunction implements IReflectionFunction
 	private $name;
 
 	/**
+	 * Original definition file name.
+	 *
+	 * @var string
+	 */
+	private $fileName;
+
+	/**
+	 * Reflection broker.
+	 *
+	 * @var \TokenReflection\Broker
+	 */
+	private $broker;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $name Function name
+	 * @param string $fileName Original definiton file name
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
-	public function __construct($name, Broker $broker)
+	public function __construct($name, $fileName, Broker $broker)
 	{
 		$this->name = ltrim($name, '\\');
 		$this->broker = $broker;
+		$this->fileName = $fileName;
 	}
 
 	/**
@@ -154,11 +163,11 @@ class ReflectionFunction implements IReflectionFunction
 	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
-	 * @return string
+	 * @return null
 	 */
 	public function getFileName()
 	{
-		return null;
+		return $this->fileName;
 	}
 
 	/**
