@@ -422,7 +422,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		$errors = array();
 
 		foreach ($namespace->getClasses() as $className => $reflection) {
-			if (!$reflection->isValid()) {
+			if ($reflection instanceof Invalid\ReflectionClass) {
 				$errors = array_merge($errors, $reflection->getReasons());
 			}
 
@@ -439,7 +439,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				$errors[] = $error;
 				$this->classes[$className]->addReason($error);
 
-				if (!$reflection->isValid()) {
+				if ($reflection instanceof Invalid\ReflectionClass) {
 					foreach ($reflection->getReasons() as $reason) {
 						$this->classes[$className]->addReason($reason);
 					}
@@ -450,7 +450,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		foreach ($namespace->getFunctions() as $functionName => $reflection) {
-			if (!$reflection->isValid()) {
+			if ($reflection instanceof Invalid\ReflectionFunction) {
 				$errors = array_merge($errors, $reflection->getReasons());
 			}
 
@@ -467,7 +467,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				$errors[] = $error;
 				$this->functions[$functionName]->addReason($error);
 
-				if (!$reflection->isValid()) {
+				if ($reflection instanceof Invalid\ReflectionFunction) {
 					foreach ($reflection->getReasons() as $reason) {
 						$this->functions[$functionName]->addReason($reason);
 					}
@@ -478,7 +478,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		}
 
 		foreach ($namespace->getConstants() as $constantName => $reflection) {
-			if (!$reflection->isValid()) {
+			if ($reflection instanceof Invalid\ReflectionConstant) {
 				$errors = array_merge($errors, $reflection->getReasons());
 			}
 
@@ -495,7 +495,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				$errors[] = $error;
 				$this->constants[$constantName]->addReason($error);
 
-				if (!$reflection->isValid()) {
+				if ($reflection instanceof Invalid\ReflectionConstant) {
 					foreach ($reflection->getReasons() as $reason) {
 						$this->constants[$constantName]->addReason($reason);
 					}
