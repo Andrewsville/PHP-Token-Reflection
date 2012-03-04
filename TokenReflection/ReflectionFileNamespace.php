@@ -257,10 +257,6 @@ class ReflectionFileNamespace extends ReflectionElement
 					}
 					$tokenStream->next();
 					break;
-				case '{':
-					$tokenStream->findMatchingBracket()->next();
-					break;
-				case '}':
 				case null:
 				case T_NAMESPACE:
 					break 2;
