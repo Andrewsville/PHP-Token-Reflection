@@ -263,7 +263,7 @@ class ReflectionFileNamespace extends ReflectionElement
 					$depth++;
 					break;
 				case '}':
-					if (0 === --$depth) {
+					if (0 === $depth--) {
 						break 2;
 					}
 
