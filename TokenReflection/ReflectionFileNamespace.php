@@ -180,6 +180,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
 		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
+		$depth = 0;
 
 		while (true) {
 			switch ($tokenStream->getType()) {
@@ -255,6 +256,17 @@ class ReflectionFileNamespace extends ReflectionElement
 					} elseif (self::DOCBLOCK_TEMPLATE_END === $docblock) {
 						array_shift($this->docblockTemplates);
 					}
+					$tokenStream->next();
+					break;
+				case '{':
+					$tokenStream->next();
+					$depth++;
+					break;
+				case '}':
+					if (0 === --$depth) {
+						break 2;
+					}
+
 					$tokenStream->next();
 					break;
 				case null:
