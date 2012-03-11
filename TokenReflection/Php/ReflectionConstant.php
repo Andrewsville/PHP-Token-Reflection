@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -15,7 +15,7 @@
 
 namespace TokenReflection\Php;
 
-use TokenReflection;
+use TokenReflection, TokenReflection\Dummy, TokenReflection\Invalid;
 use TokenReflection\Broker, TokenReflection\Exception, Reflector;
 
 /**
@@ -370,7 +370,9 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 			}
 		} else {
 			$class = $broker->getClass($className);
-			if ($class instanceof Dummy\ReflectionClass) {
+			if ($class instanceof Invalid\ReflectionClass) {
+				throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+			} elseif ($class instanceof Dummy\ReflectionClass) {
 				throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 			$constant = $class->getConstantReflection($constantName);
@@ -401,6 +403,18 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	public function getNamespaceAliases()
 	{
 		return array();
+	}
+
+	/**
+	 * Returns if the constant definition is valid.
+	 *
+	 * Internal constants are always valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
 	}
 
 	/**

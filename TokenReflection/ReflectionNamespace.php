@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -414,37 +414,102 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Adds a namespace part from a file.
 	 *
 	 * @param \TokenReflection\ReflectionFileNamespace $namespace Namespace part
-	 * @throws \TokenReflection\Exception\RuntimeException If one of classes form the namespace are already defined.
-	 * @throws \TokenReflection\Exception\RuntimeException If one of functions form the namespace are already defined.
-	 * @throws \TokenReflection\Exception\RuntimeException If one of constants form the namespace are already defined.
+	 * @return \TokenReflection\ReflectionNamespace
+	 * @throws \TokenReflection\Exception\FileProcessingException If one of classes, functions or constants form the namespace are already defined
 	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
-		// @todo check catching in broker
+		$errors = array();
 
-		$classes = $namespace->getClasses();
-		foreach ($this->classes as $className => $reflection) {
-			if (isset($classes[$className])) {
-				throw new Exception\RuntimeException(sprintf('Class "%s" is already defined; in file "%s".', $className, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		foreach ($namespace->getClasses() as $className => $reflection) {
+			if ($reflection instanceof Invalid\ReflectionClass) {
+				$errors = array_merge($errors, $reflection->getReasons());
+			}
+
+			if (isset($this->classes[$className])) {
+				if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
+					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
+				}
+
+				$error = new Exception\RuntimeException(
+					sprintf('Class %s was redeclared (previously declared in file %s).', $className, $this->classes[$className]->getFileName()),
+					Exception\RuntimeException::ALREADY_EXISTS,
+					$reflection
+				);
+				$errors[] = $error;
+				$this->classes[$className]->addReason($error);
+
+				if ($reflection instanceof Invalid\ReflectionClass) {
+					foreach ($reflection->getReasons() as $reason) {
+						$this->classes[$className]->addReason($reason);
+					}
+				}
+			} else {
+				$this->classes[$className] = $reflection;
 			}
 		}
-		$this->classes = array_merge($this->classes, $classes);
 
-		$functions = $namespace->getFunctions();
-		foreach ($this->functions as $functionName => $reflection) {
-			if (isset($functions[$functionName])) {
-				throw new Exception\RuntimeException(sprintf('Function "%s" is already defined; in file "%s".', $functionName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		foreach ($namespace->getFunctions() as $functionName => $reflection) {
+			if ($reflection instanceof Invalid\ReflectionFunction) {
+				$errors = array_merge($errors, $reflection->getReasons());
+			}
+
+			if (isset($this->functions[$functionName])) {
+				if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
+					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
+				}
+
+				$error = new Exception\RuntimeException(
+					sprintf('Function %s was redeclared (previousy declared in file %s).', $functionName, $this->functions[$functionName]->getFileName()),
+					Exception\RuntimeException::ALREADY_EXISTS,
+					$reflection
+				);
+				$errors[] = $error;
+				$this->functions[$functionName]->addReason($error);
+
+				if ($reflection instanceof Invalid\ReflectionFunction) {
+					foreach ($reflection->getReasons() as $reason) {
+						$this->functions[$functionName]->addReason($reason);
+					}
+				}
+			} else {
+				$this->functions[$functionName] = $reflection;
 			}
 		}
-		$this->functions = array_merge($this->functions, $functions);
 
-		$constants = $namespace->getConstants();
-		foreach ($this->constants as $constantName => $reflection) {
-			if (isset($constants[$constantName])) {
-				throw new Exception\RuntimeException(sprintf('Constant "%s" is already defined; in file "%s".', $constantName, $reflection->getFileName()), Exception\RuntimeException::ALREADY_EXISTS, $this);
+		foreach ($namespace->getConstants() as $constantName => $reflection) {
+			if ($reflection instanceof Invalid\ReflectionConstant) {
+				$errors = array_merge($errors, $reflection->getReasons());
+			}
+
+			if (isset($this->constants[$constantName])) {
+				if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
+					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
+				}
+
+				$error = new Exception\RuntimeException(
+					sprintf('Constant %s was redeclared (previuosly declared in file %s).', $constantName, $this->constants[$constantName]->getFileName()),
+					Exception\RuntimeException::ALREADY_EXISTS,
+					$reflection
+				);
+				$errors[] = $error;
+				$this->constants[$constantName]->addReason($error);
+
+				if ($reflection instanceof Invalid\ReflectionConstant) {
+					foreach ($reflection->getReasons() as $reason) {
+						$this->constants[$constantName]->addReason($reason);
+					}
+				}
+			} else {
+				$this->constants[$constantName] = $reflection;
 			}
 		}
-		$this->constants = array_merge($this->constants, $constants);
+
+		if (!empty($errors)) {
+			throw new Exception\FileProcessingException($errors, null);
+		}
+
+		return $this;
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -89,7 +89,7 @@ class StreamException extends BaseException
 	 *
 	 * @return string
 	 */
-	protected function getDetail()
+	public function getDetail()
 	{
 		return sprintf('Thrown when working with file "%s" token stream.', $this->getFileName());
 	}

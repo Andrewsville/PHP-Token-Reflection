@@ -46,7 +46,7 @@
 		</exec>
 	</target>
 
-	<target name="phpmd" description="Find duplicate code using PHPCPD">
+	<target name="phpmd" description="Perform project mess detection using PHPMD">
 		<exec executable="phpmd${executableExtension}">
 			<arg path="${sourcedir}" />
 			<arg value="xml" />
@@ -56,7 +56,7 @@
 		</exec>
 	</target>
 
-	<target name="phpcpd" description="Perform project mess detection using PHPMD">
+	<target name="phpcpd" description="Find duplicate code using PHPCPD">
 		<exec executable="phpcpd${executableExtension}">
 			<arg value="--log-pmd" />
 			<arg path="${builddir}/logs/pmd-cpd.xml" />

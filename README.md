@@ -1,5 +1,7 @@
 # PHP Token Reflection #
 
+[![Build Status](https://secure.travis-ci.org/Andrewsville/PHP-Token-Reflection.png?branch=develop)](http://travis-ci.org/Andrewsville/PHP-Token-Reflection)
+
 In short, this library emulates the PHP reflection model using the tokenized PHP source.
 
 ## Brief history
@@ -52,15 +54,7 @@ At the moment we do not support constants declared using the define() function. 
 define('CONSTANT', $a ? 1 : 0);
 ```
 
-The same problem (not knowing the context - more precisely not having a context at all) means that we are unable to parse classes defined conditionally:
-
-```
-if (!class_exists('RuntimeException')) {
-	class RuntimeException extends Exception {}
-}
-```
-
-We have discussed how to solve this problem, we had several possibilities but every one of them had some side effects that were hardly acceptable for us (the most important problem is that the generated documentation depends on the current generator's scope). Eventually we have decided to completely ignore such definitions until there is a better and more stable solution.
+When the library encounters a duplicate class, function or constant name, it converts the previously created reflection into an "invalid reflection" instance. That means that the parser is unable to distinguish between such classes and it is unable to build a proper class tree for example. And it throws an exception. When you catch this exception and continue to work with the Broker instance, the duplicate classes, functions or constants will have only one reflection and it will be an instance of **Invalid\ReflectionClass**, **Invalid\ReflectionFunction** or **Invalid\ReflectionConstant** respectively.
 
 ## Usage
 
@@ -89,4 +83,4 @@ The library requires PHP 5.3 with the [tokenizer extension](http://cz.php.net/ma
 
 The current version is 1.1. It should support the vast majority of PHP internal reflection features and add many more.
 
-Every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 branch, the actual 5.4RC version and actual trunk.
+Every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 and 5.4 branch and the actual trunk.

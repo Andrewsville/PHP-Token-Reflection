@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -140,6 +140,16 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	public function getClosure()
 	{
 		return null;
+	}
+
+	/**
+	 * Returns if the function definition is valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -118,12 +118,35 @@ class ParseException extends StreamException
 
 		$this->exceptionLine = $line;
 
-		while (isset($tokenStream[$min - 1]) && $line - $tokenStream[$min][2] < self::SOURCE_LINES_AROUND) {
+		static $skip = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
+
+		$significant = array();
+		while (isset($tokenStream[$min - 1])) {
+			if (!isset($significant[$tokenStream[$min][2]])) {
+				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
+					break;
+				}
+
+				$significant[$tokenStream[$min][2]] = !isset($skip[$tokenStream[$min][0]]);
+			} else {
+				$significant[$tokenStream[$min][2]] |= !isset($skip[$tokenStream[$min][0]]);
+			}
+
 			$min--;
 		}
 
+		$significant = array();
+		while (isset($tokenStream[$max + 1])) {
+			if (!isset($significant[$tokenStream[$max][2]])) {
+				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
+					break;
+				}
 
-		while (isset($tokenStream[$max + 1]) && $tokenStream[$max][2] - $line < self::SOURCE_LINES_AROUND) {
+				$significant[$tokenStream[$max][2]] = !isset($skip[$tokenStream[$max][0]]);
+			} else {
+				$significant[$tokenStream[$max][2]] |= !isset($skip[$tokenStream[$max][0]]);
+			}
+
 			$max++;
 		}
 
@@ -153,7 +176,7 @@ class ParseException extends StreamException
 	/**
 	 * Returns the line where the exception was thrown.
 	 *
-	 * @var integer
+	 * @return integer
 	 */
 	public function getExceptionLine()
 	{
@@ -197,7 +220,7 @@ class ParseException extends StreamException
 
 			$code = implode(
 				"\n",
-				array_map(function($line) use(&$actualLine, $width, $errorLine) {
+				array_map(function($line) use (&$actualLine, $width, $errorLine) {
 					return ($actualLine === $errorLine ? '*' : ' ') . str_pad($actualLine++, $width, ' ', STR_PAD_LEFT) . ': ' . $line;
 				}, $lines)
 			);
@@ -221,7 +244,7 @@ class ParseException extends StreamException
 	 *
 	 * @return string
 	 */
-	protected function getDetail()
+	public function getDetail()
 	{
 		if (0 === $this->getStream()->count()) {
 			return parent::getDetail() . 'The token stream was empty.';

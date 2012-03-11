@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+
+env:
+  - TRAVISCI=1
+
+branches:
+  only:
+    - develop
+    - master
+
+notifications:
+  email:
+    - ci@andrewsville.cz
+
+script: phpunit tests/TokenReflection

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -976,6 +976,23 @@ class ReflectionClass implements IReflectionClass
 	 * @return boolean
 	 */
 	public function isComplete()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns if the class definition is valid.
+	 *
+	 * Dummy classes are always valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
+	}
+
+	public function isDeprecated()
 	{
 		return false;
 	}

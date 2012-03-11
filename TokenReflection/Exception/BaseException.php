@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -51,11 +51,18 @@ abstract class BaseException extends RuntimeException
 	const UNSUPPORTED = 4;
 
 	/**
+	 * The reflected element already exists.
+	 *
+	 * @var integer
+	 */
+	const ALREADY_EXISTS = 5;
+
+	/**
 	 * Returns an exception description detail.
 	 *
 	 * @return string
 	 */
-	protected abstract function getDetail();
+	public abstract function getDetail();
 
 	/**
 	 * Returns an exception description as string.

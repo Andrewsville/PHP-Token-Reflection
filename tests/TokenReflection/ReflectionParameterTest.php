@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -249,5 +249,23 @@ class ReflectionParameterTest extends Test
 	public function testInternalParameterReflectionCreate()
 	{
 		Php\ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getBroker());
+	}
+
+	/**
+	 * Tests various constant (mis)definitions.
+	 */
+	public function testValueDefinitions()
+	{
+		$rfl = $this->getClassReflection('valueDefinitions');
+
+		$this->assertTrue($rfl->internal->hasMethod('method'));
+		$internalMethod = $rfl->internal->getMethod('method');
+
+		$this->assertTrue($rfl->token->hasMethod('method'));
+		$tokenMethod = $rfl->token->getMethod('method');
+
+		foreach ($internalMethod->getParameters() as $parameter) {
+			$this->assertSame($parameter->getDefaultValue(), $tokenMethod->getParameter($parameter->getName())->getDefaultValue());
+		}
 	}
 }

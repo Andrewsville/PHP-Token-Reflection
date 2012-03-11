@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -684,5 +684,31 @@ class ReflectionConstantTest extends Test
 	public function testInternalConstantExport2()
 	{
 		Php\ReflectionConstant::export($this->getBroker(), '~non-existent~', '~non-existent~', true);
+	}
+
+	/**
+	 * Tests various constant (mis)definitions.
+	 */
+	public function testValueDefinitions()
+	{
+		static $expected = array(
+			'VALUE_DEFINITION1' => true,
+			'VALUE_DEFINITION2' => true,
+			'VALUE_DEFINITION3' => true,
+			'VALUE_DEFINITION4' => true,
+			'VALUE_DEFINITION5' => true,
+			'VALUE_DEFINITION6' => true,
+			'VALUE_DEFINITION7' => true
+		);
+
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('valueDefinitions'));
+
+		foreach ($expected as $name => $value) {
+			$this->assertTrue($broker->hasConstant($name), $name);
+
+			$rfl = $broker->getConstant($name);
+			$this->assertSame($value, $rfl->getValue(), $name);
+		}
 	}
 }

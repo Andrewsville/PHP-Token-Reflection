@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -267,7 +267,9 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		$propertyName = $property;
 
 		$class = $broker->getClass($className);
-		if ($class instanceof Dummy\ReflectionClass) {
+		if ($class instanceof Invalid\ReflectionClass) {
+			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+		} elseif ($class instanceof Dummy\ReflectionClass) {
 			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$property = $class->getProperty($propertyName);
@@ -483,7 +485,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			} elseif ($sibling->isProtected()) {
 				$this->modifiers = InternalReflectionProperty::IS_PROTECTED;
 			} else {
-				throw new Exception\Parse(sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+				throw new Exception\ParseException($this, $tokenStream, sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 
 			if ($sibling->isStatic()) {

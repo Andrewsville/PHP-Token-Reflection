@@ -22,9 +22,9 @@
 	<email>kontakt@kukulich.cz</email>
 	<active>yes</active>
 </developer>
-<date>2012-02-12</date>
+<date>2012-03-11</date>
 <version>
-	<release>1.1.0</release>
+	<release>1.2.0</release>
 	<api>1.0.0</api>
 </version>
 <stability>
@@ -45,9 +45,16 @@
 			<dir name="Dummy">
 				<file name="ReflectionClass.php" role="php" />
 			</dir>
+			<dir name="Invalid">
+				<file name="ReflectionElement.php" role="php" />
+				<file name="ReflectionClass.php" role="php" />
+				<file name="ReflectionConstant.php" role="php" />
+				<file name="ReflectionFunction.php" role="php" />
+			</dir>
 			<dir name="Exception">
 				<file name="BaseException.php" role="php" />
 				<file name="BrokerException.php" role="php" />
+				<file name="FileProcessingException.php" role="php" />
 				<file name="ParseException.php" role="php" />
 				<file name="RuntimeException.php" role="php" />
 				<file name="StreamException.php" role="php" />

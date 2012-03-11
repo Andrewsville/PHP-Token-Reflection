@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -54,4 +54,12 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 */
 	public function getClosure();
 
+	/**
+	 * Returns if the function definition is valid.
+	 *
+	 * That means that the source code is valid and the function name is unique within parsed files.
+	 *
+	 * @return boolean
+	 */
+	public function isValid();
 }

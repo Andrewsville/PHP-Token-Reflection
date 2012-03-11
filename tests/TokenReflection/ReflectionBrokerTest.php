@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -263,7 +263,8 @@ class ReflectionBrokerTest extends Test
 					'type-integer.php',
 					'type-integer-negative.php',
 					'type-null.php',
-					'type-string.php'
+					'type-string.php',
+					'value-definitions.php'
 				)
 			),
 			array(

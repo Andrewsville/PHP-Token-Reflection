@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -32,7 +32,7 @@ class BrokerException extends BaseException
 	/**
 	 * Constructor.
 	 *
-	 * @param \TokenReflection\Broker $fileName Processed file name
+	 * @param \TokenReflection\Broker $broker Processed file name
 	 * @param string $message Exception message
 	 * @param integer $code Exception code
 	 * @param \TokenReflection\Exception\StreamException $parent Parent exception
@@ -59,7 +59,7 @@ class BrokerException extends BaseException
 	 *
 	 * @return string
 	 */
-	protected function getDetail()
+	public function getDetail()
 	{
 		return '';
 	}

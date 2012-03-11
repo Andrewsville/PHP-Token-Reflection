@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -34,6 +34,10 @@ class PharTest extends Test
 	 */
 	protected function assertPreConditions()
 	{
+		if (getenv('TRAVISCI')) {
+			$this->markTestSkipped('Not testing PHAR support on Travis CI.');
+		}
+
 		if (!extension_loaded('phar')) {
 			$this->markTestSkipped('The phar extension is required');
 		}
@@ -202,13 +206,11 @@ class PharTest extends Test
 		$directory = realpath(__DIR__ . '/../data/');
 		$iterator = new \DirectoryIterator($directory);
 
+		static $skip = array('broker' => true, 'parseerror' => true, 'duplicities' => true);
+
 		$data = array();
 		foreach ($iterator as $item) {
-			if ('broker' === $item->getFileName()) {
-				// Skipping the borker directory because of PHP bug #53872
-				continue;
-			} elseif ('parseerror' === $item->getFileName()) {
-				// Skipping invalid PHP files
+			if (isset($skip[$item->getFileName()])) {
 				continue;
 			}
 

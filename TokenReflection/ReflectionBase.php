@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -251,7 +251,7 @@ abstract class ReflectionBase implements IReflection
 			}
 		}
 
-		throw new Exception\RuntimeException(sprintf('Cannot read property "%s".', $key), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new Exception\RuntimeException(sprintf('Cannot read property "%s".', $key), Exception\RuntimeException::DOES_NOT_EXIST);
 	}
 
 	/**

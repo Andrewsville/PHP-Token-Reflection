@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -456,22 +456,36 @@ class Memory implements Broker\Backend
 	 */
 	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file)
 	{
-		foreach ($file->getNamespaces() as $fileNamespace) {
-			$namespaceName = $fileNamespace->getName();
-			if (!isset($this->namespaces[$namespaceName])) {
-				$this->namespaces[$namespaceName] = new TokenReflection\ReflectionNamespace($namespaceName, $file->getBroker());
-			}
-
-			$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
-		}
-
 		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : true;
 		$this->files[$file->getName()] = $file;
+
+		$errors = array();
+
+		foreach ($file->getNamespaces() as $fileNamespace) {
+			try {
+				$namespaceName = $fileNamespace->getName();
+				if (!isset($this->namespaces[$namespaceName])) {
+					$this->namespaces[$namespaceName] = new TokenReflection\ReflectionNamespace($namespaceName, $file->getBroker());
+				}
+
+				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
+			} catch (Exception\FileProcessingException $e) {
+				$errors = array_merge($errors, $e->getReasons());
+			} catch (\Exception $e) {
+				echo $e->getTraceAsString();
+				die($e->getMessage());
+			}
+		}
 
 		// Reset all-*-cache
 		$this->allClasses = null;
 		$this->allFunctions = null;
 		$this->allConstants = null;
+
+		if (!empty($errors)) {
+			throw new Exception\FileProcessingException($errors, $file);
+		}
+
 		return $this;
 	}
 

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -445,7 +445,9 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		$methodName = $method;
 
 		$class = $broker->getClass($className);
-		if ($class instanceof Dummy\ReflectionClass) {
+		if ($class instanceof Invalid\ReflectionClass) {
+			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+		} elseif ($class instanceof Dummy\ReflectionClass) {
 			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$method = $class->getMethod($methodName);

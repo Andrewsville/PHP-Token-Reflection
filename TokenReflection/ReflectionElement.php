@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -93,8 +93,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
-	 * @throws \TokenReflection\Exception\RuntimeException If the token stream is empty
-	 * @throws \TokenReflection\Exception\Parse If the token stream could not be parsed
+	 * @throws \TokenReflection\Exception\ParseException If an empty token stream was provided
 	 */
 	final public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = null)
 	{

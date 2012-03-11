@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -180,6 +180,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
 		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
+		$depth = 0;
 
 		while (true) {
 			switch ($tokenStream->getType()) {
@@ -258,9 +259,16 @@ class ReflectionFileNamespace extends ReflectionElement
 					$tokenStream->next();
 					break;
 				case '{':
-					$tokenStream->findMatchingBracket()->next();
+					$tokenStream->next();
+					$depth++;
 					break;
 				case '}':
+					if (0 === $depth--) {
+						break 2;
+					}
+
+					$tokenStream->next();
+					break;
 				case null:
 				case T_NAMESPACE:
 					break 2;
@@ -270,14 +278,46 @@ class ReflectionFileNamespace extends ReflectionElement
 				case T_TRAIT:
 				case T_INTERFACE:
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
-					$this->classes[$class->getName()] = $class;
+					$className = $class->getName();
+					if (isset($this->classes[$className])) {
+						if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
+							$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
+						}
+
+						if (!$this->classes[$className]->hasReasons()) {
+							$this->classes[$className]->addReason(new Exception\ParseException(
+								$this,
+								$tokenStream,
+								sprintf('Class %s is defined multiple times in the file.', $className),
+								Exception\ParseException::ALREADY_EXISTS
+							));
+						}
+					} else {
+						$this->classes[$className] = $class;
+					}
 					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces(true);
 					do {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
-						$this->constants[$constant->getName()] = $constant;
+						$constantName = $constant->getName();
+						if (isset($this->constants[$constantName])) {
+							if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
+								$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
+							}
+
+							if (!$this->constants[$constantName]->hasReasons()) {
+								$this->constants[$constantName]->addReason(new Exception\ParseException(
+									$this,
+									$tokenStream,
+									sprintf('Constant %s is defined multiple times in the file.', $constantName),
+									Exception\ParseException::ALREADY_EXISTS
+								));
+							}
+						} else {
+							$this->constants[$constantName] = $constant;
+						}
 						if ($tokenStream->is(',')) {
 							$tokenStream->skipWhitespaces(true);
 						} else {
@@ -313,7 +353,23 @@ class ReflectionFileNamespace extends ReflectionElement
 					}
 
 					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
-					$this->functions[$function->getName()] = $function;
+					$functionName = $function->getName();
+					if (isset($this->functions[$functionName])) {
+						if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
+							$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
+						}
+
+						if (!$this->functions[$functionName]->hasReasons()) {
+							$this->functions[$functionName]->addReason(new Exception\ParseException(
+								$this,
+								$tokenStream,
+								sprintf('Function %s is defined multiple times in the file.', $functionName),
+								Exception\ParseException::ALREADY_EXISTS
+							));
+						}
+					} else {
+						$this->functions[$functionName] = $function;
+					}
 					$tokenStream->next();
 					break;
 				default:

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -188,7 +188,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			}
 		} else {
 			$class = $broker->getClass($className);
-			if ($class instanceof Dummy\ReflectionClass) {
+			if ($class instanceof Invalid\ReflectionClass) {
+				throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+			} elseif ($class instanceof Dummy\ReflectionClass) {
 				throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $class);
 			}
 			$constant = $class->getConstantReflection($constantName);
@@ -219,6 +221,16 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	public function getPrettyName()
 	{
 		return null === $this->declaringClassName ? parent::getPrettyName() : sprintf('%s::%s', $this->declaringClassName, $this->name);
+	}
+
+	/**
+	 * Returns if the constant definition is valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
 	}
 
 	/**
@@ -344,10 +356,15 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			T_LINE => true,
 			T_METHOD_C => true,
 			T_NS_C => true,
-			T_TRAIT_C => true
+			T_TRAIT_C => true,
+			T_COMMENT => false,
+			T_WHITESPACE => false,
+			T_DOC_COMMENT => false
 		);
 		while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
-			$this->valueDefinition[] = $tokenStream->current();
+			if ($acceptedTokens[$type]) {
+				$this->valueDefinition[] = $tokenStream->current();
+			}
 			$tokenStream->next();
 		}
 

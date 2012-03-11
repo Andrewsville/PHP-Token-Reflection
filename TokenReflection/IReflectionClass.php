@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -599,4 +599,19 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function isComplete();
+	/**
+	 * Returns if the class definition is valid.
+	 *
+	 * That means that the source code is valid and the class name is unique within parsed files.
+	 *
+	 * @return boolean
+	 */
+	public function isValid();
+
+	/**
+	 * Returns if the class is deprecated.
+	 *
+	 * @return boolean
+	 */
+	public function isDeprecated();
 }

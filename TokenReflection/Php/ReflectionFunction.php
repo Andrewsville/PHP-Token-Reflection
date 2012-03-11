@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -201,6 +201,18 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public function getClosure()
 	{
 		return null;
+	}
+
+	/**
+	 * Returns if the function definition is valid.
+	 *
+	 * Internal functions are always valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
 	}
 
 	/**

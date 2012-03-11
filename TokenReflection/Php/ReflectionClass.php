@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.1
+ * Version 1.2
  *
  * LICENSE
  *
@@ -727,6 +727,18 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 * @return boolean
 	 */
 	public function isComplete()
+	{
+		return true;
+	}
+
+	/**
+	 * Returns if the class definition is valid.
+	 *
+	 * Internal classes are always valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
 	{
 		return true;
 	}
