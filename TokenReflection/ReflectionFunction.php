@@ -143,6 +143,16 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	}
 
 	/**
+	 * Returns if the function definition is valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
+	}
+
+	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @param \TokenReflection\IReflection $parent Parent reflection object

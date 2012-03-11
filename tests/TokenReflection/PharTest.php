@@ -206,13 +206,11 @@ class PharTest extends Test
 		$directory = realpath(__DIR__ . '/../data/');
 		$iterator = new \DirectoryIterator($directory);
 
+		static $skip = array('broker' => true, 'parseerror' => true, 'duplicities' => true);
+
 		$data = array();
 		foreach ($iterator as $item) {
-			if ('broker' === $item->getFileName()) {
-				// Skipping the borker directory because of PHP bug #53872
-				continue;
-			} elseif ('parseerror' === $item->getFileName()) {
-				// Skipping invalid PHP files
+			if (isset($skip[$item->getFileName()])) {
 				continue;
 			}
 

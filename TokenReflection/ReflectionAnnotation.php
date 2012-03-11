@@ -263,7 +263,7 @@ class ReflectionAnnotation
 				if ($this->reflection instanceof ReflectionClass) {
 					$parent = $broker->getClass($parentName);
 					if ($parent instanceof Dummy\ReflectionClass) {
-						// The class to copy from does not exist
+						// The class to copy from is not usable
 						return;
 					}
 				} elseif ($this->reflection instanceof ReflectionFunction) {
@@ -279,7 +279,7 @@ class ReflectionAnnotation
 					}
 
 					if ($class instanceof Dummy\ReflectionClass) {
-						// The source element class does not exist
+						// The source element class is not usable
 						return;
 					}
 

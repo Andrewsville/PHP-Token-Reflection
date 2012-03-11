@@ -204,6 +204,18 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
+	 * Returns if the function definition is valid.
+	 *
+	 * Internal functions are always valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
 	 * @return string

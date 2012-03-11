@@ -188,7 +188,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			}
 		} else {
 			$class = $broker->getClass($className);
-			if ($class instanceof Dummy\ReflectionClass) {
+			if ($class instanceof Invalid\ReflectionClass) {
+				throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+			} elseif ($class instanceof Dummy\ReflectionClass) {
 				throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $class);
 			}
 			$constant = $class->getConstantReflection($constantName);
@@ -219,6 +221,16 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	public function getPrettyName()
 	{
 		return null === $this->declaringClassName ? parent::getPrettyName() : sprintf('%s::%s', $this->declaringClassName, $this->name);
+	}
+
+	/**
+	 * Returns if the constant definition is valid.
+	 *
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return true;
 	}
 
 	/**

@@ -103,6 +103,14 @@ interface IReflectionConstant extends IReflection
 	 * @return string
 	 */
 	public function __toString();
+	/**
+	 * Returns if the constant definition is valid.
+	 *
+	 * That means that the source code is valid and the constant name is unique within parsed files.
+	 *
+	 * @return boolean
+	 */
+	public function isValid();
 
 	/**
 	 * Returns if the constant is deprecated.

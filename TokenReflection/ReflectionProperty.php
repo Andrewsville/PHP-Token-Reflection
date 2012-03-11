@@ -267,7 +267,9 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		$propertyName = $property;
 
 		$class = $broker->getClass($className);
-		if ($class instanceof Dummy\ReflectionClass) {
+		if ($class instanceof Invalid\ReflectionClass) {
+			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+		} elseif ($class instanceof Dummy\ReflectionClass) {
 			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$property = $class->getProperty($propertyName);

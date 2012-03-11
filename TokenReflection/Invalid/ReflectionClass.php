@@ -13,24 +13,19 @@
  * @author Jaroslav Hanslík
  */
 
-namespace TokenReflection\Dummy;
+namespace TokenReflection\Invalid;
 
 use TokenReflection;
 use TokenReflection\Broker, TokenReflection\IReflectionClass, TokenReflection\ReflectionBase;
 use ReflectionClass as InternalReflectionClass, TokenReflection\Exception;
 
 /**
- * Dummy class "reflection" of a nonexistent class.
+ * Invalid class reflection.
+ *
+ * The reflected class is not unique.
  */
-class ReflectionClass implements IReflectionClass
+class ReflectionClass extends ReflectionElement implements IReflectionClass
 {
-	/**
-	 * Reflection broker.
-	 *
-	 * @var \TokenReflection\Broker
-	 */
-	private $broker;
-
 	/**
 	 * Class name (FQN).
 	 *
@@ -39,14 +34,30 @@ class ReflectionClass implements IReflectionClass
 	private $name;
 
 	/**
+	 * Original definition file name.
+	 *
+	 * @var string
+	 */
+	private $fileName;
+
+	/**
+	 * Reflection broker.
+	 *
+	 * @var \TokenReflection\Broker
+	 */
+	private $broker;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $className Class name
+	 * @param string $fileName Original definiton file name
 	 * @param \TokenReflection\Broker $broker Reflection broker
 	 */
-	public function __construct($className, Broker $broker)
+	public function __construct($className, $fileName, Broker $broker)
 	{
 		$this->name = ltrim($className, '\\');
+		$this->fileName = $fileName;
 		$this->broker = $broker;
 	}
 
@@ -129,7 +140,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function getFileName()
 	{
-		return null;
+		return $this->fileName;
 	}
 
 	/**
@@ -367,7 +378,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function isUserDefined()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -377,7 +388,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function isTokenized()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -971,25 +982,23 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the class definition is complete.
 	 *
-	 * Dummy classes never have the definition complete.
+	 * Invalid classes are always complete.
 	 *
 	 * @return boolean
 	 */
 	public function isComplete()
 	{
-		return false;
+		return true;
 	}
 
 	/**
 	 * Returns if the class definition is valid.
 	 *
-	 * Dummy classes are always valid.
-	 *
 	 * @return boolean
 	 */
 	public function isValid()
 	{
-		return true;
+		return false;
 	}
 
 	public function isDeprecated()

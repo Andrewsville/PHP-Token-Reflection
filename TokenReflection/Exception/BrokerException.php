@@ -59,7 +59,7 @@ class BrokerException extends BaseException
 	 *
 	 * @return string
 	 */
-	protected function getDetail()
+	public function getDetail()
 	{
 		return '';
 	}
