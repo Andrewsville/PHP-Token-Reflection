@@ -19,6 +19,9 @@
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.Exception.html</loc>
 </url>
 <url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.Invalid.html</loc>
+</url>
+<url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/namespace-TokenReflection.Php.html</loc>
 </url>
 <url>
@@ -32,6 +35,18 @@
 </url>
 <url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Dummy.ReflectionClass.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Invalid.ReflectionClass.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Invalid.ReflectionConstant.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Invalid.ReflectionElement.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Invalid.ReflectionFunction.html</loc>
 </url>
 <url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Php.ReflectionClass.html</loc>
@@ -146,6 +161,9 @@
 </url>
 <url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.BrokerException.html</loc>
+</url>
+<url>
+	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.FileProcessingException.html</loc>
 </url>
 <url>
 	<loc>http://andrewsville.github.com/PHP-Token-Reflection/class-TokenReflection.Exception.ParseException.html</loc>

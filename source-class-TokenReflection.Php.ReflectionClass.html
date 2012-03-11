@@ -8,7 +8,7 @@
 	<title>File Php/ReflectionClass.php | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
-	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<script type="text/javascript" src="elementlist.js?1007765600"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
@@ -33,6 +33,8 @@
 				<li><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
 						</li>
 				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Invalid.html">Invalid</a>
 						</li>
 				<li class="active"><a href="namespace-TokenReflection.Php.html">Php</a>
 						</li>
@@ -107,7 +109,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.1
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.2
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -837,196 +839,208 @@
 <a href="#732" id="732" class="l">732: </a>    }
 <a href="#733" id="733" class="l">733: </a>
 <a href="#734" id="734" class="l">734: </a>    <span class="php-comment">/**
-</span><a href="#735" id="735" class="l">735: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
+</span><a href="#735" id="735" class="l">735: </a><span class="php-comment">     * Returns if the class definition is valid.
 </span><a href="#736" id="736" class="l">736: </a><span class="php-comment">     *
-</span><a href="#737" id="737" class="l">737: </a><span class="php-comment">     * @return array
-</span><a href="#738" id="738" class="l">738: </a><span class="php-comment">     */</span>
-<a href="#739" id="739" class="l">739: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases()
-<a href="#740" id="740" class="l">740: </a>    {
-<a href="#741" id="741" class="l">741: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
-<a href="#742" id="742" class="l">742: </a>    }
-<a href="#743" id="743" class="l">743: </a>
-<a href="#744" id="744" class="l">744: </a>    <span class="php-comment">/**
-</span><a href="#745" id="745" class="l">745: </a><span class="php-comment">     * Returns the reflection broker used by this reflection object.
-</span><a href="#746" id="746" class="l">746: </a><span class="php-comment">     *
-</span><a href="#747" id="747" class="l">747: </a><span class="php-comment">     * @return \TokenReflection\Broker
-</span><a href="#748" id="748" class="l">748: </a><span class="php-comment">     */</span>
-<a href="#749" id="749" class="l">749: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker()
-<a href="#750" id="750" class="l">750: </a>    {
-<a href="#751" id="751" class="l">751: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker;
-<a href="#752" id="752" class="l">752: </a>    }
-<a href="#753" id="753" class="l">753: </a>
-<a href="#754" id="754" class="l">754: </a>    <span class="php-comment">/**
-</span><a href="#755" id="755" class="l">755: </a><span class="php-comment">     * Magic __get method.
-</span><a href="#756" id="756" class="l">756: </a><span class="php-comment">     *
-</span><a href="#757" id="757" class="l">757: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#758" id="758" class="l">758: </a><span class="php-comment">     * @return mixed
-</span><a href="#759" id="759" class="l">759: </a><span class="php-comment">     */</span>
-<a href="#760" id="760" class="l">760: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
-<a href="#761" id="761" class="l">761: </a>    {
-<a href="#762" id="762" class="l">762: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#763" id="763" class="l">763: </a>    }
-<a href="#764" id="764" class="l">764: </a>
-<a href="#765" id="765" class="l">765: </a>    <span class="php-comment">/**
-</span><a href="#766" id="766" class="l">766: </a><span class="php-comment">     * Magic __isset method.
-</span><a href="#767" id="767" class="l">767: </a><span class="php-comment">     *
-</span><a href="#768" id="768" class="l">768: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#769" id="769" class="l">769: </a><span class="php-comment">     * @return boolean
-</span><a href="#770" id="770" class="l">770: </a><span class="php-comment">     */</span>
-<a href="#771" id="771" class="l">771: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __isset(<span class="php-var">$key</span>)
-<a href="#772" id="772" class="l">772: </a>    {
-<a href="#773" id="773" class="l">773: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#774" id="774" class="l">774: </a>    }
-<a href="#775" id="775" class="l">775: </a>
-<a href="#776" id="776" class="l">776: </a>    <span class="php-comment">/**
-</span><a href="#777" id="777" class="l">777: </a><span class="php-comment">     * Returns traits used by this class.
-</span><a href="#778" id="778" class="l">778: </a><span class="php-comment">     *
-</span><a href="#779" id="779" class="l">779: </a><span class="php-comment">     * @return array
-</span><a href="#780" id="780" class="l">780: </a><span class="php-comment">     */</span>
-<a href="#781" id="781" class="l">781: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTraits()
-<a href="#782" id="782" class="l">782: </a>    {
-<a href="#783" id="783" class="l">783: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS ? parent::getTraits() : <span class="php-keyword1">array</span>();
-<a href="#784" id="784" class="l">784: </a>    }
-<a href="#785" id="785" class="l">785: </a>
-<a href="#786" id="786" class="l">786: </a>    <span class="php-comment">/**
-</span><a href="#787" id="787" class="l">787: </a><span class="php-comment">     * Returns traits used by this class and not its parents.
-</span><a href="#788" id="788" class="l">788: </a><span class="php-comment">     *
-</span><a href="#789" id="789" class="l">789: </a><span class="php-comment">     * @return array
-</span><a href="#790" id="790" class="l">790: </a><span class="php-comment">     */</span>
-<a href="#791" id="791" class="l">791: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getOwnTraits()
-<a href="#792" id="792" class="l">792: </a>    {
-<a href="#793" id="793" class="l">793: </a>        <span class="php-keyword1">if</span> (!NATIVE_TRAITS) {
-<a href="#794" id="794" class="l">794: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
-<a href="#795" id="795" class="l">795: </a>        }
-<a href="#796" id="796" class="l">796: </a>
-<a href="#797" id="797" class="l">797: </a>        <span class="php-var">$parent</span> = <span class="php-var">$this</span>-&gt;getParentClass();
-<a href="#798" id="798" class="l">798: </a>        <span class="php-keyword1">return</span> <span class="php-var">$parent</span> ? <span class="php-keyword2">array_diff_key</span>(<span class="php-var">$this</span>-&gt;getTraits(), <span class="php-var">$parent</span>-&gt;getTraits()) : <span class="php-var">$this</span>-&gt;getTraits();
-<a href="#799" id="799" class="l">799: </a>    }
-<a href="#800" id="800" class="l">800: </a>
-<a href="#801" id="801" class="l">801: </a>    <span class="php-comment">/**
-</span><a href="#802" id="802" class="l">802: </a><span class="php-comment">     * Returns names of used traits.
-</span><a href="#803" id="803" class="l">803: </a><span class="php-comment">     *
-</span><a href="#804" id="804" class="l">804: </a><span class="php-comment">     * @return array
-</span><a href="#805" id="805" class="l">805: </a><span class="php-comment">     */</span>
-<a href="#806" id="806" class="l">806: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTraitNames()
-<a href="#807" id="807" class="l">807: </a>    {
-<a href="#808" id="808" class="l">808: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS ? parent::getTraitNames() : <span class="php-keyword1">array</span>();
-<a href="#809" id="809" class="l">809: </a>    }
-<a href="#810" id="810" class="l">810: </a>
-<a href="#811" id="811" class="l">811: </a>    <span class="php-comment">/**
-</span><a href="#812" id="812" class="l">812: </a><span class="php-comment">     * Returns traits used by this class and not its parents.
-</span><a href="#813" id="813" class="l">813: </a><span class="php-comment">     *
-</span><a href="#814" id="814" class="l">814: </a><span class="php-comment">     * @return array
-</span><a href="#815" id="815" class="l">815: </a><span class="php-comment">     */</span>
-<a href="#816" id="816" class="l">816: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getOwnTraitNames()
-<a href="#817" id="817" class="l">817: </a>    {
-<a href="#818" id="818" class="l">818: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">array_keys</span>(<span class="php-var">$this</span>-&gt;getOwnTraits());
-<a href="#819" id="819" class="l">819: </a>    }
-<a href="#820" id="820" class="l">820: </a>
-<a href="#821" id="821" class="l">821: </a>    <span class="php-comment">/**
-</span><a href="#822" id="822" class="l">822: </a><span class="php-comment">     * Returns method aliases from traits.
-</span><a href="#823" id="823" class="l">823: </a><span class="php-comment">     *
-</span><a href="#824" id="824" class="l">824: </a><span class="php-comment">     * @return array
-</span><a href="#825" id="825" class="l">825: </a><span class="php-comment">     */</span>
-<a href="#826" id="826" class="l">826: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTraitAliases()
-<a href="#827" id="827" class="l">827: </a>    {
-<a href="#828" id="828" class="l">828: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS ? parent::getTraitAliases() : <span class="php-keyword1">array</span>();
-<a href="#829" id="829" class="l">829: </a>    }
-<a href="#830" id="830" class="l">830: </a>
-<a href="#831" id="831" class="l">831: </a>    <span class="php-comment">/**
-</span><a href="#832" id="832" class="l">832: </a><span class="php-comment">     * Returns if the class is a trait.
-</span><a href="#833" id="833" class="l">833: </a><span class="php-comment">     *
-</span><a href="#834" id="834" class="l">834: </a><span class="php-comment">     * @return boolean
-</span><a href="#835" id="835" class="l">835: </a><span class="php-comment">     */</span>
-<a href="#836" id="836" class="l">836: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isTrait()
-<a href="#837" id="837" class="l">837: </a>    {
-<a href="#838" id="838" class="l">838: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS &amp;&amp; parent::isTrait();
-<a href="#839" id="839" class="l">839: </a>    }
-<a href="#840" id="840" class="l">840: </a>
-<a href="#841" id="841" class="l">841: </a>    <span class="php-comment">/**
-</span><a href="#842" id="842" class="l">842: </a><span class="php-comment">     * Returns if the class uses a particular trait.
-</span><a href="#843" id="843" class="l">843: </a><span class="php-comment">     *
-</span><a href="#844" id="844" class="l">844: </a><span class="php-comment">     * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-</span><a href="#845" id="845" class="l">845: </a><span class="php-comment">     * @return boolean
-</span><a href="#846" id="846" class="l">846: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
+</span><a href="#737" id="737" class="l">737: </a><span class="php-comment">     * Internal classes are always valid.
+</span><a href="#738" id="738" class="l">738: </a><span class="php-comment">     *
+</span><a href="#739" id="739" class="l">739: </a><span class="php-comment">     * @return boolean
+</span><a href="#740" id="740" class="l">740: </a><span class="php-comment">     */</span>
+<a href="#741" id="741" class="l">741: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isValid()
+<a href="#742" id="742" class="l">742: </a>    {
+<a href="#743" id="743" class="l">743: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+<a href="#744" id="744" class="l">744: </a>    }
+<a href="#745" id="745" class="l">745: </a>
+<a href="#746" id="746" class="l">746: </a>    <span class="php-comment">/**
+</span><a href="#747" id="747" class="l">747: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
+</span><a href="#748" id="748" class="l">748: </a><span class="php-comment">     *
+</span><a href="#749" id="749" class="l">749: </a><span class="php-comment">     * @return array
+</span><a href="#750" id="750" class="l">750: </a><span class="php-comment">     */</span>
+<a href="#751" id="751" class="l">751: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases()
+<a href="#752" id="752" class="l">752: </a>    {
+<a href="#753" id="753" class="l">753: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
+<a href="#754" id="754" class="l">754: </a>    }
+<a href="#755" id="755" class="l">755: </a>
+<a href="#756" id="756" class="l">756: </a>    <span class="php-comment">/**
+</span><a href="#757" id="757" class="l">757: </a><span class="php-comment">     * Returns the reflection broker used by this reflection object.
+</span><a href="#758" id="758" class="l">758: </a><span class="php-comment">     *
+</span><a href="#759" id="759" class="l">759: </a><span class="php-comment">     * @return \TokenReflection\Broker
+</span><a href="#760" id="760" class="l">760: </a><span class="php-comment">     */</span>
+<a href="#761" id="761" class="l">761: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker()
+<a href="#762" id="762" class="l">762: </a>    {
+<a href="#763" id="763" class="l">763: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker;
+<a href="#764" id="764" class="l">764: </a>    }
+<a href="#765" id="765" class="l">765: </a>
+<a href="#766" id="766" class="l">766: </a>    <span class="php-comment">/**
+</span><a href="#767" id="767" class="l">767: </a><span class="php-comment">     * Magic __get method.
+</span><a href="#768" id="768" class="l">768: </a><span class="php-comment">     *
+</span><a href="#769" id="769" class="l">769: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#770" id="770" class="l">770: </a><span class="php-comment">     * @return mixed
+</span><a href="#771" id="771" class="l">771: </a><span class="php-comment">     */</span>
+<a href="#772" id="772" class="l">772: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
+<a href="#773" id="773" class="l">773: </a>    {
+<a href="#774" id="774" class="l">774: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#775" id="775" class="l">775: </a>    }
+<a href="#776" id="776" class="l">776: </a>
+<a href="#777" id="777" class="l">777: </a>    <span class="php-comment">/**
+</span><a href="#778" id="778" class="l">778: </a><span class="php-comment">     * Magic __isset method.
+</span><a href="#779" id="779" class="l">779: </a><span class="php-comment">     *
+</span><a href="#780" id="780" class="l">780: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#781" id="781" class="l">781: </a><span class="php-comment">     * @return boolean
+</span><a href="#782" id="782" class="l">782: </a><span class="php-comment">     */</span>
+<a href="#783" id="783" class="l">783: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __isset(<span class="php-var">$key</span>)
+<a href="#784" id="784" class="l">784: </a>    {
+<a href="#785" id="785" class="l">785: </a>        <span class="php-keyword1">return</span> TokenReflection\ReflectionElement::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#786" id="786" class="l">786: </a>    }
+<a href="#787" id="787" class="l">787: </a>
+<a href="#788" id="788" class="l">788: </a>    <span class="php-comment">/**
+</span><a href="#789" id="789" class="l">789: </a><span class="php-comment">     * Returns traits used by this class.
+</span><a href="#790" id="790" class="l">790: </a><span class="php-comment">     *
+</span><a href="#791" id="791" class="l">791: </a><span class="php-comment">     * @return array
+</span><a href="#792" id="792" class="l">792: </a><span class="php-comment">     */</span>
+<a href="#793" id="793" class="l">793: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTraits()
+<a href="#794" id="794" class="l">794: </a>    {
+<a href="#795" id="795" class="l">795: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS ? parent::getTraits() : <span class="php-keyword1">array</span>();
+<a href="#796" id="796" class="l">796: </a>    }
+<a href="#797" id="797" class="l">797: </a>
+<a href="#798" id="798" class="l">798: </a>    <span class="php-comment">/**
+</span><a href="#799" id="799" class="l">799: </a><span class="php-comment">     * Returns traits used by this class and not its parents.
+</span><a href="#800" id="800" class="l">800: </a><span class="php-comment">     *
+</span><a href="#801" id="801" class="l">801: </a><span class="php-comment">     * @return array
+</span><a href="#802" id="802" class="l">802: </a><span class="php-comment">     */</span>
+<a href="#803" id="803" class="l">803: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getOwnTraits()
+<a href="#804" id="804" class="l">804: </a>    {
+<a href="#805" id="805" class="l">805: </a>        <span class="php-keyword1">if</span> (!NATIVE_TRAITS) {
+<a href="#806" id="806" class="l">806: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">array</span>();
+<a href="#807" id="807" class="l">807: </a>        }
+<a href="#808" id="808" class="l">808: </a>
+<a href="#809" id="809" class="l">809: </a>        <span class="php-var">$parent</span> = <span class="php-var">$this</span>-&gt;getParentClass();
+<a href="#810" id="810" class="l">810: </a>        <span class="php-keyword1">return</span> <span class="php-var">$parent</span> ? <span class="php-keyword2">array_diff_key</span>(<span class="php-var">$this</span>-&gt;getTraits(), <span class="php-var">$parent</span>-&gt;getTraits()) : <span class="php-var">$this</span>-&gt;getTraits();
+<a href="#811" id="811" class="l">811: </a>    }
+<a href="#812" id="812" class="l">812: </a>
+<a href="#813" id="813" class="l">813: </a>    <span class="php-comment">/**
+</span><a href="#814" id="814" class="l">814: </a><span class="php-comment">     * Returns names of used traits.
+</span><a href="#815" id="815" class="l">815: </a><span class="php-comment">     *
+</span><a href="#816" id="816" class="l">816: </a><span class="php-comment">     * @return array
+</span><a href="#817" id="817" class="l">817: </a><span class="php-comment">     */</span>
+<a href="#818" id="818" class="l">818: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTraitNames()
+<a href="#819" id="819" class="l">819: </a>    {
+<a href="#820" id="820" class="l">820: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS ? parent::getTraitNames() : <span class="php-keyword1">array</span>();
+<a href="#821" id="821" class="l">821: </a>    }
+<a href="#822" id="822" class="l">822: </a>
+<a href="#823" id="823" class="l">823: </a>    <span class="php-comment">/**
+</span><a href="#824" id="824" class="l">824: </a><span class="php-comment">     * Returns traits used by this class and not its parents.
+</span><a href="#825" id="825" class="l">825: </a><span class="php-comment">     *
+</span><a href="#826" id="826" class="l">826: </a><span class="php-comment">     * @return array
+</span><a href="#827" id="827" class="l">827: </a><span class="php-comment">     */</span>
+<a href="#828" id="828" class="l">828: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getOwnTraitNames()
+<a href="#829" id="829" class="l">829: </a>    {
+<a href="#830" id="830" class="l">830: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">array_keys</span>(<span class="php-var">$this</span>-&gt;getOwnTraits());
+<a href="#831" id="831" class="l">831: </a>    }
+<a href="#832" id="832" class="l">832: </a>
+<a href="#833" id="833" class="l">833: </a>    <span class="php-comment">/**
+</span><a href="#834" id="834" class="l">834: </a><span class="php-comment">     * Returns method aliases from traits.
+</span><a href="#835" id="835" class="l">835: </a><span class="php-comment">     *
+</span><a href="#836" id="836" class="l">836: </a><span class="php-comment">     * @return array
+</span><a href="#837" id="837" class="l">837: </a><span class="php-comment">     */</span>
+<a href="#838" id="838" class="l">838: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getTraitAliases()
+<a href="#839" id="839" class="l">839: </a>    {
+<a href="#840" id="840" class="l">840: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS ? parent::getTraitAliases() : <span class="php-keyword1">array</span>();
+<a href="#841" id="841" class="l">841: </a>    }
+<a href="#842" id="842" class="l">842: </a>
+<a href="#843" id="843" class="l">843: </a>    <span class="php-comment">/**
+</span><a href="#844" id="844" class="l">844: </a><span class="php-comment">     * Returns if the class is a trait.
+</span><a href="#845" id="845" class="l">845: </a><span class="php-comment">     *
+</span><a href="#846" id="846" class="l">846: </a><span class="php-comment">     * @return boolean
 </span><a href="#847" id="847" class="l">847: </a><span class="php-comment">     */</span>
-<a href="#848" id="848" class="l">848: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> usesTrait(<span class="php-var">$trait</span>)
+<a href="#848" id="848" class="l">848: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isTrait()
 <a href="#849" id="849" class="l">849: </a>    {
-<a href="#850" id="850" class="l">850: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_object</span>(<span class="php-var">$trait</span>)) {
-<a href="#851" id="851" class="l">851: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$trait</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass &amp;&amp; !<span class="php-var">$trait</span> <span class="php-keyword1">instanceof</span> TokenReflection\IReflectionClass) {
-<a href="#852" id="852" class="l">852: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Parameter must be a string or an instance of trait reflection.'</span>, Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
-<a href="#853" id="853" class="l">853: </a>            }
-<a href="#854" id="854" class="l">854: </a>
-<a href="#855" id="855" class="l">855: </a>            <span class="php-var">$traitName</span> = <span class="php-var">$trait</span>-&gt;getName();
-<a href="#856" id="856" class="l">856: </a>
-<a href="#857" id="857" class="l">857: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$trait</span>-&gt;isTrait()) {
-<a href="#858" id="858" class="l">858: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$traitName</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
-<a href="#859" id="859" class="l">859: </a>            }
-<a href="#860" id="860" class="l">860: </a>        } <span class="php-keyword1">else</span> {
-<a href="#861" id="861" class="l">861: </a>            <span class="php-var">$reflection</span> = <span class="php-var">$this</span>-&gt;getBroker()-&gt;getClass(<span class="php-var">$trait</span>);
-<a href="#862" id="862" class="l">862: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$reflection</span>-&gt;isTrait()) {
-<a href="#863" id="863" class="l">863: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$trait</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
-<a href="#864" id="864" class="l">864: </a>            }
-<a href="#865" id="865" class="l">865: </a>
-<a href="#866" id="866" class="l">866: </a>            <span class="php-var">$traitName</span> = <span class="php-var">$trait</span>;
-<a href="#867" id="867" class="l">867: </a>        }
+<a href="#850" id="850" class="l">850: </a>        <span class="php-keyword1">return</span> NATIVE_TRAITS &amp;&amp; parent::isTrait();
+<a href="#851" id="851" class="l">851: </a>    }
+<a href="#852" id="852" class="l">852: </a>
+<a href="#853" id="853" class="l">853: </a>    <span class="php-comment">/**
+</span><a href="#854" id="854" class="l">854: </a><span class="php-comment">     * Returns if the class uses a particular trait.
+</span><a href="#855" id="855" class="l">855: </a><span class="php-comment">     *
+</span><a href="#856" id="856" class="l">856: </a><span class="php-comment">     * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+</span><a href="#857" id="857" class="l">857: </a><span class="php-comment">     * @return boolean
+</span><a href="#858" id="858" class="l">858: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
+</span><a href="#859" id="859" class="l">859: </a><span class="php-comment">     */</span>
+<a href="#860" id="860" class="l">860: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> usesTrait(<span class="php-var">$trait</span>)
+<a href="#861" id="861" class="l">861: </a>    {
+<a href="#862" id="862" class="l">862: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_object</span>(<span class="php-var">$trait</span>)) {
+<a href="#863" id="863" class="l">863: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$trait</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass &amp;&amp; !<span class="php-var">$trait</span> <span class="php-keyword1">instanceof</span> TokenReflection\IReflectionClass) {
+<a href="#864" id="864" class="l">864: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Parameter must be a string or an instance of trait reflection.'</span>, Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
+<a href="#865" id="865" class="l">865: </a>            }
+<a href="#866" id="866" class="l">866: </a>
+<a href="#867" id="867" class="l">867: </a>            <span class="php-var">$traitName</span> = <span class="php-var">$trait</span>-&gt;getName();
 <a href="#868" id="868" class="l">868: </a>
-<a href="#869" id="869" class="l">869: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">in_array</span>(<span class="php-var">$traitName</span>, <span class="php-var">$this</span>-&gt;getTraitNames());
-<a href="#870" id="870" class="l">870: </a>    }
-<a href="#871" id="871" class="l">871: </a>
-<a href="#872" id="872" class="l">872: </a>    <span class="php-comment">/**
-</span><a href="#873" id="873" class="l">873: </a><span class="php-comment">     * Creates a new class instance without using a constructor.
-</span><a href="#874" id="874" class="l">874: </a><span class="php-comment">     *
-</span><a href="#875" id="875" class="l">875: </a><span class="php-comment">     * @return object
-</span><a href="#876" id="876" class="l">876: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
-</span><a href="#877" id="877" class="l">877: </a><span class="php-comment">     */</span>
-<a href="#878" id="878" class="l">878: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> newInstanceWithoutConstructor()
-<a href="#879" id="879" class="l">879: </a>    {
-<a href="#880" id="880" class="l">880: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;isInternal()) {
-<a href="#881" id="881" class="l">881: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not create an instance; only user defined classes can be instantiated.'</span>, Exception\RuntimeException::UNSUPPORTED, <span class="php-var">$this</span>);
-<a href="#882" id="882" class="l">882: </a>        }
+<a href="#869" id="869" class="l">869: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$trait</span>-&gt;isTrait()) {
+<a href="#870" id="870" class="l">870: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$traitName</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
+<a href="#871" id="871" class="l">871: </a>            }
+<a href="#872" id="872" class="l">872: </a>        } <span class="php-keyword1">else</span> {
+<a href="#873" id="873" class="l">873: </a>            <span class="php-var">$reflection</span> = <span class="php-var">$this</span>-&gt;getBroker()-&gt;getClass(<span class="php-var">$trait</span>);
+<a href="#874" id="874" class="l">874: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$reflection</span>-&gt;isTrait()) {
+<a href="#875" id="875" class="l">875: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'&quot;%s&quot; is not a trait.'</span>, <span class="php-var">$trait</span>), Exception\RuntimeException::INVALID_ARGUMENT, <span class="php-var">$this</span>);
+<a href="#876" id="876" class="l">876: </a>            }
+<a href="#877" id="877" class="l">877: </a>
+<a href="#878" id="878" class="l">878: </a>            <span class="php-var">$traitName</span> = <span class="php-var">$trait</span>;
+<a href="#879" id="879" class="l">879: </a>        }
+<a href="#880" id="880" class="l">880: </a>
+<a href="#881" id="881" class="l">881: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">in_array</span>(<span class="php-var">$traitName</span>, <span class="php-var">$this</span>-&gt;getTraitNames());
+<a href="#882" id="882" class="l">882: </a>    }
 <a href="#883" id="883" class="l">883: </a>
-<a href="#884" id="884" class="l">884: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$this</span>-&gt;getParentClasses() <span class="php-keyword1">as</span> <span class="php-var">$parent</span>) {
-<a href="#885" id="885" class="l">885: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$parent</span>-&gt;isInternal()) {
-<a href="#886" id="886" class="l">886: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not create an instance; only user defined classes can be instantiated.'</span>, Exception\RuntimeException::UNSUPPORTED, <span class="php-var">$this</span>);
-<a href="#887" id="887" class="l">887: </a>            }
-<a href="#888" id="888" class="l">888: </a>        }
-<a href="#889" id="889" class="l">889: </a>
-<a href="#890" id="890" class="l">890: </a>        <span class="php-keyword1">if</span> (PHP_VERSION_ID &gt;= <span class="php-num">50400</span>) {
-<a href="#891" id="891" class="l">891: </a>            <span class="php-keyword1">return</span> parent::newInstanceWithoutConstructor();
-<a href="#892" id="892" class="l">892: </a>        }
-<a href="#893" id="893" class="l">893: </a>
-<a href="#894" id="894" class="l">894: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">unserialize</span>(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'O:%d:&quot;%s&quot;:0:{}'</span>, <span class="php-keyword2">strlen</span>(<span class="php-var">$this</span>-&gt;getName()), <span class="php-var">$this</span>-&gt;getName()));
-<a href="#895" id="895" class="l">895: </a>    }
-<a href="#896" id="896" class="l">896: </a>
-<a href="#897" id="897" class="l">897: </a>    <span class="php-comment">/**
-</span><a href="#898" id="898" class="l">898: </a><span class="php-comment">     * Returns an element pretty (docblock compatible) name.
-</span><a href="#899" id="899" class="l">899: </a><span class="php-comment">     *
-</span><a href="#900" id="900" class="l">900: </a><span class="php-comment">     * @return string
-</span><a href="#901" id="901" class="l">901: </a><span class="php-comment">     */</span>
-<a href="#902" id="902" class="l">902: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getPrettyName()
-<a href="#903" id="903" class="l">903: </a>    {
-<a href="#904" id="904" class="l">904: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getName();
-<a href="#905" id="905" class="l">905: </a>    }
-<a href="#906" id="906" class="l">906: </a>
-<a href="#907" id="907" class="l">907: </a>    <span class="php-comment">/**
-</span><a href="#908" id="908" class="l">908: </a><span class="php-comment">     * Creates a reflection instance.
-</span><a href="#909" id="909" class="l">909: </a><span class="php-comment">     *
-</span><a href="#910" id="910" class="l">910: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
-</span><a href="#911" id="911" class="l">911: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
-</span><a href="#912" id="912" class="l">912: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionClass
-</span><a href="#913" id="913" class="l">913: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
-</span><a href="#914" id="914" class="l">914: </a><span class="php-comment">     */</span>
-<a href="#915" id="915" class="l">915: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
-<a href="#916" id="916" class="l">916: </a>    {
-<a href="#917" id="917" class="l">917: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass) {
-<a href="#918" id="918" class="l">918: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Invalid reflection instance provided, ReflectionClass expected.'</span>, Exception\RuntimeException::INVALID_ARGUMENT);
-<a href="#919" id="919" class="l">919: </a>        }
-<a href="#920" id="920" class="l">920: </a>
-<a href="#921" id="921" class="l">921: </a>        <span class="php-keyword1">return</span> <span class="php-var">$broker</span>-&gt;getClass(<span class="php-var">$internalReflection</span>-&gt;getName());
-<a href="#922" id="922" class="l">922: </a>    }
-<a href="#923" id="923" class="l">923: </a>}
-<a href="#924" id="924" class="l">924: </a></code></pre>
+<a href="#884" id="884" class="l">884: </a>    <span class="php-comment">/**
+</span><a href="#885" id="885" class="l">885: </a><span class="php-comment">     * Creates a new class instance without using a constructor.
+</span><a href="#886" id="886" class="l">886: </a><span class="php-comment">     *
+</span><a href="#887" id="887" class="l">887: </a><span class="php-comment">     * @return object
+</span><a href="#888" id="888" class="l">888: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
+</span><a href="#889" id="889" class="l">889: </a><span class="php-comment">     */</span>
+<a href="#890" id="890" class="l">890: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> newInstanceWithoutConstructor()
+<a href="#891" id="891" class="l">891: </a>    {
+<a href="#892" id="892" class="l">892: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;isInternal()) {
+<a href="#893" id="893" class="l">893: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not create an instance; only user defined classes can be instantiated.'</span>, Exception\RuntimeException::UNSUPPORTED, <span class="php-var">$this</span>);
+<a href="#894" id="894" class="l">894: </a>        }
+<a href="#895" id="895" class="l">895: </a>
+<a href="#896" id="896" class="l">896: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$this</span>-&gt;getParentClasses() <span class="php-keyword1">as</span> <span class="php-var">$parent</span>) {
+<a href="#897" id="897" class="l">897: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$parent</span>-&gt;isInternal()) {
+<a href="#898" id="898" class="l">898: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Could not create an instance; only user defined classes can be instantiated.'</span>, Exception\RuntimeException::UNSUPPORTED, <span class="php-var">$this</span>);
+<a href="#899" id="899" class="l">899: </a>            }
+<a href="#900" id="900" class="l">900: </a>        }
+<a href="#901" id="901" class="l">901: </a>
+<a href="#902" id="902" class="l">902: </a>        <span class="php-keyword1">if</span> (PHP_VERSION_ID &gt;= <span class="php-num">50400</span>) {
+<a href="#903" id="903" class="l">903: </a>            <span class="php-keyword1">return</span> parent::newInstanceWithoutConstructor();
+<a href="#904" id="904" class="l">904: </a>        }
+<a href="#905" id="905" class="l">905: </a>
+<a href="#906" id="906" class="l">906: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">unserialize</span>(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'O:%d:&quot;%s&quot;:0:{}'</span>, <span class="php-keyword2">strlen</span>(<span class="php-var">$this</span>-&gt;getName()), <span class="php-var">$this</span>-&gt;getName()));
+<a href="#907" id="907" class="l">907: </a>    }
+<a href="#908" id="908" class="l">908: </a>
+<a href="#909" id="909" class="l">909: </a>    <span class="php-comment">/**
+</span><a href="#910" id="910" class="l">910: </a><span class="php-comment">     * Returns an element pretty (docblock compatible) name.
+</span><a href="#911" id="911" class="l">911: </a><span class="php-comment">     *
+</span><a href="#912" id="912" class="l">912: </a><span class="php-comment">     * @return string
+</span><a href="#913" id="913" class="l">913: </a><span class="php-comment">     */</span>
+<a href="#914" id="914" class="l">914: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getPrettyName()
+<a href="#915" id="915" class="l">915: </a>    {
+<a href="#916" id="916" class="l">916: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getName();
+<a href="#917" id="917" class="l">917: </a>    }
+<a href="#918" id="918" class="l">918: </a>
+<a href="#919" id="919" class="l">919: </a>    <span class="php-comment">/**
+</span><a href="#920" id="920" class="l">920: </a><span class="php-comment">     * Creates a reflection instance.
+</span><a href="#921" id="921" class="l">921: </a><span class="php-comment">     *
+</span><a href="#922" id="922" class="l">922: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
+</span><a href="#923" id="923" class="l">923: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
+</span><a href="#924" id="924" class="l">924: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionClass
+</span><a href="#925" id="925" class="l">925: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+</span><a href="#926" id="926" class="l">926: </a><span class="php-comment">     */</span>
+<a href="#927" id="927" class="l">927: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
+<a href="#928" id="928" class="l">928: </a>    {
+<a href="#929" id="929" class="l">929: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionClass) {
+<a href="#930" id="930" class="l">930: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Invalid reflection instance provided, ReflectionClass expected.'</span>, Exception\RuntimeException::INVALID_ARGUMENT);
+<a href="#931" id="931" class="l">931: </a>        }
+<a href="#932" id="932" class="l">932: </a>
+<a href="#933" id="933" class="l">933: </a>        <span class="php-keyword1">return</span> <span class="php-var">$broker</span>-&gt;getClass(<span class="php-var">$internalReflection</span>-&gt;getName());
+<a href="#934" id="934" class="l">934: </a>    }
+<a href="#935" id="935" class="l">935: </a>}
+<a href="#936" id="936" class="l">936: </a></code></pre>
 
 	<div id="footer">
 		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>

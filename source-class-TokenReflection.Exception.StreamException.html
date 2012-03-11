@@ -8,7 +8,7 @@
 	<title>File Exception/StreamException.php | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
-	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<script type="text/javascript" src="elementlist.js?1007765600"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
@@ -34,6 +34,8 @@
 						</li>
 				<li class="active"><a href="namespace-TokenReflection.Exception.html">Exception</a>
 						</li>
+				<li><a href="namespace-TokenReflection.Invalid.html">Invalid</a>
+						</li>
 				<li><a href="namespace-TokenReflection.Php.html">Php</a>
 						</li>
 				<li><a href="namespace-TokenReflection.Stream.html">Stream</a>
@@ -52,6 +54,7 @@
 			<ul>
 				<li><a href="class-TokenReflection.Exception.BaseException.html">BaseException</a></li>
 				<li><a href="class-TokenReflection.Exception.BrokerException.html">BrokerException</a></li>
+				<li><a href="class-TokenReflection.Exception.FileProcessingException.html">FileProcessingException</a></li>
 				<li><a href="class-TokenReflection.Exception.ParseException.html">ParseException</a></li>
 				<li><a href="class-TokenReflection.Exception.RuntimeException.html">RuntimeException</a></li>
 				<li class="active"><a href="class-TokenReflection.Exception.StreamException.html">StreamException</a></li>
@@ -101,7 +104,7 @@
 <a href="#2" id="2" class="l"> 2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l"> 3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l"> 4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l"> 5: </a><span class="php-comment"> * Version 1.1
+</span><a href="#5" id="5" class="l"> 5: </a><span class="php-comment"> * Version 1.2
 </span><a href="#6" id="6" class="l"> 6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l"> 7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l"> 8: </a><span class="php-comment"> *
@@ -188,7 +191,7 @@
 </span><a href="#89" id="89" class="l">89: </a><span class="php-comment">     *
 </span><a href="#90" id="90" class="l">90: </a><span class="php-comment">     * @return string
 </span><a href="#91" id="91" class="l">91: </a><span class="php-comment">     */</span>
-<a href="#92" id="92" class="l">92: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> getDetail()
+<a href="#92" id="92" class="l">92: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getDetail()
 <a href="#93" id="93" class="l">93: </a>    {
 <a href="#94" id="94" class="l">94: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">sprintf</span>(<span class="php-quote">'Thrown when working with file &quot;%s&quot; token stream.'</span>, <span class="php-var">$this</span>-&gt;getFileName());
 <a href="#95" id="95" class="l">95: </a>    }

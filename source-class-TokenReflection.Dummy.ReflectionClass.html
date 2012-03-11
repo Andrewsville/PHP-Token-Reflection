@@ -8,7 +8,7 @@
 	<title>File Dummy/ReflectionClass.php | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
-	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<script type="text/javascript" src="elementlist.js?1007765600"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
@@ -33,6 +33,8 @@
 				<li class="active"><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
 						</li>
 				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Invalid.html">Invalid</a>
 						</li>
 				<li><a href="namespace-TokenReflection.Php.html">Php</a>
 						</li>
@@ -97,7 +99,7 @@
 <a href="#2" id="2" class="l">   2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">   3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">   4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">   5: </a><span class="php-comment"> * Version 1.1
+</span><a href="#5" id="5" class="l">   5: </a><span class="php-comment"> * Version 1.2
 </span><a href="#6" id="6" class="l">   6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">   7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">   8: </a><span class="php-comment"> *
@@ -1076,38 +1078,55 @@
 <a href="#981" id="981" class="l"> 981: </a>    }
 <a href="#982" id="982" class="l"> 982: </a>
 <a href="#983" id="983" class="l"> 983: </a>    <span class="php-comment">/**
-</span><a href="#984" id="984" class="l"> 984: </a><span class="php-comment">     * Returns the reflection broker used by this reflection object.
+</span><a href="#984" id="984" class="l"> 984: </a><span class="php-comment">     * Returns if the class definition is valid.
 </span><a href="#985" id="985" class="l"> 985: </a><span class="php-comment">     *
-</span><a href="#986" id="986" class="l"> 986: </a><span class="php-comment">     * @return \TokenReflection\Broker
-</span><a href="#987" id="987" class="l"> 987: </a><span class="php-comment">     */</span>
-<a href="#988" id="988" class="l"> 988: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker()
-<a href="#989" id="989" class="l"> 989: </a>    {
-<a href="#990" id="990" class="l"> 990: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker;
-<a href="#991" id="991" class="l"> 991: </a>    }
-<a href="#992" id="992" class="l"> 992: </a>
-<a href="#993" id="993" class="l"> 993: </a>    <span class="php-comment">/**
-</span><a href="#994" id="994" class="l"> 994: </a><span class="php-comment">     * Magic __get method.
-</span><a href="#995" id="995" class="l"> 995: </a><span class="php-comment">     *
-</span><a href="#996" id="996" class="l"> 996: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#997" id="997" class="l"> 997: </a><span class="php-comment">     * @return mixed
-</span><a href="#998" id="998" class="l"> 998: </a><span class="php-comment">     */</span>
-<a href="#999" id="999" class="l"> 999: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
-<a href="#1000" id="1000" class="l">1000: </a>    {
-<a href="#1001" id="1001" class="l">1001: </a>        <span class="php-keyword1">return</span> ReflectionBase::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#1002" id="1002" class="l">1002: </a>    }
-<a href="#1003" id="1003" class="l">1003: </a>
-<a href="#1004" id="1004" class="l">1004: </a>    <span class="php-comment">/**
-</span><a href="#1005" id="1005" class="l">1005: </a><span class="php-comment">     * Magic __isset method.
-</span><a href="#1006" id="1006" class="l">1006: </a><span class="php-comment">     *
-</span><a href="#1007" id="1007" class="l">1007: </a><span class="php-comment">     * @param string $key Variable name
-</span><a href="#1008" id="1008" class="l">1008: </a><span class="php-comment">     * @return boolean
-</span><a href="#1009" id="1009" class="l">1009: </a><span class="php-comment">     */</span>
-<a href="#1010" id="1010" class="l">1010: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __isset(<span class="php-var">$key</span>)
-<a href="#1011" id="1011" class="l">1011: </a>    {
-<a href="#1012" id="1012" class="l">1012: </a>        <span class="php-keyword1">return</span> ReflectionBase::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
-<a href="#1013" id="1013" class="l">1013: </a>    }
-<a href="#1014" id="1014" class="l">1014: </a>}
-<a href="#1015" id="1015" class="l">1015: </a></code></pre>
+</span><a href="#986" id="986" class="l"> 986: </a><span class="php-comment">     * Dummy classes are always valid.
+</span><a href="#987" id="987" class="l"> 987: </a><span class="php-comment">     *
+</span><a href="#988" id="988" class="l"> 988: </a><span class="php-comment">     * @return boolean
+</span><a href="#989" id="989" class="l"> 989: </a><span class="php-comment">     */</span>
+<a href="#990" id="990" class="l"> 990: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isValid()
+<a href="#991" id="991" class="l"> 991: </a>    {
+<a href="#992" id="992" class="l"> 992: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+<a href="#993" id="993" class="l"> 993: </a>    }
+<a href="#994" id="994" class="l"> 994: </a>
+<a href="#995" id="995" class="l"> 995: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isDeprecated()
+<a href="#996" id="996" class="l"> 996: </a>    {
+<a href="#997" id="997" class="l"> 997: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
+<a href="#998" id="998" class="l"> 998: </a>    }
+<a href="#999" id="999" class="l"> 999: </a>
+<a href="#1000" id="1000" class="l">1000: </a>    <span class="php-comment">/**
+</span><a href="#1001" id="1001" class="l">1001: </a><span class="php-comment">     * Returns the reflection broker used by this reflection object.
+</span><a href="#1002" id="1002" class="l">1002: </a><span class="php-comment">     *
+</span><a href="#1003" id="1003" class="l">1003: </a><span class="php-comment">     * @return \TokenReflection\Broker
+</span><a href="#1004" id="1004" class="l">1004: </a><span class="php-comment">     */</span>
+<a href="#1005" id="1005" class="l">1005: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getBroker()
+<a href="#1006" id="1006" class="l">1006: </a>    {
+<a href="#1007" id="1007" class="l">1007: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;broker;
+<a href="#1008" id="1008" class="l">1008: </a>    }
+<a href="#1009" id="1009" class="l">1009: </a>
+<a href="#1010" id="1010" class="l">1010: </a>    <span class="php-comment">/**
+</span><a href="#1011" id="1011" class="l">1011: </a><span class="php-comment">     * Magic __get method.
+</span><a href="#1012" id="1012" class="l">1012: </a><span class="php-comment">     *
+</span><a href="#1013" id="1013" class="l">1013: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#1014" id="1014" class="l">1014: </a><span class="php-comment">     * @return mixed
+</span><a href="#1015" id="1015" class="l">1015: </a><span class="php-comment">     */</span>
+<a href="#1016" id="1016" class="l">1016: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __get(<span class="php-var">$key</span>)
+<a href="#1017" id="1017" class="l">1017: </a>    {
+<a href="#1018" id="1018" class="l">1018: </a>        <span class="php-keyword1">return</span> ReflectionBase::get(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#1019" id="1019" class="l">1019: </a>    }
+<a href="#1020" id="1020" class="l">1020: </a>
+<a href="#1021" id="1021" class="l">1021: </a>    <span class="php-comment">/**
+</span><a href="#1022" id="1022" class="l">1022: </a><span class="php-comment">     * Magic __isset method.
+</span><a href="#1023" id="1023" class="l">1023: </a><span class="php-comment">     *
+</span><a href="#1024" id="1024" class="l">1024: </a><span class="php-comment">     * @param string $key Variable name
+</span><a href="#1025" id="1025" class="l">1025: </a><span class="php-comment">     * @return boolean
+</span><a href="#1026" id="1026" class="l">1026: </a><span class="php-comment">     */</span>
+<a href="#1027" id="1027" class="l">1027: </a>    <span class="php-keyword1">final</span> <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __isset(<span class="php-var">$key</span>)
+<a href="#1028" id="1028" class="l">1028: </a>    {
+<a href="#1029" id="1029" class="l">1029: </a>        <span class="php-keyword1">return</span> ReflectionBase::exists(<span class="php-var">$this</span>, <span class="php-var">$key</span>);
+<a href="#1030" id="1030" class="l">1030: </a>    }
+<a href="#1031" id="1031" class="l">1031: </a>}
+<a href="#1032" id="1032" class="l">1032: </a></code></pre>
 
 	<div id="footer">
 		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>

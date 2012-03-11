@@ -7,7 +7,7 @@
 	<title>Interface TokenReflection\IReflectionConstant | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
-	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<script type="text/javascript" src="elementlist.js?1007765600"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
@@ -32,6 +32,8 @@
 				<li><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
 						</li>
 				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Invalid.html">Invalid</a>
 						</li>
 				<li><a href="namespace-TokenReflection.Php.html">Php</a>
 						</li>
@@ -141,6 +143,7 @@
 
 	<div>
 		<h4>Direct known implementers</h4>
+			<a href="class-TokenReflection.Invalid.ReflectionConstant.html">TokenReflection\Invalid\ReflectionConstant</a>, 
 			<a href="class-TokenReflection.Php.ReflectionConstant.html">TokenReflection\Php\ReflectionConstant</a>, 
 			<a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a>
 	</div>
@@ -596,6 +599,83 @@
 				<h4>Returns</h4>
 				<div class="list">
 					<code>string</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isValid" id="_isValid">
+
+		<td class="attributes"><code>
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isValid">#</a>
+		<code><a href="source-class-TokenReflection.IReflectionConstant.html#106" title="Go to source code">isValid</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns if the constant definition is valid.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns if the constant definition is valid.</p>
+
+<p>That means that the source code is valid and the constant name is unique
+within parsed files.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isDeprecated" id="_isDeprecated">
+
+		<td class="attributes"><code>
+			
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isDeprecated">#</a>
+		<code><a href="source-class-TokenReflection.IReflectionConstant.html#115" title="Go to source code">isDeprecated</a>( )</code>
+
+		<div class="description short">
+			
+<p>Returns if the constant is deprecated.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Returns if the constant is deprecated.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br />
 				</div>
 
 

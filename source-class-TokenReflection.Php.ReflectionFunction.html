@@ -8,7 +8,7 @@
 	<title>File Php/ReflectionFunction.php | PHP Token Reflection</title>
 
 	<script type="text/javascript" src="resources/combined.js?2300626518"></script>
-	<script type="text/javascript" src="elementlist.js?558680278"></script>
+	<script type="text/javascript" src="elementlist.js?1007765600"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1252480456" />
 
 </head>
@@ -33,6 +33,8 @@
 				<li><a href="namespace-TokenReflection.Dummy.html">Dummy</a>
 						</li>
 				<li><a href="namespace-TokenReflection.Exception.html">Exception</a>
+						</li>
+				<li><a href="namespace-TokenReflection.Invalid.html">Invalid</a>
 						</li>
 				<li class="active"><a href="namespace-TokenReflection.Php.html">Php</a>
 						</li>
@@ -107,7 +109,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.1
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.2
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -309,32 +311,44 @@
 <a href="#204" id="204" class="l">204: </a>    }
 <a href="#205" id="205" class="l">205: </a>
 <a href="#206" id="206" class="l">206: </a>    <span class="php-comment">/**
-</span><a href="#207" id="207" class="l">207: </a><span class="php-comment">     * Returns an element pretty (docblock compatible) name.
+</span><a href="#207" id="207" class="l">207: </a><span class="php-comment">     * Returns if the function definition is valid.
 </span><a href="#208" id="208" class="l">208: </a><span class="php-comment">     *
-</span><a href="#209" id="209" class="l">209: </a><span class="php-comment">     * @return string
-</span><a href="#210" id="210" class="l">210: </a><span class="php-comment">     */</span>
-<a href="#211" id="211" class="l">211: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getPrettyName()
-<a href="#212" id="212" class="l">212: </a>    {
-<a href="#213" id="213" class="l">213: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getName() . <span class="php-quote">'()'</span>;
-<a href="#214" id="214" class="l">214: </a>    }
-<a href="#215" id="215" class="l">215: </a>
-<a href="#216" id="216" class="l">216: </a>    <span class="php-comment">/**
-</span><a href="#217" id="217" class="l">217: </a><span class="php-comment">     * Creates a reflection instance.
-</span><a href="#218" id="218" class="l">218: </a><span class="php-comment">     *
-</span><a href="#219" id="219" class="l">219: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
-</span><a href="#220" id="220" class="l">220: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
-</span><a href="#221" id="221" class="l">221: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionFunction
-</span><a href="#222" id="222" class="l">222: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
-</span><a href="#223" id="223" class="l">223: </a><span class="php-comment">     */</span>
-<a href="#224" id="224" class="l">224: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
-<a href="#225" id="225" class="l">225: </a>    {
-<a href="#226" id="226" class="l">226: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionFunction) {
-<a href="#227" id="227" class="l">227: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Invalid reflection instance provided, ReflectionFunction expected.'</span>, Exception\RuntimeException::INVALID_ARGUMENT);
-<a href="#228" id="228" class="l">228: </a>        }
-<a href="#229" id="229" class="l">229: </a>
-<a href="#230" id="230" class="l">230: </a>        <span class="php-keyword1">return</span> <span class="php-var">$broker</span>-&gt;getFunction(<span class="php-var">$internalReflection</span>-&gt;getName());
-<a href="#231" id="231" class="l">231: </a>    }
-<a href="#232" id="232" class="l">232: </a>}</code></pre>
+</span><a href="#209" id="209" class="l">209: </a><span class="php-comment">     * Internal functions are always valid.
+</span><a href="#210" id="210" class="l">210: </a><span class="php-comment">     *
+</span><a href="#211" id="211" class="l">211: </a><span class="php-comment">     * @return boolean
+</span><a href="#212" id="212" class="l">212: </a><span class="php-comment">     */</span>
+<a href="#213" id="213" class="l">213: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isValid()
+<a href="#214" id="214" class="l">214: </a>    {
+<a href="#215" id="215" class="l">215: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+<a href="#216" id="216" class="l">216: </a>    }
+<a href="#217" id="217" class="l">217: </a>
+<a href="#218" id="218" class="l">218: </a>    <span class="php-comment">/**
+</span><a href="#219" id="219" class="l">219: </a><span class="php-comment">     * Returns an element pretty (docblock compatible) name.
+</span><a href="#220" id="220" class="l">220: </a><span class="php-comment">     *
+</span><a href="#221" id="221" class="l">221: </a><span class="php-comment">     * @return string
+</span><a href="#222" id="222" class="l">222: </a><span class="php-comment">     */</span>
+<a href="#223" id="223" class="l">223: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getPrettyName()
+<a href="#224" id="224" class="l">224: </a>    {
+<a href="#225" id="225" class="l">225: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getName() . <span class="php-quote">'()'</span>;
+<a href="#226" id="226" class="l">226: </a>    }
+<a href="#227" id="227" class="l">227: </a>
+<a href="#228" id="228" class="l">228: </a>    <span class="php-comment">/**
+</span><a href="#229" id="229" class="l">229: </a><span class="php-comment">     * Creates a reflection instance.
+</span><a href="#230" id="230" class="l">230: </a><span class="php-comment">     *
+</span><a href="#231" id="231" class="l">231: </a><span class="php-comment">     * @param \ReflectionClass $internalReflection Internal reflection instance
+</span><a href="#232" id="232" class="l">232: </a><span class="php-comment">     * @param \TokenReflection\Broker $broker Reflection broker instance
+</span><a href="#233" id="233" class="l">233: </a><span class="php-comment">     * @return \TokenReflection\Php\ReflectionFunction
+</span><a href="#234" id="234" class="l">234: </a><span class="php-comment">     * @throws \TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+</span><a href="#235" id="235" class="l">235: </a><span class="php-comment">     */</span>
+<a href="#236" id="236" class="l">236: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> create(Reflector <span class="php-var">$internalReflection</span>, Broker <span class="php-var">$broker</span>)
+<a href="#237" id="237" class="l">237: </a>    {
+<a href="#238" id="238" class="l">238: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$internalReflection</span> <span class="php-keyword1">instanceof</span> InternalReflectionFunction) {
+<a href="#239" id="239" class="l">239: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\RuntimeException(<span class="php-quote">'Invalid reflection instance provided, ReflectionFunction expected.'</span>, Exception\RuntimeException::INVALID_ARGUMENT);
+<a href="#240" id="240" class="l">240: </a>        }
+<a href="#241" id="241" class="l">241: </a>
+<a href="#242" id="242" class="l">242: </a>        <span class="php-keyword1">return</span> <span class="php-var">$broker</span>-&gt;getFunction(<span class="php-var">$internalReflection</span>-&gt;getName());
+<a href="#243" id="243" class="l">243: </a>    }
+<a href="#244" id="244" class="l">244: </a>}</code></pre>
 
 	<div id="footer">
 		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.5.0</a>
