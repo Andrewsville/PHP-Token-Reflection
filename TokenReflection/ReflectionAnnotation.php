@@ -195,7 +195,7 @@ class ReflectionAnnotation
 				)
 			);
 			foreach (explode("\n", $docblock) as $line) {
-				$line = preg_replace('~^\\*\\s*~', '', trim($line));
+				$line = preg_replace('~^\\*\\s?~', '', trim($line));
 
 				// End of short description
 				if ('' === $line && self::SHORT_DESCRIPTION === $name) {
@@ -204,7 +204,7 @@ class ReflectionAnnotation
 				}
 
 				// @annotation
-				if (preg_match('~^@([\\S]+)\\s*(.*)~', $line, $matches)) {
+				if (preg_match('~^\\s*@([\\S]+)\\s*(.*)~', $line, $matches)) {
 					$name = $matches[1];
 					$this->annotations[$name][] = $matches[2];
 					continue;
