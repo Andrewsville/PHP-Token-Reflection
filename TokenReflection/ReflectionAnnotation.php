@@ -195,7 +195,7 @@ class ReflectionAnnotation
 				)
 			);
 			foreach (explode("\n", $docblock) as $line) {
-				$line = preg_replace('~^\\*\\s*~', '', trim($line));
+				$line = preg_replace('~^\\*\\s?~', '', trim($line));
 
 				// End of short description
 				if ('' === $line && self::SHORT_DESCRIPTION === $name) {
