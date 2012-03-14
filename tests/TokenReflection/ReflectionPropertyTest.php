@@ -60,7 +60,7 @@ class ReflectionPropertyTest extends Test
 		/** @var \TokenReflection\ReflectionProperty */
 		$tokenProperty = $rfl->token->getProperty($propertyName);
 		$this->assertTrue($tokenProperty->hasAnnotation('var'));
-		$this->assertSame(array("String It is a string\nand this comment has multiple\nlines."), $tokenProperty->getAnnotation('var'));
+		$this->assertSame(array("String It is a string\n	and this comment has multiple\n	lines."), $tokenProperty->getAnnotation('var'));
 
 		$rfl = $this->getPropertyReflection('noComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
