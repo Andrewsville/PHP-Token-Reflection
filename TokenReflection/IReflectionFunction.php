@@ -62,4 +62,11 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 * @return boolean
 	 */
 	public function isValid();
+
+	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases();
 }

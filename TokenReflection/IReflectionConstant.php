@@ -56,6 +56,13 @@ interface IReflectionConstant extends IReflection
 	public function inNamespace();
 
 	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases();
+
+	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string
