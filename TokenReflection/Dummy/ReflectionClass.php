@@ -103,6 +103,16 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return array();
+	}
+
+	/**
 	 * Returns the PHP extension reflection.
 	 *
 	 * @return null
