@@ -203,16 +203,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
-	public function getNamespaceAliases()
-	{
-		return array();
-	}
-
-	/**
 	 * Returns if the paramter value can be passed by value.
 	 *
 	 * @return boolean

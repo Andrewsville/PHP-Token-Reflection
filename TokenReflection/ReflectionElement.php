@@ -219,13 +219,6 @@ abstract class ReflectionElement extends ReflectionBase
 	}
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
-	abstract public function getNamespaceAliases();
-
-	/**
 	 * Returns the stack of docblock templates.
 	 *
 	 * @return array
