@@ -126,7 +126,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.2.1
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.2.2
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -180,69 +180,76 @@
 <a href="#56" id="56" class="l"> 56: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> inNamespace();
 <a href="#57" id="57" class="l"> 57: </a>
 <a href="#58" id="58" class="l"> 58: </a>    <span class="php-comment">/**
-</span><a href="#59" id="59" class="l"> 59: </a><span class="php-comment">     * Returns the file name the reflection object is defined in.
+</span><a href="#59" id="59" class="l"> 59: </a><span class="php-comment">     * Returns imported namespaces and aliases from the declaring namespace.
 </span><a href="#60" id="60" class="l"> 60: </a><span class="php-comment">     *
-</span><a href="#61" id="61" class="l"> 61: </a><span class="php-comment">     * @return string
+</span><a href="#61" id="61" class="l"> 61: </a><span class="php-comment">     * @return array
 </span><a href="#62" id="62" class="l"> 62: </a><span class="php-comment">     */</span>
-<a href="#63" id="63" class="l"> 63: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getFileName();
+<a href="#63" id="63" class="l"> 63: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getNamespaceAliases();
 <a href="#64" id="64" class="l"> 64: </a>
 <a href="#65" id="65" class="l"> 65: </a>    <span class="php-comment">/**
-</span><a href="#66" id="66" class="l"> 66: </a><span class="php-comment">     * Returns the definition start line number in the file.
+</span><a href="#66" id="66" class="l"> 66: </a><span class="php-comment">     * Returns the file name the reflection object is defined in.
 </span><a href="#67" id="67" class="l"> 67: </a><span class="php-comment">     *
-</span><a href="#68" id="68" class="l"> 68: </a><span class="php-comment">     * @return integer
+</span><a href="#68" id="68" class="l"> 68: </a><span class="php-comment">     * @return string
 </span><a href="#69" id="69" class="l"> 69: </a><span class="php-comment">     */</span>
-<a href="#70" id="70" class="l"> 70: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getStartLine();
+<a href="#70" id="70" class="l"> 70: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getFileName();
 <a href="#71" id="71" class="l"> 71: </a>
 <a href="#72" id="72" class="l"> 72: </a>    <span class="php-comment">/**
-</span><a href="#73" id="73" class="l"> 73: </a><span class="php-comment">     * Returns the definition end line number in the file.
+</span><a href="#73" id="73" class="l"> 73: </a><span class="php-comment">     * Returns the definition start line number in the file.
 </span><a href="#74" id="74" class="l"> 74: </a><span class="php-comment">     *
 </span><a href="#75" id="75" class="l"> 75: </a><span class="php-comment">     * @return integer
 </span><a href="#76" id="76" class="l"> 76: </a><span class="php-comment">     */</span>
-<a href="#77" id="77" class="l"> 77: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getEndLine();
+<a href="#77" id="77" class="l"> 77: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getStartLine();
 <a href="#78" id="78" class="l"> 78: </a>
 <a href="#79" id="79" class="l"> 79: </a>    <span class="php-comment">/**
-</span><a href="#80" id="80" class="l"> 80: </a><span class="php-comment">     * Returns the appropriate docblock definition.
+</span><a href="#80" id="80" class="l"> 80: </a><span class="php-comment">     * Returns the definition end line number in the file.
 </span><a href="#81" id="81" class="l"> 81: </a><span class="php-comment">     *
-</span><a href="#82" id="82" class="l"> 82: </a><span class="php-comment">     * @return string|boolean
+</span><a href="#82" id="82" class="l"> 82: </a><span class="php-comment">     * @return integer
 </span><a href="#83" id="83" class="l"> 83: </a><span class="php-comment">     */</span>
-<a href="#84" id="84" class="l"> 84: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getDocComment();
+<a href="#84" id="84" class="l"> 84: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getEndLine();
 <a href="#85" id="85" class="l"> 85: </a>
 <a href="#86" id="86" class="l"> 86: </a>    <span class="php-comment">/**
-</span><a href="#87" id="87" class="l"> 87: </a><span class="php-comment">     * Returns the constant value.
+</span><a href="#87" id="87" class="l"> 87: </a><span class="php-comment">     * Returns the appropriate docblock definition.
 </span><a href="#88" id="88" class="l"> 88: </a><span class="php-comment">     *
-</span><a href="#89" id="89" class="l"> 89: </a><span class="php-comment">     * @return mixed
+</span><a href="#89" id="89" class="l"> 89: </a><span class="php-comment">     * @return string|boolean
 </span><a href="#90" id="90" class="l"> 90: </a><span class="php-comment">     */</span>
-<a href="#91" id="91" class="l"> 91: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getValue();
+<a href="#91" id="91" class="l"> 91: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getDocComment();
 <a href="#92" id="92" class="l"> 92: </a>
 <a href="#93" id="93" class="l"> 93: </a>    <span class="php-comment">/**
-</span><a href="#94" id="94" class="l"> 94: </a><span class="php-comment">     * Returns the part of the source code defining the constant value.
+</span><a href="#94" id="94" class="l"> 94: </a><span class="php-comment">     * Returns the constant value.
 </span><a href="#95" id="95" class="l"> 95: </a><span class="php-comment">     *
-</span><a href="#96" id="96" class="l"> 96: </a><span class="php-comment">     * @return string
+</span><a href="#96" id="96" class="l"> 96: </a><span class="php-comment">     * @return mixed
 </span><a href="#97" id="97" class="l"> 97: </a><span class="php-comment">     */</span>
-<a href="#98" id="98" class="l"> 98: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getValueDefinition();
+<a href="#98" id="98" class="l"> 98: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getValue();
 <a href="#99" id="99" class="l"> 99: </a>
 <a href="#100" id="100" class="l">100: </a>    <span class="php-comment">/**
-</span><a href="#101" id="101" class="l">101: </a><span class="php-comment">     * Returns the string representation of the reflection object.
+</span><a href="#101" id="101" class="l">101: </a><span class="php-comment">     * Returns the part of the source code defining the constant value.
 </span><a href="#102" id="102" class="l">102: </a><span class="php-comment">     *
 </span><a href="#103" id="103" class="l">103: </a><span class="php-comment">     * @return string
 </span><a href="#104" id="104" class="l">104: </a><span class="php-comment">     */</span>
-<a href="#105" id="105" class="l">105: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __toString();
-<a href="#106" id="106" class="l">106: </a>    <span class="php-comment">/**
-</span><a href="#107" id="107" class="l">107: </a><span class="php-comment">     * Returns if the constant definition is valid.
-</span><a href="#108" id="108" class="l">108: </a><span class="php-comment">     *
-</span><a href="#109" id="109" class="l">109: </a><span class="php-comment">     * That means that the source code is valid and the constant name is unique within parsed files.
-</span><a href="#110" id="110" class="l">110: </a><span class="php-comment">     *
-</span><a href="#111" id="111" class="l">111: </a><span class="php-comment">     * @return boolean
-</span><a href="#112" id="112" class="l">112: </a><span class="php-comment">     */</span>
-<a href="#113" id="113" class="l">113: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isValid();
-<a href="#114" id="114" class="l">114: </a>
-<a href="#115" id="115" class="l">115: </a>    <span class="php-comment">/**
-</span><a href="#116" id="116" class="l">116: </a><span class="php-comment">     * Returns if the constant is deprecated.
+<a href="#105" id="105" class="l">105: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getValueDefinition();
+<a href="#106" id="106" class="l">106: </a>
+<a href="#107" id="107" class="l">107: </a>    <span class="php-comment">/**
+</span><a href="#108" id="108" class="l">108: </a><span class="php-comment">     * Returns the string representation of the reflection object.
+</span><a href="#109" id="109" class="l">109: </a><span class="php-comment">     *
+</span><a href="#110" id="110" class="l">110: </a><span class="php-comment">     * @return string
+</span><a href="#111" id="111" class="l">111: </a><span class="php-comment">     */</span>
+<a href="#112" id="112" class="l">112: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> __toString();
+<a href="#113" id="113" class="l">113: </a>    <span class="php-comment">/**
+</span><a href="#114" id="114" class="l">114: </a><span class="php-comment">     * Returns if the constant definition is valid.
+</span><a href="#115" id="115" class="l">115: </a><span class="php-comment">     *
+</span><a href="#116" id="116" class="l">116: </a><span class="php-comment">     * That means that the source code is valid and the constant name is unique within parsed files.
 </span><a href="#117" id="117" class="l">117: </a><span class="php-comment">     *
 </span><a href="#118" id="118" class="l">118: </a><span class="php-comment">     * @return boolean
 </span><a href="#119" id="119" class="l">119: </a><span class="php-comment">     */</span>
-<a href="#120" id="120" class="l">120: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isDeprecated();
-<a href="#121" id="121" class="l">121: </a>}</code></pre>
+<a href="#120" id="120" class="l">120: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isValid();
+<a href="#121" id="121" class="l">121: </a>
+<a href="#122" id="122" class="l">122: </a>    <span class="php-comment">/**
+</span><a href="#123" id="123" class="l">123: </a><span class="php-comment">     * Returns if the constant is deprecated.
+</span><a href="#124" id="124" class="l">124: </a><span class="php-comment">     *
+</span><a href="#125" id="125" class="l">125: </a><span class="php-comment">     * @return boolean
+</span><a href="#126" id="126" class="l">126: </a><span class="php-comment">     */</span>
+<a href="#127" id="127" class="l">127: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isDeprecated();
+<a href="#128" id="128" class="l">128: </a>}</code></pre>
 
 	<div id="footer">
 		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.6.0</a>
