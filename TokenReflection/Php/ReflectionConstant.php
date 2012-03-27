@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.1
+ * Version 1.2.2
  *
  * LICENSE
  *
@@ -83,24 +83,25 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 		if (null !== $parent) {
 			$realParent = null;
 
-			$parentConstants = $parent->getOwnConstants();
-			if (isset($parentConstants[$name])) {
+			if (array_key_exists($name, $parent->getOwnConstants())) {
 				$realParent = $parent;
 			}
 
-			foreach ($parent->getParentClasses() as $grandParent) {
-				$grandParentConstants = $grandParent->getOwnConstants();
-				if (isset($grandParentConstants[$name])) {
-					$realParent = $grandParent;
-					break;
+			if (null === $realParent) {
+				foreach ($parent->getParentClasses() as $grandParent) {
+					if (array_key_exists($name, $grandParent->getOwnConstants())) {
+						$realParent = $grandParent;
+						break;
+					}
 				}
 			}
 
-			foreach ($parent->getInterfaces() as $interface) {
-				$interfaceConstants = $interface->getOwnConstants();
-				if (isset($interfaceConstants[$name])) {
-					$realParent = $interface;
-					break;
+			if (null === $realParent) {
+				foreach ($parent->getInterfaces() as $interface) {
+					if (array_key_exists($name, $interface->getOwnConstants())) {
+						$realParent = $interface;
+						break;
+					}
 				}
 			}
 
@@ -111,12 +112,11 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 			$this->declaringClassName = $realParent->getName();
 			$this->userDefined = $realParent->isUserDefined();
 		} else {
-			$declared = get_defined_constants(false);
-			if (!isset($declared[$name])) {
+			if (!array_key_exists($name, get_defined_constants(false))) {
 				$this->userDefined = true;
 			} else {
 				$declared = get_defined_constants(true);
-				$this->userDefined = isset($declared['user'][$name]);
+				$this->userDefined = array_key_exists($name, $declared['user']);
 			}
 		}
 	}

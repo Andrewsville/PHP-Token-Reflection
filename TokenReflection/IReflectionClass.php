@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.1
+ * Version 1.2.2
  *
  * LICENSE
  *
@@ -40,6 +40,13 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function inNamespace();
+
+	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases();
 
 	/**
 	 * Returns the PHP extension reflection.

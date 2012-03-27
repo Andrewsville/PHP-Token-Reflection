@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.1
+ * Version 1.2.2
  *
  * LICENSE
  *
@@ -25,13 +25,6 @@ use Reflector;
  */
 interface IReflection extends TokenReflection\IReflection
 {
-	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
-	public function getNamespaceAliases();
-
 	/**
 	 * Creates a reflection instance.
 	 *

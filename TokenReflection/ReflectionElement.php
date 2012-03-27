@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.1
+ * Version 1.2.2
  *
  * LICENSE
  *
@@ -217,13 +217,6 @@ abstract class ReflectionElement extends ReflectionBase
 	{
 		return $this->endPosition;
 	}
-
-	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
-	abstract public function getNamespaceAliases();
 
 	/**
 	 * Returns the stack of docblock templates.

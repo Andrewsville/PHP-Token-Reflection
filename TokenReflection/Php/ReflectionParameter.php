@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.1
+ * Version 1.2.2
  *
  * LICENSE
  *
@@ -200,16 +200,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	public function getBroker()
 	{
 		return $this->broker;
-	}
-
-	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
-	public function getNamespaceAliases()
-	{
-		return array();
 	}
 
 	/**
