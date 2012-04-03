@@ -249,6 +249,7 @@ class ReflectionBrokerTest extends Test
 				array(
 					'doc-comment.php',
 					'doc-comment-copydoc.php',
+					'heredoc.php',
 					'in-namespace.php',
 					'lines.php',
 					'magic.php',
