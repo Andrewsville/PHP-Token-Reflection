@@ -240,6 +240,23 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	}
 
 	/**
+	 * Returns if the token stream is at a whitespace position.
+	 *
+	 * @param boolean $docBlock Consider docblocks as whitespaces
+	 * @return boolean
+	 */
+	public function isWhitespace($docBlock = false)
+	{
+		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => false);
+
+		if (!$this->valid()) {
+			return false;
+		}
+
+		return $docBlock ? isset($skipped[$this->getType()]) : !empty($skipped[$this->getType()]);
+	}
+
+	/**
 	 * Checks if there is a token of the given type at the given position.
 	 *
 	 * @param integer|string $type Token type
