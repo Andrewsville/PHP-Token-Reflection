@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.2
+ * Version 1.2.3
  *
  * LICENSE
  *
@@ -53,6 +53,20 @@ class ReflectionConstantTest extends Test
 
 		$token = $this->getConstantTokenReflection('noComment');
 		$this->assertFalse($token->getDocComment());
+	}
+
+	/**
+	 * Tests heredoc defined value.
+	 */
+	public function testHeredoc()
+	{
+		$rfl = $this->getClassReflection('heredoc');
+
+		$this->assertSame($rfl->internal->getConstant('HEREDOC'), $rfl->token->getConstant('HEREDOC'));
+		$this->assertSame('constant value', $rfl->token->getConstant('HEREDOC'));
+
+		$this->assertSame($rfl->internal->getConstant('NOWDOC'), $rfl->token->getConstant('NOWDOC'));
+		$this->assertSame('constant value', $rfl->token->getConstant('NOWDOC'));
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.2
+ * Version 1.2.3
  *
  * LICENSE
  *
@@ -356,16 +356,26 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			T_LINE => true,
 			T_METHOD_C => true,
 			T_NS_C => true,
-			T_TRAIT_C => true,
-			T_COMMENT => false,
-			T_WHITESPACE => false,
-			T_DOC_COMMENT => false
+			T_TRAIT_C => true
 		);
-		while (null !== ($type = $tokenStream->getType()) && isset($acceptedTokens[$type])) {
-			if ($acceptedTokens[$type]) {
+
+		while (null !== ($type = $tokenStream->getType())) {
+			if (T_START_HEREDOC === $type) {
 				$this->valueDefinition[] = $tokenStream->current();
+				while (null !== $type && T_END_HEREDOC !== $type) {
+					$tokenStream->next();
+					$this->valueDefinition[] = $tokenStream->current();
+					$type = $tokenStream->getType();
+				};
+				$tokenStream->next();
+			} elseif (isset($acceptedTokens[$type])) {
+				$this->valueDefinition[] = $tokenStream->current();
+				$tokenStream->next();
+			} elseif ($tokenStream->isWhitespace(true)) {
+				$tokenStream->skipWhitespaces(true);
+			} else {
+				break;
 			}
-			$tokenStream->next();
 		}
 
 		if (empty($this->valueDefinition)) {

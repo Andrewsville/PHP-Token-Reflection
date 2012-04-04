@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.2
+ * Version 1.2.3
  *
  * LICENSE
  *
@@ -65,6 +65,24 @@ class ReflectionPropertyTest extends Test
 		$rfl = $this->getPropertyReflection('noComment');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
+	}
+
+	/**
+	 * Tests heredoc defined value.
+	 */
+	public function testHeredoc()
+	{
+		$token = $this->getClassTokenReflection('heredoc');
+
+		$this->assertTrue($token->hasOwnProperty('heredoc'));
+		$property = $token->getProperty('heredoc');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('property value', $property->getDefaultValue());
+
+		$this->assertTrue($token->hasOwnProperty('nowdoc'));
+		$property = $token->getProperty('nowdoc');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('property value', $property->getDefaultValue());
 	}
 
 	/**

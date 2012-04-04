@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.2
+ * Version 1.2.3
  *
  * LICENSE
  *
@@ -237,6 +237,23 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 		} while (isset($this->tokens[$this->position]) && isset($skipped[$this->tokens[$this->position][0]]) && ($skipDocBlocks || $this->tokens[$this->position][0] !== T_DOC_COMMENT));
 
 		return $this;
+	}
+
+	/**
+	 * Returns if the token stream is at a whitespace position.
+	 *
+	 * @param boolean $docBlock Consider docblocks as whitespaces
+	 * @return boolean
+	 */
+	public function isWhitespace($docBlock = false)
+	{
+		static $skipped = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => false);
+
+		if (!$this->valid()) {
+			return false;
+		}
+
+		return $docBlock ? isset($skipped[$this->getType()]) : !empty($skipped[$this->getType()]);
 	}
 
 	/**

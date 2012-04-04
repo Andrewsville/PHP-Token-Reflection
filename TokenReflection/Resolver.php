@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.2
+ * Version 1.2.3
  *
  * LICENSE
  *
@@ -207,7 +207,7 @@ class Resolver
 			}
 		}
 
-		return eval(sprintf('return %s;', $source));
+		return self::evaluate(sprintf("return %s;\n", $source));
 	}
 
 	/**
@@ -274,5 +274,15 @@ class Resolver
 			}
 		}
 		return $constants;
+	}
+
+	/**
+	 * Evaluates a source code.
+	 *
+	 * @param string $source Source code
+	 * @return mixed
+	 */
+	final private static function evaluate($source) {
+		return eval($source);
 	}
 }
