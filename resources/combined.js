@@ -978,7 +978,7 @@ jQuery.fn.sortElements = (function(){
 
 })();
 /*!
- * ApiGen 2.6.0 - API documentation generator for PHP 5.3+
+ * ApiGen 2.6.1 - API documentation generator for PHP 5.3+
  *
  * Copyright (c) 2010-2011 David Grudl (http://davidgrudl.com)
  * Copyright (c) 2011-2012 Jaroslav Hanslík (https://github.com/kukulich)
@@ -1100,22 +1100,10 @@ $(function() {
 		$caption.click();
 	}
 
-	// Delayed hover efect on summary
+	// Open details
 	if (ApiGen.config.options.elementDetailsCollapsed) {
-		var timeout;
 		$('tr', $content).filter(':has(.detailed)')
-			.hover(function() {
-				clearTimeout(timeout);
-				var $this = $(this);
-				timeout = setTimeout(function() {
-					$('.short', $this).hide();
-					$('.detailed', $this).show();
-				}, 500);
-			}, function() {
-				clearTimeout(timeout);
-			}).click(function() {
-				// Immediate hover effect on summary
-				clearTimeout(timeout);
+			.click(function() {
 				var $this = $(this);
 				$('.short', $this).hide();
 				$('.detailed', $this).show();

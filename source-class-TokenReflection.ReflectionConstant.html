@@ -2,14 +2,14 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.6.0" />
+	<meta name="generator" content="ApiGen 2.6.1" />
 	<meta name="robots" content="noindex" />
 
 	<title>File ReflectionConstant.php | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?428767200"></script>
+	<script type="text/javascript" src="resources/combined.js?144019575"></script>
 	<script type="text/javascript" src="elementlist.js?1007765600"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?2495970611" />
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1532301413" />
 
 </head>
 
@@ -126,7 +126,7 @@
 <a href="#2" id="2" class="l">  2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">  3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">  4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.2.2
+</span><a href="#5" id="5" class="l">  5: </a><span class="php-comment"> * Version 1.2.3
 </span><a href="#6" id="6" class="l">  6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">  7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">  8: </a><span class="php-comment"> *
@@ -480,34 +480,44 @@
 <a href="#356" id="356" class="l">356: </a>            T_LINE =&gt; <span class="php-keyword1">true</span>,
 <a href="#357" id="357" class="l">357: </a>            T_METHOD_C =&gt; <span class="php-keyword1">true</span>,
 <a href="#358" id="358" class="l">358: </a>            T_NS_C =&gt; <span class="php-keyword1">true</span>,
-<a href="#359" id="359" class="l">359: </a>            T_TRAIT_C =&gt; <span class="php-keyword1">true</span>,
-<a href="#360" id="360" class="l">360: </a>            T_COMMENT =&gt; <span class="php-keyword1">false</span>,
-<a href="#361" id="361" class="l">361: </a>            T_WHITESPACE =&gt; <span class="php-keyword1">false</span>,
-<a href="#362" id="362" class="l">362: </a>            T_DOC_COMMENT =&gt; <span class="php-keyword1">false</span>
-<a href="#363" id="363" class="l">363: </a>        );
-<a href="#364" id="364" class="l">364: </a>        <span class="php-keyword1">while</span> (<span class="php-keyword1">null</span> !== (<span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>()) &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$acceptedTokens</span>[<span class="php-var">$type</span>])) {
-<a href="#365" id="365" class="l">365: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$acceptedTokens</span>[<span class="php-var">$type</span>]) {
-<a href="#366" id="366" class="l">366: </a>                <span class="php-var">$this</span>-&gt;valueDefinition[] = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
-<a href="#367" id="367" class="l">367: </a>            }
-<a href="#368" id="368" class="l">368: </a>            <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
-<a href="#369" id="369" class="l">369: </a>        }
-<a href="#370" id="370" class="l">370: </a>
-<a href="#371" id="371" class="l">371: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;valueDefinition)) {
-<a href="#372" id="372" class="l">372: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'Value definition is empty.'</span>, Exception\ParseException::LOGICAL_ERROR);
-<a href="#373" id="373" class="l">373: </a>        }
-<a href="#374" id="374" class="l">374: </a>
-<a href="#375" id="375" class="l">375: </a>        <span class="php-var">$value</span> = <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
-<a href="#376" id="376" class="l">376: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$type</span> || (<span class="php-quote">','</span> !== <span class="php-var">$value</span> &amp;&amp; <span class="php-quote">';'</span> !== <span class="php-var">$value</span>)) {
-<a href="#377" id="377" class="l">377: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'Invalid value definition.'</span>, Exception\ParseException::LOGICAL_ERROR);
-<a href="#378" id="378" class="l">378: </a>        }
-<a href="#379" id="379" class="l">379: </a>
-<a href="#380" id="380" class="l">380: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-<a href="#381" id="381" class="l">381: </a>    }
-<a href="#382" id="382" class="l">382: </a>}
-<a href="#383" id="383" class="l">383: </a></code></pre>
+<a href="#359" id="359" class="l">359: </a>            T_TRAIT_C =&gt; <span class="php-keyword1">true</span>
+<a href="#360" id="360" class="l">360: </a>        );
+<a href="#361" id="361" class="l">361: </a>
+<a href="#362" id="362" class="l">362: </a>        <span class="php-keyword1">while</span> (<span class="php-keyword1">null</span> !== (<span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>())) {
+<a href="#363" id="363" class="l">363: </a>            <span class="php-keyword1">if</span> (T_START_HEREDOC === <span class="php-var">$type</span>) {
+<a href="#364" id="364" class="l">364: </a>                <span class="php-var">$this</span>-&gt;valueDefinition[] = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
+<a href="#365" id="365" class="l">365: </a>                <span class="php-keyword1">while</span> (<span class="php-keyword1">null</span> !== <span class="php-var">$type</span> &amp;&amp; T_END_HEREDOC !== <span class="php-var">$type</span>) {
+<a href="#366" id="366" class="l">366: </a>                    <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#367" id="367" class="l">367: </a>                    <span class="php-var">$this</span>-&gt;valueDefinition[] = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
+<a href="#368" id="368" class="l">368: </a>                    <span class="php-var">$type</span> = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">getType</span>();
+<a href="#369" id="369" class="l">369: </a>                };
+<a href="#370" id="370" class="l">370: </a>                <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#371" id="371" class="l">371: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$acceptedTokens</span>[<span class="php-var">$type</span>])) {
+<a href="#372" id="372" class="l">372: </a>                <span class="php-var">$this</span>-&gt;valueDefinition[] = <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">current</span>();
+<a href="#373" id="373" class="l">373: </a>                <span class="php-var">$tokenStream</span>-&gt;<span class="php-keyword2">next</span>();
+<a href="#374" id="374" class="l">374: </a>            } <span class="php-keyword1">elseif</span> (<span class="php-var">$tokenStream</span>-&gt;isWhitespace(<span class="php-keyword1">true</span>)) {
+<a href="#375" id="375" class="l">375: </a>                <span class="php-var">$tokenStream</span>-&gt;skipWhitespaces(<span class="php-keyword1">true</span>);
+<a href="#376" id="376" class="l">376: </a>            } <span class="php-keyword1">else</span> {
+<a href="#377" id="377" class="l">377: </a>                <span class="php-keyword1">break</span>;
+<a href="#378" id="378" class="l">378: </a>            }
+<a href="#379" id="379" class="l">379: </a>        }
+<a href="#380" id="380" class="l">380: </a>
+<a href="#381" id="381" class="l">381: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;valueDefinition)) {
+<a href="#382" id="382" class="l">382: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'Value definition is empty.'</span>, Exception\ParseException::LOGICAL_ERROR);
+<a href="#383" id="383" class="l">383: </a>        }
+<a href="#384" id="384" class="l">384: </a>
+<a href="#385" id="385" class="l">385: </a>        <span class="php-var">$value</span> = <span class="php-var">$tokenStream</span>-&gt;getTokenValue();
+<a href="#386" id="386" class="l">386: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$type</span> || (<span class="php-quote">','</span> !== <span class="php-var">$value</span> &amp;&amp; <span class="php-quote">';'</span> !== <span class="php-var">$value</span>)) {
+<a href="#387" id="387" class="l">387: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception\ParseException(<span class="php-var">$this</span>, <span class="php-var">$tokenStream</span>, <span class="php-quote">'Invalid value definition.'</span>, Exception\ParseException::LOGICAL_ERROR);
+<a href="#388" id="388" class="l">388: </a>        }
+<a href="#389" id="389" class="l">389: </a>
+<a href="#390" id="390" class="l">390: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+<a href="#391" id="391" class="l">391: </a>    }
+<a href="#392" id="392" class="l">392: </a>}
+<a href="#393" id="393" class="l">393: </a></code></pre>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.6.0</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.6.1</a>
 	</div>
 </div>
 </div>
