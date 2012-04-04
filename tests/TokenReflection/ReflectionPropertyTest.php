@@ -68,6 +68,24 @@ class ReflectionPropertyTest extends Test
 	}
 
 	/**
+	 * Tests heredoc defined value.
+	 */
+	public function testHeredoc()
+	{
+		$token = $this->getClassTokenReflection('heredoc');
+
+		$this->assertTrue($token->hasOwnProperty('heredoc'));
+		$property = $token->getProperty('heredoc');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('property value', $property->getDefaultValue());
+
+		$this->assertTrue($token->hasOwnProperty('nowdoc'));
+		$property = $token->getProperty('nowdoc');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('property value', $property->getDefaultValue());
+	}
+
+	/**
 	 * Tests getting of copydoc documentation comment.
 	 */
 	public function testCommentCopydoc()
