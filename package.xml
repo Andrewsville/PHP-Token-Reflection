@@ -22,9 +22,9 @@
 	<email>kontakt@kukulich.cz</email>
 	<active>yes</active>
 </developer>
-<date>2012-03-28</date>
+<date>2012-04-04</date>
 <version>
-	<release>1.2.2</release>
+	<release>1.2.3</release>
 	<api>1.0.0</api>
 </version>
 <stability>
