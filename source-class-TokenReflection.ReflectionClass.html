@@ -114,11 +114,11 @@
 			<li>
 				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
 			</li>
-			<li>
-				<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
-			</li>
 		</ul>
 		<ul>
+			<li>
+				<a href="php-token-reflection-api-documentation.zip" title="Download documentation as ZIP archive"><span>Download</span></a>
+			</li>
 		</ul>
 	</div>
 
@@ -126,7 +126,7 @@
 <a href="#2" id="2" class="l">   2: </a><span class="php-comment">/**
 </span><a href="#3" id="3" class="l">   3: </a><span class="php-comment"> * PHP Token Reflection
 </span><a href="#4" id="4" class="l">   4: </a><span class="php-comment"> *
-</span><a href="#5" id="5" class="l">   5: </a><span class="php-comment"> * Version 1.2.3
+</span><a href="#5" id="5" class="l">   5: </a><span class="php-comment"> * Version 1.2.4
 </span><a href="#6" id="6" class="l">   6: </a><span class="php-comment"> *
 </span><a href="#7" id="7" class="l">   7: </a><span class="php-comment"> * LICENSE
 </span><a href="#8" id="8" class="l">   8: </a><span class="php-comment"> *
@@ -957,7 +957,7 @@
 </span><a href="#833" id="833" class="l"> 833: </a><span class="php-comment">     */</span>
 <a href="#834" id="834" class="l"> 834: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> getConstantReflections()
 <a href="#835" id="835" class="l"> 835: </a>    {
-<a href="#836" id="836" class="l"> 836: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;parentClassName) {
+<a href="#836" id="836" class="l"> 836: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">null</span> === <span class="php-var">$this</span>-&gt;parentClassName &amp;&amp; <span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;interfaces)) {
 <a href="#837" id="837" class="l"> 837: </a>            <span class="php-keyword1">return</span> <span class="php-keyword2">array_values</span>(<span class="php-var">$this</span>-&gt;constants);
 <a href="#838" id="838" class="l"> 838: </a>        } <span class="php-keyword1">else</span> {
 <a href="#839" id="839" class="l"> 839: </a>            <span class="php-var">$reflections</span> = <span class="php-keyword2">array_values</span>(<span class="php-var">$this</span>-&gt;constants);
