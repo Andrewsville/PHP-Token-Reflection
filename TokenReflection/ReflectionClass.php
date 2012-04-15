@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.3
+ * Version 1.2.4
  *
  * LICENSE
  *
@@ -833,7 +833,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getConstantReflections()
 	{
-		if (null === $this->parentClassName) {
+		if (null === $this->parentClassName && empty($this->interfaces)) {
 			return array_values($this->constants);
 		} else {
 			$reflections = array_values($this->constants);
