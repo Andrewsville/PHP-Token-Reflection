@@ -251,6 +251,7 @@ class ReflectionBrokerTest extends Test
 					'doc-comment-copydoc.php',
 					'heredoc.php',
 					'in-namespace.php',
+					'interfaces.php',
 					'lines.php',
 					'magic.php',
 					'magic54.php',

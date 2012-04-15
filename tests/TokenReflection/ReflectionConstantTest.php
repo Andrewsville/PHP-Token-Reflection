@@ -725,4 +725,20 @@ class ReflectionConstantTest extends Test
 			$this->assertSame($value, $rfl->getValue(), $name);
 		}
 	}
+
+	/**
+	 * Tests constants defined in interfaces.
+	 */
+	public function testInterfaces()
+	{
+		$broker = new Broker(new Broker\Backend\Memory());
+		$broker->process($this->getFilePath('interfaces'));
+
+		$class1 = $broker->getClass('TokenReflection_Test_ConstantInterfaceClass');
+		$this->assertTrue($class1->hasConstant('FIRST'));
+
+		$class2 = $broker->getClass('TokenReflection_Test_ConstantInterfaceClass2');
+		$this->assertTrue($class2->hasConstant('FIRST'));
+		$this->assertTrue($class2->hasConstant('SECOND'));
+	}
 }
