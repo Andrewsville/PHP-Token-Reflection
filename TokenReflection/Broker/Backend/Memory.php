@@ -26,6 +26,13 @@ use TokenReflection\Stream\FileStream, TokenReflection\Exception, TokenReflectio
 class Memory implements Broker\Backend
 {
 	/**
+	 * List of declared class names.
+	 *
+	 * @var array
+	 */
+	private $declaredClasses = array();
+
+	/**
 	 * Namespaces storage.
 	 *
 	 * @var array
@@ -193,9 +200,8 @@ class Memory implements Broker\Backend
 	 */
 	public function getClass($className)
 	{
-		static $declared = array();
-		if (empty($declared)) {
-			$declared = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
+		if (empty($this->declaredClasses)) {
+			$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
 		}
 
 		$className = ltrim($className, '\\');
@@ -210,7 +216,7 @@ class Memory implements Broker\Backend
 
 			return $ns->getClass($className);
 		} catch (Exception\BaseException $e) {
-			if (isset($declared[$className])) {
+			if (isset($this->declaredClasses[$className])) {
 				$reflection = new Php\ReflectionClass($className, $this->broker);
 				if ($reflection->isInternal()) {
 					return $reflection;
