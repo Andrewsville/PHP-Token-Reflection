@@ -1002,6 +1002,11 @@ class ReflectionClass implements IReflectionClass
 		return true;
 	}
 
+	/**
+	 * Returns if the reflection subject is deprecated.
+	 *
+	 * @return boolean
+	 */
 	public function isDeprecated()
 	{
 		return false;
