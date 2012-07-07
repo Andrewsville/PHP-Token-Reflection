@@ -4,6 +4,11 @@ namespace TokenReflection\Invalid;
 
 use TokenReflection\Exception\BaseException;
 
+/**
+ * Invalid element reflection.
+ *
+ * The reflected element is not unique (by its fully qualified name).
+ */
 abstract class ReflectionElement
 {
 	/**

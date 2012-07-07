@@ -1011,6 +1011,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return false;
 	}
 
+	/**
+	 * Returns if the reflection subject is deprecated.
+	 *
+	 * @return boolean
+	 */
 	public function isDeprecated()
 	{
 		return false;
