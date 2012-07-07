@@ -394,7 +394,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	public function getPrettyName()
 	{
-		return sprintf('%s::$%s', null !== $this->declaringClassName ?: $this->declaringTraitName, $this->name);
+		return sprintf('%s::$%s', $this->declaringClassName ?: $this->declaringTraitName, $this->name);
 	}
 
 	/**

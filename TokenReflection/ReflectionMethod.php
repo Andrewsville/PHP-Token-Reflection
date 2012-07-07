@@ -358,7 +358,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	public function getPrettyName()
 	{
-		return sprintf('%s::%s', null !== $this->declaringClassName ?: $this->declaringTraitName, parent::getPrettyName());
+		return sprintf('%s::%s', $this->declaringClassName ?: $this->declaringTraitName, parent::getPrettyName());
 	}
 
 	/**
