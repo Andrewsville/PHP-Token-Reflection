@@ -191,6 +191,57 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
+	 * Returns the PHP extension reflection.
+	 *
+	 * @return null
+	 */
+	public function getExtension()
+	{
+		// @todo
+		return null;
+	}
+
+	/**
+	 * Returns the PHP extension name.
+	 *
+	 * @return boolean
+	 */
+	public function getExtensionName()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns the appropriate source code part.
+	 *
+	 * @return string
+	 */
+	public function getSource()
+	{
+		return '';
+	}
+
+	/**
+	 * Returns the start position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getStartPosition()
+	{
+		return -1;
+	}
+
+	/**
+	 * Returns the end position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getEndPosition()
+	{
+		return -1;
+	}
+
+	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return null
@@ -198,6 +249,17 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	public function getFileName()
 	{
 		return null;
+	}
+
+	/**
+	 * Returns a file reflection.
+	 *
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
+	 */
+	public function getFileReflection()
+	{
+		throw new Exception\BrokerException($this->getBroker(), sprintf('Constant %s was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
 	}
 
 	/**
@@ -280,6 +342,16 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	public function getValueDefinition()
 	{
 		return var_export($this->value, true);
+	}
+
+	/**
+	 * Returns the originaly provided value definition.
+	 *
+	 * @return string
+	 */
+	public function getOriginalValueDefinition()
+	{
+		return token_get_all($this->getValueDefinition());
 	}
 
 	/**

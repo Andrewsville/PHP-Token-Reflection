@@ -30,13 +30,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	protected $namespaceName;
 
 	/**
-	 * Function/method modifiers.
-	 *
-	 * @var integer
-	 */
-	protected $modifiers = 0;
-
-	/**
 	 * Determines if the function/method returns its value as reference.
 	 *
 	 * @var boolean
@@ -106,16 +99,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	public function inNamespace()
 	{
 		return '' !== $this->getNamespaceName();
-	}
-
-	/**
-	 * Returns function/method modifiers.
-	 *
-	 * @return integer
-	 */
-	public function getModifiers()
-	{
-		return $this->modifiers;
 	}
 
 	/**

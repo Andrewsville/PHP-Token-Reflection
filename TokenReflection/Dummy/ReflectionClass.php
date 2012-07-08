@@ -143,6 +143,17 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Returns a file reflection.
+	 *
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
+	 */
+	public function getFileReflection()
+	{
+		throw new Exception\BrokerException($this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), Exception\BrokerException::UNSUPPORTED);
+	}
+
+	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return null
@@ -969,6 +980,20 @@ class ReflectionClass implements IReflectionClass
 	}
 
 	/**
+	 * Exports a reflected object.
+	 *
+	 * @param \TokenReflection\Broker $broker Broker instance
+	 * @param string|object $className Class name or class instance
+	 * @param boolean $return Return the export instead of outputting it
+	 * @return string|null
+	 * @throws \TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 */
+	public static function export(Broker $broker, $className, $return = false)
+	{
+		TokenReflection\ReflectionClass::export($broker, $className, $return);
+	}
+
+	/**
 	 * Outputs the reflection subject source code.
 	 *
 	 * @return string
@@ -976,6 +1001,26 @@ class ReflectionClass implements IReflectionClass
 	public function getSource()
 	{
 		return '';
+	}
+
+	/**
+	 * Returns the start position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getStartPosition()
+	{
+		return -1;
+	}
+
+	/**
+	 * Returns the end position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getEndPosition()
+	{
+		return -1;
 	}
 
 	/**

@@ -105,6 +105,47 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
+	 * Returns a file reflection.
+	 *
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
+	 */
+	public function getFileReflection()
+	{
+		throw new Exception\BrokerException($this->getBroker(), sprintf('Function was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
+	}
+
+	/**
+	 * Returns the appropriate source code part.
+	 *
+	 * @return string
+	 */
+	public function getSource()
+	{
+		return '';
+	}
+
+	/**
+	 * Returns the start position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getStartPosition()
+	{
+		return -1;
+	}
+
+	/**
+	 * Returns the end position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getEndPosition()
+	{
+		return -1;
+	}
+
+	/**
 	 * Returns a particular parameter.
 	 *
 	 * @param integer|string $parameter Parameter name or position
@@ -200,7 +241,24 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getClosure()
 	{
-		return null;
+		if (PHP_VERSION >= 50400) {
+			return parent::getClosure();
+		} else {
+			$that = $this;
+			return function() use ($that) {
+				return $that->invokeArgs(func_get_args());
+			};
+		}
+	}
+
+	/**
+	 * Returns the closure scope class.
+	 *
+	 * @return string|null
+	 */
+	public function getClosureScopeClass()
+	{
+		return PHP_VERSION >= 50400 ? parent::getClosureScopeClass() : null;
 	}
 
 	/**

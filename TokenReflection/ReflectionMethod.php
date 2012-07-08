@@ -100,6 +100,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $prototype;
 
 	/**
+	 * Method modifiers.
+	 *
+	 * @var integer
+	 */
+	protected $modifiers = 0;
+
+	/**
 	 * Determined if the method is accessible.
 	 *
 	 * @var boolean

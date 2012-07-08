@@ -113,6 +113,42 @@ class ReflectionFunctionTest extends Test
 	}
 
 	/**
+	 * Tests if function is a closure.
+	 */
+	public function testGetClosure()
+	{
+		$broker = $this->getBroker();
+		$broker->processFile($this->getFilePath('getClosure'));
+		require_once $this->getFilePath('getClosure');
+
+		$function = $broker->getFunction('tokenReflectionFunctionGetClosure1');
+		$this->assertNull($function->getClosureScopeClass());
+		$closure = $function->getClosure();
+		$this->assertInstanceOf('Closure', $closure);
+
+		static $data1 = array(1 => 1, 4 => 2, 9 => 3);
+		foreach ($data1 as $result => $input) {
+			$this->assertSame($result, $closure($input));
+		}
+
+		$function = $broker->getFunction('tokenReflectionFunctionGetClosure2');
+		$this->assertNull($function->getClosureScopeClass());
+		$closure = $function->getClosure();
+		$this->assertInstanceOf('Closure', $closure);
+
+		static $data2 = array(-1 => 1, -2 => 2, -3 => 3);
+		foreach ($data2 as $result => $input) {
+			$this->assertSame($result, $closure($input));
+		}
+
+		static $data3 = array(-1 => array(2, -.5), 1 => array(-100, -.01), 8 => array(2, 4));
+		foreach ($data3 as $result => $input) {
+			list($a, $b) = $input;
+			$this->assertEquals($result, $closure($a, $b));
+		}
+	}
+
+	/**
 	 * Tests if function is deprecated.
 	 */
 	public function testDeprecated()
