@@ -295,7 +295,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 			throw new Exception\ParseException($this, $tokenStream, 'Could find the start token.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 
-		static $accepted = array(T_NS_SEPARATOR => true, T_STRING => true, T_ARRAY => true, T_VARIABLE => true, '&' => true);
+		static $accepted = array(T_NS_SEPARATOR => true, T_STRING => true, T_ARRAY => true, T_CALLABLE => true, T_VARIABLE => true, '&' => true);
 
 		$tokenStream->skipWhitespaces(true);
 

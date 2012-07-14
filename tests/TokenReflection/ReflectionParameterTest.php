@@ -114,6 +114,24 @@ class ReflectionParameterTest extends Test
 	}
 
 	/**
+	 * Tests if parameter has callback type hint.
+	 */
+	public function testCallable()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Requires PHP 5.4 or higher.');
+		}
+
+		$rfl = $this->getParameterReflection('callable');
+		$this->assertSame($rfl->internal->isCallable(), $rfl->token->isCallable());
+		$this->assertTrue($rfl->token->isCallable());
+
+		$rfl = $this->getParameterReflection('noCallable');
+		$this->assertSame($rfl->internal->isCallable(), $rfl->token->isCallable());
+		$this->assertFalse($rfl->token->isCallable());
+	}
+
+	/**
 	 * Tests if parameter has class type hint.
 	 */
 	public function testClass()

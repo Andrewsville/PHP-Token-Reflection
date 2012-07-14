@@ -143,6 +143,16 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
+	 * Returns if the parameter expects a callback.
+	 *
+	 * @return boolean
+	 */
+	public function isCallable()
+	{
+		return PHP_VERSION >= 50400 && parent::isCallable();
+	}
+
+	/**
 	 * Returns the required class name of the value.
 	 *
 	 * @return string|null
