@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -191,6 +191,27 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
+	 * Returns the PHP extension reflection.
+	 *
+	 * @return null
+	 */
+	public function getExtension()
+	{
+		// @todo
+		return null;
+	}
+
+	/**
+	 * Returns the PHP extension name.
+	 *
+	 * @return boolean
+	 */
+	public function getExtensionName()
+	{
+		return false;
+	}
+
+	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return null
@@ -280,6 +301,16 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	public function getValueDefinition()
 	{
 		return var_export($this->value, true);
+	}
+
+	/**
+	 * Returns the originaly provided value definition.
+	 *
+	 * @return string
+	 */
+	public function getOriginalValueDefinition()
+	{
+		return token_get_all($this->getValueDefinition());
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -182,13 +182,44 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	}
 
 	/**
-	 * Returns function modifiers.
+	 * Returns a file reflection.
+	 *
+	 * @return \TokenReflection\ReflectionFile
+	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
+	 */
+	public function getFileReflection()
+	{
+		throw new Exception\BrokerException($this->getBroker(), sprintf('Function was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
+	}
+
+	/**
+	 * Returns the appropriate source code part.
+	 *
+	 * @return string
+	 */
+	public function getSource()
+	{
+		return '';
+	}
+
+	/**
+	 * Returns the start position in the file token stream.
 	 *
 	 * @return integer
 	 */
-	public function getModifiers()
+	public function getStartPosition()
 	{
-		return 0;
+		return -1;
+	}
+
+	/**
+	 * Returns the end position in the file token stream.
+	 *
+	 * @return integer
+	 */
+	public function getEndPosition()
+	{
+		return -1;
 	}
 
 	/**
@@ -384,6 +415,26 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getClosure()
 	{
+		throw new Exception\RuntimeException('Cannot invoke invalid functions', Exception\RuntimeException::UNSUPPORTED, $this);
+	}
+
+	/**
+	 * Returns the closure scope class.
+	 *
+	 * @return null
+	 */
+	public function getClosureScopeClass()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns this pointer bound to closure.
+	 *
+	 * @return null
+	 */
+	public function getClosureThis()
+	{
 		return null;
 	}
 
@@ -395,6 +446,24 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	public function isValid()
 	{
 		return false;
+	}
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return sprintf(
+			"%sFunction [ <user> function %s%s ] {\n  @@ %s %d - %d\n}\n",
+			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
+			$this->returnsReference() ? '&' : '',
+			$this->getName(),
+			$this->getFileName(),
+			$this->getStartLine(),
+			$this->getEndLine()
+		);
 	}
 
 	/**

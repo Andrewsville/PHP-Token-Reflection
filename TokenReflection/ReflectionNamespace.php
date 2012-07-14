@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *

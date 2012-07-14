@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -394,7 +394,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	public function getPrettyName()
 	{
-		return sprintf('%s::$%s', null !== $this->declaringClassName ?: $this->declaringTraitName, $this->name);
+		return sprintf('%s::$%s', $this->declaringClassName ?: $this->declaringTraitName, $this->name);
 	}
 
 	/**

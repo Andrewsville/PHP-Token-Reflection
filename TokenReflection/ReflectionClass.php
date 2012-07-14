@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -445,17 +445,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 
-			$interfaceName = $interface->getName();
-
 			if (!$interface->isInterface()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
-		} else {
-			$reflection = $this->getBroker()->getClass($interface);
-			if (!$reflection->isInterface()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interface), Exception\RuntimeException::INVALID_ARGUMENT, $this);
-			}
 
+			$interfaceName = $interface->getName();
+		} else {
 			$interfaceName = $interface;
 		}
 

@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -41,6 +41,13 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	private $broker;
 
 	/**
+	 * Is the property accessible despite its access level.
+	 *
+	 * @var boolean
+	 */
+	private $accessible = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass $class Defining class
@@ -56,7 +63,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return \TokenReflection\Php\IReflectionClass
+	 * @return \TokenReflection\IReflectionClass
 	 */
 	public function getDeclaringClass()
 	{
@@ -71,6 +78,16 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	public function getDeclaringClassName()
 	{
 		return $this->getDeclaringClass()->getName();
+	}
+
+	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return $this->getDeclaringClass()->getNamespaceAliases();
 	}
 
 	/**
@@ -173,6 +190,16 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	}
 
 	/**
+	 * Returns if the method is set accessible.
+	 *
+	 * @return boolean
+	 */
+	public function isAccessible()
+	{
+		return $this->accessible;
+	}
+
+	/**
 	 * Sets a method to be accessible or not.
 	 *
 	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
@@ -185,6 +212,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		if (PHP_VERSION_ID < 50302) {
 			throw new Exception\RuntimeException(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\RuntimeException::UNSUPPORTED, $this);
 		}
+
+		$this->accessible = $accessible;
 
 		parent::setAccessible($accessible);
 	}
@@ -240,17 +269,34 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getClosure($object)
 	{
-		return null;
+		if (PHP_VERSION >= 50400) {
+			return parent::getClosure();
+		} else {
+			$that = $this;
+			return function() use ($object, $that) {
+				return $that->invokeArgs($object, func_get_args());
+			};
+		}
 	}
 
 	/**
-	 * Returns the function/method as closure.
+	 * Returns the closure scope class.
 	 *
-	 * @return \Closure
+	 * @return string|null
+	 */
+	public function getClosureScopeClass()
+	{
+		return PHP_VERSION >= 50400 ? parent::getClosureScopeClass() : null;
+	}
+
+	/**
+	 * Returns this pointer bound to closure.
+	 *
+	 * @return null
 	 */
 	public function getClosureThis()
 	{
-		return null;
+		return PHP_VERSION >= 50400 ? parent::getClosureThis() : null;
 	}
 
 	/**

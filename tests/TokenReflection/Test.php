@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -341,6 +341,16 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Returns a new broker instance.
+	 *
+	 * @return \TokenReflection\Broker
+	 */
+	public function createBroker()
+	{
+		return new Broker(new Broker\Backend\Memory());
+	}
+
+	/**
 	 * Returns broker instance.
 	 *
 	 * @return \TokenReflection\Broker
@@ -349,7 +359,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	{
 		static $broker = null;
 		if (null === $broker) {
-			$broker = new Broker(new Broker\Backend\Memory());
+			$broker = $this->createBroker();
 		}
 		return $broker;
 	}

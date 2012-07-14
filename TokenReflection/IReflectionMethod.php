@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -144,13 +144,6 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @return \Closure
 	 */
 	public function getClosure($object);
-
-	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
-	 */
-	public function getClosureThis();
 
 	/**
 	 * Returns the original name when importing from a trait.

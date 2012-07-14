@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -55,7 +55,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * Returns the PHP extension reflection.
 	 *
-	 * @return \TokenReflection\Php\IReflectionExtension
+	 * @return \TokenReflection\IReflectionExtension
 	 */
 	public function getExtension()
 	{
@@ -200,7 +200,34 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getClosure()
 	{
-		return null;
+		if (PHP_VERSION >= 50400) {
+			return parent::getClosure();
+		} else {
+			$that = $this;
+			return function() use ($that) {
+				return $that->invokeArgs(func_get_args());
+			};
+		}
+	}
+
+	/**
+	 * Returns the closure scope class.
+	 *
+	 * @return string|null
+	 */
+	public function getClosureScopeClass()
+	{
+		return PHP_VERSION >= 50400 ? parent::getClosureScopeClass() : null;
+	}
+
+	/**
+	 * Returns this pointer bound to closure.
+	 *
+	 * @return null
+	 */
+	public function getClosureThis()
+	{
+		return PHP_VERSION >= 50400 ? parent::getClosureThis() : null;
 	}
 
 	/**

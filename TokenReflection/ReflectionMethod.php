@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -98,6 +98,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @var \TokenReflection\IReflectionMethod
 	 */
 	private $prototype;
+
+	/**
+	 * Method modifiers.
+	 *
+	 * @var integer
+	 */
+	protected $modifiers = 0;
 
 	/**
 	 * Determined if the method is accessible.
@@ -358,7 +365,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	public function getPrettyName()
 	{
-		return sprintf('%s::%s', null !== $this->declaringClassName ?: $this->declaringTraitName, parent::getPrettyName());
+		return sprintf('%s::%s', $this->declaringClassName ?: $this->declaringTraitName, parent::getPrettyName());
 	}
 
 	/**
@@ -553,17 +560,15 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	public function getClosure($object)
 	{
-		return null;
-	}
+		$declaringClass = $this->getDeclaringClass();
+		if (!$declaringClass->isInstance($object)) {
+			throw new Exception\RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+		}
 
-	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
-	 */
-	public function getClosureThis()
-	{
-		return null;
+		$that = $this;
+		return function() use ($object, $that) {
+			return $that->invokeArgs($object, func_get_args());
+		};
 	}
 
 	/**

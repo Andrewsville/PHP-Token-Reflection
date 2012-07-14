@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -138,6 +138,23 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 * @return \Closure
 	 */
 	public function getClosure()
+	{
+		if (!function_exists($this->getName())) {
+			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		}
+
+		$that = $this;
+		return function() use ($that) {
+			return $that->invokeArgs(func_get_args());
+		};
+	}
+
+	/**
+	 * Returns the closure scope class.
+	 *
+	 * @return null
+	 */
+	public function getClosureScopeClass()
 	{
 		return null;
 	}

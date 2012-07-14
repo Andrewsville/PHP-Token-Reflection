@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -107,7 +107,7 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Parses the token substream.
 	 *
-	 * @param Stream\StreamBase $tokenStream Token substream
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param \TokenReflection\IReflection $parent Parent reflection object
 	 */
 	final protected function parseStream(Stream $tokenStream, IReflection $parent = null)

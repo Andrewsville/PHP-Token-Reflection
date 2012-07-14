@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -125,6 +125,13 @@ interface IReflectionProperty extends IReflection
 	 * @param boolean $accessible If the property should be accessible.
 	 */
 	public function setAccessible($accessible);
+
+	/**
+	 * Returns if the property is set accessible.
+	 *
+	 * @return boolean
+	 */
+	public function isAccessible();
 
 	/**
 	 * Sets value of a property for a particular class instance.

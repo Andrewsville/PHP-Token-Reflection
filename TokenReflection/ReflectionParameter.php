@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -29,6 +29,13 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * @var string
 	 */
 	const ARRAY_TYPE_HINT = 'array';
+
+	/**
+	 * The parameter requires a callback definition as its value.
+	 *
+	 * @var string
+	 */
+	const CALLABLE_TYPE_HINT = 'callable';
 
 	/**
 	 * Declaring class name.
@@ -66,7 +73,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	private $typeHint;
 
 	/**
-	 * Defines a type hint (class name or array) of parameter values as it was defined.
+	 * Defines a type hint (class name, array or callable) of parameter values as it was defined.
 	 *
 	 * @var string
 	 */
@@ -208,13 +215,23 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	}
 
 	/**
+	 * Returns if the parameter expects a callback.
+	 *
+	 * @return boolean
+	 */
+	public function isCallable()
+	{
+		return $this->typeHint === self::CALLABLE_TYPE_HINT;
+	}
+
+	/**
 	 * Returns the original type hint as defined in the source code.
 	 *
 	 * @return string|null
 	 */
 	public function getOriginalTypeHint()
 	{
-		return !$this->isArray() ? ltrim($this->originalTypeHint, '\\') : null;
+		return !$this->isArray() && !$this->isCallable() ? ltrim($this->originalTypeHint, '\\') : null;
 	}
 
 	/**
@@ -240,7 +257,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function getClassName()
 	{
-		if ($this->isArray()) {
+		if ($this->isArray() || $this->isCallable()) {
 			return null;
 		}
 
@@ -287,7 +304,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function allowsNull()
 	{
-		if ($this->isArray()) {
+		if ($this->isArray() || $this->isCallable()) {
 			return 'null' === strtolower($this->getDefaultValueDefinition());
 		}
 
@@ -359,16 +376,16 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	{
 		if ($this->getClass()) {
 			$hint = $this->getClassName();
-			if ($this->allowsNull()) {
-				$hint .= ' or NULL';
-			}
 		} elseif ($this->isArray()) {
-			$hint = 'array';
-			if ($this->allowsNull()) {
-				$hint .= ' or NULL';
-			}
+			$hint = self::ARRAY_TYPE_HINT;
+		} elseif ($this->isCallable()) {
+			$hint = self::CALLABLE_TYPE_HINT;
 		} else {
 			$hint = '';
+		}
+
+		if (!empty($hint) && $this->allowsNull()) {
+			$hint .= ' or NULL';
 		}
 
 		if ($this->isDefaultValueAvailable()) {
@@ -511,6 +528,10 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if (T_ARRAY === $type) {
 			$this->typeHint = self::ARRAY_TYPE_HINT;
 			$this->originalTypeHint = self::ARRAY_TYPE_HINT;
+			$tokenStream->skipWhitespaces(true);
+		} elseif (T_CALLABLE === $type) {
+			$this->typeHint = self::CALLABLE_TYPE_HINT;
+			$this->originalTypeHint = self::CALLABLE_TYPE_HINT;
 			$tokenStream->skipWhitespaces(true);
 		} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
 			$className = '';

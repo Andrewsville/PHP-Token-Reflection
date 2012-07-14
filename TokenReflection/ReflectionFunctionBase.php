@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.2.4
+ * Version 1.3.0
  *
  * LICENSE
  *
@@ -28,13 +28,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 * @var string
 	 */
 	protected $namespaceName;
-
-	/**
-	 * Function/method modifiers.
-	 *
-	 * @var integer
-	 */
-	protected $modifiers = 0;
 
 	/**
 	 * Determines if the function/method returns its value as reference.
@@ -109,16 +102,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	}
 
 	/**
-	 * Returns function/method modifiers.
-	 *
-	 * @return integer
-	 */
-	public function getModifiers()
-	{
-		return $this->modifiers;
-	}
-
-	/**
 	 * Returns if the function/method is a closure.
 	 *
 	 * @return boolean
@@ -126,6 +109,26 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	public function isClosure()
 	{
 		return false;
+	}
+
+	/**
+	 * Returns this pointer bound to closure.
+	 *
+	 * @return null
+	 */
+	public function getClosureThis()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the closure scope class.
+	 *
+	 * @return string|null
+	 */
+	public function getClosureScopeClass()
+	{
+		return null;
 	}
 
 	/**
@@ -312,7 +315,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 			throw new Exception\ParseException($this, $tokenStream, 'Could find the start token.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 
-		static $accepted = array(T_NS_SEPARATOR => true, T_STRING => true, T_ARRAY => true, T_VARIABLE => true, '&' => true);
+		static $accepted = array(T_NS_SEPARATOR => true, T_STRING => true, T_ARRAY => true, T_CALLABLE => true, T_VARIABLE => true, '&' => true);
 
 		$tokenStream->skipWhitespaces(true);
 
