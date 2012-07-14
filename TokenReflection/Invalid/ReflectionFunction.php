@@ -421,9 +421,19 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the closure scope class.
 	 *
-	 * @return string|null
+	 * @return null
 	 */
 	public function getClosureScopeClass()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns this pointer bound to closure.
+	 *
+	 * @return null
+	 */
+	public function getClosureThis()
 	{
 		return null;
 	}

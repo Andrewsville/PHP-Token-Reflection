@@ -112,6 +112,26 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	}
 
 	/**
+	 * Returns this pointer bound to closure.
+	 *
+	 * @return null
+	 */
+	public function getClosureThis()
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the closure scope class.
+	 *
+	 * @return string|null
+	 */
+	public function getClosureScopeClass()
+	{
+		return null;
+	}
+
+	/**
 	 * Returns if the function/method returns its value as reference.
 	 *
 	 * @return boolean

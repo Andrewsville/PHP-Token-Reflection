@@ -34,6 +34,13 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	private $broker;
 
 	/**
+	 * Is the property accessible despite its access level.
+	 *
+	 * @var boolean
+	 */
+	private $accessible = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass $class Defining class
@@ -49,7 +56,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return \TokenReflection\Php\IReflectionClass
+	 * @return \TokenReflection\IReflectionClass
 	 */
 	public function getDeclaringClass()
 	{
@@ -228,6 +235,59 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getDeclaringTraitName()
 	{
 		return null;
+	}
+
+	/**
+	 * Returns if the property is set accessible.
+	 *
+	 * @return boolean
+	 */
+	public function isAccessible()
+	{
+		return $this->accessible;
+	}
+
+	/**
+	 * Sets a property to be accessible or not.
+	 *
+	 * @param boolean $accessible If the property should be accessible.
+	 */
+	public function setAccessible($accessible)
+	{
+		$this->accessible = (bool) $accessible;
+
+		parent::setAccessible($accessible);
+	}
+
+	/**
+	 * Returns the PHP extension reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionExtension
+	 */
+	public function getExtension()
+	{
+		return $this->getDeclaringClass()->getExtension();
+	}
+
+	/**
+	 * Returns the PHP extension name.
+	 *
+	 * @return string|boolean
+	 */
+	public function getExtensionName()
+	{
+		$extension = $this->getExtension();
+		return $extension ? $extension->getName() : false;
+	}
+
+	/**
+	 * Returns the file name the reflection object is defined in.
+	 *
+	 * @return string
+	 */
+	public function getFileName()
+	{
+		return $this->getDeclaringClass()->getFileName();
 	}
 
 	/**

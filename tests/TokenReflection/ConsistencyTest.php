@@ -27,9 +27,9 @@ require_once __DIR__ . '/../bootstrap.php';
 class ConsistencyTest extends Test
 {
 	/**
-	 * Tests consistency with the internal reflection.
+	 * Tests reflection consistency.
 	 */
-	public function testInternalConstantReflectionConsistency()
+	public function testConstantReflectionConsistency()
 	{
 		$broker = $this->createBroker();
 		$broker->processFile(__DIR__ . '/../data/constant/in-namespace.php');
@@ -57,9 +57,9 @@ class ConsistencyTest extends Test
 	}
 
 	/**
-	 * Tests consistency with the internal reflection.
+	 * Tests reflection consistency.
 	 */
-	public function testInternalClassReflectionConsistency()
+	public function testClassReflectionConsistency()
 	{
 		$broker = $this->createBroker();
 		$broker->processFile(__FILE__);
@@ -79,7 +79,7 @@ class ConsistencyTest extends Test
 
 		// Test consistency with the internal reflection
 		foreach ($classes as $class) {
-			$this->classConsistencyTest(new \ReflectionClass(new \stdClass()), new \ReflectionClass($class));
+			$this->internalConsistencyTest(new \ReflectionClass(new \stdClass()), $class);
 		}
 
 		// Test cross-consistency
@@ -93,9 +93,9 @@ class ConsistencyTest extends Test
 	}
 
 	/**
-	 * Tests consistency with the internal reflection.
+	 * Tests reflection consistency.
 	 */
-	public function testInternalFunctionReflectionConsistency()
+	public function testFunctionReflectionConsistency()
 	{
 		$broker = $this->createBroker();
 		$broker->processFile(__DIR__ . '/../data/function/in-namespace.php');
@@ -112,11 +112,101 @@ class ConsistencyTest extends Test
 			'invalid' => $broker->getFunction('duplicitiesFunctions1')
 		);
 
+		// Test consistency with the internal reflection
+		foreach ($functions as $function) {
+			$this->internalConsistencyTest(new \ReflectionFunction('constant'), $function);
+		}
+
 		// Test cross-consistency
 		foreach ($functions as $referenceType => $referenceFunction) {
 			foreach ($functions as $type => $function) {
 				if ($referenceType !== $type) {
 					$this->crossConsistencyTest($referenceFunction, $function);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tests reflection consistency.
+	 */
+	public function testPropertyReflectionConsistency()
+	{
+		$broker = $this->createBroker();
+		$broker->processFile(__DIR__ . '/../data/property/lines.php');
+
+		$this->assertTrue(function_exists('constant'));
+		$properties = array(
+			'tokenized' => $broker->getClass('TokenReflection_Test_PropertyLines')->getProperty('lines'),
+			'internal' => $broker->getClass('Exception')->getProperty('message')
+		);
+
+		// Test consistency with the internal reflection
+		foreach ($properties as $property) {
+			$this->internalConsistencyTest(new \ReflectionProperty('Exception', 'message'), $property);
+		}
+
+		// Test cross-consistency
+		foreach ($properties as $referenceType => $referenceProperty) {
+			foreach ($properties as $type => $property) {
+				if ($referenceType !== $type) {
+					$this->crossConsistencyTest($referenceProperty, $property);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tests reflection consistency.
+	 */
+	public function testMethodReflectionConsistency()
+	{
+		$broker = $this->createBroker();
+		$broker->processFile(__DIR__ . '/../data/method/access-level.php');
+
+		$methods = array(
+			'tokenized' => $broker->getClass('TokenReflection_Test_MethodAccessLevelParent')->getMethod('privateNoExtended'),
+			'internal' => $broker->getClass('Exception')->getMethod('getMessage')
+		);
+
+		// Test consistency with the internal reflection
+		foreach ($methods as $method) {
+			$this->internalConsistencyTest(new \ReflectionMethod('Exception', 'getMessage'), $method);
+		}
+
+		// Test cross-consistency
+		foreach ($methods as $referenceType => $referenceMethod) {
+			foreach ($methods as $type => $method) {
+				if ($referenceType !== $type) {
+					$this->crossConsistencyTest($referenceMethod, $method);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Tests reflection consistency.
+	 */
+	public function testParameterReflectionConsistency()
+	{
+		$broker = $this->createBroker();
+		$broker->processFile(__DIR__ . '/../data/parameter/optional-false.php');
+
+		$parameters = array(
+			'tokenized' => $broker->getFunction('tokenReflectionParameterOptionalFalse')->getParameter('one'),
+			'internal' => $broker->getFunction('constant')->getParameter('const_name')
+		);
+
+		// Test consistency with the internal reflection
+		foreach ($parameters as $parameter) {
+			$this->internalConsistencyTest(new \ReflectionParameter('constant', 'const_name'), $parameter);
+		}
+
+		// Test cross-consistency
+		foreach ($parameters as $referenceType => $referenceParameter) {
+			foreach ($parameters as $type => $parameter) {
+				if ($referenceType !== $type) {
+					$this->crossConsistencyTest($referenceParameter, $parameter);
 				}
 			}
 		}
@@ -130,7 +220,18 @@ class ConsistencyTest extends Test
 	 */
 	private function crossConsistencyTest(IReflection $reference, IReflection $token)
 	{
-		$this->classConsistencyTest(new \ReflectionClass($reference), new \ReflectionClass($token));
+		$this->performConsistencyTest(new \ReflectionClass($reference), new \ReflectionClass($token));
+	}
+
+	/**
+	 * Tests API consistency of an internal reflection and TR.
+	 *
+	 * @param \Reflector $reference Reference reflection
+	 * @param \TokenReflection\IReflection $token Tested reflection
+	 */
+	private function internalConsistencyTest(\Reflector $reference, IReflection $token)
+	{
+		$this->performConsistencyTest(new \ReflectionClass($reference), new \ReflectionClass($token));
 	}
 
 	/**
@@ -139,15 +240,31 @@ class ConsistencyTest extends Test
 	 * @param \ReflectionClass $reference Reference class reflection
 	 * @param \ReflectionClass $test Tested class reflection
 	 */
-	private function classConsistencyTest(\ReflectionClass $reference, \ReflectionClass $test)
+	private function performConsistencyTest(\ReflectionClass $reference, \ReflectionClass $test)
 	{
-		static $skip = array('addReason', 'getReasons', 'hasReasons', 'getClosureThis');
+		static $skip = array(
+			'*' => array('addReason' => true, 'getReasons' => true, 'hasReasons' => true),
+			'TokenReflection\\Php\\IReflection' => array('alias' => true, 'getFileReflection' => true, 'getSource' => true, 'getStartPosition' => true, 'getEndPosition' => true),
+			'TokenReflection\\Php\\ReflectionProperty' => array('setDefaultValue' => true)
+		);
 
 		$methods = $reference->getMethods(\ReflectionMethod::IS_PUBLIC);
 		foreach ($methods as $method) {
-			if (!$method->isStatic() && !in_array($method->getName(), $skip)) {
-				$this->assertTrue($test->hasMethod($method->getName()), sprintf('%s::%s()', $test->getName(), $method->getName()));
+			if ($method->isStatic()) {
+				continue;
 			}
+
+			if (isset($skip['*'][$method->getName()])) {
+				continue;
+			}
+
+			foreach ($skip as $className => $skipping) {
+				if (isset($skipping[$method->getName()]) && ($className === $test->getName() || $test->isSubclassOf($className))) {
+					continue 2;
+				}
+			}
+
+			$this->assertTrue($test->hasMethod($method->getName()), sprintf('%s::%s() (defined in %s)', $test->getName(), $method->getName(), $reference->getName()));
 		}
 	}
 }

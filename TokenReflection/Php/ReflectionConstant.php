@@ -212,36 +212,6 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	}
 
 	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return '';
-	}
-
-	/**
-	 * Returns the start position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getStartPosition()
-	{
-		return -1;
-	}
-
-	/**
-	 * Returns the end position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getEndPosition()
-	{
-		return -1;
-	}
-
-	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return null
@@ -249,17 +219,6 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	public function getFileName()
 	{
 		return null;
-	}
-
-	/**
-	 * Returns a file reflection.
-	 *
-	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
-	 */
-	public function getFileReflection()
-	{
-		throw new Exception\BrokerException($this->getBroker(), sprintf('Constant %s was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
 	}
 
 	/**

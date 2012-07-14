@@ -58,7 +58,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return \TokenReflection\Php\IReflectionClass|null
+	 * @return \TokenReflection\IReflectionClass
 	 */
 	public function getDeclaringClass()
 	{
@@ -75,6 +75,79 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	{
 		$class = parent::getDeclaringClass();
 		return $class ? $class->getName() : null;
+	}
+
+	/**
+	 * Returns imported namespaces and aliases from the declaring namespace.
+	 *
+	 * @return array
+	 */
+	public function getNamespaceAliases()
+	{
+		return $this->getDeclaringFunction()->getNamespaceAliases();
+	}
+
+	/**
+	 * Returns the file name the reflection object is defined in.
+	 *
+	 * @return string
+	 */
+	public function getFileName()
+	{
+		return $this->getDeclaringFunction()->getFileName();
+	}
+
+	/**
+	 * Returns the PHP extension reflection.
+	 *
+	 * @return \TokenReflection\Php\ReflectionExtension
+	 */
+	public function getExtension()
+	{
+		return $this->getDeclaringFunction()->getExtension();
+	}
+
+	/**
+	 * Returns the PHP extension name.
+	 *
+	 * @return string|boolean
+	 */
+	public function getExtensionName()
+	{
+		$extension = $this->getExtension();
+		return $extension ? $extension->getName() : false;
+	}
+
+	/**
+	 * Checks if there is a particular annotation.
+	 *
+	 * @param string $name Annotation name
+	 * @return boolean
+	 */
+	public function hasAnnotation($name)
+	{
+		return false;
+	}
+
+	/**
+	 * Returns a particular annotation value.
+	 *
+	 * @param string $name Annotation name
+	 * @return null
+	 */
+	public function getAnnotation($name)
+	{
+		return null;
+	}
+
+	/**
+	 * Returns parsed docblock.
+	 *
+	 * @return array
+	 */
+	public function getAnnotations()
+	{
+		return array();
 	}
 
 	/**
@@ -150,6 +223,16 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	public function isCallable()
 	{
 		return PHP_VERSION >= 50400 && parent::isCallable();
+	}
+
+	/**
+	 * Returns the original type hint as defined in the source code.
+	 *
+	 * @return string|null
+	 */
+	public function getOriginalTypeHint()
+	{
+		return !$this->isArray() && !$this->isCallable() ? $this->getClass() : null;
 	}
 
 	/**

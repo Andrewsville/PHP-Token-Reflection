@@ -146,13 +146,6 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	public function getClosure($object);
 
 	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
-	 */
-	public function getClosureThis();
-
-	/**
 	 * Returns the original name when importing from a trait.
 	 *
 	 * @return string|null

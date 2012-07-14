@@ -152,7 +152,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * Returns the closure scope class.
 	 *
-	 * @return string|null
+	 * @return null
 	 */
 	public function getClosureScopeClass()
 	{

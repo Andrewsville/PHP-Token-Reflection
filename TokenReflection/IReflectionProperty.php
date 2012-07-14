@@ -127,6 +127,13 @@ interface IReflectionProperty extends IReflection
 	public function setAccessible($accessible);
 
 	/**
+	 * Returns if the property is set accessible.
+	 *
+	 * @return boolean
+	 */
+	public function isAccessible();
+
+	/**
 	 * Sets value of a property for a particular class instance.
 	 *
 	 * @param object $object Class instance

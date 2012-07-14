@@ -55,7 +55,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * Returns the PHP extension reflection.
 	 *
-	 * @return \TokenReflection\Php\IReflectionExtension
+	 * @return \TokenReflection\IReflectionExtension
 	 */
 	public function getExtension()
 	{
@@ -102,47 +102,6 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public function isTokenized()
 	{
 		return false;
-	}
-
-	/**
-	 * Returns a file reflection.
-	 *
-	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
-	 */
-	public function getFileReflection()
-	{
-		throw new Exception\BrokerException($this->getBroker(), sprintf('Function was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
-	}
-
-	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return '';
-	}
-
-	/**
-	 * Returns the start position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getStartPosition()
-	{
-		return -1;
-	}
-
-	/**
-	 * Returns the end position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getEndPosition()
-	{
-		return -1;
 	}
 
 	/**
@@ -259,6 +218,16 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public function getClosureScopeClass()
 	{
 		return PHP_VERSION >= 50400 ? parent::getClosureScopeClass() : null;
+	}
+
+	/**
+	 * Returns this pointer bound to closure.
+	 *
+	 * @return null
+	 */
+	public function getClosureThis()
+	{
+		return PHP_VERSION >= 50400 ? parent::getClosureThis() : null;
 	}
 
 	/**

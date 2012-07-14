@@ -720,47 +720,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	}
 
 	/**
-	 * Returns a file reflection.
-	 *
-	 * @return \TokenReflection\ReflectionFile
-	 * @throws \TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
-	 */
-	public function getFileReflection()
-	{
-		throw new Exception\BrokerException($this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), Exception\BrokerException::UNSUPPORTED);
-	}
-
-	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return '';
-	}
-
-	/**
-	 * Returns the start position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getStartPosition()
-	{
-		return -1;
-	}
-
-	/**
-	 * Returns the end position in the file token stream.
-	 *
-	 * @return integer
-	 */
-	public function getEndPosition()
-	{
-		return -1;
-	}
-
-	/**
 	 * Returns if the class definition is complete.
 	 *
 	 * Internal classes always have the definition complete.
