@@ -85,6 +85,7 @@ class ReflectionFile extends ReflectionBase
 
 		if (1 >= $tokenStream->count()) {
 			// No PHP content
+			$this->docComment = new ReflectionAnnotation($this, null);
 			return $this;
 		}
 
