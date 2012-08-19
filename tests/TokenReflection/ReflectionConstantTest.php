@@ -741,4 +741,24 @@ class ReflectionConstantTest extends Test
 		$this->assertTrue($class2->hasConstant('FIRST'));
 		$this->assertTrue($class2->hasConstant('SECOND'));
 	}
+
+	/**
+	 * Tests constants overriding.
+	 *
+	 * (btw that sucks even more than eval)
+	 */
+	public function testOverriding()
+	{
+		$token = $this->getClassTokenReflection('overriding');
+
+		$this->assertTrue($token->hasConstant('FOO'));
+		$constant = $token->getConstantReflection('FOO');
+		$this->assertSame('notbar', $constant->getValue());
+		$this->assertSame('TokenReflection_Test_ConstantOverriding', $constant->getDeclaringClassName());
+
+		$this->assertTrue($token->getParentClass()->hasConstant('FOO'));
+		$constant = $token->getParentClass()->getConstantReflection('FOO');
+		$this->assertSame('bar', $constant->getValue());
+		$this->assertSame('TokenReflection_Test_ConstantOverridingBase', $constant->getDeclaringClassName());
+	}
 }
