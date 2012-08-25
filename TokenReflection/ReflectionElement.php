@@ -71,7 +71,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @var integer
 	 */
-	private $startPosition;
+	protected $startPosition;
 
 	/**
 	 * End position in the file token stream.
