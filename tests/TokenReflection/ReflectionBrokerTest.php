@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.0
+ * Version 1.3.1
  *
  * LICENSE
  *
@@ -257,6 +257,7 @@ class ReflectionBrokerTest extends Test
 					'magic54.php',
 					'no-comment.php',
 					'no-namespace.php',
+					'overriding.php',
 					'pretty-names.php',
 					'type-boolean.php',
 					'type-constant.php',

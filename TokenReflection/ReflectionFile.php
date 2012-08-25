@@ -2,7 +2,7 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.0
+ * Version 1.3.1
  *
  * LICENSE
  *
@@ -85,6 +85,7 @@ class ReflectionFile extends ReflectionBase
 
 		if (1 >= $tokenStream->count()) {
 			// No PHP content
+			$this->docComment = new ReflectionAnnotation($this, null);
 			return $this;
 		}
 
