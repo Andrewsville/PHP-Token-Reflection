@@ -2,13 +2,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.6.1" />
+	<meta name="generator" content="ApiGen 2.8.0" />
 
 	<title>Class TokenReflection\Broker | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?144019575"></script>
+	<script type="text/javascript" src="resources/combined.js?394153670"></script>
 	<script type="text/javascript" src="elementlist.js?1007765600"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1532301413" />
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
 
@@ -146,8 +146,9 @@
 		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-TokenReflection.Broker.html#30" title="Go to source code">Broker.php</a><br />
+		<b>Located at</b> <a href="source-class-TokenReflection.Broker.html#30-542" title="Go to source code">Broker.php</a><br />
 	</div>
+
 
 
 	<table class="summary" id="methods">
@@ -163,7 +164,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#109" title="Go to source code">__construct</a>( <span><code><a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a></code> <var>$backend</var></span>, <span>integer <var>$options</var> = <code><a href="class-TokenReflection.Broker.html#OPTION_DEFAULT">TokenReflection\Broker::<b>OPTION_DEFAULT</b></a></code></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#109-129" title="Go to source code">__construct</a>( <span><code><a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a></code> <var>$backend</var></span>, <span>integer <var>$options</var> = <code><a href="class-TokenReflection.Broker.html#OPTION_DEFAULT">TokenReflection\Broker::<b>OPTION_DEFAULT</b></a></code></span> )</code>
 
 		<div class="description short">
 			
@@ -180,10 +181,11 @@
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$backend</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a></code></code><br> Broker backend instance</dd>
+					<dd><code><code><a href="class-TokenReflection.Broker.Backend.html">TokenReflection\Broker\Backend</a></code></code><br>$backend Broker backend instance</dd>
 					<dt><var>$options</var></dt>
-					<dd><code>integer</code><br> Broker/parsing options</dd>
+					<dd><code>integer</code><br>$options Broker/parsing options</dd>
 				</dl></div>
+
 
 
 
@@ -202,7 +204,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOptions">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#131" title="Go to source code">getOptions</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#131-139" title="Go to source code">getOptions</a>( )</code>
 
 		<div class="description short">
 			
@@ -224,6 +226,7 @@
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -238,7 +241,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isOptionSet">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#141" title="Go to source code">isOptionSet</a>( <span>integer <var>$option</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#141-150" title="Go to source code">isOptionSet</a>( <span>integer <var>$option</var></span> )</code>
 
 		<div class="description short">
 			
@@ -255,13 +258,14 @@
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$option</var></dt>
-					<dd><code>integer</code><br> Option setting</dd>
+					<dd><code>integer</code><br>$option Option setting</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean</code><br />
 				</div>
+
 
 
 
@@ -279,7 +283,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_processString">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#152" title="Go to source code">processString</a>( <span>string <var>$source</var></span>, <span>string <var>$fileName</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#152-183" title="Go to source code">processString</a>( <span>string <var>$source</var></span>, <span>string <var>$fileName</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -298,17 +302,19 @@ returns the appropriate reflection object.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$source</var></dt>
-					<dd><code>string</code><br> PHP source code</dd>
+					<dd><code>string</code><br>$source PHP source code</dd>
 					<dt><var>$fileName</var></dt>
-					<dd><code>string</code><br> Used file name</dd>
+					<dd><code>string</code><br>$fileName Used file name</dd>
 					<dt><var>$returnReflectionFile</var></dt>
-					<dd><code>boolean</code><br> Returns the appropriate \TokenReflection\ReflectionFile instance(s)</dd>
+					<dd><code>boolean</code><br>$returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile
+instance(s)</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean|<code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code></code><br />
 				</div>
+
 
 
 
@@ -326,7 +332,7 @@ returns the appropriate reflection object.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_processFile">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#185" title="Go to source code">processFile</a>( <span>string <var>$fileName</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#185-222" title="Go to source code">processFile</a>( <span>string <var>$fileName</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -343,9 +349,10 @@ returns the appropriate reflection object.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$fileName</var></dt>
-					<dd><code>string</code><br> Filename</dd>
+					<dd><code>string</code><br>$fileName Filename</dd>
 					<dt><var>$returnReflectionFile</var></dt>
-					<dd><code>boolean</code><br> Returns the appropriate \TokenReflection\ReflectionFile instance(s)</dd>
+					<dd><code>boolean</code><br>$returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile
+instance(s)</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -357,6 +364,7 @@ returns the appropriate reflection object.</p>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.Exception.BrokerException.html">TokenReflection\Exception\BrokerException</a></code></code><br>If the file could not be processed.<br />
 				</div>
+
 
 
 		</div>
@@ -373,7 +381,7 @@ returns the appropriate reflection object.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_processPhar">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#224" title="Go to source code">processPhar</a>( <span>string <var>$fileName</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#224-258" title="Go to source code">processPhar</a>( <span>string <var>$fileName</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -390,9 +398,10 @@ returns the appropriate reflection object.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$fileName</var></dt>
-					<dd><code>string</code><br> Archive filename.</dd>
+					<dd><code>string</code><br>$fileName Archive filename.</dd>
 					<dt><var>$returnReflectionFile</var></dt>
-					<dd><code>boolean</code><br> Returns the appropriate \TokenReflection\ReflectionFile instance(s)</dd>
+					<dd><code>boolean</code><br>$returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile
+instance(s)</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -406,6 +415,7 @@ returns the appropriate reflection object.</p>
 					<code><code><a href="class-TokenReflection.Exception.BrokerException.html">TokenReflection\Exception\BrokerException</a></code></code><br>If the given archive could not be read.<br />
 					<code><code><a href="class-TokenReflection.Exception.BrokerException.html">TokenReflection\Exception\BrokerException</a></code></code><br>If the given archive could not be processed.<br />
 				</div>
+
 
 
 		</div>
@@ -422,7 +432,7 @@ returns the appropriate reflection object.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_processDirectory">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#260" title="Go to source code">processDirectory</a>( <span>string <var>$path</var></span>, <span>string|array <var>$filters</var> = <span class="php-keyword1">array</span>()</span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#260-303" title="Go to source code">processDirectory</a>( <span>string <var>$path</var></span>, <span>string|array <var>$filters</var> = <span class="php-keyword1">array</span>()</span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -441,11 +451,12 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$path</var></dt>
-					<dd><code>string</code><br> Directora path</dd>
+					<dd><code>string</code><br>$path Directora path</dd>
 					<dt><var>$filters</var></dt>
-					<dd><code>string|array</code><br> Filename filters</dd>
+					<dd><code>string|array</code><br>$filters Filename filters</dd>
 					<dt><var>$returnReflectionFile</var></dt>
-					<dd><code>boolean</code><br> Returns the appropriate \TokenReflection\ReflectionFile instance(s)</dd>
+					<dd><code>boolean</code><br>$returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile
+instance(s)</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -458,6 +469,7 @@ objects.</p>
 					<code><code><a href="class-TokenReflection.Exception.BrokerException.html">TokenReflection\Exception\BrokerException</a></code></code><br>If the given directory does not exist.<br />
 					<code><code><a href="class-TokenReflection.Exception.BrokerException.html">TokenReflection\Exception\BrokerException</a></code></code><br>If the given directory could not be processed.<br />
 				</div>
+
 
 
 		</div>
@@ -474,7 +486,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_process">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#305" title="Go to source code">process</a>( <span>string <var>$path</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#305-326" title="Go to source code">process</a>( <span>string <var>$path</var></span>, <span>boolean <var>$returnReflectionFile</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			
@@ -491,9 +503,10 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$path</var></dt>
-					<dd><code>string</code><br> Path</dd>
+					<dd><code>string</code><br>$path Path</dd>
 					<dt><var>$returnReflectionFile</var></dt>
-					<dd><code>boolean</code><br> Returns the appropriate \TokenReflection\ReflectionFile instance(s)</dd>
+					<dd><code>boolean</code><br>$returnReflectionFile Returns the appropriate \TokenReflection\ReflectionFile
+instance(s)</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -505,6 +518,7 @@ objects.</p>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.Exception.BrokerException.html">TokenReflection\Exception\BrokerException</a></code></code><br>If the target does not exist.<br />
 				</div>
+
 
 
 		</div>
@@ -521,7 +535,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasNamespace">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#328" title="Go to source code">hasNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#328-337" title="Go to source code">hasNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -538,13 +552,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$namespaceName</var></dt>
-					<dd><code>string</code><br> Namespace name</dd>
+					<dd><code>string</code><br>$namespaceName Namespace name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean</code><br />
 				</div>
+
 
 
 
@@ -562,7 +577,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespace">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#339" title="Go to source code">getNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#339-359" title="Go to source code">getNamespace</a>( <span>string <var>$namespaceName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -579,13 +594,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$namespaceName</var></dt>
-					<dd><code>string</code><br> Namespace name</dd>
+					<dd><code>string</code><br>$namespaceName Namespace name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionNamespace.html">TokenReflection\ReflectionNamespace</a></code>|null</code><br />
 				</div>
+
 
 
 
@@ -603,7 +619,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasClass">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#361" title="Go to source code">hasClass</a>( <span>string <var>$className</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#361-370" title="Go to source code">hasClass</a>( <span>string <var>$className</var></span> )</code>
 
 		<div class="description short">
 			
@@ -620,13 +636,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$className</var></dt>
-					<dd><code>string</code><br> Class name</dd>
+					<dd><code>string</code><br>$className Class name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean</code><br />
 				</div>
+
 
 
 
@@ -644,7 +661,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getClass">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#372" title="Go to source code">getClass</a>( <span>string <var>$className</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#372-388" title="Go to source code">getClass</a>( <span>string <var>$className</var></span> )</code>
 
 		<div class="description short">
 			
@@ -661,13 +678,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$className</var></dt>
-					<dd><code>string</code><br> CLass bame</dd>
+					<dd><code>string</code><br>$className CLass bame</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionClass.html">TokenReflection\ReflectionClass</a></code>|null</code><br />
 				</div>
+
 
 
 
@@ -685,7 +703,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getClasses">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#390" title="Go to source code">getClasses</a>( <span>integer <var>$types</var> = <code><a href="class-TokenReflection.Broker.Backend.html#TOKENIZED_CLASSES">TokenReflection\Broker\Backend::<b>TOKENIZED_CLASSES</b></a></code></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#390-399" title="Go to source code">getClasses</a>( <span>integer <var>$types</var> = <code><a href="class-TokenReflection.Broker.Backend.html#TOKENIZED_CLASSES">TokenReflection\Broker\Backend::<b>TOKENIZED_CLASSES</b></a></code></span> )</code>
 
 		<div class="description short">
 			
@@ -702,13 +720,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$types</var></dt>
-					<dd><code>integer</code><br> Returned class types (multiple values may be OR-ed)</dd>
+					<dd><code>integer</code><br>$types Returned class types (multiple values may be OR-ed)</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>array</code><br />
 				</div>
+
 
 
 
@@ -726,7 +745,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasConstant">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#401" title="Go to source code">hasConstant</a>( <span>string <var>$constantName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#401-410" title="Go to source code">hasConstant</a>( <span>string <var>$constantName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -743,13 +762,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$constantName</var></dt>
-					<dd><code>string</code><br> Constant name</dd>
+					<dd><code>string</code><br>$constantName Constant name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean</code><br />
 				</div>
+
 
 
 
@@ -767,7 +787,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstant">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#412" title="Go to source code">getConstant</a>( <span>string <var>$constantName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#412-431" title="Go to source code">getConstant</a>( <span>string <var>$constantName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -784,13 +804,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$constantName</var></dt>
-					<dd><code>string</code><br> Constant name</dd>
+					<dd><code>string</code><br>$constantName Constant name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionConstant.html">TokenReflection\ReflectionConstant</a></code>|null</code><br />
 				</div>
+
 
 
 
@@ -808,7 +829,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstants">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#433" title="Go to source code">getConstants</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#433-441" title="Go to source code">getConstants</a>( )</code>
 
 		<div class="description short">
 			
@@ -827,6 +848,7 @@ objects.</p>
 				<div class="list">
 					<code>array</code><br />
 				</div>
+
 
 
 
@@ -844,7 +866,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFunction">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#443" title="Go to source code">hasFunction</a>( <span>string <var>$functionName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#443-452" title="Go to source code">hasFunction</a>( <span>string <var>$functionName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -861,13 +883,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$functionName</var></dt>
-					<dd><code>string</code><br> Function name</dd>
+					<dd><code>string</code><br>$functionName Function name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean</code><br />
 				</div>
+
 
 
 
@@ -885,7 +908,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFunction">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#454" title="Go to source code">getFunction</a>( <span>string <var>$functionName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#454-473" title="Go to source code">getFunction</a>( <span>string <var>$functionName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -902,13 +925,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$functionName</var></dt>
-					<dd><code>string</code><br> Function name</dd>
+					<dd><code>string</code><br>$functionName Function name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionFunction.html">TokenReflection\ReflectionFunction</a></code>|null</code><br />
 				</div>
+
 
 
 
@@ -926,7 +950,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFunctions">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#475" title="Go to source code">getFunctions</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#475-483" title="Go to source code">getFunctions</a>( )</code>
 
 		<div class="description short">
 			
@@ -945,6 +969,7 @@ objects.</p>
 				<div class="list">
 					<code>array</code><br />
 				</div>
+
 
 
 
@@ -962,7 +987,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFile">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#485" title="Go to source code">hasFile</a>( <span>string <var>$fileName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#485-494" title="Go to source code">hasFile</a>( <span>string <var>$fileName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -979,13 +1004,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$fileName</var></dt>
-					<dd><code>string</code><br> File name</dd>
+					<dd><code>string</code><br>$fileName File name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean</code><br />
 				</div>
+
 
 
 
@@ -1003,7 +1029,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFile">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#496" title="Go to source code">getFile</a>( <span>string <var>$fileName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#496-505" title="Go to source code">getFile</a>( <span>string <var>$fileName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1020,13 +1046,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$fileName</var></dt>
-					<dd><code>string</code><br> File name</dd>
+					<dd><code>string</code><br>$fileName File name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionFile.html">TokenReflection\ReflectionFile</a></code>|null</code><br />
 				</div>
+
 
 
 
@@ -1044,7 +1071,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFiles">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#507" title="Go to source code">getFiles</a>( )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#507-515" title="Go to source code">getFiles</a>( )</code>
 
 		<div class="description short">
 			
@@ -1066,6 +1093,7 @@ objects.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -1080,7 +1108,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFileTokens">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#517" title="Go to source code">getFileTokens</a>( <span>string <var>$fileName</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#517-526" title="Go to source code">getFileTokens</a>( <span>string <var>$fileName</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1097,13 +1125,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$fileName</var></dt>
-					<dd><code>string</code><br> File name</dd>
+					<dd><code>string</code><br>$fileName File name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code>|null</code><br />
 				</div>
+
 
 
 
@@ -1121,7 +1150,7 @@ objects.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getRealPath">#</a>
-		<code><a href="source-class-TokenReflection.Broker.html#528" title="Go to source code">getRealPath</a>( <span>string <var>$path</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Broker.html#528-541" title="Go to source code">getRealPath</a>( <span>string <var>$path</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1138,13 +1167,14 @@ objects.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$path</var></dt>
-					<dd><code>string</code><br> Source path</dd>
+					<dd><code>string</code><br>$path Source path</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>string|boolean</code><br />
 				</div>
+
 
 
 
@@ -1156,15 +1186,17 @@ objects.</p>
 
 
 
+
+
+
+
 	<table class="summary" id="constants">
 	<caption>Constants summary</caption>
 	<tr data-order="OPTION_SAVE_TOKEN_STREAM" id="OPTION_SAVE_TOKEN_STREAM">
 
-		<td class="attributes"><code>
-			integer
-		</code></td>
+		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Broker.html#37" title="Go to source code"><b>OPTION_SAVE_TOKEN_STREAM</b></a>
+				<a href="source-class-TokenReflection.Broker.html#37-42" title="Go to source code"><b>OPTION_SAVE_TOKEN_STREAM</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">0x0001</span></code></td>
 		<td class="description"><div>
@@ -1186,11 +1218,9 @@ objects.</p>
 	</tr>
 	<tr data-order="OPTION_PARSE_FUNCTION_BODY" id="OPTION_PARSE_FUNCTION_BODY">
 
-		<td class="attributes"><code>
-			integer
-		</code></td>
+		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Broker.html#44" title="Go to source code"><b>OPTION_PARSE_FUNCTION_BODY</b></a>
+				<a href="source-class-TokenReflection.Broker.html#44-51" title="Go to source code"><b>OPTION_PARSE_FUNCTION_BODY</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">0x0002</span></code></td>
 		<td class="description"><div>
@@ -1215,11 +1245,9 @@ functions/methods.</p>
 	</tr>
 	<tr data-order="OPTION_DEFAULT" id="OPTION_DEFAULT">
 
-		<td class="attributes"><code>
-			integer
-		</code></td>
+		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Broker.html#53" title="Go to source code"><b>OPTION_DEFAULT</b></a>
+				<a href="source-class-TokenReflection.Broker.html#53-58" title="Go to source code"><b>OPTION_DEFAULT</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">0x0003</span></code></td>
 		<td class="description"><div>
@@ -1241,11 +1269,9 @@ functions/methods.</p>
 	</tr>
 	<tr data-order="CACHE_NAMESPACE" id="CACHE_NAMESPACE">
 
-		<td class="attributes"><code>
-			string
-		</code></td>
+		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Broker.html#60" title="Go to source code"><b>CACHE_NAMESPACE</b></a>
+				<a href="source-class-TokenReflection.Broker.html#60-65" title="Go to source code"><b>CACHE_NAMESPACE</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'namespace'</span></code></td>
 		<td class="description"><div>
@@ -1267,11 +1293,9 @@ functions/methods.</p>
 	</tr>
 	<tr data-order="CACHE_CLASS" id="CACHE_CLASS">
 
-		<td class="attributes"><code>
-			string
-		</code></td>
+		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Broker.html#67" title="Go to source code"><b>CACHE_CLASS</b></a>
+				<a href="source-class-TokenReflection.Broker.html#67-72" title="Go to source code"><b>CACHE_CLASS</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'class'</span></code></td>
 		<td class="description"><div>
@@ -1293,11 +1317,9 @@ functions/methods.</p>
 	</tr>
 	<tr data-order="CACHE_CONSTANT" id="CACHE_CONSTANT">
 
-		<td class="attributes"><code>
-			string
-		</code></td>
+		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Broker.html#74" title="Go to source code"><b>CACHE_CONSTANT</b></a>
+				<a href="source-class-TokenReflection.Broker.html#74-79" title="Go to source code"><b>CACHE_CONSTANT</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'constant'</span></code></td>
 		<td class="description"><div>
@@ -1319,11 +1341,9 @@ functions/methods.</p>
 	</tr>
 	<tr data-order="CACHE_FUNCTION" id="CACHE_FUNCTION">
 
-		<td class="attributes"><code>
-			string
-		</code></td>
+		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Broker.html#81" title="Go to source code"><b>CACHE_FUNCTION</b></a>
+				<a href="source-class-TokenReflection.Broker.html#81-86" title="Go to source code"><b>CACHE_FUNCTION</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'function'</span></code></td>
 		<td class="description"><div>
@@ -1350,10 +1370,14 @@ functions/methods.</p>
 
 
 
+
+
+
+
 </div>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.6.1</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
 	</div>
 </div>
 </div>

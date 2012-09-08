@@ -2,13 +2,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.6.1" />
+	<meta name="generator" content="ApiGen 2.8.0" />
 
 	<title>Class TokenReflection\Php\ReflectionClass | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?144019575"></script>
+	<script type="text/javascript" src="resources/combined.js?394153670"></script>
 	<script type="text/javascript" src="elementlist.js?1007765600"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1532301413" />
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
 
@@ -148,8 +148,9 @@ ReflectionClass
 		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a>\<a href="namespace-TokenReflection.Php.html">Php</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-TokenReflection.Php.ReflectionClass.html#22" title="Go to source code">Php/ReflectionClass.php</a><br />
+		<b>Located at</b> <a href="source-class-TokenReflection.Php.ReflectionClass.html#22-935" title="Go to source code">Php/ReflectionClass.php</a><br />
 	</div>
+
 
 
 	<table class="summary" id="methods">
@@ -165,7 +166,7 @@ ReflectionClass
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#64" title="Go to source code">__construct</a>( <span>string <var>$className</var></span>, <span><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code> <var>$broker</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#64-74" title="Go to source code">__construct</a>( <span>string <var>$className</var></span>, <span><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code> <var>$broker</var></span> )</code>
 
 		<div class="description short">
 			
@@ -182,13 +183,16 @@ ReflectionClass
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$className</var></dt>
-					<dd><code>string</code><br> Class name</dd>
+					<dd><code>string</code><br>$className Class name</dd>
 					<dt><var>$broker</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br> Reflection broker</dd>
+					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br>$broker Reflection broker</dd>
 				</dl></div>
 
 
 
+
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::__construct()</code></div>
 
 		</div>
 		</div></td>
@@ -204,7 +208,7 @@ ReflectionClass
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getExtension">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#76" title="Go to source code">getExtension</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#76-84" title="Go to source code">getExtension</a>( )</code>
 
 		<div class="description short">
 			
@@ -226,6 +230,11 @@ ReflectionClass
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getExtension()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getExtension">TokenReflection\IReflectionClass::getExtension()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -240,7 +249,7 @@ ReflectionClass
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasAnnotation">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#86" title="Go to source code">hasAnnotation</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#86-95" title="Go to source code">hasAnnotation</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -257,13 +266,14 @@ ReflectionClass
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Annotation name</dd>
+					<dd><code>string</code><br>$name Annotation name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>boolean</code><br />
 				</div>
+
 
 
 
@@ -281,7 +291,7 @@ ReflectionClass
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getAnnotation">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#97" title="Go to source code">getAnnotation</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#97-106" title="Go to source code">getAnnotation</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -298,13 +308,14 @@ ReflectionClass
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Annotation name</dd>
+					<dd><code>string</code><br>$name Annotation name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>null</code><br />
 				</div>
+
 
 
 
@@ -322,7 +333,7 @@ ReflectionClass
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getAnnotations">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#108" title="Go to source code">getAnnotations</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#108-116" title="Go to source code">getAnnotations</a>( )</code>
 
 		<div class="description short">
 			
@@ -344,6 +355,7 @@ ReflectionClass
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -358,7 +370,7 @@ ReflectionClass
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isException">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#118" title="Go to source code">isException</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#118-126" title="Go to source code">isException</a>( )</code>
 
 		<div class="description short">
 			
@@ -380,8 +392,9 @@ ReflectionClass
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isException">TokenReflection\IReflectionClass::isException</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isException">TokenReflection\IReflectionClass::isException()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -396,7 +409,7 @@ ReflectionClass
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isCloneable">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#128" title="Go to source code">isCloneable</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#128-144" title="Go to source code">isCloneable</a>( )</code>
 
 		<div class="description short">
 			
@@ -425,8 +438,9 @@ ReflectionClass
 href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&amp;view=markup#l4059">http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059</a><br />
 				</div>
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isCloneable">TokenReflection\IReflectionClass::isCloneable</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isCloneable">TokenReflection\IReflectionClass::isCloneable()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -441,7 +455,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isTokenized">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#146" title="Go to source code">isTokenized</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#146-154" title="Go to source code">isTokenized</a>( )</code>
 
 		<div class="description short">
 			
@@ -463,8 +477,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_isTokenized">TokenReflection\IReflection::isTokenized</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_isTokenized">TokenReflection\IReflection::isTokenized()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -479,7 +494,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isDeprecated">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#156" title="Go to source code">isDeprecated</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#156-164" title="Go to source code">isDeprecated</a>( )</code>
 
 		<div class="description short">
 			
@@ -501,8 +516,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isDeprecated">TokenReflection\IReflectionClass::isDeprecated</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isDeprecated">TokenReflection\IReflectionClass::isDeprecated()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -517,7 +533,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isSubclassOf">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#166" title="Go to source code">isSubclassOf</a>( <span>string|object <var>$class</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#166-184" title="Go to source code">isSubclassOf</a>( <span>string|object <var>$class</var></span> )</code>
 
 		<div class="description short">
 			
@@ -534,7 +550,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$class</var></dt>
-					<dd><code>string|object</code><br> Class name or reflection object</dd>
+					<dd><code>string|object</code><br>$class Class name or reflection object</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -548,6 +564,11 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				</div>
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::isSubclassOf()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isSubclassOf">TokenReflection\IReflectionClass::isSubclassOf()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -562,7 +583,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getParentClass">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#186" title="Go to source code">getParentClass</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#186-195" title="Go to source code">getParentClass</a>( )</code>
 
 		<div class="description short">
 			
@@ -584,6 +605,11 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getParentClass()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getParentClass">TokenReflection\IReflectionClass::getParentClass()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -598,7 +624,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getParentClassName">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#197" title="Go to source code">getParentClassName</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#197-206" title="Go to source code">getParentClassName</a>( )</code>
 
 		<div class="description short">
 			
@@ -620,8 +646,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getParentClassName">TokenReflection\IReflectionClass::getParentClassName</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getParentClassName">TokenReflection\IReflectionClass::getParentClassName()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -636,7 +663,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getParentClasses">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#208" title="Go to source code">getParentClasses</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#208-219" title="Go to source code">getParentClasses</a>( )</code>
 
 		<div class="description short">
 			
@@ -658,8 +685,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getParentClasses">TokenReflection\IReflectionClass::getParentClasses</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getParentClasses">TokenReflection\IReflectionClass::getParentClasses()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -674,7 +702,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getParentClassNameList">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#221" title="Go to source code">getParentClassNameList</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#221-229" title="Go to source code">getParentClassNameList</a>( )</code>
 
 		<div class="description short">
 			
@@ -696,8 +724,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getParentClassNameList">TokenReflection\IReflectionClass::getParentClassNameList</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getParentClassNameList">TokenReflection\IReflectionClass::getParentClassNameList()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -712,7 +741,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_implementsInterface">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#231" title="Go to source code">implementsInterface</a>( <span>string|object <var>$interface</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#231-261" title="Go to source code">implementsInterface</a>( <span>string|object <var>$interface</var></span> )</code>
 
 		<div class="description short">
 			
@@ -729,7 +758,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$interface</var></dt>
-					<dd><code>string|object</code><br> Interface name or reflection object</dd>
+					<dd><code>string|object</code><br>$interface Interface name or reflection object</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -743,6 +772,11 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				</div>
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::implementsInterface()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_implementsInterface">TokenReflection\IReflectionClass::implementsInterface()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -757,7 +791,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getInterfaces">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#263" title="Go to source code">getInterfaces</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#263-284" title="Go to source code">getInterfaces</a>( )</code>
 
 		<div class="description short">
 			
@@ -779,6 +813,11 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getInterfaces()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getInterfaces">TokenReflection\IReflectionClass::getInterfaces()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -793,7 +832,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnInterfaces">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#286" title="Go to source code">getOwnInterfaces</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#286-295" title="Go to source code">getOwnInterfaces</a>( )</code>
 
 		<div class="description short">
 			
@@ -815,8 +854,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnInterfaces">TokenReflection\IReflectionClass::getOwnInterfaces</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnInterfaces">TokenReflection\IReflectionClass::getOwnInterfaces()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -831,7 +871,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnInterfaceNames">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#297" title="Go to source code">getOwnInterfaceNames</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#297-305" title="Go to source code">getOwnInterfaceNames</a>( )</code>
 
 		<div class="description short">
 			
@@ -853,8 +893,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnInterfaceNames">TokenReflection\IReflectionClass::getOwnInterfaceNames</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnInterfaceNames">TokenReflection\IReflectionClass::getOwnInterfaceNames()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -869,7 +910,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstructor">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#307" title="Go to source code">getConstructor</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#307-315" title="Go to source code">getConstructor</a>( )</code>
 
 		<div class="description short">
 			
@@ -891,6 +932,11 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getConstructor()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getConstructor">TokenReflection\IReflectionClass::getConstructor()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -905,7 +951,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDestructor">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#317" title="Go to source code">getDestructor</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#317-331" title="Go to source code">getDestructor</a>( )</code>
 
 		<div class="description short">
 			
@@ -927,8 +973,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDestructor">TokenReflection\IReflectionClass::getDestructor</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDestructor">TokenReflection\IReflectionClass::getDestructor()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -943,7 +990,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getMethod">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#333" title="Go to source code">getMethod</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#333-349" title="Go to source code">getMethod</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -960,7 +1007,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Method name</dd>
+					<dd><code>string</code><br>$name Method name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -974,6 +1021,11 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				</div>
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getMethod()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getMethod">TokenReflection\IReflectionClass::getMethod()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -988,7 +1040,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getMethods">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#351" title="Go to source code">getMethods</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#351-373" title="Go to source code">getMethods</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1005,7 +1057,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$filter</var></dt>
-					<dd><code>integer</code><br> Methods filter</dd>
+					<dd><code>integer</code><br>$filter Methods filter</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1015,6 +1067,11 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getMethods()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getMethods">TokenReflection\IReflectionClass::getMethods()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1029,7 +1086,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasOwnMethod">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#375" title="Go to source code">hasOwnMethod</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#375-390" title="Go to source code">hasOwnMethod</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1046,7 +1103,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Method name</dd>
+					<dd><code>string</code><br>$name Method name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1056,8 +1113,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasOwnMethod">TokenReflection\IReflectionClass::hasOwnMethod</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasOwnMethod">TokenReflection\IReflectionClass::hasOwnMethod()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1072,7 +1130,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnMethods">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#392" title="Go to source code">getOwnMethods</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#392-404" title="Go to source code">getOwnMethods</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1089,7 +1147,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$filter</var></dt>
-					<dd><code>integer</code></dd>
+					<dd><code>integer</code><br>$filter</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1099,8 +1157,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnMethods">TokenReflection\IReflectionClass::getOwnMethods</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnMethods">TokenReflection\IReflectionClass::getOwnMethods()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1115,7 +1174,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasTraitMethod">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#406" title="Go to source code">hasTraitMethod</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#406-416" title="Go to source code">hasTraitMethod</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1132,7 +1191,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Method name</dd>
+					<dd><code>string</code><br>$name Method name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1142,8 +1201,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasTraitMethod">TokenReflection\IReflectionClass::hasTraitMethod</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasTraitMethod">TokenReflection\IReflectionClass::hasTraitMethod()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1158,7 +1218,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getTraitMethods">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#418" title="Go to source code">getTraitMethods</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#418-428" title="Go to source code">getTraitMethods</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1175,7 +1235,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$filter</var></dt>
-					<dd><code>integer</code><br> Methods filter</dd>
+					<dd><code>integer</code><br>$filter Methods filter</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1185,8 +1245,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitMethods">TokenReflection\IReflectionClass::getTraitMethods</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitMethods">TokenReflection\IReflectionClass::getTraitMethods()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1201,7 +1262,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstantReflection">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#430" title="Go to source code">getConstantReflection</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#430-444" title="Go to source code">getConstantReflection</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1218,7 +1279,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Constant name</dd>
+					<dd><code>string</code><br>$name Constant name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1232,8 +1293,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				</div>
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getConstantReflection">TokenReflection\IReflectionClass::getConstantReflection</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getConstantReflection">TokenReflection\IReflectionClass::getConstantReflection()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1248,7 +1310,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getConstantReflections">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#446" title="Go to source code">getConstantReflections</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#446-461" title="Go to source code">getConstantReflections</a>( )</code>
 
 		<div class="description short">
 			
@@ -1270,8 +1332,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getConstantReflections">TokenReflection\IReflectionClass::getConstantReflections</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getConstantReflections">TokenReflection\IReflectionClass::getConstantReflections()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1286,7 +1349,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasOwnConstant">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#463" title="Go to source code">hasOwnConstant</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#463-473" title="Go to source code">hasOwnConstant</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1303,7 +1366,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Constant name.</dd>
+					<dd><code>string</code><br>$name Constant name.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1313,8 +1376,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasOwnConstant">TokenReflection\IReflectionClass::hasOwnConstant</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasOwnConstant">TokenReflection\IReflectionClass::hasOwnConstant()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1329,7 +1393,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnConstants">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#475" title="Go to source code">getOwnConstants</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#475-483" title="Go to source code">getOwnConstants</a>( )</code>
 
 		<div class="description short">
 			
@@ -1351,8 +1415,9 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnConstants">TokenReflection\IReflectionClass::getOwnConstants</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnConstants">TokenReflection\IReflectionClass::getOwnConstants()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1367,7 +1432,7 @@ href="http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnConstantReflections">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#485" title="Go to source code">getOwnConstantReflections</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#485-497" title="Go to source code">getOwnConstantReflections</a>( )</code>
 
 		<div class="description short">
 			
@@ -1391,8 +1456,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnConstantReflections">TokenReflection\IReflectionClass::getOwnConstantReflections</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnConstantReflections">TokenReflection\IReflectionClass::getOwnConstantReflections()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1407,7 +1473,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getProperty">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#499" title="Go to source code">getProperty</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#499-515" title="Go to source code">getProperty</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1424,7 +1490,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Property name</dd>
+					<dd><code>string</code><br>$name Property name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1438,6 +1504,11 @@ parents.</p>
 				</div>
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getProperty()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getProperty">TokenReflection\IReflectionClass::getProperty()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1452,7 +1523,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getProperties">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#517" title="Go to source code">getProperties</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#517-539" title="Go to source code">getProperties</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1469,7 +1540,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$filter</var></dt>
-					<dd><code>integer</code><br> Properties filter</dd>
+					<dd><code>integer</code><br>$filter Properties filter</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1479,6 +1550,11 @@ parents.</p>
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getProperties()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getProperties">TokenReflection\IReflectionClass::getProperties()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1493,7 +1569,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasOwnProperty">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#541" title="Go to source code">hasOwnProperty</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#541-556" title="Go to source code">hasOwnProperty</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1510,7 +1586,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Property name</dd>
+					<dd><code>string</code><br>$name Property name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1520,8 +1596,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasOwnProperty">TokenReflection\IReflectionClass::hasOwnProperty</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasOwnProperty">TokenReflection\IReflectionClass::hasOwnProperty()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1536,7 +1613,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnProperties">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#558" title="Go to source code">getOwnProperties</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#558-570" title="Go to source code">getOwnProperties</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1553,7 +1630,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$filter</var></dt>
-					<dd><code>integer</code></dd>
+					<dd><code>integer</code><br>$filter</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1563,8 +1640,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnProperties">TokenReflection\IReflectionClass::getOwnProperties</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnProperties">TokenReflection\IReflectionClass::getOwnProperties()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1579,7 +1657,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasTraitProperty">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#572" title="Go to source code">hasTraitProperty</a>( <span>string <var>$name</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#572-582" title="Go to source code">hasTraitProperty</a>( <span>string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1596,7 +1674,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$name</var></dt>
-					<dd><code>string</code><br> Property name</dd>
+					<dd><code>string</code><br>$name Property name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1606,8 +1684,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasTraitProperty">TokenReflection\IReflectionClass::hasTraitProperty</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_hasTraitProperty">TokenReflection\IReflectionClass::hasTraitProperty()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1622,7 +1701,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getTraitProperties">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#584" title="Go to source code">getTraitProperties</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#584-594" title="Go to source code">getTraitProperties</a>( <span>integer <var>$filter</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -1639,7 +1718,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$filter</var></dt>
-					<dd><code>integer</code><br> Properties filter</dd>
+					<dd><code>integer</code><br>$filter Properties filter</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -1649,8 +1728,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitProperties">TokenReflection\IReflectionClass::getTraitProperties</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitProperties">TokenReflection\IReflectionClass::getTraitProperties()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1665,7 +1745,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getStaticProperties">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#596" title="Go to source code">getStaticProperties</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#596-604" title="Go to source code">getStaticProperties</a>( )</code>
 
 		<div class="description short">
 			
@@ -1687,6 +1767,11 @@ parents.</p>
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code>ReflectionClass::getStaticProperties()</code></div>
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getStaticProperties">TokenReflection\IReflectionClass::getStaticProperties()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1701,7 +1786,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDirectSubclasses">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#606" title="Go to source code">getDirectSubclasses</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#606-621" title="Go to source code">getDirectSubclasses</a>( )</code>
 
 		<div class="description short">
 			
@@ -1723,8 +1808,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectSubclasses">TokenReflection\IReflectionClass::getDirectSubclasses</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectSubclasses">TokenReflection\IReflectionClass::getDirectSubclasses()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1739,7 +1825,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDirectSubclassNames">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#623" title="Go to source code">getDirectSubclassNames</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#623-631" title="Go to source code">getDirectSubclassNames</a>( )</code>
 
 		<div class="description short">
 			
@@ -1761,8 +1847,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectSubclassNames">TokenReflection\IReflectionClass::getDirectSubclassNames</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectSubclassNames">TokenReflection\IReflectionClass::getDirectSubclassNames()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1777,7 +1864,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getIndirectSubclasses">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#633" title="Go to source code">getIndirectSubclasses</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#633-648" title="Go to source code">getIndirectSubclasses</a>( )</code>
 
 		<div class="description short">
 			
@@ -1799,8 +1886,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectSubclasses">TokenReflection\IReflectionClass::getIndirectSubclasses</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectSubclasses">TokenReflection\IReflectionClass::getIndirectSubclasses()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1815,7 +1903,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getIndirectSubclassNames">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#650" title="Go to source code">getIndirectSubclassNames</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#650-658" title="Go to source code">getIndirectSubclassNames</a>( )</code>
 
 		<div class="description short">
 			
@@ -1837,8 +1925,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectSubclassNames">TokenReflection\IReflectionClass::getIndirectSubclassNames</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectSubclassNames">TokenReflection\IReflectionClass::getIndirectSubclassNames()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1853,7 +1942,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDirectImplementers">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#660" title="Go to source code">getDirectImplementers</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#660-679" title="Go to source code">getDirectImplementers</a>( )</code>
 
 		<div class="description short">
 			
@@ -1875,8 +1964,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectImplementers">TokenReflection\IReflectionClass::getDirectImplementers</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectImplementers">TokenReflection\IReflectionClass::getDirectImplementers()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1891,7 +1981,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDirectImplementerNames">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#681" title="Go to source code">getDirectImplementerNames</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#681-689" title="Go to source code">getDirectImplementerNames</a>( )</code>
 
 		<div class="description short">
 			
@@ -1913,8 +2003,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectImplementerNames">TokenReflection\IReflectionClass::getDirectImplementerNames</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getDirectImplementerNames">TokenReflection\IReflectionClass::getDirectImplementerNames()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1929,7 +2020,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getIndirectImplementers">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#691" title="Go to source code">getIndirectImplementers</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#691-710" title="Go to source code">getIndirectImplementers</a>( )</code>
 
 		<div class="description short">
 			
@@ -1951,8 +2042,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectImplementers">TokenReflection\IReflectionClass::getIndirectImplementers</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectImplementers">TokenReflection\IReflectionClass::getIndirectImplementers()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -1967,7 +2059,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getIndirectImplementerNames">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#712" title="Go to source code">getIndirectImplementerNames</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#712-720" title="Go to source code">getIndirectImplementerNames</a>( )</code>
 
 		<div class="description short">
 			
@@ -1989,8 +2081,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectImplementerNames">TokenReflection\IReflectionClass::getIndirectImplementerNames</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getIndirectImplementerNames">TokenReflection\IReflectionClass::getIndirectImplementerNames()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2005,7 +2098,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isComplete">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#722" title="Go to source code">isComplete</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#722-732" title="Go to source code">isComplete</a>( )</code>
 
 		<div class="description short">
 			
@@ -2029,8 +2122,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isComplete">TokenReflection\IReflectionClass::isComplete</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isComplete">TokenReflection\IReflectionClass::isComplete()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2045,7 +2139,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isValid">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#734" title="Go to source code">isValid</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#734-744" title="Go to source code">isValid</a>( )</code>
 
 		<div class="description short">
 			
@@ -2069,8 +2163,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isValid">TokenReflection\IReflectionClass::isValid</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isValid">TokenReflection\IReflectionClass::isValid()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2085,7 +2180,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespaceAliases">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#746" title="Go to source code">getNamespaceAliases</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#746-754" title="Go to source code">getNamespaceAliases</a>( )</code>
 
 		<div class="description short">
 			
@@ -2107,8 +2202,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getNamespaceAliases">TokenReflection\IReflectionClass::getNamespaceAliases</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getNamespaceAliases">TokenReflection\IReflectionClass::getNamespaceAliases()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2123,7 +2219,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getBroker">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#756" title="Go to source code">getBroker</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#756-764" title="Go to source code">getBroker</a>( )</code>
 
 		<div class="description short">
 			
@@ -2145,8 +2241,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_getBroker">TokenReflection\IReflection::getBroker</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_getBroker">TokenReflection\IReflection::getBroker()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2161,7 +2258,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#___get">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#766" title="Go to source code">__get</a>( <span>string <var>$key</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#766-775" title="Go to source code">__get</a>( <span>string <var>$key</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2178,7 +2275,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$key</var></dt>
-					<dd><code>string</code><br> Variable name</dd>
+					<dd><code>string</code><br>$key Variable name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -2188,8 +2285,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#___get">TokenReflection\IReflection::__get</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflection.html#___get">TokenReflection\IReflection::__get()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2204,7 +2302,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#___isset">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#777" title="Go to source code">__isset</a>( <span>string <var>$key</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#777-786" title="Go to source code">__isset</a>( <span>string <var>$key</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2221,7 +2319,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$key</var></dt>
-					<dd><code>string</code><br> Variable name</dd>
+					<dd><code>string</code><br>$key Variable name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -2231,8 +2329,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#___isset">TokenReflection\IReflection::__isset</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflection.html#___isset">TokenReflection\IReflection::__isset()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2247,7 +2346,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getTraits">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#788" title="Go to source code">getTraits</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#788-796" title="Go to source code">getTraits</a>( )</code>
 
 		<div class="description short">
 			
@@ -2269,8 +2368,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraits">TokenReflection\IReflectionClass::getTraits</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraits">TokenReflection\IReflectionClass::getTraits()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2285,7 +2385,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnTraits">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#798" title="Go to source code">getOwnTraits</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#798-811" title="Go to source code">getOwnTraits</a>( )</code>
 
 		<div class="description short">
 			
@@ -2307,8 +2407,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnTraits">TokenReflection\IReflectionClass::getOwnTraits</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnTraits">TokenReflection\IReflectionClass::getOwnTraits()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2323,7 +2424,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getTraitNames">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#813" title="Go to source code">getTraitNames</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#813-821" title="Go to source code">getTraitNames</a>( )</code>
 
 		<div class="description short">
 			
@@ -2345,8 +2446,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitNames">TokenReflection\IReflectionClass::getTraitNames</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitNames">TokenReflection\IReflectionClass::getTraitNames()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2361,7 +2463,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getOwnTraitNames">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#823" title="Go to source code">getOwnTraitNames</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#823-831" title="Go to source code">getOwnTraitNames</a>( )</code>
 
 		<div class="description short">
 			
@@ -2383,8 +2485,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnTraitNames">TokenReflection\IReflectionClass::getOwnTraitNames</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getOwnTraitNames">TokenReflection\IReflectionClass::getOwnTraitNames()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2399,7 +2502,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getTraitAliases">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#833" title="Go to source code">getTraitAliases</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#833-841" title="Go to source code">getTraitAliases</a>( )</code>
 
 		<div class="description short">
 			
@@ -2421,8 +2524,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitAliases">TokenReflection\IReflectionClass::getTraitAliases</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_getTraitAliases">TokenReflection\IReflectionClass::getTraitAliases()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2437,7 +2541,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isTrait">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#843" title="Go to source code">isTrait</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#843-851" title="Go to source code">isTrait</a>( )</code>
 
 		<div class="description short">
 			
@@ -2459,8 +2563,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isTrait">TokenReflection\IReflectionClass::isTrait</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_isTrait">TokenReflection\IReflectionClass::isTrait()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2475,7 +2580,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_usesTrait">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#853" title="Go to source code">usesTrait</a>( <span><code><a href="class-TokenReflection.Php.ReflectionClass.html">TokenReflection\Php\ReflectionClass</a></code>|<code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|string <var>$trait</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#853-882" title="Go to source code">usesTrait</a>( <span>ReflectionClass|<code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|string <var>$trait</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2492,7 +2597,7 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$trait</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Php.ReflectionClass.html">TokenReflection\Php\ReflectionClass</a></code>|<code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|string</code><br> Trait reflection or name</dd>
+					<dd><code>ReflectionClass|<code><a href="class-TokenReflection.IReflectionClass.html">TokenReflection\IReflectionClass</a></code>|string</code><br>$trait Trait reflection or name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -2506,8 +2611,9 @@ parents.</p>
 				</div>
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_usesTrait">TokenReflection\IReflectionClass::usesTrait</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_usesTrait">TokenReflection\IReflectionClass::usesTrait()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2522,7 +2628,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_newInstanceWithoutConstructor">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#884" title="Go to source code">newInstanceWithoutConstructor</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#884-907" title="Go to source code">newInstanceWithoutConstructor</a>( )</code>
 
 		<div class="description short">
 			
@@ -2548,8 +2654,9 @@ parents.</p>
 				</div>
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_newInstanceWithoutConstructor">TokenReflection\IReflectionClass::newInstanceWithoutConstructor</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflectionClass.html#_newInstanceWithoutConstructor">TokenReflection\IReflectionClass::newInstanceWithoutConstructor()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2564,7 +2671,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getPrettyName">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#909" title="Go to source code">getPrettyName</a>( )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#909-917" title="Go to source code">getPrettyName</a>( )</code>
 
 		<div class="description short">
 			
@@ -2586,8 +2693,9 @@ parents.</p>
 
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_getPrettyName">TokenReflection\IReflection::getPrettyName</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.IReflection.html#_getPrettyName">TokenReflection\IReflection::getPrettyName()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2602,7 +2710,7 @@ parents.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_create">#</a>
-		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#919" title="Go to source code">create</a>( <span>Reflector <var>$internalReflection</var></span>, <span><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code> <var>$broker</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Php.ReflectionClass.html#919-934" title="Go to source code">create</a>( <span>Reflector <var>$internalReflection</var></span>, <span><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code> <var>$broker</var></span> )</code>
 
 		<div class="description short">
 			
@@ -2619,9 +2727,9 @@ parents.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$internalReflection</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Php.ReflectionClass.html">TokenReflection\Php\ReflectionClass</a></code></code><br> Internal reflection instance</dd>
+					<dd><code>ReflectionClass</code><br>$internalReflection Internal reflection instance</dd>
 					<dt><var>$broker</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br> Reflection broker instance</dd>
+					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br>$broker Reflection broker instance</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -2635,8 +2743,9 @@ parents.</p>
 				</div>
 
 
+
 				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-TokenReflection.Php.IReflection.html#_create">TokenReflection\Php\IReflection::create</a></code></div>
+				<div class="list"><code><a href="class-TokenReflection.Php.IReflection.html#_create">TokenReflection\Php\IReflection::create()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -2684,6 +2793,10 @@ setStaticPropertyValue()
 
 
 
+
+
+
+
 	<table class="summary inherited">
 	<caption>Constants inherited from ReflectionClass</caption>
 	<tr>
@@ -2697,6 +2810,7 @@ setStaticPropertyValue()
 
 
 
+
 	<table class="summary inherited">
 	<caption>Properties inherited from ReflectionClass</caption>
 	<tr>
@@ -2707,10 +2821,13 @@ setStaticPropertyValue()
 	</table>
 
 
+
+
+
 </div>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.6.1</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
 	</div>
 </div>
 </div>

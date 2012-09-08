@@ -2,13 +2,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.6.1" />
+	<meta name="generator" content="ApiGen 2.8.0" />
 
 	<title>Class TokenReflection\ReflectionElement | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?144019575"></script>
+	<script type="text/javascript" src="resources/combined.js?394153670"></script>
 	<script type="text/javascript" src="elementlist.js?1007765600"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1532301413" />
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
 
@@ -177,8 +177,9 @@ class.</p>
 		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-TokenReflection.ReflectionElement.html#20" title="Go to source code">ReflectionElement.php</a><br />
+		<b>Located at</b> <a href="source-class-TokenReflection.ReflectionElement.html#20-352" title="Go to source code">ReflectionElement.php</a><br />
 	</div>
+
 
 
 	<table class="summary" id="methods">
@@ -194,7 +195,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#90" title="Go to source code">__construct</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code> <var>$broker</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#90-105" title="Go to source code">__construct</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code> <var>$broker</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -211,11 +212,11 @@ class.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
 					<dt><var>$broker</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br> Reflection broker</dd>
+					<dd><code><code><a href="class-TokenReflection.Broker.html">TokenReflection\Broker</a></code></code><br>$broker Reflection broker</dd>
 					<dt><var>$parent</var></dt>
-					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br> Parent reflection object</dd>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br>$parent Parent reflection object</dd>
 				</dl></div>
 
 
@@ -224,6 +225,9 @@ class.</p>
 					<code><code><a href="class-TokenReflection.Exception.ParseException.html">TokenReflection\Exception\ParseException</a></code></code><br>If an empty token stream was provided<br />
 				</div>
 
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-TokenReflection.ReflectionBase.html#___construct">TokenReflection\ReflectionBase::__construct()</a></code></div>
 
 		</div>
 		</div></td>
@@ -239,7 +243,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseStream">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#107" title="Go to source code">parseStream</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#107-124" title="Go to source code">parseStream</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -256,10 +260,11 @@ class.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
 					<dt><var>$parent</var></dt>
-					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br> Parent reflection object</dd>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br>$parent Parent reflection object</dd>
 				</dl></div>
+
 
 
 
@@ -278,7 +283,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFileName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#126" title="Go to source code">getFileName</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#126-134" title="Go to source code">getFileName</a>( )</code>
 
 		<div class="description short">
 			
@@ -300,6 +305,7 @@ class.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -314,7 +320,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFileReflection">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#136" title="Go to source code">getFileReflection</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#136-145" title="Go to source code">getFileReflection</a>( )</code>
 
 		<div class="description short">
 			
@@ -340,6 +346,7 @@ class.</p>
 				</div>
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -354,7 +361,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getStartLine">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#147" title="Go to source code">getStartLine</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#147-155" title="Go to source code">getStartLine</a>( )</code>
 
 		<div class="description short">
 			
@@ -373,6 +380,7 @@ class.</p>
 				<div class="list">
 					<code>integer</code><br />
 				</div>
+
 
 
 
@@ -390,7 +398,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getEndLine">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#157" title="Go to source code">getEndLine</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#157-165" title="Go to source code">getEndLine</a>( )</code>
 
 		<div class="description short">
 			
@@ -412,6 +420,7 @@ class.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -426,7 +435,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getExtension">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#167" title="Go to source code">getExtension</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#167-177" title="Go to source code">getExtension</a>( )</code>
 
 		<div class="description short">
 			
@@ -450,6 +459,7 @@ class.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -464,7 +474,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getExtensionName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#179" title="Go to source code">getExtensionName</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#179-189" title="Go to source code">getExtensionName</a>( )</code>
 
 		<div class="description short">
 			
@@ -488,6 +498,7 @@ class.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -502,7 +513,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getSource">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#191" title="Go to source code">getSource</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#191-199" title="Go to source code">getSource</a>( )</code>
 
 		<div class="description short">
 			
@@ -524,6 +535,7 @@ class.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -538,7 +550,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getStartPosition">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#201" title="Go to source code">getStartPosition</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#201-209" title="Go to source code">getStartPosition</a>( )</code>
 
 		<div class="description short">
 			
@@ -557,6 +569,7 @@ class.</p>
 				<div class="list">
 					<code>integer</code><br />
 				</div>
+
 
 
 
@@ -574,7 +587,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getEndPosition">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#211" title="Go to source code">getEndPosition</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#211-219" title="Go to source code">getEndPosition</a>( )</code>
 
 		<div class="description short">
 			
@@ -596,6 +609,7 @@ class.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -610,7 +624,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getDocblockTemplates">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#221" title="Go to source code">getDocblockTemplates</a>( )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#221-229" title="Go to source code">getDocblockTemplates</a>( )</code>
 
 		<div class="description short">
 			
@@ -632,6 +646,7 @@ class.</p>
 
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -646,7 +661,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_processParent">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#231" title="Go to source code">processParent</a>( <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span>, <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#231-242" title="Go to source code">processParent</a>( <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span>, <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span> )</code>
 
 		<div class="description short">
 			
@@ -663,15 +678,16 @@ class.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$parent</var></dt>
-					<dd><code>TokenReflection\Reflection</code><br> Parent reflection object</dd>
+					<dd><code>TokenReflection\Reflection</code><br>$parent Parent reflection object</dd>
 					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br />
 				</div>
+
 
 
 
@@ -689,7 +705,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseDocComment">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#244" title="Go to source code">parseDocComment</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#244-289" title="Go to source code">parseDocComment</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
 
 		<div class="description short">
 			
@@ -706,15 +722,16 @@ class.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
 					<dt><var>$parent</var></dt>
-					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br> Parent reflection</dd>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br>$parent Parent reflection</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br />
 				</div>
+
 
 
 
@@ -732,7 +749,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parse">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#323" title="Go to source code">parse</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#323-330" title="Go to source code">parse</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
 
 		<div class="description short">
 			
@@ -749,15 +766,16 @@ class.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
 					<dt><var>$parent</var></dt>
-					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br> Parent reflection object</dd>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br>$parent Parent reflection object</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br />
 				</div>
+
 
 
 
@@ -775,7 +793,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#332" title="Go to source code">parseName</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#332-338" title="Go to source code">parseName</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span> )</code>
 
 		<div class="description short">
 			
@@ -792,13 +810,14 @@ class.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br />
 				</div>
+
 
 
 
@@ -816,7 +835,7 @@ class.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseChildren">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionElement.html#340" title="Go to source code">parseChildren</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionElement.html#340-351" title="Go to source code">parseChildren</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
 
 		<div class="description short">
 			
@@ -833,15 +852,16 @@ class.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokenStream</var></dt>
-					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br> Token substream</dd>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
 					<dt><var>$parent</var></dt>
-					<dd><code>TokenReflection\Reflection</code><br> Parent reflection object</dd>
+					<dd><code>TokenReflection\Reflection</code><br>$parent Parent reflection object</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br />
 				</div>
+
 
 
 
@@ -875,15 +895,17 @@ class.</p>
 
 
 
+
+
+
+
 	<table class="summary" id="constants">
 	<caption>Constants summary</caption>
 	<tr data-order="DOCBLOCK_TEMPLATE_START" id="DOCBLOCK_TEMPLATE_START">
 
-		<td class="attributes"><code>
-			string
-		</code></td>
+		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.ReflectionElement.html#27" title="Go to source code"><b>DOCBLOCK_TEMPLATE_START</b></a>
+				<a href="source-class-TokenReflection.ReflectionElement.html#27-32" title="Go to source code"><b>DOCBLOCK_TEMPLATE_START</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'/**#@+'</span></code></td>
 		<td class="description"><div>
@@ -905,11 +927,9 @@ class.</p>
 	</tr>
 	<tr data-order="DOCBLOCK_TEMPLATE_END" id="DOCBLOCK_TEMPLATE_END">
 
-		<td class="attributes"><code>
-			string
-		</code></td>
+		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.ReflectionElement.html#34" title="Go to source code"><b>DOCBLOCK_TEMPLATE_END</b></a>
+				<a href="source-class-TokenReflection.ReflectionElement.html#34-39" title="Go to source code"><b>DOCBLOCK_TEMPLATE_END</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'/**#@-*/'</span></code></td>
 		<td class="description"><div>
@@ -933,17 +953,17 @@ class.</p>
 
 
 
+
 	<table class="summary" id="properties">
 	<caption>Properties summary</caption>
 	<tr data-order="docblockTemplates" id="$docblockTemplates">
-
 		<td class="attributes"><code>
-			protected 
+			protected  
 			array
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-TokenReflection.ReflectionElement.html#83" title="Go to source code"><var>$docblockTemplates</var></a>
+				<a href="source-class-TokenReflection.ReflectionElement.html#83-88" title="Go to source code"><var>$docblockTemplates</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
@@ -976,10 +996,13 @@ class.</p>
 	</table>
 
 
+
+
+
 </div>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.6.1</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
 	</div>
 </div>
 </div>

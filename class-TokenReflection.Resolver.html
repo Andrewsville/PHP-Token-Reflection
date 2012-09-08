@@ -2,13 +2,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="generator" content="ApiGen 2.6.1" />
+	<meta name="generator" content="ApiGen 2.8.0" />
 
 	<title>Class TokenReflection\Resolver | PHP Token Reflection</title>
 
-	<script type="text/javascript" src="resources/combined.js?144019575"></script>
+	<script type="text/javascript" src="resources/combined.js?394153670"></script>
 	<script type="text/javascript" src="elementlist.js?1007765600"></script>
-	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?1532301413" />
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
 
@@ -144,8 +144,9 @@
 		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-TokenReflection.Resolver.html#18" title="Go to source code">Resolver.php</a><br />
+		<b>Located at</b> <a href="source-class-TokenReflection.Resolver.html#18-288" title="Go to source code">Resolver.php</a><br />
 	</div>
+
 
 
 	<table class="summary" id="methods">
@@ -161,7 +162,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-TokenReflection.Resolver.html#30" title="Go to source code">__construct</a>( )</code>
+		<code><a href="source-class-TokenReflection.Resolver.html#30-40" title="Go to source code">__construct</a>( )</code>
 
 		<div class="description short">
 			
@@ -185,6 +186,7 @@
 				</div>
 
 
+
 		</div>
 		</div></td>
 	</tr>
@@ -199,7 +201,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_resolveClassFQN">#</a>
-		<code><a href="source-class-TokenReflection.Resolver.html#42" title="Go to source code">resolveClassFQN</a>( <span>string <var>$className</var></span>, <span>array <var>$aliases</var></span>, <span>string <var>$namespaceName</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-TokenReflection.Resolver.html#42-71" title="Go to source code">resolveClassFQN</a>( <span>string <var>$className</var></span>, <span>array <var>$aliases</var></span>, <span>string <var>$namespaceName</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -218,17 +220,18 @@ namespaces.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$className</var></dt>
-					<dd><code>string</code><br> Input class name</dd>
+					<dd><code>string</code><br>$className Input class name</dd>
 					<dt><var>$aliases</var></dt>
-					<dd><code>array</code><br> Namespace import aliases</dd>
+					<dd><code>array</code><br>$aliases Namespace import aliases</dd>
 					<dt><var>$namespaceName</var></dt>
-					<dd><code>string</code><br> Context namespace name</dd>
+					<dd><code>string</code><br>$namespaceName Context namespace name</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>string</code><br />
 				</div>
+
 
 
 
@@ -246,7 +249,7 @@ namespaces.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getValueDefinition">#</a>
-		<code><a href="source-class-TokenReflection.Resolver.html#73" title="Go to source code">getValueDefinition</a>( <span>array <var>$tokens</var></span>, <span><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code> <var>$reflection</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Resolver.html#73-211" title="Go to source code">getValueDefinition</a>( <span>array <var>$tokens</var></span>, <span><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code> <var>$reflection</var></span> )</code>
 
 		<div class="description short">
 			
@@ -263,9 +266,9 @@ namespaces.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokens</var></dt>
-					<dd><code>array</code><br> Tokenized definition</dd>
+					<dd><code>array</code><br>$tokens Tokenized definition</dd>
 					<dt><var>$reflection</var></dt>
-					<dd><code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br> Caller reflection</dd>
+					<dd><code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br>$reflection Caller reflection</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -278,6 +281,7 @@ namespaces.</p>
 					<code><code><a href="class-TokenReflection.Exception.RuntimeException.html">TokenReflection\Exception\RuntimeException</a></code></code><br>If an invalid reflection object was provided.<br />
 					<code><code><a href="class-TokenReflection.Exception.RuntimeException.html">TokenReflection\Exception\RuntimeException</a></code></code><br>If an invalid source code was provided.<br />
 				</div>
+
 
 
 		</div>
@@ -294,7 +298,7 @@ namespaces.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getSourceCode">#</a>
-		<code><a href="source-class-TokenReflection.Resolver.html#213" title="Go to source code">getSourceCode</a>( <span>array <var>$tokens</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Resolver.html#213-230" title="Go to source code">getSourceCode</a>( <span>array <var>$tokens</var></span> )</code>
 
 		<div class="description short">
 			
@@ -311,13 +315,14 @@ namespaces.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokens</var></dt>
-					<dd><code>array</code><br> Tokens array</dd>
+					<dd><code>array</code><br>$tokens Tokens array</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>array</code><br />
 				</div>
+
 
 
 
@@ -335,7 +340,7 @@ namespaces.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_findConstants">#</a>
-		<code><a href="source-class-TokenReflection.Resolver.html#232" title="Go to source code">findConstants</a>( <span>array <var>$tokens</var></span>, <span><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code> <var>$reflection</var></span> )</code>
+		<code><a href="source-class-TokenReflection.Resolver.html#232-277" title="Go to source code">findConstants</a>( <span>array <var>$tokens</var></span>, <span><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code> <var>$reflection</var></span> )</code>
 
 		<div class="description short">
 			
@@ -352,15 +357,16 @@ namespaces.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$tokens</var></dt>
-					<dd><code>array</code><br> Tokenized source code</dd>
+					<dd><code>array</code><br>$tokens Tokenized source code</dd>
 					<dt><var>$reflection</var></dt>
-					<dd><code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br> Caller reflection</dd>
+					<dd><code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br>$reflection Caller reflection</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					<code>array</code><br />
 				</div>
+
 
 
 
@@ -372,15 +378,17 @@ namespaces.</p>
 
 
 
+
+
+
+
 	<table class="summary" id="constants">
 	<caption>Constants summary</caption>
 	<tr data-order="CONSTANT_NOT_FOUND" id="CONSTANT_NOT_FOUND">
 
-		<td class="attributes"><code>
-			null
-		</code></td>
+		<td class="attributes"><code>null</code></td>
 		<td class="name"><code>
-				<a href="source-class-TokenReflection.Resolver.html#23" title="Go to source code"><b>CONSTANT_NOT_FOUND</b></a>
+				<a href="source-class-TokenReflection.Resolver.html#23-28" title="Go to source code"><b>CONSTANT_NOT_FOUND</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'~~NOT RESOLVED~~'</span></code></td>
 		<td class="description"><div>
@@ -407,10 +415,14 @@ namespaces.</p>
 
 
 
+
+
+
+
 </div>
 
 	<div id="footer">
-		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.6.1</a>
+		PHP Token Reflection API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
 	</div>
 </div>
 </div>
