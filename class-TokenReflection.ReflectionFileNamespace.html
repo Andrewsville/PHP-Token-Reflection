@@ -167,7 +167,7 @@
 		<b>Namespace:</b> <a href="namespace-TokenReflection.html">TokenReflection</a><br />
 		
 
-		<b>Located at</b> <a href="source-class-TokenReflection.ReflectionFileNamespace.html#20-383" title="Go to source code">ReflectionFileNamespace.php</a><br />
+		<b>Located at</b> <a href="source-class-TokenReflection.ReflectionFileNamespace.html#20-412" title="Go to source code">ReflectionFileNamespace.php</a><br />
 	</div>
 
 
@@ -416,6 +416,52 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="parseDocComment" id="_parseDocComment">
+
+		<td class="attributes"><code>
+			 protected 
+			<code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parseDocComment">#</a>
+		<code><a href="source-class-TokenReflection.ReflectionFileNamespace.html#122-137" title="Go to source code">parseDocComment</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Find the appropriate docblock.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Find the appropriate docblock.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$tokenStream</var></dt>
+					<dd><code><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code></code><br>$tokenStream Token substream</dd>
+					<dt><var>$parent</var></dt>
+					<dd><code><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code></code><br>$parent Parent reflection</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-TokenReflection.ReflectionElement.html">TokenReflection\ReflectionElement</a></code></code><br />
+				</div>
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-TokenReflection.ReflectionElement.html#_parseDocComment">TokenReflection\ReflectionElement::parseDocComment()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="parseName" id="_parseName">
 
 		<td class="attributes"><code>
@@ -427,7 +473,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseName">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFileNamespace.html#122-170" title="Go to source code">parseName</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionFileNamespace.html#139-187" title="Go to source code">parseName</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span> )</code>
 
 		<div class="description short">
 			
@@ -473,7 +519,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseChildren">#</a>
-		<code><a href="source-class-TokenReflection.ReflectionFileNamespace.html#172-382" title="Go to source code">parseChildren</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
+		<code><a href="source-class-TokenReflection.ReflectionFileNamespace.html#189-411" title="Go to source code">parseChildren</a>( <span><code><a href="class-TokenReflection.Stream.StreamBase.html">TokenReflection\Stream\StreamBase</a></code> <var>$tokenStream</var></span>, <span><code><a href="class-TokenReflection.IReflection.html">TokenReflection\IReflection</a></code> <var>$parent</var></span> )</code>
 
 		<div class="description short">
 			
@@ -529,7 +575,6 @@
 			<a href="class-TokenReflection.ReflectionElement.html#_getSource">getSource()</a>, 
 			<a href="class-TokenReflection.ReflectionElement.html#_getStartLine">getStartLine()</a>, 
 			<a href="class-TokenReflection.ReflectionElement.html#_getStartPosition">getStartPosition()</a>, 
-			<a href="class-TokenReflection.ReflectionElement.html#_parseDocComment">parseDocComment()</a>, 
 			<a href="class-TokenReflection.ReflectionElement.html#_parseStream">parseStream()</a>
 		</code></td>
 	</tr>
@@ -581,7 +626,8 @@
 	<caption>Properties inherited from <a href="class-TokenReflection.ReflectionElement.html#properties">TokenReflection\ReflectionElement</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-TokenReflection.ReflectionElement.html#$docblockTemplates"><var>$docblockTemplates</var></a>
+			<a href="class-TokenReflection.ReflectionElement.html#$docblockTemplates"><var>$docblockTemplates</var></a>, 
+			<a href="class-TokenReflection.ReflectionElement.html#$startPosition"><var>$startPosition</var></a>
 		</code></td>
 	</tr>
 	</table>
