@@ -177,6 +177,7 @@ class ReflectionBrokerTest extends Test
 					'doc-comment-inheritance.php',
 					'doc-comment-many-lines.php',
 					'double-properties.php',
+					'dummy.php',
 					'final.php',
 					'in-namespace.php',
 					'instances.php',
