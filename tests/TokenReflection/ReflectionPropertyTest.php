@@ -245,6 +245,20 @@ class ReflectionPropertyTest extends Test
 	}
 
 	/**
+	 * Tests the access level of a property that is declared as just "static".
+	 */
+	public function testOnlyStatic()
+	{
+		$rfl = $this->getPropertyReflection('onlyStatic');
+
+		$this->assertTrue($rfl->internal->isStatic());
+		$this->assertSame($rfl->internal->isStatic(), $rfl->token->isStatic());
+		$this->assertTrue($rfl->internal->isPublic());
+		$this->assertSame($rfl->internal->isPublic(), $rfl->token->isPublic());
+		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+	}
+
+	/**
 	 * Tests getting of declaring class.
 	 */
 	public function testDeclaringClass()
