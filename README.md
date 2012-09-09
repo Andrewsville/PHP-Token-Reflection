@@ -4,18 +4,6 @@
 
 In short, this library emulates the PHP reflection model using the tokenized PHP source.
 
-## Brief history
-
-Everything started with [ApiGen](http://apigen.org). It is a pretty cool tool for generating documentation. It uses docblocks and... yes, reflection. It makes perfect sense, because reflection is - besides other things - a great tool for generating documentation, however it has its limitations by design. The biggest one is that you have to include/require the described source. It means that:
-
-* the described source affects the generator's environment,
-* it is very memory-consuming,
-* you have to include sources of all libraries (you cannot generate documentation of a Zend Framework based application without having at least a big part of the ZF loaded as well).
-
-One day we thought to ourselves: "Would it be possible to emulate reflection using just the tokenized source? Well, why not." And that was the beginning of our library.
-
-## Some technical info
-
 The basic concept is, that any reflection is possible to process the particular part of the token array describing the reflected element. It is also able to find out if there are any child elements (a class reflection is able to find method definitions in the source, for example), create their reflections and pass the appropriate part of the token array to them.
 
 This concept allows us to keep the parser code relatively simple and easily maintainable. And we are able to to create all reflections in a single pass. That is absolutely crucial for the performance of the library.
@@ -44,15 +32,11 @@ There are reflections for the tokenized source (those mentioned above), but also
 
 ## Remarks
 
-From the beginning we tried to be as compatible as possible with the internal reflection (including things like returning the interface list in the same - pretty weird - order). However there are situations where it is just impossible.
+From the beginning we tried to be as compatible as possible with the internal reflection (including things like returning the interface list in the same - pretty weird - order). However there are situations where it is just impossible (for example we prefer consistency over compatibility with the internal reflection and will not introduce [this bug](https://bugs.php.net/bug.php?id=62715) into the library :).
 
-We are limited in the way we can handle constant values and property and parameter default values. When defined as a constant, we try to resolve its value (within parsed and internal constants) and use it. This is eventually made via a combination of ```var_export()``` and ```eval()```. Yes, that sucks, but there is no better way. Moreover the referenced constant may not exist. In that case it is replaced by a ```~~NOT RESOLVED~~``` string.
+We are limited in the way we can handle constant values and property and parameter default values. When defined as a constant, we do our best to resolve its value (within parsed and internal constants) and use it. This is eventually made via a combination of ```var_export()``` and ```eval()```. Yes, that sucks, but there is no better way. Moreover the referenced constant may not exist. In that case it is replaced by a ```~~NOT RESOLVED~~``` string.
 
-At the moment we do not support constants declared using the define() function. We will implement support for names defined using a single string and simple values, but there is no way to implement support for something like
-
-```
-define('CONSTANT', $a ? 1 : 0);
-```
+Runtime constants are not supported.
 
 When the library encounters a duplicate class, function or constant name, it converts the previously created reflection into an "invalid reflection" instance. That means that the parser is unable to distinguish between such classes and it is unable to build a proper class tree for example. And it throws an exception. When you catch this exception and continue to work with the Broker instance, the duplicate classes, functions or constants will have only one reflection and it will be an instance of **Invalid\ReflectionClass**, **Invalid\ReflectionFunction** or **Invalid\ReflectionConstant** respectively.
 
@@ -81,6 +65,6 @@ The library requires PHP 5.3 with the [tokenizer extension](http://cz.php.net/ma
 
 ## Current status
 
-The current version is 1.2. It should support the vast majority of PHP internal reflection features and add many more.
+The current version should support the vast majority of PHP internal reflection features and add many more.
 
 Every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 and 5.4 branch and the actual trunk.
