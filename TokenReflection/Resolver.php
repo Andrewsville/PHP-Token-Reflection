@@ -99,8 +99,6 @@ class Resolver
 
 				try {
 					switch ($constant) {
-						case '__LINE__':
-							throw new Exception\RuntimeException('__LINE__ constant cannot be resolved this way.', Exception\RuntimeException::UNSUPPORTED, $reflection);
 						case '__FILE__':
 							$value = $reflection->getFileName();
 							break;
