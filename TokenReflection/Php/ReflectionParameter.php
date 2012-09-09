@@ -222,7 +222,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 */
 	public function isCallable()
 	{
-		return PHP_VERSION >= 50400 && parent::isCallable();
+		return PHP_VERSION_ID >= 50400 && parent::isCallable();
 	}
 
 	/**

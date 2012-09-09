@@ -200,7 +200,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getClosure()
 	{
-		if (PHP_VERSION >= 50400) {
+		if (PHP_VERSION_ID >= 50400) {
 			return parent::getClosure();
 		} else {
 			$that = $this;
@@ -217,7 +217,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getClosureScopeClass()
 	{
-		return PHP_VERSION >= 50400 ? parent::getClosureScopeClass() : null;
+		return PHP_VERSION_ID >= 50400 ? parent::getClosureScopeClass() : null;
 	}
 
 	/**
@@ -227,7 +227,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getClosureThis()
 	{
-		return PHP_VERSION >= 50400 ? parent::getClosureThis() : null;
+		return PHP_VERSION_ID >= 50400 ? parent::getClosureThis() : null;
 	}
 
 	/**
