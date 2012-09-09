@@ -286,4 +286,38 @@ class ReflectionParameterTest extends Test
 			$this->assertSame($parameter->getDefaultValue(), $tokenMethod->getParameter($parameter->getName())->getDefaultValue());
 		}
 	}
+
+	/**
+	 * Tests returning if a parameter has its default value defined by a constant (PHP 5.4.6+ feature).
+	 */
+	public function testDefaultValuesByConstant()
+	{
+		static $expected = array(
+			'one' => array(false, null, 'foo'),
+			'two' => array(false, null, 'bar'),
+			'three' => array(true, 'self::VALUE', 'bar'),
+			'four' => array(true, 'TokenReflection_Test_ParameterConstantValue::VALUE', 'bar'),
+			'five' => array(true, 'TOKEN_REFLECTION_PARAMETER_CONSTANT_VALUE', 'foo')
+		);
+
+		$rfl = $this->getMethodReflection('constantValue');
+		$this->assertSame(count($expected), count($rfl->internal->getParameters()));
+
+		foreach ($rfl->internal->getParameters() as $parameter) {
+			$tokenParameter = $rfl->token->getParameter($parameter->getName());
+
+			$this->assertTrue(isset($expected[$parameter->getName()]), $parameter->getName());
+			list($isConstant, $constantName, $value) = $expected[$parameter->getName()];
+
+			$this->assertSame($isConstant, $tokenParameter->isDefaultValueConstant(), $parameter->getName());
+			$this->assertSame($constantName, $tokenParameter->getDefaultValueConstantName(), $parameter->getName());
+			$this->assertSame($value, $tokenParameter->getDefaultValue(), $parameter->getName());
+
+			if (PHP_VERSION_ID >= 50406) {
+				$this->assertSame($parameter->isDefaultValueConstant(), $tokenParameter->isDefaultValueConstant(), $parameter->getName());
+				$this->assertSame($parameter->getDefaultValueConstantName(), $tokenParameter->getDefaultValueConstantName(), $parameter->getName());
+				$this->assertSame($parameter->getDefaultValue(), $tokenParameter->getDefaultValue(), $parameter->getName());
+			}
+		}
+	}
 }

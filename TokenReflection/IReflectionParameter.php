@@ -91,6 +91,20 @@ interface IReflectionParameter extends IReflection
 	public function isDefaultValueAvailable();
 
 	/**
+	 * Returns if the default value is defined by a constant.
+	 *
+	 * @return boolean
+	 */
+	public function isDefaultValueConstant();
+
+	/**
+	 * Returns the name of the default value constant.
+	 *
+	 * @return string
+	 */
+	public function getDefaultValueConstantName();
+
+	/**
 	 * Returns the position within all parameters.
 	 *
 	 * @return integer
