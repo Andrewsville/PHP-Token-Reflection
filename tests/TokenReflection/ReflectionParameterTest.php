@@ -100,6 +100,51 @@ class ReflectionParameterTest extends Test
 	}
 
 	/**
+	 * Tests handling of invalid definitions of optional parameters.
+	 */
+	public function testInvalidOptions()
+	{
+		$fileName = $this->getFilePath('invalid-optionals');
+
+		$broker = $this->getBroker();
+		$broker->processFile($fileName);
+
+		require_once $fileName;
+
+		$token = $broker->getFunction('tokenReflectionParameterInvalidOptionals');
+		$internal = new \ReflectionFunction('tokenReflectionParameterInvalidOptionals');
+
+		static $params = array(
+			array('one', false, false, true),
+			array('two', false, false, false),
+			array('three', true, true, true)
+		);
+
+		$parameters = $internal->getParameters();
+		$this->assertSame(count($params), count($parameters));
+
+		foreach ($parameters as $i => $parameter) {
+			$tokenParameter = $token->getParameter($i);
+
+			list($paramName, $defaultValueAvailable, $optional, $allowsNull) = $params[$i];
+
+			$this->assertSame($paramName, $parameter->getName(), $parameter->getName());
+			$this->assertSame($paramName, $tokenParameter->getName(), $parameter->getName());
+
+			if (PHP_VERSION_ID !== 50316) { // https://bugs.php.net/bug.php?id=62715
+				$this->assertSame($defaultValueAvailable, $parameter->isDefaultValueAvailable(), $parameter->getName());
+				$this->assertSame($defaultValueAvailable, $tokenParameter->isDefaultValueAvailable(), $parameter->getName());
+
+				$this->assertSame($optional, $parameter->isOptional(), $parameter->getName());
+				$this->assertSame($optional, $tokenParameter->isOptional(), $parameter->getName());
+			}
+
+			$this->assertSame($allowsNull, $parameter->allowsNull(), $parameter->getName());
+			$this->assertSame($allowsNull, $tokenParameter->allowsNull(), $parameter->getName());
+		}
+	}
+
+	/**
 	 * Tests if parameter has array type hint.
 	 */
 	public function testArray()

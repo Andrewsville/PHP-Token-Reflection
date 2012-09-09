@@ -225,7 +225,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function isDefaultValueAvailable()
 	{
-		return null !== $this->getDefaultValueDefinition();
+		return $this->isOptional();
 	}
 
 	/**
@@ -354,21 +354,31 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function isOptional()
 	{
 		if (null === $this->isOptional) {
-			$function = $this->getDeclaringFunction();
-			if (null === $function) {
-				throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
-			}
-
-			$this->isOptional = true;
-			foreach (array_slice($function->getParameters(), $this->position) as $reflectionParameter) {
-				if (!$reflectionParameter->isDefaultValueAvailable()) {
-					$this->isOptional = false;
-					break;
-				}
-			}
+			$this->isOptional = !empty($this->defaultValueDefinition) && $this->haveSiblingsDefalutValues();
 		}
 
 		return $this->isOptional;
+	}
+
+	/**
+	 * Returns if all following parameters have a default value definition.
+	 *
+	 * @return boolean
+	 */
+	protected function haveSiblingsDefalutValues()
+	{
+		$function = $this->getDeclaringFunction();
+		if (null === $function) {
+			throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		}
+
+		foreach (array_slice($function->getParameters(), $this->position + 1) as $reflectionParameter) {
+			if (null === $reflectionParameter->getDefaultValueDefinition()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
