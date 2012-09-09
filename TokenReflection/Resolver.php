@@ -161,8 +161,8 @@ class Resolver
 							if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
 								// Handle self:: and parent:: definitions
 
-								if ($reflection instanceof ReflectionConstant) {
-									throw new Exception\RuntimeException('Constants cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
+								if ($reflection instanceof ReflectionConstant && null === $reflection->getDeclaringClassName()) {
+									throw new Exception\RuntimeException('Top level constants cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
 								} elseif ($reflection instanceof ReflectionParameter && null === $reflection->getDeclaringClassName()) {
 									throw new Exception\RuntimeException('Function parameters cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
 								}
@@ -182,8 +182,8 @@ class Resolver
 								}
 							}
 
-							$reflection = $reflection->getBroker()->getConstant($constantName);
-							$value = $reflection->getValue();
+							$constantReflection = $reflection->getBroker()->getConstant($constantName);
+							$value = $constantReflection->getValue();
 					}
 				} catch (Exception\RuntimeException $e) {
 					$value = self::CONSTANT_NOT_FOUND;
