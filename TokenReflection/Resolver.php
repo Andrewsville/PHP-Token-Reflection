@@ -28,18 +28,6 @@ class Resolver
 	const CONSTANT_NOT_FOUND = '~~NOT RESOLVED~~';
 
 	/**
-	 * Constructor.
-	 *
-	 * Prevents from creating instances.
-	 *
-	 * @throws LogicException When trying to create a class instance.
-	 */
-	final public function __construct()
-	{
-		throw new \LogicException('Static class cannot be instantiated.');
-	}
-
-	/**
 	 * Returns a fully qualified name of a class using imported/aliased namespaces.
 	 *
 	 * @param string $className Input class name
