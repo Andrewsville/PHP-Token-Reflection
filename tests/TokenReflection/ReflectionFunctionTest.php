@@ -113,7 +113,7 @@ class ReflectionFunctionTest extends Test
 	}
 
 	/**
-	 * Tests if function is a closure.
+	 * Tests returning a closure of the function.
 	 */
 	public function testGetClosure()
 	{
@@ -121,24 +121,52 @@ class ReflectionFunctionTest extends Test
 		$broker->processFile($this->getFilePath('getClosure'));
 		require_once $this->getFilePath('getClosure');
 
+		if (PHP_VERSION_ID >= 50400) {
+			$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure1');
+		}
+
 		$function = $broker->getFunction('tokenReflectionFunctionGetClosure1');
+
 		$this->assertNull($function->getClosureScopeClass());
+		if (isset($internal)) {
+			$this->assertNull($internal->getClosureScopeClass());
+		}
+
 		$closure = $function->getClosure();
 		$this->assertInstanceOf('Closure', $closure);
 
 		static $data1 = array(1 => 1, 4 => 2, 9 => 3);
 		foreach ($data1 as $result => $input) {
 			$this->assertSame($result, $closure($input));
+
+			if (isset($internal)) {
+				$internalClosure = $internal->getClosure();
+				$this->assertSame($result, $internalClosure($input));
+			}
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure2');
 		}
 
 		$function = $broker->getFunction('tokenReflectionFunctionGetClosure2');
+
 		$this->assertNull($function->getClosureScopeClass());
+		if (isset($internal)) {
+			$this->assertNull($internal->getClosureScopeClass());
+		}
+
 		$closure = $function->getClosure();
 		$this->assertInstanceOf('Closure', $closure);
 
 		static $data2 = array(-1 => 1, -2 => 2, -3 => 3);
 		foreach ($data2 as $result => $input) {
 			$this->assertSame($result, $closure($input));
+
+			if (isset($internal)) {
+				$internalClosure = $internal->getClosure();
+				$this->assertSame($result, $internalClosure($input));
+			}
 		}
 
 		static $data3 = array(-1 => array(2, -.5), 1 => array(-100, -.01), 8 => array(2, 4));

@@ -163,6 +163,37 @@ class ReflectionMethodTest extends Test
 	}
 
 	/**
+	 * Tests closure related methods.
+	 */
+	public function testClosures()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Requires PHP 5.4 or higher.');
+		}
+
+		$rfl = $this->getMethodReflection('closures');
+		$internal = $rfl->internal;
+		$token = $rfl->token;
+
+		$className = $this->getClassName('closures');
+		$class = new $className;
+
+		$internalClosure = $internal->getClosure($class);
+		$tokenClosure = $token->getClosure($class);
+
+		static $results = array(1 => 1, 2 => 4, 3 => 9, 100 => 10000);
+		foreach ($results as $param => $result) {
+			$this->assertSame($result, $internalClosure($param));
+			$this->assertSame($result, $tokenClosure($param));
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($internal->getClosureThis(), $token->getClosureThis());
+			$this->assertSame($internal->getClosureScopeClass(), $token->getClosureScopeClass());
+		}
+	}
+
+	/**
 	 * Tests if method is deprecated.
 	 */
 	public function testDeprecated()
