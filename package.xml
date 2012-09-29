@@ -100,7 +100,7 @@
 			<file name="ReflectionProperty.php" role="php" />
 			<file name="Resolver.php" role="php" />
 		</dir>
-		<file name="LICENSE" role="doc" />
+		<file name="LICENSE.md" role="doc" />
 		<file name="README.md" role="doc" />
 	</dir>
 </contents>
