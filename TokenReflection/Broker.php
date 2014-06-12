@@ -17,6 +17,8 @@ namespace TokenReflection;
 
 use TokenReflection\Broker, TokenReflection\Exception;
 use RecursiveDirectoryIterator, RecursiveIteratorIterator;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 // Detect if we have native traits support
 define('NATIVE_TRAITS', defined('T_TRAIT'));
@@ -275,23 +277,22 @@ class Broker
 		}
 
 		try {
-			$result = array();
-			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
-				if ($entry->isFile()) {
-					$process = empty($filters);
-					if (!$process) {
-						foreach ((array) $filters as $filter) {
-							$whitelisting = '!' !== $filter{0};
-							if (fnmatch($whitelisting ? $filter : substr($filter, 1), $entry->getPathName(), FNM_NOESCAPE)) {
-								$process = $whitelisting;
-							}
-						}
-					}
+			$files = Finder::create()->files()->ignoreVCS(true)->ignoreDotFiles(true)->ignoreUnreadableDirs();
 
-					if ($process) {
-						$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
-					}
+			foreach ($filters as $filter) {
+				if ('!' === $filter{0}) {
+					$files->notPath(substr($filter,1));
+				} else {
+					$files->path($filter);
 				}
+			}
+
+			$files->in($realPath);
+
+			$result = array();
+			foreach ($files as $entry) {
+                		/** @var SplFileInfo $entry */
+                		$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
 			}
 
 			return $returnReflectionFile ? $result : true;
