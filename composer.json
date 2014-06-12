@@ -19,7 +19,8 @@
 
 	"require": {
 		"php": ">=5.3.0",
-		"ext-tokenizer": "*"
+		"ext-tokenizer": "*",
+		"symfony/finder" : "@stable",
 	},
 
 	"autoload": {
