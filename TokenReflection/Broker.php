@@ -277,7 +277,7 @@ class Broker
 		}
 
 		try {
-			$files = Finder::create()->files()->contains('.php')->ignoreVCS(true)->ignoreDotFiles(true)->ignoreUnreadableDirs();
+			$files = Finder::create()->files()->name('*.php')->ignoreVCS(true)->ignoreDotFiles(true)->ignoreUnreadableDirs();
 
 			foreach ($filters as $filter) {
 				if ('!' === $filter{0}) {
