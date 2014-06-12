@@ -475,7 +475,7 @@ class Memory implements Broker\Backend
 				}
 
 				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
-			} catch (Exception\FileProcessingException $e) {
+			} catch (\Exception\FileProcessingException $e) {
 				$errors = array_merge($errors, $e->getReasons());
 			} catch (\Exception $e) {
 				echo $e->getTraceAsString();
