@@ -1437,6 +1437,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function __toString()
 	{
+		try {
 		$implements = '';
 		$interfaceNames = $this->getInterfaceNames();
 		if (count($interfaceNames) > 0) {
@@ -1524,6 +1525,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			$properties,
 			$methods
 		);
+		} catch (\Exception $e) {
+			return __CLASS__;
+		}
 	}
 
 	/**
