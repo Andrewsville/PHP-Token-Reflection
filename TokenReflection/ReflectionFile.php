@@ -110,7 +110,6 @@ class ReflectionFile extends ReflectionBase
 						$tokenStream
 							->skipWhitespaces()
 							->findMatchingBracket()
-							->skipWhitespaces()
 							->skipWhitespaces();
 						break;
 					case T_NAMESPACE:

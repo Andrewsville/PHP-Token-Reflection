@@ -88,6 +88,40 @@ class ReflectionFileTest extends Test
 		$this->assertSame($this->getBroker()->getFile($fileName), $rfl->token->getFileReflection());
 	}
 
+	public function testDeclareNoNamespace()
+	{
+		$fileName = $this->getFilePath('declareNoNamespace');
+		$this->getBroker()->processFile($fileName);
+
+		$this->assertTrue($this->getBroker()->hasFile($fileName));
+
+		$fileReflection = $this->getBroker()->getFile($fileName);
+		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+
+		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
+
+		$namespaces = $fileReflection->getNamespaces();
+		$this->assertCount(1, $namespaces);
+		$this->assertEquals(ReflectionNamespace::NO_NAMESPACE_NAME, $namespaces[0]->getName());
+	}
+
+	public function testDeclareNamespace()
+	{
+		$fileName = $this->getFilePath('declareNamespace');
+		$this->getBroker()->processFile($fileName);
+
+		$this->assertTrue($this->getBroker()->hasFile($fileName));
+
+		$fileReflection = $this->getBroker()->getFile($fileName);
+		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+
+		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
+
+		$namespaces = $fileReflection->getNamespaces();
+		$this->assertCount(1, $namespaces);
+		$this->assertEquals('TokenReflection\Test', $namespaces[0]->getName());
+	}
+
 	/**
 	 * Tests throwing exceptions when requesting reflections of files that were not processed.
 	 *
