@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -160,6 +160,37 @@ class ReflectionMethodTest extends Test
 		$rfl = $this->getMethodReflection('noClosure');
 		$this->assertSame($rfl->internal->isClosure(), $rfl->token->isClosure());
 		$this->assertFalse($rfl->token->isClosure());
+	}
+
+	/**
+	 * Tests closure related methods.
+	 */
+	public function testClosures()
+	{
+		if (PHP_VERSION_ID < 50400) {
+			$this->markTestSkipped('Requires PHP 5.4 or higher.');
+		}
+
+		$rfl = $this->getMethodReflection('closures');
+		$internal = $rfl->internal;
+		$token = $rfl->token;
+
+		$className = $this->getClassName('closures');
+		$class = new $className;
+
+		$internalClosure = $internal->getClosure($class);
+		$tokenClosure = $token->getClosure($class);
+
+		static $results = array(1 => 1, 2 => 4, 3 => 9, 100 => 10000);
+		foreach ($results as $param => $result) {
+			$this->assertSame($result, $internalClosure($param));
+			$this->assertSame($result, $tokenClosure($param));
+		}
+
+		if (PHP_VERSION_ID >= 50400) {
+			$this->assertSame($internal->getClosureThis(), $token->getClosureThis());
+			$this->assertSame($internal->getClosureScopeClass(), $token->getClosureScopeClass());
+		}
 	}
 
 	/**

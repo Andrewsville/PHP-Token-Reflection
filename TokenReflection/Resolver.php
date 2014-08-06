@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file license.txt.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -26,18 +26,6 @@ class Resolver
 	 * @var null
 	 */
 	const CONSTANT_NOT_FOUND = '~~NOT RESOLVED~~';
-
-	/**
-	 * Constructor.
-	 *
-	 * Prevents from creating instances.
-	 *
-	 * @throws LogicException When trying to create a class instance.
-	 */
-	final public function __construct()
-	{
-		throw new \LogicException('Static class cannot be instantiated.');
-	}
 
 	/**
 	 * Returns a fully qualified name of a class using imported/aliased namespaces.
@@ -111,8 +99,6 @@ class Resolver
 
 				try {
 					switch ($constant) {
-						case '__LINE__':
-							throw new Exception\RuntimeException('__LINE__ constant cannot be resolved this way.', Exception\RuntimeException::UNSUPPORTED, $reflection);
 						case '__FILE__':
 							$value = $reflection->getFileName();
 							break;
@@ -175,8 +161,8 @@ class Resolver
 							if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
 								// Handle self:: and parent:: definitions
 
-								if ($reflection instanceof ReflectionConstant) {
-									throw new Exception\RuntimeException('Constants cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
+								if ($reflection instanceof ReflectionConstant && null === $reflection->getDeclaringClassName()) {
+									throw new Exception\RuntimeException('Top level constants cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
 								} elseif ($reflection instanceof ReflectionParameter && null === $reflection->getDeclaringClassName()) {
 									throw new Exception\RuntimeException('Function parameters cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
 								}
@@ -196,8 +182,8 @@ class Resolver
 								}
 							}
 
-							$reflection = $reflection->getBroker()->getConstant($constantName);
-							$value = $reflection->getValue();
+							$constantReflection = $reflection->getBroker()->getConstant($constantName);
+							$value = $constantReflection->getValue();
 					}
 				} catch (Exception\RuntimeException $e) {
 					$value = self::CONSTANT_NOT_FOUND;

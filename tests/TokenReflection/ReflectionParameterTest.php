@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -96,6 +96,51 @@ class ReflectionParameterTest extends Test
 		} catch (\Exception $e) {
 			// Correctly thrown exception
 			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
+		}
+	}
+
+	/**
+	 * Tests handling of invalid definitions of optional parameters.
+	 */
+	public function testInvalidOptions()
+	{
+		$fileName = $this->getFilePath('invalid-optionals');
+
+		$broker = $this->getBroker();
+		$broker->processFile($fileName);
+
+		require_once $fileName;
+
+		$token = $broker->getFunction('tokenReflectionParameterInvalidOptionals');
+		$internal = new \ReflectionFunction('tokenReflectionParameterInvalidOptionals');
+
+		static $params = array(
+			array('one', false, false, true),
+			array('two', false, false, false),
+			array('three', true, true, true)
+		);
+
+		$parameters = $internal->getParameters();
+		$this->assertSame(count($params), count($parameters));
+
+		foreach ($parameters as $i => $parameter) {
+			$tokenParameter = $token->getParameter($i);
+
+			list($paramName, $defaultValueAvailable, $optional, $allowsNull) = $params[$i];
+
+			$this->assertSame($paramName, $parameter->getName(), $parameter->getName());
+			$this->assertSame($paramName, $tokenParameter->getName(), $parameter->getName());
+
+			if (PHP_VERSION_ID !== 50316) { // https://bugs.php.net/bug.php?id=62715
+				$this->assertSame($defaultValueAvailable, $parameter->isDefaultValueAvailable(), $parameter->getName());
+				$this->assertSame($defaultValueAvailable, $tokenParameter->isDefaultValueAvailable(), $parameter->getName());
+
+				$this->assertSame($optional, $parameter->isOptional(), $parameter->getName());
+				$this->assertSame($optional, $tokenParameter->isOptional(), $parameter->getName());
+			}
+
+			$this->assertSame($allowsNull, $parameter->allowsNull(), $parameter->getName());
+			$this->assertSame($allowsNull, $tokenParameter->allowsNull(), $parameter->getName());
 		}
 	}
 
@@ -284,6 +329,40 @@ class ReflectionParameterTest extends Test
 
 		foreach ($internalMethod->getParameters() as $parameter) {
 			$this->assertSame($parameter->getDefaultValue(), $tokenMethod->getParameter($parameter->getName())->getDefaultValue());
+		}
+	}
+
+	/**
+	 * Tests returning if a parameter has its default value defined by a constant (PHP 5.4.6+ feature).
+	 */
+	public function testDefaultValuesByConstant()
+	{
+		static $expected = array(
+			'one' => array(false, null, 'foo'),
+			'two' => array(false, null, 'bar'),
+			'three' => array(true, 'self::VALUE', 'bar'),
+			'four' => array(true, 'TokenReflection_Test_ParameterConstantValue::VALUE', 'bar'),
+			'five' => array(true, 'TOKEN_REFLECTION_PARAMETER_CONSTANT_VALUE', 'foo')
+		);
+
+		$rfl = $this->getMethodReflection('constantValue');
+		$this->assertSame(count($expected), count($rfl->internal->getParameters()));
+
+		foreach ($rfl->internal->getParameters() as $parameter) {
+			$tokenParameter = $rfl->token->getParameter($parameter->getName());
+
+			$this->assertTrue(isset($expected[$parameter->getName()]), $parameter->getName());
+			list($isConstant, $constantName, $value) = $expected[$parameter->getName()];
+
+			$this->assertSame($isConstant, $tokenParameter->isDefaultValueConstant(), $parameter->getName());
+			$this->assertSame($constantName, $tokenParameter->getDefaultValueConstantName(), $parameter->getName());
+			$this->assertSame($value, $tokenParameter->getDefaultValue(), $parameter->getName());
+
+			if (PHP_VERSION_ID >= 50406) {
+				$this->assertSame($parameter->isDefaultValueConstant(), $tokenParameter->isDefaultValueConstant(), $parameter->getName());
+				$this->assertSame($parameter->getDefaultValueConstantName(), $tokenParameter->getDefaultValueConstantName(), $parameter->getName());
+				$this->assertSame($parameter->getDefaultValue(), $tokenParameter->getDefaultValue(), $parameter->getName());
+			}
 		}
 	}
 }

@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -37,17 +37,21 @@ class ReflectionClassTest extends Test
 	public function testDummyClass()
 	{
 		static $classNames = array(
-			'ns\\non-existent',
-			'non-existent'
+			'ns\\nonexistent',
+			'nonexistent'
 		);
 
 		$broker = $this->getBroker();
+
+		$reflections = array();
 
 		foreach ($classNames as $className) {
 			$this->assertFalse($broker->hasClass($className));
 
 			$class = $broker->getClass($className);
 			$this->assertInstanceOf('TokenReflection\Dummy\ReflectionClass', $class);
+
+			$reflections[$className] = $class;
 
 			$nameParts = explode('\\', $className);
 			if (1 === count($nameParts)) {
@@ -68,13 +72,23 @@ class ReflectionClassTest extends Test
 			} else {
 				$this->assertTrue($class->inNamespace());
 			}
+			$this->assertSame(array(), $class->getNamespaceAliases());
 
 			$this->assertNull($class->getExtension());
 			$this->assertFalse($class->getExtensionName());
 
 			$this->assertNull($class->getFileName());
 			$this->assertNull($class->getEndLine());
+			$this->assertSame(-1, $class->getStartPosition());
+			$this->assertSame(-1, $class->getEndPosition());
 			$this->assertNull($class->getStartLine());
+
+			try {
+				$class->getFileReflection();
+				$this->fail('Exception\\BrokerException expected');
+			} catch (\Exception $e) {
+				$this->assertInstanceOf('TokenReflection\\Exception\\BrokerException', $e);
+			}
 
 			$this->assertFalse($class->getDocComment());
 			$this->assertSame(array(), $class->getAnnotations());
@@ -95,6 +109,8 @@ class ReflectionClassTest extends Test
 			$this->assertFalse($class->isUserDefined());
 			$this->assertFalse($class->isTokenized());
 			$this->assertFalse($class->isComplete());
+			$this->assertTrue($class->isValid());
+			$this->assertFalse($class->isDeprecated());
 
 			$this->assertFalse($class->isTrait());
 			$this->assertSame(array(), $class->getTraits());
@@ -157,6 +173,22 @@ class ReflectionClassTest extends Test
 			$this->assertSame('', $class->getSource());
 
 			$this->assertSame($broker, $class->getBroker());
+		}
+
+		require_once $this->getFilePath('dummy');
+
+		foreach ($reflections as $className => $reflection) {
+			$instance = $reflection->newInstance(null);
+			$this->assertTrue($reflection->isInstance($instance));
+			$this->assertTrue($instance->wasConstrustorCalled());
+
+			$instance = $reflection->newInstanceArgs(array());
+			$this->assertTrue($reflection->isInstance($instance));
+			$this->assertTrue($instance->wasConstrustorCalled());
+
+			$instance = $reflection->newInstanceWithoutConstructor();
+			$this->assertTrue($reflection->isInstance($instance));
+			$this->assertFalse($instance->wasConstrustorCalled());
 		}
 	}
 

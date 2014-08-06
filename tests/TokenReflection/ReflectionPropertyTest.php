@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -245,6 +245,20 @@ class ReflectionPropertyTest extends Test
 	}
 
 	/**
+	 * Tests the access level of a property that is declared as just "static".
+	 */
+	public function testOnlyStatic()
+	{
+		$rfl = $this->getPropertyReflection('onlyStatic');
+
+		$this->assertTrue($rfl->internal->isStatic());
+		$this->assertSame($rfl->internal->isStatic(), $rfl->token->isStatic());
+		$this->assertTrue($rfl->internal->isPublic());
+		$this->assertSame($rfl->internal->isPublic(), $rfl->token->isPublic());
+		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+	}
+
+	/**
 	 * Tests getting of declaring class.
 	 */
 	public function testDeclaringClass()
@@ -267,10 +281,63 @@ class ReflectionPropertyTest extends Test
 	 */
 	public function testDefault()
 	{
-		$token = $this->getPropertyTokenReflection('default');
-		$this->assertTrue($token->isDefault());
-		$this->assertSame('default', $token->getDefaultValue());
-		$this->assertSame("'default'", $token->getDefaultValueDefinition());
+		$class = $this->getClassTokenReflection('default');
+
+		$this->assertTrue($class->hasProperty('default'));
+		$property = $class->getProperty('default');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('default', $property->getDefaultValue());
+		$this->assertSame("'default'", $property->getDefaultValueDefinition());
+
+		$this->assertTrue($class->hasProperty('default2'));
+		$property = $class->getProperty('default2');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('default', $property->getDefaultValue());
+		$this->assertSame('self::DEFAULT_VALUE', $property->getDefaultValueDefinition());
+
+		$this->assertTrue($class->hasProperty('default3'));
+		$property = $class->getProperty('default3');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('default', $property->getDefaultValue());
+		$this->assertSame('TokenReflection_Test_PropertyDefault::DEFAULT_VALUE', $property->getDefaultValueDefinition());
+
+		$class = $this->getBroker()->getClass('TokenReflection_Test_PropertyDefault2');
+
+		$this->assertTrue($class->hasProperty('default4'));
+		$property = $class->getProperty('default4');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('not default', $property->getDefaultValue());
+		$this->assertSame('self::DEFAULT_VALUE', $property->getDefaultValueDefinition());
+
+		$this->assertTrue($class->hasProperty('default5'));
+		$property = $class->getProperty('default5');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('not default', $property->getDefaultValue());
+		$this->assertSame('TokenReflection_Test_PropertyDefault2::DEFAULT_VALUE', $property->getDefaultValueDefinition());
+
+		$this->assertTrue($class->hasProperty('default6'));
+		$property = $class->getProperty('default6');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('default', $property->getDefaultValue());
+		$this->assertSame('parent::DEFAULT_VALUE', $property->getDefaultValueDefinition());
+
+		$this->assertTrue($class->hasProperty('default7'));
+		$property = $class->getProperty('default7');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('default', $property->getDefaultValue());
+		$this->assertSame('TokenReflection_Test_PropertyDefault::DEFAULT_VALUE', $property->getDefaultValueDefinition());
+
+		$this->assertTrue($class->hasProperty('default8'));
+		$property = $class->getProperty('default8');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame('default', $property->getDefaultValue());
+		$this->assertSame('self::PARENT_DEFAULT_VALUE', $property->getDefaultValueDefinition());
+
+		$this->assertTrue($class->hasProperty('default9'));
+		$property = $class->getProperty('default9');
+		$this->assertTrue($property->isDefault());
+		$this->assertSame(array('not default', 'default', 'default'), $property->getDefaultValue());
+		$this->assertSame('array(self::DEFAULT_VALUE, parent::DEFAULT_VALUE, self::PARENT_DEFAULT_VALUE)', $property->getDefaultValueDefinition());
 
 		$token = $this->getPropertyTokenReflection('noDefault');
 		$this->assertTrue($token->isDefault());

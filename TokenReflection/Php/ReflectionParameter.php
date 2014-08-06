@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -216,13 +216,37 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
+	 * Returns if the default value is defined by a constant.
+	 *
+	 * @return boolean
+	 */
+	public function isDefaultValueConstant()
+	{
+		return PHP_VERSION_ID >= 50406 && parent::isDefaultValueAvailable();
+	}
+
+	/**
+	 * Returns the name of the default value constant.
+	 *
+	 * @return string|null
+	 */
+	public function getDefaultValueConstantName()
+	{
+		if (!$this->isOptional()) {
+			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
+		}
+
+		return $this->isDefaultValueConstant() ? parent::getDefaultValueConstantName : null;
+	}
+
+	/**
 	 * Returns if the parameter expects a callback.
 	 *
 	 * @return boolean
 	 */
 	public function isCallable()
 	{
-		return PHP_VERSION >= 50400 && parent::isCallable();
+		return PHP_VERSION_ID >= 50400 && parent::isCallable();
 	}
 
 	/**

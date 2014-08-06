@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -162,13 +162,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 
-		if (is_array($this->defaultValueDefinition)) {
+		if (null === $this->defaultValue) {
 			if (0 === count($this->defaultValueDefinition)) {
 				throw new Exception\RuntimeException('Property has no default value.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 
 			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
-			$this->defaultValueDefinition = Resolver::getSourceCode($this->defaultValueDefinition);
 		}
 
 		return $this->defaultValue;
@@ -181,7 +180,42 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function getDefaultValueDefinition()
 	{
-		return is_array($this->defaultValueDefinition) ? Resolver::getSourceCode($this->defaultValueDefinition) : $this->defaultValueDefinition;
+		return Resolver::getSourceCode($this->defaultValueDefinition);
+	}
+
+	/**
+	 * Returns if the default value is defined by a constant.
+	 *
+	 * @return boolean
+	 */
+	public function isDefaultValueConstant()
+	{
+		if (!$this->isDefaultValueAvailable() || empty($this->defaultValueDefinition)) {
+			return false;
+		}
+
+		static $expected = array(T_STRING => true, T_NS_SEPARATOR => true, T_DOUBLE_COLON => true);
+		foreach ($this->defaultValueDefinition as $token) {
+			if (!isset($expected[$token[0]])) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns the name of the default value constant.
+	 *
+	 * @return string|null
+	 */
+	public function getDefaultValueConstantName()
+	{
+		if (!$this->isOptional()) {
+			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
+		}
+
+		return $this->isDefaultValueConstant() ? $this->getDefaultValueDefinition() : null;
 	}
 
 	/**
@@ -191,7 +225,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function isDefaultValueAvailable()
 	{
-		return null !== $this->getDefaultValueDefinition();
+		return $this->isOptional();
 	}
 
 	/**
@@ -320,21 +354,31 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function isOptional()
 	{
 		if (null === $this->isOptional) {
-			$function = $this->getDeclaringFunction();
-			if (null === $function) {
-				throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
-			}
-
-			$this->isOptional = true;
-			foreach (array_slice($function->getParameters(), $this->position) as $reflectionParameter) {
-				if (!$reflectionParameter->isDefaultValueAvailable()) {
-					$this->isOptional = false;
-					break;
-				}
-			}
+			$this->isOptional = !empty($this->defaultValueDefinition) && $this->haveSiblingsDefalutValues();
 		}
 
 		return $this->isOptional;
+	}
+
+	/**
+	 * Returns if all following parameters have a default value definition.
+	 *
+	 * @return boolean
+	 */
+	protected function haveSiblingsDefalutValues()
+	{
+		$function = $this->getDeclaringFunction();
+		if (null === $function) {
+			throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		}
+
+		foreach (array_slice($function->getParameters(), $this->position + 1) as $reflectionParameter) {
+			if (null === $reflectionParameter->getDefaultValueDefinition()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

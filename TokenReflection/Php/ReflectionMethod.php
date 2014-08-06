@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -269,7 +269,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getClosure($object)
 	{
-		if (PHP_VERSION >= 50400) {
+		if (PHP_VERSION_ID >= 50400) {
 			return parent::getClosure();
 		} else {
 			$that = $this;
@@ -286,7 +286,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getClosureScopeClass()
 	{
-		return PHP_VERSION >= 50400 ? parent::getClosureScopeClass() : null;
+		return PHP_VERSION_ID >= 50400 ? parent::getClosureScopeClass() : null;
 	}
 
 	/**
@@ -296,7 +296,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getClosureThis()
 	{
-		return PHP_VERSION >= 50400 ? parent::getClosureThis() : null;
+		return PHP_VERSION_ID >= 50400 ? parent::getClosureThis() : null;
 	}
 
 	/**

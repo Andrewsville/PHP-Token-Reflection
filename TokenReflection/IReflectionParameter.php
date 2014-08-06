@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -89,6 +89,20 @@ interface IReflectionParameter extends IReflection
 	 * @return boolean
 	 */
 	public function isDefaultValueAvailable();
+
+	/**
+	 * Returns if the default value is defined by a constant.
+	 *
+	 * @return boolean
+	 */
+	public function isDefaultValueConstant();
+
+	/**
+	 * Returns the name of the default value constant.
+	 *
+	 * @return string
+	 */
+	public function getDefaultValueConstantName();
 
 	/**
 	 * Returns the position within all parameters.

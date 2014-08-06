@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -86,6 +86,40 @@ class ReflectionFileTest extends Test
 
 		$this->assertSame($rfl->token->getFileName(), $rfl->token->getFileReflection()->getName());
 		$this->assertSame($this->getBroker()->getFile($fileName), $rfl->token->getFileReflection());
+	}
+
+	public function testDeclareNoNamespace()
+	{
+		$fileName = $this->getFilePath('declareNoNamespace');
+		$this->getBroker()->processFile($fileName);
+
+		$this->assertTrue($this->getBroker()->hasFile($fileName));
+
+		$fileReflection = $this->getBroker()->getFile($fileName);
+		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+
+		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
+
+		$namespaces = $fileReflection->getNamespaces();
+		$this->assertCount(1, $namespaces);
+		$this->assertEquals(ReflectionNamespace::NO_NAMESPACE_NAME, $namespaces[0]->getName());
+	}
+
+	public function testDeclareNamespace()
+	{
+		$fileName = $this->getFilePath('declareNamespace');
+		$this->getBroker()->processFile($fileName);
+
+		$this->assertTrue($this->getBroker()->hasFile($fileName));
+
+		$fileReflection = $this->getBroker()->getFile($fileName);
+		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+
+		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
+
+		$namespaces = $fileReflection->getNamespaces();
+		$this->assertCount(1, $namespaces);
+		$this->assertEquals('TokenReflection\Test', $namespaces[0]->getName());
 	}
 
 	/**

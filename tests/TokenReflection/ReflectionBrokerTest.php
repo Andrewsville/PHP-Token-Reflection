@@ -2,12 +2,12 @@
 /**
  * PHP Token Reflection
  *
- * Version 1.3.1
+ * Version 1.4.0
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.
+ * with this library in the file LICENSE.md.
  *
  * @author Ondřej Nešpor
  * @author Jaroslav Hanslík
@@ -177,6 +177,7 @@ class ReflectionBrokerTest extends Test
 					'doc-comment-inheritance.php',
 					'doc-comment-many-lines.php',
 					'double-properties.php',
+					'dummy.php',
 					'final.php',
 					'in-namespace.php',
 					'instances.php',
