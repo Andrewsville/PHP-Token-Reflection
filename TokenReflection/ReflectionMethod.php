@@ -384,7 +384,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$prototype = ', prototype ' . $this->getPrototype()->getDeclaringClassName();
 		} catch (Exception\RuntimeException $e) {
 			if ($declaringClassParent && $declaringClassParent->isInternal()) {
-				$internal = 'internal:' . $parentClass->getExtensionName();
+				$internal = 'internal:' . $declaringClassParent->getExtensionName();
 			}
 		}
 

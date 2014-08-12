@@ -16,4 +16,7 @@ notifications:
   email:
     - ci@andrewsville.cz
 
+before_script:
+  - composer update --dev
+  
 script: phpunit tests/TokenReflection
