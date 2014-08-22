@@ -62,6 +62,13 @@ interface Backend
 	public function getNamespace($namespaceName);
 
 	/**
+	 * Returns a list of namespaces.
+	 *
+	 * @return array
+	 */
+	public function getNamespaces();
+
+	/**
 	 * Returns if there was such class processed (FQN expected).
 	 *
 	 * @param string $className Class name

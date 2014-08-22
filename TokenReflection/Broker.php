@@ -359,6 +359,23 @@ class Broker
 	}
 
 	/**
+	 * Returns a list of reflection objects for all the found namespaces.
+	 *
+	 * @return array
+	 */
+
+	public function getNamespaces()
+	{
+		$output = array();
+
+		foreach(array_keys($this->backend->getNamespaces()) as $name) {
+			$output[] = $this->getNamespace($name);
+		}
+
+		return $output;
+	}
+
+	/**
 	 * Returns if the broker contains a class of the given name.
 	 *
 	 * @param string $className Class name
