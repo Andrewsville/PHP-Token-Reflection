@@ -719,7 +719,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 						}
 
 						if (!isset($this->methods[$newName])) {
-							if (isset($methods[$newName])) {
+							if (isset($methods[$newName]) && !$traitMethod->isAbstract()) {
 								throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $newName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 							}
 
@@ -730,7 +730,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 				if (!in_array(null, $imports)) {
 					if (!isset($this->methods[$methodName])) {
-						if (isset($methods[$methodName])) {
+						if (isset($methods[$methodName]) && !$traitMethod->isAbstract()) {
 							throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 						}
 
