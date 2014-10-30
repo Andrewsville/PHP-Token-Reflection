@@ -94,6 +94,13 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	private $isOptional;
 
 	/**
+	 * Determines if the parameter is variadic.
+	 *
+	 * @var boolean
+	 */
+	private $isVariadic = false;
+
+	/**
 	 * Determines if the value is passed by reference.
 	 *
 	 * @var boolean
@@ -392,6 +399,16 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	}
 
 	/**
+	 * Returns if the parameter is variadic.
+	 *
+	 * @return boolean
+	 */
+	public function isVariadic()
+	{
+		return $this->isVariadic;
+	}
+
+	/**
 	 * Returns if the paramter value can be passed by value.
 	 *
 	 * @return boolean
@@ -450,11 +467,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		}
 
 		return sprintf(
-			'Parameter #%d [ <%s> %s%s$%s%s ]',
+			'Parameter #%d [ <%s> %s%s%s$%s%s ]',
 			$this->getPosition(),
 			$this->isOptional() ? 'optional' : 'required',
 			$hint ? $hint . ' ' : '',
 			$this->isPassedByReference() ? '&' : '',
+			$this->isVariadic() ? '...' : '',
 			$this->getName(),
 			$default
 		);
@@ -554,6 +572,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return $this
 			->parseTypeHint($tokenStream)
 			->parsePassedByReference($tokenStream)
+			->parseIsVariadic($tokenStream)
 			->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
 	}
@@ -606,6 +625,22 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	{
 		if ($tokenStream->is('&')) {
 			$this->passedByReference = true;
+			$tokenStream->skipWhitespaces(true);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Parses if parameter is variadic.
+	 *
+	 * @param \TokenReflection\Stream\StreamBase $tokenStream Token substream
+	 * @return \TokenReflection\ReflectionParameter
+	 */
+	private function parseIsVariadic(Stream $tokenStream)
+	{
+		if (PHP_VERSION_ID >= 50600 && $tokenStream->is(T_ELLIPSIS)) {
+			$this->isVariadic = true;
 			$tokenStream->skipWhitespaces(true);
 		}
 

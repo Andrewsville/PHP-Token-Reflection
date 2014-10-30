@@ -250,6 +250,16 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	}
 
 	/**
+	 * Returns if the parameter is variadic.
+	 *
+	 * @return boolean
+	 */
+	public function isVariadic()
+	{
+		return PHP_VERSION_ID >= 50600 && parent::isVariadic();
+	}
+
+	/**
 	 * Returns the original type hint as defined in the source code.
 	 *
 	 * @return string|null

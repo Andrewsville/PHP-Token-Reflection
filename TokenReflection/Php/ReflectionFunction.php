@@ -243,6 +243,16 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	}
 
 	/**
+	 * Returns if the function/method is variadic.
+	 *
+	 * @return boolean
+	 */
+	public function isVariadic()
+	{
+		return PHP_VERSION_ID >= 50600 ? parent::isVariadic() : false;
+	}
+
+	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
 	 * @return string

@@ -487,4 +487,14 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	{
 		return ReflectionBase::exists($this, $key);
 	}
+
+	/**
+	 * Returns if the function/method is variadic.
+	 *
+	 * @return boolean
+	 */
+	public function isVariadic()
+	{
+		return false;
+	}
 }
