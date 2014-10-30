@@ -84,6 +84,13 @@ interface IReflectionFunctionBase extends IReflection
 	public function isClosure();
 
 	/**
+	 * Returns if the function/method is variadic.
+	 *
+	 * @return boolean
+	 */
+	public function isVariadic();
+
+	/**
 	 * Returns if the function/method is deprecated.
 	 *
 	 * @return boolean
