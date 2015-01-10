@@ -1,6 +1,6 @@
-# PHP Token Reflection #
+# ApiGen\TokenReflection [WIPŊ
 
-[![Build Status](https://secure.travis-ci.org/Andrewsville/PHP-Token-Reflection.png?branch=develop)](http://travis-ci.org/Andrewsville/PHP-Token-Reflection)
+[![Build Status](https://secure.travis-ci.org/apigen/token-reflection.png?branch=master)](http://travis-ci.org/ApiGen/TokenReflection)
 
 In short, this library emulates the PHP reflection model using the tokenized PHP source.
 
@@ -46,7 +46,7 @@ To be able to work with reflections you have to let the library parse the source
 
 ```php
 <?php
-namespace TokenReflection;
+namespace ApiGen\TokenReflection;
 
 $broker = new Broker(new Broker\Backend\Memory());
 $broker->processDirectory('~/lib/Zend_Framework');
@@ -58,13 +58,3 @@ $class = $broker->getClass('Nonexistent');  // returns a TokenReflection\Dummy\R
 $function = $broker->getFunction(...);
 $constant = $broker->getConstant(...);
 ```
-
-## Requirements
-
-The library requires PHP 5.3 with the [tokenizer extension](http://cz.php.net/manual/en/book.tokenizer.php) enabled. If you want to process PHAR archives, you will require the [appropriate extension](http://cz.php.net/manual/en/book.phar.php) enabled as well.
-
-## Current status
-
-The current version should support the vast majority of PHP internal reflection features and add many more.
-
-Every release is tested using our testing package (several PHP frameworks and other libraries) and its compatibility is tested on all PHP versions of the 5.3 and 5.4 branch and the actual trunk.
