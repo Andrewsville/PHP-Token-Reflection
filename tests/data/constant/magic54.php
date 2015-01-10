@@ -39,7 +39,7 @@ namespace
 
 	class TokenReflection_Test_ConstantMagic54WithTrait extends TokenReflection_Test_ConstantMagic54
 	{
-		use TokenReflection_Test_ConstantMagic54Trait;
+		use \TokenReflection_Test_ConstantMagic54Trait;
 
 		public $trait2 = __TRAIT__;
 
@@ -92,7 +92,7 @@ namespace ns
 
 	class TokenReflection_Test_ConstantMagic54WithTrait extends TokenReflection_Test_ConstantMagic54
 	{
-		use TokenReflection_Test_ConstantMagic54Trait;
+		use \TokenReflection_Test_ConstantMagic54Trait;
 
 		public $trait2 = __TRAIT__;
 

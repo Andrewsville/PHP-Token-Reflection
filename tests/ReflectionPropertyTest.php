@@ -1,28 +1,18 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
 
+namespace ApiGen\TokenReflection\Tests;
+
+use ApiGen;
+use ApiGen\TokenReflection\Php\ReflectionProperty;
+use ApiGen\TokenReflection\ReflectionAnnotation;
 use ReflectionProperty as InternalReflectionProperty;
 
-require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Property test.
  */
-class ReflectionPropertyTest extends Test
+class ReflectionPropertyTest extends TestCase
 {
 	/**
 	 * Element type.
@@ -57,7 +47,7 @@ class ReflectionPropertyTest extends Test
 		$propertyName = 'docComment';
 		$this->assertTrue($rfl->token->hasProperty($propertyName));
 
-		/** @var \TokenReflection\ReflectionProperty */
+		/** @var ApiGen\TokenReflection\ReflectionProperty */
 		$tokenProperty = $rfl->token->getProperty($propertyName);
 		$this->assertTrue($tokenProperty->hasAnnotation('var'));
 		$this->assertSame(array("String It is a string\n\tand this comment has multiple\n\tlines."), $tokenProperty->getAnnotation('var'));
@@ -192,7 +182,7 @@ class ReflectionPropertyTest extends Test
 	}
 
 	/**
-	 * Test property accessibility.
+	 * TestCase property accessibility.
 	 */
 	public function testAccessible()
 	{
@@ -206,12 +196,12 @@ class ReflectionPropertyTest extends Test
 
 			try {
 				$token->getValue($object);
-				$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
+				$this->fail('Expected exception ApiGen\TokenReflection\Exception\RuntimeException.');
 			} catch (\PHPUnit_Framework_AssertionFailedError $e) {
 				throw $e;
 			} catch (\Exception $e) {
 				// Correctly thrown exception
-				$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
+				$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 			}
 
 			$this->assertSame($internal->setAccessible(true), $token->setAccessible(true));
@@ -272,7 +262,7 @@ class ReflectionPropertyTest extends Test
 			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' .  $class, $token->getDeclaringClassName());
-			$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
+			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}
 
@@ -415,9 +405,9 @@ class ReflectionPropertyTest extends Test
 		foreach ($tests as $test) {
 			$rfl = $this->getPropertyReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			$this->assertSame(InternalReflectionProperty::export($this->getClassName($test), $test, true), ReflectionProperty::export($this->getBroker(), $this->getClassName($test), $test, true));
+			$this->assertSame(InternalReflectionProperty::export($this->getClassName($test), $test, true), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), $this->getClassName($test), $test, true));
 
-			// Test loading from a string
+			// TestCase loading from a string
 			$rfl = $this->getPropertyReflection($test, true);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
@@ -428,14 +418,14 @@ class ReflectionPropertyTest extends Test
 			$internal = $rfl->internal->getProperty($name);
 			$token = $rfl->token->getProperty($name);
 			$this->assertSame($internal->__toString(), $token->__toString());
-			$this->assertSame(InternalReflectionProperty::export($this->getClassName('modifiers'), $name, true), ReflectionProperty::export($this->getBroker(), $this->getClassName('modifiers'), $name, true));
+			$this->assertSame(InternalReflectionProperty::export($this->getClassName('modifiers'), $name, true), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), $this->getClassName('modifiers'), $name, true));
 
-			// Test loading from a string
+			// TestCase loading from a string
 			$this->assertSame($internal->__toString(), $rfl_fromString->token->getProperty($name)->__toString());
 		}
 
-		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', true), ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', true));
-		$this->assertSame(InternalReflectionProperty::export(new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true), ReflectionProperty::export($this->getBroker(), new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true));
+		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', true), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', true));
+		$this->assertSame(InternalReflectionProperty::export(new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', true));
 	}
 
 	/**
@@ -443,10 +433,6 @@ class ReflectionPropertyTest extends Test
 	 */
 	public function test54features()
 	{
-		if (PHP_VERSION_ID < 50400) {
-			$this->markTestSkipped('Tested only on PHP 5.4+');
-		}
-
 		$tests = array('public', 'protected', 'private');
 
 		$rfl = $this->getClassReflection('54features');
@@ -470,11 +456,11 @@ class ReflectionPropertyTest extends Test
 	/**
 	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalPropertyReflectionCreate()
 	{
-		Php\ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getBroker());
+		ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 
 	/**

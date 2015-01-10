@@ -1,26 +1,13 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
 
-require_once __DIR__ . '/../bootstrap.php';
+namespace ApiGen\TokenReflection\Tests;
 
-/**
- * Abstract test.
- */
-abstract class Test extends \PHPUnit_Framework_TestCase
+
+use ApiGen\TokenReflection\Broker;
+
+
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Element type.
@@ -33,7 +20,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 * Return a tokenized file reflection.
 	 *
 	 * @param mixed $test
-	 * @return \TokenReflection\ReflectionFile
+	 * @return ApiGen\TokenReflection\ReflectionFile
 	 */
 	protected function getFileTokenReflection($test)
 	{
@@ -180,7 +167,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 *
 	 * @param string $test
 	 * @param boolean $fromString
-	 * @return \TokenReflection\ReflectionClass
+	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
 	protected function getClassTokenReflection($test, $fromString = false)
 	{
@@ -199,7 +186,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 *
 	 * @param string $test
 	 * @param boolean $fromString
-	 * @return \TokenReflection\ReflectionMethod
+	 * @return ApiGen\TokenReflection\ReflectionMethod
 	 */
 	protected function getMethodTokenReflection($test, $fromString = false)
 	{
@@ -211,7 +198,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 *
 	 * @param string $test
 	 * @param boolean $fromString
-	 * @return \TokenReflection\ReflectionProperty
+	 * @return ApiGen\TokenReflection\ReflectionProperty
 	 */
 	protected function getPropertyTokenReflection($test, $fromString = false)
 	{
@@ -223,7 +210,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 *
 	 * @param string $test
 	 * @param boolean $fromString
-	 * @return \TokenReflection\ReflectionConstant
+	 * @return ApiGen\TokenReflection\ReflectionConstant
 	 */
 	protected function getConstantTokenReflection($test, $fromString = false)
 	{
@@ -235,7 +222,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 *
 	 * @param string $test
 	 * @param boolean $fromString
-	 * @return \TokenReflection\ReflectionFunction
+	 * @return ApiGen\TokenReflection\ReflectionFunction
 	 */
 	protected function getFunctionTokenReflection($test, $fromString = false)
 	{
@@ -254,7 +241,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	 *
 	 * @param string $test
 	 * @param boolean $fromString
-	 * @return \TokenReflection\ReflectionParameter
+	 * @return ApiGen\TokenReflection\ReflectionParameter
 	 */
 	protected function getParameterTokenReflection($test, $fromString = false)
 	{
@@ -280,7 +267,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 		$file = preg_replace_callback('~[A-Z]~', function($matches) {
 			return '-' . strtolower($matches[0]);
 		}, $test);
-		return realpath(__DIR__ . '/../data/' . $this->type . '/' . $file . '.php');
+		return realpath(__DIR__ . '/data/' . $this->type . '/' . $file . '.php');
 	}
 
 	/**
@@ -341,19 +328,15 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Returns a new broker instance.
-	 *
-	 * @return \TokenReflection\Broker
+	 * @return Broker
 	 */
 	public function createBroker()
 	{
-		return new Broker(new Broker\Backend\Memory());
+		return new Broker(new Broker\Backend\Memory);
 	}
 
 	/**
-	 * Returns broker instance.
-	 *
-	 * @return \TokenReflection\Broker
+	 * @return Broker
 	 */
 	protected function getBroker()
 	{

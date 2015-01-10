@@ -1,28 +1,15 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
+namespace ApiGen\TokenReflection\Tests;
 
+use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Php\ReflectionExtension;
+use ApiGen\TokenReflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\ReflectionMethod;
 use ReflectionMethod as InternalReflectionMethod;
 
-require_once __DIR__ . '/../bootstrap.php';
 
-/**
- * Method test.
- */
-class ReflectionMethodTest extends Test
+class ReflectionMethodTest extends TestCase
 {
 	/**
 	 * Element type.
@@ -146,7 +133,7 @@ class ReflectionMethodTest extends Test
 		);
 
 		// The same test with parsing method bodies turned off
-		$broker = new Broker(new Broker\Backend\Memory(), Broker::OPTION_DEFAULT & ~Broker::OPTION_PARSE_FUNCTION_BODY);
+		$broker = new Broker(new Broker\Backend\Memory, Broker::OPTION_DEFAULT & ~Broker::OPTION_PARSE_FUNCTION_BODY);
 		$broker->processFile($this->getFilePath($testName));
 		$reflection = $broker->getClass($this->getClassName($testName))->getMethod($this->getMethodName($testName));
 		$this->assertSame(array(), $reflection->getStaticVariables());
@@ -167,10 +154,6 @@ class ReflectionMethodTest extends Test
 	 */
 	public function testClosures()
 	{
-		if (PHP_VERSION_ID < 50400) {
-			$this->markTestSkipped('Requires PHP 5.4 or higher.');
-		}
-
 		$rfl = $this->getMethodReflection('closures');
 		$internal = $rfl->internal;
 		$token = $rfl->token;
@@ -187,15 +170,10 @@ class ReflectionMethodTest extends Test
 			$this->assertSame($result, $tokenClosure($param));
 		}
 
-		if (PHP_VERSION_ID >= 50400) {
-			$this->assertSame($internal->getClosureThis(), $token->getClosureThis());
-			$this->assertSame($internal->getClosureScopeClass(), $token->getClosureScopeClass());
-		}
+		$this->assertSame($internal->getClosureThis(), $token->getClosureThis());
+		$this->assertSame($internal->getClosureScopeClass(), $token->getClosureScopeClass());
 	}
 
-	/**
-	 * Tests if method is deprecated.
-	 */
 	public function testDeprecated()
 	{
 		$rfl = $this->getMethodReflection('noDeprecated');
@@ -203,9 +181,6 @@ class ReflectionMethodTest extends Test
 		$this->assertFalse($rfl->token->isDeprecated());
 	}
 
-	/**
-	 * Tests if method is constructor or destructor.
-	 */
 	public function testConstructorDestructor()
 	{
 		$rfl = $this->getClassReflection('constructorDestructor');
@@ -249,21 +224,6 @@ class ReflectionMethodTest extends Test
 		}
 	}
 
-	/**
-	 * Tests if method can clone.
-	 */
-	public function testClone()
-	{
-		if (PHP_VERSION_ID >= 50400) {
-			// @todo investigate http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l199
-			$this->markTestSkipped();
-		}
-
-		$rfl = $this->getClassReflection('clone');
-
-		$this->assertSame($rfl->internal->getMethod('__clone')->getModifiers(), $rfl->token->getMethod('__clone')->getModifiers());
-		$this->assertSame($rfl->internal->getMethod('noClone')->getModifiers(), $rfl->token->getMethod('noClone')->getModifiers());
-	}
 
 	/**
 	 * Tests getting of declaring class.
@@ -279,7 +239,7 @@ class ReflectionMethodTest extends Test
 			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_MethodDeclaringClass' .  $class, $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_MethodDeclaringClass' .  $class, $token->getDeclaringClassName());
-			$this->assertInstanceOf('TokenReflection\ReflectionClass', $token->getDeclaringClass());
+			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}
 
@@ -307,11 +267,6 @@ class ReflectionMethodTest extends Test
 
 			foreach ($internal->getMethods() as $method) {
 				$this->assertTrue($token->hasMethod($method->getName()), sprintf('%s::%s()', $className, $method->getName()));
-				if (PHP_VERSION_ID >= 50400) {
-					// @todo investigate http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l199
-					continue;
-				}
-				$this->assertSame($method->getModifiers(), $token->getMethod($method->getName())->getModifiers(), sprintf('%s::%s()', $className, $method->getName()));
 			}
 		}
 	}
@@ -415,7 +370,7 @@ class ReflectionMethodTest extends Test
 		$tokenParameters = $rfl->token->getParameters();
 		for ($i = 0; $i < count($internalParameters); $i++) {
 			$this->assertSame($internalParameters[$i]->getName(), $tokenParameters[$i]->getName());
-			$this->assertInstanceOf('TokenReflection\ReflectionParameter', $tokenParameters[$i]);
+			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionParameter', $tokenParameters[$i]);
 		}
 
 		$rfl = $this->getMethodReflection('noParameters');
@@ -457,7 +412,7 @@ class ReflectionMethodTest extends Test
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
@@ -467,7 +422,7 @@ class ReflectionMethodTest extends Test
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		$internal = $rfl->internal->getMethod('protectedInvoke');
@@ -480,7 +435,7 @@ class ReflectionMethodTest extends Test
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		try {
@@ -490,7 +445,7 @@ class ReflectionMethodTest extends Test
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 		}
 
 		if (PHP_VERSION_ID >= 50302) {
@@ -510,7 +465,7 @@ class ReflectionMethodTest extends Test
 		$rfl = $this->getMethodReflection('prototype');
 		$this->assertSame($rfl->internal->getPrototype()->getName(), $rfl->internal->getPrototype()->getName());
 		$this->assertSame($rfl->internal->getPrototype()->getDeclaringClass()->getName(), $rfl->internal->getPrototype()->getDeclaringClass()->getName());
-		$this->assertInstanceOf('TokenReflection\ReflectionMethod', $rfl->token->getPrototype());
+		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $rfl->token->getPrototype());
 
 		$rfl = $this->getMethodReflection('noPrototype');
 
@@ -521,7 +476,7 @@ class ReflectionMethodTest extends Test
 			throw $e;
 		} catch (\Exception $e) {
 			// Correctly thrown exception
-			$this->assertInstanceOf('TokenReflection\Exception\RuntimeException', $e);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 		}
 	}
 
@@ -572,10 +527,6 @@ class ReflectionMethodTest extends Test
 	 */
 	public function test54features()
 	{
-		if (PHP_VERSION_ID < 50400) {
-			$this->markTestSkipped('Tested only on PHP 5.4+');
-		}
-
 		$rfl = $this->getMethodReflection('features54');
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
@@ -592,17 +543,17 @@ class ReflectionMethodTest extends Test
 	/**
 	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalMethodReflectionCreate()
 	{
-		Php\ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
+		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 
 	/**
 	 * Tests an exception thrown when trying to get a non-existent parameter.
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalMethodGetParameter1()
 	{
@@ -612,7 +563,7 @@ class ReflectionMethodTest extends Test
 	/**
 	 * Tests an exception thrown when trying to get a non-existent parameter.
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalMethodGetParameter2()
 	{
@@ -622,7 +573,7 @@ class ReflectionMethodTest extends Test
 	/**
 	 * Returns an internal method reflection.
 	 *
-	 * @return \TokenReflection\Php\ReflectionMethod
+	 * @return ApiGen\TokenReflection\Php\ReflectionMethod
 	 */
 	private function getInternalMethodReflection()
 	{

@@ -1,28 +1,19 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
 
+namespace ApiGen\TokenReflection\Tests;
+
+use ApiGen;
+use ApiGen\TokenReflection\Php\ReflectionExtension;
+use ApiGen\TokenReflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\ReflectionFunction;
 use ReflectionFunction as InternalReflectionFunction;
 
-require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * Function test.
  */
-class ReflectionFunctionTest extends Test
+class ReflectionFunctionTest extends TestCase
 {
 	/**
 	 * Element type.
@@ -121,9 +112,7 @@ class ReflectionFunctionTest extends Test
 		$broker->processFile($this->getFilePath('getClosure'));
 		require_once $this->getFilePath('getClosure');
 
-		if (PHP_VERSION_ID >= 50400) {
-			$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure1');
-		}
+		$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure1');
 
 		$function = $broker->getFunction('tokenReflectionFunctionGetClosure1');
 
@@ -145,9 +134,7 @@ class ReflectionFunctionTest extends Test
 			}
 		}
 
-		if (PHP_VERSION_ID >= 50400) {
-			$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure2');
-		}
+		$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure2');
 
 		$function = $broker->getFunction('tokenReflectionFunctionGetClosure2');
 
@@ -226,7 +213,7 @@ class ReflectionFunctionTest extends Test
 		$this->assertSame($rfl->internal->isInternal(), $rfl->token->isInternal());
 		$this->assertTrue($rfl->token->isInternal());
 
-		$this->assertInstanceOf('TokenReflection\Php\ReflectionExtension', $rfl->token->getExtension());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Php\ReflectionExtension', $rfl->token->getExtension());
 		$this->assertSame($rfl->internal->getExtensionName(), $rfl->token->getExtensionName());
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
@@ -293,7 +280,7 @@ class ReflectionFunctionTest extends Test
 		$tokenParameters = $rfl->token->getParameters();
 		for ($i = 0; $i < count($internalParameters); $i++) {
 			$this->assertSame($internalParameters[$i]->getName(), $tokenParameters[$i]->getName());
-			$this->assertInstanceOf('TokenReflection\ReflectionParameter', $tokenParameters[$i]);
+			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionParameter', $tokenParameters[$i]);
 		}
 
 		$rfl = $this->getFunctionReflection('noParameters');
@@ -331,7 +318,7 @@ class ReflectionFunctionTest extends Test
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 			$this->assertSame(InternalReflectionFunction::export($this->getFunctionName($test), true), ReflectionFunction::export($this->getBroker(), $this->getFunctionName($test), true));
 
-			// Test loading from a string
+			// TestCase loading from a string
 			$rfl = $this->getFunctionReflection($test, true);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
@@ -344,10 +331,6 @@ class ReflectionFunctionTest extends Test
 	 */
 	public function test54features()
 	{
-		if (PHP_VERSION_ID < 50400) {
-			$this->markTestSkipped('Tested only on PHP 5.4+');
-		}
-
 		$rfl = $this->getFunctionReflection('54features');
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
@@ -364,17 +347,17 @@ class ReflectionFunctionTest extends Test
 	/**
 	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalFunctionReflectionCreate()
 	{
-		Php\ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
+		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 
 	/**
 	 * Tests an exception thrown when trying to get a non-existent parameter.
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalFunctionGetParameter1()
 	{
@@ -384,7 +367,7 @@ class ReflectionFunctionTest extends Test
 	/**
 	 * Tests an exception thrown when trying to get a non-existent parameter.
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalFunctionGetParameter2()
 	{
@@ -394,7 +377,7 @@ class ReflectionFunctionTest extends Test
 	/**
 	 * Returns an internal function reflection.
 	 *
-	 * @return \TokenReflection\Php\ReflectionFunction
+	 * @return ApiGen\TokenReflection\Php\ReflectionFunction
 	 */
 	private function getInternalFunctionReflection()
 	{

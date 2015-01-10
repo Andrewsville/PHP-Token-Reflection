@@ -1,28 +1,13 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
 
+namespace ApiGen\TokenReflection\Tests;
+
+use ApiGen\TokenReflection\ReflectionNamespace;
 use ReflectionClass as InternalReflectionClass;
 
-require_once __DIR__ . '/../bootstrap.php';
 
-/**
- * Class test.
- */
-class ReflectionFileTest extends Test
+class ReflectionFileTest extends TestCase
 {
 	/**
 	 * Element type.
@@ -42,7 +27,7 @@ class ReflectionFileTest extends Test
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
 
@@ -65,7 +50,7 @@ class ReflectionFileTest extends Test
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
 
@@ -96,7 +81,7 @@ class ReflectionFileTest extends Test
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
 
@@ -113,7 +98,7 @@ class ReflectionFileTest extends Test
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
 
@@ -125,7 +110,7 @@ class ReflectionFileTest extends Test
 	/**
 	 * Tests throwing exceptions when requesting reflections of files that were not processed.
 	 *
-	 * @expectedException \TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
 	 */
 	public function testExceptionReturningFileReflection()
 	{

@@ -1,26 +1,11 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
+namespace ApiGen\TokenReflection\Tests;
 
-require_once __DIR__ . '/../bootstrap.php';
+use ApiGen\TokenReflection\Exception\FileProcessingException;
 
-/**
- * Duplicities handling test.
- */
-class DuplicitiesTest extends Test
+
+class DuplicitiesTest extends TestCase
 {
 	/**
 	 * Element type.
@@ -38,8 +23,8 @@ class DuplicitiesTest extends Test
 		try {
 			$broker->processFile($fileName = $this->getFilePath('constants'));
 
-			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\FileProcessingException $e) {
+			$this->fail('Expected exception ApiGen\TokenReflection\Exception\RuntimeException.');
+		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
@@ -49,7 +34,7 @@ class DuplicitiesTest extends Test
 		$this->assertTrue($broker->hasClass('duplicitiesConstants'));
 
 		$constant = $broker->getConstant('DUPLICITIES_CONSTANTS_1');
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $constant);
+		$this->assertInstanceOf('ApiGen\\TokenReflection\\Invalid\\ReflectionConstant', $constant);
 		$this->assertSame($fileName, $constant->getFileName());
 		$this->assertTrue($constant->hasReasons());
 	}
@@ -63,8 +48,8 @@ class DuplicitiesTest extends Test
 		try {
 			$broker->processFile($fileName = $this->getFilePath('functions'));
 
-			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\FileProcessingException $e) {
+			$this->fail('Expected exception ApiGen\TokenReflection\Exception\RuntimeException.');
+		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
@@ -74,7 +59,7 @@ class DuplicitiesTest extends Test
 		$this->assertTrue($broker->hasConstant('DUPLICITIES_FUNCTIONS'));
 
 		$function = $broker->getFunction('duplicitiesFunctions1');
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $function);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Invalid\ReflectionFunction', $function);
 		$this->assertSame($fileName, $function->getFileName());
 		$this->assertTrue($function->hasReasons());
 	}
@@ -88,8 +73,8 @@ class DuplicitiesTest extends Test
 		try {
 			$broker->processFile($fileName = $this->getFilePath('classes'));
 
-			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\FileProcessingException $e) {
+			$this->fail('Expected exception ApiGen\TokenReflection\Exception\RuntimeException.');
+		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
@@ -99,7 +84,7 @@ class DuplicitiesTest extends Test
 		$this->assertTrue($broker->hasConstant('DUPLICITIES_CLASSES'));
 
 		$class = $broker->getClass('duplicitiesClasses1');
-		$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $class);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Invalid\ReflectionClass', $class);
 		$this->assertSame($fileName, $class->getFileName());
 		$this->assertTrue($class->hasReasons());
 	}
@@ -113,8 +98,8 @@ class DuplicitiesTest extends Test
 		try {
 			$broker->processFile($fileName = $this->getFilePath('otherfile'));
 
-			$this->fail('Expected exception \TokenReflection\Exception\RuntimeException.');
-		} catch (Exception\FileProcessingException $e) {
+			$this->fail('Expected exception ApiGen\TokenReflection\Exception\RuntimeException.');
+		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
@@ -146,19 +131,19 @@ class DuplicitiesTest extends Test
 						$this->assertTrue($broker->hasClass($name));
 
 						$reflection = $broker->getClass($name);
-						$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionClass', $reflection);
+						$this->assertInstanceOf('ApiGen\TokenReflection\Invalid\ReflectionClass', $reflection);
 						break;
 					case 'functions':
 						$this->assertTrue($broker->hasFunction($name));
 
 						$reflection = $broker->getFunction($name);
-						$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionFunction', $reflection);
+						$this->assertInstanceOf('ApiGen\TokenReflection\Invalid\ReflectionFunction', $reflection);
 						break;
 					case 'constants':
 						$this->assertTrue($broker->hasConstant($name));
 
 						$reflection = $broker->getConstant($name);
-						$this->assertInstanceOf('TokenReflection\\Invalid\\ReflectionConstant', $reflection);
+						$this->assertInstanceOf('ApiGen\TokenReflection\Invalid\ReflectionConstant', $reflection);
 						break;
 				}
 

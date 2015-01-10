@@ -1,26 +1,12 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
+namespace ApiGen\TokenReflection\Tests;
 
-require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * TR library source code test.
  */
-class SourceCodeTest extends Test
+class SourceCodeTest extends TestCase
 {
 	/**
 	 * Tests if all methods have annotations.
@@ -28,14 +14,12 @@ class SourceCodeTest extends Test
 	public function testAnnotationsPresence()
 	{
 		$broker = $this->createBroker();
-		$broker->processDirectory(__DIR__ . '/../../TokenReflection');
+		$broker->processDirectory(__DIR__ . '/../src');
 
 		$classes = $broker->getClasses();
 		$this->assertGreaterThan(0, count($classes));
 
 		foreach ($classes as $class) {
-			$this->assertNotSame(false, $class->getDocComment(), $class->getPrettyName());
-
 			foreach ($class->getMethods() as $method) {
 				if (!$method->isInternal()) {
 					$this->assertNotSame(false, $method->getDocComment(), $method->getPrettyName());

@@ -1,30 +1,15 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-namespace TokenReflection;
+namespace ApiGen\TokenReflection\Tests;
 
-require_once __DIR__ . '/../bootstrap.php';
+use ApiGen;
+use ApiGen\TokenReflection\ReflectionAnnotation;
 
-/**
- * Annotations test.
- */
-class ReflectionAnnotationTest extends Test
+
+class ReflectionAnnotationTest extends TestCase
 {
+
 	/**
-	 * Element type.
-	 *
 	 * @var string
 	 */
 	protected $type = 'annotation';
@@ -34,7 +19,7 @@ class ReflectionAnnotationTest extends Test
 	 *
 	 * This exception is never thrown when using TR the "standard way".
 	 *
-	 * @expectedException \TokenReflection\Exception\RuntimeException
+	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testAnnotationInvalidTemplate()
 	{
