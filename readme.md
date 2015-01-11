@@ -1,6 +1,6 @@
 # Token Reflection [WIP]
 
-[![Build Status](https://img.shields.io/travis/apigen/token-reflection/master.svg?style=flat-square)](https://travis-ci.org/apigen/token-reflection)
+[![Build Status](https://img.shields.io/travis/apigen/TokenReflection/master.svg?style=flat-square)](https://travis-ci.org/apigen/TokenReflection)
 [![Quality Score](https://img.shields.io/scrutinizer/g/ApiGen/TokenReflection.svg?style=flat-square)](https://scrutinizer-ci.com/g/ApiGen/TokenReflection)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/ApiGen/TokenReflection.svg?style=flat-square)](https://scrutinizer-ci.com/g/ApiGen/TokenReflection)
 [![Downloads this Month](https://img.shields.io/packagist/dm/apigen/token-reflection.svg?style=flat-square)](https://packagist.org/packages/apigen/token-reflection)
