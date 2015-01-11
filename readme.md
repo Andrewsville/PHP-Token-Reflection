@@ -6,6 +6,15 @@
 [![Downloads this Month](https://img.shields.io/packagist/dm/apigen/token-reflection.svg?style=flat-square)](https://packagist.org/packages/apigen/token-reflection)
 [![Latest stable](https://img.shields.io/packagist/v/apigen/token-reflection.svg?style=flat-square)](https://packagist.org/packages/apigen/token-reflection)
 
+
+## Installation
+
+```sh
+composer require apigen/token-reflection
+```
+
+---
+
 In short, this library emulates the PHP reflection model using the tokenized PHP source.
 
 The basic concept is, that any reflection is possible to process the particular part of the token array describing the reflected element. It is also able to find out if there are any child elements (a class reflection is able to find method definitions in the source, for example), create their reflections and pass the appropriate part of the token array to them.
