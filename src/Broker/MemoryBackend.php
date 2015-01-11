@@ -16,6 +16,7 @@ use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\ReflectionFile;
 use ApiGen\TokenReflection\Stream\FileStream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
 /**
@@ -443,11 +444,9 @@ class MemoryBackend implements Backend
 	/**
 	 * Adds a file to the backend storage.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token stream
-	 * @param ApiGen\TokenReflection\ReflectionFile $file File reflection object
-	 * @return ApiGen\TokenReflection\Broker\Backend\Memory
+	 * @return MemoryBackend
 	 */
-	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, ReflectionFile $file)
+	public function addFile(StreamBase $tokenStream, ReflectionFile $file)
 	{
 		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : TRUE;
 		$this->files[$file->getName()] = $file;

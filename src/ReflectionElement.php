@@ -10,7 +10,6 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase;

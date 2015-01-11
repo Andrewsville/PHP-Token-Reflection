@@ -13,11 +13,6 @@ use ApiGen\TokenReflection\Stream\StreamBase;
 use ApiGen\TokenReflection\IReflection;
 
 
-/**
- * Parse exception.
- *
- * Thrown while parsing source codes.
- */
 class ParseException extends StreamException
 {
 
@@ -86,8 +81,8 @@ class ParseException extends StreamException
 
 
 	/**
-	 * @param ApiGen\TokenReflection\IReflection $sender Reflection element
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token stream
+	 * @param IReflection $sender Reflection element
+	 * @param StreamBase $tokenStream Token stream
 	 * @param string $message Exception message
 	 * @param int $code Exception code
 	 */

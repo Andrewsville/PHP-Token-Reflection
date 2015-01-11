@@ -10,7 +10,6 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase;
@@ -105,7 +104,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns the declaring class.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass|null
+	 * @return ReflectionClass|NULL
 	 */
 	public function getDeclaringClass()
 	{
@@ -159,8 +158,8 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * Returns the default value.
 	 *
 	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the property is not optional.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the property has no default value.
+	 * @throws RuntimeException If the property is not optional.
+	 * @throws RuntimeException If the property has no default value.
 	 */
 	public function getDefaultValue()
 	{
@@ -178,9 +177,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the part of the source code defining the parameter default value.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getDefaultValueDefinition()
 	{
@@ -189,9 +186,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns if the default value is defined by a constant.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDefaultValueConstant()
 	{
@@ -209,9 +204,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the name of the default value constant.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDefaultValueConstantName()
 	{
@@ -223,9 +216,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Retutns if a default value for the parameter is available.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDefaultValueAvailable()
 	{
@@ -234,9 +225,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the position within all parameters.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getPosition()
 	{
@@ -245,9 +234,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns if the parameter expects an array.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isArray()
 	{
@@ -278,9 +265,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns reflection of the required class of the value.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getClass()
 	{
@@ -293,10 +278,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the required class name of the value.
-	 *
-	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the type hint class FQN could not be determined.
+	 * {@inheritdoc}
 	 */
 	public function getClassName()
 	{
@@ -337,7 +319,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function allowsNull()
 	{
@@ -349,8 +331,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * @return bool
-	 * @throws RuntimeException If it is not possible to determine if the parameter is optional.
+	 * {@inheritdoc}
 	 */
 	public function isOptional()
 	{
@@ -391,9 +372,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns if the parameter value is passed by reference.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isPassedByReference()
 	{
@@ -402,9 +381,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns if the paramter value can be passed by value.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function canBePassedByValue()
 	{

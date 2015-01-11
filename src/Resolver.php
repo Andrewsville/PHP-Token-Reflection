@@ -10,6 +10,9 @@
 namespace ApiGen\TokenReflection;
 
 
+use ApiGen\TokenReflection\Exception\RuntimeException;
+
+
 class Resolver
 {
 
@@ -55,10 +58,10 @@ class Resolver
 	 * Returns a property/parameter/constant/static variable value definition.
 	 *
 	 * @param array $tokens Tokenized definition
-	 * @param ApiGen\TokenReflection\ReflectionElement $reflection Caller reflection
+	 * @param ReflectionElement $reflection Caller reflection
 	 * @return string
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid reflection object was provided.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid source code was provided.
+	 * @throws RuntimeException If an invalid reflection object was provided.
+	 * @throws RuntimeException If an invalid source code was provided.
 	 */
 	final public static function getValueDefinition(array $tokens, ReflectionElement $reflection)
 	{
@@ -203,7 +206,7 @@ class Resolver
 	 * Finds constant names in the token definition.
 	 *
 	 * @param array $tokens Tokenized source code
-	 * @param ApiGen\TokenReflection\ReflectionElement $reflection Caller reflection
+	 * @param ReflectionElement $reflection Caller reflection
 	 * @return array
 	 */
 	final public static function findConstants(array $tokens, ReflectionElement $reflection)

@@ -12,7 +12,6 @@ namespace ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionClass as InternalReflectionClass;
@@ -390,7 +389,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 *
 	 * @return ReflectionProperty
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
 		$this->parseModifiers($tokenStream, $parent);
 		if (FALSE === $this->docComment->getDocComment()) {
@@ -404,7 +403,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
 	 *
-	 * @return ReflectionClass
+	 * @return ReflectionProperty
 	 * @throws ParseException If the modifiers value cannot be determined.
 	 */
 	private function parseModifiers(StreamBase $tokenStream, ReflectionClass $class)

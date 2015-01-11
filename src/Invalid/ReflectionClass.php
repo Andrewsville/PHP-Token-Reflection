@@ -11,7 +11,6 @@ namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\IReflectionClass;
@@ -374,9 +373,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass, Ann
 
 
 	/**
-	 * Returns the parent class reflection.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getParentClass()
 	{

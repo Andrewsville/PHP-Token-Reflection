@@ -28,7 +28,7 @@ class RuntimeException extends BaseException
 	/**
 	 * The reflection element that caused this exception to be raised.
 	 *
-	 * @var ApiGen\TokenReflection\IReflection
+	 * @var IReflection
 	 */
 	private $sender;
 
@@ -36,7 +36,7 @@ class RuntimeException extends BaseException
 	/**
 	 * @param string $message Exception message
 	 * @param int $code Exception code
-	 * @param ApiGen\TokenReflection\IReflection $sender Reflection element
+	 * @param IReflection $sender Reflection element
 	 */
 	public function __construct($message, $code, IReflection $sender = NULL)
 	{
@@ -48,7 +48,7 @@ class RuntimeException extends BaseException
 	/**
 	 * Returns the reflection element that caused the exception to be raised.
 	 *
-	 * @return ApiGen\TokenReflection\IReflection
+	 * @return IReflection
 	 */
 	public function getSender()
 	{

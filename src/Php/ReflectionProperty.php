@@ -11,7 +11,6 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\IReflectionProperty;
 use ApiGen\TokenReflection\ReflectionElement;

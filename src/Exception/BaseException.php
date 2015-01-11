@@ -12,9 +12,6 @@ namespace ApiGen\TokenReflection\Exception;
 use RuntimeException;
 
 
-/**
- * Base TokenReflection exception.
- */
 abstract class BaseException extends RuntimeException
 {
 

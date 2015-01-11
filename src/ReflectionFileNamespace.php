@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 

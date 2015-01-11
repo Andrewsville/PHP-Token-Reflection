@@ -12,9 +12,6 @@ namespace ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * TokenReflection exception raised when working with a token stream.
- */
 class StreamException extends BaseException
 {
 
@@ -48,7 +45,7 @@ class StreamException extends BaseException
 
 
 	/**
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $stream Reflection element
+	 * @param StreamBase $stream Reflection element
 	 * @param string $message Exception message
 	 * @param int $code Exception code
 	 */

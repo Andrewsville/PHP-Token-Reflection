@@ -12,9 +12,6 @@ namespace ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Broker\Broker;
 
 
-/**
- * Exception raised when working with the Broker.
- */
 class BrokerException extends BaseException
 {
 

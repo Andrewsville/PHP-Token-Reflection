@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection\Php;
 
+use ApiGen;
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Backend;
 use ApiGen\TokenReflection\Broker\Broker;
@@ -765,7 +766,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @return ReflectionClass
+	 * @return ApiGen\TokenReflection\ReflectionClass|NULL
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)

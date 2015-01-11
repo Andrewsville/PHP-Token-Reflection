@@ -10,7 +10,6 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Behaviors\Annotations;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 
 

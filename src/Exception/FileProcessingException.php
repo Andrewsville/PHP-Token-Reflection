@@ -12,9 +12,6 @@ namespace ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\ReflectionFile;
 
 
-/**
- * Processing exception thrown by the library if a file could not be processed.
- */
 final class FileProcessingException extends RuntimeException
 {
 

@@ -10,12 +10,11 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
-use ReflectionMethod as InternalReflectionMethod, ReflectionClass as InternalReflectionClass;
+use ReflectionClass as InternalReflectionClass;
+use ReflectionMethod as InternalReflectionMethod;
 
 
 class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMethod
@@ -639,7 +638,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @return ReflectionMethod
 	 * @throws ParseException If the class could not be parsed.
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
 		return $this->parseBaseModifiers($tokenStream)
 			->parseReturnsReference($tokenStream)
