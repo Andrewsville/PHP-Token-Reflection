@@ -2,8 +2,8 @@
 
 namespace ApiGen\TokenReflection\Tests;
 
+use ApiGen;
 use ApiGen\TokenReflection\ReflectionNamespace;
-use ReflectionClass as InternalReflectionClass;
 
 
 class ReflectionFileTest extends TestCase
@@ -124,6 +124,40 @@ class ReflectionFileTest extends TestCase
 
 		$this->assertFalse($broker->hasFile('#non~Existent#'));
 		$broker->getFile('#non~Existent#');
+	}
+
+
+	public function testGetSource()
+	{
+		$fileName = $this->getFilePath('docComment');
+
+		$fileReflection = $this->getBroker()->getFile($fileName);
+
+		$expectedSource = <<<SOURCE
+<?php
+/**
+ * This is a file level doccomment.
+ *
+ * @package package name
+ * @author author name
+ */
+
+
+/**
+ * TokenReflection_Test_FileDocComment.
+ *
+ * @copyright Copyright (c) 2011
+ * @author author
+ * @see http://php.net
+ */
+class TokenReflection_Test_FileDocComment
+{
+
+}
+
+SOURCE;
+
+		$this->assertSame($expectedSource, $fileReflection->getSource());
 	}
 
 }
