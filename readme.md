@@ -1,6 +1,10 @@
-# ApiGen\TokenReflection [WIP]
+# Token Reflection [WIP]
 
-[![Build Status](https://secure.travis-ci.org/apigen/token-reflection.png?branch=master)](http://travis-ci.org/ApiGen/TokenReflection)
+[![Build Status](https://img.shields.io/travis/apigen/token-reflection/master.svg?style=flat-square)](https://travis-ci.org/apigen/token-reflection)
+[![Quality Score](https://img.shields.io/scrutinizer/g/ApiGen/TokenReflection.svg?style=flat-square)](https://scrutinizer-ci.com/g/ApiGen/TokenReflection)
+[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/ApiGen/TokenReflection.svg?style=flat-square)](https://scrutinizer-ci.com/g/ApiGen/TokenReflection)
+[![Downloads this Month](https://img.shields.io/packagist/dm/apigen/token-reflection.svg?style=flat-square)](https://packagist.org/packages/apigen/token-reflection)
+[![Latest stable](https://img.shields.io/packagist/v/apigen/token-reflection.svg?style=flat-square)](https://packagist.org/packages/apigen/token-reflection)
 
 In short, this library emulates the PHP reflection model using the tokenized PHP source.
 
