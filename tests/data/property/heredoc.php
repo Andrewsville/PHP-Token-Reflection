@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_PropertyHeredoc
 {
+
 	public $heredoc = <<<EOT
 property value
 EOT;
@@ -9,4 +10,5 @@ EOT;
 	public $nowdoc = <<<'EOT'
 property value
 EOT;
+
 }

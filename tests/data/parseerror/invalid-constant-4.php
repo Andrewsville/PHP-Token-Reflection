@@ -1,3 +1,3 @@
 <?php
 
-const INVALID_CONSTANT_4 = true && false;
+const INVALID_CONSTANT_4 = TRUE && FALSE;

@@ -1,19 +1,22 @@
 language: php
 
 php:
-  - 5.3
   - 5.4
+  - 5.5
+  - 5.6
 
-env:
-  - TRAVISCI=1
+before_install:
+  - composer self-update
 
-branches:
-  only:
-    - develop
-    - master
+install:
+  - composer update --prefer-source
 
-notifications:
-  email:
-    - ci@andrewsville.cz
+script:
+  - if [[ $TRAVIS_PHP_VERSION != '5.6' ]]; then phpunit; fi
+  # generate coverage only with latest PHP
+  - if [[ $TRAVIS_PHP_VERSION == '5.6' ]]; then phpunit --coverage-clover=coverage.clover; fi
 
-script: phpunit tests/TokenReflection
+after_script:
+  # move code coverage
+  - if [[ $TRAVIS_PHP_VERSION == '5.6' ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [[ $TRAVIS_PHP_VERSION == '5.6' ]]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi

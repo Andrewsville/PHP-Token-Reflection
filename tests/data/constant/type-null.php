@@ -2,5 +2,7 @@
 
 class TokenReflection_Test_ConstantTypeNull
 {
-	const TYPE_NULL = null;
+
+	const TYPE_NULL = NULL;
+
 }

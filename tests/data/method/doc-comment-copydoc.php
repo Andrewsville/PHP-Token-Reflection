@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_MethodDocCommentCopydoc
 {
+
 	/**
 	 * This is a method.
 	 */
@@ -9,6 +10,7 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 	{
 
 	}
+
 
 	/**
 	 * @copydoc method
@@ -18,6 +20,7 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 
 	}
 
+
 	/**
 	 * @copydoc method()
 	 */
@@ -25,6 +28,7 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 	{
 
 	}
+
 
 	/**
 	 * @copydoc TokenReflection_Test_MethodDocCommentCopydoc::method
@@ -34,6 +38,7 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 
 	}
 
+
 	/**
 	 * @copydoc TokenReflection_Test_MethodDocCommentCopydoc::method()
 	 */
@@ -41,6 +46,7 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 	{
 
 	}
+
 
 	/**
 	 * @copydoc nonexistentMethod()
@@ -50,6 +56,7 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 
 	}
 
+
 	/**
 	 * @copydoc nonexistentClass::nonexistentMethod()
 	 */
@@ -57,4 +64,5 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 	{
 
 	}
+
 }

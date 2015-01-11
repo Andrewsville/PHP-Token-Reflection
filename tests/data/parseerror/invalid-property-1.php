@@ -1,7 +1,8 @@
 <?php
 
-class foo {
+class foo
+{
 
-	$property;
+$property;
 
 }

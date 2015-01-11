@@ -1,0 +1,187 @@
+<?php
+
+/**
+ * This file is part of the ApiGen (http://apigen.org)
+ *
+ * For the full copyright and license information, please view
+ * the file license.md that was distributed with this source code.
+ */
+
+namespace ApiGen\TokenReflection;
+
+/**
+ * Common reflection property interface.
+ */
+interface IReflectionProperty extends IReflection
+{
+
+	/**
+	 * Returns a reflection of the declaring class.
+	 *
+	 * @return ApiGen\TokenReflection\IReflectionClass
+	 */
+	public function getDeclaringClass();
+
+
+	/**
+	 * Returns the name of the declaring class.
+	 *
+	 * @return string
+	 */
+	public function getDeclaringClassName();
+
+
+	/**
+	 * Returns the definition start line number in the file.
+	 *
+	 * @return int
+	 */
+	public function getStartLine();
+
+
+	/**
+	 * Returns the definition end line number in the file.
+	 *
+	 * @return int
+	 */
+	public function getEndLine();
+
+
+	/**
+	 * Returns the appropriate docblock definition.
+	 *
+	 * @return string|bool
+	 */
+	public function getDocComment();
+
+
+	/**
+	 * Returns the property default value.
+	 *
+	 * @return mixed
+	 */
+	public function getDefaultValue();
+
+
+	/**
+	 * Returns the part of the source code defining the property default value.
+	 *
+	 * @return string
+	 */
+	public function getDefaultValueDefinition();
+
+
+	/**
+	 * Returns the property value for a particular class instance.
+	 *
+	 * @param object $object
+	 * @return mixed
+	 */
+	public function getValue($object);
+
+
+	/**
+	 * Returns property modifiers.
+	 *
+	 * @return int
+	 */
+	public function getModifiers();
+
+
+	/**
+	 * Returns if the property is private.
+	 *
+	 * @return bool
+	 */
+	public function isPrivate();
+
+
+	/**
+	 * Returns if the property is protected.
+	 *
+	 * @return bool
+	 */
+	public function isProtected();
+
+
+	/**
+	 * Returns if the property is public.
+	 *
+	 * @return bool
+	 */
+	public function isPublic();
+
+
+	/**
+	 * Returns if the property is static.
+	 *
+	 * @return bool
+	 */
+	public function isStatic();
+
+
+	/**
+	 * Returns if the property was defined at compile time.
+	 *
+	 * @return bool
+	 */
+	public function isDefault();
+
+
+	/**
+	 * Sets a property to be accessible or not.
+	 *
+	 * @param bool $accessible If the property should be accessible.
+	 */
+	public function setAccessible($accessible);
+
+
+	/**
+	 * Returns if the property is set accessible.
+	 *
+	 * @return bool
+	 */
+	public function isAccessible();
+
+
+	/**
+	 * Sets value of a property for a particular class instance.
+	 *
+	 * @param object $object Class instance
+	 * @param mixed $value Poperty value
+	 */
+	public function setValue($object, $value);
+
+
+	/**
+	 * Returns the string representation of the reflection object.
+	 *
+	 * @return string
+	 */
+	public function __toString();
+
+
+	/**
+	 * Returns the defining trait.
+	 *
+	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 */
+	public function getDeclaringTrait();
+
+
+	/**
+	 * Returns the declaring trait name.
+	 *
+	 * @return string|null
+	 */
+	public function getDeclaringTraitName();
+
+
+	/**
+	 * Returns if the property is deprecated.
+	 *
+	 * @return bool
+	 */
+	public function isDeprecated();
+
+}

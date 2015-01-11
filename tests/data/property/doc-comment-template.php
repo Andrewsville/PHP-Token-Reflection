@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_PropertyDocCommentTemplate
 {
+
 	/**#@+
 	 * Short description.
 	 *
@@ -33,7 +34,7 @@ class TokenReflection_Test_PropertyDocCommentTemplate
 	 * Another own short description.
 	 *
 	 * Own long description.
-	 * @var integer
+	 * @var int
 	 */
 	public $public5 = 'public5';
 
@@ -43,7 +44,7 @@ class TokenReflection_Test_PropertyDocCommentTemplate
 	/**
 	 * Outside of template.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	public $public7 = 'public7';
 

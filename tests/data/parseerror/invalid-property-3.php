@@ -1,5 +1,6 @@
 <?php
 
-class foo {
+class foo
+{
 
 	public $version = 0

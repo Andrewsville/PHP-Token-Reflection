@@ -1,7 +1,8 @@
 <?php
 
-class foo {
+class foo
+{
 
-	public PHP_VERSION = 0;
+public PHP_VERSION = 0;
 
 }

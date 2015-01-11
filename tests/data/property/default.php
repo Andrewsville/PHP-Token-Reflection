@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_PropertyDefault
 {
+
 	const DEFAULT_VALUE = 'default';
 
 	public $default = 'default';
@@ -9,10 +10,13 @@ class TokenReflection_Test_PropertyDefault
 	public $default2 = self::DEFAULT_VALUE;
 
 	public $default3 = TokenReflection_Test_PropertyDefault::DEFAULT_VALUE;
+
 }
+
 
 class TokenReflection_Test_PropertyDefault2 extends TokenReflection_Test_PropertyDefault
 {
+
 	const DEFAULT_VALUE = 'not default';
 
 	const PARENT_DEFAULT_VALUE = parent::DEFAULT_VALUE;
@@ -27,5 +31,6 @@ class TokenReflection_Test_PropertyDefault2 extends TokenReflection_Test_Propert
 
 	public $default8 = self::PARENT_DEFAULT_VALUE;
 
-	public $default9 = array(self::DEFAULT_VALUE, parent::DEFAULT_VALUE, self::PARENT_DEFAULT_VALUE);
+	public $default9 = [self::DEFAULT_VALUE, parent::DEFAULT_VALUE, self::PARENT_DEFAULT_VALUE];
+
 }

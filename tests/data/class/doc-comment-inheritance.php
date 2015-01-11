@@ -11,7 +11,9 @@
  */
 class TokenReflection_Test_ClassDocCommentInheritanceParent
 {
+
 }
+
 
 /**
  * My {@inheritDoc}
@@ -22,8 +24,11 @@ class TokenReflection_Test_ClassDocCommentInheritanceParent
  */
 class TokenReflection_Test_ClassDocCommentInheritanceExplicit extends TokenReflection_Test_ClassDocCommentInheritanceParent
 {
+
 }
+
 
 class TokenReflection_Test_ClassDocCommentInheritanceImplicit extends TokenReflection_Test_ClassDocCommentInheritanceParent
 {
+
 }
