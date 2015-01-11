@@ -9,18 +9,16 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection parameter interface.
- */
+
 interface IReflectionParameter extends IReflection
 {
 
 	/**
 	 * Returns the declaring class.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return IReflectionClass|NULL
 	 */
-	public function getDeclaringClass();
+	function getDeclaringClass();
 
 
 	/**
@@ -28,7 +26,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return string|null
 	 */
-	public function getDeclaringClassName();
+	function getDeclaringClassName();
 
 
 	/**
@@ -36,7 +34,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionFunctionBase
 	 */
-	public function getDeclaringFunction();
+	function getDeclaringFunction();
 
 
 	/**
@@ -44,7 +42,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getDeclaringFunctionName();
+	function getDeclaringFunctionName();
 
 
 	/**
@@ -52,7 +50,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getStartLine();
+	function getStartLine();
 
 
 	/**
@@ -60,7 +58,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getEndLine();
+	function getEndLine();
 
 
 	/**
@@ -68,7 +66,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return string|bool
 	 */
-	public function getDocComment();
+	function getDocComment();
 
 
 	/**
@@ -76,7 +74,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return mixed
 	 */
-	public function getDefaultValue();
+	function getDefaultValue();
 
 
 	/**
@@ -84,7 +82,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getDefaultValueDefinition();
+	function getDefaultValueDefinition();
 
 
 	/**
@@ -92,7 +90,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isDefaultValueAvailable();
+	function isDefaultValueAvailable();
 
 
 	/**
@@ -100,7 +98,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isDefaultValueConstant();
+	function isDefaultValueConstant();
 
 
 	/**
@@ -108,7 +106,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getDefaultValueConstantName();
+	function getDefaultValueConstantName();
 
 
 	/**
@@ -116,7 +114,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getPosition();
+	function getPosition();
 
 
 	/**
@@ -124,7 +122,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isArray();
+	function isArray();
 
 
 	/**
@@ -132,7 +130,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
-	public function getClass();
+	function getClass();
 
 
 	/**
@@ -140,7 +138,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return string|null
 	 */
-	public function getClassName();
+	function getClassName();
 
 
 	/**
@@ -148,7 +146,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function allowsNull();
+	function allowsNull();
 
 
 	/**
@@ -156,7 +154,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isOptional();
+	function isOptional();
 
 
 	/**
@@ -164,7 +162,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isPassedByReference();
+	function isPassedByReference();
 
 
 	/**
@@ -172,7 +170,7 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function canBePassedByValue();
+	function canBePassedByValue();
 
 
 	/**
@@ -180,6 +178,6 @@ interface IReflectionParameter extends IReflection
 	 *
 	 * @return string
 	 */
-	public function __toString();
+	function __toString();
 
 }

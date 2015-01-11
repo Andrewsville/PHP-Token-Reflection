@@ -20,7 +20,7 @@ interface IReflection
 	 *
 	 * @return string
 	 */
-	public function getName();
+	function getName();
 
 
 	/**
@@ -28,7 +28,7 @@ interface IReflection
 	 *
 	 * @return bool
 	 */
-	public function isInternal();
+	function isInternal();
 
 
 	/**
@@ -36,7 +36,7 @@ interface IReflection
 	 *
 	 * @return bool
 	 */
-	public function isUserDefined();
+	function isUserDefined();
 
 
 	/**
@@ -44,7 +44,7 @@ interface IReflection
 	 *
 	 * @return bool
 	 */
-	public function isTokenized();
+	function isTokenized();
 
 
 	/**
@@ -52,7 +52,7 @@ interface IReflection
 	 *
 	 * @return ApiGen\TokenReflection\Broker
 	 */
-	public function getBroker();
+	function getBroker();
 
 
 	/**
@@ -61,7 +61,7 @@ interface IReflection
 	 * @param string $key Variable name
 	 * @return mixed
 	 */
-	public function __get($key);
+	function __get($key);
 
 
 	/**
@@ -70,7 +70,7 @@ interface IReflection
 	 * @param string $key Variable name
 	 * @return bool
 	 */
-	public function __isset($key);
+	function __isset($key);
 
 
 	/**
@@ -78,6 +78,6 @@ interface IReflection
 	 *
 	 * @return string
 	 */
-	public function getPrettyName();
+	function getPrettyName();
 
 }

@@ -9,18 +9,16 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection property interface.
- */
+
 interface IReflectionProperty extends IReflection
 {
 
 	/**
 	 * Returns a reflection of the declaring class.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass
+	 * @return IReflectionClass
 	 */
-	public function getDeclaringClass();
+	function getDeclaringClass();
 
 
 	/**
@@ -28,7 +26,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getDeclaringClassName();
+	function getDeclaringClassName();
 
 
 	/**
@@ -36,7 +34,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getStartLine();
+	function getStartLine();
 
 
 	/**
@@ -44,7 +42,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getEndLine();
+	function getEndLine();
 
 
 	/**
@@ -52,7 +50,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return string|bool
 	 */
-	public function getDocComment();
+	function getDocComment();
 
 
 	/**
@@ -60,7 +58,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return mixed
 	 */
-	public function getDefaultValue();
+	function getDefaultValue();
 
 
 	/**
@@ -68,7 +66,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getDefaultValueDefinition();
+	function getDefaultValueDefinition();
 
 
 	/**
@@ -77,7 +75,7 @@ interface IReflectionProperty extends IReflection
 	 * @param object $object
 	 * @return mixed
 	 */
-	public function getValue($object);
+	function getValue($object);
 
 
 	/**
@@ -85,7 +83,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getModifiers();
+	function getModifiers();
 
 
 	/**
@@ -93,7 +91,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isPrivate();
+	function isPrivate();
 
 
 	/**
@@ -101,7 +99,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isProtected();
+	function isProtected();
 
 
 	/**
@@ -109,7 +107,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isPublic();
+	function isPublic();
 
 
 	/**
@@ -117,7 +115,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isStatic();
+	function isStatic();
 
 
 	/**
@@ -125,7 +123,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isDefault();
+	function isDefault();
 
 
 	/**
@@ -133,7 +131,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @param bool $accessible If the property should be accessible.
 	 */
-	public function setAccessible($accessible);
+	function setAccessible($accessible);
 
 
 	/**
@@ -141,7 +139,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isAccessible();
+	function isAccessible();
 
 
 	/**
@@ -150,7 +148,7 @@ interface IReflectionProperty extends IReflection
 	 * @param object $object Class instance
 	 * @param mixed $value Poperty value
 	 */
-	public function setValue($object, $value);
+	function setValue($object, $value);
 
 
 	/**
@@ -158,7 +156,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return string
 	 */
-	public function __toString();
+	function __toString();
 
 
 	/**
@@ -166,7 +164,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
-	public function getDeclaringTrait();
+	function getDeclaringTrait();
 
 
 	/**
@@ -174,7 +172,7 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return string|null
 	 */
-	public function getDeclaringTraitName();
+	function getDeclaringTraitName();
 
 
 	/**
@@ -182,6 +180,6 @@ interface IReflectionProperty extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isDeprecated();
+	function isDeprecated();
 
 }

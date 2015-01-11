@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection classes interface.
- */
+
 interface IReflectionClass extends IReflection
 {
 
@@ -20,7 +18,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getShortName();
+	function getShortName();
 
 
 	/**
@@ -28,7 +26,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getNamespaceName();
+	function getNamespaceName();
 
 
 	/**
@@ -36,7 +34,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function inNamespace();
+	function inNamespace();
 
 
 	/**
@@ -44,7 +42,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getNamespaceAliases();
+	function getNamespaceAliases();
 
 
 	/**
@@ -52,7 +50,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionExtension|null
 	 */
-	public function getExtension();
+	function getExtension();
 
 
 	/**
@@ -60,7 +58,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return string|null
 	 */
-	public function getExtensionName();
+	function getExtensionName();
 
 
 	/**
@@ -68,7 +66,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getFileName();
+	function getFileName();
 
 
 	/**
@@ -76,7 +74,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getStartLine();
+	function getStartLine();
 
 
 	/**
@@ -84,7 +82,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getEndLine();
+	function getEndLine();
 
 
 	/**
@@ -92,7 +90,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return string|bool
 	 */
-	public function getDocComment();
+	function getDocComment();
 
 
 	/**
@@ -100,7 +98,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getModifiers();
+	function getModifiers();
 
 
 	/**
@@ -108,7 +106,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isAbstract();
+	function isAbstract();
 
 
 	/**
@@ -116,7 +114,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isFinal();
+	function isFinal();
 
 
 	/**
@@ -124,7 +122,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isInterface();
+	function isInterface();
 
 
 	/**
@@ -132,7 +130,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isException();
+	function isException();
 
 
 	/**
@@ -143,7 +141,7 @@ interface IReflectionClass extends IReflection
 	 * @return bool
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
 	 */
-	public function isCloneable();
+	function isCloneable();
 
 
 	/**
@@ -153,7 +151,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isIterateable();
+	function isIterateable();
 
 
 	/**
@@ -162,7 +160,7 @@ interface IReflectionClass extends IReflection
 	 * @param string|object $class Class name or reflection object
 	 * @return bool
 	 */
-	public function isSubclassOf($class);
+	function isSubclassOf($class);
 
 
 	/**
@@ -170,7 +168,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
-	public function getParentClass();
+	function getParentClass();
 
 
 	/**
@@ -178,7 +176,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return string|null
 	 */
-	public function getParentClassName();
+	function getParentClassName();
 
 
 	/**
@@ -186,7 +184,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getParentClasses();
+	function getParentClasses();
 
 
 	/**
@@ -194,7 +192,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getParentClassNameList();
+	function getParentClassNameList();
 
 
 	/**
@@ -204,7 +202,7 @@ interface IReflectionClass extends IReflection
 	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid object was provided as interface.
 	 */
-	public function implementsInterface($interface);
+	function implementsInterface($interface);
 
 
 	/**
@@ -212,7 +210,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getInterfaces();
+	function getInterfaces();
 
 
 	/**
@@ -220,7 +218,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getInterfaceNames();
+	function getInterfaceNames();
 
 
 	/**
@@ -228,7 +226,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getOwnInterfaces();
+	function getOwnInterfaces();
 
 
 	/**
@@ -236,7 +234,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getOwnInterfaceNames();
+	function getOwnInterfaceNames();
 
 
 	/**
@@ -244,7 +242,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionMethod|null
 	 */
-	public function getConstructor();
+	function getConstructor();
 
 
 	/**
@@ -252,7 +250,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionMethod|null
 	 */
-	public function getDestructor();
+	function getDestructor();
 
 
 	/**
@@ -261,7 +259,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Method name
 	 * @return bool
 	 */
-	public function hasMethod($name);
+	function hasMethod($name);
 
 
 	/**
@@ -271,7 +269,7 @@ interface IReflectionClass extends IReflection
 	 * @return ApiGen\TokenReflection\IReflectionMethod
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested method does not exist.
 	 */
-	public function getMethod($name);
+	function getMethod($name);
 
 
 	/**
@@ -280,7 +278,7 @@ interface IReflectionClass extends IReflection
 	 * @param int $filter Methods filter
 	 * @return array
 	 */
-	public function getMethods($filter = NULL);
+	function getMethods($filter = NULL);
 
 
 	/**
@@ -289,7 +287,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Method name
 	 * @return bool
 	 */
-	public function hasOwnMethod($name);
+	function hasOwnMethod($name);
 
 
 	/**
@@ -298,7 +296,7 @@ interface IReflectionClass extends IReflection
 	 * @param int $filter Methods filter
 	 * @return array
 	 */
-	public function getOwnMethods($filter = NULL);
+	function getOwnMethods($filter = NULL);
 
 
 	/**
@@ -307,7 +305,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Method name
 	 * @return bool
 	 */
-	public function hasTraitMethod($name);
+	function hasTraitMethod($name);
 
 
 	/**
@@ -316,7 +314,7 @@ interface IReflectionClass extends IReflection
 	 * @param int $filter Methods filter
 	 * @return array
 	 */
-	public function getTraitMethods($filter = NULL);
+	function getTraitMethods($filter = NULL);
 
 
 	/**
@@ -325,7 +323,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Constant name.
 	 * @return bool
 	 */
-	public function hasConstant($name);
+	function hasConstant($name);
 
 
 	/**
@@ -335,7 +333,7 @@ interface IReflectionClass extends IReflection
 	 * @return mixed
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested constant does not exist.
 	 */
-	public function getConstant($name);
+	function getConstant($name);
 
 
 	/**
@@ -345,7 +343,7 @@ interface IReflectionClass extends IReflection
 	 * @return ApiGen\TokenReflection\IReflectionConstant
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested constant does not exist.
 	 */
-	public function getConstantReflection($name);
+	function getConstantReflection($name);
 
 
 	/**
@@ -353,7 +351,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getConstants();
+	function getConstants();
 
 
 	/**
@@ -361,7 +359,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getConstantReflections();
+	function getConstantReflections();
 
 
 	/**
@@ -370,7 +368,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Constant name.
 	 * @return bool
 	 */
-	public function hasOwnConstant($name);
+	function hasOwnConstant($name);
 
 
 	/**
@@ -378,7 +376,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getOwnConstants();
+	function getOwnConstants();
 
 
 	/**
@@ -386,7 +384,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getOwnConstantReflections();
+	function getOwnConstantReflections();
 
 
 	/**
@@ -395,7 +393,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Property name
 	 * @return bool
 	 */
-	public function hasProperty($name);
+	function hasProperty($name);
 
 
 	/**
@@ -405,7 +403,7 @@ interface IReflectionClass extends IReflection
 	 * @return ApiGen\TokenReflection\ReflectionProperty
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested property does not exist.
 	 */
-	public function getProperty($name);
+	function getProperty($name);
 
 
 	/**
@@ -414,7 +412,7 @@ interface IReflectionClass extends IReflection
 	 * @param int $filter Properties filter
 	 * @return array
 	 */
-	public function getProperties($filter = NULL);
+	function getProperties($filter = NULL);
 
 
 	/**
@@ -423,7 +421,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Property name
 	 * @return bool
 	 */
-	public function hasOwnProperty($name);
+	function hasOwnProperty($name);
 
 
 	/**
@@ -432,7 +430,7 @@ interface IReflectionClass extends IReflection
 	 * @param int $filter Properties filter
 	 * @return array
 	 */
-	public function getOwnProperties($filter = NULL);
+	function getOwnProperties($filter = NULL);
 
 
 	/**
@@ -441,7 +439,7 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Property name
 	 * @return bool
 	 */
-	public function hasTraitProperty($name);
+	function hasTraitProperty($name);
 
 
 	/**
@@ -450,7 +448,7 @@ interface IReflectionClass extends IReflection
 	 * @param int $filter Properties filter
 	 * @return array
 	 */
-	public function getTraitProperties($filter = NULL);
+	function getTraitProperties($filter = NULL);
 
 
 	/**
@@ -458,7 +456,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getDefaultProperties();
+	function getDefaultProperties();
 
 
 	/**
@@ -466,7 +464,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getStaticProperties();
+	function getStaticProperties();
 
 
 	/**
@@ -478,7 +476,7 @@ interface IReflectionClass extends IReflection
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
 	 */
-	public function getStaticPropertyValue($name, $default = NULL);
+	function getStaticPropertyValue($name, $default = NULL);
 
 
 	/**
@@ -486,7 +484,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getDirectSubclasses();
+	function getDirectSubclasses();
 
 
 	/**
@@ -494,7 +492,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getDirectSubclassNames();
+	function getDirectSubclassNames();
 
 
 	/**
@@ -502,7 +500,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getIndirectSubclasses();
+	function getIndirectSubclasses();
 
 
 	/**
@@ -510,7 +508,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getIndirectSubclassNames();
+	function getIndirectSubclassNames();
 
 
 	/**
@@ -518,7 +516,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getDirectImplementers();
+	function getDirectImplementers();
 
 
 	/**
@@ -526,7 +524,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getDirectImplementerNames();
+	function getDirectImplementerNames();
 
 
 	/**
@@ -534,7 +532,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getIndirectImplementers();
+	function getIndirectImplementers();
 
 
 	/**
@@ -542,7 +540,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getIndirectImplementerNames();
+	function getIndirectImplementerNames();
 
 
 	/**
@@ -550,7 +548,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isInstantiable();
+	function isInstantiable();
 
 
 	/**
@@ -558,7 +556,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getTraits();
+	function getTraits();
 
 
 	/**
@@ -566,7 +564,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getOwnTraits();
+	function getOwnTraits();
 
 
 	/**
@@ -574,7 +572,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getTraitNames();
+	function getTraitNames();
 
 
 	/**
@@ -582,7 +580,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getOwnTraitNames();
+	function getOwnTraitNames();
 
 
 	/**
@@ -590,7 +588,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getTraitAliases();
+	function getTraitAliases();
 
 
 	/**
@@ -599,7 +597,7 @@ interface IReflectionClass extends IReflection
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
 	 * @return bool
 	 */
-	public function usesTrait($trait);
+	function usesTrait($trait);
 
 
 	/**
@@ -607,7 +605,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isTrait();
+	function isTrait();
 
 
 	/**
@@ -617,7 +615,7 @@ interface IReflectionClass extends IReflection
 	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided argument is not an object.
 	 */
-	public function isInstance($object);
+	function isInstance($object);
 
 
 	/**
@@ -626,7 +624,7 @@ interface IReflectionClass extends IReflection
 	 * @return object
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
 	 */
-	public function newInstanceWithoutConstructor();
+	function newInstanceWithoutConstructor();
 
 
 	/**
@@ -637,7 +635,7 @@ interface IReflectionClass extends IReflection
 	 * @param mixed $args
 	 * @return object
 	 */
-	public function newInstance($args);
+	function newInstance($args);
 
 
 	/**
@@ -647,7 +645,7 @@ interface IReflectionClass extends IReflection
 	 * @return object
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required class does not exist.
 	 */
-	public function newInstanceArgs(array $args = []);
+	function newInstanceArgs(array $args = []);
 
 
 	/**
@@ -658,7 +656,7 @@ interface IReflectionClass extends IReflection
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
 	 */
-	public function setStaticPropertyValue($name, $value);
+	function setStaticPropertyValue($name, $value);
 
 
 	/**
@@ -666,7 +664,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return string
 	 */
-	public function __toString();
+	function __toString();
 
 
 	/**
@@ -676,7 +674,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isComplete();
+	function isComplete();
 
 
 	/**
@@ -686,7 +684,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isValid();
+	function isValid();
 
 
 	/**
@@ -694,6 +692,6 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isDeprecated();
+	function isDeprecated();
 
 }

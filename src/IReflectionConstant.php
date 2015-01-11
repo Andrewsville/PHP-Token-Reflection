@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection constant interface.
- */
+
 interface IReflectionConstant extends IReflection
 {
 
@@ -20,7 +18,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getShortName();
+	function getShortName();
 
 
 	/**
@@ -28,7 +26,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass
 	 */
-	public function getDeclaringClass();
+	function getDeclaringClass();
 
 
 	/**
@@ -36,7 +34,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getDeclaringClassName();
+	function getDeclaringClassName();
 
 
 	/**
@@ -44,7 +42,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getNamespaceName();
+	function getNamespaceName();
 
 
 	/**
@@ -52,7 +50,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function inNamespace();
+	function inNamespace();
 
 
 	/**
@@ -60,7 +58,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getNamespaceAliases();
+	function getNamespaceAliases();
 
 
 	/**
@@ -68,7 +66,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getFileName();
+	function getFileName();
 
 
 	/**
@@ -76,7 +74,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getStartLine();
+	function getStartLine();
 
 
 	/**
@@ -84,7 +82,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getEndLine();
+	function getEndLine();
 
 
 	/**
@@ -92,7 +90,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return string|bool
 	 */
-	public function getDocComment();
+	function getDocComment();
 
 
 	/**
@@ -100,7 +98,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return mixed
 	 */
-	public function getValue();
+	function getValue();
 
 
 	/**
@@ -108,7 +106,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getValueDefinition();
+	function getValueDefinition();
 
 
 	/**
@@ -116,7 +114,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return string
 	 */
-	public function __toString();
+	function __toString();
 
 
 	/**
@@ -126,7 +124,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isValid();
+	function isValid();
 
 
 	/**
@@ -134,6 +132,6 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isDeprecated();
+	function isDeprecated();
 
 }

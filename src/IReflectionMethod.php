@@ -9,18 +9,16 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection method interface.
- */
+
 interface IReflectionMethod extends IReflectionFunctionBase
 {
 
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return IReflectionClass|NULL
 	 */
-	public function getDeclaringClass();
+	function getDeclaringClass();
 
 
 	/**
@@ -28,7 +26,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return string|null
 	 */
-	public function getDeclaringClassName();
+	function getDeclaringClassName();
 
 
 	/**
@@ -36,7 +34,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return int
 	 */
-	public function getModifiers();
+	function getModifiers();
 
 
 	/**
@@ -44,7 +42,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isAbstract();
+	function isAbstract();
 
 
 	/**
@@ -52,7 +50,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isFinal();
+	function isFinal();
 
 
 	/**
@@ -60,7 +58,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isPrivate();
+	function isPrivate();
 
 
 	/**
@@ -68,7 +66,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isProtected();
+	function isProtected();
 
 
 	/**
@@ -76,7 +74,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isPublic();
+	function isPublic();
 
 
 	/**
@@ -84,7 +82,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isStatic();
+	function isStatic();
 
 
 	/**
@@ -93,7 +91,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @param int $filter Filter
 	 * @return bool
 	 */
-	public function is($filter = NULL);
+	function is($filter = NULL);
 
 
 	/**
@@ -101,7 +99,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isConstructor();
+	function isConstructor();
 
 
 	/**
@@ -109,7 +107,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isDestructor();
+	function isDestructor();
 
 
 	/**
@@ -117,7 +115,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionMethod
 	 */
-	public function getPrototype();
+	function getPrototype();
 
 
 	/**
@@ -127,7 +125,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @param mixed $args
 	 * @return mixed
 	 */
-	public function invoke($object, $args);
+	function invoke($object, $args);
 
 
 	/**
@@ -137,7 +135,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @param array $args Method parameter values
 	 * @return mixed
 	 */
-	public function invokeArgs($object, array $args);
+	function invokeArgs($object, array $args);
 
 
 	/**
@@ -145,7 +143,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @param bool $accessible If the method should be accessible.
 	 */
-	public function setAccessible($accessible);
+	function setAccessible($accessible);
 
 
 	/**
@@ -154,7 +152,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @param object $object Object
 	 * @return \Closure
 	 */
-	public function getClosure($object);
+	function getClosure($object);
 
 
 	/**
@@ -162,7 +160,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return string|null
 	 */
-	public function getOriginalName();
+	function getOriginalName();
 
 
 	/**
@@ -170,7 +168,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionMethod|null
 	 */
-	public function getOriginal();
+	function getOriginal();
 
 
 	/**
@@ -178,7 +176,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return int|null
 	 */
-	public function getOriginalModifiers();
+	function getOriginalModifiers();
 
 
 	/**
@@ -186,7 +184,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
-	public function getDeclaringTrait();
+	function getDeclaringTrait();
 
 
 	/**
@@ -194,6 +192,6 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 *
 	 * @return string|null
 	 */
-	public function getDeclaringTraitName();
+	function getDeclaringTraitName();
 
 }

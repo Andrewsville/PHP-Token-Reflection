@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection function\method interface.
- */
+
 interface IReflectionFunctionBase extends IReflection
 {
 
@@ -20,7 +18,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getNamespaceName();
+	function getNamespaceName();
 
 
 	/**
@@ -28,7 +26,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function inNamespace();
+	function inNamespace();
 
 
 	/**
@@ -36,7 +34,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionExtension|null
 	 */
-	public function getExtension();
+	function getExtension();
 
 
 	/**
@@ -44,7 +42,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return string|null
 	 */
-	public function getExtensionName();
+	function getExtensionName();
 
 
 	/**
@@ -52,7 +50,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return string
 	 */
-	public function getFileName();
+	function getFileName();
 
 
 	/**
@@ -60,7 +58,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getStartLine();
+	function getStartLine();
 
 
 	/**
@@ -68,7 +66,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getEndLine();
+	function getEndLine();
 
 
 	/**
@@ -76,7 +74,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return string|bool
 	 */
-	public function getDocComment();
+	function getDocComment();
 
 
 	/**
@@ -84,7 +82,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isClosure();
+	function isClosure();
 
 
 	/**
@@ -92,7 +90,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function isDeprecated();
+	function isDeprecated();
 
 
 	/**
@@ -100,7 +98,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return bool
 	 */
-	public function returnsReference();
+	function returnsReference();
 
 
 	/**
@@ -109,7 +107,7 @@ interface IReflectionFunctionBase extends IReflection
 	 * @param int|string $parameter Parameter name or position
 	 * @return ApiGen\TokenReflection\IReflectionParameter
 	 */
-	public function getParameter($parameter);
+	function getParameter($parameter);
 
 
 	/**
@@ -117,7 +115,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getParameters();
+	function getParameters();
 
 
 	/**
@@ -125,7 +123,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getNumberOfParameters();
+	function getNumberOfParameters();
 
 
 	/**
@@ -133,7 +131,7 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return int
 	 */
-	public function getNumberOfRequiredParameters();
+	function getNumberOfRequiredParameters();
 
 
 	/**
@@ -141,6 +139,6 @@ interface IReflectionFunctionBase extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getStaticVariables();
+	function getStaticVariables();
 
 }

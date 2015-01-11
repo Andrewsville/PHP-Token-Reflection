@@ -9,19 +9,17 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection extension interface.
- */
+
 interface IReflectionExtension extends IReflection
 {
 
 	/**
 	 * Returns a class reflection.
 	 *
-	 * @param string $name Class name
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @param string $name
+	 * @return IReflectionClass|NULL
 	 */
-	public function getClass($name);
+	function getClass($name);
 
 
 	/**
@@ -29,7 +27,7 @@ interface IReflectionExtension extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getClasses();
+	function getClasses();
 
 
 	/**
@@ -37,7 +35,7 @@ interface IReflectionExtension extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getClassNames();
+	function getClassNames();
 
 
 	/**
@@ -46,7 +44,7 @@ interface IReflectionExtension extends IReflection
 	 * @param string $name Constant name
 	 * @return ApiGen\TokenReflection\IReflectionConstant
 	 */
-	public function getConstantReflection($name);
+	function getConstantReflection($name);
 
 
 	/**
@@ -57,7 +55,7 @@ interface IReflectionExtension extends IReflection
 	 * @return array
 	 * @see ApiGen\TokenReflection\IReflectionExtension::getConstantReflections()
 	 */
-	public function getConstantReflections();
+	function getConstantReflections();
 
 
 	/**
@@ -66,7 +64,7 @@ interface IReflectionExtension extends IReflection
 	 * @param string $name Constant name
 	 * @return mixed|false
 	 */
-	public function getConstant($name);
+	function getConstant($name);
 
 
 	/**
@@ -76,7 +74,7 @@ interface IReflectionExtension extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getConstants();
+	function getConstants();
 
 
 	/**
@@ -85,7 +83,7 @@ interface IReflectionExtension extends IReflection
 	 * @param string $name Function name
 	 * @return ApiGen\TokenReflection\IReflectionFunction
 	 */
-	public function getFunction($name);
+	function getFunction($name);
 
 
 	/**
@@ -93,7 +91,7 @@ interface IReflectionExtension extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getFunctions();
+	function getFunctions();
 
 
 	/**
@@ -101,7 +99,7 @@ interface IReflectionExtension extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getFunctionNames();
+	function getFunctionNames();
 
 
 	/**
@@ -109,6 +107,6 @@ interface IReflectionExtension extends IReflection
 	 *
 	 * @return string
 	 */
-	public function __toString();
+	function __toString();
 
 }

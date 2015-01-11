@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection namespace interface.
- */
+
 interface IReflectionNamespace extends IReflection
 {
 
@@ -21,7 +19,7 @@ interface IReflectionNamespace extends IReflection
 	 * @param string $className Class name
 	 * @return bool
 	 */
-	public function hasClass($className);
+	function hasClass($className);
 
 
 	/**
@@ -30,7 +28,7 @@ interface IReflectionNamespace extends IReflection
 	 * @param string $className Class name
 	 * @return ApiGen\TokenReflection\IReflectionClass
 	 */
-	public function getClass($className);
+	function getClass($className);
 
 
 	/**
@@ -38,7 +36,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getClasses();
+	function getClasses();
 
 
 	/**
@@ -46,7 +44,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getClassNames();
+	function getClassNames();
 
 
 	/**
@@ -54,7 +52,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getClassShortNames();
+	function getClassShortNames();
 
 
 	/**
@@ -63,7 +61,7 @@ interface IReflectionNamespace extends IReflection
 	 * @param string $constantName Constant name
 	 * @return bool
 	 */
-	public function hasConstant($constantName);
+	function hasConstant($constantName);
 
 
 	/**
@@ -72,7 +70,7 @@ interface IReflectionNamespace extends IReflection
 	 * @param string $constantName Constant name
 	 * @return ApiGen\TokenReflection\IReflectionConstant
 	 */
-	public function getConstant($constantName);
+	function getConstant($constantName);
 
 
 	/**
@@ -80,7 +78,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getConstants();
+	function getConstants();
 
 
 	/**
@@ -88,7 +86,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getConstantNames();
+	function getConstantNames();
 
 
 	/**
@@ -96,7 +94,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getConstantShortNames();
+	function getConstantShortNames();
 
 
 	/**
@@ -105,7 +103,7 @@ interface IReflectionNamespace extends IReflection
 	 * @param string $functionName Function name
 	 * @return bool
 	 */
-	public function hasFunction($functionName);
+	function hasFunction($functionName);
 
 
 	/**
@@ -114,7 +112,7 @@ interface IReflectionNamespace extends IReflection
 	 * @param string $functionName Function name
 	 * @return ApiGen\TokenReflection\IReflectionFunction
 	 */
-	public function getFunction($functionName);
+	function getFunction($functionName);
 
 
 	/**
@@ -122,7 +120,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getFunctions();
+	function getFunctions();
 
 
 	/**
@@ -130,7 +128,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getFunctionNames();
+	function getFunctionNames();
 
 
 	/**
@@ -138,7 +136,7 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return array
 	 */
-	public function getFunctionShortNames();
+	function getFunctionShortNames();
 
 
 	/**
@@ -146,6 +144,6 @@ interface IReflectionNamespace extends IReflection
 	 *
 	 * @return string
 	 */
-	public function __toString();
+	function __toString();
 
 }

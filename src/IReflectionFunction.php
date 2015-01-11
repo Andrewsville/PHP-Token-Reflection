@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Common reflection function interface.
- */
+
 interface IReflectionFunction extends IReflectionFunctionBase
 {
 
@@ -20,26 +18,22 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isDisabled();
+	function isDisabled();
 
 	/**
 	 * Calls the function.
 	 *
-	 * This function is commented out because its actual declaration in ReflectionFunction
-	 * is different in PHP 5.3.0 (http://bugs.php.net/bug.php?id=48757).
-	 *
-	 * If you use PHP > 5.3.0, you can uncomment it.
-	 *
 	 * @return mixed
 	 */
-	// public function invoke();
+	 function invoke();
+
 	/**
 	 * Calls the function.
 	 *
 	 * @param array $args Function parameter values
 	 * @return mixed
 	 */
-	public function invokeArgs(array $args);
+	function invokeArgs(array $args);
 
 
 	/**
@@ -47,7 +41,7 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 *
 	 * @return \Closure
 	 */
-	public function getClosure();
+	function getClosure();
 
 
 	/**
@@ -57,7 +51,7 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 *
 	 * @return bool
 	 */
-	public function isValid();
+	function isValid();
 
 
 	/**
@@ -65,6 +59,6 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 *
 	 * @return array
 	 */
-	public function getNamespaceAliases();
+	function getNamespaceAliases();
 
 }
