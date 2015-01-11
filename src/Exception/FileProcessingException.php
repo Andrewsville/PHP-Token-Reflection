@@ -19,21 +19,19 @@ final class FileProcessingException extends RuntimeException
 {
 
 	/**
-	 * Resons why the file could not be processed.
-	 *
 	 * @var array
 	 */
 	private $reasons = [];
 
 
 	/**
-	 * @param array $reasons Resons why the file could not be processed
-	 * @param ApiGen\TokenReflection\ReflectionFile $sender Reflection file
+	 * @param array $reasons
+	 * @param ReflectionFile $sender
 	 */
 	public function __construct(array $reasons, ReflectionFile $sender = NULL)
 	{
 		parent::__construct(
-			NULL === $sender ? 'There was an error processing the file.' : sprintf('There was an error processing the file %s.', $sender->getName()),
+			$sender === NULL ? 'There was an error processing the file.' : sprintf('There was an error processing the file %s.', $sender->getName()),
 			0,
 			$sender
 		);
