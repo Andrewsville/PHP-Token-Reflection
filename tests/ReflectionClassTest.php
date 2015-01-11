@@ -14,8 +14,6 @@ class ReflectionClassTest extends TestCase
 {
 
 	/**
-	 * Element type.
-	 *
 	 * @var string
 	 */
 	protected $type = 'class';
@@ -745,9 +743,6 @@ class ReflectionClassTest extends TestCase
 	}
 
 
-	/**
-	 * Tests class modifiers.
-	 */
 	public function testModifiers()
 	{
 		static $classes = [
@@ -771,8 +766,7 @@ class ReflectionClassTest extends TestCase
 		foreach ($classes as $className) {
 			$token = $this->getBroker()->getClass($className);
 			$internal = new \ReflectionClass($className);
-
-			$this->assertSame($internal->getModifiers(), $token->getModifiers(), $className);
+			$this->assertSame($internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $token->getModifiers(), $className);
 		}
 	}
 
@@ -896,7 +890,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertTrue($rfl->token->isAbstract());
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame(InternalReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('abstractImplicit');
@@ -904,7 +898,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertTrue($rfl->token->isAbstract());
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertFalse($rfl->token->isInstantiable());
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame(InternalReflectionClass::IS_IMPLICIT_ABSTRACT | InternalReflectionClass::IS_EXPLICIT_ABSTRACT, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('noAbstract');
@@ -912,7 +906,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertFalse($rfl->token->isAbstract());
 		$this->assertSame($rfl->internal->isInstantiable(), $rfl->token->isInstantiable());
 		$this->assertTrue($rfl->token->isInstantiable());
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
 
@@ -925,13 +919,13 @@ class ReflectionClassTest extends TestCase
 		$rfl = $this->getClassReflection('final');
 		$this->assertSame($rfl->internal->isFinal(), $rfl->token->isFinal());
 		$this->assertTrue($rfl->token->isFinal());
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame(InternalReflectionClass::IS_FINAL, $rfl->token->getModifiers());
 
 		$rfl = $this->getClassReflection('noFinal');
 		$this->assertSame($rfl->internal->isFinal(), $rfl->token->isFinal());
 		$this->assertFalse($rfl->token->isFinal());
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
 
@@ -962,7 +956,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$rfl = $this->getClassReflection('interfaces');
 
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
 		$this->assertSame(['Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'], $rfl->token->getInterfaceNames());
 		$this->assertSame(['Countable', 'ArrayAccess', 'Serializable'], $rfl->token->getOwnInterfaceNames());
@@ -986,7 +980,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame(['Traversable'], $token->getOwnInterfaceNames());
 
 		$rfl = $this->getClassReflection('noInterfaces');
-		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
+		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
 		$this->assertSame([], $rfl->token->getOwnInterfaceNames());
 		$this->assertSame([], $rfl->token->getInterfaceNames());
