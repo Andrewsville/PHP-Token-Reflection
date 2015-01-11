@@ -2,11 +2,13 @@
 
 namespace ApiGen\TokenReflection\Tests;
 
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\ReflectionFile;
+use PHPUnit_Framework_TestCase;
 
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends PHPUnit_Framework_TestCase
 {
 
 	/**
@@ -340,15 +342,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return Broker
 	 */
-	public function createBroker()
-	{
-		return new Broker(new Broker\Backend\Memory);
-	}
-
-
-	/**
-	 * @return Broker
-	 */
 	protected function getBroker()
 	{
 		static $broker = NULL;
@@ -381,6 +374,15 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		}
 
 		return $combinations;
+	}
+
+
+	/**
+	 * @return Broker
+	 */
+	private function createBroker()
+	{
+		return new Broker(new MemoryBackend);
 	}
 
 }

@@ -9,7 +9,10 @@
 
 namespace ApiGen\TokenReflection\Broker;
 
+use ApiGen;
 use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
 /**
@@ -46,16 +49,16 @@ interface Backend
 	 * @param string $namespaceName Namespace name
 	 * @return bool
 	 */
-	public function hasNamespace($namespaceName);
+	function hasNamespace($namespaceName);
 
 
 	/**
 	 * Returns a reflection object of the given namespace.
 	 *
 	 * @param string $namespaceName Namespace name
-	 * @return ApiGen\TokenReflection\IReflectionNamespace|null
+	 * @return ApiGen\TokenReflection\IReflectionNamespace|NULL
 	 */
-	public function getNamespace($namespaceName);
+	function getNamespace($namespaceName);
 
 
 	/**
@@ -64,16 +67,16 @@ interface Backend
 	 * @param string $className Class name
 	 * @return bool
 	 */
-	public function hasClass($className);
+	function hasClass($className);
 
 
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
 	 * @param string $className CLass bame
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return ApiGen\TokenReflection\IReflectionClass|NULL
 	 */
-	public function getClass($className);
+	function getClass($className);
 
 
 	/**
@@ -82,7 +85,7 @@ interface Backend
 	 * @param int $type Returned class types (multiple values may be OR-ed)
 	 * @return array
 	 */
-	public function getClasses($type = Backend::TOKENIZED_CLASSES);
+	function getClasses($type = Backend::TOKENIZED_CLASSES);
 
 
 	/**
@@ -91,16 +94,16 @@ interface Backend
 	 * @param string $constantName Constant name
 	 * @return bool
 	 */
-	public function hasConstant($constantName);
+	function hasConstant($constantName);
 
 
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
 	 * @param string $constantName Constant name
-	 * @return ApiGen\TokenReflection\IReflectionConstant|null
+	 * @return ApiGen\TokenReflection\IReflectionConstant|NULL
 	 */
-	public function getConstant($constantName);
+	function getConstant($constantName);
 
 
 	/**
@@ -108,7 +111,7 @@ interface Backend
 	 *
 	 * @return array
 	 */
-	public function getConstants();
+	function getConstants();
 
 
 	/**
@@ -117,16 +120,16 @@ interface Backend
 	 * @param string $functionName Function name
 	 * @return bool
 	 */
-	public function hasFunction($functionName);
+	function hasFunction($functionName);
 
 
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
 	 * @param string $functionName Function name
-	 * @return ApiGen\TokenReflection\IReflectionFunction|null
+	 * @return ApiGen\TokenReflection\IReflectionFunction|NULL
 	 */
-	public function getFunction($functionName);
+	function getFunction($functionName);
 
 
 	/**
@@ -134,7 +137,7 @@ interface Backend
 	 *
 	 * @return array
 	 */
-	public function getFunctions();
+	function getFunctions();
 
 
 	/**
@@ -143,7 +146,7 @@ interface Backend
 	 * @param string $fileName File name
 	 * @return bool
 	 */
-	public function isFileProcessed($fileName);
+	function isFileProcessed($fileName);
 
 
 	/**
@@ -152,17 +155,17 @@ interface Backend
 	 * @param string $fileName File name
 	 * @return bool
 	 */
-	public function hasFile($fileName);
+	function hasFile($fileName);
 
 
 	/**
 	 * Returns a file reflection.
 	 *
 	 * @param string $fileName File name
-	 * @return ApiGen\TokenReflection\ReflectionFile
+	 * @return ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested file has not been processed
 	 */
-	public function getFile($fileName);
+	function getFile($fileName);
 
 
 	/**
@@ -170,52 +173,45 @@ interface Backend
 	 *
 	 * @return array
 	 */
-	public function getFiles();
+	function getFiles();
 
 
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
 	 * @param string $fileName File name
-	 * @return ApiGen\TokenReflection\Stream\StreamBase
+	 * @return StreamBase
 	 */
-	public function getFileTokens($fileName);
+	function getFileTokens($fileName);
 
 
 	/**
 	 * Adds a file to the backend storage.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token stream
-	 * @param ApiGen\TokenReflection\ReflectionFile $file File reflection object
 	 * @return ApiGen\TokenReflection\Broker\Backend
 	 */
-	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file);
+	function addFile(StreamBase $tokenStream, ReflectionFile $file);
 
 
 	/**
-	 * Sets the reflection broker instance.
-	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
-	 * @return ApiGen\TokenReflection\Broker\Backend
+	 * @return Backend
 	 */
-	public function setBroker(TokenReflection\Broker $broker);
+	function setBroker(Broker $broker);
 
 
 	/**
-	 * Returns the reflection broker instance.
-	 *
-	 * @return ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @return Broker
 	 */
-	public function getBroker();
+	function getBroker();
 
 
 	/**
 	 * Sets if token streams are stored in the backend.
 	 *
 	 * @param bool $store
-	 * @return ApiGen\TokenReflection\Broker\Backend
+	 * @return Backend
 	 */
-	public function setStoringTokenStreams($store);
+	function setStoringTokenStreams($store);
 
 
 	/**
@@ -223,6 +219,6 @@ interface Backend
 	 *
 	 * @return bool
 	 */
-	public function getStoringTokenStreams();
+	function getStoringTokenStreams();
 
 }

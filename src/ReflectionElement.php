@@ -9,8 +9,11 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
 /**
@@ -86,33 +89,21 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Constructor.
-	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If an empty token stream was provided
+	 * @throws ParseException If an empty token stream was provided
 	 */
-	final public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = NULL)
+	final public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
-		if (0 === $tokenStream->count()) {
-			throw new Exception\ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', Exception\ParseException::INVALID_ARGUMENT);
+		if ($tokenStream->count() === 0) {
+			throw new ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
 		}
 		parent::__construct($tokenStream, $broker, $parent);
 	}
 
 
-	/**
-	 * Parses the token substream.
-	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 */
-	final protected function parseStream(Stream $tokenStream, IReflection $parent = NULL)
+	final protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL)
 	{
 		$this->fileName = $tokenStream->getFileName();
-		$this
-			->processParent($parent, $tokenStream)
+		$this->processParent($parent, $tokenStream)
 			->parseStartLine($tokenStream)
 			->parseDocComment($tokenStream, $parent)
 			->parse($tokenStream, $parent)
@@ -239,9 +230,7 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\Reflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
@@ -253,11 +242,9 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Find the appropriate docblock.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
-	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
+	protected function parseDocComment(StreamBase $tokenStream, IReflection $parent)
 	{
 		if ($this instanceof ReflectionParameter) {
 			$this->docComment = new ReflectionAnnotation($this);
@@ -296,10 +283,9 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Saves the start line number.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token susbtream
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
-	private final function parseStartLine(Stream $tokenStream)
+	private final function parseStartLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->startLine = $token[2];
@@ -311,10 +297,9 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Saves the end line number.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token susbtream
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
-	private final function parseEndLine(Stream $tokenStream)
+	private final function parseEndLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->endLine = $token[2];
@@ -326,18 +311,13 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
 	abstract protected function parse(Stream $tokenStream, IReflection $parent);
 
 
 	/**
-	 * Parses the reflection object name.
-	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
 	abstract protected function parseName(Stream $tokenStream);
 
@@ -345,11 +325,9 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\Reflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
-	protected function parseChildren(Stream $tokenStream, IReflection $parent)
+	protected function parseChildren(StreamBase $tokenStream, IReflection $parent)
 	{
 		// To be defined in child classes
 		return $this;

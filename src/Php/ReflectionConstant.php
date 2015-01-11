@@ -12,7 +12,7 @@ namespace ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Invalid;
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use Reflector;
 
@@ -59,16 +59,12 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	private $userDefined;
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param string $name Constant name
 	 * @param mixed $value Constant value
 	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker

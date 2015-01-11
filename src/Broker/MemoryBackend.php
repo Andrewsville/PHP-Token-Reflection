@@ -7,20 +7,21 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection\Broker\Backend;
+namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Php;
+use ApiGen\TokenReflection\ReflectionFile;
 use ApiGen\TokenReflection\Stream\FileStream;
 
 
 /**
  * Stores parsed reflection objects in memory.
  */
-class Memory implements Broker\Backend
+class MemoryBackend implements Backend
 {
 
 	/**
@@ -73,9 +74,7 @@ class Memory implements Broker\Backend
 	private $files = [];
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
@@ -103,13 +102,13 @@ class Memory implements Broker\Backend
 	 * Returns a file reflection.
 	 *
 	 * @param string $fileName File name
-	 * @return ApiGen\TokenReflection\ReflectionFile
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the requested file has not been processed
+	 * @return ReflectionFile
+	 * @throws BrokerException If the requested file has not been processed
 	 */
 	public function getFile($fileName)
 	{
 		if ( ! isset($this->files[$fileName])) {
-			throw new Exception\BrokerException($this->getBroker(), sprintf('File "%s" has not been processed.', $fileName), Exception\BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException($this->getBroker(), sprintf('File "%s" has not been processed.', $fileName), BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->files[$fileName];
 	}
@@ -152,7 +151,7 @@ class Memory implements Broker\Backend
 		}
 		$namespaceName = ltrim($namespaceName, '\\');
 		if ( ! isset($this->namespaces[$namespaceName])) {
-			throw new Exception\BrokerException($this->getBroker(), sprintf('Namespace %s does not exist.', $namespaceName), Exception\BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException($this->getBroker(), sprintf('Namespace %s does not exist.', $namespaceName), BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->namespaces[$namespaceName];
 	}
@@ -313,7 +312,7 @@ class Memory implements Broker\Backend
 					return $reflection;
 				}
 			}
-			throw new Exception\BrokerException($this->getBroker(), sprintf('Constant %s does not exist.', $constantName), Exception\BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException($this->getBroker(), sprintf('Constant %s does not exist.', $constantName), BrokerException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -388,7 +387,7 @@ class Memory implements Broker\Backend
 			if (isset($declared[$functionName])) {
 				return new Php\ReflectionFunction($functionName, $this->broker);
 			}
-			throw new Exception\BrokerException($this->getBroker(), sprintf('Function %s does not exist.', $functionName), Exception\BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException($this->getBroker(), sprintf('Function %s does not exist.', $functionName), BrokerException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -435,7 +434,7 @@ class Memory implements Broker\Backend
 	{
 		$realName = Broker::getRealPath($fileName);
 		if ( ! isset($this->tokenStreams[$realName])) {
-			throw new Exception\BrokerException($this->getBroker(), sprintf('File "%s" was not processed yet.', $fileName), Exception\BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException($this->getBroker(), sprintf('File "%s" was not processed yet.', $fileName), BrokerException::DOES_NOT_EXIST);
 		}
 		return TRUE === $this->tokenStreams[$realName] ? new FileStream($realName) : $this->tokenStreams[$realName];
 	}
@@ -448,7 +447,7 @@ class Memory implements Broker\Backend
 	 * @param ApiGen\TokenReflection\ReflectionFile $file File reflection object
 	 * @return ApiGen\TokenReflection\Broker\Backend\Memory
 	 */
-	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file)
+	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, ReflectionFile $file)
 	{
 		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : TRUE;
 		$this->files[$file->getName()] = $file;
@@ -479,10 +478,8 @@ class Memory implements Broker\Backend
 
 
 	/**
-	 * Sets the reflection broker instance.
-	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
-	 * @return ApiGen\TokenReflection\Broker\Backend\Memory
+	 * @param Broker $broker
+	 * @return MemoryBackend
 	 */
 	public function setBroker(Broker $broker)
 	{
@@ -494,7 +491,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Returns the reflection broker instance.
 	 *
-	 * @return ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @return Broker $broker Reflection broker
 	 */
 	public function getBroker()
 	{
@@ -506,7 +503,7 @@ class Memory implements Broker\Backend
 	 * Sets if token streams are stored in the backend.
 	 *
 	 * @param bool $store
-	 * @return ApiGen\TokenReflection\Broker\Backend
+	 * @return Backend
 	 */
 	public function setStoringTokenStreams($store)
 	{

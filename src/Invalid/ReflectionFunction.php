@@ -12,7 +12,7 @@ namespace ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\IReflectionFunction;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\ReflectionBase;
 
 
@@ -39,16 +39,12 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	private $fileName;
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param string $name Function name
 	 * @param string $fileName Original definiton file name
 	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker

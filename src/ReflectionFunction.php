@@ -9,7 +9,9 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ReflectionFunction as InternalReflectionFunction;
 
@@ -69,20 +71,18 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 
 	/**
-	 * Exports a reflected object.
-	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
+	 * @param Broker $broker
 	 * @param string $function Function name
 	 * @param bool $return Return the export instead of outputting it
-	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @return string|NULL
+	 * @throws RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $function, $return = FALSE)
 	{
 		$functionName = $function;
 		$function = $broker->getFunction($functionName);
 		if (NULL === $function) {
-			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('Function %s() does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST);
 		}
 		if ($return) {
 			return $function->__toString();
@@ -112,7 +112,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	public function invokeArgs(array $args = [])
 	{
 		if ( ! function_exists($this->getName())) {
-			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException('Could not invoke function; function is not defined.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return call_user_func_array($this->getName(), $args);
 	}
@@ -137,7 +137,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	public function getClosure()
 	{
 		if ( ! function_exists($this->getName())) {
-			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException('Could not invoke function; function is not defined.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$that = $this;
 		return function () use ($that) {

@@ -10,8 +10,11 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflection;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
 /**
@@ -51,21 +54,12 @@ abstract class ReflectionBase implements IReflection
 	private $parsedDocComment;
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
 
-	/**
-	 * Constructor.
-	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 */
-	public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
 		$this->broker = $broker;
 		$this->parseStream($tokenStream, $parent);
@@ -74,11 +68,8 @@ abstract class ReflectionBase implements IReflection
 
 	/**
 	 * Parses the token substream.
-	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 */
-	abstract protected function parseStream(Stream $tokenStream, IReflection $parent = NULL);
+	abstract protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL);
 
 
 	/**
@@ -139,9 +130,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * @return Broker
 	 */
 	public function getBroker()
 	{
@@ -150,8 +139,6 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns if the reflection object is internal.
-	 *
 	 * Always returns false - everything is user defined.
 	 *
 	 * @return bool
@@ -163,8 +150,6 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns if the reflection object is user defined.
-	 *
 	 * Always returns true - everything is user defined.
 	 *
 	 * @return bool
@@ -176,8 +161,6 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
 	 * @return bool
 	 */
 	public function isTokenized()
@@ -187,8 +170,6 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns if the reflection subject is deprecated.
-	 *
 	 * @return bool
 	 */
 	public function isDeprecated()
@@ -198,8 +179,6 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns the appropriate source code part.
-	 *
 	 * @return string
 	 */
 	abstract public function getSource();
@@ -217,8 +196,6 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Magic __get method.
-	 *
 	 * @param string $key Variable name
 	 * @return mixed
 	 */
@@ -229,8 +206,6 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Magic __isset method.
-	 *
 	 * @param string $key Variable name
 	 * @return bool
 	 */
@@ -241,12 +216,10 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Magic __get method helper.
-	 *
-	 * @param ApiGen\TokenReflection\IReflection $object Reflection object
+	 * @param IReflection $object Reflection object
 	 * @param string $key Variable name
 	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested parameter does not exist.
+	 * @throws RuntimeException If the requested parameter does not exist.
 	 */
 	final public static function get(IReflection $object, $key)
 	{
@@ -263,14 +236,12 @@ abstract class ReflectionBase implements IReflection
 				return $object->{'is' . $key2}();
 			}
 		}
-		throw new Exception\RuntimeException(sprintf('Cannot read property "%s".', $key), Exception\RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('Cannot read property "%s".', $key), RuntimeException::DOES_NOT_EXIST);
 	}
 
 
 	/**
-	 * Magic __isset method helper.
-	 *
-	 * @param ApiGen\TokenReflection\IReflection $object Reflection object
+	 * @param IReflection $object Reflection object
 	 * @param string $key Variable name
 	 * @return bool
 	 */
@@ -279,7 +250,7 @@ abstract class ReflectionBase implements IReflection
 		try {
 			self::get($object, $key);
 			return TRUE;
-		} catch (Exception\RuntimeException $e) {
+		} catch (RuntimeException $e) {
 			return FALSE;
 		}
 	}

@@ -17,7 +17,7 @@ class ConsistencyTest extends TestCase
 
 	public function testConstantReflectionConsistency()
 	{
-		$broker = $this->createBroker();
+		$broker = $this->getBroker();
 		$broker->processFile(__DIR__ . '/data/constant/in-namespace.php');
 		try {
 			$broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
@@ -45,7 +45,7 @@ class ConsistencyTest extends TestCase
 
 	public function testClassReflectionConsistency()
 	{
-		$broker = $this->createBroker();
+		$broker = $this->getBroker();
 		$broker->processFile(__FILE__);
 		try {
 			$broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
@@ -79,7 +79,7 @@ class ConsistencyTest extends TestCase
 
 	public function testFunctionReflectionConsistency()
 	{
-		$broker = $this->createBroker();
+		$broker = $this->getBroker();
 		$broker->processFile(__DIR__ . '/data/function/in-namespace.php');
 		try {
 			$broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
@@ -112,7 +112,7 @@ class ConsistencyTest extends TestCase
 
 	public function testPropertyReflectionConsistency()
 	{
-		$broker = $this->createBroker();
+		$broker = $this->getBroker();
 		$broker->processFile(__DIR__ . '/data/property/lines.php');
 
 		$this->assertTrue(function_exists('constant'));
@@ -139,7 +139,7 @@ class ConsistencyTest extends TestCase
 
 	public function testMethodReflectionConsistency()
 	{
-		$broker = $this->createBroker();
+		$broker = $this->getBroker();
 		$broker->processFile(__DIR__ . '/data/method/access-level.php');
 
 		$methods = [
@@ -165,7 +165,7 @@ class ConsistencyTest extends TestCase
 
 	public function testParameterReflectionConsistency()
 	{
-		$broker = $this->createBroker();
+		$broker = $this->getBroker();
 		$broker->processFile(__DIR__ . '/data/parameter/optional-false.php');
 
 		$parameters = [

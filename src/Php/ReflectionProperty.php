@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use Reflector, ReflectionProperty as InternalReflectionProperty;
 
@@ -25,9 +25,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 {
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
@@ -40,8 +38,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass $class Defining class
 	 * @param string $propertyName Property name
 	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker

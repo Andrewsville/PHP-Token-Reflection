@@ -34,8 +34,6 @@ class RuntimeException extends BaseException
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param string $message Exception message
 	 * @param int $code Exception code
 	 * @param ApiGen\TokenReflection\IReflection $sender Reflection element

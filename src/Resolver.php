@@ -9,16 +9,14 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * TokenReflection Resolver class.
- */
+
 class Resolver
 {
 
 	/**
-	 * Placeholder for non-existen constants.
+	 * Placeholder for non-existing constants.
 	 *
-	 * @var null
+	 * @var string
 	 */
 	const CONSTANT_NOT_FOUND = '~~NOT RESOLVED~~';
 

@@ -10,6 +10,8 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
+use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Exception;
 
@@ -172,30 +174,30 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Exports a reflected object.
-	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
-	 * @param string|object|null $class Class name, class instance or null
+	 * @param Broker $broker
+	 * @param string|object|NULL $class Class name, class instance or null
 	 * @param string $constant Constant name
 	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @throws RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $constant, $return = FALSE)
 	{
 		$className = is_object($class) ? get_class($class) : $class;
 		$constantName = $constant;
-		if (NULL === $className) {
+		if ($className === NULL) {
 			$constant = $broker->getConstant($constantName);
-			if (NULL === $constant) {
-				throw new Exception\RuntimeException('Constant does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
+			if ($constant === NULL) {
+				throw new RuntimeException('Constant does not exist.', RuntimeException::DOES_NOT_EXIST);
 			}
+
 		} else {
 			$class = $broker->getClass($className);
 			if ($class instanceof Invalid\ReflectionClass) {
-				throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
-			} elseif ($class instanceof Dummy\ReflectionClass) {
-				throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $class);
+				throw new RuntimeException('Class is invalid.', RuntimeException::UNSUPPORTED);
+
+				} elseif ($class instanceof Dummy\ReflectionClass) {
+				throw new RuntimeException('Class does not exist.', RuntimeException::DOES_NOT_EXIST, $class);
 			}
 			$constant = $class->getConstantReflection($constantName);
 		}

@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Dummy;
 
 use ApiGen;
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\IReflectionClass;
 use ApiGen\TokenReflection\ReflectionBase;
 use ReflectionClass as InternalReflectionClass;
@@ -25,9 +25,7 @@ class ReflectionClass implements IReflectionClass
 {
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
@@ -40,10 +38,8 @@ class ReflectionClass implements IReflectionClass
 
 
 	/**
-	 * Constructor.
-	 *
-	 * @param string $className Class name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param string $className
+	 * @param Broker $broker
 	 */
 	public function __construct($className, Broker $broker)
 	{

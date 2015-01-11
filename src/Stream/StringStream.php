@@ -16,8 +16,6 @@ class StringStream extends StreamBase
 {
 
 	/**
-	 * Constructor.
-	 *
 	 * Creates a token substream from a string.
 	 *
 	 * @param string $source PHP source code

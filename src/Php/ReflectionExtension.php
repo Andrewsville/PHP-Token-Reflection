@@ -10,7 +10,8 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Broker, TokenReflection\Exception;
+use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use Reflector, ReflectionExtension as InternalReflectionExtension;
 
@@ -45,16 +46,12 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	private $functions;
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param string $name Extension name
 	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
 	 */

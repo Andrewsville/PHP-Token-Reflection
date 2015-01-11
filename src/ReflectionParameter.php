@@ -9,8 +9,12 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionParameter as InternalReflectionParameter;
 
 
@@ -123,7 +127,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns the declaring function.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionFunctionBase
+	 * @return ReflectionFunctionBase
 	 */
 	public function getDeclaringFunction()
 	{
@@ -161,11 +165,11 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function getDefaultValue()
 	{
 		if ( ! $this->isOptional()) {
-			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
+			throw new RuntimeException('Property is not optional.', RuntimeException::UNSUPPORTED, $this);
 		}
 		if (NULL === $this->defaultValue) {
 			if (0 === count($this->defaultValueDefinition)) {
-				throw new Exception\RuntimeException('Property has no default value.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException('Property has no default value.', RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
 		}
@@ -212,7 +216,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function getDefaultValueConstantName()
 	{
 		if ( ! $this->isOptional()) {
-			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
+			throw new RuntimeException('Property is not optional.', RuntimeException::UNSUPPORTED, $this);
 		}
 		return $this->isDefaultValueConstant() ? $this->getDefaultValueDefinition() : NULL;
 	}
@@ -303,22 +307,22 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			if (NULL !== $this->declaringClassName) {
 				$parent = $this->getDeclaringClass();
 				if (NULL === $parent) {
-					throw new Exception\RuntimeException('Could not load class reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+					throw new RuntimeException('Could not load class reflection.', RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			} else {
 				$parent = $this->getDeclaringFunction();
 				if (NULL === $parent || !$parent->isTokenized()) {
-					throw new Exception\RuntimeException('Could not load function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+					throw new RuntimeException('Could not load function reflection.', RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			}
 			$lTypeHint = strtolower($this->originalTypeHint);
 			if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
 				if (NULL === $this->declaringClassName) {
-					throw new Exception\RuntimeException('Parameter type hint cannot be "self" nor "parent" when not a method.', Exception\RuntimeException::UNSUPPORTED, $this);
+					throw new RuntimeException('Parameter type hint cannot be "self" nor "parent" when not a method.', RuntimeException::UNSUPPORTED, $this);
 				}
 				if ('parent' === $lTypeHint) {
 					if ($parent->isInterface() || NULL === $parent->getParentClassName()) {
-						throw new Exception\RuntimeException('Class has no parent.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+						throw new RuntimeException('Class has no parent.', RuntimeException::DOES_NOT_EXIST, $this);
 					}
 					$this->typeHint = $parent->getParentClassName();
 				} else {
@@ -333,29 +337,25 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns if the the parameter allows NULL.
-	 *
 	 * @return bool
 	 */
 	public function allowsNull()
 	{
 		if ($this->isArray() || $this->isCallable()) {
-			return 'null' === strtolower($this->getDefaultValueDefinition());
+			return strtolower($this->getDefaultValueDefinition()) === 'null';
 		}
-		return NULL === $this->originalTypeHint || !empty($this->defaultValueDefinition);
+		return $this->originalTypeHint === NULL || !empty($this->defaultValueDefinition);
 	}
 
 
 	/**
-	 * Returns if the parameter is optional.
-	 *
 	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If it is not possible to determine if the parameter is optional.
+	 * @throws RuntimeException If it is not possible to determine if the parameter is optional.
 	 */
 	public function isOptional()
 	{
 		if (NULL === $this->isOptional) {
-			$this->isOptional = !empty($this->defaultValueDefinition) && $this->haveSiblingsDefalutValues();
+			$this->isOptional = !empty($this->defaultValueDefinition) && $this->haveSiblingsDefaultValues();
 		}
 		return $this->isOptional;
 	}
@@ -366,11 +366,11 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @return bool
 	 */
-	protected function haveSiblingsDefalutValues()
+	protected function haveSiblingsDefaultValues()
 	{
 		$function = $this->getDeclaringFunction();
 		if (NULL === $function) {
-			throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException('Could not get the declaring function reflection.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		foreach (array_slice($function->getParameters(), $this->position + 1) as $reflectionParameter) {
 			if (NULL === $reflectionParameter->getDefaultValueDefinition()) {
@@ -464,20 +464,20 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Exports a reflected object.
 	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
+	 * @param Broker $broker
 	 * @param string $function Function name
 	 * @param string $parameter Parameter name
 	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @throws RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $function, $parameter, $return = FALSE)
 	{
 		$functionName = $function;
 		$parameterName = $parameter;
 		$function = $broker->getFunction($functionName);
-		if (NULL === $function) {
-			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
+		if ($function === NULL) {
+			throw new RuntimeException(sprintf('Function %s() does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST);
 		}
 		$parameter = $function->getParameter($parameterName);
 		if ($return) {
@@ -501,8 +501,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Creates a parameter alias for the given method.
 	 *
-	 * @param ApiGen\TokenReflection\ReflectionMethod $parent New parent method
-	 * @return ApiGen\TokenReflection\ReflectionParameter
+	 * @return ReflectionParameter
 	 */
 	public function alias(ReflectionMethod $parent)
 	{
@@ -516,15 +515,13 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
+	 * @return ReflectionElement
+	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFunctionBase) {
-			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', Exception\ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', ParseException::INVALID_PARENT);
 		}
 		// Declaring function name
 		$this->declaringFunctionName = $parent->getName();
@@ -541,14 +538,11 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionParameter
+	 * @return ReflectionParameter
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return $this
-			->parseTypeHint($tokenStream)
+		return $this->parseTypeHint($tokenStream)
 			->parsePassedByReference($tokenStream)
 			->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
@@ -556,13 +550,10 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Parses the type hint.
-	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionParameter
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the type hint class name could not be determined.
+	 * @return ReflectionParameter
+	 * @throws ParseException If the type hint class name could not be determined.
 	 */
-	private function parseTypeHint(Stream $tokenStream)
+	private function parseTypeHint(StreamBase $tokenStream)
 	{
 		$type = $tokenStream->getType();
 		if (T_ARRAY === $type) {
@@ -581,7 +572,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 				$type = $tokenStream->getType();
 			} while (T_STRING === $type || T_NS_SEPARATOR === $type);
 			if ('' === ltrim($className, '\\')) {
-				throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid class name definition: "%s".', $className), Exception\ParseException::LOGICAL_ERROR);
+				throw new ParseException($this, $tokenStream, sprintf('Invalid class name definition: "%s".', $className), ParseException::LOGICAL_ERROR);
 			}
 			$this->originalTypeHint = $className;
 		}
@@ -592,8 +583,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Parses if parameter value is passed by reference.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionParameter
+	 * @return ReflectionParameter
 	 */
 	private function parsePassedByReference(Stream $tokenStream)
 	{
@@ -608,14 +598,13 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Parses the constant name.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionParameter
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the parameter name could not be determined.
+	 * @return ReflectionParameter
+	 * @throws ParseException If the parameter name could not be determined.
 	 */
-	protected function parseName(Stream $tokenStream)
+	protected function parseName(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_VARIABLE)) {
-			throw new Exception\ParseException($this, $tokenStream, 'The parameter name could not be determined.', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'The parameter name could not be determined.', ParseException::UNEXPECTED_TOKEN);
 		}
 		$this->name = substr($tokenStream->getTokenValue(), 1);
 		$tokenStream->skipWhitespaces(TRUE);
@@ -626,11 +615,10 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Parses the parameter default value.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionParameter
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the default value could not be determined.
+	 * @return ReflectionParameter
+	 * @throws ParseException If the default value could not be determined.
 	 */
-	private function parseDefaultValue(Stream $tokenStream)
+	private function parseDefaultValue(StreamBase $tokenStream)
 	{
 		if ($tokenStream->is('=')) {
 			$tokenStream->skipWhitespaces(TRUE);
@@ -662,7 +650,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 				$tokenStream->next();
 			}
 			if (')' !== $type && ',' !== $type) {
-				throw new Exception\ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ")".', Exception\ParseException::UNEXPECTED_TOKEN);
+				throw new ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ")".', ParseException::UNEXPECTED_TOKEN);
 			}
 		}
 		return $this;

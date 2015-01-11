@@ -10,11 +10,9 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 
 
-/**
- * Docblock parser.
- */
 class ReflectionAnnotation
 {
 
@@ -77,10 +75,8 @@ class ReflectionAnnotation
 
 
 	/**
-	 * Constructor.
-	 *
-	 * @param ApiGen\TokenReflection\ReflectionBase $reflection Parent reflection object
-	 * @param string|bool $docComment Docblock definition
+	 * @param ReflectionBase $reflection
+	 * @param string|bool $docComment
 	 */
 	public function __construct(ReflectionBase $reflection, $docComment = FALSE)
 	{
@@ -90,8 +86,6 @@ class ReflectionAnnotation
 
 
 	/**
-	 * Returns the docblock.
-	 *
 	 * @return string|bool
 	 */
 	public function getDocComment()
@@ -101,14 +95,12 @@ class ReflectionAnnotation
 
 
 	/**
-	 * Returns if the current docblock contains the requrested annotation.
-	 *
 	 * @param string $annotation Annotation name
 	 * @return bool
 	 */
 	public function hasAnnotation($annotation)
 	{
-		if (NULL === $this->annotations) {
+		if ($this->annotations === NULL) {
 			$this->parse();
 		}
 		return isset($this->annotations[$annotation]);
@@ -116,14 +108,12 @@ class ReflectionAnnotation
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $annotation Annotation name
-	 * @return string|array|null
+	 * @param string $annotation
+	 * @return string|array|NULL
 	 */
 	public function getAnnotation($annotation)
 	{
-		if (NULL === $this->annotations) {
+		if ($this->annotations === NULL) {
 			$this->parse();
 		}
 		return isset($this->annotations[$annotation]) ? $this->annotations[$annotation] : NULL;
@@ -131,13 +121,11 @@ class ReflectionAnnotation
 
 
 	/**
-	 * Returns all parsed annotations.
-	 *
 	 * @return array
 	 */
 	public function getAnnotations()
 	{
-		if (NULL === $this->annotations) {
+		if ($this->annotations === NULL) {
 			$this->parse();
 		}
 		return $this->annotations;
@@ -148,19 +136,19 @@ class ReflectionAnnotation
 	 * Sets Docblock templates.
 	 *
 	 * @param array $templates Docblock templates
-	 * @return ApiGen\TokenReflection\ReflectionAnnotation
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid annotation template was provided.
+	 * @return ReflectionAnnotation
+	 * @throws RuntimeException If an invalid annotation template was provided.
 	 */
 	public function setTemplates(array $templates)
 	{
 		foreach ($templates as $template) {
 			if ( ! $template instanceof ReflectionAnnotation) {
-				throw new Exception\RuntimeException(
+				throw new RuntimeException(
 					sprintf(
 						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
 						is_object($template) ? get_class($template) : gettype($template)
 					),
-					Exception\RuntimeException::INVALID_ARGUMENT,
+					RuntimeException::INVALID_ARGUMENT,
 					$this->reflection
 				);
 			}
@@ -239,7 +227,7 @@ class ReflectionAnnotation
 	/**
 	 * Copies annotations if the @copydoc tag is present.
 	 *
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException When stuck in an infinite loop when resolving the @copydoc tag.
+	 * @throws RuntimeException When stuck in an infinite loop when resolving the @copydoc tag.
 	 */
 	private function copyAnnotation()
 	{
@@ -281,7 +269,7 @@ class ReflectionAnnotation
 				if ( ! empty($parent)) {
 					// Don't get into an infinite recursion loop
 					if (in_array($parent, self::$copydocStack, TRUE)) {
-						throw new Exception\RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag.', Exception\RuntimeException::INVALID_ARGUMENT, $this->reflection);
+						throw new RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag.', RuntimeException::INVALID_ARGUMENT, $this->reflection);
 					}
 					self::$copydocStack[] = $parent;
 					// We can get into an infinite loop here (e.g. when two methods @copydoc from each other)
@@ -334,7 +322,7 @@ class ReflectionAnnotation
 	/**
 	 * Inherits annotations from parent classes/methods/properties if needed.
 	 *
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If unsupported reflection was used.
+	 * @throws RuntimeException If unsupported reflection was used.
 	 */
 	private function inheritAnnotations()
 	{

@@ -86,8 +86,6 @@ class ParseException extends StreamException
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param ApiGen\TokenReflection\IReflection $sender Reflection element
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @param string $message Exception message

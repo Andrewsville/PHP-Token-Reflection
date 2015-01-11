@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 
 
@@ -56,18 +57,14 @@ class ReflectionNamespace implements IReflectionNamespace
 	private $functions = [];
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
 
 	/**
-	 * Constructor.
-	 *
-	 * @param string $name Namespace name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param string $name
+	 * @param Broker $broker
 	 */
 	public function __construct($name, Broker $broker)
 	{

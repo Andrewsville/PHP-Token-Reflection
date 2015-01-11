@@ -48,8 +48,6 @@ class StreamException extends BaseException
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $stream Reflection element
 	 * @param string $message Exception message
 	 * @param int $code Exception code

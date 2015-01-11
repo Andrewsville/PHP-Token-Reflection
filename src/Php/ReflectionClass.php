@@ -10,25 +10,19 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
-use Reflector, ReflectionClass as InternalReflectionClass;
+use Reflector;
+use ReflectionClass as InternalReflectionClass;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-/**
- * Reflection of a not tokenized but defined class.
- *
- * Descendant of the internal reflection with additional features.
- */
 class ReflectionClass extends InternalReflectionClass implements IReflection, TokenReflection\IReflectionClass
 {
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
@@ -63,7 +57,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 	/**
 	 * @param string $className Class name
-	 * @param Broker $broker Reflection broker
+	 * @param Broker $broker
 	 */
 	public function __construct($className, Broker $broker)
 	{
@@ -73,9 +67,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionExtension
+	 * @return ReflectionExtension
 	 */
 	public function getExtension()
 	{

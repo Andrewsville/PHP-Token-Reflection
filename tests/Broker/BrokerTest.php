@@ -1,17 +1,16 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests;
+namespace ApiGen\TokenReflection\Tests\Broker;
 
 use ApiGen;
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\MemoryBackend;
+use ApiGen\TokenReflection\Tests\TestCase;
 
 
 class BrokerTest extends TestCase
 {
 
-	/**
-	 * Tests processing of an empty file.
-	 */
 	public function testEmptyFileProcessing()
 	{
 		$this->getFileTokenReflection('empty');
@@ -20,8 +19,8 @@ class BrokerTest extends TestCase
 
 	public function testFindFiles()
 	{
-		$broker = new Broker(new Broker\Backend\Memory);
-		$files = $broker->processDirectory(realpath(__DIR__ . '/data/class'), TRUE);
+		$broker = new Broker(new MemoryBackend);
+		$files = $broker->processDirectory(realpath(__DIR__ . '/../data/class'), TRUE);
 		$this->assertCount(39, $files);
 	}
 
@@ -74,22 +73,6 @@ class BrokerTest extends TestCase
 		}
 
 		$this->getBroker()->process($file);
-	}
-
-
-	/**
-	 * PhpUnit does not seem to let one compare two arrays without having to
-	 * have elements in the same order (which is not important at all here).
-	 *
-	 * @param array $expected
-	 * @param array $actual
-	 */
-	private function compareFileLists(array $expected, array $actual)
-	{
-		$this->assertSame(count($expected), count($actual));
-		foreach ($expected as $fileName) {
-			$this->assertTrue(in_array($fileName, $actual));
-		}
 	}
 
 }

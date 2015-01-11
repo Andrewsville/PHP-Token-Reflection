@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\IReflectionConstant;
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\ReflectionBase;
 
 
@@ -38,16 +38,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	private $fileName;
 
 	/**
-	 * Reflection broker.
-	 *
-	 * @var ApiGen\TokenReflection\Broker
+	 * @var Broker
 	 */
 	private $broker;
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param string $name Constant name
 	 * @param string $fileName Original definiton file name
 	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker

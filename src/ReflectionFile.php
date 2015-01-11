@@ -10,8 +10,11 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
+use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
 class ReflectionFile extends ReflectionBase
@@ -39,25 +42,23 @@ class ReflectionFile extends ReflectionBase
 	/**
 	 * Returns the string representation of the reflection object.
 	 *
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the method is called, because it's unsupported.
+	 * @throws RuntimeException If the method is called, because it's unsupported.
 	 */
 	public function __toString()
 	{
-		throw new Exception\RuntimeException('Casting to string is not supported.', Exception\RuntimeException::UNSUPPORTED, $this);
+		throw new RuntimeException('Casting to string is not supported.', RuntimeException::UNSUPPORTED, $this);
 	}
 
 
 	/**
-	 * Exports a reflected object.
-	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
+	 * @param Broker $broker Broker instance
 	 * @param string $argument Reflection object name
 	 * @param bool $return Return the export instead of outputting it
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the method is called, because it's unsupported.
+	 * @throws RuntimeException If the method is called, because it's unsupported.
 	 */
 	public static function export(Broker $broker, $argument, $return = FALSE)
 	{
-		throw new Exception\RuntimeException('Export is not supported.', Exception\RuntimeException::UNSUPPORTED);
+		throw new RuntimeException('Export is not supported.', RuntimeException::UNSUPPORTED);
 	}
 
 
@@ -75,14 +76,12 @@ class ReflectionFile extends ReflectionBase
 	/**
 	 * Parses the token substream and prepares namespace reflections from the file.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionFile
 	 */
-	protected function parseStream(Stream $tokenStream, IReflection $parent = NULL)
+	protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL)
 	{
 		$this->name = $tokenStream->getFileName();
-		if (1 >= $tokenStream->count()) {
+		if ($tokenStream->count() <= 1) {
 			// No PHP content
 			$this->docComment = new ReflectionAnnotation($this, NULL);
 			return $this;

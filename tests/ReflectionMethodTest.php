@@ -2,7 +2,8 @@
 
 namespace ApiGen\TokenReflection\Tests;
 
-use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
 use ApiGen\TokenReflection\ReflectionAnnotation;
 use ApiGen\TokenReflection\ReflectionMethod;
@@ -139,7 +140,7 @@ class ReflectionMethodTest extends TestCase
 		);
 
 		// The same test with parsing method bodies turned off
-		$broker = new Broker(new Broker\Backend\Memory, Broker::OPTION_DEFAULT & ~Broker::OPTION_PARSE_FUNCTION_BODY);
+		$broker = new Broker(new MemoryBackend, Broker::OPTION_DEFAULT & ~Broker::OPTION_PARSE_FUNCTION_BODY);
 		$broker->processFile($this->getFilePath($testName));
 		$reflection = $broker->getClass($this->getClassName($testName))->getMethod($this->getMethodName($testName));
 		$this->assertSame([], $reflection->getStaticVariables());

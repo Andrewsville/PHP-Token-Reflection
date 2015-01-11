@@ -9,7 +9,9 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ReflectionMethod as InternalReflectionMethod, ReflectionClass as InternalReflectionClass;
 
@@ -335,7 +337,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 				if ( ! $method->isPrivate()) {
 					try {
 						$prototype = $method->getPrototype();
-					} catch (Exception\RuntimeException $e) {
+					} catch (RuntimeException $e) {
 						$prototype = $method;
 					}
 				}
@@ -351,7 +353,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$this->prototype = $prototype ?: ($this->isComplete() ? FALSE : NULL);
 		}
 		if (empty($this->prototype)) {
-			throw new Exception\RuntimeException('Method has no prototype.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException('Method has no prototype.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return $this->prototype;
 	}
@@ -381,7 +383,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		$declaringClassParent = $this->getDeclaringClass()->getParentClass();
 		try {
 			$prototype = ', prototype ' . $this->getPrototype()->getDeclaringClassName();
-		} catch (Exception\RuntimeException $e) {
+		} catch (RuntimeException $e) {
 			if ($declaringClassParent && $declaringClassParent->isInternal()) {
 				$internal = 'internal:' . $parentClass->getExtensionName();
 			}
@@ -436,12 +438,12 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Exports a reflected object.
 	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
+	 * @param Broker $broker
 	 * @param string|object $class Class name or class instance
 	 * @param string $method Method name
 	 * @param bool $return Return the export instead of outputting it
-	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @return string|NULL
+	 * @throws RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $method, $return = FALSE)
 	{
@@ -449,9 +451,10 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		$methodName = $method;
 		$class = $broker->getClass($className);
 		if ($class instanceof Invalid\ReflectionClass) {
-			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+			throw new RuntimeException('Class is invalid.', RuntimeException::UNSUPPORTED);
+
 		} elseif ($class instanceof Dummy\ReflectionClass) {
-			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('Class %s does not exist.', $className), RuntimeException::DOES_NOT_EXIST);
 		}
 		$method = $class->getMethod($methodName);
 		if ($return) {
@@ -487,7 +490,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if ( ! $declaringClass->isInstance($object)) {
-			throw new Exception\RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+			throw new RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		if ($this->isPublic()) {
 			return call_user_func_array([$object, $this->getName()], $args);
@@ -499,7 +502,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$refMethod->setAccessible(FALSE);
 			return $value;
 		}
-		throw new Exception\RuntimeException('Only public methods can be invoked.', Exception\RuntimeException::NOT_ACCESSBILE, $this);
+		throw new RuntimeException('Only public methods can be invoked.', RuntimeException::NOT_ACCESSBILE, $this);
 	}
 
 
@@ -559,7 +562,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if ( ! $declaringClass->isInstance($object)) {
-			throw new Exception\RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+			throw new RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		$that = $this;
 		return function () use ($object, $that) {
@@ -588,7 +591,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		}
 		if (NULL !== $accessLevel) {
 			if ( ! isset($possibleLevels[$accessLevel])) {
-				throw new Exception\RuntimeException(sprintf('Invalid method access level: "%s".', $accessLevel), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('Invalid method access level: "%s".', $accessLevel), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);
 			$method->modifiers |= $accessLevel;

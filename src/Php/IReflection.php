@@ -10,24 +10,19 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Broker\Broker;
 use Reflector;
 
 
 /**
- * Basic internal reflection interface.
- *
  * Common interface for all internal reflection classes.
  */
 interface IReflection extends TokenReflection\IReflection
 {
 
 	/**
-	 * Creates a reflection instance.
-	 *
-	 * @param \Reflector $internalReflection Internal reflection instance
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker instance
-	 * @return ApiGen\TokenReflection\Php\IReflection
+	 * @return IReflection
 	 */
-	public static function create(Reflector $internalReflection, TokenReflection\Broker $broker);
+	static function create(Reflector $internalReflection, Broker $broker);
 
 }

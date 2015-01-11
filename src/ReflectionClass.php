@@ -10,9 +10,14 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
-use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty, ReflectionMethod as InternalReflectionMethod;
+use ApiGen\TokenReflection\Stream\StreamBase;
+use ReflectionClass as InternalReflectionClass;
+use ReflectionProperty as InternalReflectionProperty;
+use ReflectionMethod as InternalReflectionMethod;
 
 
 /**
@@ -1498,10 +1503,10 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Exports a reflected object.
 	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
+	 * @param Broker $broker
 	 * @param string|object $className Class name or class instance
 	 * @param bool $return Return the export instead of outputting it
-	 * @return string|null
+	 * @return string|NULL
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $className, $return = FALSE)
@@ -1523,14 +1528,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class definition is complete.
-	 *
 	 * @return bool
 	 */
 	public function isComplete()
 	{
 		if ( ! $this->definitionComplete) {
-			if (NULL !== $this->parentClassName && !$this->getParentClass()->isComplete()) {
+			if ($this->parentClassName !== NULL && ! $this->getParentClass()->isComplete()) {
 				return FALSE;
 			}
 			foreach ($this->getOwnInterfaces() as $interface) {
@@ -1545,8 +1548,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
 	 * @return array
 	 */
 	public function getNamespaceAliases()
@@ -1558,15 +1559,13 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ApiGen\TokenReflection\ParseException On invalid parent reflection provided
+	 * @throws ParseException On invalid parent reflection provided
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFileNamespace) {
-			throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), Exception\ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), ParseException::INVALID_PARENT);
 		}
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
@@ -1577,14 +1576,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
-		return $this
-			->parseModifiers($tokenStream)
+		return $this->parseModifiers($tokenStream)
 			->parseName($tokenStream)
 			->parseParent($tokenStream, $parent)
 			->parseInterfaces($tokenStream, $parent);
@@ -1636,12 +1632,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the class name could not be determined.
+	 * @throws ParseException If the class name could not be determined.
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_STRING)) {
-			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}
 		if ($this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$this->name = $tokenStream->getTokenValue();
@@ -1700,7 +1696,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ApiGen\TokenReflection\Exception\ParseException On error while parsing interfaces.
+	 * @throws ParseException On error while parsing interfaces.
 	 */
 	private function parseInterfaces(Stream $tokenStream, ReflectionElement $parent = NULL)
 	{
@@ -1708,7 +1704,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			return $this;
 		}
 		if ($this->isInterface()) {
-			throw new Exception\ParseException($this, $tokenStream, 'Interfaces cannot implement interfaces.', Exception\ParseException::LOGICAL_ERROR);
+			throw new ParseException($this, $tokenStream, 'Interfaces cannot implement interfaces.', ParseException::LOGICAL_ERROR);
 		}
 		while (TRUE) {
 			$interfaceName = '';
@@ -1729,7 +1725,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			if ('{' === $type) {
 				break;
 			} elseif (',' !== $type) {
-				throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found, expected "{" or ";".', Exception\ParseException::UNEXPECTED_TOKEN);
+				throw new ParseException($this, $tokenStream, 'Unexpected token found, expected "{" or ";".', ParseException::UNEXPECTED_TOKEN);
 			}
 		}
 		return $this;
@@ -1742,7 +1738,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If a parse error was detected.
+	 * @throws ParseException If a parse error was detected.
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
@@ -1811,7 +1807,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 						}
 						if ('' === trim($traitName, '\\')) {
-							throw new Exception\ParseException($this, $tokenStream, 'An empty trait name found.', Exception\ParseException::LOGICAL_ERROR);
+							throw new ParseException($this, $tokenStream, 'An empty trait name found.', ParseException::LOGICAL_ERROR);
 						}
 						$this->traits[] = Resolver::resolveClassFQN($traitName, $this->aliases, $this->namespaceName);
 						if (';' === $type) {
@@ -1824,7 +1820,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							continue;
 						} elseif ('{' !== $type) {
 							// Unexpected token
-							throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found: "%s".', Exception\ParseException::UNEXPECTED_TOKEN);
+							throw new ParseException($this, $tokenStream, 'Unexpected token found: "%s".', ParseException::UNEXPECTED_TOKEN);
 						}
 						// Aliases definition
 						$type = $tokenStream->skipWhitespaces(TRUE)->getType();
@@ -1843,12 +1839,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							if (T_INSTEADOF === $type) {
 								$alias = FALSE;
 							} elseif (T_AS !== $type) {
-								throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
+								throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 							}
 							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							if (T_PUBLIC === $type || T_PROTECTED === $type || T_PRIVATE === $type) {
 								if ( ! $alias) {
-									throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
+									throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 								}
 								switch ($type) {
 									case T_PUBLIC:
@@ -1871,7 +1867,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							}
 							if (empty($leftSide)) {
-								throw new Exception\ParseException($this, $tokenStream, 'An empty method name was found.', Exception\ParseException::LOGICAL_ERROR);
+								throw new ParseException($this, $tokenStream, 'An empty method name was found.', ParseException::LOGICAL_ERROR);
 							}
 							if ($alias) {
 								// Alias
@@ -1889,7 +1885,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 								if ($pos = strpos($leftSide, '::')) {
 									$methodName = substr($leftSide, $pos + 2);
 								} else {
-									throw new Exception\ParseException($this, $tokenStream, 'A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', Exception\ParseException::UNEXPECTED_TOKEN);
+									throw new ParseException($this, $tokenStream, 'A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', ParseException::UNEXPECTED_TOKEN);
 								}
 								$this->traitImports[Resolver::resolveClassFQN($rightSide[0], $this->aliases, $this->namespaceName) . '::' . $methodName][] = NULL;
 							}
@@ -1897,7 +1893,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 								$tokenStream->skipWhitespaces(TRUE);
 								continue;
 							} elseif (';' !== $type) {
-								throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
+								throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 							}
 							$type = $tokenStream->skipWhitespaces()->getType();
 						}

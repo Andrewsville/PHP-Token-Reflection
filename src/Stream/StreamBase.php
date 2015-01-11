@@ -9,15 +9,12 @@
 
 namespace ApiGen\TokenReflection\Stream;
 
+use ApiGen\TokenReflection\Exception\StreamException;
+use ArrayAccess;
 use ApiGen\TokenReflection\Exception;
-use SeekableIterator, Countable, ArrayAccess, Serializable;
-
-
-// Ensure that we check if we have a native support of traits
-if ( ! defined('NATIVE_TRAITS')) {
-	require_once __DIR__ . '/../Broker.php';
-
-}
+use Countable;
+use SeekableIterator;
+use Serializable;
 
 
 /**
@@ -56,16 +53,14 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 
 	/**
-	 * Constructor.
-	 *
 	 * Protected to ensure that the concrete implementation will override it.
 	 *
-	 * @throws ApiGen\TokenReflection\Exception\StreamException If tokenizer PHP extension is missing.
+	 * @throws StreamException If tokenizer PHP extension is missing.
 	 */
 	protected function __construct()
 	{
 		if ( ! extension_loaded('tokenizer')) {
-			throw new Exception\StreamException($this, 'The tokenizer PHP extension is not loaded.', Exception\StreamException::PHP_EXT_MISSING);
+			throw new StreamException($this, 'The tokenizer PHP extension is not loaded.', StreamException::PHP_EXT_MISSING);
 		}
 	}
 
@@ -73,7 +68,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Extracts tokens from a source code.
 	 *
-	 * @param string $source Source code
+	 * @param string $source
 	 */
 	protected final function processSource($source)
 	{
@@ -108,8 +103,6 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 
 	/**
-	 * Returns the file name this is a part of.
-	 *
 	 * @return string
 	 */
 	public function getFileName()
@@ -119,8 +112,6 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 
 	/**
-	 * Returns the original source code.
-	 *
 	 * @return string
 	 */
 	public function getSource()
@@ -130,8 +121,6 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 
 	/**
-	 * Returns a part of the source code.
-	 *
 	 * @param mixed $start Start offset
 	 * @param mixed $end End offset
 	 * @return string
@@ -152,7 +141,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * Finds the position of the token of the given type.
 	 *
 	 * @param int|string $type Token type
-	 * @return ApiGen\TokenReflection\Stream|bool
+	 * @return StreamBase|bool
 	 */
 	public function find($type)
 	{
@@ -186,12 +175,12 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			T_DOLLAR_OPEN_CURLY_BRACES => '}'
 		];
 		if ( ! $this->valid()) {
-			throw new Exception\StreamException($this, 'Out of token stream.', Exception\StreamException::READ_BEYOND_EOS);
+			throw new StreamException($this, 'Out of token stream.', StreamException::READ_BEYOND_EOS);
 		}
 		$position = $this->position;
 		$bracket = $this->tokens[$this->position][0];
 		if ( ! isset($brackets[$bracket])) {
-			throw new Exception\StreamException($this, sprintf('There is no usable bracket at position "%d".', $position), Exception\StreamException::DOES_NOT_EXIST);
+			throw new StreamException($this, sprintf('There is no usable bracket at position "%d".', $position), StreamException::DOES_NOT_EXIST);
 		}
 		$searching = $brackets[$bracket];
 		$level = 0;
@@ -207,7 +196,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			}
 			$this->position++;
 		}
-		throw new Exception\StreamException($this, sprintf('Could not find the end bracket "%s" of the bracket at position "%d".', $searching, $position), Exception\StreamException::DOES_NOT_EXIST);
+		throw new StreamException($this, sprintf('Could not find the end bracket "%s" of the bracket at position "%d".', $searching, $position), StreamException::DOES_NOT_EXIST);
 	}
 
 
@@ -272,10 +261,8 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 
 	/**
-	 * Returns the current token value.
-	 *
 	 * @param int $position Token position; if none given, consider the current iteration position
-	 * @return stirng
+	 * @return string
 	 */
 	public function getTokenValue($position = -1)
 	{
@@ -323,16 +310,16 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * Restores the stream from the serialized state.
 	 *
 	 * @param string $serialized Serialized form
-	 * @throws ApiGen\TokenReflection\Exception\StreamException On deserialization error.
+	 * @throws StreamException On unserialization error.
 	 */
 	public function unserialize($serialized)
 	{
 		$data = @unserialize($serialized);
-		if (FALSE === $data) {
-			throw new Exception\StreamException($this, 'Could not deserialize the serialized data.', Exception\StreamException::SERIALIZATION_ERROR);
+		if ($data === FALSE) {
+			throw new StreamException($this, 'Could not deserialize the serialized data.', StreamException::SERIALIZATION_ERROR);
 		}
-		if (2 !== count($data) || !is_string($data[0]) || !is_array($data[1])) {
-			throw new Exception\StreamException($this, 'Invalid serialization data.', Exception\StreamException::SERIALIZATION_ERROR);
+		if (count($data) !== 2 || ! is_string($data[0]) || ! is_array($data[1])) {
+			throw new StreamException($this, 'Invalid serialization data.', StreamException::SERIALIZATION_ERROR);
 		}
 		$this->fileName = $data[0];
 		$this->tokens = $data[1];
@@ -363,7 +350,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new Exception\StreamException($this, 'Removing of tokens from the stream is not supported.', Exception\StreamException::UNSUPPORTED);
+		throw new StreamException($this, 'Removing of tokens from the stream is not supported.', StreamException::UNSUPPORTED);
 	}
 
 
@@ -390,7 +377,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new Exception\StreamException($this, 'Setting token values is not supported.', Exception\StreamException::UNSUPPORTED);
+		throw new StreamException($this, 'Setting token values is not supported.', StreamException::UNSUPPORTED);
 	}
 
 
@@ -466,7 +453,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * Sets the internal pointer to the given value.
 	 *
 	 * @param int $position New position
-	 * @return ApiGen\TokenReflection\Stream
+	 * @return StreamBase
 	 */
 	public function seek($position)
 	{
@@ -476,8 +463,6 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 
 	/**
-	 * Returns the stream source code.
-	 *
 	 * @return string
 	 */
 	public function __toString()

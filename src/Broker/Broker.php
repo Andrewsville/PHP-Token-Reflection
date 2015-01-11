@@ -7,12 +7,16 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\IReflection;
+use ApiGen\TokenReflection\IReflectionClass;
+use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\Stream\FileStream;
+use ApiGen\TokenReflection\Stream\StringStream;
 use Nette\Utils\Finder;
-use RecursiveDirectoryIterator, RecursiveIteratorIterator;
 use SplFileInfo;
 
 
@@ -99,7 +103,7 @@ class Broker
 	 * @param ApiGen\TokenReflection\Broker\Backend $backend Broker backend instance
 	 * @param int $options Broker/parsing options
 	 */
-	public function __construct(Broker\Backend $backend, $options = self::OPTION_DEFAULT)
+	public function __construct(Backend $backend, $options = self::OPTION_DEFAULT)
 	{
 		$this->cache = [
 			self::CACHE_NAMESPACE => [],
@@ -143,14 +147,14 @@ class Broker
 	 * @param string $source PHP source code
 	 * @param string $fileName Used file name
 	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return bool|ApiGen\TokenReflection\ReflectionFile
+	 * @return bool|ReflectionFile
 	 */
 	public function processString($source, $fileName, $returnReflectionFile = FALSE)
 	{
 		if ($this->backend->isFileProcessed($fileName)) {
 			$tokens = $this->backend->getFileTokens($fileName);
 		} else {
-			$tokens = new Stream\StringStream($source, $fileName);
+			$tokens = new StringStream($source, $fileName);
 		}
 		$reflectionFile = new ReflectionFile($tokens, $this);
 		if ( ! $this->backend->isFileProcessed($fileName)) {
@@ -173,7 +177,7 @@ class Broker
 	 *
 	 * @param string $fileName Filename
 	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return bool|ApiGen\TokenReflection\ReflectionFile
+	 * @return bool|ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName, $returnReflectionFile = FALSE)
@@ -182,7 +186,7 @@ class Broker
 			if ($this->backend->isFileProcessed($fileName)) {
 				$tokens = $this->backend->getFileTokens($fileName);
 			} else {
-				$tokens = new Stream\FileStream($fileName);
+				$tokens = new FileStream($fileName);
 			}
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if ( ! $this->backend->isFileProcessed($fileName)) {
@@ -210,7 +214,7 @@ class Broker
 	 *
 	 * @param string $path
 	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return bool|ApiGen\TokenReflection\ReflectionFile[]|SplFileInfo[]
+	 * @return bool|ReflectionFile[]|SplFileInfo[]
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory could not be processed.
 	 */
@@ -240,7 +244,7 @@ class Broker
 	 *
 	 * @param string $path Path
 	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return bool|array|ApiGen\TokenReflection\ReflectionFile
+	 * @return bool|array|ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the target does not exist.
 	 */
 	public function process($path, $returnReflectionFile = FALSE)
@@ -320,9 +324,9 @@ class Broker
 	 * Returns all classes from all namespaces.
 	 *
 	 * @param int $types Returned class types (multiple values may be OR-ed)
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
-	public function getClasses($types = Broker\Backend::TOKENIZED_CLASSES)
+	public function getClasses($types = Backend::TOKENIZED_CLASSES)
 	{
 		return $this->backend->getClasses($types);
 	}
@@ -428,7 +432,7 @@ class Broker
 	 * Returns a reflection object of a file.
 	 *
 	 * @param string $fileName File name
-	 * @return ApiGen\TokenReflection\ReflectionFile|null
+	 * @return ReflectionFile|null
 	 */
 	public function getFile($fileName)
 	{

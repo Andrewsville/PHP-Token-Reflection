@@ -9,8 +9,8 @@
 
 namespace ApiGen\TokenReflection\Stream;
 
-use ApiGen\TokenReflection\Broker as Broker;
-use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Exception\StreamException;
 
 
 /**
@@ -20,23 +20,21 @@ class FileStream extends StreamBase
 {
 
 	/**
-	 * Constructor.
-	 *
 	 * Creates a token substream from a file.
 	 *
-	 * @param string $fileName File name
-	 * @throws ApiGen\TokenReflection\Exception\StreamException If the file does not exist or is not readable.
+	 * @param string $fileName
+	 * @throws StreamException If the file does not exist or is not readable.
 	 */
 	public function __construct($fileName)
 	{
 		parent::__construct();
 		$this->fileName = Broker::getRealPath($fileName);
 		if (FALSE === $this->fileName) {
-			throw new Exception\StreamException($this, 'File does not exist.', Exception\StreamException::DOES_NOT_EXIST);
+			throw new StreamException($this, 'File does not exist.', StreamException::DOES_NOT_EXIST);
 		}
 		$contents = @file_get_contents($this->fileName);
 		if (FALSE === $contents) {
-			throw new Exception\StreamException($this, 'File is not readable.', Exception\StreamException::NOT_READABLE);
+			throw new StreamException($this, 'File is not readable.', StreamException::NOT_READABLE);
 		}
 		$this->processSource($contents);
 	}

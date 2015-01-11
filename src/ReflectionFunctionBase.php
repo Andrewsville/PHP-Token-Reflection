@@ -9,8 +9,12 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
 /**
@@ -136,8 +140,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns if the function/method returns its value as reference.
-	 *
 	 * @return bool
 	 */
 	public function returnsReference()
@@ -150,15 +152,15 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 * Returns a particular function/method parameter.
 	 *
 	 * @param int|string $parameter Parameter name or position
-	 * @return ApiGen\TokenReflection\ReflectionParameter
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
+	 * @return ReflectionParameter
+	 * @throws RuntimeException If there is no parameter of the given name.
+	 * @throws RuntimeException If there is no parameter at the given position.
 	 */
 	public function getParameter($parameter)
 	{
 		if (is_numeric($parameter)) {
 			if ( ! isset($this->parameters[$parameter])) {
-				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			return $this->parameters[$parameter];
 		} else {
@@ -167,14 +169,12 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 					return $reflection;
 				}
 			}
-			throw new Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
 
 
 	/**
-	 * Returns parameters.
-	 *
 	 * @return array
 	 */
 	public function getParameters()
@@ -184,8 +184,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns the number of parameters.
-	 *
 	 * @return int
 	 */
 	public function getNumberOfParameters()
@@ -195,8 +193,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns the number of required parameters.
-	 *
 	 * @return int
 	 */
 	public function getNumberOfRequiredParameters()
@@ -212,8 +208,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns static variables.
-	 *
 	 * @return array
 	 */
 	public function getStaticVariables()
@@ -241,12 +235,12 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Creates aliases to parameters.
 	 *
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException When called on a ReflectionFunction instance.
+	 * @throws RuntimeException When called on a ReflectionFunction instance.
 	 */
 	protected final function aliasParameters()
 	{
 		if ( ! $this instanceof ReflectionMethod) {
-			throw new Exception\RuntimeException('Only method parameters can be aliased.', Exception\RuntimeException::UNSUPPORTED, $this);
+			throw new RuntimeException('Only method parameters can be aliased.', RuntimeException::UNSUPPORTED, $this);
 		}
 		foreach ($this->parameters as $index => $parameter) {
 			$this->parameters[$index] = $parameter->alias($this);
@@ -257,14 +251,13 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Parses if the function/method returns its value as reference.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionFunctionBase
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If could not be determined if the function\method returns its value by reference.
+	 * @return ReflectionFunctionBase
+	 * @throws ParseException If could not be determined if the function\method returns its value by reference.
 	 */
-	final protected function parseReturnsReference(Stream $tokenStream)
+	final protected function parseReturnsReference(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_FUNCTION)) {
-			throw new Exception\ParseException($this, $tokenStream, 'Could not find the function keyword.', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'Could not find the function keyword.', ParseException::UNEXPECTED_TOKEN);
 		}
 		$tokenStream->skipWhitespaces(TRUE);
 		$type = $tokenStream->getType();
@@ -272,7 +265,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 			$this->returnsReference = TRUE;
 			$tokenStream->skipWhitespaces(TRUE);
 		} elseif (T_STRING !== $type) {
-			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}
 		return $this;
 	}
@@ -281,11 +274,10 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Parses the function/method name.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionMethod
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the class name could not be determined.
+	 * @return ReflectionMethod
+	 * @throws ParseException If the class name could not be determined.
 	 */
-	final protected function parseName(Stream $tokenStream)
+	final protected function parseName(StreamBase $tokenStream)
 	{
 		$this->name = $tokenStream->getTokenValue();
 		$tokenStream->skipWhitespaces(TRUE);
@@ -296,14 +288,11 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
-	final protected function parseChildren(Stream $tokenStream, IReflection $parent)
+	final protected function parseChildren(StreamBase $tokenStream, IReflection $parent)
 	{
-		return $this
-			->parseParameters($tokenStream)
+		return $this->parseParameters($tokenStream)
 			->parseStaticVariables($tokenStream);
 	}
 
@@ -311,14 +300,13 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Parses function/method parameters.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionFunctionBase
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If parameters could not be parsed.
+	 * @return ReflectionFunctionBase
+	 * @throws ParseException If parameters could not be parsed.
 	 */
-	final protected function parseParameters(Stream $tokenStream)
+	final protected function parseParameters(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is('(')) {
-			throw new Exception\ParseException($this, $tokenStream, 'Could find the start token.', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'Could find the start token.', ParseException::UNEXPECTED_TOKEN);
 		}
 		static $accepted = [T_NS_SEPARATOR => TRUE, T_STRING => TRUE, T_ARRAY => TRUE, T_CALLABLE => TRUE, T_VARIABLE => TRUE, '&' => TRUE];
 		$tokenStream->skipWhitespaces(TRUE);
@@ -338,13 +326,10 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Parses static variables.
-	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionFunctionBase
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If static variables could not be parsed.
+	 * @return ReflectionFunctionBase
+	 * @throws ParseException If static variables could not be parsed.
 	 */
-	final protected function parseStaticVariables(Stream $tokenStream)
+	final protected function parseStaticVariables(StreamBase $tokenStream)
 	{
 		$type = $tokenStream->getType();
 		if ('{' === $type) {
@@ -391,7 +376,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 										$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 									}
 									if ( ! $tokenStream->valid()) {
-										throw new Exception\ParseException($this, $tokenStream, 'Invalid end of token stream.', Exception\ParseException::READ_BEYOND_EOS);
+										throw new ParseException($this, $tokenStream, 'Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
 									}
 								}
 								$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
@@ -405,7 +390,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 						case T_FUNCTION:
 							// Anonymous function -> skip to its end
 							if ( ! $tokenStream->find('{')) {
-								throw new Exception\ParseException($this, $tokenStream, 'Could not find beginning of the anonymous function.', Exception\ParseException::UNEXPECTED_TOKEN);
+								throw new ParseException($this, $tokenStream, 'Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
 							}
 						// Break missing intentionally
 						case '{':
@@ -424,7 +409,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 				$tokenStream->findMatchingBracket();
 			}
 		} elseif (';' !== $type) {
-			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}
 		return $this;
 	}

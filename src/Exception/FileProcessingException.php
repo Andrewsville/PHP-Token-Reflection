@@ -27,8 +27,6 @@ final class FileProcessingException extends RuntimeException
 
 
 	/**
-	 * Constructor.
-	 *
 	 * @param array $reasons Resons why the file could not be processed
 	 * @param ApiGen\TokenReflection\ReflectionFile $sender Reflection file
 	 */

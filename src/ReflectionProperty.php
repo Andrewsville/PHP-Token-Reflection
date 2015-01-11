@@ -9,14 +9,13 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
-use ReflectionProperty as InternalReflectionProperty, ReflectionClass as InternalReflectionClass;
+use ReflectionProperty as InternalReflectionProperty;
+use ReflectionClass as InternalReflectionClass;
 
 
-/**
- * Tokenized class property reflection.
- */
 class ReflectionProperty extends ReflectionElement implements IReflectionProperty
 {
 
@@ -169,13 +168,11 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns property modifiers.
-	 *
 	 * @return int
 	 */
 	public function getModifiers()
 	{
-		if (FALSE === $this->modifiersComplete) {
+		if ($this->modifiersComplete === FALSE) {
 			$declaringClass = $this->getDeclaringClass();
 			$declaringClassParent = $declaringClass->getParentClass();
 			if ($declaringClassParent && $declaringClassParent->hasProperty($this->name)) {
@@ -191,8 +188,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns if the property is private.
-	 *
 	 * @return bool
 	 */
 	public function isPrivate()
@@ -202,8 +197,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns if the property is protected.
-	 *
 	 * @return bool
 	 */
 	public function isProtected()
@@ -213,8 +206,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns if the property is public.
-	 *
 	 * @return bool
 	 */
 	public function isPublic()
@@ -224,8 +215,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns if the poperty is static.
-	 *
 	 * @return bool
 	 */
 	public function isStatic()
@@ -235,8 +224,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
 	 * @return string
 	 */
 	public function __toString()
@@ -256,12 +243,12 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Exports a reflected object.
 	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
+	 * @param Broker $broker Broker instance
 	 * @param string|object $class Class name or class instance
-	 * @param string $property Property name
+	 * @param string $property
 	 * @param bool $return Return the export instead of outputting it
-	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @return string|NULL
+	 * @throws Exception\RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $property, $return = FALSE)
 	{
