@@ -390,10 +390,8 @@ class ReflectionMethodTest extends TestCase
 		$this->assertSame($internal->invokeArgs($object, [1, 2]), $token->invokeArgs($object, [1, 2]));
 		$this->assertSame(3, $token->invokeArgs($object, [1, 2]));
 
-		if (PHP_VERSION_ID >= 50302) {
-			$this->assertSame($internal->setAccessible(FALSE), $token->setAccessible(FALSE));
-			$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
-		}
+		$this->assertSame($internal->setAccessible(FALSE), $token->setAccessible(FALSE));
+		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
 
 		try {
 			$token->invoke(new \Exception(), 1, 2);
@@ -438,13 +436,11 @@ class ReflectionMethodTest extends TestCase
 			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 		}
 
-		if (PHP_VERSION_ID >= 50302) {
-			$this->assertSame($internal->setAccessible(TRUE), $token->setAccessible(TRUE));
-			$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
-			$this->assertSame(3, $token->invoke($object, 1, 2));
-			$this->assertSame($internal->invokeArgs($object, [1, 2]), $token->invokeArgs($object, [1, 2]));
-			$this->assertSame(3, $token->invokeArgs($object, [1, 2]));
-		}
+		$this->assertSame($internal->setAccessible(TRUE), $token->setAccessible(TRUE));
+		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
+		$this->assertSame(3, $token->invoke($object, 1, 2));
+		$this->assertSame($internal->invokeArgs($object, [1, 2]), $token->invokeArgs($object, [1, 2]));
+		$this->assertSame(3, $token->invokeArgs($object, [1, 2]));
 	}
 
 

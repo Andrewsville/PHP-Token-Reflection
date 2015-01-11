@@ -121,13 +121,10 @@ class ReflectionParameterTest extends TestCase
 			$this->assertSame($paramName, $parameter->getName(), $parameter->getName());
 			$this->assertSame($paramName, $tokenParameter->getName(), $parameter->getName());
 
-			if (PHP_VERSION_ID !== 50316) { // https://bugs.php.net/bug.php?id=62715
-				//	$this->assertSame($defaultValueAvailable, $parameter->isDefaultValueAvailable(), $parameter->getName());
-				$this->assertSame($defaultValueAvailable, $tokenParameter->isDefaultValueAvailable(), $parameter->getName());
+			$this->assertSame($defaultValueAvailable, $tokenParameter->isDefaultValueAvailable(), $parameter->getName());
 
-				$this->assertSame($optional, $parameter->isOptional(), $parameter->getName());
-				$this->assertSame($optional, $tokenParameter->isOptional(), $parameter->getName());
-			}
+			$this->assertSame($optional, $parameter->isOptional(), $parameter->getName());
+			$this->assertSame($optional, $tokenParameter->isOptional(), $parameter->getName());
 
 			$this->assertSame($allowsNull, $parameter->allowsNull(), $parameter->getName());
 			$this->assertSame($allowsNull, $tokenParameter->allowsNull(), $parameter->getName());
