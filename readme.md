@@ -77,3 +77,8 @@ When you ask the Broker for an internal element, it returns a `ApiGen\TokenRefle
 
 When the library encounters a duplicate element, it converts the previously created reflection into an `ApiGen\TokenReflection\Invalid\Reflection*` instance.
 Then it throws an exception. When you catch this exception and continue to work with the Broker instance, the duplicate elements will have only one reflection.
+
+
+## Non Existing Classes- `ApiGen\TokenReflection\Dummy\*`
+
+There are used if the element doesn't exists, e.g. while calling `getParentClass()` and not present in broker.
