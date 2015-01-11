@@ -1,4 +1,4 @@
-# ApiGen\TokenReflection [WIPŊ
+# ApiGen\TokenReflection [WIP]
 
 [![Build Status](https://secure.travis-ci.org/apigen/token-reflection.png?branch=master)](http://travis-ci.org/ApiGen/TokenReflection)
 
