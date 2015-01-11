@@ -60,6 +60,12 @@ interface Backend
 	 */
 	function getNamespace($namespaceName);
 
+	/**
+	 * Returns all namespaces.
+	 *
+	 * @return array
+	 */
+	function getNamespaces();
 
 	/**
 	 * Returns if there was such class processed (FQN expected).

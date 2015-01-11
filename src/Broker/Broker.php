@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen;
+use ApiGen\TokenReflection\Broker\Backend;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\IReflection;
 use ApiGen\TokenReflection\IReflectionClass;
@@ -80,7 +81,7 @@ class Broker
 	/**
 	 * Namespace/class backend.
 	 *
-	 * @var ApiGen\TokenReflection\Broker\Backend
+	 * @var Backend
 	 */
 	private $backend;
 
@@ -100,7 +101,7 @@ class Broker
 
 
 	/**
-	 * @param ApiGen\TokenReflection\Broker\Backend $backend Broker backend instance
+	 * @param Backend $backend Broker backend instance
 	 * @param int $options Broker/parsing options
 	 */
 	public function __construct(Backend $backend, $options = self::OPTION_DEFAULT)
@@ -288,6 +289,21 @@ class Broker
 			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespace;
 		}
 		return $namespace;
+	}
+
+
+	/**
+	 * Returns a list of reflection objects for all namespaces.
+	 *
+	 * @return array
+	 */
+	public function getNamespaces()
+	{
+		$namespaces = [];
+		foreach(array_keys($this->backend->getNamespaces()) as $name) {
+			$namespaces[] = $this->getNamespace($name);
+		}
+		return $namespaces;
 	}
 
 
