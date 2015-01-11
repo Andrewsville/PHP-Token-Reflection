@@ -14,7 +14,6 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionProperty as InternalReflectionProperty;
@@ -520,10 +519,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class implements the given method.
-	 *
-	 * @param string $name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasMethod($name)
 	{
@@ -537,11 +533,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns a method reflection.
-	 *
-	 * @param string $name
-	 * @return ApiGen\TokenReflection\ReflectionMethod
-	 * @throws RuntimeException If the requested method does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getMethod($name)
 	{
@@ -558,10 +550,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns method reflections.
-	 *
-	 * @param int $filter Methods filter
-	 * @return array|ReflectionMethod[]
+	 * {@inheritdoc}
 	 */
 	public function getMethods($filter = NULL)
 	{
@@ -604,10 +593,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of methods declared by this class, not its parents.
-	 *
-	 * @param int $filter Methods filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnMethods($filter = NULL)
 	{
@@ -639,11 +625,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of method imported from traits.
-	 *
-	 * @param int $filter Methods filter
-	 * @return array|ReflectionMethod[]
-	 * @throws RuntimeException If trait method was already imported.
+	 * {@inheritdoc}
 	 */
 	public function getTraitMethods($filter = NULL)
 	{
@@ -711,10 +693,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns a constant value.
-	 *
-	 * @param string $name Constant name
-	 * @return mixed|false
+	 * {@inheritdoc}
 	 */
 	public function getConstant($name)
 	{
@@ -727,11 +706,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns a constant reflection.
-	 *
-	 * @param string $name Constant name
-	 * @return ApiGen\TokenReflection\ReflectionConstant
-	 * @throws RuntimeException If the requested constant does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getConstantReflection($name)
 	{
@@ -748,9 +723,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns constant values.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getConstants()
 	{
@@ -1057,9 +1030,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class definition is valid.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isValid()
 	{
@@ -1207,11 +1178,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the given object is an instance of this class.
-	 *
-	 * @param object $object Instance
-	 * @return bool
-	 * @throws RuntimeException If the provided argument is not an object.
+	 * {@inheritdoc}
 	 */
 	public function isInstance($object)
 	{
@@ -1245,11 +1212,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Creates a new instance using an array of parameters.
-	 *
-	 * @param array $args Array of constructor parameters
-	 * @return object
-	 * @throws RuntimeException If the required class does not exist.
+	 * {@inheritdoc}
 	 */
 	public function newInstanceArgs(array $args = [])
 	{
@@ -1262,12 +1225,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Sets a static property value.
-	 *
-	 * @param string $name Property name
-	 * @param mixed $value Property value
-	 * @throws RuntimeException If the requested static property does not exist.
-	 * @throws RuntimeException If the requested static property is not accessible.
+	 * {@inheritdoc}
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
@@ -1501,11 +1459,10 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Parses the class/interface name.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 * @throws ParseException If the class name could not be determined.
 	 */
-	protected function parseName(Stream $tokenStream)
+	protected function parseName(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_STRING)) {
 			throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
@@ -1523,11 +1480,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Parses the parent class.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
-	private function parseParent(Stream $tokenStream, ReflectionElement $parent = NULL)
+	private function parseParent(StreamBase $tokenStream, ReflectionElement $parent = NULL)
 	{
 		if ( ! $tokenStream->is(T_EXTENDS)) {
 			return $this;

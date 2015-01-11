@@ -299,6 +299,15 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	/**
 	 * {@inheritdoc}
 	 */
+	public function hasMethod($name)
+	{
+		return isset($this->getMethods()[$name]);
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getMethod($name)
 	{
 		foreach ($this->getMethods() as $method) {
