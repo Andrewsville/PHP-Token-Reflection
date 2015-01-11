@@ -6,6 +6,7 @@ class TokenReflection_Test_MethodStaticVariablesParent
 {
 
 	const PARENT = 'parent constant';
+
 }
 
 
@@ -18,9 +19,9 @@ class TokenReflection_Test_MethodStaticVariables extends TokenReflection_Test_Me
 	public function staticVariables()
 	{
 		static $string = 'string';
-		static $integer = 1;
+		static $int = 1;
 		static $float = 1.1;
-		static $boolean = TRUE;
+		static $bool = TRUE;
 		static $null = NULL;
 		static $array = [1 => 1];
 		static $array2 = [1 => 1, 2 => 2];

@@ -64,7 +64,7 @@ class ReflectionAnnotation
 	 *
 	 * False if none.
 	 *
-	 * @var string|boolean
+	 * @var string|bool
 	 */
 	private $docComment;
 
@@ -80,7 +80,7 @@ class ReflectionAnnotation
 	 * Constructor.
 	 *
 	 * @param ApiGen\TokenReflection\ReflectionBase $reflection Parent reflection object
-	 * @param string|boolean $docComment Docblock definition
+	 * @param string|bool $docComment Docblock definition
 	 */
 	public function __construct(ReflectionBase $reflection, $docComment = FALSE)
 	{
@@ -92,7 +92,7 @@ class ReflectionAnnotation
 	/**
 	 * Returns the docblock.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getDocComment()
 	{
@@ -104,7 +104,7 @@ class ReflectionAnnotation
 	 * Returns if the current docblock contains the requrested annotation.
 	 *
 	 * @param string $annotation Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($annotation)
 	{
@@ -154,7 +154,7 @@ class ReflectionAnnotation
 	public function setTemplates(array $templates)
 	{
 		foreach ($templates as $template) {
-			if (!$template instanceof ReflectionAnnotation) {
+			if ( ! $template instanceof ReflectionAnnotation) {
 				throw new Exception\RuntimeException(
 					sprintf(
 						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
@@ -206,7 +206,7 @@ class ReflectionAnnotation
 				}
 				// Continuation
 				if (self::SHORT_DESCRIPTION === $name || self::LONG_DESCRIPTION === $name) {
-					if (!isset($this->annotations[$name])) {
+					if ( ! isset($this->annotations[$name])) {
 						$this->annotations[$name] = $line;
 					} else {
 						$this->annotations[$name] .= "\n" . $line;
@@ -225,7 +225,7 @@ class ReflectionAnnotation
 			// Merge docblock templates
 			$this->mergeTemplates();
 			// Copy annotations if the @copydoc tag is present.
-			if (!empty($this->annotations['copydoc'])) {
+			if ( ! empty($this->annotations['copydoc'])) {
 				$this->copyAnnotation();
 			}
 			// Process docblock inheritance for supported reflections
@@ -278,7 +278,7 @@ class ReflectionAnnotation
 						$parent = $class->getProperty(ltrim($parentName, '$'));
 					}
 				}
-				if (!empty($parent)) {
+				if ( ! empty($parent)) {
 					// Don't get into an infinite recursion loop
 					if (in_array($parent, self::$copydocStack, TRUE)) {
 						throw new Exception\RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag.', Exception\RuntimeException::INVALID_ARGUMENT, $this->reflection);
@@ -370,7 +370,7 @@ class ReflectionAnnotation
 			// Inherit the entire docblock
 			foreach ($parents as $parent) {
 				$annotations = $parent->getAnnotations();
-				if (!empty($annotations)) {
+				if ( ! empty($annotations)) {
 					$this->annotations = $annotations;
 					break;
 				}
@@ -422,7 +422,7 @@ class ReflectionAnnotation
 				foreach ($parents as $parent) {
 					if ($parent->hasAnnotation('param')) {
 						$parentParams = array_slice($parent->getAnnotation('param'), count($params));
-						while (!empty($parentParams) && !$complete) {
+						while ( ! empty($parentParams) && !$complete) {
 							array_push($params, array_shift($parentParams));
 							if (count($params) === $this->reflection->getNumberOfParameters()) {
 								$complete = TRUE;
@@ -433,13 +433,13 @@ class ReflectionAnnotation
 						break;
 					}
 				}
-				if (!empty($params)) {
+				if ( ! empty($params)) {
 					$this->annotations['param'] = $params;
 				}
 			}
 			// And check if we need and can inherit the return and throws value
 			foreach (['return', 'throws'] as $paramName) {
-				if (!isset($this->annotations[$paramName])) {
+				if ( ! isset($this->annotations[$paramName])) {
 					foreach ($parents as $parent) {
 						if ($parent->hasAnnotation($paramName)) {
 							$this->annotations[$paramName] = $parent->getAnnotation($paramName);

@@ -92,7 +92,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * Always false.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -105,7 +105,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * Always true.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -116,7 +116,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -128,7 +128,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Returns if the namespace contains a class of the given name.
 	 *
 	 * @param string $className Class name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasClass($className)
 	{
@@ -153,7 +153,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		if (FALSE === strpos($className, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
 			$className = $this->getName() . '\\' . $className;
 		}
-		if (!isset($this->classes[$className])) {
+		if ( ! isset($this->classes[$className])) {
 			throw new Exception\RuntimeException(sprintf('Class "%s" does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return $this->classes[$className];
@@ -199,7 +199,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Returns if the namespace contains a constant of the given name.
 	 *
 	 * @param string $constantName Constant name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($constantName)
 	{
@@ -224,7 +224,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		if (FALSE === strpos($constantName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
 			$constantName = $this->getName() . '\\' . $constantName;
 		}
-		if (!isset($this->constants[$constantName])) {
+		if ( ! isset($this->constants[$constantName])) {
 			throw new Exception\RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return $this->constants[$constantName];
@@ -270,7 +270,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Returns if the namespace contains a function of the given name.
 	 *
 	 * @param string $functionName Function name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFunction($functionName)
 	{
@@ -295,7 +295,7 @@ class ReflectionNamespace implements IReflectionNamespace
 		if (FALSE === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
 			$functionName = $this->getName() . '\\' . $functionName;
 		}
-		if (!isset($this->functions[$functionName])) {
+		if ( ! isset($this->functions[$functionName])) {
 			throw new Exception\RuntimeException(sprintf('Function "%s" does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return $this->functions[$functionName];
@@ -395,7 +395,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string $namespace Namespace name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -428,7 +428,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				$errors = array_merge($errors, $reflection->getReasons());
 			}
 			if (isset($this->classes[$className])) {
-				if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
+				if ( ! $this->classes[$className] instanceof Invalid\ReflectionClass) {
 					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
 				}
 				$error = new Exception\RuntimeException(
@@ -452,7 +452,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				$errors = array_merge($errors, $reflection->getReasons());
 			}
 			if (isset($this->functions[$functionName])) {
-				if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
+				if ( ! $this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
 					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
 				}
 				$error = new Exception\RuntimeException(
@@ -476,7 +476,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				$errors = array_merge($errors, $reflection->getReasons());
 			}
 			if (isset($this->constants[$constantName])) {
-				if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
+				if ( ! $this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
 					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
 				}
 				$error = new Exception\RuntimeException(
@@ -495,7 +495,7 @@ class ReflectionNamespace implements IReflectionNamespace
 				$this->constants[$constantName] = $reflection;
 			}
 		}
-		if (!empty($errors)) {
+		if ( ! empty($errors)) {
 			throw new Exception\FileProcessingException($errors, NULL);
 		}
 		return $this;
@@ -542,7 +542,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{

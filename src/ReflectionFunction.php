@@ -28,7 +28,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * Returns if the function is is disabled via the disable_functions directive.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDisabled()
 	{
@@ -73,7 +73,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 *
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string $function Function name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -111,7 +111,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 */
 	public function invokeArgs(array $args = [])
 	{
-		if (!function_exists($this->getName())) {
+		if ( ! function_exists($this->getName())) {
 			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return call_user_func_array($this->getName(), $args);
@@ -136,7 +136,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 */
 	public function getClosure()
 	{
-		if (!function_exists($this->getName())) {
+		if ( ! function_exists($this->getName())) {
 			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$that = $this;
@@ -160,7 +160,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * Returns if the function definition is valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -178,7 +178,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
-		if (!$parent instanceof ReflectionFileNamespace) {
+		if ( ! $parent instanceof ReflectionFileNamespace) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace.', Exception\ParseException::INVALID_PARENT);
 		}
 		$this->namespaceName = $parent->getName();

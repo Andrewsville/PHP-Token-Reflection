@@ -8,7 +8,7 @@ class TokenReflection_Test_MethodDocCommentInheritanceGrandParent
 	 *
 	 * Private1 long.
 	 *
-	 * @return integer
+	 * @return int
 	 * @throws Exception
 	 */
 	private function method1()
@@ -65,7 +65,7 @@ class TokenReflection_Test_MethodDocCommentInheritanceParent extends TokenReflec
 	 *
 	 * Protected3 long.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function method3()
 	{

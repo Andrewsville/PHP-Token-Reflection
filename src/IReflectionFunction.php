@@ -18,7 +18,7 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is is disabled via the disable_functions directive.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDisabled();
 
@@ -55,7 +55,7 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 *
 	 * That means that the source code is valid and the function name is unique within parsed files.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid();
 
@@ -66,4 +66,5 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 * @return array
 	 */
 	public function getNamespaceAliases();
+
 }

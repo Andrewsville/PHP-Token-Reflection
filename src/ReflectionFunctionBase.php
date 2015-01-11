@@ -29,7 +29,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Determines if the function/method returns its value as reference.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $returnsReference = FALSE;
 
@@ -94,7 +94,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Returns if the function/method is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace()
 	{
@@ -105,7 +105,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Returns if the function/method is a closure.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isClosure()
 	{
@@ -138,7 +138,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Returns if the function/method returns its value as reference.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function returnsReference()
 	{
@@ -149,7 +149,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Returns a particular function/method parameter.
 	 *
-	 * @param integer|string $parameter Parameter name or position
+	 * @param int|string $parameter Parameter name or position
 	 * @return ApiGen\TokenReflection\ReflectionParameter
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
@@ -157,7 +157,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	public function getParameter($parameter)
 	{
 		if (is_numeric($parameter)) {
-			if (!isset($this->parameters[$parameter])) {
+			if ( ! isset($this->parameters[$parameter])) {
 				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			return $this->parameters[$parameter];
@@ -186,7 +186,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Returns the number of parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getNumberOfParameters()
 	{
@@ -197,13 +197,13 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	/**
 	 * Returns the number of required parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getNumberOfRequiredParameters()
 	{
 		$count = 0;
 		array_walk($this->parameters, function (ReflectionParameter $parameter) use (&$count) {
-			if (!$parameter->isOptional()) {
+			if ( ! $parameter->isOptional()) {
 				$count++;
 			}
 		});
@@ -245,7 +245,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	protected final function aliasParameters()
 	{
-		if (!$this instanceof ReflectionMethod) {
+		if ( ! $this instanceof ReflectionMethod) {
 			throw new Exception\RuntimeException('Only method parameters can be aliased.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 		foreach ($this->parameters as $index => $parameter) {
@@ -263,7 +263,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	final protected function parseReturnsReference(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_FUNCTION)) {
+		if ( ! $tokenStream->is(T_FUNCTION)) {
 			throw new Exception\ParseException($this, $tokenStream, 'Could not find the function keyword.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 		$tokenStream->skipWhitespaces(TRUE);
@@ -317,7 +317,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	final protected function parseParameters(Stream $tokenStream)
 	{
-		if (!$tokenStream->is('(')) {
+		if ( ! $tokenStream->is('(')) {
 			throw new Exception\ParseException($this, $tokenStream, 'Could find the start token.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 		static $accepted = [T_NS_SEPARATOR => TRUE, T_STRING => TRUE, T_ARRAY => TRUE, T_CALLABLE => TRUE, T_VARIABLE => TRUE, '&' => TRUE];
@@ -390,7 +390,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 										$variableDefinition[] = $tokenStream->current();
 										$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 									}
-									if (!$tokenStream->valid()) {
+									if ( ! $tokenStream->valid()) {
 										throw new Exception\ParseException($this, $tokenStream, 'Invalid end of token stream.', Exception\ParseException::READ_BEYOND_EOS);
 									}
 								}
@@ -404,7 +404,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 							break;
 						case T_FUNCTION:
 							// Anonymous function -> skip to its end
-							if (!$tokenStream->find('{')) {
+							if ( ! $tokenStream->find('{')) {
 								throw new Exception\ParseException($this, $tokenStream, 'Could not find beginning of the anonymous function.', Exception\ParseException::UNEXPECTED_TOKEN);
 							}
 						// Break missing intentionally

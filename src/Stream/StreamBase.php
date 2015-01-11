@@ -14,8 +14,9 @@ use SeekableIterator, Countable, ArrayAccess, Serializable;
 
 
 // Ensure that we check if we have a native support of traits
-if (!defined('NATIVE_TRAITS')) {
+if ( ! defined('NATIVE_TRAITS')) {
 	require_once __DIR__ . '/../Broker.php';
+
 }
 
 
@@ -42,14 +43,14 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Internal pointer.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $position = 0;
 
 	/**
 	 * Token stream size.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $count = 0;
 
@@ -63,7 +64,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 */
 	protected function __construct()
 	{
-		if (!extension_loaded('tokenizer')) {
+		if ( ! extension_loaded('tokenizer')) {
 			throw new Exception\StreamException($this, 'The tokenizer PHP extension is not loaded.', Exception\StreamException::PHP_EXT_MISSING);
 		}
 	}
@@ -150,8 +151,8 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Finds the position of the token of the given type.
 	 *
-	 * @param integer|string $type Token type
-	 * @return ApiGen\TokenReflection\Stream|boolean
+	 * @param int|string $type Token type
+	 * @return ApiGen\TokenReflection\Stream|bool
 	 */
 	public function find($type)
 	{
@@ -184,12 +185,12 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			T_CURLY_OPEN => '}',
 			T_DOLLAR_OPEN_CURLY_BRACES => '}'
 		];
-		if (!$this->valid()) {
+		if ( ! $this->valid()) {
 			throw new Exception\StreamException($this, 'Out of token stream.', Exception\StreamException::READ_BEYOND_EOS);
 		}
 		$position = $this->position;
 		$bracket = $this->tokens[$this->position][0];
-		if (!isset($brackets[$bracket])) {
+		if ( ! isset($brackets[$bracket])) {
 			throw new Exception\StreamException($this, sprintf('There is no usable bracket at position "%d".', $position), Exception\StreamException::DOES_NOT_EXIST);
 		}
 		$searching = $brackets[$bracket];
@@ -213,7 +214,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Skips whitespaces and comments next to the current position.
 	 *
-	 * @param boolean $skipDocBlocks Skip docblocks as well
+	 * @param bool $skipDocBlocks Skip docblocks as well
 	 * @return ApiGen\TokenReflection\Stream\StreamBase
 	 */
 	public function skipWhitespaces($skipDocBlocks = FALSE)
@@ -229,13 +230,13 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns if the token stream is at a whitespace position.
 	 *
-	 * @param boolean $docBlock Consider docblocks as whitespaces
-	 * @return boolean
+	 * @param bool $docBlock Consider docblocks as whitespaces
+	 * @return bool
 	 */
 	public function isWhitespace($docBlock = FALSE)
 	{
 		static $skipped = [T_WHITESPACE => TRUE, T_COMMENT => TRUE, T_DOC_COMMENT => FALSE];
-		if (!$this->valid()) {
+		if ( ! $this->valid()) {
 			return FALSE;
 		}
 		return $docBlock ? isset($skipped[$this->getType()]) : !empty($skipped[$this->getType()]);
@@ -245,9 +246,9 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Checks if there is a token of the given type at the given position.
 	 *
-	 * @param integer|string $type Token type
-	 * @param integer $position Position; if none given, consider the current iteration position
-	 * @return boolean
+	 * @param int|string $type Token type
+	 * @param int $position Position; if none given, consider the current iteration position
+	 * @return bool
 	 */
 	public function is($type, $position = -1)
 	{
@@ -258,8 +259,8 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns the type of a token.
 	 *
-	 * @param integer $position Token position; if none given, consider the current iteration position
-	 * @return string|integer|null
+	 * @param int $position Token position; if none given, consider the current iteration position
+	 * @return string|int|null
 	 */
 	public function getType($position = -1)
 	{
@@ -273,7 +274,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns the current token value.
 	 *
-	 * @param integer $position Token position; if none given, consider the current iteration position
+	 * @param int $position Token position; if none given, consider the current iteration position
 	 * @return stirng
 	 */
 	public function getTokenValue($position = -1)
@@ -288,7 +289,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns the token type name.
 	 *
-	 * @param integer $position Token position; if none given, consider the current iteration position
+	 * @param int $position Token position; if none given, consider the current iteration position
 	 * @return string|null
 	 */
 	public function getTokenName($position = -1)
@@ -343,8 +344,8 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Checks of there is a token with the given index.
 	 *
-	 * @param integer $offset Token index
-	 * @return boolean
+	 * @param int $offset Token index
+	 * @return bool
 	 */
 	public function offsetExists($offset)
 	{
@@ -357,7 +358,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 *
 	 * Unsupported.
 	 *
-	 * @param integer $offset Position
+	 * @param int $offset Position
 	 * @throws ApiGen\TokenReflection\Exception\StreamException Unsupported.
 	 */
 	public function offsetUnset($offset)
@@ -369,7 +370,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns a token at the given index.
 	 *
-	 * @param integer $offset Token index
+	 * @param int $offset Token index
 	 * @return mixed
 	 */
 	public function offsetGet($offset)
@@ -383,7 +384,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 *
 	 * Unsupported
 	 *
-	 * @param integer $offset Position
+	 * @param int $offset Position
 	 * @param mixed $value Value
 	 * @throws ApiGen\TokenReflection\Exception\StreamException Unsupported.
 	 */
@@ -396,7 +397,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns the current internal pointer value.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function key()
 	{
@@ -442,7 +443,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Checks if there is a token on the current position.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function valid()
 	{
@@ -453,7 +454,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns the number of tokens in the stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function count()
 	{
@@ -464,7 +465,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Sets the internal pointer to the given value.
 	 *
-	 * @param integer $position New position
+	 * @param int $position New position
 	 * @return ApiGen\TokenReflection\Stream
 	 */
 	public function seek($position)

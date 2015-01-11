@@ -190,7 +190,7 @@ class ParseErrorTest extends TestCase
 	 * Prepares test names.
 	 *
 	 * @param string $prefix TestCase name prefix
-	 * @param integer $count TestCase count
+	 * @param int $count TestCase count
 	 * @return array
 	 */
 	private function prepareTests($prefix, $count)

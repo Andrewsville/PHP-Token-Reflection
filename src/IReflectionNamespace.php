@@ -19,7 +19,7 @@ interface IReflectionNamespace extends IReflection
 	 * Returns if the namespace contains a class of the given name.
 	 *
 	 * @param string $className Class name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasClass($className);
 
@@ -61,7 +61,7 @@ interface IReflectionNamespace extends IReflection
 	 * Returns if the namespace contains a constant of the given name.
 	 *
 	 * @param string $constantName Constant name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($constantName);
 
@@ -103,7 +103,7 @@ interface IReflectionNamespace extends IReflection
 	 * Returns if the namespace contains a function of the given name.
 	 *
 	 * @param string $functionName Function name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFunction($functionName);
 
@@ -147,4 +147,5 @@ interface IReflectionNamespace extends IReflection
 	 * @return string
 	 */
 	public function __toString();
+
 }

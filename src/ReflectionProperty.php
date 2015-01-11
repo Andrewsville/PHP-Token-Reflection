@@ -26,7 +26,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l134
 	 * ZEND_ACC_CHANGED
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const ACCESS_LEVEL_CHANGED = 0x800;
 
@@ -40,14 +40,14 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Property modifiers.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $modifiers = 0;
 
 	/**
 	 * Determines if modifiers are complete.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $modifiersComplete = FALSE;
 
@@ -68,7 +68,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Determined if the property value is accessible.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $accessible = FALSE;
 
@@ -138,7 +138,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	public function getValue($object)
 	{
 		$declaringClass = $this->getDeclaringClass();
-		if (!$declaringClass->isInstance($object)) {
+		if ( ! $declaringClass->isInstance($object)) {
 			throw new Exception\RuntimeException('The given class is not an instance or subclass of the current class.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		if ($this->isPublic()) {
@@ -160,7 +160,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 *
 	 * All properties in the source code are.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDefault()
 	{
@@ -171,7 +171,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns property modifiers.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getModifiers()
 	{
@@ -193,7 +193,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns if the property is private.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPrivate()
 	{
@@ -204,7 +204,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns if the property is protected.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isProtected()
 	{
@@ -215,7 +215,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns if the property is public.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPublic()
 	{
@@ -226,7 +226,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns if the poperty is static.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isStatic()
 	{
@@ -259,7 +259,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string|object $class Class name or class instance
 	 * @param string $property Property name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -284,7 +284,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns if the property is set accessible.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAccessible()
 	{
@@ -295,7 +295,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Sets a property to be accessible or not.
 	 *
-	 * @param boolean $accessible If the property should be accessible.
+	 * @param bool $accessible If the property should be accessible.
 	 */
 	public function setAccessible($accessible)
 	{
@@ -325,7 +325,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	public function setValue($object, $value)
 	{
 		$declaringClass = $this->getDeclaringClass();
-		if (!$declaringClass->isInstance($object)) {
+		if ( ! $declaringClass->isInstance($object)) {
 			throw new Exception\RuntimeException('Instance of or subclass expected.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		if ($this->isPublic()) {
@@ -413,7 +413,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
-		if (!$parent instanceof ReflectionClass) {
+		if ( ! $parent instanceof ReflectionClass) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', Exception\ParseException::INVALID_PARENT);
 		}
 		$this->declaringClassName = $parent->getName();
@@ -506,7 +506,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_VARIABLE)) {
+		if ( ! $tokenStream->is(T_VARIABLE)) {
 			throw new Exception\ParseException($this, $tokenStream, 'The property name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
 		}
 		$this->name = substr($tokenStream->getTokenValue(), 1);

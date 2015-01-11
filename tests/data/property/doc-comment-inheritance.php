@@ -28,7 +28,7 @@ class TokenReflection_Test_PropertyDocCommentInheritanceGrandParent
 	 *
 	 * Private4 long.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $param4 = FALSE;
 

@@ -4,6 +4,7 @@ interface TokenReflection_Test_ConstantInterface
 {
 
 	const FIRST = 1;
+
 }
 
 
@@ -11,6 +12,7 @@ interface TokenReflection_Test_ConstantInterface2 extends TokenReflection_Test_C
 {
 
 	const SECOND = 2;
+
 }
 
 

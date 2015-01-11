@@ -42,7 +42,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Is the property accessible despite its access level.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $accessible = FALSE;
 
@@ -98,7 +98,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -132,7 +132,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -154,7 +154,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Returns a particular parameter.
 	 *
-	 * @param integer|string $parameter Parameter name or position
+	 * @param int|string $parameter Parameter name or position
 	 * @return ApiGen\TokenReflection\Php\ReflectionParameter
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
@@ -163,7 +163,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	{
 		$parameters = $this->getParameters();
 		if (is_numeric($parameter)) {
-			if (!isset($parameters[$parameter])) {
+			if ( ! isset($parameters[$parameter])) {
 				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			return $parameters[$parameter];
@@ -199,7 +199,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Returns if the method is set accessible.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAccessible()
 	{
@@ -212,7 +212,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 *
 	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
 	 *
-	 * @param boolean $accessible
+	 * @param bool $accessible
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If run on PHP version < 5.3.2.
 	 */
 	public function setAccessible($accessible)
@@ -228,8 +228,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
 	 *
-	 * @param integer $filter Filter
-	 * @return boolean
+	 * @param int $filter Filter
+	 * @return bool
 	 */
 	public function is($filter = NULL)
 	{
@@ -264,7 +264,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{
@@ -372,11 +372,11 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = [];
-		if (!$internalReflection instanceof InternalReflectionMethod) {
+		if ( ! $internalReflection instanceof InternalReflectionMethod) {
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionMethod expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
-		if (!isset($cache[$key])) {
+		if ( ! isset($cache[$key])) {
 			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $broker);
 		}
 		return $cache[$key];

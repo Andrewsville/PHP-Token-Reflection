@@ -122,7 +122,7 @@ class ReflectionPropertyTest extends TestCase
 
 		$this->assertSame('Protected4 short.', $rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertNull($rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
-		$this->assertSame(['boolean'], $rfl->token->getProperty('param4')->getAnnotation('var'));
+		$this->assertSame(['bool'], $rfl->token->getProperty('param4')->getAnnotation('var'));
 	}
 
 
@@ -155,7 +155,7 @@ class ReflectionPropertyTest extends TestCase
 			'public5' => [
 				ReflectionAnnotation::SHORT_DESCRIPTION => 'Another own short description.',
 				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nOwn long description.",
-				'var' => ['integer', 'string']
+				'var' => ['int', 'string']
 			],
 			// Template end -> remove the first template from the stack
 			'public6' => [
@@ -163,7 +163,7 @@ class ReflectionPropertyTest extends TestCase
 			],
 			'public7' => [
 				ReflectionAnnotation::SHORT_DESCRIPTION => 'Outside of template.',
-				'var' => ['boolean']
+				'var' => ['bool']
 			],
 		];
 

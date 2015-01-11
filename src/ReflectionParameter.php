@@ -79,21 +79,21 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Position of the parameter in the function/method.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $position;
 
 	/**
 	 * Determines if the parameter is optional.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $isOptional;
 
 	/**
 	 * Determines if the value is passed by reference.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $passedByReference = FALSE;
 
@@ -160,7 +160,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function getDefaultValue()
 	{
-		if (!$this->isOptional()) {
+		if ( ! $this->isOptional()) {
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 		if (NULL === $this->defaultValue) {
@@ -187,16 +187,16 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if the default value is defined by a constant.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDefaultValueConstant()
 	{
-		if (!$this->isDefaultValueAvailable() || empty($this->defaultValueDefinition)) {
+		if ( ! $this->isDefaultValueAvailable() || empty($this->defaultValueDefinition)) {
 			return FALSE;
 		}
 		static $expected = [T_STRING => TRUE, T_NS_SEPARATOR => TRUE, T_DOUBLE_COLON => TRUE];
 		foreach ($this->defaultValueDefinition as $token) {
-			if (!isset($expected[$token[0]])) {
+			if ( ! isset($expected[$token[0]])) {
 				return FALSE;
 			}
 		}
@@ -211,7 +211,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function getDefaultValueConstantName()
 	{
-		if (!$this->isOptional()) {
+		if ( ! $this->isOptional()) {
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 		return $this->isDefaultValueConstant() ? $this->getDefaultValueDefinition() : NULL;
@@ -221,7 +221,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Retutns if a default value for the parameter is available.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDefaultValueAvailable()
 	{
@@ -232,7 +232,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns the position within all parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getPosition()
 	{
@@ -243,7 +243,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if the parameter expects an array.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isArray()
 	{
@@ -254,7 +254,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if the parameter expects a callback.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isCallable()
 	{
@@ -335,7 +335,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if the the parameter allows NULL.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function allowsNull()
 	{
@@ -349,7 +349,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if the parameter is optional.
 	 *
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If it is not possible to determine if the parameter is optional.
 	 */
 	public function isOptional()
@@ -364,7 +364,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if all following parameters have a default value definition.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function haveSiblingsDefalutValues()
 	{
@@ -384,7 +384,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if the parameter value is passed by reference.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPassedByReference()
 	{
@@ -395,7 +395,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	/**
 	 * Returns if the paramter value can be passed by value.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function canBePassedByValue()
 	{
@@ -430,7 +430,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		} else {
 			$hint = '';
 		}
-		if (!empty($hint) && $this->allowsNull()) {
+		if ( ! empty($hint) && $this->allowsNull()) {
 			$hint .= ' or NULL';
 		}
 		if ($this->isDefaultValueAvailable()) {
@@ -467,7 +467,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string $function Function name
 	 * @param string $parameter Parameter name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -523,7 +523,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
-		if (!$parent instanceof ReflectionFunctionBase) {
+		if ( ! $parent instanceof ReflectionFunctionBase) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', Exception\ParseException::INVALID_PARENT);
 		}
 		// Declaring function name
@@ -614,7 +614,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_VARIABLE)) {
+		if ( ! $tokenStream->is(T_VARIABLE)) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parameter name could not be determined.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 		$this->name = substr($tokenStream->getTokenValue(), 1);

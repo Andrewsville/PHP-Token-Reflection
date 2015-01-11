@@ -39,7 +39,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Docblock definition.
 	 *
-	 * @var ApiGen\TokenReflection\ReflectionAnnotation|boolean
+	 * @var ApiGen\TokenReflection\ReflectionAnnotation|bool
 	 */
 	protected $docComment;
 
@@ -95,7 +95,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getDocComment()
 	{
@@ -107,7 +107,7 @@ abstract class ReflectionBase implements IReflection
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function hasAnnotation($name)
 	{
@@ -154,7 +154,7 @@ abstract class ReflectionBase implements IReflection
 	 *
 	 * Always returns false - everything is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -167,7 +167,7 @@ abstract class ReflectionBase implements IReflection
 	 *
 	 * Always returns true - everything is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -178,7 +178,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -189,7 +189,7 @@ abstract class ReflectionBase implements IReflection
 	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -232,7 +232,7 @@ abstract class ReflectionBase implements IReflection
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{
@@ -250,9 +250,9 @@ abstract class ReflectionBase implements IReflection
 	 */
 	final public static function get(IReflection $object, $key)
 	{
-		if (!empty($key)) {
+		if ( ! empty($key)) {
 			$className = get_class($object);
-			if (!isset(self::$methodCache[$className])) {
+			if ( ! isset(self::$methodCache[$className])) {
 				self::$methodCache[$className] = array_flip(get_class_methods($className));
 			}
 			$methods = self::$methodCache[$className];
@@ -272,7 +272,7 @@ abstract class ReflectionBase implements IReflection
 	 *
 	 * @param ApiGen\TokenReflection\IReflection $object Reflection object
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public static function exists(IReflection $object, $key)
 	{

@@ -10,4 +10,5 @@ EOT;
 	const NOWDOC = <<<'EOT'
 constant value
 EOT;
+
 }

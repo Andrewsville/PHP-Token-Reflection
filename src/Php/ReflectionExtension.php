@@ -68,7 +68,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	/**
 	 * Returns if the constant is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -79,7 +79,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	/**
 	 * Returns if the constant is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -90,7 +90,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -101,7 +101,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -261,7 +261,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{
@@ -280,10 +280,10 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = [];
-		if (!$internalReflection instanceof InternalReflectionExtension) {
+		if ( ! $internalReflection instanceof InternalReflectionExtension) {
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.', RuntimeException::INVALID_ARGUMENT);
 		}
-		if (!isset($cache[$internalReflection->getName()])) {
+		if ( ! isset($cache[$internalReflection->getName()])) {
 			$cache[$internalReflection->getName()] = new self($internalReflection->getName(), $broker);
 		}
 		return $cache[$internalReflection->getName()];

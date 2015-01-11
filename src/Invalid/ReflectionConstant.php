@@ -120,7 +120,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the function/method is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace()
 	{
@@ -142,7 +142,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getExtensionName()
 	{
@@ -164,7 +164,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns the start position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartPosition()
 	{
@@ -175,7 +175,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns the end position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndPosition()
 	{
@@ -231,7 +231,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getDocComment()
 	{
@@ -243,7 +243,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -310,7 +310,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the constant is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -321,7 +321,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the constant is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -332,7 +332,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -343,7 +343,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -403,7 +403,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the constant definition is valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -427,7 +427,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{

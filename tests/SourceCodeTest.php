@@ -21,17 +21,17 @@ class SourceCodeTest extends TestCase
 
 		foreach ($classes as $class) {
 			foreach ($class->getMethods() as $method) {
-				if (!$method->isInternal()) {
+				if ( ! $method->isInternal()) {
 					$this->assertNotSame(FALSE, $method->getDocComment(), $method->getPrettyName());
 				}
 			}
 			foreach ($class->getProperties() as $property) {
-				if (!$property->isInternal()) {
+				if ( ! $property->isInternal()) {
 					$this->assertNotSame(FALSE, $property->getDocComment(), $property->getPrettyName());
 				}
 			}
 			foreach ($class->getConstantReflections() as $constant) {
-				if (!$constant->isInternal()) {
+				if ( ! $constant->isInternal()) {
 					$this->assertNotSame(FALSE, $constant->getDocComment(), $constant->getPrettyName());
 				}
 			}

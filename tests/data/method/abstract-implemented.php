@@ -4,6 +4,7 @@ abstract class TokenReflection_Test_MethodAbstractImplementedParent
 {
 
 	abstract public function abstractImplemented();
+
 }
 
 

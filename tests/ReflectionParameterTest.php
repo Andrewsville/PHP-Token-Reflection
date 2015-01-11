@@ -244,6 +244,7 @@ class ReflectionParameterTest extends TestCase
 		foreach ($tests as $test) {
 			$rfl = $this->getParameterReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
+
 			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, TRUE), ApiGen\TokenReflection\ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, TRUE));
 
 			// TestCase loading from a string

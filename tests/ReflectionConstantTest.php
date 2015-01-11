@@ -9,9 +9,6 @@ use ApiGen\TokenReflection\ReflectionAnnotation;
 use ApiGen\TokenReflection\ReflectionConstant;
 
 
-/**
- * Constant test.
- */
 class ReflectionConstantTest extends TestCase
 {
 
@@ -375,7 +372,7 @@ class ReflectionConstantTest extends TestCase
 
 			$this->assertSame($internal->isTrait(), $token->isTrait());
 
-			if (!$internal->isTrait()) {
+			if ( ! $internal->isTrait()) {
 				$instance = new $class();
 			}
 
@@ -406,7 +403,7 @@ class ReflectionConstantTest extends TestCase
 
 				if ($reflection->isStatic()) {
 					$this->assertSame($internal->getStaticPropertyValue($name), $token->getStaticPropertyValue($name), sprintf('%s::$%s', $class, $name));
-				} elseif (!$internal->isTrait()) {
+				} elseif ( ! $internal->isTrait()) {
 					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getValue($instance), sprintf('%s::$%s', $class, $name));
 					$this->assertSame($reflection->getValue($instance), $token->getProperty($name)->getDefaultValue(), sprintf('%s::$%s', $class, $name));
 				}

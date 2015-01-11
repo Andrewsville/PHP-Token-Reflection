@@ -14,4 +14,5 @@ class TokenReflection_Test_ConstantDocComment
 
 		/** And this is the second constant. */
 		SECOND_CONSTANT = 'value2';
+
 }

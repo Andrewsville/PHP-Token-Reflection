@@ -50,7 +50,7 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns if the constant is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace();
 
@@ -74,7 +74,7 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartLine();
 
@@ -82,7 +82,7 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndLine();
 
@@ -90,7 +90,7 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getDocComment();
 
@@ -124,7 +124,7 @@ interface IReflectionConstant extends IReflection
 	 *
 	 * That means that the source code is valid and the constant name is unique within parsed files.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid();
 
@@ -132,7 +132,8 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns if the constant is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated();
+
 }

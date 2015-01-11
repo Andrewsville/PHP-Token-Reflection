@@ -61,7 +61,7 @@ final class FileProcessingException extends RuntimeException
 	 */
 	public function getDetail()
 	{
-		if (!empty($this->reasons)) {
+		if ( ! empty($this->reasons)) {
 			$reasons = array_map(function (BaseException $reason) {
 				if ($reason instanceof ParseException) {
 					return $reason->getDetail();

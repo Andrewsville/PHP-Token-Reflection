@@ -10,6 +10,7 @@ interface TokenReflection_Test_ClassModifiersIface2 extends Serializable
 {
 
 	public function foo();
+
 }
 
 
@@ -17,6 +18,7 @@ interface TokenReflection_Test_ClassModifiersIface3 extends TokenReflection_Test
 {
 
 	public function bar();
+
 }
 
 
@@ -42,6 +44,7 @@ abstract class TokenReflection_Test_ClassModifiersClass3
 {
 
 	abstract protected function bar();
+
 }
 
 
@@ -55,6 +58,7 @@ abstract class TokenReflection_Test_ClassModifiersClass5 implements TokenReflect
 {
 
 	abstract protected function tmp();
+
 }
 
 

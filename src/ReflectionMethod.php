@@ -26,7 +26,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l114
 	 * ZEND_ACC_IMPLICIT_PUBLIC
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const IS_IMPLEMENTED_ABSTRACT = 0x08;
 
@@ -36,7 +36,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l134
 	 * ZEND_ACC_CHANGED
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const ACCESS_LEVEL_CHANGED = 0x800;
 
@@ -48,7 +48,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l138
 	 * ZEND_ACC_CTOR
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const IS_CONSTRUCTOR = 0x2000;
 
@@ -58,7 +58,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l139
 	 * ZEND_ACC_DTOR
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const IS_DESTRUCTOR = 0x4000;
 
@@ -68,7 +68,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l140
 	 * ZEND_ACC_CLONE
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const IS_CLONE = 0x8000;
 
@@ -78,7 +78,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l143
 	 * ZEND_ACC_ALLOW_STATIC
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const IS_ALLOWED_STATIC = 0x10000;
 
@@ -99,21 +99,21 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Method modifiers.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	protected $modifiers = 0;
 
 	/**
 	 * Determined if the method is accessible.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $accessible = FALSE;
 
 	/**
 	 * Determines if modifiers are complete.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $modifiersComplete = FALSE;
 
@@ -134,7 +134,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * The original modifiers value when importing from a trait.
 	 *
-	 * @var integer|null
+	 * @var int|null
 	 */
 	private $originalModifiers = NULL;
 
@@ -171,11 +171,11 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns method modifiers.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getModifiers()
 	{
-		if (!$this->modifiersComplete && !($this->modifiers & (self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT))) {
+		if ( ! $this->modifiersComplete && !($this->modifiers & (self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT))) {
 			$declaringClass = $this->getDeclaringClass();
 			$parentClass = $declaringClass->getParentClass();
 			if (FALSE !== $parentClass && $parentClass->hasMethod($this->name)) {
@@ -207,7 +207,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is abstract.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAbstract()
 	{
@@ -218,7 +218,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is final.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFinal()
 	{
@@ -229,7 +229,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is private.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPrivate()
 	{
@@ -240,7 +240,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is protected.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isProtected()
 	{
@@ -251,7 +251,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is public.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPublic()
 	{
@@ -262,7 +262,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is static.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isStatic()
 	{
@@ -281,8 +281,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 *     }
 	 * </code>
 	 *
-	 * @param integer $filter Filter
-	 * @return boolean
+	 * @param int $filter Filter
+	 * @return bool
 	 */
 	public function is($filter = NULL)
 	{
@@ -300,7 +300,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is a constructor.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isConstructor()
 	{
@@ -311,7 +311,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the method is a destructor.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDestructor()
 	{
@@ -332,7 +332,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$declaring = $this->getDeclaringClass();
 			if (($parent = $declaring->getParentClass()) && $parent->hasMethod($this->name)) {
 				$method = $parent->getMethod($this->name);
-				if (!$method->isPrivate()) {
+				if ( ! $method->isPrivate()) {
 					try {
 						$prototype = $method->getPrototype();
 					} catch (Exception\RuntimeException $e) {
@@ -439,7 +439,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string|object $class Class name or class instance
 	 * @param string $method Method name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -486,7 +486,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	public function invokeArgs($object, array $args = [])
 	{
 		$declaringClass = $this->getDeclaringClass();
-		if (!$declaringClass->isInstance($object)) {
+		if ( ! $declaringClass->isInstance($object)) {
 			throw new Exception\RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		if ($this->isPublic()) {
@@ -506,7 +506,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns if the property is set accessible.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAccessible()
 	{
@@ -517,7 +517,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Sets a method to be accessible or not.
 	 *
-	 * @param boolean $accessible
+	 * @param bool $accessible
 	 */
 	public function setAccessible($accessible)
 	{
@@ -530,7 +530,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 *
 	 * Technically returns if the declaring class definition is complete.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function isComplete()
 	{
@@ -558,7 +558,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	public function getClosure($object)
 	{
 		$declaringClass = $this->getDeclaringClass();
-		if (!$declaringClass->isInstance($object)) {
+		if ( ! $declaringClass->isInstance($object)) {
 			throw new Exception\RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		$that = $this;
@@ -573,7 +573,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 *
 	 * @param ApiGen\TokenReflection\ReflectionClass $parent New parent class
 	 * @param string $name New method name
-	 * @param integer $accessLevel New access level
+	 * @param int $accessLevel New access level
 	 * @return ApiGen\TokenReflection\ReflectionMethod
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid method access level was found.
 	 */
@@ -587,7 +587,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$method->name = $name;
 		}
 		if (NULL !== $accessLevel) {
-			if (!isset($possibleLevels[$accessLevel])) {
+			if ( ! isset($possibleLevels[$accessLevel])) {
 				throw new Exception\RuntimeException(sprintf('Invalid method access level: "%s".', $accessLevel), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$method->modifiers &= ~(InternalReflectionMethod::IS_PUBLIC | InternalReflectionMethod::IS_PROTECTED | InternalReflectionMethod::IS_PRIVATE);
@@ -626,7 +626,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns the original modifiers value when importing from a trait.
 	 *
-	 * @return integer|null
+	 * @return int|null
 	 */
 	public function getOriginalModifiers()
 	{
@@ -666,7 +666,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
-		if (!$parent instanceof ReflectionClass) {
+		if ( ! $parent instanceof ReflectionClass) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', Exception\ParseException::INVALID_PARENT);
 		}
 		$this->declaringClassName = $parent->getName();
@@ -731,7 +731,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			}
 			$tokenStream->skipWhitespaces();
 		}
-		if (!($this->modifiers & (InternalReflectionMethod::IS_PRIVATE | InternalReflectionMethod::IS_PROTECTED))) {
+		if ( ! ($this->modifiers & (InternalReflectionMethod::IS_PRIVATE | InternalReflectionMethod::IS_PROTECTED))) {
 			$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
 		}
 		return $this;
@@ -748,7 +748,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	{
 		$name = strtolower($this->name);
 		// In PHP 5.3.3+ the ctor can be named only __construct in namespaced classes
-		if ('__construct' === $name || ((!$class->inNamespace() || PHP_VERSION_ID < 50303) && strtolower($class->getShortName()) === $name)) {
+		if ('__construct' === $name || (( ! $class->inNamespace() || PHP_VERSION_ID < 50303) && strtolower($class->getShortName()) === $name)) {
 			$this->modifiers |= self::IS_CONSTRUCTOR;
 		} elseif ('__destruct' === $name) {
 			$this->modifiers |= self::IS_DESTRUCTOR;
@@ -760,7 +760,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		} else {
 			// Can be called statically, see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_API.c?revision=309853&view=markup#l1795
 			static $notAllowed = ['__clone' => TRUE, '__tostring' => TRUE, '__get' => TRUE, '__set' => TRUE, '__isset' => TRUE, '__unset' => TRUE];
-			if (!$this->isStatic() && !$this->isConstructor() && !$this->isDestructor() && !isset($notAllowed[$name])) {
+			if ( ! $this->isStatic() && !$this->isConstructor() && !$this->isDestructor() && !isset($notAllowed[$name])) {
 				$this->modifiers |= self::IS_ALLOWED_STATIC;
 			}
 		}

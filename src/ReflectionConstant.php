@@ -110,7 +110,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the class is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace()
 	{
@@ -177,7 +177,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string|object|null $class Class name, class instance or null
 	 * @param string $constant Constant name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -231,7 +231,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns if the constant definition is valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -311,7 +311,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_STRING)) {
+		if ( ! $tokenStream->is(T_STRING)) {
 			throw new Exception\ParseException($this, $tokenStream, 'The constant name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
 		}
 		if (NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
@@ -334,7 +334,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	private function parseValue(Stream $tokenStream, IReflection $parent)
 	{
-		if (!$tokenStream->is('=')) {
+		if ( ! $tokenStream->is('=')) {
 			throw new Exception\ParseException($this, $tokenStream, 'Could not find the definition start.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 		$tokenStream->skipWhitespaces(TRUE);

@@ -34,7 +34,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Is the property accessible despite its access level.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $accessible = FALSE;
 
@@ -100,7 +100,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getDocComment()
 	{
@@ -112,7 +112,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -170,7 +170,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns if the property is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -181,7 +181,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns if the property is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -192,7 +192,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -203,7 +203,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -258,7 +258,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns if the property is set accessible.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAccessible()
 	{
@@ -269,7 +269,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Sets a property to be accessible or not.
 	 *
-	 * @param boolean $accessible If the property should be accessible.
+	 * @param bool $accessible If the property should be accessible.
 	 */
 	public function setAccessible($accessible)
 	{
@@ -292,7 +292,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getExtensionName()
 	{
@@ -339,7 +339,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{
@@ -358,11 +358,11 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = [];
-		if (!$internalReflection instanceof InternalReflectionProperty) {
+		if ( ! $internalReflection instanceof InternalReflectionProperty) {
 			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
-		if (!isset($cache[$key])) {
+		if ( ! isset($cache[$key])) {
 			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $broker);
 		}
 		return $cache[$key];

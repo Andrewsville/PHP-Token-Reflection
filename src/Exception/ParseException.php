@@ -24,28 +24,28 @@ class ParseException extends StreamException
 	/**
 	 * An unexpected  token was encountered.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const UNEXPECTED_TOKEN = 1101;
 
 	/**
 	 * A logical error was encountered.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const LOGICAL_ERROR = 1102;
 
 	/**
 	 * An invalid reflection parent was provided.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const INVALID_PARENT = 1103;
 
 	/**
 	 * Minimal number of source code lines around the token.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const SOURCE_LINES_AROUND = 5;
 
@@ -66,7 +66,7 @@ class ParseException extends StreamException
 	/**
 	 * The line where the exception was thrown.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $exceptionLine;
 
@@ -91,7 +91,7 @@ class ParseException extends StreamException
 	 * @param ApiGen\TokenReflection\IReflection $sender Reflection element
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token stream
 	 * @param string $message Exception message
-	 * @param integer $code Exception code
+	 * @param int $code Exception code
 	 */
 	public function __construct(IReflection $sender, StreamBase $tokenStream, $message, $code)
 	{
@@ -99,7 +99,7 @@ class ParseException extends StreamException
 		$this->sender = $sender;
 		$token = $tokenStream->current();
 		$position = $tokenStream->key();
-		if (!empty($token) && !empty($position)) {
+		if ( ! empty($token) && !empty($position)) {
 			$this->token = $token;
 			$this->tokenName = $tokenStream->getTokenName();
 			$line = $this->token[2];
@@ -112,7 +112,7 @@ class ParseException extends StreamException
 		static $skip = [T_WHITESPACE => TRUE, T_COMMENT => TRUE, T_DOC_COMMENT => TRUE];
 		$significant = [];
 		while (isset($tokenStream[$min - 1])) {
-			if (!isset($significant[$tokenStream[$min][2]])) {
+			if ( ! isset($significant[$tokenStream[$min][2]])) {
 				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
 					break;
 				}
@@ -124,7 +124,7 @@ class ParseException extends StreamException
 		}
 		$significant = [];
 		while (isset($tokenStream[$max + 1])) {
-			if (!isset($significant[$tokenStream[$max][2]])) {
+			if ( ! isset($significant[$tokenStream[$max][2]])) {
 				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
 					break;
 				}
@@ -163,7 +163,7 @@ class ParseException extends StreamException
 	/**
 	 * Returns the line where the exception was thrown.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getExceptionLine()
 	{
@@ -174,7 +174,7 @@ class ParseException extends StreamException
 	/**
 	 * Returns the file line with the token or null.
 	 *
-	 * @return integer|null
+	 * @return int|null
 	 */
 	public function getTokenLine()
 	{
@@ -185,7 +185,7 @@ class ParseException extends StreamException
 	/**
 	 * Returns the source code part around the token.
 	 *
-	 * @param boolean $lineNumbers Returns the source code part with line numbers
+	 * @param bool $lineNumbers Returns the source code part with line numbers
 	 * @return string|null
 	 */
 	public function getSourcePart($lineNumbers = FALSE)

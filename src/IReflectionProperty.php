@@ -34,7 +34,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartLine();
 
@@ -42,7 +42,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndLine();
 
@@ -50,7 +50,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getDocComment();
 
@@ -83,7 +83,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns property modifiers.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getModifiers();
 
@@ -91,7 +91,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns if the property is private.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPrivate();
 
@@ -99,7 +99,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns if the property is protected.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isProtected();
 
@@ -107,7 +107,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns if the property is public.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPublic();
 
@@ -115,7 +115,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns if the property is static.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isStatic();
 
@@ -123,7 +123,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns if the property was defined at compile time.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDefault();
 
@@ -131,7 +131,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Sets a property to be accessible or not.
 	 *
-	 * @param boolean $accessible If the property should be accessible.
+	 * @param bool $accessible If the property should be accessible.
 	 */
 	public function setAccessible($accessible);
 
@@ -139,7 +139,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns if the property is set accessible.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAccessible();
 
@@ -180,7 +180,8 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns if the property is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated();
+
 }

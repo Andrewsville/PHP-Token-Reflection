@@ -25,7 +25,7 @@ class Broker
 	/**
 	 * Turns on saving of parsed token streams.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const OPTION_SAVE_TOKEN_STREAM = 0x0001;
 
@@ -34,14 +34,14 @@ class Broker
 	 *
 	 * This effectively turns on parsing of static variables in functions/methods.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const OPTION_PARSE_FUNCTION_BODY = 0x0002;
 
 	/**
 	 * Default options.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const OPTION_DEFAULT = 0x0003;
 
@@ -90,14 +90,14 @@ class Broker
 	/**
 	 * Broker/parser options.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $options;
 
 
 	/**
 	 * @param ApiGen\TokenReflection\Broker\Backend $backend Broker backend instance
-	 * @param integer $options Broker/parsing options
+	 * @param int $options Broker/parsing options
 	 */
 	public function __construct(Broker\Backend $backend, $options = self::OPTION_DEFAULT)
 	{
@@ -117,7 +117,7 @@ class Broker
 	/**
 	 * Returns broker/parser options.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getOptions()
 	{
@@ -128,8 +128,8 @@ class Broker
 	/**
 	 * Returns if a particular option setting is set.
 	 *
-	 * @param integer $option Option setting
-	 * @return boolean
+	 * @param int $option Option setting
+	 * @return bool
 	 */
 	public function isOptionSet($option)
 	{
@@ -142,8 +142,8 @@ class Broker
 	 *
 	 * @param string $source PHP source code
 	 * @param string $fileName Used file name
-	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|ApiGen\TokenReflection\ReflectionFile
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @return bool|ApiGen\TokenReflection\ReflectionFile
 	 */
 	public function processString($source, $fileName, $returnReflectionFile = FALSE)
 	{
@@ -153,11 +153,11 @@ class Broker
 			$tokens = new Stream\StringStream($source, $fileName);
 		}
 		$reflectionFile = new ReflectionFile($tokens, $this);
-		if (!$this->backend->isFileProcessed($fileName)) {
+		if ( ! $this->backend->isFileProcessed($fileName)) {
 			$this->backend->addFile($tokens, $reflectionFile);
 			// Clear the cache - leave only tokenized reflections
 			foreach ($this->cache as $type => $cached) {
-				if (!empty($cached)) {
+				if ( ! empty($cached)) {
 					$this->cache[$type] = array_filter($cached, function (IReflection $reflection) {
 						return $reflection->isTokenized();
 					});
@@ -172,8 +172,8 @@ class Broker
 	 * Parses a file and returns the appropriate reflection object.
 	 *
 	 * @param string $fileName Filename
-	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|ApiGen\TokenReflection\ReflectionFile
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @return bool|ApiGen\TokenReflection\ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName, $returnReflectionFile = FALSE)
@@ -185,11 +185,11 @@ class Broker
 				$tokens = new Stream\FileStream($fileName);
 			}
 			$reflectionFile = new ReflectionFile($tokens, $this);
-			if (!$this->backend->isFileProcessed($fileName)) {
+			if ( ! $this->backend->isFileProcessed($fileName)) {
 				$this->backend->addFile($tokens, $reflectionFile);
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
-					if (!empty($cached)) {
+					if ( ! empty($cached)) {
 						$this->cache[$type] = array_filter($cached, function (IReflection $reflection) {
 							return $reflection->isTokenized();
 						});
@@ -209,15 +209,15 @@ class Broker
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
 	 * @param string $path
-	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|ApiGen\TokenReflection\ReflectionFile[]|SplFileInfo[]
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @return bool|ApiGen\TokenReflection\ReflectionFile[]|SplFileInfo[]
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory could not be processed.
 	 */
 	public function processDirectory($path, $returnReflectionFile = FALSE)
 	{
 		$realPath = realpath($path);
-		if (!is_dir($realPath)) {
+		if ( ! is_dir($realPath)) {
 			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
 		}
 		try {
@@ -239,8 +239,8 @@ class Broker
 	 * Process a file or directory.
 	 *
 	 * @param string $path Path
-	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|array|ApiGen\TokenReflection\ReflectionFile
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @return bool|array|ApiGen\TokenReflection\ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the target does not exist.
 	 */
 	public function process($path, $returnReflectionFile = FALSE)
@@ -259,7 +259,7 @@ class Broker
 	 * Returns if the broker contains a namespace of the given name.
 	 *
 	 * @param string $namespaceName Namespace name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasNamespace($namespaceName)
 	{
@@ -291,7 +291,7 @@ class Broker
 	 * Returns if the broker contains a class of the given name.
 	 *
 	 * @param string $className Class name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasClass($className)
 	{
@@ -319,7 +319,7 @@ class Broker
 	/**
 	 * Returns all classes from all namespaces.
 	 *
-	 * @param integer $types Returned class types (multiple values may be OR-ed)
+	 * @param int $types Returned class types (multiple values may be OR-ed)
 	 * @return array
 	 */
 	public function getClasses($types = Broker\Backend::TOKENIZED_CLASSES)
@@ -332,7 +332,7 @@ class Broker
 	 * Returns if the broker contains a constant of the given name.
 	 *
 	 * @param string $constantName Constant name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($constantName)
 	{
@@ -374,7 +374,7 @@ class Broker
 	 * Returns if the broker contains a function of the given name.
 	 *
 	 * @param string $functionName Function name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFunction($functionName)
 	{
@@ -416,7 +416,7 @@ class Broker
 	 * Returns if the broker contains a file reflection of the given name.
 	 *
 	 * @param string $fileName File name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFile($fileName)
 	{
@@ -463,7 +463,7 @@ class Broker
 	 * Returns a real system path.
 	 *
 	 * @param string $path Source path
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public static function getRealPath($path)
 	{

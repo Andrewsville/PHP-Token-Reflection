@@ -102,7 +102,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
-		if (!$parent instanceof ReflectionFile) {
+		if ( ! $parent instanceof ReflectionFile) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFile.', Exception\ParseException::INVALID_PARENT);
 		}
 		return parent::processParent($parent, $tokenStream);
@@ -131,7 +131,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	 */
 	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
 	{
-		if (!$tokenStream->is(T_NAMESPACE)) {
+		if ( ! $tokenStream->is(T_NAMESPACE)) {
 			$this->docComment = new ReflectionAnnotation($this);
 			return $this;
 		} else {
@@ -149,7 +149,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_NAMESPACE)) {
+		if ( ! $tokenStream->is(T_NAMESPACE)) {
 			$this->name = ReflectionNamespace::NO_NAMESPACE_NAME;
 			return $this;
 		}
@@ -175,7 +175,7 @@ class ReflectionFileNamespace extends ReflectionElement
 		} else {
 			$this->name = $name;
 		}
-		if (!$tokenStream->is(';') && !$tokenStream->is('{')) {
+		if ( ! $tokenStream->is(';') && !$tokenStream->is('{')) {
 			throw new Exception\ParseException($this, $tokenStream, 'Invalid namespace name end, expecting ";" or "{".', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 		$tokenStream->skipWhitespaces();
@@ -223,7 +223,7 @@ class ReflectionFileNamespace extends ReflectionElement
 						if ($tokenStream->is(T_AS)) {
 							// Alias defined
 							$tokenStream->skipWhitespaces(TRUE);
-							if (!$tokenStream->is(T_STRING)) {
+							if ( ! $tokenStream->is(T_STRING)) {
 								throw new Exception\ParseException($this, $tokenStream, sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), Exception\ParseException::LOGICAL_ERROR);
 							}
 							$alias = $tokenStream->getTokenValue();
@@ -282,10 +282,10 @@ class ReflectionFileNamespace extends ReflectionElement
 					$firstChild = $firstChild ?: $class;
 					$className = $class->getName();
 					if (isset($this->classes[$className])) {
-						if (!$this->classes[$className] instanceof Invalid\ReflectionClass) {
+						if ( ! $this->classes[$className] instanceof Invalid\ReflectionClass) {
 							$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
 						}
-						if (!$this->classes[$className]->hasReasons()) {
+						if ( ! $this->classes[$className]->hasReasons()) {
 							$this->classes[$className]->addReason(new Exception\ParseException(
 								$this,
 								$tokenStream,
@@ -305,10 +305,10 @@ class ReflectionFileNamespace extends ReflectionElement
 						$firstChild = $firstChild ?: $constant;
 						$constantName = $constant->getName();
 						if (isset($this->constants[$constantName])) {
-							if (!$this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
+							if ( ! $this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
 								$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
 							}
-							if (!$this->constants[$constantName]->hasReasons()) {
+							if ( ! $this->constants[$constantName]->hasReasons()) {
 								$this->constants[$constantName]->addReason(new Exception\ParseException(
 									$this,
 									$tokenStream,
@@ -352,10 +352,10 @@ class ReflectionFileNamespace extends ReflectionElement
 					$firstChild = $firstChild ?: $function;
 					$functionName = $function->getName();
 					if (isset($this->functions[$functionName])) {
-						if (!$this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
+						if ( ! $this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
 							$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
 						}
-						if (!$this->functions[$functionName]->hasReasons()) {
+						if ( ! $this->functions[$functionName]->hasReasons()) {
 							$this->functions[$functionName]->addReason(new Exception\ParseException(
 								$this,
 								$tokenStream,

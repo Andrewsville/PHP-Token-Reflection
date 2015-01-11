@@ -52,7 +52,7 @@ class ReflectionFile extends ReflectionBase
 	 *
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string $argument Reflection object name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the method is called, because it's unsupported.
 	 */
 	public static function export(Broker $broker, $argument, $return = FALSE)
@@ -88,7 +88,7 @@ class ReflectionFile extends ReflectionBase
 			return $this;
 		}
 		$docCommentPosition = NULL;
-		if (!$tokenStream->is(T_OPEN_TAG)) {
+		if ( ! $tokenStream->is(T_OPEN_TAG)) {
 			$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 		} else {
 			$tokenStream->skipWhitespaces();

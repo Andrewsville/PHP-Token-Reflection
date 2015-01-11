@@ -85,7 +85,7 @@ class Resolver
 		}
 		$source = self::getSourceCode($tokens);
 		$constants = self::findConstants($tokens, $reflection);
-		if (!empty($constants)) {
+		if ( ! empty($constants)) {
 			foreach (array_reverse($constants, TRUE) as $offset => $constant) {
 				$value = '';
 				try {
@@ -233,7 +233,7 @@ class Resolver
 			if (isset($accepted[$token[0]])) {
 				$constant .= $token[1];
 			} elseif ('' !== $constant) {
-				if (!isset($dontResolve[strtolower($constant)])) {
+				if ( ! isset($dontResolve[strtolower($constant)])) {
 					$constants[$offset - strlen($constant)] = $constant;
 				}
 				$constant = '';

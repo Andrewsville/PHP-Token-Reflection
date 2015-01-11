@@ -24,7 +24,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Modifier for determining if the reflected object is an interface.
 	 *
-	 * @var integer
+	 * @var int
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l122
 	 */
 	const IS_INTERFACE = 0x80;
@@ -32,7 +32,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Modifier for determining if the reflected object is a trait.
 	 *
-	 * @var integer
+	 * @var int
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l150
 	 */
 	const IS_TRAIT = 0x120;
@@ -42,7 +42,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l152
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const IMPLEMENTS_INTERFACES = 0x80000;
 
@@ -51,7 +51,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l181
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const IMPLEMENTS_TRAITS = 0x400000;
 
@@ -65,21 +65,21 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Class modifiers.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $modifiers = 0;
 
 	/**
 	 * Class type (class/interface/trait).
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $type = 0;
 
 	/**
 	 * Determines if modifiers are complete.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $modifiersComplete = FALSE;
 
@@ -150,7 +150,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Stores if the class definition is complete.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $definitionComplete = FALSE;
 
@@ -191,7 +191,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace()
 	{
@@ -213,23 +213,23 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 						$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 					}
 				}
-				if (!empty($this->interfaces)) {
+				if ( ! empty($this->interfaces)) {
 					$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 				}
 			}
-			if (!empty($this->interfaces)) {
+			if ( ! empty($this->interfaces)) {
 				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
 			}
 			if ($this->isInterface() && !empty($this->methods)) {
 				$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 			}
-			if (!empty($this->traits)) {
+			if ( ! empty($this->traits)) {
 				$this->modifiers |= self::IMPLEMENTS_TRAITS;
 			}
 			$this->modifiersComplete = NULL === $this->parentClassName || $this->getParentClass()->isComplete();
 			if ($this->modifiersComplete) {
 				foreach ($this->getInterfaces() as $interface) {
-					if (!$interface->isComplete()) {
+					if ( ! $interface->isComplete()) {
 						$this->modifiersComplete = FALSE;
 						break;
 					}
@@ -237,7 +237,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 			if ($this->modifiersComplete) {
 				foreach ($this->getTraits() as $trait) {
-					if (!$trait->isComplete()) {
+					if ( ! $trait->isComplete()) {
 						$this->modifiersComplete = FALSE;
 						break;
 					}
@@ -251,7 +251,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class is abstract.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAbstract()
 	{
@@ -267,7 +267,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class is final.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFinal()
 	{
@@ -278,7 +278,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class is an interface.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInterface()
 	{
@@ -289,7 +289,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class is an exception or its descendant.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isException()
 	{
@@ -300,7 +300,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if it is possible to create an instance of this class.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInstantiable()
 	{
@@ -319,7 +319,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * Introduced in PHP 5.4.
 	 *
-	 * @return boolean
+	 * @return bool
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
 	 */
 	public function isCloneable()
@@ -339,7 +339,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * Returns true if the class implements the Traversable interface.
 	 *
-	 * @return boolean
+	 * @return bool
 	 * @todo traits
 	 */
 	public function isIterateable()
@@ -352,7 +352,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the current class is a subclass of the given class.
 	 *
 	 * @param string|object $class Class name or reflection object
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided parameter is not a reflection class instance.
 	 */
 	public function isSubclassOf($class)
@@ -375,7 +375,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass|boolean
+	 * @return ApiGen\TokenReflection\ReflectionClass|bool
 	 */
 	public function getParentClass()
 	{
@@ -432,16 +432,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class implements the given interface.
 	 *
 	 * @param string|object $interface Interface name or reflection object
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided parameter is not an interface.
 	 */
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
-			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
+			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
 				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
-			if (!$interface->isInterface()) {
+			if ( ! $interface->isInterface()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface->getName();
@@ -554,7 +554,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class implements the given method.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasMethod($name)
 	{
@@ -591,27 +591,27 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns method reflections.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getMethods($filter = NULL)
 	{
 		$methods = $this->methods;
 		foreach ($this->getTraitMethods() as $traitMethod) {
-			if (!isset($methods[$traitMethod->getName()])) {
+			if ( ! isset($methods[$traitMethod->getName()])) {
 				$methods[$traitMethod->getName()] = $traitMethod;
 			}
 		}
 		if (NULL !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getMethods(NULL) as $parentMethod) {
-				if (!isset($methods[$parentMethod->getName()])) {
+				if ( ! isset($methods[$parentMethod->getName()])) {
 					$methods[$parentMethod->getName()] = $parentMethod;
 				}
 			}
 		}
 		foreach ($this->getOwnInterfaces() as $interface) {
 			foreach ($interface->getMethods(NULL) as $parentMethod) {
-				if (!isset($methods[$parentMethod->getName()])) {
+				if ( ! isset($methods[$parentMethod->getName()])) {
 					$methods[$parentMethod->getName()] = $parentMethod;
 				}
 			}
@@ -629,7 +629,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class implements (and not its parents) the given method.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnMethod($name)
 	{
@@ -640,7 +640,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns reflections of methods declared by this class, not its parents.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getOwnMethods($filter = NULL)
@@ -659,7 +659,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class imports the given method from traits.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasTraitMethod($name)
 	{
@@ -678,7 +678,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns reflections of method imported from traits.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If trait method was already imported.
 	 */
@@ -703,7 +703,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							$newName = $methodName;
 							$imports[] = NULL;
 						}
-						if (!isset($this->methods[$newName])) {
+						if ( ! isset($this->methods[$newName])) {
 							if (isset($methods[$newName])) {
 								throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $newName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 							}
@@ -711,8 +711,8 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 						}
 					}
 				}
-				if (!in_array(NULL, $imports)) {
-					if (!isset($this->methods[$methodName])) {
+				if ( ! in_array(NULL, $imports)) {
+					if ( ! isset($this->methods[$methodName])) {
 						if (isset($methods[$methodName])) {
 							throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 						}
@@ -734,7 +734,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class defines the given constant.
 	 *
 	 * @param string $name Constant name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($name)
 	{
@@ -828,7 +828,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class (and not its parents) defines the given constant.
 	 *
 	 * @param string $name Constant name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnConstant($name)
 	{
@@ -864,7 +864,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class defines the given property.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasProperty($name)
 	{
@@ -901,20 +901,20 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns property reflections.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getProperties($filter = NULL)
 	{
 		$properties = $this->properties;
 		foreach ($this->getTraitProperties(NULL) as $traitProperty) {
-			if (!isset($properties[$traitProperty->getName()])) {
+			if ( ! isset($properties[$traitProperty->getName()])) {
 				$properties[$traitProperty->getName()] = $traitProperty->alias($this);
 			}
 		}
 		if (NULL !== $this->parentClassName) {
 			foreach ($this->getParentClass()->getProperties(NULL) as $parentProperty) {
-				if (!isset($properties[$parentProperty->getName()])) {
+				if ( ! isset($properties[$parentProperty->getName()])) {
 					$properties[$parentProperty->getName()] = $parentProperty;
 				}
 			}
@@ -932,7 +932,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class (and not its parents) defines the given property.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnProperty($name)
 	{
@@ -943,7 +943,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns reflections of properties declared by this class, not its parents.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getOwnProperties($filter = NULL)
@@ -962,7 +962,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class imports the given property from traits.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasTraitProperty($name)
 	{
@@ -981,7 +981,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns reflections of properties imported from traits.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getTraitProperties($filter = NULL)
@@ -989,7 +989,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		$properties = [];
 		foreach ($this->getOwnTraits() as $trait) {
 			foreach ($trait->getProperties(NULL) as $traitProperty) {
-				if (!isset($this->properties[$traitProperty->getName()]) && !isset($properties[$traitProperty->getName()])) {
+				if ( ! isset($this->properties[$traitProperty->getName()]) && !isset($properties[$traitProperty->getName()])) {
 					$properties[$traitProperty->getName()] = $traitProperty->alias($this);
 				}
 			}
@@ -1055,7 +1055,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getStaticPropertyValue($name, $default = NULL)
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
-			if (!$property->isPublic() && !$property->isAccessible()) {
+			if ( ! $property->isPublic() && !$property->isAccessible()) {
 				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
 			}
 			return $property->getDefaultValue();
@@ -1141,7 +1141,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class is a trait.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTrait()
 	{
@@ -1152,7 +1152,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class definition is valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -1160,12 +1160,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			return FALSE;
 		}
 		foreach ($this->getInterfaces() as $interface) {
-			if (!$interface->isValid()) {
+			if ( ! $interface->isValid()) {
 				return FALSE;
 			}
 		}
 		foreach ($this->getTraits() as $trait) {
-			if (!$trait->isValid()) {
+			if ( ! $trait->isValid()) {
 				return FALSE;
 			}
 		}
@@ -1177,22 +1177,22 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the class uses a particular trait.
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
 	 */
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
-			if (!$trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
+			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
 				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait->getName();
-			if (!$trait->isTrait()) {
+			if ( ! $trait->isTrait()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($trait);
-			if (!$reflection->isTrait()) {
+			if ( ! $reflection->isTrait()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait;
@@ -1210,7 +1210,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		$that = $this->name;
 		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if (!$class->isSubclassOf($that)) {
+			if ( ! $class->isSubclassOf($that)) {
 				return FALSE;
 			}
 			return NULL === $class->getParentClassName() || !$class->getParentClass()->isSubClassOf($that);
@@ -1238,7 +1238,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		$that = $this->name;
 		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if (!$class->isSubclassOf($that)) {
+			if ( ! $class->isSubclassOf($that)) {
 				return FALSE;
 			}
 			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($that);
@@ -1264,7 +1264,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getDirectImplementers()
 	{
-		if (!$this->isInterface()) {
+		if ( ! $this->isInterface()) {
 			return [];
 		}
 		$that = $this->name;
@@ -1295,7 +1295,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getIndirectImplementers()
 	{
-		if (!$this->isInterface()) {
+		if ( ! $this->isInterface()) {
 			return [];
 		}
 		$that = $this->name;
@@ -1323,12 +1323,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns if the given object is an instance of this class.
 	 *
 	 * @param object $object Instance
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided argument is not an object.
 	 */
 	public function isInstance($object)
 	{
-		if (!is_object($object)) {
+		if ( ! is_object($object)) {
 			throw new Exception\RuntimeException(sprintf('Parameter must be an object, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		return $this->name === get_class($object) || is_subclass_of($object, $this->getName());
@@ -1343,7 +1343,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function newInstanceWithoutConstructor()
 	{
-		if (!class_exists($this->name, TRUE)) {
+		if ( ! class_exists($this->name, TRUE)) {
 			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$reflection = new ApiGen\TokenReflection\Php\ReflectionClass($this->getName(), $this->getBroker());
@@ -1374,7 +1374,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function newInstanceArgs(array $args = [])
 	{
-		if (!class_exists($this->name, TRUE)) {
+		if ( ! class_exists($this->name, TRUE)) {
 			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$reflection = new InternalReflectionClass($this->name);
@@ -1393,7 +1393,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function setStaticPropertyValue($name, $value)
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
-			if (!$property->isPublic() && !$property->isAccessible()) {
+			if ( ! $property->isPublic() && !$property->isAccessible()) {
 				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
 			}
 			$property->setDefaultValue($value);
@@ -1500,7 +1500,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string|object $className Class name or class instance
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -1525,16 +1525,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class definition is complete.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isComplete()
 	{
-		if (!$this->definitionComplete) {
+		if ( ! $this->definitionComplete) {
 			if (NULL !== $this->parentClassName && !$this->getParentClass()->isComplete()) {
 				return FALSE;
 			}
 			foreach ($this->getOwnInterfaces() as $interface) {
-				if (!$interface->isComplete()) {
+				if ( ! $interface->isComplete()) {
 					return FALSE;
 				}
 			}
@@ -1565,7 +1565,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	protected function processParent(IReflection $parent, Stream $tokenStream)
 	{
-		if (!$parent instanceof ReflectionFileNamespace) {
+		if ( ! $parent instanceof ReflectionFileNamespace) {
 			throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), Exception\ParseException::INVALID_PARENT);
 		}
 		$this->namespaceName = $parent->getName();
@@ -1640,7 +1640,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	protected function parseName(Stream $tokenStream)
 	{
-		if (!$tokenStream->is(T_STRING)) {
+		if ( ! $tokenStream->is(T_STRING)) {
 			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
 		if ($this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
@@ -1662,7 +1662,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	private function parseParent(Stream $tokenStream, ReflectionElement $parent = NULL)
 	{
-		if (!$tokenStream->is(T_EXTENDS)) {
+		if ( ! $tokenStream->is(T_EXTENDS)) {
 			return $this;
 		}
 		while (TRUE) {
@@ -1704,7 +1704,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	private function parseInterfaces(Stream $tokenStream, ReflectionElement $parent = NULL)
 	{
-		if (!$tokenStream->is(T_IMPLEMENTS)) {
+		if ( ! $tokenStream->is(T_IMPLEMENTS)) {
 			return $this;
 		}
 		if ($this->isInterface()) {
@@ -1847,7 +1847,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							}
 							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							if (T_PUBLIC === $type || T_PROTECTED === $type || T_PRIVATE === $type) {
-								if (!$alias) {
+								if ( ! $alias) {
 									throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 								}
 								switch ($type) {

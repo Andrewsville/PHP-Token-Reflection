@@ -67,7 +67,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -101,7 +101,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -112,7 +112,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * Returns a particular parameter.
 	 *
-	 * @param integer|string $parameter Parameter name or position
+	 * @param int|string $parameter Parameter name or position
 	 * @return ApiGen\TokenReflection\Php\ReflectionParameter
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
@@ -121,7 +121,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	{
 		$parameters = $this->getParameters();
 		if (is_numeric($parameter)) {
-			if (!isset($parameters[$parameter])) {
+			if ( ! isset($parameters[$parameter])) {
 				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			return $parameters[$parameter];
@@ -192,7 +192,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{
@@ -238,7 +238,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 *
 	 * Internal functions are always valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -267,7 +267,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
-		if (!$internalReflection instanceof InternalReflectionFunction) {
+		if ( ! $internalReflection instanceof InternalReflectionFunction) {
 			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
 		return $broker->getFunction($internalReflection->getName());

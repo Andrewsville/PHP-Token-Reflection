@@ -26,7 +26,7 @@ interface IReflection
 	/**
 	 * Returns if the reflection object is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal();
 
@@ -34,7 +34,7 @@ interface IReflection
 	/**
 	 * Returns if the reflection object is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined();
 
@@ -42,7 +42,7 @@ interface IReflection
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized();
 
@@ -68,7 +68,7 @@ interface IReflection
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function __isset($key);
 
@@ -79,4 +79,5 @@ interface IReflection
 	 * @return string
 	 */
 	public function getPrettyName();
+
 }

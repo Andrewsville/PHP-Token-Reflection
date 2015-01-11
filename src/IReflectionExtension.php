@@ -110,4 +110,5 @@ interface IReflectionExtension extends IReflection
 	 * @return string
 	 */
 	public function __toString();
+
 }

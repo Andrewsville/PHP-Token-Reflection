@@ -110,7 +110,7 @@ class ReflectionMethodTest extends TestCase
 		$this->assertSame(['mixed'], $parent->token->getMethod('method2')->getAnnotation('return'));
 
 		$this->assertSame($parent->token->getMethod('method3')->getAnnotation('return'), $rfl->token->getMethod('method3')->getAnnotation('return'));
-		$this->assertSame(['boolean'], $rfl->token->getMethod('method3')->getAnnotation('return'));
+		$this->assertSame(['bool'], $rfl->token->getMethod('method3')->getAnnotation('return'));
 	}
 
 
@@ -127,9 +127,9 @@ class ReflectionMethodTest extends TestCase
 		$this->assertSame(
 			[
 				'string' => 'string',
-				'integer' => 1,
+				'int' => 1,
 				'float' => 1.1,
-				'boolean' => TRUE,
+				'bool' => TRUE,
 				'null' => NULL,
 				'array' => [1 => 1],
 				'array2' => [1 => 1, 2 => 2],

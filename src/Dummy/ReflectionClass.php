@@ -101,7 +101,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the class is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace()
 	{
@@ -134,7 +134,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getExtensionName()
 	{
@@ -190,7 +190,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getDocComment()
 	{
@@ -202,7 +202,7 @@ class ReflectionClass implements IReflectionClass
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -236,7 +236,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns modifiers.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getModifiers()
 	{
@@ -247,7 +247,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the class is abstract.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAbstract()
 	{
@@ -258,7 +258,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the class is final.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFinal()
 	{
@@ -269,7 +269,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the class is an interface.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInterface()
 	{
@@ -280,7 +280,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the class is an exception or its descendant.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isException()
 	{
@@ -291,7 +291,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if it is possible to create an instance of this class.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInstantiable()
 	{
@@ -357,7 +357,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the class is a trait.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTrait()
 	{
@@ -369,7 +369,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class uses a particular trait.
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function usesTrait($trait)
 	{
@@ -382,7 +382,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * Introduced in PHP 5.4.
 	 *
-	 * @return boolean
+	 * @return bool
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
 	 */
 	public function isCloneable()
@@ -396,7 +396,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * Returns true if the class implements the Traversable interface.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isIterateable()
 	{
@@ -407,7 +407,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the reflection object is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -418,7 +418,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the reflection object is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -429,7 +429,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -441,7 +441,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the current class is a subclass of the given class.
 	 *
 	 * @param string|object $class Class name or reflection object
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isSubclassOf($class)
 	{
@@ -497,17 +497,17 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class implements the given interface.
 	 *
 	 * @param string|object $interface Interface name or reflection object
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided parameter is not an interface.
 	 */
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
-			if (!$interface instanceof IReflectionClass) {
+			if ( ! $interface instanceof IReflectionClass) {
 				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface->getName();
-			if (!$interface->isInterface()) {
+			if ( ! $interface->isInterface()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		}
@@ -586,7 +586,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class implements the given method.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasMethod($name)
 	{
@@ -609,7 +609,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns method reflections.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getMethods($filter = NULL)
@@ -622,7 +622,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class implements (and not its parents) the given method.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnMethod($name)
 	{
@@ -633,7 +633,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns methods declared by this class, not its parents.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getOwnMethods($filter = NULL)
@@ -646,7 +646,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class imports the given method from traits.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasTraitMethod($name)
 	{
@@ -657,7 +657,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns method reflections imported from traits.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getTraitMethods($filter = NULL)
@@ -670,7 +670,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class defines the given constant.
 	 *
 	 * @param string $name Constant name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($name)
 	{
@@ -728,7 +728,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class (and not its parents) defines the given constant.
 	 *
 	 * @param string $name Constant name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnConstant($name)
 	{
@@ -773,7 +773,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class implements the given property.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasProperty($name)
 	{
@@ -784,7 +784,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns class properties.
 	 *
-	 * @param integer $filter Property types
+	 * @param int $filter Property types
 	 * @return array
 	 */
 	public function getProperties($filter = NULL)
@@ -809,7 +809,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class (and not its parents) implements the given property.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnProperty($name)
 	{
@@ -820,7 +820,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns properties declared by this class, not its parents.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getOwnProperties($filter = NULL)
@@ -833,7 +833,7 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the class imports the given property from traits.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasTraitProperty($name)
 	{
@@ -844,7 +844,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns property reflections imported from traits.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getTraitProperties($filter = NULL)
@@ -969,12 +969,12 @@ class ReflectionClass implements IReflectionClass
 	 * Returns if the given object is an instance of this class.
 	 *
 	 * @param object $object Instance
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided argument is not an object.
 	 */
 	public function isInstance($object)
 	{
-		if (!is_object($object)) {
+		if ( ! is_object($object)) {
 			throw new Exception\RuntimeException(sprintf('Parameter must be a class instance, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		return $this->name === get_class($object) || is_subclass_of($object, $this->name);
@@ -989,7 +989,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function newInstanceWithoutConstructor()
 	{
-		if (!class_exists($this->name, TRUE)) {
+		if ( ! class_exists($this->name, TRUE)) {
 			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$reflection = new ApiGen\TokenReflection\Php\ReflectionClass($this->name, $this->getBroker());
@@ -1020,7 +1020,7 @@ class ReflectionClass implements IReflectionClass
 	 */
 	public function newInstanceArgs(array $args = [])
 	{
-		if (!class_exists($this->name, TRUE)) {
+		if ( ! class_exists($this->name, TRUE)) {
 			throw new Exception\RuntimeException('Could not create an instance of class; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$reflection = new InternalReflectionClass($this->name);
@@ -1065,7 +1065,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string|object $className Class name or class instance
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -1089,7 +1089,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the start position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartPosition()
 	{
@@ -1100,7 +1100,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns the end position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndPosition()
 	{
@@ -1113,7 +1113,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * Dummy classes never have the definition complete.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isComplete()
 	{
@@ -1126,7 +1126,7 @@ class ReflectionClass implements IReflectionClass
 	 *
 	 * Dummy classes are always valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -1137,7 +1137,7 @@ class ReflectionClass implements IReflectionClass
 	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -1172,7 +1172,7 @@ class ReflectionClass implements IReflectionClass
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{

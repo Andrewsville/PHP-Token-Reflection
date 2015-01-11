@@ -7,7 +7,7 @@ class TokenReflection_Test_ParameterDocCommentInheritanceGrandParent
 	 * Private method.
 	 *
 	 * @param mixed $one First
-	 * @param boolean $two Second
+	 * @param bool $two Second
 	 * @param string $three Third
 	 */
 	private function m($one, $two, $three)

@@ -26,7 +26,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns if the function/method is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace();
 
@@ -58,7 +58,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartLine();
 
@@ -66,7 +66,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndLine();
 
@@ -74,7 +74,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getDocComment();
 
@@ -82,7 +82,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns if the function/method is a closure.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isClosure();
 
@@ -90,7 +90,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns if the function/method is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated();
 
@@ -98,7 +98,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns if the function/method returns its value as reference.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function returnsReference();
 
@@ -106,7 +106,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns a function/method parameter.
 	 *
-	 * @param integer|string $parameter Parameter name or position
+	 * @param int|string $parameter Parameter name or position
 	 * @return ApiGen\TokenReflection\IReflectionParameter
 	 */
 	public function getParameter($parameter);
@@ -123,7 +123,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the number of parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getNumberOfParameters();
 
@@ -131,7 +131,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the number of required parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getNumberOfRequiredParameters();
 
@@ -142,4 +142,5 @@ interface IReflectionFunctionBase extends IReflection
 	 * @return array
 	 */
 	public function getStaticVariables();
+
 }

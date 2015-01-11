@@ -21,7 +21,7 @@ class RuntimeException extends BaseException
 	/**
 	 * The property/method is not accessible.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const NOT_ACCESSBILE = 3002;
 
@@ -37,7 +37,7 @@ class RuntimeException extends BaseException
 	 * Constructor.
 	 *
 	 * @param string $message Exception message
-	 * @param integer $code Exception code
+	 * @param int $code Exception code
 	 * @param ApiGen\TokenReflection\IReflection $sender Reflection element
 	 */
 	public function __construct($message, $code, IReflection $sender = NULL)

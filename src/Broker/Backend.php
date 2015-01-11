@@ -21,21 +21,21 @@ interface Backend
 	/**
 	 * Identifier of the tokenized classes list.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const TOKENIZED_CLASSES = 1;
 
 	/**
 	 * Identifier of the internal classes list.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const INTERNAL_CLASSES = 2;
 
 	/**
 	 * Identifier of the nonexisten classes list.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const NONEXISTENT_CLASSES = 4;
 
@@ -44,7 +44,7 @@ interface Backend
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
 	 * @param string $namespaceName Namespace name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasNamespace($namespaceName);
 
@@ -62,7 +62,7 @@ interface Backend
 	 * Returns if there was such class processed (FQN expected).
 	 *
 	 * @param string $className Class name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasClass($className);
 
@@ -79,7 +79,7 @@ interface Backend
 	/**
 	 * Returns all classes from all namespaces.
 	 *
-	 * @param integer $type Returned class types (multiple values may be OR-ed)
+	 * @param int $type Returned class types (multiple values may be OR-ed)
 	 * @return array
 	 */
 	public function getClasses($type = Backend::TOKENIZED_CLASSES);
@@ -89,7 +89,7 @@ interface Backend
 	 * Returns if there was such constant processed (FQN expected).
 	 *
 	 * @param string $constantName Constant name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($constantName);
 
@@ -115,7 +115,7 @@ interface Backend
 	 * Returns if there was such function processed (FQN expected).
 	 *
 	 * @param string $functionName Function name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFunction($functionName);
 
@@ -141,7 +141,7 @@ interface Backend
 	 * Returns if the given file was already processed.
 	 *
 	 * @param string $fileName File name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFileProcessed($fileName);
 
@@ -150,7 +150,7 @@ interface Backend
 	 * Returns if a file with the given filename has been processed.
 	 *
 	 * @param string $fileName File name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFile($fileName);
 
@@ -212,7 +212,7 @@ interface Backend
 	/**
 	 * Sets if token streams are stored in the backend.
 	 *
-	 * @param boolean $store
+	 * @param bool $store
 	 * @return ApiGen\TokenReflection\Broker\Backend
 	 */
 	public function setStoringTokenStreams($store);
@@ -221,7 +221,8 @@ interface Backend
 	/**
 	 * Returns if token streams are stored in the backend.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getStoringTokenStreams();
+
 }

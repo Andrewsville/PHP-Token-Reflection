@@ -99,7 +99,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the class is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace()
 	{
@@ -110,7 +110,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the reflection object is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -121,7 +121,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the reflection object is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -132,7 +132,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -221,7 +221,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the start position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartPosition()
 	{
@@ -232,7 +232,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the end position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndPosition()
 	{
@@ -243,7 +243,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartLine()
 	{
@@ -254,7 +254,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndLine()
 	{
@@ -265,7 +265,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getDocComment()
 	{
@@ -277,7 +277,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -311,7 +311,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the function/method is a closure.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isClosure()
 	{
@@ -322,7 +322,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the function/method is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -333,7 +333,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the function/method returns its value as reference.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function returnsReference()
 	{
@@ -344,7 +344,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns a function/method parameter.
 	 *
-	 * @param integer|string $parameter Parameter name or position
+	 * @param int|string $parameter Parameter name or position
 	 */
 	public function getParameter($parameter)
 	{
@@ -370,7 +370,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the number of parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getNumberOfParameters()
 	{
@@ -381,7 +381,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns the number of required parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getNumberOfRequiredParameters()
 	{
@@ -403,7 +403,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the method is is disabled via the disable_functions directive.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDisabled()
 	{
@@ -481,7 +481,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns if the function definition is valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -524,7 +524,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{

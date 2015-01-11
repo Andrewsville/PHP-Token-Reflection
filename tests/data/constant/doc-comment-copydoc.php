@@ -27,6 +27,7 @@ class TokenReflection_Test_ConstantDocCommentCopydoc
 	 * @copydoc TokenReflection_Test_ConstantDocCommentCopydoc::NON_EXISTENT
 	 */
 	const DOC_COMMENT_COPY_NO = 'doc-comment-copy-no';
+
 }
 
 
@@ -37,6 +38,7 @@ class TokenReflection_Test_ConstantDocCommentCopydoc2
 	 * This is another constant.
 	 */
 	const DOC_COMMENT = 'doc-comment';
+
 }
 
 /**

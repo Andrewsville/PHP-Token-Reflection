@@ -10,16 +10,14 @@
 namespace ApiGen\TokenReflection\Broker\Backend;
 
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Stream\FileStream;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Broker;
-use ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Dummy;
+use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Php;
+use ApiGen\TokenReflection\Stream\FileStream;
 
 
 /**
- * Memory broker backend.
- *
  * Stores parsed reflection objects in memory.
  */
 class Memory implements Broker\Backend
@@ -84,7 +82,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Determines if token streams are stored within the backend.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $storingTokenStreams;
 
@@ -93,7 +91,7 @@ class Memory implements Broker\Backend
 	 * Returns if a file with the given filename has been processed.
 	 *
 	 * @param string $fileName File name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFile($fileName)
 	{
@@ -110,7 +108,7 @@ class Memory implements Broker\Backend
 	 */
 	public function getFile($fileName)
 	{
-		if (!isset($this->files[$fileName])) {
+		if ( ! isset($this->files[$fileName])) {
 			throw new Exception\BrokerException($this->getBroker(), sprintf('File "%s" has not been processed.', $fileName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->files[$fileName];
@@ -132,7 +130,7 @@ class Memory implements Broker\Backend
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
 	 * @param string $namespaceName Namespace name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasNamespace($namespaceName)
 	{
@@ -149,11 +147,11 @@ class Memory implements Broker\Backend
 	 */
 	public function getNamespace($namespaceName)
 	{
-		if (!isset($this->namespaces[TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME])) {
+		if ( ! isset($this->namespaces[TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME])) {
 			$this->namespaces[TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME] = new TokenReflection\ReflectionNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
 		}
 		$namespaceName = ltrim($namespaceName, '\\');
-		if (!isset($this->namespaces[$namespaceName])) {
+		if ( ! isset($this->namespaces[$namespaceName])) {
 			throw new Exception\BrokerException($this->getBroker(), sprintf('Namespace %s does not exist.', $namespaceName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->namespaces[$namespaceName];
@@ -175,14 +173,14 @@ class Memory implements Broker\Backend
 	 * Returns if there was such class processed (FQN expected).
 	 *
 	 * @param string $className Class name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasClass($className)
 	{
 		$className = ltrim($className, '\\');
 		if ($pos = strrpos($className, '\\')) {
 			$namespace = substr($className, 0, $pos);
-			if (!isset($this->namespaces[$namespace])) {
+			if ( ! isset($this->namespaces[$namespace])) {
 				return FALSE;
 			}
 			$namespace = $this->getNamespace($namespace);
@@ -230,7 +228,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Returns all classes from all namespaces.
 	 *
-	 * @param integer $type Returned class types (multiple values may be OR-ed)
+	 * @param int $type Returned class types (multiple values may be OR-ed)
 	 * @return array
 	 */
 	public function getClasses($type = self::TOKENIZED_CLASSES)
@@ -252,7 +250,7 @@ class Memory implements Broker\Backend
 	 * Returns if there was such constant processed (FQN expected).
 	 *
 	 * @param string $constantName Constant name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($constantName)
 	{
@@ -260,14 +258,14 @@ class Memory implements Broker\Backend
 		if ($pos = strpos($constantName, '::')) {
 			$className = substr($constantName, 0, $pos);
 			$constantName = substr($constantName, $pos + 2);
-			if (!$this->hasClass($className)) {
+			if ( ! $this->hasClass($className)) {
 				return FALSE;
 			}
 			$parent = $this->getClass($className);
 		} else {
 			if ($pos = strrpos($constantName, '\\')) {
 				$namespace = substr($constantName, 0, $pos);
-				if (!$this->hasNamespace($namespace)) {
+				if ( ! $this->hasNamespace($namespace)) {
 					return FALSE;
 				}
 				$parent = $this->getNamespace($namespace);
@@ -343,14 +341,14 @@ class Memory implements Broker\Backend
 	 * Returns if there was such function processed (FQN expected).
 	 *
 	 * @param string $functionName Function name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasFunction($functionName)
 	{
 		$functionName = ltrim($functionName, '\\');
 		if ($pos = strrpos($functionName, '\\')) {
 			$namespace = substr($functionName, 0, $pos);
-			if (!isset($this->namespaces[$namespace])) {
+			if ( ! isset($this->namespaces[$namespace])) {
 				return FALSE;
 			}
 			$namespace = $this->getNamespace($namespace);
@@ -418,7 +416,7 @@ class Memory implements Broker\Backend
 	 * Returns if the given file was already processed.
 	 *
 	 * @param string $fileName File name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFileProcessed($fileName)
 	{
@@ -436,7 +434,7 @@ class Memory implements Broker\Backend
 	public function getFileTokens($fileName)
 	{
 		$realName = Broker::getRealPath($fileName);
-		if (!isset($this->tokenStreams[$realName])) {
+		if ( ! isset($this->tokenStreams[$realName])) {
 			throw new Exception\BrokerException($this->getBroker(), sprintf('File "%s" was not processed yet.', $fileName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
 		return TRUE === $this->tokenStreams[$realName] ? new FileStream($realName) : $this->tokenStreams[$realName];
@@ -458,7 +456,7 @@ class Memory implements Broker\Backend
 		foreach ($file->getNamespaces() as $fileNamespace) {
 			try {
 				$namespaceName = $fileNamespace->getName();
-				if (!isset($this->namespaces[$namespaceName])) {
+				if ( ! isset($this->namespaces[$namespaceName])) {
 					$this->namespaces[$namespaceName] = new TokenReflection\ReflectionNamespace($namespaceName, $file->getBroker());
 				}
 				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
@@ -473,7 +471,7 @@ class Memory implements Broker\Backend
 		$this->allClasses = NULL;
 		$this->allFunctions = NULL;
 		$this->allConstants = NULL;
-		if (!empty($errors)) {
+		if ( ! empty($errors)) {
 			throw new Exception\FileProcessingException($errors, $file);
 		}
 		return $this;
@@ -507,7 +505,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Sets if token streams are stored in the backend.
 	 *
-	 * @param boolean $store
+	 * @param bool $store
 	 * @return ApiGen\TokenReflection\Broker\Backend
 	 */
 	public function setStoringTokenStreams($store)
@@ -520,7 +518,7 @@ class Memory implements Broker\Backend
 	/**
 	 * Returns if token streams are stored in the backend.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getStoringTokenStreams()
 	{
@@ -550,7 +548,7 @@ class Memory implements Broker\Backend
 			foreach (array_merge($class->getParentClasses(), $class->getInterfaces()) as $parent) {
 				if ($parent->isInternal()) {
 					$allClasses[self::INTERNAL_CLASSES][$parent->getName()] = $parent;
-				} elseif (!$parent->isTokenized()) {
+				} elseif ( ! $parent->isTokenized()) {
 					$allClasses[self::NONEXISTENT_CLASSES][$parent->getName()] = $parent;
 				}
 			}

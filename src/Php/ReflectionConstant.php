@@ -54,7 +54,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Determined if the constant is user defined.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $userDefined;
 
@@ -107,7 +107,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 			$this->declaringClassName = $realParent->getName();
 			$this->userDefined = $realParent->isUserDefined();
 		} else {
-			if (!array_key_exists($name, get_defined_constants(FALSE))) {
+			if ( ! array_key_exists($name, get_defined_constants(FALSE))) {
 				$this->userDefined = TRUE;
 			} else {
 				$declared = get_defined_constants(TRUE);
@@ -182,7 +182,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns if the function/method is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace()
 	{
@@ -205,7 +205,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getExtensionName()
 	{
@@ -249,7 +249,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getDocComment()
 	{
@@ -261,7 +261,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -328,7 +328,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns if the constant is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -339,7 +339,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns if the constant is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -350,7 +350,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -361,7 +361,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -402,7 +402,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
 	 * @param string|object|null $class Class name, class instance or null
 	 * @param string $constant Constant name
-	 * @param boolean $return Return the export instead of outputting it
+	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
@@ -459,7 +459,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 *
 	 * Internal constants are always valid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid()
 	{
@@ -483,7 +483,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{

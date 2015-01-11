@@ -31,7 +31,7 @@ class BrokerException extends BaseException
 	 *
 	 * @param ApiGen\TokenReflection\Broker $broker Processed file name
 	 * @param string $message Exception message
-	 * @param integer $code Exception code
+	 * @param int $code Exception code
 	 * @param ApiGen\TokenReflection\Exception\StreamException $parent Parent exception
 	 */
 	public function __construct(Broker $broker, $message, $code, StreamException $parent = NULL)

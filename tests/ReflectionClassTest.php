@@ -512,8 +512,8 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getConstant('NONEXISTENT'), $rfl->token->getConstant('NONEXISTENT'));
 		$this->assertFalse($rfl->token->getConstant('NONEXISTENT'));
 		$this->assertSame($rfl->internal->getConstants(), $rfl->token->getConstants());
-		$this->assertSame(['STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => TRUE, 'PARENT' => 'parent'], $rfl->token->getConstants());
-		$this->assertSame(['STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => TRUE], $rfl->token->getOwnConstants());
+		$this->assertSame(['STRING' => 'string', 'int' => 1, 'FLOAT' => 1.1, 'bool' => TRUE, 'PARENT' => 'parent'], $rfl->token->getConstants());
+		$this->assertSame(['STRING' => 'string', 'int' => 1, 'FLOAT' => 1.1, 'bool' => TRUE], $rfl->token->getOwnConstants());
 		$this->assertSame(range(0, 3), array_keys($rfl->token->getOwnConstantReflections()));
 		foreach ($rfl->token->getOwnConstantReflections() as $constant) {
 			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionConstant', $constant);
@@ -1291,7 +1291,7 @@ class ReflectionClassTest extends TestCase
 			'PARENT' => 'PARENT = \'parent\';',
 			'STRING' => 'STRING = \'string\';',
 			'FLOAT' => 'FLOAT = 1.1;',
-			'BOOLEAN' => 'BOOLEAN = TRUE;'
+			'bool' => 'bool = TRUE;'
 		];
 
 		$rfl = $this->getClassReflection('constants')->token;
@@ -1308,7 +1308,7 @@ class ReflectionClassTest extends TestCase
 	{
 		static $expected = [
 			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n\n	public function __construct(\$three)\n	{\n	}\n\n\n	public function __destruct()\n	{\n	}\n\n\n	public final function publicFinalFunction(\$four = 1)\n	{\n	}\n\n\n	public static function publicStaticFunction(\$five = 1.1)\n	{\n	}\n\n\n	private static function privateStaticFunction(\$six = 'string', \$seven = NULL)\n	{\n	}\n\n\n	public function publicFunction(array \$eight = [])\n	{\n	}\n\n\n	private function privateFunction(Foo \$nine = NULL)\n	{\n	}\n\n}",
-			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n\n	const STRING = 'string';\n	const INTEGER = 1;\n	const FLOAT = 1.1;\n	const BOOLEAN = TRUE;\n}",
+			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n\n	const STRING = 'string';\n	const int = 1;\n	const FLOAT = 1.1;\n	const bool = TRUE;\n\n}",
 			'docComment' => "/**\n * TokenReflection_Test_ClassDocComment.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */\nclass TokenReflection_Test_ClassDocComment\n{\n\n}"
 		];
 

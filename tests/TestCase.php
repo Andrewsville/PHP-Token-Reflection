@@ -3,6 +3,7 @@
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\Broker;
+use ApiGen\TokenReflection\ReflectionFile;
 
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
@@ -17,10 +18,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Return a tokenized file reflection.
-	 *
 	 * @param mixed $test
-	 * @return ApiGen\TokenReflection\ReflectionFile
+	 * @return ReflectionFile
 	 */
 	protected function getFileTokenReflection($test)
 	{
@@ -29,10 +28,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns class reflections.
-	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return \stdClass
 	 */
 	protected function getClassReflection($test, $fromString = FALSE)
@@ -45,10 +42,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns method reflections.
-	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return \stdClass
 	 */
 	protected function getMethodReflection($test, $fromString = FALSE)
@@ -61,10 +56,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns property reflections.
-	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return \stdClass
 	 */
 	protected function getPropertyReflection($test, $fromString = FALSE)
@@ -77,10 +70,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns function reflections.
-	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return \stdClass
 	 */
 	protected function getFunctionReflection($test, $fromString = FALSE)
@@ -93,10 +84,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns parameter reflections.
-	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return \stdClass
 	 */
 	protected function getParameterReflection($test, $fromString = FALSE)
@@ -109,8 +98,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns internal class reflection.
-	 *
 	 * @param string $test
 	 * @return \ReflectionClass
 	 */
@@ -177,7 +164,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized class reflection.
 	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
 	protected function getClassTokenReflection($test, $fromString = FALSE)
@@ -197,7 +184,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized method reflection.
 	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return ApiGen\TokenReflection\ReflectionMethod
 	 */
 	protected function getMethodTokenReflection($test, $fromString = FALSE)
@@ -210,7 +197,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized property reflection.
 	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return ApiGen\TokenReflection\ReflectionProperty
 	 */
 	protected function getPropertyTokenReflection($test, $fromString = FALSE)
@@ -223,7 +210,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized constant reflection.
 	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return ApiGen\TokenReflection\ReflectionConstant
 	 */
 	protected function getConstantTokenReflection($test, $fromString = FALSE)
@@ -236,7 +223,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized function reflection.
 	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return ApiGen\TokenReflection\ReflectionFunction
 	 */
 	protected function getFunctionTokenReflection($test, $fromString = FALSE)
@@ -256,7 +243,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * Returns tokenized parameter reflection.
 	 *
 	 * @param string $test
-	 * @param boolean $fromString
+	 * @param bool $fromString
 	 * @return ApiGen\TokenReflection\ReflectionParameter
 	 */
 	protected function getParameterTokenReflection($test, $fromString = FALSE)

@@ -52,28 +52,28 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Start line in the file.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $startLine;
 
 	/**
 	 * End line in the file.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $endLine;
 
 	/**
 	 * Start position in the file token stream.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	protected $startPosition;
 
 	/**
 	 * End position in the file token stream.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	private $endPosition;
 
@@ -147,7 +147,7 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartLine()
 	{
@@ -158,7 +158,7 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndLine()
 	{
@@ -184,7 +184,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * Alwyas returns false - everything is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getExtensionName()
 	{
@@ -206,7 +206,7 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Returns the start position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartPosition()
 	{
@@ -217,7 +217,7 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Returns the end position in the file token stream.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndPosition()
 	{

@@ -34,7 +34,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class is defined within a namespace.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function inNamespace();
 
@@ -74,7 +74,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartLine();
 
@@ -82,7 +82,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndLine();
 
@@ -90,7 +90,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getDocComment();
 
@@ -106,7 +106,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class is abstract.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAbstract();
 
@@ -114,7 +114,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class is final.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFinal();
 
@@ -122,7 +122,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class is an interface.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInterface();
 
@@ -130,7 +130,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class is an exception or its descendant.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isException();
 
@@ -140,7 +140,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * Introduced in PHP 5.4.
 	 *
-	 * @return boolean
+	 * @return bool
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
 	 */
 	public function isCloneable();
@@ -151,7 +151,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * Returns true if the class implements the Traversable interface.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isIterateable();
 
@@ -160,7 +160,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the current class is a subclass of the given class.
 	 *
 	 * @param string|object $class Class name or reflection object
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isSubclassOf($class);
 
@@ -201,7 +201,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class implements the given interface.
 	 *
 	 * @param string|object $interface Interface name or reflection object
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid object was provided as interface.
 	 */
 	public function implementsInterface($interface);
@@ -259,7 +259,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class implements the given method.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasMethod($name);
 
@@ -277,7 +277,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns method reflections.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getMethods($filter = NULL);
@@ -287,7 +287,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class implements (and not its parents) the given method.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnMethod($name);
 
@@ -295,7 +295,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns method reflections declared by this class, not its parents.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getOwnMethods($filter = NULL);
@@ -305,7 +305,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class imports the given method from traits.
 	 *
 	 * @param string $name Method name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasTraitMethod($name);
 
@@ -313,7 +313,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns method reflections imported from traits.
 	 *
-	 * @param integer $filter Methods filter
+	 * @param int $filter Methods filter
 	 * @return array
 	 */
 	public function getTraitMethods($filter = NULL);
@@ -323,7 +323,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class defines the given constant.
 	 *
 	 * @param string $name Constant name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasConstant($name);
 
@@ -368,7 +368,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class (and not its parents) defines the given constant.
 	 *
 	 * @param string $name Constant name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnConstant($name);
 
@@ -393,7 +393,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class defines the given property.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasProperty($name);
 
@@ -411,7 +411,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns property reflections.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getProperties($filter = NULL);
@@ -421,7 +421,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class (and not its parents) defines the given property.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasOwnProperty($name);
 
@@ -429,7 +429,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns property reflections declared by this class, not its parents.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getOwnProperties($filter = NULL);
@@ -439,7 +439,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the class imports the given property from traits.
 	 *
 	 * @param string $name Property name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasTraitProperty($name);
 
@@ -447,7 +447,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns property reflections imported from traits.
 	 *
-	 * @param integer $filter Properties filter
+	 * @param int $filter Properties filter
 	 * @return array
 	 */
 	public function getTraitProperties($filter = NULL);
@@ -548,7 +548,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if it is possible to create an instance of this class.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInstantiable();
 
@@ -605,7 +605,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class is a trait.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTrait();
 
@@ -614,7 +614,7 @@ interface IReflectionClass extends IReflection
 	 * Returns if the given object is an instance of this class.
 	 *
 	 * @param object $object Instance
-	 * @return boolean
+	 * @return bool
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided argument is not an object.
 	 */
 	public function isInstance($object);
@@ -674,7 +674,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * That means if there are no dummy classes among parents and implemented interfaces.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isComplete();
 
@@ -684,7 +684,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * That means that the source code is valid and the class name is unique within parsed files.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isValid();
 
@@ -692,7 +692,8 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated();
+
 }

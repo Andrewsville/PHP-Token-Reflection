@@ -4,6 +4,7 @@ interface TokenReflection_Test_MethodModifiersIface
 {
 
 	public function publicFromIface();
+
 }
 
 
@@ -14,6 +15,7 @@ abstract class TokenReflection_Test_MethodModifiersParent implements TokenReflec
 
 
 	abstract protected function protectedAbstract();
+
 }
 
 

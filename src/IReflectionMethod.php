@@ -34,7 +34,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns method modifiers.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getModifiers();
 
@@ -42,7 +42,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is abstract.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAbstract();
 
@@ -50,7 +50,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is final.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFinal();
 
@@ -58,7 +58,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is private.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPrivate();
 
@@ -66,7 +66,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is protected.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isProtected();
 
@@ -74,7 +74,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is public.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPublic();
 
@@ -82,7 +82,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is static.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isStatic();
 
@@ -90,8 +90,8 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
 	 *
-	 * @param integer $filter Filter
-	 * @return boolean
+	 * @param int $filter Filter
+	 * @return bool
 	 */
 	public function is($filter = NULL);
 
@@ -99,7 +99,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is a constructor.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isConstructor();
 
@@ -107,7 +107,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns if the method is a destructor.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDestructor();
 
@@ -143,7 +143,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Sets a method to be accessible or not.
 	 *
-	 * @param boolean $accessible If the method should be accessible.
+	 * @param bool $accessible If the method should be accessible.
 	 */
 	public function setAccessible($accessible);
 
@@ -176,7 +176,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the original modifiers value when importing from a trait.
 	 *
-	 * @return integer|null
+	 * @return int|null
 	 */
 	public function getOriginalModifiers();
 
@@ -195,4 +195,5 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 * @return string|null
 	 */
 	public function getDeclaringTraitName();
+
 }

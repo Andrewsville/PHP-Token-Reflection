@@ -29,4 +29,5 @@ interface IReflection extends TokenReflection\IReflection
 	 * @return ApiGen\TokenReflection\Php\IReflection
 	 */
 	public static function create(Reflector $internalReflection, TokenReflection\Broker $broker);
+
 }

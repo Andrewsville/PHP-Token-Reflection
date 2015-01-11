@@ -85,9 +85,9 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame(
 			[
 				'string' => 'string',
-				'integer' => 1,
+				'int' => 1,
 				'float' => 1.1,
-				'boolean' => TRUE,
+				'bool' => TRUE,
 				'null' => NULL,
 				'array' => [1 => 1],
 				'array2' => [1 => 1, 2 => 2],

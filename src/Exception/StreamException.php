@@ -21,21 +21,21 @@ class StreamException extends BaseException
 	/**
 	 * The property/element does not exist.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const NOT_READABLE = 1001;
 
 	/**
 	 * A required PHP extension is missing.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const READ_BEYOND_EOS = 1002;
 
 	/**
 	 * There was an error when (de)serializing the token stream.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const SERIALIZATION_ERROR = 1003;
 
@@ -52,7 +52,7 @@ class StreamException extends BaseException
 	 *
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $stream Reflection element
 	 * @param string $message Exception message
-	 * @param integer $code Exception code
+	 * @param int $code Exception code
 	 */
 	public function __construct(StreamBase $stream, $message, $code)
 	{

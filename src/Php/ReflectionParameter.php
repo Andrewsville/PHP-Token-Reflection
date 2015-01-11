@@ -26,7 +26,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Determined if the parameter (along with the function/method) is user defined.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $userDefined;
 
@@ -114,7 +114,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the PHP extension name.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getExtensionName()
 	{
@@ -127,7 +127,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 * Checks if there is a particular annotation.
 	 *
 	 * @param string $name Annotation name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasAnnotation($name)
 	{
@@ -208,7 +208,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function getDocComment()
 	{
@@ -231,7 +231,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns if the default value is defined by a constant.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDefaultValueConstant()
 	{
@@ -246,7 +246,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 */
 	public function getDefaultValueConstantName()
 	{
-		if (!$this->isOptional()) {
+		if ( ! $this->isOptional()) {
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
 		return $this->isDefaultValueConstant() ? parent::getDefaultValueConstantName : NULL;
@@ -255,7 +255,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 //	/**
 //	 * Returns if the parameter expects a callback.
 //	 *
-//	 * @return boolean
+//	 * @return bool
 //	 */
 //	public function isCallable()
 //	{
@@ -286,7 +286,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns if the parameter is internal.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isInternal()
 	{
@@ -297,7 +297,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns if the parameter is user defined.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isUserDefined()
 	{
@@ -308,7 +308,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isTokenized()
 	{
@@ -319,7 +319,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns if the reflection subject is deprecated.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDeprecated()
 	{
@@ -341,7 +341,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns if the paramter value can be passed by value.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function canBePassedByValue()
 	{
@@ -376,7 +376,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	 * Magic __isset method.
 	 *
 	 * @param string $key Variable name
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function __isset($key)
 	{
@@ -395,14 +395,14 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = [];
-		if (!$internalReflection instanceof InternalReflectionParameter) {
+		if ( ! $internalReflection instanceof InternalReflectionParameter) {
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionParameter expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		$class = $internalReflection->getDeclaringClass();
 		$function = $internalReflection->getDeclaringFunction();
 		$key = $class ? $class->getName() . '::' : '';
 		$key .= $function->getName() . '(' . $internalReflection->getName() . ')';
-		if (!isset($cache[$key])) {
+		if ( ! isset($cache[$key])) {
 			$cache[$key] = new self($class ? [$class->getName(), $function->getName()] : $function->getName(), $internalReflection->getName(), $broker, $function);
 		}
 		return $cache[$key];

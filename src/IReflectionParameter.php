@@ -50,7 +50,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the definition start line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getStartLine();
 
@@ -58,7 +58,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the definition end line number in the file.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getEndLine();
 
@@ -66,7 +66,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
-	 * @return string|boolean
+	 * @return string|bool
 	 */
 	public function getDocComment();
 
@@ -90,7 +90,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Retutns if a default value for the parameter is available.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDefaultValueAvailable();
 
@@ -98,7 +98,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns if the default value is defined by a constant.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDefaultValueConstant();
 
@@ -114,7 +114,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the position within all parameters.
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	public function getPosition();
 
@@ -122,7 +122,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns if the parameter expects an array.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isArray();
 
@@ -146,7 +146,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns if the the parameter allows NULL.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function allowsNull();
 
@@ -154,7 +154,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns if the parameter is optional.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isOptional();
 
@@ -162,7 +162,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns if the parameter value is passed by reference.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPassedByReference();
 
@@ -170,7 +170,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns if the paramter value can be passed by value.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function canBePassedByValue();
 
@@ -181,4 +181,5 @@ interface IReflectionParameter extends IReflection
 	 * @return string
 	 */
 	public function __toString();
+
 }

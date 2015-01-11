@@ -48,7 +48,7 @@ abstract class ReflectionElement
 	/**
 	 * Returns if there are any known reasons why this element's reflection is invalid.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function hasReasons()
 	{
