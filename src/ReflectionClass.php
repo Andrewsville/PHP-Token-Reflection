@@ -13,6 +13,7 @@ use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionClass as InternalReflectionClass;
@@ -358,7 +359,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param string|object $class Class name or reflection object
 	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided parameter is not a reflection class instance.
+	 * @throws RuntimeException If the provided parameter is not a reflection class instance.
 	 */
 	public function isSubclassOf($class)
 	{
@@ -438,16 +439,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided parameter is not an interface.
+	 * @throws RuntimeException If the provided parameter is not an interface.
 	 */
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
 			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
-				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			if ( ! $interface->isInterface()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface->getName();
 		} else {
@@ -497,7 +498,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns reflections of interfaces implemented by this class, not its parents.
 	 *
-	 * @return array
+	 * @return array|ReflectionClass[]
 	 */
 	public function getOwnInterfaces()
 	{
@@ -577,7 +578,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param string $name Method name
 	 * @return ApiGen\TokenReflection\ReflectionMethod
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested method does not exist.
+	 * @throws RuntimeException If the requested method does not exist.
 	 */
 	public function getMethod($name)
 	{
@@ -589,7 +590,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				return $method;
 			}
 		}
-		throw new Exception\RuntimeException(sprintf('There is no method "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no method "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
@@ -597,7 +598,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns method reflections.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array
+	 * @return array|ReflectionMethod[]
 	 */
 	public function getMethods($filter = NULL)
 	{
@@ -684,8 +685,8 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Returns reflections of method imported from traits.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If trait method was already imported.
+	 * @return array|ReflectionMethod[]
+	 * @throws RuntimeException If trait method was already imported.
 	 */
 	public function getTraitMethods($filter = NULL)
 	{
@@ -709,8 +710,8 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							$imports[] = NULL;
 						}
 						if ( ! isset($this->methods[$newName])) {
-							if (isset($methods[$newName])) {
-								throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $newName), Exception\RuntimeException::ALREADY_EXISTS, $this);
+							if (isset($methods[$newName]) && ! $traitMethod->isAbstract()) {
+								throw new RuntimeException(sprintf('Trait method "%s" was already imported.', $newName), RuntimeException::ALREADY_EXISTS, $this);
 							}
 							$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
 						}
@@ -718,8 +719,8 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				}
 				if ( ! in_array(NULL, $imports)) {
 					if ( ! isset($this->methods[$methodName])) {
-						if (isset($methods[$methodName])) {
-							throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName), Exception\RuntimeException::ALREADY_EXISTS, $this);
+						if (isset($methods[$methodName]) && ! $traitMethod->isAbstract()) {
+							throw new RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName), RuntimeException::ALREADY_EXISTS, $this);
 						}
 						$methods[$methodName] = $traitMethod->alias($this);
 					}
@@ -776,7 +777,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param string $name Constant name
 	 * @return ApiGen\TokenReflection\ReflectionConstant
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested constant does not exist.
+	 * @throws RuntimeException If the requested constant does not exist.
 	 */
 	public function getConstantReflection($name)
 	{
@@ -788,7 +789,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				return $constant;
 			}
 		}
-		throw new Exception\RuntimeException(sprintf('There is no constant "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no constant "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
@@ -887,7 +888,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @return ApiGen\TokenReflection\ReflectionProperty
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested property does not exist.
+	 * @throws RuntimeException If the requested property does not exist.
 	 */
 	public function getProperty($name)
 	{
@@ -899,7 +900,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				return $property;
 			}
 		}
-		throw new Exception\RuntimeException(sprintf('There is no property "%s".', $name, $this->name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no property "%s".', $name, $this->name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
@@ -1054,18 +1055,18 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param string $name Property name
 	 * @param mixed $default Default value
 	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
+	 * @throws RuntimeException If the requested static property does not exist.
+	 * @throws RuntimeException If the requested static property is not accessible.
 	 */
 	public function getStaticPropertyValue($name, $default = NULL)
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
 			if ( ! $property->isPublic() && !$property->isAccessible()) {
-				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
+				throw new RuntimeException(sprintf('Static property "%s" is not accessible.', $name), RuntimeException::NOT_ACCESSBILE, $this);
 			}
 			return $property->getDefaultValue();
 		}
-		throw new Exception\RuntimeException(sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
@@ -1090,7 +1091,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns traits used by this class and not its parents.
 	 *
-	 * @return array
+	 * @return array|ReflectionClass[]
 	 */
 	public function getOwnTraits()
 	{
@@ -1183,22 +1184,22 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
 	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
+	 * @throws RuntimeException If an invalid parameter was provided.
 	 */
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
 			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
-				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait->getName();
 			if ( ! $trait->isTrait()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not a trait.', $traitName), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($trait);
 			if ( ! $reflection->isTrait()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not a trait.', $trait), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait;
 		}
@@ -1329,12 +1330,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param object $object Instance
 	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided argument is not an object.
+	 * @throws RuntimeException If the provided argument is not an object.
 	 */
 	public function isInstance($object)
 	{
 		if ( ! is_object($object)) {
-			throw new Exception\RuntimeException(sprintf('Parameter must be an object, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+			throw new RuntimeException(sprintf('Parameter must be an object, "%s" provided.', gettype($object)), RuntimeException::INVALID_ARGUMENT, $this);
 		}
 		return $this->name === get_class($object) || is_subclass_of($object, $this->getName());
 	}
@@ -1344,12 +1345,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Creates a new class instance without using a constructor.
 	 *
 	 * @return object
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
+	 * @throws RuntimeException If the class inherits from an internal class.
 	 */
 	public function newInstanceWithoutConstructor()
 	{
 		if ( ! class_exists($this->name, TRUE)) {
-			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException('Could not create an instance; class does not exist.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$reflection = new ApiGen\TokenReflection\Php\ReflectionClass($this->getName(), $this->getBroker());
 		return $reflection->newInstanceWithoutConstructor();
@@ -1375,12 +1376,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param array $args Array of constructor parameters
 	 * @return object
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required class does not exist.
+	 * @throws RuntimeException If the required class does not exist.
 	 */
 	public function newInstanceArgs(array $args = [])
 	{
 		if ( ! class_exists($this->name, TRUE)) {
-			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException('Could not create an instance; class does not exist.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		$reflection = new InternalReflectionClass($this->name);
 		return $reflection->newInstanceArgs($args);
@@ -1392,19 +1393,19 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
+	 * @throws RuntimeException If the requested static property does not exist.
+	 * @throws RuntimeException If the requested static property is not accessible.
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
 			if ( ! $property->isPublic() && !$property->isAccessible()) {
-				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
+				throw new RuntimeException(sprintf('Static property "%s" is not accessible.', $name), RuntimeException::NOT_ACCESSBILE, $this);
 			}
 			$property->setDefaultValue($value);
 			return;
 		}
-		throw new Exception\RuntimeException(sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
@@ -1507,7 +1508,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param string|object $className Class name or class instance
 	 * @param bool $return Return the export instead of outputting it
 	 * @return string|NULL
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @throws RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $className, $return = FALSE)
 	{
@@ -1516,9 +1517,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		}
 		$class = $broker->getClass($className);
 		if ($class instanceof Invalid\ReflectionClass) {
-			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+			throw new RuntimeException('Class is invalid.', RuntimeException::UNSUPPORTED);
 		} elseif ($class instanceof Dummy\ReflectionClass) {
-			throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException('Class does not exist.', RuntimeException::DOES_NOT_EXIST);
 		}
 		if ($return) {
 			return $class->__toString();
