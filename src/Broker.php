@@ -11,7 +11,9 @@ namespace ApiGen\TokenReflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Exception;
+use Nette\Utils\Finder;
 use RecursiveDirectoryIterator, RecursiveIteratorIterator;
+use SplFileInfo;
 
 
 /**
@@ -92,8 +94,6 @@ class Broker
 	private $options;
 
 	/**
-	 * Constructor.
-	 *
 	 * @param ApiGen\TokenReflection\Broker\Backend $backend Broker backend instance
 	 * @param integer $options Broker/parsing options
 	 */
@@ -140,7 +140,7 @@ class Broker
 	 * @param string $source PHP source code
 	 * @param string $fileName Used file name
 	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|\TokenReflection\ReflectionFile
+	 * @return boolean|ApiGen\TokenReflection\ReflectionFile
 	 */
 	public function processString($source, $fileName, $returnReflectionFile = false)
 	{
@@ -172,7 +172,7 @@ class Broker
 	 *
 	 * @param string $fileName Filename
 	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|\TokenReflection\ReflectionFile
+	 * @return boolean|ApiGen\TokenReflection\ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName, $returnReflectionFile = false)
@@ -206,53 +206,17 @@ class Broker
 		}
 	}
 
-	/**
-	 * Processes a PHAR archive.
-	 *
-	 * @param string $fileName Archive filename.
-	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|array of ApiGen\TokenReflection\ReflectionFile
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the PHAR PHP extension is not loaded.
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given archive could not be read.
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given archive could not be processed.
-	 */
-	public function processPhar($fileName, $returnReflectionFile = false)
-	{
-		if (!is_file($fileName)) {
-			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
-		}
-
-		if (!extension_loaded('Phar')) {
-			throw new Exception\BrokerException($this, 'The PHAR PHP extension is not loaded.', Exception\BrokerException::PHP_EXT_MISSING);
-		}
-
-		try {
-			$result = array();
-			foreach (new RecursiveIteratorIterator(new \Phar($fileName)) as $entry) {
-				if ($entry->isFile()) {
-					$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
-				}
-			}
-
-			return $returnReflectionFile ? $result : true;
-		} catch (Exception\ParseException $e) {
-			throw $e;
-		} catch (Exception\StreamException $e) {
-			throw new Exception\BrokerException($this, 'Could not process the archive.', 0, $e);
-		}
-	}
 
 	/**
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
-	 * @param string $path Directora path
-	 * @param string|array $filters Filename filters
+	 * @param string $path
 	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|array of ApiGen\TokenReflection\ReflectionFile
+	 * @return boolean|ApiGen\TokenReflection\ReflectionFile[]|SplFileInfo[]
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory could not be processed.
 	 */
-	public function processDirectory($path, $filters = array(), $returnReflectionFile = false)
+	public function processDirectory($path, $returnReflectionFile = false)
 	{
 		$realPath = realpath($path);
 		if (!is_dir($realPath)) {
@@ -261,22 +225,9 @@ class Broker
 
 		try {
 			$result = array();
-			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($realPath)) as $entry) {
-				if ($entry->isFile()) {
-					$process = empty($filters);
-					if (!$process) {
-						foreach ((array) $filters as $filter) {
-							$whitelisting = '!' !== $filter{0};
-							if (fnmatch($whitelisting ? $filter : substr($filter, 1), $entry->getPathName(), FNM_NOESCAPE)) {
-								$process = $whitelisting;
-							}
-						}
-					}
-
-					if ($process) {
-						$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
-					}
-				}
+			foreach (Finder::findFiles('*')->in($realPath) as $entry) {
+				/** @var SplFileInfo $entry */
+				$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
 			}
 
 			return $returnReflectionFile ? $result : true;
@@ -288,11 +239,11 @@ class Broker
 	}
 
 	/**
-	 * Process a file, directory or a PHAR archive.
+	 * Process a file or directory.
 	 *
 	 * @param string $path Path
 	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
-	 * @return boolean|array|\TokenReflection\ReflectionFile
+	 * @return boolean|array|ApiGen\TokenReflection\ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the target does not exist.
 	 */
 	public function process($path, $returnReflectionFile = false)
@@ -300,10 +251,6 @@ class Broker
 		if (is_dir($path)) {
 			return $this->processDirectory($path, array(), $returnReflectionFile);
 		} elseif (is_file($path)) {
-			if (preg_match('~\\.phar(?:$|\\.)~i', $path)) {
-				return $this->processPhar($path, $returnReflectionFile);
-			}
-
 			return $this->processFile($path, $returnReflectionFile);
 		} else {
 			throw new Exception\BrokerException($this, 'The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
@@ -518,10 +465,6 @@ class Broker
 	 */
 	public static function getRealPath($path)
 	{
-		if (0 === strpos($path, 'phar://')) {
-			return is_file($path) || is_dir($path) ? $path : false;
-		} else {
-			return realpath($path);
-		}
+		return realpath($path);
 	}
 }
