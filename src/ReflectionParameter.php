@@ -13,14 +13,9 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
-use ReflectionParameter as InternalReflectionParameter;
 
 
-/**
- * Tokenized function/method parameter reflection.
- */
 class ReflectionParameter extends ReflectionElement implements IReflectionParameter
 {
 
@@ -93,6 +88,11 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * @var bool
 	 */
 	private $isOptional;
+
+	/**
+	 * @var bool
+	 */
+	private $isVariadic = FALSE;
 
 	/**
 	 * Determines if the value is passed by reference.
@@ -362,6 +362,15 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function isVariadic()
+	{
+		return $this->isVariadic;
+	}
+
+
+	/**
 	 * Returns if all following parameters have a default value definition.
 	 *
 	 * @return bool
@@ -450,11 +459,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			$default = '';
 		}
 		return sprintf(
-			'Parameter #%d [ <%s> %s%s$%s%s ]',
+			'Parameter #%d [ <%s> %s%s%s$%s%s ]',
 			$this->getPosition(),
 			$this->isOptional() ? 'optional' : 'required',
 			$hint ? $hint . ' ' : '',
 			$this->isPassedByReference() ? '&' : '',
+			$this->isVariadic() ? '...' : '',
 			$this->getName(),
 			$default
 		);
@@ -513,12 +523,10 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Processes the parent reflection object.
-	 *
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFunctionBase) {
 			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', ParseException::INVALID_PARENT);
@@ -540,10 +548,11 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @return ReflectionParameter
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
 		return $this->parseTypeHint($tokenStream)
 			->parsePassedByReference($tokenStream)
+			->parseIsVariadic($tokenStream)
 			->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
 	}
@@ -581,14 +590,25 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Parses if parameter value is passed by reference.
-	 *
 	 * @return ReflectionParameter
 	 */
-	private function parsePassedByReference(Stream $tokenStream)
+	private function parsePassedByReference(StreamBase $tokenStream)
 	{
 		if ($tokenStream->is('&')) {
 			$this->passedByReference = TRUE;
+			$tokenStream->skipWhitespaces(TRUE);
+		}
+		return $this;
+	}
+
+
+	/**
+	 * @return ReflectionParameter
+	 */
+	private function parseIsVariadic(StreamBase $tokenStream)
+	{
+		if (PHP_VERSION_ID >= 50600 && $tokenStream->is(T_ELLIPSIS)) {
+			$this->isVariadic = TRUE;
 			$tokenStream->skipWhitespaces(TRUE);
 		}
 		return $this;

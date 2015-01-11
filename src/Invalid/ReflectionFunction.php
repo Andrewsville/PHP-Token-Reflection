@@ -16,11 +16,6 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\ReflectionBase;
 
 
-/**
- * Invalid function reflection.
- *
- * The reflected function is not unique.
- */
 class ReflectionFunction extends ReflectionElement implements IReflectionFunction
 {
 
@@ -45,9 +40,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * @param string $name Function name
-	 * @param string $fileName Original definiton file name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param string $name
+	 * @param string $fileName Original definition file name
+	 * @param Broker $broker
 	 */
 	public function __construct($name, $fileName, Broker $broker)
 	{
@@ -475,9 +470,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns if the function definition is valid.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isValid()
 	{
@@ -486,8 +479,15 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
+	 * {@inheritdoc}
+	 */
+	public function isVariadic()
+	{
+		return FALSE;
+	}
+
+
+	/**
 	 * @return string
 	 */
 	public function __toString()
@@ -505,8 +505,6 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Magic __get method.
-	 *
 	 * @param string $key Variable name
 	 * @return mixed
 	 */
@@ -517,8 +515,6 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Magic __isset method.
-	 *
 	 * @param string $key Variable name
 	 * @return bool
 	 */

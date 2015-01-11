@@ -13,14 +13,11 @@ use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use Reflector, ReflectionParameter as InternalReflectionParameter, ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
+use Reflector;
+use ReflectionParameter as InternalReflectionParameter;
+use ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
 
 
-/**
- * Reflection of a not tokenized but defined method/function parameter.
- *
- * Descendant of the internal reflection with additional features.
- */
 class ReflectionParameter extends InternalReflectionParameter implements IReflection, TokenReflection\IReflectionParameter
 {
 
@@ -39,8 +36,8 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 	/**
 	 * @param string|array $function Defining function/method
-	 * @param string $paramName Parameter name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param string $paramName
+	 * @param Broker $broker
 	 * @param \ReflectionFunctionAbstract $parent Parent reflection object
 	 */
 	public function __construct($function, $paramName, Broker $broker, InternalReflectionFunctionAbstract $parent)
@@ -158,7 +155,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	/**
 	 * Returns the declaring function reflection.
 	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionFunction|\TokenReflection\Php\ReflectionMethod
+	 * @return ReflectionFunction|ReflectionMethod
 	 */
 	public function getDeclaringFunction()
 	{
@@ -249,15 +246,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 		return $this->isDefaultValueConstant() ? parent::getDefaultValueConstantName : NULL;
 	}
 
-//	/**
-//	 * Returns if the parameter expects a callback.
-//	 *
-//	 * @return bool
-//	 */
-//	public function isCallable()
-//	{
-//		return PHP_VERSION_ID >= 50400 && parent::isCallable();
-//	}
+
 	/**
 	 * Returns the original type hint as defined in the source code.
 	 *
@@ -358,8 +347,15 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Magic __get method.
-	 *
+	 * {@inheritdoc}
+	 */
+	public function isVariadic()
+	{
+		return PHP_VERSION_ID >= 50600 && parent::isVariadic();
+	}
+
+
+	/**
 	 * @param string $key Variable name
 	 * @return mixed
 	 */
@@ -370,8 +366,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Magic __isset method.
-	 *
 	 * @param string $key Variable name
 	 * @return bool
 	 */

@@ -14,14 +14,11 @@ use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use Reflector, ReflectionMethod as InternalReflectionMethod, ReflectionParameter as InternalReflectionParameter;
+use Reflector;
+use ReflectionMethod as InternalReflectionMethod;
+use ReflectionParameter as InternalReflectionParameter;
 
 
-/**
- * Reflection of a not tokenized but defined class method.
- *
- * Descendant of the internal reflection with additional features.
- */
 class ReflectionMethod extends InternalReflectionMethod implements IReflection, TokenReflection\IReflectionMethod
 {
 
@@ -46,9 +43,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass $class Defining class
-	 * @param string $methodName Method name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param string|ReflectionClass|\ReflectionClass $class Defining class
+	 * @param string $methodName
+	 * @param Broker $broker
 	 */
 	public function __construct($class, $methodName, Broker $broker)
 	{
@@ -267,34 +264,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
-//	/**
-//	 * Returns the function/method as closure.
-//	 *
-//	 * @param object $object Object
-//	 * @return \Closure
-//	 */
-//	public function getClosure($object)
-//	{
-//		return parent::getClosure();
-//	}
-//	/**
-//	 * Returns the closure scope class.
-//	 *
-//	 * @return string|null
-//	 */
-//	public function getClosureScopeClass()
-//	{
-//		return parent::getClosureScopeClass();
-//	}
-//	/**
-//	 * Returns this pointer bound to closure.
-//	 *
-//	 * @return null
-//	 */
-//	public function getClosureThis()
-//	{
-//		return PHP_VERSION_ID >= 50400 ? parent::getClosureThis() : null;
-//	}
+
 	/**
 	 * Returns the original name when importing from a trait.
 	 *
@@ -358,6 +328,15 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	public function getPrettyName()
 	{
 		return sprintf('%s::%s()', $this->getDeclaringClassName(), $this->getName());
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isVariadic()
+	{
+		return PHP_VERSION_ID >= 50600 ? parent::isVariadic() : FALSE;
 	}
 
 

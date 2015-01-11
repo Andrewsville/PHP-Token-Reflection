@@ -86,6 +86,14 @@ interface IReflectionFunctionBase extends IReflection
 
 
 	/**
+	 * Return if the function/method is variadic.
+	 *
+	 * @return bool
+	 */
+	function isVariadic();
+
+
+	/**
 	 * Returns if the function/method is deprecated.
 	 *
 	 * @return bool

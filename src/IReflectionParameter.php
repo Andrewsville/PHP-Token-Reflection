@@ -158,6 +158,14 @@ interface IReflectionParameter extends IReflection
 
 
 	/**
+	 * Return if the parameter is variadic.
+	 *
+	 * @return bool
+	 */
+	function isVariadic();
+
+
+	/**
 	 * Returns if the parameter value is passed by reference.
 	 *
 	 * @return bool

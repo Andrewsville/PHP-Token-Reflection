@@ -13,14 +13,11 @@ use ApiGen;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
-use Reflector, ReflectionFunction as InternalReflectionFunction, ReflectionParameter as InternalReflectionParameter;
+use Reflector;
+use ReflectionFunction as InternalReflectionFunction;
+use ReflectionParameter as InternalReflectionParameter;
 
 
-/**
- * Reflection of a not tokenized but defined function.
- *
- * Descendant of the internal reflection with additional features.
- */
 class ReflectionFunction extends InternalReflectionFunction implements IReflection, TokenReflection\IReflectionFunction
 {
 
@@ -38,8 +35,8 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * @param string $functionName Function name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param string $functionName
+	 * @param Broker $broker
 	 */
 	public function __construct($functionName, Broker $broker)
 	{
@@ -230,11 +227,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns if the function definition is valid.
-	 *
-	 * Internal functions are always valid.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isValid()
 	{
@@ -250,6 +243,15 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public function getPrettyName()
 	{
 		return $this->getName() . '()';
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isVariadic()
+	{
+		return PHP_VERSION_ID >= 50600 ? parent::isVariadic() : FALSE;
 	}
 
 

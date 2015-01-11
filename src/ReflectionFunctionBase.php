@@ -58,6 +58,11 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	private $staticVariablesDefinition = [];
 
+	/**
+	 * @var bool|NULL
+	 */
+	private $isVariadic;
+
 
 	/**
 	 * Returns the name (FQN).
@@ -222,6 +227,19 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
+	 * @return bool
+	 */
+	public function isVariadic()
+	{
+		if ( ! isset($this->isVariadic)) {
+			$lastParameter = end($this->parameters);
+			$this->isVariadic = $lastParameter && $lastParameter->isVariadic();
+		};
+		return $this->isVariadic;
+	}
+
+
+	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
 	 * @return string
@@ -309,6 +327,10 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 			throw new ParseException($this, $tokenStream, 'Could find the start token.', ParseException::UNEXPECTED_TOKEN);
 		}
 		static $accepted = [T_NS_SEPARATOR => TRUE, T_STRING => TRUE, T_ARRAY => TRUE, T_CALLABLE => TRUE, T_VARIABLE => TRUE, '&' => TRUE];
+		if (PHP_VERSION_ID >= 50600 && ! isset($accepted[T_ELLIPSIS])) {
+			$accepted += [T_ELLIPSIS => TRUE];
+		}
+
 		$tokenStream->skipWhitespaces(TRUE);
 		while (NULL !== ($type = $tokenStream->getType()) && ')' !== $type) {
 			if (isset($accepted[$type])) {
