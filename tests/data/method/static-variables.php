@@ -29,4 +29,5 @@ class TokenReflection_Test_MethodStaticVariables extends TokenReflection_Test_Me
 			TokenReflection_Test_MethodStaticVariablesParent::PARENT
 		];
 	}
+
 }

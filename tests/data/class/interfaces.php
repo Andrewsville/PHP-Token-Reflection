@@ -26,6 +26,7 @@ class TokenReflection_Test_ClassInterfacesParent implements Iterator
 	function rewind()
 	{
 	}
+
 }
 
 
@@ -65,4 +66,5 @@ class TokenReflection_Test_ClassInterfaces extends TokenReflection_Test_ClassInt
 	public function offsetUnset($offset)
 	{
 	}
+
 }

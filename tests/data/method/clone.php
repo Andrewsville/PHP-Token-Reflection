@@ -11,4 +11,5 @@ class TokenReflection_Test_MethodClone
 	public function noClone()
 	{
 	}
+
 }

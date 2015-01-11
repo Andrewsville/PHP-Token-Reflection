@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
@@ -353,4 +354,5 @@ abstract class ReflectionElement extends ReflectionBase
 		// To be defined in child classes
 		return $this;
 	}
+
 }

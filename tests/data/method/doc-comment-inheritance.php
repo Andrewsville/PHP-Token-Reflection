@@ -36,6 +36,7 @@ class TokenReflection_Test_MethodDocCommentInheritanceGrandParent
 	private function method4()
 	{
 	}
+
 }
 
 
@@ -74,6 +75,7 @@ class TokenReflection_Test_MethodDocCommentInheritanceParent extends TokenReflec
 	protected function method4()
 	{
 	}
+
 }
 
 
@@ -101,4 +103,5 @@ class TokenReflection_Test_MethodDocCommentInheritance extends TokenReflection_T
 	public function method4()
 	{
 	}
+
 }

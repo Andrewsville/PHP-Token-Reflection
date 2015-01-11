@@ -125,4 +125,5 @@ class ReflectionFileTest extends TestCase
 		$this->assertFalse($broker->hasFile('#non~Existent#'));
 		$broker->getFile('#non~Existent#');
 	}
+
 }

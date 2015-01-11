@@ -402,4 +402,5 @@ class ReflectionFunctionTest extends TestCase
 	{
 		return $this->getBroker()->getFunction('create_function');
 	}
+
 }

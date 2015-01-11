@@ -54,4 +54,5 @@ abstract class ReflectionElement
 	{
 		return !empty($this->reasons);
 	}
+
 }

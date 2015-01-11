@@ -11,6 +11,7 @@ class TokenReflection_Test_ClassMethodsParent
 	protected function protectedFunction($two = FALSE)
 	{
 	}
+
 }
 
 
@@ -50,4 +51,5 @@ class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethod
 	private function privateFunction(Foo $nine = NULL)
 	{
 	}
+
 }

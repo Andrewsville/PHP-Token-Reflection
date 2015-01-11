@@ -7,4 +7,5 @@ class TokenReflection_Test_MethodClosures
 	{
 		return $i * $i;
 	}
+
 }

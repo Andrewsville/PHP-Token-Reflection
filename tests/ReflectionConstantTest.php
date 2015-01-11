@@ -568,4 +568,5 @@ class ReflectionConstantTest extends TestCase
 		$this->assertSame('bar', $constant->getValue());
 		$this->assertSame('TokenReflection_Test_ConstantOverridingBase', $constant->getDeclaringClassName());
 	}
+
 }

@@ -65,6 +65,7 @@ class TokenReflection_Test_ClassModifiersClass6 implements TokenReflection_Test_
 	{
 
 	}
+
 }
 
 
@@ -105,6 +106,7 @@ class TokenReflection_Test_ClassModifiersClass7 extends TokenReflection_Test_Cla
 	{
 
 	}
+
 }
 
 

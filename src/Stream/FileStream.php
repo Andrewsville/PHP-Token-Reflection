@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Stream;
 
 use ApiGen\TokenReflection\Broker as Broker;
@@ -39,4 +40,5 @@ class FileStream extends StreamBase
 		}
 		$this->processSource($contents);
 	}
+
 }

@@ -18,6 +18,7 @@ namespace ns {
 			return $this->constructorCalled;
 		}
 	}
+
 }
 
 namespace {
@@ -38,4 +39,5 @@ namespace {
 			return $this->constructorCalled;
 		}
 	}
+
 }

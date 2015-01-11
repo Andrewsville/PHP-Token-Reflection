@@ -124,4 +124,5 @@ class StreamTest extends TestCase
 	{
 		return new FileStream($this->getFilePath($name));
 	}
+
 }

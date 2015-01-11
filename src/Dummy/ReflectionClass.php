@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Dummy;
 
 use ApiGen;
@@ -1177,4 +1178,5 @@ class ReflectionClass implements IReflectionClass
 	{
 		return ReflectionBase::exists($this, $key);
 	}
+
 }

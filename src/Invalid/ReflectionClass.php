@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection;
@@ -1185,4 +1186,5 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		return ReflectionBase::exists($this, $key);
 	}
+
 }

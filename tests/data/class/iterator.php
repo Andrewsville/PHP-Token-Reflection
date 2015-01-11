@@ -26,4 +26,5 @@ class TokenReflection_Test_ClassIterator implements Iterator
 	function rewind()
 	{
 	}
+
 }

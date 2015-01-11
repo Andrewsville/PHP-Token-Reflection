@@ -21,6 +21,7 @@ class TokenReflection_Test_MethodAccessLevelParent
 	protected function protectedExtended()
 	{
 	}
+
 }
 
 
@@ -45,4 +46,5 @@ class TokenReflection_Test_MethodAccessLevel extends TokenReflection_Test_Method
 	public function protectedExtended()
 	{
 	}
+
 }

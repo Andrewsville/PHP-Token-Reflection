@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection;
@@ -913,4 +914,5 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		}
 		return $broker->getClass($internalReflection->getName());
 	}
+
 }

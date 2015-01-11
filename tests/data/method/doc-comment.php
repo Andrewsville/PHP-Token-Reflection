@@ -9,4 +9,5 @@ class TokenReflection_Test_MethodDocComment
 	public function docComment()
 	{
 	}
+
 }

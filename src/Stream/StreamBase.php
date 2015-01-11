@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Stream;
 
 use ApiGen\TokenReflection\Exception;
@@ -482,4 +483,5 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	{
 		return $this->getSource();
 	}
+
 }

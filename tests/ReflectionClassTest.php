@@ -1307,7 +1307,7 @@ class ReflectionClassTest extends TestCase
 	public function testClassGetSource()
 	{
 		static $expected = [
-			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n\n	public function __construct(\$three)\n	{\n	}\n\n\n	public function __destruct()\n	{\n	}\n\n\n	public final function publicFinalFunction(\$four = 1)\n	{\n	}\n\n\n	public static function publicStaticFunction(\$five = 1.1)\n	{\n	}\n\n\n	private static function privateStaticFunction(\$six = 'string', \$seven = NULL)\n	{\n	}\n\n\n	public function publicFunction(array \$eight = [])\n	{\n	}\n\n\n	private function privateFunction(Foo \$nine = NULL)\n	{\n	}\n}",
+			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n\n	public function __construct(\$three)\n	{\n	}\n\n\n	public function __destruct()\n	{\n	}\n\n\n	public final function publicFinalFunction(\$four = 1)\n	{\n	}\n\n\n	public static function publicStaticFunction(\$five = 1.1)\n	{\n	}\n\n\n	private static function privateStaticFunction(\$six = 'string', \$seven = NULL)\n	{\n	}\n\n\n	public function publicFunction(array \$eight = [])\n	{\n	}\n\n\n	private function privateFunction(Foo \$nine = NULL)\n	{\n	}\n\n}",
 			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n\n	const STRING = 'string';\n	const INTEGER = 1;\n	const FLOAT = 1.1;\n	const BOOLEAN = TRUE;\n}",
 			'docComment' => "/**\n * TokenReflection_Test_ClassDocComment.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */\nclass TokenReflection_Test_ClassDocComment\n{\n\n}"
 		];
@@ -1538,4 +1538,5 @@ class ReflectionClassTest extends TestCase
 
 		return $this->getBroker()->getClass($className);
 	}
+
 }

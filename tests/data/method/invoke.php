@@ -13,4 +13,5 @@ class TokenReflection_Test_MethodInvoke
 	{
 		return $param + $param2;
 	}
+
 }

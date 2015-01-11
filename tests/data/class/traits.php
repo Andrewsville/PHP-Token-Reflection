@@ -29,6 +29,7 @@ trait TokenReflection_Test_ClassTraitsTrait1
 	public function publicf()
 	{
 	}
+
 }
 
 
@@ -43,6 +44,7 @@ trait TokenReflection_Test_ClassTraitsTrait2
 	private function privatef()
 	{
 	}
+
 }
 
 
@@ -55,6 +57,7 @@ trait TokenReflection_Test_ClassTraitsTrait3
 	private function privatef()
 	{
 	}
+
 }
 
 
@@ -67,6 +70,7 @@ trait TokenReflection_Test_ClassTraitsTrait4
 	private function privatef()
 	{
 	}
+
 }
 
 
@@ -91,6 +95,7 @@ class TokenReflection_Test_ClassTraits2
 	public function publicf()
 	{
 	}
+
 }
 
 
@@ -103,6 +108,7 @@ class TokenReflection_Test_ClassTraits3
 	private function privatef()
 	{
 	}
+
 }
 
 
@@ -113,5 +119,6 @@ class TokenReflection_Test_ClassTraits4
 	use TokenReflection_Test_ClassTraitsTrait4 {
 		TokenReflection_Test_ClassTraitsTrait4::privatef insteadof TokenReflection_Test_ClassTraitsTrait3;
 	}
+
 }
 

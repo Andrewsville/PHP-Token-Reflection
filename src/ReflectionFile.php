@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
@@ -131,4 +132,5 @@ class ReflectionFile extends ReflectionBase
 		$this->docComment = new ReflectionAnnotation($this, NULL !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : NULL);
 		return $this;
 	}
+
 }

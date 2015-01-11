@@ -13,4 +13,5 @@ class TokenReflection_Test_MethodAbstractImplemented extends TokenReflection_Tes
 	public function abstractImplemented()
 	{
 	}
+
 }

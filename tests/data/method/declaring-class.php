@@ -11,6 +11,7 @@ class TokenReflection_Test_MethodDeclaringClassParent
 	protected function parentOverlay()
 	{
 	}
+
 }
 
 
@@ -25,4 +26,5 @@ class TokenReflection_Test_MethodDeclaringClass extends TokenReflection_Test_Met
 	public function child()
 	{
 	}
+
 }

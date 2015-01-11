@@ -8,4 +8,5 @@ class MethodNamedConstructor
 	public function MethodNamedConstructor()
 	{
 	}
+
 }

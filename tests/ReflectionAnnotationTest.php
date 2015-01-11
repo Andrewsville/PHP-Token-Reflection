@@ -33,4 +33,5 @@ class ReflectionAnnotationTest extends TestCase
 		$a = new ReflectionAnnotation($class);
 		$a->setTemplates([new \Exception()]);
 	}
+
 }

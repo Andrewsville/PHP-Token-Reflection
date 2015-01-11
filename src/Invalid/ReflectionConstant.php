@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection;
@@ -432,4 +433,5 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	{
 		return ReflectionBase::exists($this, $key);
 	}
+
 }

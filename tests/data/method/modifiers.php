@@ -93,6 +93,7 @@ class TokenReflection_Test_MethodModifiers extends TokenReflection_Test_MethodMo
 	private function privateNoStatic()
 	{
 	}
+
 }
 
 
@@ -142,6 +143,7 @@ class TokenReflection_Test_MethodModifiersChild extends TokenReflection_Test_Met
 	private function privateNoStatic()
 	{
 	}
+
 }
 
 
@@ -171,6 +173,7 @@ class TokenReflection_Test_MethodModifiersChild2 extends TokenReflection_Test_Me
 	protected function privateNoStatic()
 	{
 	}
+
 }
 
 
@@ -185,6 +188,7 @@ class TokenReflection_Test_MethodModifiersChild3 extends TokenReflection_Test_Me
 	public function privateNoStatic()
 	{
 	}
+
 }
 
 
@@ -214,4 +218,5 @@ class TokenReflection_Test_MethodModifiersChild4 extends TokenReflection_Test_Me
 	public function privateNoStatic()
 	{
 	}
+
 }

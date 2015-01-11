@@ -199,4 +199,5 @@ class ParseErrorTest extends TestCase
 			return [$prefix . '-' . $i];
 		}, range(1, $count));
 	}
+
 }

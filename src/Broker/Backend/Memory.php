@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Broker\Backend;
 
 use ApiGen\TokenReflection;
@@ -556,4 +557,5 @@ class Memory implements Broker\Backend
 		}
 		return $allClasses;
 	}
+
 }

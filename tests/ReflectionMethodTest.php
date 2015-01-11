@@ -602,4 +602,5 @@ class ReflectionMethodTest extends TestCase
 	{
 		return $this->getBroker()->getClass('Exception')->getConstructor();
 	}
+
 }

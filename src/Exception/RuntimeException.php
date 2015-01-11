@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
+
 namespace ApiGen\TokenReflection\Exception;
 
 use ApiGen\TokenReflection\IReflection;
@@ -66,4 +67,5 @@ class RuntimeException extends BaseException
 	{
 		return NULL === $this->sender ? '' : sprintf('Thrown when working with "%s".', $this->sender->getPrettyName());
 	}
+
 }

@@ -14,6 +14,7 @@ class TokenReflection_Test_ParameterDocCommentInheritanceGrandParent
 	{
 
 	}
+
 }
 
 
@@ -27,6 +28,7 @@ class TokenReflection_Test_ParameterDocCommentInheritanceParent extends TokenRef
 	{
 
 	}
+
 }
 
 
@@ -42,4 +44,5 @@ class TokenReflection_Test_ParameterDocCommentInheritance extends TokenReflectio
 	{
 
 	}
+
 }

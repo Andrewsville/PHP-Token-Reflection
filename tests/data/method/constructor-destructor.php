@@ -11,4 +11,5 @@ class TokenReflection_Test_MethodConstructorDestructor
 	public function __destruct()
 	{
 	}
+
 }

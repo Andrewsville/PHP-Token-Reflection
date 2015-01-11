@@ -64,4 +64,5 @@ class TokenReflection_Test_MethodDocCommentCopydoc
 	{
 
 	}
+
 }

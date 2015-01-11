@@ -75,6 +75,7 @@ namespace
 			static $all = [__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__];
 		}
 	}
+
 }
 
 namespace ns {
@@ -168,6 +169,7 @@ namespace ns {
 			static $all = [__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__];
 		}
 	}
+
 }
 
 namespace ns2 {
@@ -186,6 +188,7 @@ namespace ns2 {
 			static $all = [__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__];
 		}
 	}
+
 }
 
 namespace ns3 {
@@ -204,4 +207,5 @@ namespace ns3 {
 			static $all = [__NAMESPACE__, __CLASS__, __FILE__, __DIR__, __LINE__, __FUNCTION__, __METHOD__];
 		}
 	}
+
 }

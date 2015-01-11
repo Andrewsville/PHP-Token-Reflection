@@ -493,4 +493,5 @@ class ReflectionPropertyTest extends TestCase
 			$this->assertSame($value, $rfl->getProperty($name)->getDefaultValue(), $name);
 		}
 	}
+
 }

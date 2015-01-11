@@ -8,4 +8,5 @@ class MethodInNamespace
 	public function inNamespace()
 	{
 	}
+
 }

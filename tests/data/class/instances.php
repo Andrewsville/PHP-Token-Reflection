@@ -10,6 +10,7 @@ class TokenReflection_Test_ClassInstances
 	{
 		$this->private = $private;
 	}
+
 }
 
 
