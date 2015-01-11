@@ -1403,15 +1403,6 @@ class ReflectionClassTest extends TestCase
 			}
 		}
 
-		// Try the internal reflection
-		$internal = new \ReflectionClass('TokenReflection_Test_NewInstanceWithoutConstructor1');
-		try {
-			$internal->newInstanceWithoutConstructor();
-			$this->fail('ReflectionException expected.');
-		} catch (\Exception $e) {
-			$this->assertInstanceOf('ReflectionException', $e);
-		}
-
 		$token = $this->getBroker()->getClass('Exception');
 		$this->assertInstanceOf('ApiGen\TokenReflection\Php\ReflectionClass', $token);
 
@@ -1424,15 +1415,6 @@ class ReflectionClassTest extends TestCase
 			if ($e->getCode() !== RuntimeException::UNSUPPORTED) {
 				throw $e;
 			}
-		}
-
-		// Try the internal reflection
-		$internal = new \ReflectionClass('Exception');
-		try {
-			$internal->newInstanceWithoutConstructor();
-			$this->fail('ReflectionException expected.');
-		} catch (\Exception $e) {
-			$this->assertInstanceOf('ReflectionException', $e);
 		}
 
 		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
