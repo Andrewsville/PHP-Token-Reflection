@@ -12,6 +12,7 @@ use TokenReflection_Test_ClassInstances;
 
 class ReflectionClassTest extends TestCase
 {
+
 	/**
 	 * Element type.
 	 *
@@ -19,19 +20,20 @@ class ReflectionClassTest extends TestCase
 	 */
 	protected $type = 'class';
 
+
 	/**
 	 * Tests the dummy class reflection interface.
 	 */
 	public function testDummyClass()
 	{
-		static $classNames = array(
+		static $classNames = [
 			'ns\\nonexistent',
 			'nonexistent'
-		);
+		];
 
 		$broker = $this->getBroker();
 
-		$reflections = array();
+		$reflections = [];
 
 		foreach ($classNames as $className) {
 			$this->assertFalse($broker->hasClass($className));
@@ -60,7 +62,7 @@ class ReflectionClassTest extends TestCase
 			} else {
 				$this->assertTrue($class->inNamespace());
 			}
-			$this->assertSame(array(), $class->getNamespaceAliases());
+			$this->assertSame([], $class->getNamespaceAliases());
 
 			$this->assertNull($class->getExtension());
 			$this->assertFalse($class->getExtensionName());
@@ -79,7 +81,7 @@ class ReflectionClassTest extends TestCase
 			}
 
 			$this->assertFalse($class->getDocComment());
-			$this->assertSame(array(), $class->getAnnotations());
+			$this->assertSame([], $class->getAnnotations());
 			$this->assertFalse($class->hasAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 			$this->assertNull($class->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 
@@ -101,25 +103,25 @@ class ReflectionClassTest extends TestCase
 			$this->assertFalse($class->isDeprecated());
 
 			$this->assertFalse($class->isTrait());
-			$this->assertSame(array(), $class->getTraits());
-			$this->assertSame(array(), $class->getTraitNames());
-			$this->assertSame(array(), $class->getOwnTraits());
-			$this->assertSame(array(), $class->getOwnTraitNames());
-			$this->assertSame(array(), $class->getTraitAliases());
+			$this->assertSame([], $class->getTraits());
+			$this->assertSame([], $class->getTraitNames());
+			$this->assertSame([], $class->getOwnTraits());
+			$this->assertSame([], $class->getOwnTraitNames());
+			$this->assertSame([], $class->getTraitAliases());
 			$this->assertFalse($class->usesTrait('Any'));
 
 			$this->assertFalse($class->isSubclassOf('Any'));
 			$this->assertFalse($class->getParentClass());
 			$this->assertNull($class->getParentClassName());
-			$this->assertSame(array(), $class->getParentClasses());
-			$this->assertSame(array(), $class->getParentClassNameList());
+			$this->assertSame([], $class->getParentClasses());
+			$this->assertSame([], $class->getParentClassNameList());
 
 			$this->assertFalse($class->implementsInterface('Traversable'));
 			$this->assertFalse($class->implementsInterface($broker->getClass('Traversable')));
-			$this->assertSame(array(), $class->getInterfaces());
-			$this->assertSame(array(), $class->getOwnInterfaces());
-			$this->assertSame(array(), $class->getInterfaceNames());
-			$this->assertSame(array(), $class->getOwnInterfaceNames());
+			$this->assertSame([], $class->getInterfaces());
+			$this->assertSame([], $class->getOwnInterfaces());
+			$this->assertSame([], $class->getInterfaceNames());
+			$this->assertSame([], $class->getOwnInterfaceNames());
 
 			$this->assertNull($class->getConstructor());
 			$this->assertNull($class->getDestructor());
@@ -127,34 +129,34 @@ class ReflectionClassTest extends TestCase
 			$this->assertFalse($class->hasMethod('Any'));
 			$this->assertFalse($class->hasOwnMethod('Any'));
 			$this->assertFalse($class->hasTraitMethod('Any'));
-			$this->assertSame(array(), $class->getMethods());
-			$this->assertSame(array(), $class->getOwnMethods());
-			$this->assertSame(array(), $class->getTraitMethods());
+			$this->assertSame([], $class->getMethods());
+			$this->assertSame([], $class->getOwnMethods());
+			$this->assertSame([], $class->getTraitMethods());
 
 			$this->assertFalse($class->hasConstant('Any'));
 			$this->assertFalse($class->hasOwnConstant('Any'));
-			$this->assertSame(array(), $class->getConstants());
-			$this->assertSame(array(), $class->getOwnConstants());
-			$this->assertSame(array(), $class->getConstantReflections());
-			$this->assertSame(array(), $class->getOwnConstantReflections());
+			$this->assertSame([], $class->getConstants());
+			$this->assertSame([], $class->getOwnConstants());
+			$this->assertSame([], $class->getConstantReflections());
+			$this->assertSame([], $class->getOwnConstantReflections());
 
-			$this->assertSame(array(), $class->getDefaultProperties());
+			$this->assertSame([], $class->getDefaultProperties());
 			$this->assertFalse($class->hasProperty('Any'));
 			$this->assertFalse($class->hasOwnProperty('Any'));
 			$this->assertFalse($class->hasTraitProperty('Any'));
-			$this->assertSame(array(), $class->getProperties());
-			$this->assertSame(array(), $class->getOwnProperties());
-			$this->assertSame(array(), $class->getTraitProperties());
-			$this->assertSame(array(), $class->getStaticProperties());
+			$this->assertSame([], $class->getProperties());
+			$this->assertSame([], $class->getOwnProperties());
+			$this->assertSame([], $class->getTraitProperties());
+			$this->assertSame([], $class->getStaticProperties());
 
-			$this->assertSame(array(), $class->getDirectSubclasses());
-			$this->assertSame(array(), $class->getDirectSubclassNames());
-			$this->assertSame(array(), $class->getDirectImplementers());
-			$this->assertSame(array(), $class->getDirectImplementerNames());
-			$this->assertSame(array(), $class->getIndirectSubclasses());
-			$this->assertSame(array(), $class->getIndirectSubclassNames());
-			$this->assertSame(array(), $class->getIndirectImplementers());
-			$this->assertSame(array(), $class->getIndirectImplementerNames());
+			$this->assertSame([], $class->getDirectSubclasses());
+			$this->assertSame([], $class->getDirectSubclassNames());
+			$this->assertSame([], $class->getDirectImplementers());
+			$this->assertSame([], $class->getDirectImplementerNames());
+			$this->assertSame([], $class->getIndirectSubclasses());
+			$this->assertSame([], $class->getIndirectSubclassNames());
+			$this->assertSame([], $class->getIndirectImplementers());
+			$this->assertSame([], $class->getIndirectImplementerNames());
 
 			$this->assertFalse($class->isInstance(new \Exception()));
 
@@ -166,11 +168,11 @@ class ReflectionClassTest extends TestCase
 		require_once $this->getFilePath('dummy');
 
 		foreach ($reflections as $className => $reflection) {
-			$instance = $reflection->newInstance(null);
+			$instance = $reflection->newInstance(NULL);
 			$this->assertTrue($reflection->isInstance($instance));
 			$this->assertTrue($instance->wasConstrustorCalled());
 
-			$instance = $reflection->newInstanceArgs(array());
+			$instance = $reflection->newInstanceArgs([]);
 			$this->assertTrue($reflection->isInstance($instance));
 			$this->assertTrue($instance->wasConstrustorCalled());
 
@@ -179,6 +181,7 @@ class ReflectionClassTest extends TestCase
 			$this->assertFalse($instance->wasConstrustorCalled());
 		}
 	}
+
 
 	/**
 	 * Tests an exception thrown when providing an invalid object.
@@ -190,6 +193,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->implementsInterface(new \Exception());
 	}
 
+
 	/**
 	 * Tests an exception thrown when providing an invalid object.
 	 *
@@ -199,6 +203,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getDummyClassReflection()->implementsInterface($this->getBroker()->getClass('Exception'));
 	}
+
 
 	/**
 	 * Tests an exception thrown when getting a method from a dummy class reflection.
@@ -210,6 +215,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->getMethod('any');
 	}
 
+
 	/**
 	 * Tests an exception thrown when getting a property from a dummy class reflection.
 	 *
@@ -220,6 +226,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->getProperty('any');
 	}
 
+
 	/**
 	 * Tests an exception thrown when getting a static property from a dummy class reflection.
 	 *
@@ -227,8 +234,9 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testDummyClassGetStaticProperty()
 	{
-		$this->getDummyClassReflection()->getStaticPropertyValue('any', null);
+		$this->getDummyClassReflection()->getStaticPropertyValue('any', NULL);
 	}
+
 
 	/**
 	 * Tests an exception thrown when setting a static property from a dummy class reflection.
@@ -240,6 +248,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->setStaticPropertyValue('foo', 'bar');
 	}
 
+
 	/**
 	 * Tests an exception thrown when getting a constant value from a dummy class reflection.
 	 *
@@ -249,6 +258,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getDummyClassReflection()->getConstant('any');
 	}
+
 
 	/**
 	 * Tests an exception thrown when getting a constant reflection from a dummy class reflection.
@@ -260,6 +270,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->getConstantReflection('any');
 	}
 
+
 	/**
 	 * Tests an exception thrown when providing an invalid argument to isInstance() method.
 	 *
@@ -267,8 +278,9 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testDummyClassIsInstance()
 	{
-		$this->getDummyClassReflection()->isInstance(true);
+		$this->getDummyClassReflection()->isInstance(TRUE);
 	}
+
 
 	/**
 	 * Tests an exception thrown when trying to instantiate a non existent class.
@@ -280,6 +292,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->newInstanceWithoutConstructor();
 	}
 
+
 	/**
 	 * Tests an exception thrown when trying to instantiate a non existent class.
 	 *
@@ -287,8 +300,9 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testDummyNewInstance()
 	{
-		$this->getDummyClassReflection()->newInstance(null);
+		$this->getDummyClassReflection()->newInstance(NULL);
 	}
+
 
 	/**
 	 * Tests an exception thrown when trying to instantiate a non existent class.
@@ -300,6 +314,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->newInstanceArgs();
 	}
 
+
 	/**
 	 * Tests an exception thrown when providing an invalid object.
 	 *
@@ -309,6 +324,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getInternalClassReflection()->isSubclassOf(new \Exception());
 	}
+
 
 	/**
 	 * Tests an exception thrown when providing an invalid object.
@@ -320,6 +336,7 @@ class ReflectionClassTest extends TestCase
 		$this->getInternalClassReflection()->implementsInterface(new \Exception());
 	}
 
+
 	/**
 	 * Tests an exception thrown when providing an invalid object.
 	 *
@@ -329,6 +346,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getInternalClassReflection()->implementsInterface($this->getBroker()->getClass('Exception'));
 	}
+
 
 	/**
 	 * Tests an exception thrown when providing an invalid class name.
@@ -340,6 +358,7 @@ class ReflectionClassTest extends TestCase
 		$this->getInternalClassReflection()->implementsInterface('Exception');
 	}
 
+
 	/**
 	 * Tests an exception thrown when getting a method from an internal class reflection.
 	 *
@@ -349,6 +368,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getDummyClassReflection()->getMethod('~non-existent~');
 	}
+
 
 	/**
 	 * Tests an exception thrown when getting a property from an internal class reflection.
@@ -360,6 +380,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->getProperty('~non-existent~');
 	}
 
+
 	/**
 	 * Tests an exception thrown when getting a static property from an internal class reflection.
 	 *
@@ -367,8 +388,9 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testInternalClassGetStaticProperty()
 	{
-		$this->getDummyClassReflection()->getStaticPropertyValue('~non-existent~', null);
+		$this->getDummyClassReflection()->getStaticPropertyValue('~non-existent~', NULL);
 	}
+
 
 	/**
 	 * Tests an exception thrown when setting a static property from an internal class reflection.
@@ -380,6 +402,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->setStaticPropertyValue('~non', 'existent~');
 	}
 
+
 	/**
 	 * Tests an exception thrown when getting a constant value from an internal class reflection.
 	 *
@@ -389,6 +412,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getDummyClassReflection()->getConstant('~non-existent~');
 	}
+
 
 	/**
 	 * Tests an exception thrown when getting a constant reflection from an internal class reflection.
@@ -400,6 +424,7 @@ class ReflectionClassTest extends TestCase
 		$this->getDummyClassReflection()->getConstantReflection('~non-existent~');
 	}
 
+
 	/**
 	 * Tests an exception thrown when providing an invalid object.
 	 *
@@ -409,6 +434,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getInternalClassReflection()->usesTrait(new \Exception());
 	}
+
 
 	/**
 	 * Tests an exception thrown when providing an invalid object.
@@ -420,6 +446,7 @@ class ReflectionClassTest extends TestCase
 		$this->getInternalClassReflection()->usesTrait($this->getBroker()->getClass('Exception'));
 	}
 
+
 	/**
 	 * Tests an exception thrown when providing an invalid class name.
 	 *
@@ -430,6 +457,7 @@ class ReflectionClassTest extends TestCase
 		$this->getInternalClassReflection()->usesTrait('Exception');
 	}
 
+
 	/**
 	 * Tests an exception thrown when it is impossible to create an instance without invoking the constructor.
 	 *
@@ -439,6 +467,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$this->getInternalClassReflection()->newInstanceWithoutConstructor();
 	}
+
 
 	/**
 	 * Tests an exception thrown when it is impossible to create an instance without invoking the constructor.
@@ -451,6 +480,7 @@ class ReflectionClassTest extends TestCase
 		$reflection->newInstanceWithoutConstructor();
 	}
 
+
 	/**
 	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
 	 *
@@ -460,6 +490,7 @@ class ReflectionClassTest extends TestCase
 	{
 		ReflectionClass::create(new \ReflectionFunction('create_function'), $this->getBroker());
 	}
+
 
 	/**
 	 * Tests getting of class constants.
@@ -481,8 +512,8 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getConstant('NONEXISTENT'), $rfl->token->getConstant('NONEXISTENT'));
 		$this->assertFalse($rfl->token->getConstant('NONEXISTENT'));
 		$this->assertSame($rfl->internal->getConstants(), $rfl->token->getConstants());
-		$this->assertSame(array('STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => true, 'PARENT' => 'parent'), $rfl->token->getConstants());
-		$this->assertSame(array('STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => true), $rfl->token->getOwnConstants());
+		$this->assertSame(['STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => TRUE, 'PARENT' => 'parent'], $rfl->token->getConstants());
+		$this->assertSame(['STRING' => 'string', 'INTEGER' => 1, 'FLOAT' => 1.1, 'BOOLEAN' => TRUE], $rfl->token->getOwnConstants());
 		$this->assertSame(range(0, 3), array_keys($rfl->token->getOwnConstantReflections()));
 		foreach ($rfl->token->getOwnConstantReflections() as $constant) {
 			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionConstant', $constant);
@@ -497,9 +528,9 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getConstant('NONEXISTENT'), $rfl->token->getConstant('NONEXISTENT'));
 		$this->assertFalse($rfl->token->getConstant('NONEXISTENT'));
 		$this->assertSame($rfl->internal->getConstants(), $rfl->token->getConstants());
-		$this->assertSame(array(), $rfl->token->getConstants());
-		$this->assertSame(array(), $rfl->token->getOwnConstants());
-		$this->assertSame(array(), $rfl->token->getOwnConstantReflections());
+		$this->assertSame([], $rfl->token->getConstants());
+		$this->assertSame([], $rfl->token->getOwnConstants());
+		$this->assertSame([], $rfl->token->getOwnConstantReflections());
 
 		$token = $this->getBroker()->getClass('RecursiveDirectoryIterator');
 		$this->assertTrue($token->hasConstant('CURRENT_AS_PATHNAME'));
@@ -509,6 +540,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame('FilesystemIterator', $token->getConstantReflection('CURRENT_AS_PATHNAME')->getDeclaringClassName());
 	}
 
+
 	/**
 	 * Tests getting of class properties.
 	 */
@@ -516,7 +548,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$rfl = $this->getClassReflection('properties');
 
-		$filters = array(\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE);
+		$filters = [\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE];
 		foreach ($this->getFilterCombinations($filters) as $filter) {
 			$this->assertSame(array_keys($rfl->internal->getProperties($filter)), array_keys($rfl->token->getProperties($filter)));
 			foreach ($rfl->token->getProperties($filter) as $property) {
@@ -528,12 +560,12 @@ class ReflectionClassTest extends TestCase
 		}
 
 		$this->assertSame($rfl->internal->getDefaultProperties(), $rfl->token->getDefaultProperties());
-		$this->assertSame(array('publicStatic' => true, 'privateStatic' => 'something', 'protectedStatic' => 1, 'public' => false, 'private' => '', 'protected' => 0), $rfl->token->getDefaultProperties());
+		$this->assertSame(['publicStatic' => TRUE, 'privateStatic' => 'something', 'protectedStatic' => 1, 'public' => FALSE, 'private' => '', 'protected' => 0], $rfl->token->getDefaultProperties());
 
 		$this->assertSame($rfl->internal->getStaticProperties(), $rfl->token->getStaticProperties());
-		$this->assertSame(array('publicStatic' => true, 'privateStatic' => 'something', 'protectedStatic' => 1), $rfl->token->getStaticProperties());
+		$this->assertSame(['publicStatic' => TRUE, 'privateStatic' => 'something', 'protectedStatic' => 1], $rfl->token->getStaticProperties());
 
-		$properties = array('public', 'publicStatic', 'protectedStatic', 'protectedStatic', 'private', 'privateStatic');
+		$properties = ['public', 'publicStatic', 'protectedStatic', 'protectedStatic', 'private', 'privateStatic'];
 		foreach ($properties as $property) {
 			$this->assertSame($rfl->internal->hasProperty($property), $rfl->token->hasProperty($property));
 			$this->assertTrue($rfl->token->hasProperty($property));
@@ -541,11 +573,11 @@ class ReflectionClassTest extends TestCase
 			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $rfl->token->getProperty($property));
 		}
 
-		$properties = array('public', 'publicStatic', 'private', 'privateStatic');
+		$properties = ['public', 'publicStatic', 'private', 'privateStatic'];
 		foreach ($properties as $property) {
 			$this->assertTrue($rfl->token->hasOwnProperty($property));
 		}
-		$properties = array('protectedStatic', 'protectedStatic');
+		$properties = ['protectedStatic', 'protectedStatic'];
 		foreach ($properties as $property) {
 			$this->assertFalse($rfl->token->hasOwnProperty($property));
 		}
@@ -584,8 +616,8 @@ class ReflectionClassTest extends TestCase
 			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
 		}
 
-		$this->assertSame($rfl->internal->setStaticPropertyValue('publicStatic', false), $rfl->token->setStaticPropertyValue('publicStatic', false));
-		$this->assertNull($rfl->token->setStaticPropertyValue('publicStatic', false));
+		$this->assertSame($rfl->internal->setStaticPropertyValue('publicStatic', FALSE), $rfl->token->setStaticPropertyValue('publicStatic', FALSE));
+		$this->assertNull($rfl->token->setStaticPropertyValue('publicStatic', FALSE));
 		$this->assertSame($rfl->internal->getStaticPropertyValue('publicStatic'), $rfl->token->getStaticPropertyValue('publicStatic'));
 		$this->assertFalse($rfl->token->getStaticPropertyValue('publicStatic'));
 
@@ -612,12 +644,12 @@ class ReflectionClassTest extends TestCase
 		$rfl = $this->getClassReflection('noProperties');
 
 		$this->assertSame($rfl->internal->getDefaultProperties(), $rfl->token->getDefaultProperties());
-		$this->assertSame(array(), $rfl->token->getDefaultProperties());
+		$this->assertSame([], $rfl->token->getDefaultProperties());
 		$this->assertSame($rfl->internal->getProperties(), $rfl->token->getProperties());
-		$this->assertSame(array(), $rfl->token->getProperties());
-		$this->assertSame(array(), $rfl->token->getOwnProperties());
+		$this->assertSame([], $rfl->token->getProperties());
+		$this->assertSame([], $rfl->token->getOwnProperties());
 		$this->assertSame($rfl->internal->getStaticProperties(), $rfl->token->getStaticProperties());
-		$this->assertSame(array(), $rfl->token->getStaticProperties());
+		$this->assertSame([], $rfl->token->getStaticProperties());
 
 		$this->assertSame($rfl->internal->hasProperty('nonExistent'), $rfl->token->hasProperty('nonExistent'));
 		$this->assertFalse($rfl->token->hasProperty('nonExistent'));
@@ -655,7 +687,7 @@ class ReflectionClassTest extends TestCase
 
 		$rfl = $this->getClassReflection('doubleProperties');
 
-		$filters = array(\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE);
+		$filters = [\ReflectionProperty::IS_STATIC, \ReflectionProperty::IS_PUBLIC, \ReflectionProperty::IS_PROTECTED, \ReflectionProperty::IS_PRIVATE];
 		foreach ($this->getFilterCombinations($filters) as $filter) {
 			$this->assertSame(array_keys($rfl->internal->getProperties($filter)), array_keys($rfl->token->getProperties($filter)), $filter);
 			foreach ($rfl->token->getProperties($filter) as $property) {
@@ -667,12 +699,12 @@ class ReflectionClassTest extends TestCase
 		}
 
 		$this->assertSame($rfl->internal->getDefaultProperties(), $rfl->token->getDefaultProperties());
-		$this->assertSame(array('protectedOne' => 1, 'protectedTwo' => 0, 'publicOne' => true, 'publicTwo' => false, 'privateOne' => 'something', 'privateTwo' => ''), $rfl->token->getDefaultProperties());
+		$this->assertSame(['protectedOne' => 1, 'protectedTwo' => 0, 'publicOne' => TRUE, 'publicTwo' => FALSE, 'privateOne' => 'something', 'privateTwo' => ''], $rfl->token->getDefaultProperties());
 
 		$this->assertSame($rfl->internal->getStaticProperties(), $rfl->token->getStaticProperties());
-		$this->assertSame(array('protectedOne' => 1, 'protectedTwo' => 0), $rfl->token->getStaticProperties());
+		$this->assertSame(['protectedOne' => 1, 'protectedTwo' => 0], $rfl->token->getStaticProperties());
 
-		$properties = array('publicOne', 'publicTwo', 'protectedOne', 'protectedTwo', 'privateOne', 'privateTwo');
+		$properties = ['publicOne', 'publicTwo', 'protectedOne', 'protectedTwo', 'privateOne', 'privateTwo'];
 		foreach ($properties as $property) {
 			$this->assertSame($rfl->internal->hasProperty($property), $rfl->token->hasProperty($property));
 			$this->assertTrue($rfl->token->hasProperty($property));
@@ -680,6 +712,7 @@ class ReflectionClassTest extends TestCase
 			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $rfl->token->getProperty($property));
 		}
 	}
+
 
 	/**
 	 * Tests if class is instantiable or cloneable.
@@ -711,12 +744,13 @@ class ReflectionClassTest extends TestCase
 		$this->assertFalse($rfl->token->isCloneable());
 	}
 
+
 	/**
 	 * Tests class modifiers.
 	 */
 	public function testModifiers()
 	{
-		static $classes = array(
+		static $classes = [
 			'TokenReflection_Test_ClassModifiersIface1',
 			'TokenReflection_Test_ClassModifiersIface2',
 			'TokenReflection_Test_ClassModifiersIface3',
@@ -729,7 +763,7 @@ class ReflectionClassTest extends TestCase
 			'TokenReflection_Test_ClassModifiersClass6',
 			'TokenReflection_Test_ClassModifiersClass7',
 			'TokenReflection_Test_ClassModifiersClass8',
-		);
+		];
 
 		require_once $this->getFilePath('modifiers');
 		$this->getBroker()->process($this->getFilePath('modifiers'));
@@ -742,6 +776,7 @@ class ReflectionClassTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests getting of class methods.
 	 */
@@ -749,7 +784,7 @@ class ReflectionClassTest extends TestCase
 	{
 		$rfl = $this->getClassReflection('methods');
 
-		$filters = array(\ReflectionMethod::IS_STATIC, \ReflectionMethod::IS_PUBLIC, \ReflectionMethod::IS_PROTECTED, \ReflectionMethod::IS_PRIVATE, \ReflectionMethod::IS_ABSTRACT, \ReflectionMethod::IS_FINAL);
+		$filters = [\ReflectionMethod::IS_STATIC, \ReflectionMethod::IS_PUBLIC, \ReflectionMethod::IS_PROTECTED, \ReflectionMethod::IS_PRIVATE, \ReflectionMethod::IS_ABSTRACT, \ReflectionMethod::IS_FINAL];
 		foreach ($this->getFilterCombinations($filters) as $filter) {
 			$this->assertSame(array_keys($rfl->internal->getMethods($filter)), array_keys($rfl->token->getMethods($filter)));
 			foreach ($rfl->token->getMethods($filter) as $method) {
@@ -760,7 +795,7 @@ class ReflectionClassTest extends TestCase
 			}
 		}
 
-		$methods = array('__construct', '__destruct', 'publicFinalFunction', 'publicStaticFunction', 'protectedStaticFunction', 'privateStaticFunction', 'publicFunction', 'protectedFunction', 'privateFunction');
+		$methods = ['__construct', '__destruct', 'publicFinalFunction', 'publicStaticFunction', 'protectedStaticFunction', 'privateStaticFunction', 'publicFunction', 'protectedFunction', 'privateFunction'];
 		foreach ($methods as $method) {
 			$this->assertSame($rfl->internal->hasMethod($method), $rfl->token->hasMethod($method));
 			$this->assertTrue($rfl->token->hasMethod($method));
@@ -768,11 +803,11 @@ class ReflectionClassTest extends TestCase
 			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $rfl->token->getMethod($method));
 		}
 
-		$methods = array('__construct', '__destruct', 'publicFinalFunction', 'publicStaticFunction', 'privateStaticFunction', 'publicFunction', 'privateFunction');
+		$methods = ['__construct', '__destruct', 'publicFinalFunction', 'publicStaticFunction', 'privateStaticFunction', 'publicFunction', 'privateFunction'];
 		foreach ($methods as $method) {
 			$this->assertTrue($rfl->token->hasOwnMethod($method));
 		}
-		$methods = array('protectedStaticFunction', 'protectedFunction');
+		$methods = ['protectedStaticFunction', 'protectedFunction'];
 		foreach ($methods as $method) {
 			$this->assertFalse($rfl->token->hasOwnMethod($method));
 		}
@@ -794,8 +829,8 @@ class ReflectionClassTest extends TestCase
 		$rfl = $this->getClassReflection('noMethods');
 
 		$this->assertSame($rfl->internal->getMethods(), $rfl->token->getMethods());
-		$this->assertSame(array(), $rfl->token->getMethods());
-		$this->assertSame(array(), $rfl->token->getOwnMethods());
+		$this->assertSame([], $rfl->token->getMethods());
+		$this->assertSame([], $rfl->token->getOwnMethods());
 
 		try {
 			$rfl->token->getMethod('nonExistent');
@@ -816,6 +851,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertNull($rfl->token->getDestructor());
 	}
 
+
 	/**
 	 * Tests getting of start and end line.
 	 */
@@ -825,8 +861,9 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getStartLine(), $rfl->token->getStartLine());
 		$this->assertSame(3, $rfl->token->getStartLine());
 		$this->assertSame($rfl->internal->getEndLine(), $rfl->token->getEndLine());
-		$this->assertSame(5, $rfl->token->getEndLine());
+		$this->assertSame(6, $rfl->token->getEndLine());
 	}
+
 
 	/**
 	 * Tests if class is instance of a object and tests creating new instances.
@@ -844,9 +881,10 @@ class ReflectionClassTest extends TestCase
 
 		$this->assertEquals($rfl->internal->newInstance(1), $rfl->token->newInstance(1));
 		$this->assertInstanceOf($this->getClassName('instances'), $rfl->token->newInstance(1));
-		$this->assertEquals($rfl->internal->newInstanceArgs(array(1)), $rfl->token->newInstanceArgs(array(1)));
-		$this->assertInstanceOf($this->getClassName('instances'), $rfl->token->newInstanceArgs(array(1)));
+		$this->assertEquals($rfl->internal->newInstanceArgs([1]), $rfl->token->newInstanceArgs([1]));
+		$this->assertInstanceOf($this->getClassName('instances'), $rfl->token->newInstanceArgs([1]));
 	}
+
 
 	/**
 	 * Tests if class is abstract.
@@ -878,6 +916,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
 
+
 	/**
 	 * Tests if class is final.
 	 */
@@ -895,6 +934,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 		$this->assertSame(0, $rfl->token->getModifiers());
 	}
+
 
 	/**
 	 * Tests if class is an interface.
@@ -914,6 +954,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertTrue($rfl->token->isInstantiable());
 	}
 
+
 	/**
 	 * Tests if class implements interfaces.
 	 */
@@ -923,11 +964,11 @@ class ReflectionClassTest extends TestCase
 
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
-		$this->assertSame(array('Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'), $rfl->token->getInterfaceNames());
-		$this->assertSame(array('Countable', 'ArrayAccess', 'Serializable'), $rfl->token->getOwnInterfaceNames());
+		$this->assertSame(['Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'], $rfl->token->getInterfaceNames());
+		$this->assertSame(['Countable', 'ArrayAccess', 'Serializable'], $rfl->token->getOwnInterfaceNames());
 		$this->assertSame(array_keys($rfl->internal->getInterfaces()), array_keys($rfl->token->getInterfaces()));
-		$this->assertSame(array('Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'), array_keys($rfl->token->getInterfaces()));
-		$this->assertSame(array('Countable', 'ArrayAccess', 'Serializable'), array_keys($rfl->token->getOwnInterfaces()));
+		$this->assertSame(['Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'], array_keys($rfl->token->getInterfaces()));
+		$this->assertSame(['Countable', 'ArrayAccess', 'Serializable'], array_keys($rfl->token->getOwnInterfaces()));
 		foreach ($rfl->token->getInterfaces() as $interface) {
 			$this->assertInstanceOf('ApiGen\TokenReflection\Php\ReflectionClass', $interface);
 		}
@@ -939,23 +980,24 @@ class ReflectionClassTest extends TestCase
 		$this->assertTrue($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 
 		$token = $this->getBroker()->getClass('Iterator');
-		$this->assertSame(array('Traversable'), array_keys($token->getInterfaces()));
-		$this->assertSame(array('Traversable'), $token->getInterfaceNames());
-		$this->assertSame(array('Traversable'), array_keys($token->getOwnInterfaces()));
-		$this->assertSame(array('Traversable'), $token->getOwnInterfaceNames());
+		$this->assertSame(['Traversable'], array_keys($token->getInterfaces()));
+		$this->assertSame(['Traversable'], $token->getInterfaceNames());
+		$this->assertSame(['Traversable'], array_keys($token->getOwnInterfaces()));
+		$this->assertSame(['Traversable'], $token->getOwnInterfaceNames());
 
 		$rfl = $this->getClassReflection('noInterfaces');
 		$this->assertSame($rfl->internal->getModifiers(), $rfl->token->getModifiers());
 		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
-		$this->assertSame(array(), $rfl->token->getOwnInterfaceNames());
-		$this->assertSame(array(), $rfl->token->getInterfaceNames());
+		$this->assertSame([], $rfl->token->getOwnInterfaceNames());
+		$this->assertSame([], $rfl->token->getInterfaceNames());
 		$this->assertSame($rfl->internal->getInterfaces(), $rfl->token->getInterfaces());
-		$this->assertSame(array(), $rfl->token->getInterfaces());
-		$this->assertSame(array(), $rfl->token->getOwnInterfaces());
+		$this->assertSame([], $rfl->token->getInterfaces());
+		$this->assertSame([], $rfl->token->getOwnInterfaces());
 		$this->assertSame($rfl->internal->implementsInterface('Countable'), $rfl->token->implementsInterface('Countable'));
 		$this->assertFalse($rfl->token->implementsInterface('Countable'));
 		$this->assertFalse($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 	}
+
 
 	/**
 	 * Tests if class is iterator.
@@ -971,18 +1013,19 @@ class ReflectionClassTest extends TestCase
 		$this->assertFalse($rfl->token->isIterateable());
 	}
 
+
 	/**
 	 * Tests if class has parent.
 	 */
 	public function testParent()
 	{
 		$rfl = $this->getClassReflection('parent');
-		foreach (array('TokenReflection_Test_ClassGrandGrandParent', 'TokenReflection_Test_ClassGrandParent') as $parent) {
+		foreach (['TokenReflection_Test_ClassGrandGrandParent', 'TokenReflection_Test_ClassGrandParent'] as $parent) {
 			$this->assertSame($rfl->internal->isSubclassOf($parent), $rfl->token->isSubclassOf($parent));
 			$this->assertTrue($rfl->token->isSubclassOf($parent));
 			$this->assertTrue($rfl->token->isSubclassOf($this->getBroker()->getClass($parent)));
 		}
-		foreach (array('TokenReflection_Test_ClassParent', 'Exception', 'DateTime') as $parent) {
+		foreach (['TokenReflection_Test_ClassParent', 'Exception', 'DateTime'] as $parent) {
 			$this->assertSame($rfl->internal->isSubclassOf($parent), $rfl->token->isSubclassOf($parent));
 			$this->assertFalse($rfl->token->isSubclassOf($parent));
 		}
@@ -993,7 +1036,7 @@ class ReflectionClassTest extends TestCase
 		foreach ($rfl->token->getParentClasses() as $class) {
 			$this->assertInstanceOf('ApiGen\TokenReflection\IReflectionClass', $class);
 		}
-		$this->assertSame(array('TokenReflection_Test_ClassGrandParent', 'TokenReflection_Test_ClassGrandGrandParent', 'ReflectionClass'), $rfl->token->getParentClassNameList());
+		$this->assertSame(['TokenReflection_Test_ClassGrandParent', 'TokenReflection_Test_ClassGrandGrandParent', 'ReflectionClass'], $rfl->token->getParentClassNameList());
 
 		$rfl = $this->getClassReflection('noParent');
 		$this->assertSame($rfl->internal->isSubclassOf('Exception'), $rfl->token->isSubclassOf('Exception'));
@@ -1002,9 +1045,10 @@ class ReflectionClassTest extends TestCase
 
 		$this->assertSame($rfl->internal->getParentClass(), $rfl->token->getParentClass());
 		$this->assertFalse($rfl->token->getParentClass());
-		$this->assertSame(array(), $rfl->token->getParentClasses());
-		$this->assertSame(array(), $rfl->token->getParentClassNameList());
+		$this->assertSame([], $rfl->token->getParentClasses());
+		$this->assertSame([], $rfl->token->getParentClassNameList());
 	}
+
 
 	/**
 	 * Tests if class is user defined or internal.
@@ -1041,6 +1085,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
 
+
 	/**
 	 * Tests getting of documentation comment.
 	 */
@@ -1055,6 +1100,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+
 	/**
 	 * TestCase getting of documentation comment, when after docComment many line breaks.
 	 */
@@ -1068,6 +1114,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertFalse($rfl->token->getDocComment());
 	}
+
 
 	/**
 	 * Tests getting of inherited documentation comment.
@@ -1096,6 +1143,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($parent->token->getAnnotations(), $rfl->token->getAnnotations());
 	}
 
+
 	/**
 	 * Tests getting of copydoc documentation comment.
 	 */
@@ -1122,8 +1170,8 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame('Whatever.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertSame('Long description.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
-		$this->assertSame(array('None'), $rfl->token->getAnnotation('license'));
-		$this->assertSame(array('Another author'), $rfl->token->getAnnotation('author'));
+		$this->assertSame(['None'], $rfl->token->getAnnotation('license'));
+		$this->assertSame(['Another author'], $rfl->token->getAnnotation('author'));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentCopydocDouble');
@@ -1131,8 +1179,8 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame('Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertSame('Long description.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
-		$this->assertSame(array('None'), $rfl->token->getAnnotation('license'));
-		$this->assertSame(array('Author'), $rfl->token->getAnnotation('author'));
+		$this->assertSame(['None'], $rfl->token->getAnnotation('license'));
+		$this->assertSame(['Author'], $rfl->token->getAnnotation('author'));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentCopydocRecursive');
@@ -1140,10 +1188,10 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame('Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 		$this->assertSame('Long description.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
-		$this->assertSame(array('None'), $rfl->token->getAnnotation('license'));
-		$this->assertSame(array('Author'), $rfl->token->getAnnotation('author'));
+		$this->assertSame(['None'], $rfl->token->getAnnotation('license'));
+		$this->assertSame(['Author'], $rfl->token->getAnnotation('author'));
 
-		static $emptys = array(
+		static $emptys = [
 			'TokenReflection_Test_ClassDocCommentCopydocNotFound',
 			'TokenReflection_Test_ClassDocCommentCopydocCircle11',
 			'TokenReflection_Test_ClassDocCommentCopydocCircle12',
@@ -1151,15 +1199,16 @@ class ReflectionClassTest extends TestCase
 			'TokenReflection_Test_ClassDocCommentCopydocCircle22',
 			'TokenReflection_Test_ClassDocCommentCopydocCircle23',
 			'TokenReflection_Test_ClassDocCommentCopydocCircleSelf'
-		);
+		];
 		foreach ($emptys as $empty) {
 			$rfl = new \stdClass();
 			$rfl->internal = new InternalReflectionClass($empty);
 			$rfl->token = $this->getBroker()->getClass($empty);
 			$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
-			$this->assertSame(array(), $rfl->token->getAnnotations());
+			$this->assertSame([], $rfl->token->getAnnotations());
 		}
 	}
+
 
 	/**
 	 * Tests if class is defined in namespace.
@@ -1193,19 +1242,20 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($this->getClassName('noNamespace'), $rfl->token->getShortName());
 	}
 
+
 	/**
 	 * Tests getting of property source code.
 	 */
 	public function testPropertyGetSource()
 	{
-		static $expected = array(
-			'publicStatic' => 'public static $publicStatic = true;',
+		static $expected = [
+			'publicStatic' => 'public static $publicStatic = TRUE;',
 			'privateStatic' => 'private static $privateStatic = \'something\';',
 			'protectedStatic' => 'protected static $protectedStatic = 1;',
-			'public' => 'public $public = false;',
+			'public' => 'public $public = FALSE;',
 			'protected' => 'protected $protected = 0;',
 			'private' => 'private $private = \'\';'
-		);
+		];
 
 		$rfl = $this->getClassReflection('properties')->token;
 		foreach ($expected as $propertyName => $source) {
@@ -1213,16 +1263,17 @@ class ReflectionClassTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests getting of method source code.
 	 */
 	public function testMethodGetSource()
 	{
-		static $expected = array(
-			'protectedStaticFunction' => "protected static function protectedStaticFunction(\$one = true)\n	{\n	}",
-			'protectedFunction' => "protected function protectedFunction(\$two = false)\n	{\n	}",
+		static $expected = [
+			'protectedStaticFunction' => "protected static function protectedStaticFunction(\$one = TRUE)\n	{\n	}",
+			'protectedFunction' => "protected function protectedFunction(\$two = FALSE)\n	{\n	}",
 			'publicStaticFunction' => "public static function publicStaticFunction(\$five = 1.1)\n	{\n	}"
-		);
+		];
 
 		$rfl = $this->getClassReflection('methods')->token;
 		foreach ($expected as $methodName => $source) {
@@ -1230,17 +1281,18 @@ class ReflectionClassTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests getting of constant source code.
 	 */
 	public function testConstantGetSource()
 	{
-		static $expected = array(
+		static $expected = [
 			'PARENT' => 'PARENT = \'parent\';',
 			'STRING' => 'STRING = \'string\';',
 			'FLOAT' => 'FLOAT = 1.1;',
-			'BOOLEAN' => 'BOOLEAN = true;'
-		);
+			'BOOLEAN' => 'BOOLEAN = TRUE;'
+		];
 
 		$rfl = $this->getClassReflection('constants')->token;
 		foreach ($expected as $constantName => $source) {
@@ -1248,16 +1300,17 @@ class ReflectionClassTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests getting of class source code.
 	 */
 	public function testClassGetSource()
 	{
-		static $expected = array(
-			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n	public function __construct(\$three)\n	{\n	}\n\n	public function __destruct()\n	{\n	}\n\n	public final function publicFinalFunction(\$four = 1)\n	{\n	}\n\n	public static function publicStaticFunction(\$five = 1.1)\n	{\n	}\n\n	private static function privateStaticFunction(\$six = 'string', \$seven = null)\n	{\n	}\n\n	public function publicFunction(array \$eight = array())\n	{\n	}\n\n	private function privateFunction(Foo \$nine = null)\n	{\n	}\n}",
-			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n	const STRING = 'string';\n	const INTEGER = 1;\n	const FLOAT = 1.1;\n	const BOOLEAN = true;\n}",
-			'docComment' => "/**\n * TokenReflection_Test_ClassDocComment.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */\nclass TokenReflection_Test_ClassDocComment\n{\n}"
-		);
+		static $expected = [
+			'methods' => "class TokenReflection_Test_ClassMethods extends TokenReflection_Test_ClassMethodsParent\n{\n\n	public function __construct(\$three)\n	{\n	}\n\n\n	public function __destruct()\n	{\n	}\n\n\n	public final function publicFinalFunction(\$four = 1)\n	{\n	}\n\n\n	public static function publicStaticFunction(\$five = 1.1)\n	{\n	}\n\n\n	private static function privateStaticFunction(\$six = 'string', \$seven = NULL)\n	{\n	}\n\n\n	public function publicFunction(array \$eight = [])\n	{\n	}\n\n\n	private function privateFunction(Foo \$nine = NULL)\n	{\n	}\n}",
+			'constants' => "class TokenReflection_Test_ClassConstants extends TokenReflection_Test_ClassConstantsParent\n{\n\n	const STRING = 'string';\n	const INTEGER = 1;\n	const FLOAT = 1.1;\n	const BOOLEAN = TRUE;\n}",
+			'docComment' => "/**\n * TokenReflection_Test_ClassDocComment.\n *\n * @copyright Copyright (c) 2011\n * @author author\n * @see http://php.net\n */\nclass TokenReflection_Test_ClassDocComment\n{\n\n}"
+		];
 
 		foreach ($expected as $className => $source) {
 			$this->assertSame(
@@ -1267,12 +1320,13 @@ class ReflectionClassTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests export.
 	 */
 	public function testToString()
 	{
-		$tests = array(
+		$tests = [
 			'lines', 'docComment', 'noDocComment',
 			'constants', 'noConstants', 'properties', 'noProperties', 'doubleProperties',
 			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
@@ -1280,7 +1334,7 @@ class ReflectionClassTest extends TestCase
 			'interface', 'noInterface', 'interfaces', 'noInterfaces',
 			'iterator', 'noIterator', 'parent', 'noParent',
 			'userDefined', 'noNamespace',
-		);
+		];
 
 		$tests[] = 'traits';
 
@@ -1290,13 +1344,14 @@ class ReflectionClassTest extends TestCase
 			// $this->assertSame(InternalReflectionClass::export($this->getClassName($test), true), ReflectionClass::export($this->getBroker(), $this->getClassName($test), true));
 
 			// TestCase loading from a string
-			$rfl = $this->getClassReflection($test, true);
+			$rfl = $this->getClassReflection($test, TRUE);
 			// $this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 
-		$this->assertSame(InternalReflectionClass::export('ReflectionClass', true), ApiGen\TokenReflection\ReflectionClass::export($this->getBroker(), 'ReflectionClass', true));
-		$this->assertSame(InternalReflectionClass::export(new InternalReflectionClass('ReflectionClass'), true), ApiGen\TokenReflection\ReflectionClass::export($this->getBroker(), new InternalReflectionClass('ReflectionClass'), true));
+		$this->assertSame(InternalReflectionClass::export('ReflectionClass', TRUE), ApiGen\TokenReflection\ReflectionClass::export($this->getBroker(), 'ReflectionClass', TRUE));
+		$this->assertSame(InternalReflectionClass::export(new InternalReflectionClass('ReflectionClass'), TRUE), ApiGen\TokenReflection\ReflectionClass::export($this->getBroker(), new InternalReflectionClass('ReflectionClass'), TRUE));
 	}
+
 
 	/**
 	 * Tests traits support comparing with the internal reflection.
@@ -1305,7 +1360,7 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testTraits()
 	{
-		static $classes = array(
+		static $classes = [
 			'TokenReflection_Test_ClassTraitsTrait1',
 			'TokenReflection_Test_ClassTraitsTrait2',
 			'TokenReflection_Test_ClassTraitsTrait3',
@@ -1314,7 +1369,7 @@ class ReflectionClassTest extends TestCase
 			'TokenReflection_Test_ClassTraits2',
 			'TokenReflection_Test_ClassTraits3',
 			'TokenReflection_Test_ClassTraits4'
-		);
+		];
 
 		require_once $this->getFilePath('traits');
 		$this->getBroker()->process($this->getFilePath('traits'));
@@ -1333,21 +1388,22 @@ class ReflectionClassTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests traits support comparing with expected values.
 	 */
 	public function testTraits2()
 	{
-		static $expected = array(
-			'TokenReflection_Test_ClassTraitsTrait1' => array(true, array(), array(), array(), 0, 0),
-			'TokenReflection_Test_ClassTraitsTrait2' => array(true, array('t2privatef' => '(null)::privatef'), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 3),
-			'TokenReflection_Test_ClassTraitsTrait3' => array(true, array(), array(), array(), 0, 0),
-			'TokenReflection_Test_ClassTraitsTrait4' => array(true, array(), array(), array(), 0, 0),
-			'TokenReflection_Test_ClassTraits' => array(false, array('privatef2' => '(null)::publicf', 'publicf3' => '(null)::protectedf', 'publicfOriginal' => '(null)::publicf'), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 6),
-			'TokenReflection_Test_ClassTraits2' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait2'), array('TokenReflection_Test_ClassTraitsTrait2'), 6, 3),
-			'TokenReflection_Test_ClassTraits3' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait1'), array('TokenReflection_Test_ClassTraitsTrait1'), 6, 2),
-			'TokenReflection_Test_ClassTraits4' => array(false, array(), array('TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'), array('TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'), 2, 1)
-		);
+		static $expected = [
+			'TokenReflection_Test_ClassTraitsTrait1' => [TRUE, [], [], [], 0, 0],
+			'TokenReflection_Test_ClassTraitsTrait2' => [TRUE, ['t2privatef' => '(null)::privatef'], ['TokenReflection_Test_ClassTraitsTrait1'], ['TokenReflection_Test_ClassTraitsTrait1'], 6, 3],
+			'TokenReflection_Test_ClassTraitsTrait3' => [TRUE, [], [], [], 0, 0],
+			'TokenReflection_Test_ClassTraitsTrait4' => [TRUE, [], [], [], 0, 0],
+			'TokenReflection_Test_ClassTraits' => [FALSE, ['privatef2' => '(null)::publicf', 'publicf3' => '(null)::protectedf', 'publicfOriginal' => '(null)::publicf'], ['TokenReflection_Test_ClassTraitsTrait1'], ['TokenReflection_Test_ClassTraitsTrait1'], 6, 6],
+			'TokenReflection_Test_ClassTraits2' => [FALSE, [], ['TokenReflection_Test_ClassTraitsTrait2'], ['TokenReflection_Test_ClassTraitsTrait2'], 6, 3],
+			'TokenReflection_Test_ClassTraits3' => [FALSE, [], ['TokenReflection_Test_ClassTraitsTrait1'], ['TokenReflection_Test_ClassTraitsTrait1'], 6, 2],
+			'TokenReflection_Test_ClassTraits4' => [FALSE, [], ['TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'], ['TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'], 2, 1]
+		];
 
 		$this->getBroker()->process($this->getFilePath('traits'));
 		foreach ($expected as $className => $definition) {
@@ -1380,6 +1436,7 @@ class ReflectionClassTest extends TestCase
 			$this->assertSame($definition[5], count($reflection->getTraitMethods()), $className);
 		}
 	}
+
 
 	/**
 	 * Tests creating class instances without calling the constructor.
@@ -1431,16 +1488,17 @@ class ReflectionClassTest extends TestCase
 		$this->assertEquals($internal->newInstanceWithoutConstructor(), $token->newInstanceWithoutConstructor());
 	}
 
+
 	/**
 	 * Tests returning pretty class names.
 	 */
 	public function testPrettyNames()
 	{
-		static $names = array(
+		static $names = [
 			'ns1\\TokenReflection_Test_ClassPrettyNames',
 			'ns2\\ns3\\ns4\\TokenReflection_Test_ClassPrettyNames2',
 			'TokenReflection_Test_ClassPrettyNames3'
-		);
+		];
 
 		$broker = $this->getBroker();
 		$broker->processFile($this->getFilePath('pretty-names'));
@@ -1453,6 +1511,7 @@ class ReflectionClassTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Returns an internal class reflection.
 	 *
@@ -1463,6 +1522,7 @@ class ReflectionClassTest extends TestCase
 		return $this->getBroker()->getClass('Exception');
 	}
 
+
 	/**
 	 * Returns a non existent class reflection.
 	 *
@@ -1472,7 +1532,7 @@ class ReflectionClassTest extends TestCase
 	{
 		static $className = 'foo_bar';
 
-		if (class_exists($className, false)) {
+		if (class_exists($className, FALSE)) {
 			$this->markTestSkipped(sprintf('Class %s exists.', $className));
 		}
 

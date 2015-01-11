@@ -17,10 +17,11 @@ class BrokerTest extends TestCase
 		$this->getFileTokenReflection('empty');
 	}
 
+
 	public function testFindFiles()
 	{
 		$broker = new Broker(new Broker\Backend\Memory);
-		$files = $broker->processDirectory(realpath(__DIR__ . '/data/class'), true);
+		$files = $broker->processDirectory(realpath(__DIR__ . '/data/class'), TRUE);
 		$this->assertCount(39, $files);
 	}
 
@@ -40,6 +41,7 @@ class BrokerTest extends TestCase
 
 		$this->getBroker()->processFile($file);
 	}
+
 
 	/**
 	 * Tests an exception thrown when a file could not be processed.
@@ -73,6 +75,7 @@ class BrokerTest extends TestCase
 
 		$this->getBroker()->process($file);
 	}
+
 
 	/**
 	 * PhpUnit does not seem to let one compare two arrays without having to

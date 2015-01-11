@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,6 +13,7 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionNamespace extends IReflection
 {
+
 	/**
 	 * Returns if the namespace contains a class of the given name.
 	 *
@@ -21,6 +21,7 @@ interface IReflectionNamespace extends IReflection
 	 * @return boolean
 	 */
 	public function hasClass($className);
+
 
 	/**
 	 * Return a class reflection.
@@ -30,12 +31,14 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function getClass($className);
 
+
 	/**
 	 * Returns class reflections.
 	 *
 	 * @return array
 	 */
 	public function getClasses();
+
 
 	/**
 	 * Returns class names (FQN).
@@ -44,12 +47,14 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function getClassNames();
 
+
 	/**
 	 * Returns class unqualified names (UQN).
 	 *
 	 * @return array
 	 */
 	public function getClassShortNames();
+
 
 	/**
 	 * Returns if the namespace contains a constant of the given name.
@@ -59,6 +64,7 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function hasConstant($constantName);
 
+
 	/**
 	 * Returns a constant reflection.
 	 *
@@ -67,12 +73,14 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function getConstant($constantName);
 
+
 	/**
 	 * Returns constant reflections.
 	 *
 	 * @return array
 	 */
 	public function getConstants();
+
 
 	/**
 	 * Returns constant names (FQN).
@@ -81,12 +89,14 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function getConstantNames();
 
+
 	/**
 	 * Returns constant unqualified names (UQN).
 	 *
 	 * @return array
 	 */
 	public function getConstantShortNames();
+
 
 	/**
 	 * Returns if the namespace contains a function of the given name.
@@ -96,6 +106,7 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function hasFunction($functionName);
 
+
 	/**
 	 * Returns a function reflection.
 	 *
@@ -104,12 +115,14 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function getFunction($functionName);
 
+
 	/**
 	 * Returns function reflections.
 	 *
 	 * @return array
 	 */
 	public function getFunctions();
+
 
 	/**
 	 * Returns function names (FQN).
@@ -118,12 +131,14 @@ interface IReflectionNamespace extends IReflection
 	 */
 	public function getFunctionNames();
 
+
 	/**
 	 * Returns function unqualified names (UQN).
 	 *
 	 * @return array
 	 */
 	public function getFunctionShortNames();
+
 
 	/**
 	 * Returns the string representation of the reflection object.

@@ -1,20 +1,20 @@
 <?php
 
-
 namespace ApiGen\TokenReflection\Tests;
-
 
 use ApiGen\TokenReflection\Broker;
 
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
+
 	/**
 	 * Element type.
 	 *
 	 * @var string
 	 */
 	protected $type;
+
 
 	/**
 	 * Return a tokenized file reflection.
@@ -24,8 +24,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	protected function getFileTokenReflection($test)
 	{
-		return $this->getBroker()->processFile($this->getFilePath($test), true);
+		return $this->getBroker()->processFile($this->getFilePath($test), TRUE);
 	}
+
 
 	/**
 	 * Returns class reflections.
@@ -34,13 +35,14 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getClassReflection($test, $fromString = false)
+	protected function getClassReflection($test, $fromString = FALSE)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getClassInternalReflection($test);
 		$reflection->token = $this->getClassTokenReflection($test, $fromString);
 		return $reflection;
 	}
+
 
 	/**
 	 * Returns method reflections.
@@ -49,13 +51,14 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getMethodReflection($test, $fromString = false)
+	protected function getMethodReflection($test, $fromString = FALSE)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getMethodInternalReflection($test);
 		$reflection->token = $this->getMethodTokenReflection($test, $fromString);
 		return $reflection;
 	}
+
 
 	/**
 	 * Returns property reflections.
@@ -64,13 +67,14 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getPropertyReflection($test, $fromString = false)
+	protected function getPropertyReflection($test, $fromString = FALSE)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getPropertyInternalReflection($test);
 		$reflection->token = $this->getPropertyTokenReflection($test, $fromString);
 		return $reflection;
 	}
+
 
 	/**
 	 * Returns function reflections.
@@ -79,13 +83,14 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getFunctionReflection($test, $fromString = false)
+	protected function getFunctionReflection($test, $fromString = FALSE)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getFunctionInternalReflection($test);
 		$reflection->token = $this->getFunctionTokenReflection($test, $fromString);
 		return $reflection;
 	}
+
 
 	/**
 	 * Returns parameter reflections.
@@ -94,13 +99,14 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return \stdClass
 	 */
-	protected function getParameterReflection($test, $fromString = false)
+	protected function getParameterReflection($test, $fromString = FALSE)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getParameterInternalReflection($test);
 		$reflection->token = $this->getParameterTokenReflection($test, $fromString);
 		return $reflection;
 	}
+
 
 	/**
 	 * Returns internal class reflection.
@@ -114,6 +120,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return new \ReflectionClass($this->getClassName($test));
 	}
 
+
 	/**
 	 * Returns internal method reflection.
 	 *
@@ -124,6 +131,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	{
 		return $this->getClassInternalReflection($test)->getMethod($this->getMethodName($test));
 	}
+
 
 	/**
 	 * Returns internal property reflection.
@@ -136,6 +144,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $this->getClassInternalReflection($test)->getProperty($this->getPropertyName($test));
 	}
 
+
 	/**
 	 * Returns internal function reflection.
 	 *
@@ -147,6 +156,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		require_once $this->getFilePath($test);
 		return new \ReflectionFunction($this->getFunctionName($test));
 	}
+
 
 	/**
 	 * Returns internal parameter reflection.
@@ -162,6 +172,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $parameters[0];
 	}
 
+
 	/**
 	 * Returns tokenized class reflection.
 	 *
@@ -169,7 +180,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
-	protected function getClassTokenReflection($test, $fromString = false)
+	protected function getClassTokenReflection($test, $fromString = FALSE)
 	{
 		$broker = $this->getBroker();
 		if ($fromString) {
@@ -181,6 +192,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $broker->getClass($this->getClassName($test));
 	}
 
+
 	/**
 	 * Returns tokenized method reflection.
 	 *
@@ -188,10 +200,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return ApiGen\TokenReflection\ReflectionMethod
 	 */
-	protected function getMethodTokenReflection($test, $fromString = false)
+	protected function getMethodTokenReflection($test, $fromString = FALSE)
 	{
 		return $this->getClassTokenReflection($test, $fromString)->getMethod($this->getMethodName($test));
 	}
+
 
 	/**
 	 * Returns tokenized property reflection.
@@ -200,10 +213,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return ApiGen\TokenReflection\ReflectionProperty
 	 */
-	protected function getPropertyTokenReflection($test, $fromString = false)
+	protected function getPropertyTokenReflection($test, $fromString = FALSE)
 	{
 		return $this->getClassTokenReflection($test, $fromString)->getProperty($this->getPropertyName($test));
 	}
+
 
 	/**
 	 * Returns tokenized constant reflection.
@@ -212,10 +226,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return ApiGen\TokenReflection\ReflectionConstant
 	 */
-	protected function getConstantTokenReflection($test, $fromString = false)
+	protected function getConstantTokenReflection($test, $fromString = FALSE)
 	{
 		return $this->getClassTokenReflection($test, $fromString)->getConstantReflection($this->getConstantName($test));
 	}
+
 
 	/**
 	 * Returns tokenized function reflection.
@@ -224,7 +239,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return ApiGen\TokenReflection\ReflectionFunction
 	 */
-	protected function getFunctionTokenReflection($test, $fromString = false)
+	protected function getFunctionTokenReflection($test, $fromString = FALSE)
 	{
 		$broker = $this->getBroker();
 		if ($fromString) {
@@ -236,6 +251,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $broker->getFunction($this->getFunctionName($test));
 	}
 
+
 	/**
 	 * Returns tokenized parameter reflection.
 	 *
@@ -243,7 +259,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @param boolean $fromString
 	 * @return ApiGen\TokenReflection\ReflectionParameter
 	 */
-	protected function getParameterTokenReflection($test, $fromString = false)
+	protected function getParameterTokenReflection($test, $fromString = FALSE)
 	{
 		$broker = $this->getBroker();
 		if ($fromString) {
@@ -256,6 +272,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $parameters[0];
 	}
 
+
 	/**
 	 * Returns test file path.
 	 *
@@ -264,11 +281,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	protected function getFilePath($test)
 	{
-		$file = preg_replace_callback('~[A-Z]~', function($matches) {
+		$file = preg_replace_callback('~[A-Z]~', function ($matches) {
 			return '-' . strtolower($matches[0]);
 		}, $test);
 		return realpath(__DIR__ . '/data/' . $this->type . '/' . $file . '.php');
 	}
+
 
 	/**
 	 * Returns test class name.
@@ -281,6 +299,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return 'TokenReflection_Test_' . ucfirst($this->type) . ucfirst($test);
 	}
 
+
 	/**
 	 * Returns test method name.
 	 *
@@ -291,6 +310,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	{
 		return $test;
 	}
+
 
 	/**
 	 * Returns test property name.
@@ -303,6 +323,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $test;
 	}
 
+
 	/**
 	 * Returns test constant name.
 	 *
@@ -311,10 +332,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	protected function getConstantName($test)
 	{
-		return strtoupper(preg_replace_callback('~[A-Z]~', function($matches) {
+		return strtoupper(preg_replace_callback('~[A-Z]~', function ($matches) {
 			return '_' . $matches[0];
 		}, $test));
 	}
+
 
 	/**
 	 * Returns test function name.
@@ -327,6 +349,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return 'tokenReflection' . ucfirst($this->type) . ucfirst($test);
 	}
 
+
 	/**
 	 * @return Broker
 	 */
@@ -335,17 +358,19 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return new Broker(new Broker\Backend\Memory);
 	}
 
+
 	/**
 	 * @return Broker
 	 */
 	protected function getBroker()
 	{
-		static $broker = null;
-		if (null === $broker) {
+		static $broker = NULL;
+		if (NULL === $broker) {
 			$broker = $this->createBroker();
 		}
 		return $broker;
 	}
+
 
 	/**
 	 * Returns all filters combinations.
@@ -355,7 +380,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	protected function getFilterCombinations(array $filters)
 	{
-		$combinations = array();
+		$combinations = [];
 
 		for ($i = 0; $i < pow(2, count($filters)); $i++) {
 			$combination = 0;

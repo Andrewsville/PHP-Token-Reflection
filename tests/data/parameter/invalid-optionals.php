@@ -1,5 +1,5 @@
 <?php
 
-function tokenReflectionParameterInvalidOptionals($one = true, array $two, array $three = null)
+function tokenReflectionParameterInvalidOptionals($one = TRUE, array $two, array $three = NULL)
 {
 }

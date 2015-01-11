@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_PropertyDocCommentInheritanceGrandParent
 {
+
 	/**
 	 * Private1 short.
 	 *
@@ -29,11 +30,14 @@ class TokenReflection_Test_PropertyDocCommentInheritanceGrandParent
 	 *
 	 * @var boolean
 	 */
-	private $param4 = false;
+	private $param4 = FALSE;
+
 }
+
 
 class TokenReflection_Test_PropertyDocCommentInheritanceParent extends TokenReflection_Test_PropertyDocCommentInheritanceGrandParent
 {
+
 	/**
 	 * {@inheritdoc} Protected1 short.
 	 *
@@ -58,10 +62,13 @@ class TokenReflection_Test_PropertyDocCommentInheritanceParent extends TokenRefl
 	 * Protected4 short.
 	 */
 	protected $param4;
+
 }
+
 
 class TokenReflection_Test_PropertyDocCommentInheritance extends TokenReflection_Test_PropertyDocCommentInheritanceParent
 {
+
 	public $param1;
 
 	public $param2;
@@ -74,4 +81,5 @@ class TokenReflection_Test_PropertyDocCommentInheritance extends TokenReflection
 	public $param3;
 
 	public $param4;
+
 }

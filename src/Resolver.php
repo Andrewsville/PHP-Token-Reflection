@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,12 +13,14 @@ namespace ApiGen\TokenReflection;
  */
 class Resolver
 {
+
 	/**
 	 * Placeholder for non-existen constants.
 	 *
 	 * @var null
 	 */
 	const CONSTANT_NOT_FOUND = '~~NOT RESOLVED~~';
+
 
 	/**
 	 * Returns a fully qualified name of a class using imported/aliased namespaces.
@@ -29,14 +30,13 @@ class Resolver
 	 * @param string $namespaceName Context namespace name
 	 * @return string
 	 */
-	final public static function resolveClassFQN($className, array $aliases, $namespaceName = null)
+	final public static function resolveClassFQN($className, array $aliases, $namespaceName = NULL)
 	{
 		if ($className{0} == '\\') {
 			// FQN
 			return ltrim($className, '\\');
 		}
-
-		if (false === ($position = strpos($className, '\\'))) {
+		if (FALSE === ($position = strpos($className, '\\'))) {
 			// Plain class name
 			if (isset($aliases[$className])) {
 				return $aliases[$className];
@@ -48,9 +48,9 @@ class Resolver
 				return $aliases[$alias] . '\\' . substr($className, $position + 1);
 			}
 		}
-
-		return null === $namespaceName || '' === $namespaceName || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
+		return NULL === $namespaceName || '' === $namespaceName || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
 	}
+
 
 	/**
 	 * Returns a property/parameter/constant/static variable value definition.
@@ -72,25 +72,21 @@ class Resolver
 		} else {
 			throw new Exception\RuntimeException('Invalid reflection object given.', Exception\RuntimeException::INVALID_ARGUMENT, $reflection);
 		}
-
 		// Process __LINE__ constants; replace with the line number of the corresponding token
 		foreach ($tokens as $index => $token) {
 			if (T_LINE === $token[0]) {
-				$tokens[$index] = array(
+				$tokens[$index] = [
 					T_LNUMBER,
 					$token[2],
 					$token[2]
-				);
+				];
 			}
 		}
-
 		$source = self::getSourceCode($tokens);
-
 		$constants = self::findConstants($tokens, $reflection);
 		if (!empty($constants)) {
-			foreach (array_reverse($constants, true) as $offset => $constant) {
+			foreach (array_reverse($constants, TRUE) as $offset => $constant) {
 				$value = '';
-
 				try {
 					switch ($constant) {
 						case '__FILE__':
@@ -123,7 +119,7 @@ class Resolver
 							break;
 						case '__METHOD__':
 							if ($reflection instanceof IReflectionParameter) {
-								if (null !== $reflection->getDeclaringClassName()) {
+								if (NULL !== $reflection->getDeclaringClassName()) {
 									$value = $reflection->getDeclaringClassName() . '::' . $reflection->getDeclaringFunctionName();
 								} else {
 									$value = $reflection->getDeclaringFunctionName();
@@ -137,10 +133,10 @@ class Resolver
 							}
 							break;
 						case '__NAMESPACE__':
-							if (($reflection instanceof IReflectionConstant && null !== $reflection->getDeclaringClassName()) || $reflection instanceof IReflectionProperty) {
+							if (($reflection instanceof IReflectionConstant && NULL !== $reflection->getDeclaringClassName()) || $reflection instanceof IReflectionProperty) {
 								$value = $reflection->getDeclaringClass()->getNamespaceName();
 							} elseif ($reflection instanceof IReflectionParameter) {
-								if (null !== $reflection->getDeclaringClassName()) {
+								if (NULL !== $reflection->getDeclaringClassName()) {
 									$value = $reflection->getDeclaringClass()->getNamespaceName();
 								} else {
 									$value = $reflection->getDeclaringFunction()->getNamespaceName();
@@ -154,20 +150,17 @@ class Resolver
 						default:
 							if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
 								// Handle self:: and parent:: definitions
-
-								if ($reflection instanceof ReflectionConstant && null === $reflection->getDeclaringClassName()) {
+								if ($reflection instanceof ReflectionConstant && NULL === $reflection->getDeclaringClassName()) {
 									throw new Exception\RuntimeException('Top level constants cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
-								} elseif ($reflection instanceof ReflectionParameter && null === $reflection->getDeclaringClassName()) {
+								} elseif ($reflection instanceof ReflectionParameter && NULL === $reflection->getDeclaringClassName()) {
 									throw new Exception\RuntimeException('Function parameters cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
 								}
-
 								if (0 === stripos($constant, 'self::')) {
 									$className = $reflection->getDeclaringClassName();
 								} else {
 									$declaringClass = $reflection->getDeclaringClass();
 									$className = $declaringClass->getParentClassName() ?: self::CONSTANT_NOT_FOUND;
 								}
-
 								$constantName = $className . substr($constant, strpos($constant, '::'));
 							} else {
 								$constantName = self::resolveClassFQN($constant, $reflection->getNamespaceAliases(), $namespace);
@@ -175,20 +168,18 @@ class Resolver
 									$constantName = str_repeat('\\', $cnt) . $constantName;
 								}
 							}
-
 							$constantReflection = $reflection->getBroker()->getConstant($constantName);
 							$value = $constantReflection->getValue();
 					}
 				} catch (Exception\RuntimeException $e) {
 					$value = self::CONSTANT_NOT_FOUND;
 				}
-
-				$source = substr_replace($source, var_export($value, true), $offset, strlen($constant));
+				$source = substr_replace($source, var_export($value, TRUE), $offset, strlen($constant));
 			}
 		}
-
 		return self::evaluate(sprintf("return %s;\n", $source));
 	}
+
 
 	/**
 	 * Returns a part of the source code defined by given tokens.
@@ -199,15 +190,15 @@ class Resolver
 	final public static function getSourceCode(array $tokens)
 	{
 		if (empty($tokens)) {
-			return null;
+			return NULL;
 		}
-
 		$source = '';
 		foreach ($tokens as $token) {
 			$source .= $token[1];
 		}
 		return $source;
 	}
+
 
 	/**
 	 * Finds constant names in the token definition.
@@ -218,25 +209,23 @@ class Resolver
 	 */
 	final public static function findConstants(array $tokens, ReflectionElement $reflection)
 	{
-		static $accepted = array(
-			T_DOUBLE_COLON => true,
-			T_STRING => true,
-			T_NS_SEPARATOR => true,
-			T_CLASS_C => true,
-			T_DIR => true,
-			T_FILE => true,
-			T_LINE => true,
-			T_FUNC_C => true,
-			T_METHOD_C => true,
-			T_NS_C => true,
-			T_TRAIT_C => true
-		);
-		static $dontResolve = array('true' => true, 'false' => true, 'null' => true);
-
+		static $accepted = [
+			T_DOUBLE_COLON => TRUE,
+			T_STRING => TRUE,
+			T_NS_SEPARATOR => TRUE,
+			T_CLASS_C => TRUE,
+			T_DIR => TRUE,
+			T_FILE => TRUE,
+			T_LINE => TRUE,
+			T_FUNC_C => TRUE,
+			T_METHOD_C => TRUE,
+			T_NS_C => TRUE,
+			T_TRAIT_C => TRUE
+		];
+		static $dontResolve = ['true' => TRUE, 'false' => TRUE, 'null' => TRUE];
 		// Adding a dummy token to the end
-		$tokens[] = array(null);
-
-		$constants = array();
+		$tokens[] = [NULL];
+		$constants = [];
 		$constant = '';
 		$offset = 0;
 		foreach ($tokens as $token) {
@@ -248,13 +237,13 @@ class Resolver
 				}
 				$constant = '';
 			}
-
-			if (null !== $token[0]) {
+			if (NULL !== $token[0]) {
 				$offset += strlen($token[1]);
 			}
 		}
 		return $constants;
 	}
+
 
 	/**
 	 * Evaluates a source code.
@@ -262,7 +251,9 @@ class Resolver
 	 * @param string $source Source code
 	 * @return mixed
 	 */
-	final private static function evaluate($source) {
+	final private static function evaluate($source)
+	{
 		return eval($source);
 	}
+
 }

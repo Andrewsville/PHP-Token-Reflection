@@ -4,6 +4,7 @@ namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection\Exception\BaseException;
 
+
 /**
  * Invalid element reflection.
  *
@@ -11,12 +12,14 @@ use ApiGen\TokenReflection\Exception\BaseException;
  */
 abstract class ReflectionElement
 {
+
 	/**
 	 * Reasons why this element's reflection is invalid.
 	 *
 	 * @var array
 	 */
-	private $reasons = array();
+	private $reasons = [];
+
 
 	/**
 	 * Adds a reason why this element's reflection is invalid.
@@ -27,9 +30,9 @@ abstract class ReflectionElement
 	public function addReason(BaseException $reason)
 	{
 		$this->reasons[] = $reason;
-
 		return $this;
 	}
+
 
 	/**
 	 * Returns a list of reasons why this element's reflection is invalid.
@@ -40,6 +43,7 @@ abstract class ReflectionElement
 	{
 		return $this->reasons;
 	}
+
 
 	/**
 	 * Returns if there are any known reasons why this element's reflection is invalid.

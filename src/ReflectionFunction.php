@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
@@ -16,12 +15,14 @@ use ReflectionFunction as InternalReflectionFunction;
 
 class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFunction
 {
+
 	/**
 	 * Imported namespace/class aliases.
 	 *
 	 * @var array
 	 */
-	private $aliases = array();
+	private $aliases = [];
+
 
 	/**
 	 * Returns if the function is is disabled via the disable_functions directive.
@@ -32,6 +33,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	{
 		return $this->hasAnnotation('disabled');
 	}
+
 
 	/**
 	 * Returns the string representation of the reflection object.
@@ -64,6 +66,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 		);
 	}
 
+
 	/**
 	 * Exports a reflected object.
 	 *
@@ -73,21 +76,19 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
-	public static function export(Broker $broker, $function, $return = false)
+	public static function export(Broker $broker, $function, $return = FALSE)
 	{
 		$functionName = $function;
-
 		$function = $broker->getFunction($functionName);
-		if (null === $function) {
+		if (NULL === $function) {
 			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
-
 		if ($return) {
 			return $function->__toString();
 		}
-
 		echo $function->__toString();
 	}
+
 
 	/**
 	 * Calls the function.
@@ -99,6 +100,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 		return $this->invokeArgs(func_get_args());
 	}
 
+
 	/**
 	 * Calls the function.
 	 *
@@ -106,14 +108,14 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 * @return mixed
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required function does not exist.
 	 */
-	public function invokeArgs(array $args = array())
+	public function invokeArgs(array $args = [])
 	{
 		if (!function_exists($this->getName())) {
 			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
-
 		return call_user_func_array($this->getName(), $args);
 	}
+
 
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
@@ -125,6 +127,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 		return $this->aliases;
 	}
 
+
 	/**
 	 * Returns the function/method as closure.
 	 *
@@ -135,12 +138,12 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 		if (!function_exists($this->getName())) {
 			throw new Exception\RuntimeException('Could not invoke function; function is not defined.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
-
 		$that = $this;
-		return function() use ($that) {
+		return function () use ($that) {
 			return $that->invokeArgs(func_get_args());
 		};
 	}
+
 
 	/**
 	 * Returns the closure scope class.
@@ -149,8 +152,9 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 */
 	public function getClosureScopeClass()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns if the function definition is valid.
@@ -159,8 +163,9 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 */
 	public function isValid()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Processes the parent reflection object.
@@ -175,11 +180,11 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 		if (!$parent instanceof ReflectionFileNamespace) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace.', Exception\ParseException::INVALID_PARENT);
 		}
-
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
 		return parent::processParent($parent, $tokenStream);
 	}
+
 
 	/**
 	 * Parses reflected element metadata from the token stream.

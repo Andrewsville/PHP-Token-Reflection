@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,12 +13,14 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionMethod extends IReflectionFunctionBase
 {
+
 	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
 	public function getDeclaringClass();
+
 
 	/**
 	 * Returns the declaring class name.
@@ -28,12 +29,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function getDeclaringClassName();
 
+
 	/**
 	 * Returns method modifiers.
 	 *
 	 * @return integer
 	 */
 	public function getModifiers();
+
 
 	/**
 	 * Returns if the method is abstract.
@@ -42,12 +45,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function isAbstract();
 
+
 	/**
 	 * Returns if the method is final.
 	 *
 	 * @return boolean
 	 */
 	public function isFinal();
+
 
 	/**
 	 * Returns if the method is private.
@@ -56,12 +61,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function isPrivate();
 
+
 	/**
 	 * Returns if the method is protected.
 	 *
 	 * @return boolean
 	 */
 	public function isProtected();
+
 
 	/**
 	 * Returns if the method is public.
@@ -70,6 +77,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function isPublic();
 
+
 	/**
 	 * Returns if the method is static.
 	 *
@@ -77,13 +85,15 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function isStatic();
 
+
 	/**
 	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
 	 *
 	 * @param integer $filter Filter
 	 * @return boolean
 	 */
-	public function is($filter = null);
+	public function is($filter = NULL);
+
 
 	/**
 	 * Returns if the method is a constructor.
@@ -92,6 +102,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function isConstructor();
 
+
 	/**
 	 * Returns if the method is a destructor.
 	 *
@@ -99,12 +110,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function isDestructor();
 
+
 	/**
 	 * Returns the method prototype.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionMethod
 	 */
 	public function getPrototype();
+
 
 	/**
 	 * Calls the method on an given instance.
@@ -115,6 +128,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function invoke($object, $args);
 
+
 	/**
 	 * Calls the method on an given object.
 	 *
@@ -124,12 +138,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function invokeArgs($object, array $args);
 
+
 	/**
 	 * Sets a method to be accessible or not.
 	 *
 	 * @param boolean $accessible If the method should be accessible.
 	 */
 	public function setAccessible($accessible);
+
 
 	/**
 	 * Returns the function/method as closure.
@@ -139,12 +155,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function getClosure($object);
 
+
 	/**
 	 * Returns the original name when importing from a trait.
 	 *
 	 * @return string|null
 	 */
 	public function getOriginalName();
+
 
 	/**
 	 * Returns the original method when importing from a trait.
@@ -153,6 +171,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function getOriginal();
 
+
 	/**
 	 * Returns the original modifiers value when importing from a trait.
 	 *
@@ -160,12 +179,14 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	 */
 	public function getOriginalModifiers();
 
+
 	/**
 	 * Returns the defining trait.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
 	public function getDeclaringTrait();
+
 
 	/**
 	 * Returns the declaring trait name.

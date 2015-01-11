@@ -6,22 +6,24 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Exception;
 
 use ApiGen\TokenReflection\Broker;
+
 
 /**
  * Exception raised when working with the Broker.
  */
 class BrokerException extends BaseException
 {
+
 	/**
 	 * Processed file name.
 	 *
 	 * @var ApiGen\TokenReflection\Broker
 	 */
 	private $broker;
+
 
 	/**
 	 * Constructor.
@@ -31,12 +33,12 @@ class BrokerException extends BaseException
 	 * @param integer $code Exception code
 	 * @param ApiGen\TokenReflection\Exception\StreamException $parent Parent exception
 	 */
-	public function __construct(Broker $broker, $message, $code, StreamException $parent = null)
+	public function __construct(Broker $broker, $message, $code, StreamException $parent = NULL)
 	{
 		parent::__construct($message, $code, $parent);
-
 		$this->broker = $broker;
 	}
+
 
 	/**
 	 * Returns the current Broker.
@@ -47,6 +49,7 @@ class BrokerException extends BaseException
 	{
 		return $this->broker;
 	}
+
 
 	/**
 	 * Returns an exception description detail.

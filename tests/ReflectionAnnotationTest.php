@@ -14,6 +14,7 @@ class ReflectionAnnotationTest extends TestCase
 	 */
 	protected $type = 'annotation';
 
+
 	/**
 	 * Tests an exception thrown on an invalid docblock template.
 	 *
@@ -30,6 +31,6 @@ class ReflectionAnnotationTest extends TestCase
 		$class = $broker->getClass('AnnotationInvalidTemplate');
 
 		$a = new ReflectionAnnotation($class);
-		$a->setTemplates(array(new \Exception()));
+		$a->setTemplates([new \Exception()]);
 	}
 }

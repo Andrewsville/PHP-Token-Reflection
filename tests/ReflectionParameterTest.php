@@ -9,6 +9,7 @@ use ReflectionParameter as InternalReflectionParameter;
 
 class ReflectionParameterTest extends TestCase
 {
+
 	/**
 	 * Element type.
 	 *
@@ -34,12 +35,13 @@ class ReflectionParameterTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests if parameter allows null.
 	 */
 	public function testAllowsNull()
 	{
-		foreach (array('Class', 'Array') as $type) {
+		foreach (['Class', 'Array'] as $type) {
 			$rfl = $this->getParameterReflection('null' . $type);
 			$this->assertSame($rfl->internal->allowsNull(), $rfl->token->allowsNull());
 			$this->assertTrue($rfl->token->allowsNull());
@@ -50,13 +52,14 @@ class ReflectionParameterTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests if parameters is optional.
 	 */
 	public function testOptional()
 	{
-		$types = array('null' => null, 'true' => true, 'false' => false, 'array' => array(), 'string' => 'string', 'integer' => 1, 'float' => 1.1, 'constant' => E_NOTICE);
-		$definitions = array('null' => 'null', 'true' => 'true', 'false' => 'false', 'array' => 'array()', 'string' => "'string'", 'integer' => '1', 'float' => '1.1', 'constant' => 'E_NOTICE');
+		$types = ['null' => NULL, 'true' => TRUE, 'false' => FALSE, 'array' => [], 'string' => 'string', 'integer' => 1, 'float' => 1.1, 'constant' => E_NOTICE];
+		$definitions = ['null' => 'NULL', 'true' => 'TRUE', 'false' => 'FALSE', 'array' => '[]', 'string' => "'string'", 'integer' => '1', 'float' => '1.1', 'constant' => 'E_NOTICE'];
 		foreach ($types as $type => $value) {
 			$rfl = $this->getParameterReflection('optional' . ucfirst($type));
 			$this->assertSame($rfl->internal->isOptional(), $rfl->token->isOptional());
@@ -85,6 +88,7 @@ class ReflectionParameterTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests handling of invalid definitions of optional parameters.
 	 */
@@ -100,11 +104,11 @@ class ReflectionParameterTest extends TestCase
 		$token = $broker->getFunction('tokenReflectionParameterInvalidOptionals');
 		$internal = new \ReflectionFunction('tokenReflectionParameterInvalidOptionals');
 
-		static $params = array(
-			array('one', false, false, true),
-			array('two', false, false, false),
-			array('three', true, true, true)
-		);
+		static $params = [
+			['one', FALSE, FALSE, TRUE],
+			['two', FALSE, FALSE, FALSE],
+			['three', TRUE, TRUE, TRUE]
+		];
 
 		$parameters = $internal->getParameters();
 		$this->assertSame(count($params), count($parameters));
@@ -130,6 +134,7 @@ class ReflectionParameterTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests if parameter has array type hint.
 	 */
@@ -144,6 +149,7 @@ class ReflectionParameterTest extends TestCase
 		$this->assertFalse($rfl->token->isArray());
 	}
 
+
 	/**
 	 * Tests if parameter has callback type hint.
 	 */
@@ -157,6 +163,7 @@ class ReflectionParameterTest extends TestCase
 		$this->assertSame($rfl->internal->isCallable(), $rfl->token->isCallable());
 		$this->assertFalse($rfl->token->isCallable());
 	}
+
 
 	/**
 	 * Tests if parameter has class type hint.
@@ -175,6 +182,7 @@ class ReflectionParameterTest extends TestCase
 		$this->assertNull($rfl->token->getClassName());
 	}
 
+
 	/**
 	 * Tests if parameter is passed by reference.
 	 */
@@ -188,6 +196,7 @@ class ReflectionParameterTest extends TestCase
 		$this->assertSame($rfl->internal->isPassedByReference(), $rfl->token->isPassedByReference());
 		$this->assertFalse($rfl->token->isPassedByReference());
 	}
+
 
 	/**
 	 * Tests getting of declaring method or function.
@@ -221,28 +230,30 @@ class ReflectionParameterTest extends TestCase
 		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token->getDeclaringClass());
 	}
 
+
 	/**
 	 * Tests export.
 	 */
 	public function testToString()
 	{
-		$tests = array(
+		$tests = [
 			'declaringFunction', 'reference', 'noReference', 'class', 'noClass', 'array', 'noArray',
 			'nullClass', 'noNullClass', 'nullArray', 'noNullArray', 'noOptional',
 			'optionalNull', 'optionalTrue', 'optionalFalse', 'optionalArray', 'optionalString', 'optionalInteger', 'optionalFloat', 'optionalConstant'
-		);
+		];
 		foreach ($tests as $test) {
 			$rfl = $this->getParameterReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, true), ApiGen\TokenReflection\ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, true));
+			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, TRUE), ApiGen\TokenReflection\ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, TRUE));
 
 			// TestCase loading from a string
-			$rfl = $this->getParameterReflection($test, true);
+			$rfl = $this->getParameterReflection($test, TRUE);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 
-		$this->assertSame(InternalReflectionParameter::export('strpos', 0, true), ApiGen\TokenReflection\ReflectionParameter::export($this->getBroker(), 'strpos', 0, true));
+		$this->assertSame(InternalReflectionParameter::export('strpos', 0, TRUE), ApiGen\TokenReflection\ReflectionParameter::export($this->getBroker(), 'strpos', 0, TRUE));
 	}
+
 
 	/**
 	 * Tests getting of inherited documentation comment.
@@ -268,6 +279,7 @@ class ReflectionParameterTest extends TestCase
 		$this->assertSame(count($grandParent->token->getAnnotation('param')), count($rfl->token->getAnnotation('param')));
 	}
 
+
 	/**
 	 * Tests new PHP 5.4 features.
 	 */
@@ -276,11 +288,12 @@ class ReflectionParameterTest extends TestCase
 		$rfl = $this->getFunctionReflection('54features');
 
 		$this->assertSame(3, $rfl->internal->getNumberOfParameters());
-		foreach ($rfl->internal->getParameters() as $internal){
+		foreach ($rfl->internal->getParameters() as $internal) {
 			$token = $rfl->token->getParameter($internal->getPosition());
 			$this->assertSame($internal->getDefaultValue(), $token->getDefaultValue());
 		}
 	}
+
 
 	/**
 	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
@@ -291,6 +304,7 @@ class ReflectionParameterTest extends TestCase
 	{
 		ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
+
 
 	/**
 	 * Tests various constant (mis)definitions.
@@ -310,18 +324,19 @@ class ReflectionParameterTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests returning if a parameter has its default value defined by a constant (PHP 5.4.6+ feature).
 	 */
 	public function testDefaultValuesByConstant()
 	{
-		static $expected = array(
-			'one' => array(false, null, 'foo'),
-			'two' => array(false, null, 'bar'),
-			'three' => array(true, 'self::VALUE', 'bar'),
-			'four' => array(true, 'TokenReflection_Test_ParameterConstantValue::VALUE', 'bar'),
-			'five' => array(true, 'TOKEN_REFLECTION_PARAMETER_CONSTANT_VALUE', 'foo')
-		);
+		static $expected = [
+			'one' => [FALSE, NULL, 'foo'],
+			'two' => [FALSE, NULL, 'bar'],
+			'three' => [TRUE, 'self::VALUE', 'bar'],
+			'four' => [TRUE, 'TokenReflection_Test_ParameterConstantValue::VALUE', 'bar'],
+			'five' => [TRUE, 'TOKEN_REFLECTION_PARAMETER_CONSTANT_VALUE', 'foo']
+		];
 
 		$rfl = $this->getMethodReflection('constantValue');
 		$this->assertSame(count($expected), count($rfl->internal->getParameters()));

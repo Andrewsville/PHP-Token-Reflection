@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
@@ -16,6 +15,7 @@ use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use Reflector, ReflectionMethod as InternalReflectionMethod, ReflectionParameter as InternalReflectionParameter;
 
+
 /**
  * Reflection of a not tokenized but defined class method.
  *
@@ -23,6 +23,7 @@ use Reflector, ReflectionMethod as InternalReflectionMethod, ReflectionParameter
  */
 class ReflectionMethod extends InternalReflectionMethod implements IReflection, TokenReflection\IReflectionMethod
 {
+
 	/**
 	 * Function parameter reflections.
 	 *
@@ -42,7 +43,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 *
 	 * @var boolean
 	 */
-	private $accessible = false;
+	private $accessible = FALSE;
+
 
 	/**
 	 * Constructor.
@@ -57,6 +59,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		$this->broker = $broker;
 	}
 
+
 	/**
 	 * Returns the declaring class reflection.
 	 *
@@ -66,6 +69,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	{
 		return ReflectionClass::create(parent::getDeclaringClass(), $this->broker);
 	}
+
 
 	/**
 	 * Returns the declaring class name.
@@ -77,6 +81,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		return $this->getDeclaringClass()->getName();
 	}
 
+
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
@@ -87,6 +92,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		return $this->getDeclaringClass()->getNamespaceAliases();
 	}
 
+
 	/**
 	 * Checks if there is a particular annotation.
 	 *
@@ -95,8 +101,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function hasAnnotation($name)
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a particular annotation value.
@@ -106,8 +113,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getAnnotation($name)
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns parsed docblock.
@@ -116,8 +124,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getAnnotations()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
@@ -126,8 +135,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function isTokenized()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns the method prototype.
@@ -138,6 +148,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	{
 		return self::create(parent::getPrototype(), $this->broker);
 	}
+
 
 	/**
 	 * Returns a particular parameter.
@@ -150,12 +161,10 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	public function getParameter($parameter)
 	{
 		$parameters = $this->getParameters();
-
 		if (is_numeric($parameter)) {
 			if (!isset($parameters[$parameter])) {
 				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 			}
-
 			return $parameters[$parameter];
 		} else {
 			foreach ($parameters as $reflection) {
@@ -163,10 +172,10 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 					return $reflection;
 				}
 			}
-
 			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
+
 
 	/**
 	 * Returns function parameters.
@@ -175,16 +184,16 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getParameters()
 	{
-		if (null === $this->parameters) {
+		if (NULL === $this->parameters) {
 			$broker = $this->broker;
 			$parent = $this;
-			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
+			$this->parameters = array_map(function (InternalReflectionParameter $parameter) use ($broker, $parent) {
 				return ReflectionParameter::create($parameter, $broker, $parent);
 			}, parent::getParameters());
 		}
-
 		return $this->parameters;
 	}
+
 
 	/**
 	 * Returns if the method is set accessible.
@@ -195,6 +204,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	{
 		return $this->accessible;
 	}
+
 
 	/**
 	 * Sets a method to be accessible or not.
@@ -209,11 +219,10 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		if (PHP_VERSION_ID < 50302) {
 			throw new Exception\RuntimeException(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\RuntimeException::UNSUPPORTED, $this);
 		}
-
 		$this->accessible = $accessible;
-
 		parent::setAccessible($accessible);
 	}
+
 
 	/**
 	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
@@ -221,10 +230,11 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 * @param integer $filter Filter
 	 * @return boolean
 	 */
-	public function is($filter = null)
+	public function is($filter = NULL)
 	{
-		return null === $filter || ($this->getModifiers() & $filter);
+		return NULL === $filter || ($this->getModifiers() & $filter);
 	}
+
 
 	/**
 	 * Returns the reflection broker used by this reflection object.
@@ -236,6 +246,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		return $this->broker;
 	}
 
+
 	/**
 	 * Magic __get method.
 	 *
@@ -246,6 +257,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	{
 		return TokenReflection\ReflectionElement::get($this, $key);
 	}
+
 
 	/**
 	 * Magic __isset method.
@@ -268,7 +280,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 //	{
 //		return parent::getClosure();
 //	}
-
 //	/**
 //	 * Returns the closure scope class.
 //	 *
@@ -278,7 +289,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 //	{
 //		return parent::getClosureScopeClass();
 //	}
-
 //	/**
 //	 * Returns this pointer bound to closure.
 //	 *
@@ -288,7 +298,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 //	{
 //		return PHP_VERSION_ID >= 50400 ? parent::getClosureThis() : null;
 //	}
-
 	/**
 	 * Returns the original name when importing from a trait.
 	 *
@@ -296,8 +305,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getOriginalName()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the original method when importing from a trait.
@@ -306,8 +316,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getOriginal()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the original modifiers value when importing from a trait.
@@ -316,8 +327,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getOriginalModifiers()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the defining trait.
@@ -326,8 +338,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getDeclaringTrait()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the declaring trait name.
@@ -336,8 +349,9 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	 */
 	public function getDeclaringTraitName()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns an element pretty (docblock compatible) name.
@@ -349,23 +363,21 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 		return sprintf('%s::%s()', $this->getDeclaringClassName(), $this->getName());
 	}
 
+
 	/**
 	 * @return ApiGen\TokenReflection\Php\IReflection
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
-		static $cache = array();
-
+		static $cache = [];
 		if (!$internalReflection instanceof InternalReflectionMethod) {
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionMethod expected.', RuntimeException::INVALID_ARGUMENT);
 		}
-
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
 		if (!isset($cache[$key])) {
 			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $broker);
 		}
-
 		return $cache[$key];
 	}
 }

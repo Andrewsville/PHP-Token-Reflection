@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
@@ -15,12 +14,14 @@ use ReflectionFunction as InternalReflectionFunction;
  */
 class ReflectionFunctionTest extends TestCase
 {
+
 	/**
 	 * Element type.
 	 *
 	 * @var string
 	 */
 	protected $type = 'function';
+
 
 	/**
 	 * Tests getting of start and end line.
@@ -33,6 +34,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($rfl->internal->getEndLine(), $rfl->token->getEndLine());
 		$this->assertSame(5, $rfl->token->getEndLine());
 	}
+
 
 	/**
 	 * Tests getting of documentation comment.
@@ -48,18 +50,19 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertFalse($rfl->token->getDocComment());
 	}
 
+
 	/**
 	 * Tests getting of copydoc documentation comment.
 	 */
 	public function testCommentCopydoc()
 	{
-		static $functions = array(
+		static $functions = [
 			'tokenReflectionFunctionDocCommentCopydoc' => 'This is a function.',
 			'tokenReflectionFunctionDocCommentCopydoc2' => 'This is a function.',
 			'tokenReflectionFunctionDocCommentCopydoc3' => 'This is a function.',
-			'tokenReflectionFunctionDocCommentCopydoc4' => null,
-			'tokenReflectionFunctionDocCommentCopydoc5' => null,
-		);
+			'tokenReflectionFunctionDocCommentCopydoc4' => NULL,
+			'tokenReflectionFunctionDocCommentCopydoc5' => NULL,
+		];
 
 		$broker = $this->getBroker();
 		$broker->processFile($this->getFilePath('docCommentCopydoc'));
@@ -70,6 +73,7 @@ class ReflectionFunctionTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests getting of static variables.
 	 */
@@ -79,19 +83,20 @@ class ReflectionFunctionTest extends TestCase
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
 		$this->assertSame(
-			array(
+			[
 				'string' => 'string',
 				'integer' => 1,
 				'float' => 1.1,
-				'boolean' => true,
-				'null' => null,
-				'array' => array(1 => 1),
-				'array2' => array(1 => 1, 2 => 2),
+				'boolean' => TRUE,
+				'null' => NULL,
+				'array' => [1 => 1],
+				'array2' => [1 => 1, 2 => 2],
 				'constant' => 'constant value'
-			),
+			],
 			$rfl->token->getStaticVariables()
 		);
 	}
+
 
 	/**
 	 * Tests if function is a closure.
@@ -102,6 +107,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($rfl->internal->isClosure(), $rfl->token->isClosure());
 		$this->assertFalse($rfl->token->isClosure());
 	}
+
 
 	/**
 	 * Tests returning a closure of the function.
@@ -124,7 +130,7 @@ class ReflectionFunctionTest extends TestCase
 		$closure = $function->getClosure();
 		$this->assertInstanceOf('Closure', $closure);
 
-		static $data1 = array(1 => 1, 4 => 2, 9 => 3);
+		static $data1 = [1 => 1, 4 => 2, 9 => 3];
 		foreach ($data1 as $result => $input) {
 			$this->assertSame($result, $closure($input));
 
@@ -146,7 +152,7 @@ class ReflectionFunctionTest extends TestCase
 		$closure = $function->getClosure();
 		$this->assertInstanceOf('Closure', $closure);
 
-		static $data2 = array(-1 => 1, -2 => 2, -3 => 3);
+		static $data2 = [-1 => 1, -2 => 2, -3 => 3];
 		foreach ($data2 as $result => $input) {
 			$this->assertSame($result, $closure($input));
 
@@ -156,12 +162,13 @@ class ReflectionFunctionTest extends TestCase
 			}
 		}
 
-		static $data3 = array(-1 => array(2, -.5), 1 => array(-100, -.01), 8 => array(2, 4));
+		static $data3 = [-1 => [2, -.5], 1 => [-100, -.01], 8 => [2, 4]];
 		foreach ($data3 as $result => $input) {
 			list($a, $b) = $input;
 			$this->assertEquals($result, $closure($a, $b));
 		}
 	}
+
 
 	/**
 	 * Tests if function is deprecated.
@@ -173,6 +180,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertFalse($rfl->token->isDeprecated());
 	}
 
+
 	/**
 	 * Tests if function is disabled.
 	 */
@@ -182,6 +190,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($rfl->internal->isDisabled(), $rfl->token->isDisabled());
 		$this->assertFalse($rfl->token->isDisabled());
 	}
+
 
 	/**
 	 * Tests if function is user defined or internal.
@@ -218,6 +227,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
 
+
 	/**
 	 * Tests if function is defined in namespace.
 	 */
@@ -250,6 +260,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($this->getFunctionName('noNamespace'), $rfl->token->getShortName());
 	}
 
+
 	/**
 	 * Tests if function returns reference.
 	 */
@@ -263,6 +274,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($rfl->internal->returnsReference(), $rfl->token->returnsReference());
 		$this->assertFalse($rfl->token->returnsReference());
 	}
+
 
 	/**
 	 * Tests getting of function parameters.
@@ -289,8 +301,9 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($rfl->internal->getNumberOfRequiredParameters(), $rfl->token->getNumberOfRequiredParameters());
 		$this->assertSame(0, $rfl->token->getNumberOfRequiredParameters());
 		$this->assertSame($rfl->internal->getParameters(), $rfl->token->getParameters());
-		$this->assertSame(array(), $rfl->token->getParameters());
+		$this->assertSame([], $rfl->token->getParameters());
 	}
+
 
 	/**
 	 * Tests function invoking.
@@ -300,31 +313,33 @@ class ReflectionFunctionTest extends TestCase
 		$rfl = $this->getFunctionReflection('invoke');
 		$this->assertSame($rfl->internal->invoke(1, 2), $rfl->token->invoke(1, 2));
 		$this->assertSame(3, $rfl->token->invoke(1, 2));
-		$this->assertSame($rfl->internal->invokeArgs(array(1, 2)), $rfl->token->invokeArgs(array(1, 2)));
-		$this->assertSame(3, $rfl->token->invokeArgs(array(1, 2)));
+		$this->assertSame($rfl->internal->invokeArgs([1, 2]), $rfl->token->invokeArgs([1, 2]));
+		$this->assertSame(3, $rfl->token->invokeArgs([1, 2]));
 	}
+
 
 	/**
 	 * Tests export.
 	 */
 	public function testToString()
 	{
-		$tests = array(
+		$tests = [
 			'lines', 'docComment', 'noComment',
 			'invoke', 'noParameters', 'parameters', 'reference', 'noReference', 'noNamespace', 'userDefined', 'noClosure'
-		);
+		];
 		foreach ($tests as $test) {
 			$rfl = $this->getFunctionReflection($test);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			$this->assertSame(InternalReflectionFunction::export($this->getFunctionName($test), true), ReflectionFunction::export($this->getBroker(), $this->getFunctionName($test), true));
+			$this->assertSame(InternalReflectionFunction::export($this->getFunctionName($test), TRUE), ReflectionFunction::export($this->getBroker(), $this->getFunctionName($test), TRUE));
 
 			// TestCase loading from a string
-			$rfl = $this->getFunctionReflection($test, true);
+			$rfl = $this->getFunctionReflection($test, TRUE);
 			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
 		}
 
-		$this->assertSame(InternalReflectionFunction::export('strpos', true), ReflectionFunction::export($this->getBroker(), 'strpos', true));
+		$this->assertSame(InternalReflectionFunction::export('strpos', TRUE), ReflectionFunction::export($this->getBroker(), 'strpos', TRUE));
 	}
+
 
 	/**
 	 * Tests new PHP 5.4 features.
@@ -335,14 +350,15 @@ class ReflectionFunctionTest extends TestCase
 
 		$this->assertSame($rfl->internal->getStaticVariables(), $rfl->token->getStaticVariables());
 		$this->assertSame(
-			array(
-				'one' => array(),
-				'two' => array(array(1), '2', array(array(array(array(true))))),
+			[
+				'one' => [],
+				'two' => [[1], '2', [[[[TRUE]]]]],
 				'three' => 21
-			),
+			],
 			$rfl->token->getStaticVariables()
 		);
 	}
+
 
 	/**
 	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
@@ -354,6 +370,7 @@ class ReflectionFunctionTest extends TestCase
 		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 
+
 	/**
 	 * Tests an exception thrown when trying to get a non-existent parameter.
 	 *
@@ -364,6 +381,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->getInternalFunctionReflection()->getParameter('~non-existent~');
 	}
 
+
 	/**
 	 * Tests an exception thrown when trying to get a non-existent parameter.
 	 *
@@ -373,6 +391,7 @@ class ReflectionFunctionTest extends TestCase
 	{
 		$this->getInternalFunctionReflection()->getParameter(999);
 	}
+
 
 	/**
 	 * Returns an internal function reflection.

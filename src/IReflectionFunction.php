@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,6 +13,7 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionFunction extends IReflectionFunctionBase
 {
+
 	/**
 	 * Returns if the method is is disabled via the disable_functions directive.
 	 *
@@ -32,7 +32,6 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 * @return mixed
 	 */
 	// public function invoke();
-
 	/**
 	 * Calls the function.
 	 *
@@ -41,12 +40,14 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 */
 	public function invokeArgs(array $args);
 
+
 	/**
 	 * Returns the function/method as closure.
 	 *
 	 * @return \Closure
 	 */
 	public function getClosure();
+
 
 	/**
 	 * Returns if the function definition is valid.
@@ -56,6 +57,7 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 * @return boolean
 	 */
 	public function isValid();
+
 
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.

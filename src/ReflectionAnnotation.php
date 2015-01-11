@@ -6,16 +6,17 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
+
 
 /**
  * Docblock parser.
  */
 class ReflectionAnnotation
 {
+
 	/**
 	 * Main description annotation identifier.
 	 *
@@ -41,14 +42,14 @@ class ReflectionAnnotation
 	 *
 	 * @var array
 	 */
-	private static $copydocStack = array();
+	private static $copydocStack = [];
 
 	/**
 	 * List of applied templates.
 	 *
 	 * @var array
 	 */
-	private $templates = array();
+	private $templates = [];
 
 	/**
 	 * Parsed annotations.
@@ -73,17 +74,19 @@ class ReflectionAnnotation
 	 */
 	private $reflection;
 
+
 	/**
 	 * Constructor.
 	 *
 	 * @param ApiGen\TokenReflection\ReflectionBase $reflection Parent reflection object
 	 * @param string|boolean $docComment Docblock definition
 	 */
-	public function __construct(ReflectionBase $reflection, $docComment = false)
+	public function __construct(ReflectionBase $reflection, $docComment = FALSE)
 	{
 		$this->reflection = $reflection;
-		$this->docComment = $docComment ?: false;
+		$this->docComment = $docComment ?: FALSE;
 	}
+
 
 	/**
 	 * Returns the docblock.
@@ -95,6 +98,7 @@ class ReflectionAnnotation
 		return $this->docComment;
 	}
 
+
 	/**
 	 * Returns if the current docblock contains the requrested annotation.
 	 *
@@ -103,12 +107,12 @@ class ReflectionAnnotation
 	 */
 	public function hasAnnotation($annotation)
 	{
-		if (null === $this->annotations) {
+		if (NULL === $this->annotations) {
 			$this->parse();
 		}
-
 		return isset($this->annotations[$annotation]);
 	}
+
 
 	/**
 	 * Returns a particular annotation value.
@@ -118,12 +122,12 @@ class ReflectionAnnotation
 	 */
 	public function getAnnotation($annotation)
 	{
-		if (null === $this->annotations) {
+		if (NULL === $this->annotations) {
 			$this->parse();
 		}
-
-		return isset($this->annotations[$annotation]) ? $this->annotations[$annotation] : null;
+		return isset($this->annotations[$annotation]) ? $this->annotations[$annotation] : NULL;
 	}
+
 
 	/**
 	 * Returns all parsed annotations.
@@ -132,12 +136,12 @@ class ReflectionAnnotation
 	 */
 	public function getAnnotations()
 	{
-		if (null === $this->annotations) {
+		if (NULL === $this->annotations) {
 			$this->parse();
 		}
-
 		return $this->annotations;
 	}
+
 
 	/**
 	 * Sets Docblock templates.
@@ -160,50 +164,45 @@ class ReflectionAnnotation
 				);
 			}
 		}
-
 		$this->templates = $templates;
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses reflection object documentation.
 	 */
 	private function parse()
 	{
-		$this->annotations = array();
-
-		if (false !== $this->docComment) {
+		$this->annotations = [];
+		if (FALSE !== $this->docComment) {
 			// Parse docblock
 			$name = self::SHORT_DESCRIPTION;
 			$docblock = trim(
 				preg_replace(
-					array(
+					[
 						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_START, '~') . '~',
 						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_END, '~') . '$~',
 						'~^/\\*\\*~',
 						'~\\*/$~'
-					),
+					],
 					'',
 					$this->docComment
 				)
 			);
 			foreach (explode("\n", $docblock) as $line) {
 				$line = preg_replace('~^\\*\\s?~', '', trim($line));
-
 				// End of short description
 				if ('' === $line && self::SHORT_DESCRIPTION === $name) {
 					$name = self::LONG_DESCRIPTION;
 					continue;
 				}
-
 				// @annotation
 				if (preg_match('~^\\s*@([\\S]+)\\s*(.*)~', $line, $matches)) {
 					$name = $matches[1];
 					$this->annotations[$name][] = $matches[2];
 					continue;
 				}
-
 				// Continuation
 				if (self::SHORT_DESCRIPTION === $name || self::LONG_DESCRIPTION === $name) {
 					if (!isset($this->annotations[$name])) {
@@ -215,29 +214,26 @@ class ReflectionAnnotation
 					$this->annotations[$name][count($this->annotations[$name]) - 1] .= "\n" . $line;
 				}
 			}
-
-			array_walk_recursive($this->annotations, function(&$value) {
+			array_walk_recursive($this->annotations, function (&$value) {
 				// {@*} is a placeholder for */ (phpDocumentor compatibility)
 				$value = str_replace('{@*}', '*/', $value);
 				$value = trim($value);
 			});
 		}
-
 		if ($this->reflection instanceof ReflectionElement) {
 			// Merge docblock templates
 			$this->mergeTemplates();
-
 			// Copy annotations if the @copydoc tag is present.
 			if (!empty($this->annotations['copydoc'])) {
 				$this->copyAnnotation();
 			}
-
 			// Process docblock inheritance for supported reflections
 			if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 				$this->inheritAnnotations();
 			}
 		}
 	}
+
 
 	/**
 	 * Copies annotations if the @copydoc tag is present.
@@ -248,10 +244,8 @@ class ReflectionAnnotation
 	{
 		self::$copydocStack[] = $this->reflection;
 		$broker = $this->reflection->getBroker();
-
 		$parentNames = $this->annotations['copydoc'];
 		unset($this->annotations['copydoc']);
-
 		foreach ($parentNames as $parentName) {
 			try {
 				if ($this->reflection instanceof ReflectionClass) {
@@ -262,21 +256,19 @@ class ReflectionAnnotation
 					}
 				} elseif ($this->reflection instanceof ReflectionFunction) {
 					$parent = $broker->getFunction(rtrim($parentName, '()'));
-				} elseif ($this->reflection instanceof ReflectionConstant && null === $this->reflection->getDeclaringClassName()) {
+				} elseif ($this->reflection instanceof ReflectionConstant && NULL === $this->reflection->getDeclaringClassName()) {
 					$parent = $broker->getConstant($parentName);
 				} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty || $this->reflection instanceof ReflectionConstant) {
-					if (false !== strpos($parentName, '::')) {
+					if (FALSE !== strpos($parentName, '::')) {
 						list($className, $parentName) = explode('::', $parentName, 2);
 						$class = $broker->getClass($className);
 					} else {
 						$class = $this->reflection->getDeclaringClass();
 					}
-
 					if ($class instanceof Dummy\ReflectionClass) {
 						// The source element class is not usable
 						return;
 					}
-
 					if ($this->reflection instanceof ReflectionMethod) {
 						$parent = $class->getMethod(rtrim($parentName, '()'));
 					} elseif ($this->reflection instanceof ReflectionConstant) {
@@ -285,15 +277,12 @@ class ReflectionAnnotation
 						$parent = $class->getProperty(ltrim($parentName, '$'));
 					}
 				}
-
 				if (!empty($parent)) {
 					// Don't get into an infinite recursion loop
-					if (in_array($parent, self::$copydocStack, true)) {
+					if (in_array($parent, self::$copydocStack, TRUE)) {
 						throw new Exception\RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag.', Exception\RuntimeException::INVALID_ARGUMENT, $this->reflection);
 					}
-
 					self::$copydocStack[] = $parent;
-
 					// We can get into an infinite loop here (e.g. when two methods @copydoc from each other)
 					foreach ($parent->getAnnotations() as $name => $value) {
 						// Add annotations that are not already present
@@ -301,16 +290,15 @@ class ReflectionAnnotation
 							$this->annotations[$name] = $value;
 						}
 					}
-
 					array_pop(self::$copydocStack);
 				}
 			} catch (Exception\BaseException $e) {
 				// Ignoring links to non existent elements, ...
 			}
 		}
-
 		array_pop(self::$copydocStack);
 	}
+
 
 	/**
 	 * Merges templates with the current docblock.
@@ -321,7 +309,6 @@ class ReflectionAnnotation
 			if (0 === $index && $template->getDocComment() === $this->docComment) {
 				continue;
 			}
-
 			foreach ($template->getAnnotations() as $name => $value) {
 				if ($name === self::LONG_DESCRIPTION) {
 					// Long description
@@ -342,6 +329,7 @@ class ReflectionAnnotation
 		}
 	}
 
+
 	/**
 	 * Inherits annotations from parent classes/methods/properties if needed.
 	 *
@@ -354,14 +342,12 @@ class ReflectionAnnotation
 		} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 			$declaringClass = $this->reflection->getDeclaringClass();
 		}
-
-		$parents = array_filter(array_merge(array($declaringClass->getParentClass()), $declaringClass->getOwnInterfaces()), function($class) {
+		$parents = array_filter(array_merge([$declaringClass->getParentClass()], $declaringClass->getOwnInterfaces()), function ($class) {
 			return $class instanceof ReflectionClass;
 		});
-
 		// In case of properties and methods, look for a property/method of the same name and return
 		// and array of such members.
-		$parentDefinitions = array();
+		$parentDefinitions = [];
 		if ($this->reflection instanceof ReflectionProperty) {
 			$name = $this->reflection->getName();
 			foreach ($parents as $parent) {
@@ -369,7 +355,6 @@ class ReflectionAnnotation
 					$parentDefinitions[] = $parent->getProperty($name);
 				}
 			}
-
 			$parents = $parentDefinitions;
 		} elseif ($this->reflection instanceof ReflectionMethod) {
 			$name = $this->reflection->getName();
@@ -378,11 +363,9 @@ class ReflectionAnnotation
 					$parentDefinitions[] = $parent->getMethod($name);
 				}
 			}
-
 			$parents = $parentDefinitions;
 		}
-
-		if (false === $this->docComment) {
+		if (FALSE === $this->docComment) {
 			// Inherit the entire docblock
 			foreach ($parents as $parent) {
 				$annotations = $parent->getAnnotations();
@@ -392,7 +375,7 @@ class ReflectionAnnotation
 				}
 			}
 		} else {
-			if (isset($this->annotations[self::LONG_DESCRIPTION]) && false !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}')) {
+			if (isset($this->annotations[self::LONG_DESCRIPTION]) && FALSE !== stripos($this->annotations[self::LONG_DESCRIPTION], '{@inheritdoc}')) {
 				// Inherit long description
 				foreach ($parents as $parent) {
 					if ($parent->hasAnnotation(self::LONG_DESCRIPTION)) {
@@ -404,10 +387,9 @@ class ReflectionAnnotation
 						break;
 					}
 				}
-
 				$this->annotations[self::LONG_DESCRIPTION] = str_ireplace('{@inheritdoc}', '', $this->annotations[self::LONG_DESCRIPTION]);
 			}
-			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && false !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
+			if (isset($this->annotations[self::SHORT_DESCRIPTION]) && FALSE !== stripos($this->annotations[self::SHORT_DESCRIPTION], '{@inheritdoc}')) {
 				// Inherit short description
 				foreach ($parents as $parent) {
 					if ($parent->hasAnnotation(self::SHORT_DESCRIPTION)) {
@@ -419,11 +401,9 @@ class ReflectionAnnotation
 						break;
 					}
 				}
-
 				$this->annotations[self::SHORT_DESCRIPTION] = str_ireplace('{@inheritdoc}', '', $this->annotations[self::SHORT_DESCRIPTION]);
 			}
 		}
-
 		// In case of properties check if we need and can inherit the data type
 		if ($this->reflection instanceof ReflectionProperty && empty($this->annotations['var'])) {
 			foreach ($parents as $parent) {
@@ -433,37 +413,31 @@ class ReflectionAnnotation
 				}
 			}
 		}
-
 		if ($this->reflection instanceof ReflectionMethod) {
 			if (0 !== $this->reflection->getNumberOfParameters() && (empty($this->annotations['param']) || count($this->annotations['param']) < $this->reflection->getNumberOfParameters())) {
 				// In case of methods check if we need and can inherit parameter descriptions
-				$params = isset($this->annotations['param']) ? $this->annotations['param'] : array();
-				$complete = false;
+				$params = isset($this->annotations['param']) ? $this->annotations['param'] : [];
+				$complete = FALSE;
 				foreach ($parents as $parent) {
 					if ($parent->hasAnnotation('param')) {
 						$parentParams = array_slice($parent->getAnnotation('param'), count($params));
-
 						while (!empty($parentParams) && !$complete) {
 							array_push($params, array_shift($parentParams));
-
 							if (count($params) === $this->reflection->getNumberOfParameters()) {
-								$complete = true;
+								$complete = TRUE;
 							}
 						}
 					}
-
 					if ($complete) {
 						break;
 					}
 				}
-
 				if (!empty($params)) {
 					$this->annotations['param'] = $params;
 				}
 			}
-
 			// And check if we need and can inherit the return and throws value
-			foreach (array('return', 'throws') as $paramName) {
+			foreach (['return', 'throws'] as $paramName) {
 				if (!isset($this->annotations[$paramName])) {
 					foreach ($parents as $parent) {
 						if ($parent->hasAnnotation($paramName)) {

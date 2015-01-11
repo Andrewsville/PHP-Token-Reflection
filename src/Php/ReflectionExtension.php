@@ -6,13 +6,13 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker, TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use Reflector, ReflectionExtension as InternalReflectionExtension;
+
 
 /**
  * Reflection of a not tokenized but defined extension.
@@ -21,6 +21,7 @@ use Reflector, ReflectionExtension as InternalReflectionExtension;
  */
 class ReflectionExtension extends InternalReflectionExtension implements IReflection, TokenReflection\IReflectionExtension
 {
+
 	/**
 	 * Defined classes.
 	 *
@@ -49,6 +50,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	private $broker;
 
+
 	/**
 	 * Constructor.
 	 *
@@ -61,6 +63,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 		$this->broker = $broker;
 	}
 
+
 	/**
 	 * Returns if the constant is internal.
 	 *
@@ -68,8 +71,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public function isInternal()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the constant is user defined.
@@ -78,8 +82,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public function isUserDefined()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
@@ -88,8 +93,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public function isTokenized()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the reflection subject is deprecated.
@@ -98,8 +104,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public function isDeprecated()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a class reflection.
@@ -110,8 +117,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	public function getClass($name)
 	{
 		$classes = $this->getClasses();
-		return isset($classes[$name]) ? $classes[$name] : null;
+		return isset($classes[$name]) ? $classes[$name] : NULL;
 	}
+
 
 	/**
 	 * Returns classes defined by this extension.
@@ -120,15 +128,15 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public function getClasses()
 	{
-		if (null === $this->classes) {
+		if (NULL === $this->classes) {
 			$broker = $this->broker;
-			$this->classes = array_map(function($className) use ($broker) {
+			$this->classes = array_map(function ($className) use ($broker) {
 				return $broker->getClass($className);
 			}, $this->getClassNames());
 		}
-
 		return $this->classes;
 	}
+
 
 	/**
 	 * Returns a constant value.
@@ -139,8 +147,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	public function getConstant($name)
 	{
 		$constants = $this->getConstants();
-		return isset($constants[$name]) ? $constants[$name] : false;
+		return isset($constants[$name]) ? $constants[$name] : FALSE;
 	}
+
 
 	/**
 	 * Returns a constant reflection.
@@ -151,8 +160,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	public function getConstantReflection($name)
 	{
 		$constants = $this->getConstantReflections();
-		return isset($constants[$name]) ? $constants[$name] : null;
+		return isset($constants[$name]) ? $constants[$name] : NULL;
 	}
+
 
 	/**
 	 * Returns reflections of defined constants.
@@ -161,15 +171,15 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public function getConstantReflections()
 	{
-		if (null === $this->constants) {
+		if (NULL === $this->constants) {
 			$broker = $this->broker;
-			$this->constants = array_map(function($constantName) use ($broker) {
+			$this->constants = array_map(function ($constantName) use ($broker) {
 				return $broker->getConstant($constantName);
 			}, array_keys($this->getConstants()));
 		}
-
 		return $this->constants;
 	}
+
 
 	/**
 	 * Returns a function reflection.
@@ -180,8 +190,9 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	public function getFunction($name)
 	{
 		$functions = $this->getFunctions();
-		return isset($functions[$name]) ? $functions[$name] : null;
+		return isset($functions[$name]) ? $functions[$name] : NULL;
 	}
+
 
 	/**
 	 * Returns functions defined by this extension.
@@ -190,15 +201,15 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public function getFunctions()
 	{
-		if (null === $this->functions) {
+		if (NULL === $this->functions) {
 			$broker = $this->broker;
-			$this->classes = array_map(function($functionName) use ($broker) {
+			$this->classes = array_map(function ($functionName) use ($broker) {
 				return $broker->getFunction($functionName);
 			}, array_keys(parent::getFunctions()));
 		}
-
 		return $this->functions;
 	}
+
 
 	/**
 	 * Returns names of functions defined by this extension.
@@ -210,6 +221,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 		return array_keys($this->getFunctions());
 	}
 
+
 	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
@@ -220,6 +232,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 		return $this->getName();
 	}
 
+
 	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
@@ -229,6 +242,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	{
 		return $this->broker;
 	}
+
 
 	/**
 	 * Magic __get method.
@@ -241,6 +255,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 		return TokenReflection\ReflectionElement::get($this, $key);
 	}
 
+
 	/**
 	 * Magic __isset method.
 	 *
@@ -252,6 +267,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
+
 	/**
 	 * Creates a reflection instance.
 	 *
@@ -262,16 +278,13 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
-		static $cache = array();
-
+		static $cache = [];
 		if (!$internalReflection instanceof InternalReflectionExtension) {
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.', RuntimeException::INVALID_ARGUMENT);
 		}
-
 		if (!isset($cache[$internalReflection->getName()])) {
 			$cache[$internalReflection->getName()] = new self($internalReflection->getName(), $broker);
 		}
-
 		return $cache[$internalReflection->getName()];
 	}
 }

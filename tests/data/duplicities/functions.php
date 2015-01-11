@@ -15,9 +15,10 @@ function duplicitiesFunctions1()
 
 }
 
+
 class duplicitiesFunctions
 {
 
 }
 
-const DUPLICITIES_FUNCTIONS = true;
+const DUPLICITIES_FUNCTIONS = TRUE;

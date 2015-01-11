@@ -3,12 +3,15 @@
 namespace ns {
 	class nonexistent
 	{
-		private $constructorCalled = false;
+
+		private $constructorCalled = FALSE;
+
 
 		public function __construct()
 		{
-			$this->constructorCalled = true;
+			$this->constructorCalled = TRUE;
 		}
+
 
 		public function wasConstrustorCalled()
 		{
@@ -20,12 +23,15 @@ namespace ns {
 namespace {
 	class nonexistent
 	{
-		private $constructorCalled = false;
+
+		private $constructorCalled = FALSE;
+
 
 		public function __construct()
 		{
-			$this->constructorCalled = true;
+			$this->constructorCalled = TRUE;
 		}
+
 
 		public function wasConstrustorCalled()
 		{

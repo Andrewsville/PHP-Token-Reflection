@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,12 +13,14 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionParameter extends IReflection
 {
+
 	/**
 	 * Returns the declaring class.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
 	public function getDeclaringClass();
+
 
 	/**
 	 * Returns the declaring class name.
@@ -28,12 +29,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function getDeclaringClassName();
 
+
 	/**
 	 * Returns the declaring function.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionFunctionBase
 	 */
 	public function getDeclaringFunction();
+
 
 	/**
 	 * Returns the declaring function name.
@@ -42,12 +45,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function getDeclaringFunctionName();
 
+
 	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer
 	 */
 	public function getStartLine();
+
 
 	/**
 	 * Returns the definition end line number in the file.
@@ -56,12 +61,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function getEndLine();
 
+
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
 	 * @return string|boolean
 	 */
 	public function getDocComment();
+
 
 	/**
 	 * Returns the default value.
@@ -70,12 +77,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function getDefaultValue();
 
+
 	/**
 	 * Returns the part of the source code defining the paramter default value.
 	 *
 	 * @return string
 	 */
 	public function getDefaultValueDefinition();
+
 
 	/**
 	 * Retutns if a default value for the parameter is available.
@@ -84,12 +93,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function isDefaultValueAvailable();
 
+
 	/**
 	 * Returns if the default value is defined by a constant.
 	 *
 	 * @return boolean
 	 */
 	public function isDefaultValueConstant();
+
 
 	/**
 	 * Returns the name of the default value constant.
@@ -98,12 +109,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function getDefaultValueConstantName();
 
+
 	/**
 	 * Returns the position within all parameters.
 	 *
 	 * @return integer
 	 */
 	public function getPosition();
+
 
 	/**
 	 * Returns if the parameter expects an array.
@@ -112,12 +125,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function isArray();
 
+
 	/**
 	 * Returns reflection of the required class of the value.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
 	public function getClass();
+
 
 	/**
 	 * Returns the required class name of the value.
@@ -126,12 +141,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function getClassName();
 
+
 	/**
 	 * Returns if the the parameter allows NULL.
 	 *
 	 * @return boolean
 	 */
 	public function allowsNull();
+
 
 	/**
 	 * Returns if the parameter is optional.
@@ -140,6 +157,7 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function isOptional();
 
+
 	/**
 	 * Returns if the parameter value is passed by reference.
 	 *
@@ -147,12 +165,14 @@ interface IReflectionParameter extends IReflection
 	 */
 	public function isPassedByReference();
 
+
 	/**
 	 * Returns if the paramter value can be passed by value.
 	 *
 	 * @return boolean
 	 */
 	public function canBePassedByValue();
+
 
 	/**
 	 * Returns the string representation of the reflection object.

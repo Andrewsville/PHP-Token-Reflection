@@ -7,17 +7,7 @@
  * @author author
  * @see http://php.net
  */
-
-
-
-
-
-
-
-
-
-
-
 class TokenReflection_Test_ClassDocCommentManyLines
 {
+
 }

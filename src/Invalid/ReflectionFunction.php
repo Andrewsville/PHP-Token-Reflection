@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection;
@@ -15,6 +14,7 @@ use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection\ReflectionBase;
 
+
 /**
  * Invalid function reflection.
  *
@@ -22,6 +22,7 @@ use ApiGen\TokenReflection\ReflectionBase;
  */
 class ReflectionFunction extends ReflectionElement implements IReflectionFunction
 {
+
 	/**
 	 * Class name (FQN).
 	 *
@@ -43,6 +44,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	private $broker;
 
+
 	/**
 	 * Constructor.
 	 *
@@ -57,6 +59,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		$this->fileName = $fileName;
 	}
 
+
 	/**
 	 * Returns the name (FQN).
 	 *
@@ -67,6 +70,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		return $this->name;
 	}
 
+
 	/**
 	 * Returns the unqualified name (UQN).
 	 *
@@ -75,8 +79,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	public function getShortName()
 	{
 		$pos = strrpos($this->name, '\\');
-		return false === $pos ? $this->name : substr($this->name, $pos + 1);
+		return FALSE === $pos ? $this->name : substr($this->name, $pos + 1);
 	}
+
 
 	/**
 	 * Returns the namespace name.
@@ -86,8 +91,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	public function getNamespaceName()
 	{
 		$pos = strrpos($this->name, '\\');
-		return false === $pos ? '' : substr($this->name, 0, $pos);
+		return FALSE === $pos ? '' : substr($this->name, 0, $pos);
 	}
+
 
 	/**
 	 * Returns if the class is defined within a namespace.
@@ -96,8 +102,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function inNamespace()
 	{
-		return false !== strrpos($this->name, '\\');
+		return FALSE !== strrpos($this->name, '\\');
 	}
+
 
 	/**
 	 * Returns if the reflection object is internal.
@@ -106,8 +113,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function isInternal()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the reflection object is user defined.
@@ -116,8 +124,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function isUserDefined()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
@@ -126,8 +135,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function isTokenized()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns the reflection broker used by this reflection object.
@@ -139,6 +149,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		return $this->broker;
 	}
 
+
 	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
@@ -149,6 +160,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		return $this->name . '()';
 	}
 
+
 	/**
 	 * Returns the PHP extension reflection.
 	 *
@@ -156,8 +168,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getExtension()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the PHP extension name.
@@ -166,8 +179,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getExtensionName()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns the file name the reflection object is defined in.
@@ -178,6 +192,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	{
 		return $this->fileName;
 	}
+
 
 	/**
 	 * Returns a file reflection.
@@ -190,6 +205,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		throw new Exception\BrokerException($this->getBroker(), sprintf('Function was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
 	}
 
+
 	/**
 	 * Returns the appropriate source code part.
 	 *
@@ -199,6 +215,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	{
 		return '';
 	}
+
 
 	/**
 	 * Returns the start position in the file token stream.
@@ -210,6 +227,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		return -1;
 	}
 
+
 	/**
 	 * Returns the end position in the file token stream.
 	 *
@@ -220,6 +238,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		return -1;
 	}
 
+
 	/**
 	 * Returns the definition start line number in the file.
 	 *
@@ -227,8 +246,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getStartLine()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the definition end line number in the file.
@@ -237,8 +257,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getEndLine()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the appropriate docblock definition.
@@ -247,8 +268,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getDocComment()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Checks if there is a particular annotation.
@@ -258,8 +280,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function hasAnnotation($name)
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a particular annotation value.
@@ -269,8 +292,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getAnnotation($name)
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns all annotations.
@@ -279,8 +303,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getAnnotations()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns if the function/method is a closure.
@@ -289,8 +314,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function isClosure()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the function/method is deprecated.
@@ -299,8 +325,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function isDeprecated()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the function/method returns its value as reference.
@@ -309,8 +336,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function returnsReference()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a function/method parameter.
@@ -326,14 +354,17 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		}
 	}
 
+
 	/**
 	 * Returns function/method parameters.
 	 *
 	 * @return array
 	 */
-	public function getParameters(){
-		return array();
+	public function getParameters()
+	{
+		return [];
 	}
+
 
 	/**
 	 * Returns the number of parameters.
@@ -345,6 +376,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		return 0;
 	}
 
+
 	/**
 	 * Returns the number of required parameters.
 	 *
@@ -355,6 +387,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		return 0;
 	}
 
+
 	/**
 	 * Returns static variables.
 	 *
@@ -362,8 +395,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getStaticVariables()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns if the method is is disabled via the disable_functions directive.
@@ -372,8 +406,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function isDisabled()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Calls the function.
@@ -382,8 +417,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function invoke()
 	{
-		return $this->invokeArgs(array());
+		return $this->invokeArgs([]);
 	}
+
 
 	/**
 	 * Calls the function.
@@ -396,6 +432,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		throw new Exception\RuntimeException('Cannot invoke invalid functions', Exception\RuntimeException::UNSUPPORTED, $this);
 	}
 
+
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
@@ -403,8 +440,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getNamespaceAliases()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns the function/method as closure.
@@ -416,6 +454,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		throw new Exception\RuntimeException('Cannot invoke invalid functions', Exception\RuntimeException::UNSUPPORTED, $this);
 	}
 
+
 	/**
 	 * Returns the closure scope class.
 	 *
@@ -423,8 +462,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getClosureScopeClass()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns this pointer bound to closure.
@@ -433,8 +473,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getClosureThis()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns if the function definition is valid.
@@ -443,8 +484,9 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function isValid()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns the string representation of the reflection object.
@@ -464,6 +506,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 		);
 	}
 
+
 	/**
 	 * Magic __get method.
 	 *
@@ -474,6 +517,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	{
 		return ReflectionBase::get($this, $key);
 	}
+
 
 	/**
 	 * Magic __isset method.

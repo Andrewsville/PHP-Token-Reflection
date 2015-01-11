@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Exception;
 
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ApiGen\TokenReflection\IReflection;
+
 
 /**
  * Parse exception.
@@ -19,6 +19,7 @@ use ApiGen\TokenReflection\IReflection;
  */
 class ParseException extends StreamException
 {
+
 	/**
 	 * An unexpected  token was encountered.
 	 *
@@ -73,7 +74,7 @@ class ParseException extends StreamException
 	 *
 	 * @var array
 	 */
-	private $scopeBoundaries = array();
+	private $scopeBoundaries = [];
 
 	/**
 	 * The reflection element that caused this exception to be raised.
@@ -81,6 +82,7 @@ class ParseException extends StreamException
 	 * @var ApiGen\TokenReflection\IReflection
 	 */
 	private $sender;
+
 
 	/**
 	 * Constructor.
@@ -93,59 +95,47 @@ class ParseException extends StreamException
 	public function __construct(IReflection $sender, StreamBase $tokenStream, $message, $code)
 	{
 		parent::__construct($tokenStream, $message, $code);
-
 		$this->sender = $sender;
-
 		$token = $tokenStream->current();
 		$position = $tokenStream->key();
-
 		if (!empty($token) && !empty($position)) {
 			$this->token = $token;
 			$this->tokenName = $tokenStream->getTokenName();
-
 			$line = $this->token[2];
 			$min = $max = $position;
 		} else {
 			$min = $max = $tokenStream->count() - 1;
 			$line = $tokenStream[$min][2];
 		}
-
 		$this->exceptionLine = $line;
-
-		static $skip = array(T_WHITESPACE => true, T_COMMENT => true, T_DOC_COMMENT => true);
-
-		$significant = array();
+		static $skip = [T_WHITESPACE => TRUE, T_COMMENT => TRUE, T_DOC_COMMENT => TRUE];
+		$significant = [];
 		while (isset($tokenStream[$min - 1])) {
 			if (!isset($significant[$tokenStream[$min][2]])) {
 				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
 					break;
 				}
-
 				$significant[$tokenStream[$min][2]] = !isset($skip[$tokenStream[$min][0]]);
 			} else {
 				$significant[$tokenStream[$min][2]] |= !isset($skip[$tokenStream[$min][0]]);
 			}
-
 			$min--;
 		}
-
-		$significant = array();
+		$significant = [];
 		while (isset($tokenStream[$max + 1])) {
 			if (!isset($significant[$tokenStream[$max][2]])) {
 				if (self::SOURCE_LINES_AROUND <= array_sum($significant)) {
 					break;
 				}
-
 				$significant[$tokenStream[$max][2]] = !isset($skip[$tokenStream[$max][0]]);
 			} else {
 				$significant[$tokenStream[$max][2]] |= !isset($skip[$tokenStream[$max][0]]);
 			}
-
 			$max++;
 		}
-
-		$this->scopeBoundaries = array($min, $max);
+		$this->scopeBoundaries = [$min, $max];
 	}
+
 
 	/**
 	 * Returns the token where the problem was detected or NULL if the token stream was empty or an end was reached.
@@ -157,6 +147,7 @@ class ParseException extends StreamException
 		return $this->token;
 	}
 
+
 	/**
 	 * Returns the name of the token where the problem was detected or NULL if the token stream was empty or an end was reached.
 	 *
@@ -166,6 +157,7 @@ class ParseException extends StreamException
 	{
 		return $this->tokenName;
 	}
+
 
 	/**
 	 * Returns the line where the exception was thrown.
@@ -177,6 +169,7 @@ class ParseException extends StreamException
 		return $this->exceptionLine;
 	}
 
+
 	/**
 	 * Returns the file line with the token or null.
 	 *
@@ -184,8 +177,9 @@ class ParseException extends StreamException
 	 */
 	public function getTokenLine()
 	{
-		return null === $this->token ? null : $this->token[2];
+		return NULL === $this->token ? NULL : $this->token[2];
 	}
+
 
 	/**
 	 * Returns the source code part around the token.
@@ -193,35 +187,30 @@ class ParseException extends StreamException
 	 * @param boolean $lineNumbers Returns the source code part with line numbers
 	 * @return string|null
 	 */
-	public function getSourcePart($lineNumbers = false)
+	public function getSourcePart($lineNumbers = FALSE)
 	{
 		if (empty($this->scopeBoundaries)) {
-			return null;
+			return NULL;
 		}
-
 		list($lo, $hi) = $this->scopeBoundaries;
 		$stream = $this->getStream();
-
 		$code = $stream->getSourcePart($lo, $hi);
-
 		if ($lineNumbers) {
 			$lines = explode("\n", $code);
-
 			$startLine = $stream[$lo][2];
 			$width = strlen($startLine + count($lines) - 1);
 			$errorLine = $this->token[2];
 			$actualLine = $startLine;
-
 			$code = implode(
 				"\n",
-				array_map(function($line) use (&$actualLine, $width, $errorLine) {
+				array_map(function ($line) use (&$actualLine, $width, $errorLine) {
 					return ($actualLine === $errorLine ? '*' : ' ') . str_pad($actualLine++, $width, ' ', STR_PAD_LEFT) . ': ' . $line;
 				}, $lines)
 			);
 		}
-
 		return $code;
 	}
+
 
 	/**
 	 * Returns the reflection element that caused the exception to be raised.
@@ -232,6 +221,7 @@ class ParseException extends StreamException
 	{
 		return $this->sender;
 	}
+
 
 	/**
 	 * Returns an exception description detail.
@@ -246,13 +236,13 @@ class ParseException extends StreamException
 			return parent::getDetail() . 'The token stream was read out of its bounds.';
 		} else {
 			return parent::getDetail() .
-				sprintf(
-					"\nThe cause of the exception was the %s token (line %s) in following part of %s source code:\n\n%s",
-					$this->tokenName,
-					$this->token[2],
-					$this->sender && $this->sender->getName() ? $this->sender->getPrettyName() : 'the',
-					$this->getSourcePart(true)
-				);
+			sprintf(
+				"\nThe cause of the exception was the %s token (line %s) in following part of %s source code:\n\n%s",
+				$this->tokenName,
+				$this->token[2],
+				$this->sender && $this->sender->getName() ? $this->sender->getPrettyName() : 'the',
+				$this->getSourcePart(TRUE)
+			);
 		}
 	}
 }

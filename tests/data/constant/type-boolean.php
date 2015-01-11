@@ -2,5 +2,6 @@
 
 class TokenReflection_Test_ConstantTypeBoolean
 {
-	const TYPE_BOOLEAN = true;
+
+	const TYPE_BOOLEAN = TRUE;
 }

@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection;
 use Reflector;
+
 
 /**
  * Basic internal reflection interface.
@@ -19,6 +19,7 @@ use Reflector;
  */
 interface IReflection extends TokenReflection\IReflection
 {
+
 	/**
 	 * Creates a reflection instance.
 	 *

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
@@ -15,12 +14,14 @@ use ApiGen\TokenReflection\ReflectionConstant;
  */
 class ReflectionConstantTest extends TestCase
 {
+
 	/**
 	 * Element type.
 	 *
 	 * @var string
 	 */
 	protected $type = 'constant';
+
 
 	/**
 	 * Tests getting of start and end line.
@@ -29,9 +30,10 @@ class ReflectionConstantTest extends TestCase
 	{
 		$token = $this->getConstantTokenReflection('lines');
 
-		$this->assertSame(5, $token->getStartLine());
-		$this->assertSame(5, $token->getEndLine());
+		$this->assertSame(6, $token->getStartLine());
+		$this->assertSame(6, $token->getEndLine());
 	}
+
 
 	/**
 	 * Tests getting of documentation comment.
@@ -41,12 +43,13 @@ class ReflectionConstantTest extends TestCase
 		$rfl = $this->getClassReflection('docComment');
 		foreach (array_keys($rfl->internal->getConstants()) as $constant) {
 			$this->assertTrue($rfl->token->hasConstant($constant), $constant);
-			$this->assertFalse(false === $rfl->token->getConstantReflection($constant)->getDocComment(), $constant);
+			$this->assertFalse(FALSE === $rfl->token->getConstantReflection($constant)->getDocComment(), $constant);
 		}
 
 		$token = $this->getConstantTokenReflection('noComment');
 		$this->assertFalse($token->getDocComment());
 	}
+
 
 	/**
 	 * Tests heredoc defined value.
@@ -62,12 +65,13 @@ class ReflectionConstantTest extends TestCase
 		$this->assertSame('constant value', $rfl->token->getConstant('NOWDOC'));
 	}
 
+
 	/**
 	 * Tests getting of copydoc documentation comment.
 	 */
 	public function testCommentCopydoc()
 	{
-		static $constants = array('DOC_COMMENT', 'DOC_COMMENT_COPY', 'DOC_COMMENT_COPY2');
+		static $constants = ['DOC_COMMENT', 'DOC_COMMENT_COPY', 'DOC_COMMENT_COPY2'];
 
 		$broker = $this->getBroker();
 		$broker->processFile($this->getFilePath('docCommentCopydoc'));
@@ -79,25 +83,26 @@ class ReflectionConstantTest extends TestCase
 		}
 
 		$this->assertSame('This is another constant.', $reflection->getConstantReflection('DOC_COMMENT_COPY_CLASS')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertSame(null, $reflection->getConstantReflection('DOC_COMMENT_COPY_NO')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+		$this->assertSame(NULL, $reflection->getConstantReflection('DOC_COMMENT_COPY_NO')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
 
-		static $topLevelConstants = array(
+		static $topLevelConstants = [
 			'CONSTANT_DOC_COMMENT_COPYDOC' => 'Comment.',
 			'CONSTANT_DOC_COMMENT_COPYDOC2' => 'Comment.',
-			'CONSTANT_DOC_COMMENT_COPYDOC3' => null,
-		);
+			'CONSTANT_DOC_COMMENT_COPYDOC3' => NULL,
+		];
 		foreach ($topLevelConstants as $constantName => $shortDescription) {
 			$this->assertTrue($broker->hasConstant($constantName), $constantName);
 			$this->assertSame($shortDescription, $broker->getConstant($constantName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constantName);
 		}
 	}
 
+
 	/**
 	 * Tests different types of constant value.
 	 */
 	public function testTypes()
 	{
-		$constants = array('string' => 'string', 'integer' => 1, 'integerNegative' => -1, 'float' => 1.1, 'floatNegative' => -1.1, 'boolean' => true, 'null' => null, 'constant' => E_NOTICE);
+		$constants = ['string' => 'string', 'integer' => 1, 'integerNegative' => -1, 'float' => 1.1, 'floatNegative' => -1.1, 'boolean' => TRUE, 'null' => NULL, 'constant' => E_NOTICE];
 		foreach ($constants as $type => $value) {
 			$test = 'type' . ucfirst($type);
 			$token = $this->getConstantTokenReflection($test);
@@ -105,6 +110,7 @@ class ReflectionConstantTest extends TestCase
 			$this->assertSame($value, $token->getValue());
 		}
 	}
+
 
 	/**
 	 * Tests if constant is defined in namespace or in class.
@@ -138,7 +144,7 @@ class ReflectionConstantTest extends TestCase
 
 	public function testToString()
 	{
-		$tests = array(
+		$tests = [
 			'noNamespace' => "Constant [ string NO_NAMESPACE ] { no-namespace }\n",
 			'typeString' => "Constant [ string TYPE_STRING ] { string }\n",
 			'typeInteger' => "Constant [ integer TYPE_INTEGER ] { 1 }\n",
@@ -147,16 +153,16 @@ class ReflectionConstantTest extends TestCase
 			'typeFloatNegative' => "Constant [ double TYPE_FLOAT_NEGATIVE ] { -1.1 }\n",
 			'typeBoolean' => "Constant [ boolean TYPE_BOOLEAN ] { 1 }\n",
 			'typeNull' => "Constant [ null TYPE_NULL ] {  }\n"
-		);
+		];
 		foreach ($tests as $test => $expected) {
 			$this->assertSame($expected, $this->getConstantTokenReflection($test)->__toString());
-			$this->assertSame($expected, ReflectionConstant::export($this->getBroker(), $this->getClassName($test), $this->getConstantName($test), true));
+			$this->assertSame($expected, ReflectionConstant::export($this->getBroker(), $this->getClassName($test), $this->getConstantName($test), TRUE));
 
 			// TestCase loading from a string
-			$this->assertSame($expected, $this->getConstantTokenReflection($test, true)->__toString());
+			$this->assertSame($expected, $this->getConstantTokenReflection($test, TRUE)->__toString());
 		}
 
-		$this->assertSame("Constant [ integer E_NOTICE ] { 8 }\n", ReflectionConstant::export($this->getBroker(), null, 'E_NOTICE', true));
+		$this->assertSame("Constant [ integer E_NOTICE ] { 8 }\n", ReflectionConstant::export($this->getBroker(), NULL, 'E_NOTICE', TRUE));
 	}
 
 
@@ -165,9 +171,9 @@ class ReflectionConstantTest extends TestCase
 		$broker = new Broker(new Broker\Backend\Memory);
 		$broker->process($this->getFilePath('magic'));
 
-		require_once ($this->getFilePath('magic'));
+		require_once($this->getFilePath('magic'));
 
-		$internal_constants = get_defined_constants(true);
+		$internal_constants = get_defined_constants(TRUE);
 		$internal_constants = $internal_constants['user'];
 
 		$token_constants = $broker->getConstants();
@@ -213,14 +219,14 @@ class ReflectionConstantTest extends TestCase
 			}
 		}
 
-		$classes = array(
+		$classes = [
 			'TokenReflection_Test_ConstantMagic',
 			'ns\\TokenReflection_Test_ConstantMagic',
 			'ns2\\TokenReflection_Test_ConstantMagic',
 			'ns3\\TokenReflection_Test_ConstantMagic'
-		);
+		];
 		foreach ($classes as $class) {
-			$this->assertTrue(class_exists($class, false), $class);
+			$this->assertTrue(class_exists($class, FALSE), $class);
 
 			$token = $broker->getClass($class);
 			$internal = new \ReflectionClass($class);
@@ -294,6 +300,7 @@ class ReflectionConstantTest extends TestCase
 		}
 	}
 
+
 	/**
 	 * Tests the __TRAIT__ magic constant.
 	 */
@@ -302,9 +309,9 @@ class ReflectionConstantTest extends TestCase
 		$broker = new Broker(new Broker\Backend\Memory());
 		$broker->process($this->getFilePath('magic54'));
 
-		require_once ($this->getFilePath('magic54'));
+		require_once($this->getFilePath('magic54'));
 
-		$internal_constants = get_defined_constants(true);
+		$internal_constants = get_defined_constants(TRUE);
 		$internal_constants = $internal_constants['user'];
 
 		$token_constants = $broker->getConstants();
@@ -350,7 +357,7 @@ class ReflectionConstantTest extends TestCase
 			}
 		}
 
-		$classes = array(
+		$classes = [
 			'TokenReflection_Test_ConstantMagic54Trait',
 			'TokenReflection_Test_ConstantMagic54',
 			'TokenReflection_Test_ConstantMagic54WithTrait',
@@ -361,7 +368,7 @@ class ReflectionConstantTest extends TestCase
 			'ns2\\TokenReflection_Test_ConstantMagic54WithTrait',
 			'ns3\\TokenReflection_Test_ConstantMagic54',
 			'ns3\\TokenReflection_Test_ConstantMagic54WithTrait'
-		);
+		];
 		foreach ($classes as $class) {
 			$token = $broker->getClass($class);
 			$internal = new \ReflectionClass($class);
@@ -450,12 +457,12 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testPrettyNames()
 	{
-		static $names = array(
+		static $names = [
 			'ns1\\CONST_PRETTY_NAMES_1',
 			'CONST_PRETTY_NAMES_1',
 			'ns1\\ConstPrettyNames::INTERNAL',
 			'ConstPrettyNames::INTERNAL',
-		);
+		];
 
 		$broker = $this->getBroker();
 		$broker->processFile($this->getFilePath('pretty-names'));
@@ -467,6 +474,7 @@ class ReflectionConstantTest extends TestCase
 			$this->assertSame($name, $rfl->getPrettyName(), $name);
 		}
 	}
+
 
 	/**
 	 * Tests an exception thrown when trying to get instance of TokenReflection\Php\ReflectionConstant and providing an invalid parent reflection.
@@ -484,7 +492,7 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testInternalConstantExport1()
 	{
-		\ApiGen\TokenReflection\Php\ReflectionConstant::export($this->getBroker(), null, '~non-existent~', true);
+		\ApiGen\TokenReflection\Php\ReflectionConstant::export($this->getBroker(), NULL, '~non-existent~', TRUE);
 	}
 
 
@@ -493,23 +501,24 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testInternalConstantExport2()
 	{
-		\ApiGen\TokenReflection\Php\ReflectionConstant::export($this->getBroker(), '~non-existent~', '~non-existent~', true);
+		\ApiGen\TokenReflection\Php\ReflectionConstant::export($this->getBroker(), '~non-existent~', '~non-existent~', TRUE);
 	}
+
 
 	/**
 	 * Tests various constant (mis)definitions.
 	 */
 	public function testValueDefinitions()
 	{
-		static $expected = array(
-			'VALUE_DEFINITION1' => true,
-			'VALUE_DEFINITION2' => true,
-			'VALUE_DEFINITION3' => true,
-			'VALUE_DEFINITION4' => true,
-			'VALUE_DEFINITION5' => true,
-			'VALUE_DEFINITION6' => true,
-			'VALUE_DEFINITION7' => true
-		);
+		static $expected = [
+			'VALUE_DEFINITION1' => TRUE,
+			'VALUE_DEFINITION2' => TRUE,
+			'VALUE_DEFINITION3' => TRUE,
+			'VALUE_DEFINITION4' => TRUE,
+			'VALUE_DEFINITION5' => TRUE,
+			'VALUE_DEFINITION6' => TRUE,
+			'VALUE_DEFINITION7' => TRUE
+		];
 
 		$broker = $this->getBroker();
 		$broker->processFile($this->getFilePath('valueDefinitions'));
@@ -521,6 +530,7 @@ class ReflectionConstantTest extends TestCase
 			$this->assertSame($value, $rfl->getValue(), $name);
 		}
 	}
+
 
 	/**
 	 * Tests constants defined in interfaces.
@@ -537,6 +547,7 @@ class ReflectionConstantTest extends TestCase
 		$this->assertTrue($class2->hasConstant('FIRST'));
 		$this->assertTrue($class2->hasConstant('SECOND'));
 	}
+
 
 	/**
 	 * Tests constants overriding.

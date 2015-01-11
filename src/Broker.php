@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
@@ -21,6 +20,7 @@ use SplFileInfo;
  */
 class Broker
 {
+
 	/**
 	 * Turns on saving of parsed token streams.
 	 *
@@ -93,25 +93,25 @@ class Broker
 	 */
 	private $options;
 
+
 	/**
 	 * @param ApiGen\TokenReflection\Broker\Backend $backend Broker backend instance
 	 * @param integer $options Broker/parsing options
 	 */
 	public function __construct(Broker\Backend $backend, $options = self::OPTION_DEFAULT)
 	{
-		$this->cache = array(
-			self::CACHE_NAMESPACE => array(),
-			self::CACHE_CLASS => array(),
-			self::CACHE_CONSTANT => array(),
-			self::CACHE_FUNCTION => array()
-		);
-
+		$this->cache = [
+			self::CACHE_NAMESPACE => [],
+			self::CACHE_CLASS => [],
+			self::CACHE_CONSTANT => [],
+			self::CACHE_FUNCTION => []
+		];
 		$this->options = $options;
-
 		$this->backend = $backend
 			->setBroker($this)
 			->setStoringTokenStreams((bool) ($options & self::OPTION_SAVE_TOKEN_STREAM));
 	}
+
 
 	/**
 	 * Returns broker/parser options.
@@ -122,6 +122,7 @@ class Broker
 	{
 		return $this->options;
 	}
+
 
 	/**
 	 * Returns if a particular option setting is set.
@@ -134,6 +135,7 @@ class Broker
 		return (bool) ($this->options & $option);
 	}
 
+
 	/**
 	 * Parses a string with the PHP source code using the given file name and returns the appropriate reflection object.
 	 *
@@ -142,30 +144,28 @@ class Broker
 	 * @param boolean $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
 	 * @return boolean|ApiGen\TokenReflection\ReflectionFile
 	 */
-	public function processString($source, $fileName, $returnReflectionFile = false)
+	public function processString($source, $fileName, $returnReflectionFile = FALSE)
 	{
 		if ($this->backend->isFileProcessed($fileName)) {
 			$tokens = $this->backend->getFileTokens($fileName);
 		} else {
 			$tokens = new Stream\StringStream($source, $fileName);
 		}
-
 		$reflectionFile = new ReflectionFile($tokens, $this);
 		if (!$this->backend->isFileProcessed($fileName)) {
 			$this->backend->addFile($tokens, $reflectionFile);
-
 			// Clear the cache - leave only tokenized reflections
 			foreach ($this->cache as $type => $cached) {
 				if (!empty($cached)) {
-					$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
+					$this->cache[$type] = array_filter($cached, function (IReflection $reflection) {
 						return $reflection->isTokenized();
 					});
 				}
 			}
 		}
-
-		return $returnReflectionFile ? $reflectionFile : true;
+		return $returnReflectionFile ? $reflectionFile : TRUE;
 	}
+
 
 	/**
 	 * Parses a file and returns the appropriate reflection object.
@@ -175,7 +175,7 @@ class Broker
 	 * @return boolean|ApiGen\TokenReflection\ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the file could not be processed.
 	 */
-	public function processFile($fileName, $returnReflectionFile = false)
+	public function processFile($fileName, $returnReflectionFile = FALSE)
 	{
 		try {
 			if ($this->backend->isFileProcessed($fileName)) {
@@ -183,22 +183,19 @@ class Broker
 			} else {
 				$tokens = new Stream\FileStream($fileName);
 			}
-
 			$reflectionFile = new ReflectionFile($tokens, $this);
 			if (!$this->backend->isFileProcessed($fileName)) {
 				$this->backend->addFile($tokens, $reflectionFile);
-
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
 					if (!empty($cached)) {
-						$this->cache[$type] = array_filter($cached, function(IReflection $reflection) {
+						$this->cache[$type] = array_filter($cached, function (IReflection $reflection) {
 							return $reflection->isTokenized();
 						});
 					}
 				}
 			}
-
-			return $returnReflectionFile ? $reflectionFile : true;
+			return $returnReflectionFile ? $reflectionFile : TRUE;
 		} catch (Exception\ParseException $e) {
 			throw $e;
 		} catch (Exception\StreamException $e) {
@@ -216,27 +213,26 @@ class Broker
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory could not be processed.
 	 */
-	public function processDirectory($path, $returnReflectionFile = false)
+	public function processDirectory($path, $returnReflectionFile = FALSE)
 	{
 		$realPath = realpath($path);
 		if (!is_dir($realPath)) {
 			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
 		}
-
 		try {
-			$result = array();
+			$result = [];
 			foreach (Finder::findFiles('*')->in($realPath) as $entry) {
 				/** @var SplFileInfo $entry */
 				$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
 			}
-
-			return $returnReflectionFile ? $result : true;
+			return $returnReflectionFile ? $result : TRUE;
 		} catch (Exception\ParseException $e) {
 			throw $e;
 		} catch (Exception\StreamException $e) {
 			throw new Exception\BrokerException($this, 'Could not process the directory.', 0, $e);
 		}
 	}
+
 
 	/**
 	 * Process a file or directory.
@@ -246,16 +242,17 @@ class Broker
 	 * @return boolean|array|ApiGen\TokenReflection\ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the target does not exist.
 	 */
-	public function process($path, $returnReflectionFile = false)
+	public function process($path, $returnReflectionFile = FALSE)
 	{
 		if (is_dir($path)) {
-			return $this->processDirectory($path, array(), $returnReflectionFile);
+			return $this->processDirectory($path, [], $returnReflectionFile);
 		} elseif (is_file($path)) {
 			return $this->processFile($path, $returnReflectionFile);
 		} else {
 			throw new Exception\BrokerException($this, 'The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
+
 
 	/**
 	 * Returns if the broker contains a namespace of the given name.
@@ -268,6 +265,7 @@ class Broker
 		return isset($this->cache[self::CACHE_NAMESPACE][$namespaceName]) || $this->backend->hasNamespace($namespaceName);
 	}
 
+
 	/**
 	 * Returns a reflection object of the given namespace.
 	 *
@@ -277,18 +275,16 @@ class Broker
 	public function getNamespace($namespaceName)
 	{
 		$namespaceName = ltrim($namespaceName, '\\');
-
 		if (isset($this->cache[self::CACHE_NAMESPACE][$namespaceName])) {
 			return $this->cache[self::CACHE_NAMESPACE][$namespaceName];
 		}
-
 		$namespace = $this->backend->getNamespace($namespaceName);
-		if (null !== $namespace) {
+		if (NULL !== $namespace) {
 			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespace;
 		}
-
 		return $namespace;
 	}
+
 
 	/**
 	 * Returns if the broker contains a class of the given name.
@@ -301,6 +297,7 @@ class Broker
 		return isset($this->cache[self::CACHE_CLASS][$className]) || $this->backend->hasClass($className);
 	}
 
+
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
@@ -310,14 +307,13 @@ class Broker
 	public function getClass($className)
 	{
 		$className = ltrim($className, '\\');
-
 		if (isset($this->cache[self::CACHE_CLASS][$className])) {
 			return $this->cache[self::CACHE_CLASS][$className];
 		}
-
 		$this->cache[self::CACHE_CLASS][$className] = $this->backend->getClass($className);
 		return $this->cache[self::CACHE_CLASS][$className];
 	}
+
 
 	/**
 	 * Returns all classes from all namespaces.
@@ -330,6 +326,7 @@ class Broker
 		return $this->backend->getClasses($types);
 	}
 
+
 	/**
 	 * Returns if the broker contains a constant of the given name.
 	 *
@@ -341,6 +338,7 @@ class Broker
 		return isset($this->cache[self::CACHE_CONSTANT][$constantName]) || $this->backend->hasConstant($constantName);
 	}
 
+
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
@@ -350,17 +348,15 @@ class Broker
 	public function getConstant($constantName)
 	{
 		$constantName = ltrim($constantName, '\\');
-
 		if (isset($this->cache[self::CACHE_CONSTANT][$constantName])) {
 			return $this->cache[self::CACHE_CONSTANT][$constantName];
 		}
-
 		if ($constant = $this->backend->getConstant($constantName)) {
 			$this->cache[self::CACHE_CONSTANT][$constantName] = $constant;
 		}
-
 		return $constant;
 	}
+
 
 	/**
 	 * Returns all constants from all namespaces.
@@ -371,6 +367,7 @@ class Broker
 	{
 		return $this->backend->getConstants();
 	}
+
 
 	/**
 	 * Returns if the broker contains a function of the given name.
@@ -383,6 +380,7 @@ class Broker
 		return isset($this->cache[self::CACHE_FUNCTION][$functionName]) || $this->backend->hasFunction($functionName);
 	}
 
+
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
@@ -392,17 +390,15 @@ class Broker
 	public function getFunction($functionName)
 	{
 		$functionName = ltrim($functionName, '\\');
-
 		if (isset($this->cache[self::CACHE_FUNCTION][$functionName])) {
 			return $this->cache[self::CACHE_FUNCTION][$functionName];
 		}
-
 		if ($function = $this->backend->getFunction($functionName)) {
 			$this->cache[self::CACHE_FUNCTION][$functionName] = $function;
 		}
-
 		return $function;
 	}
+
 
 	/**
 	 * Returns all functions from all namespaces.
@@ -413,6 +409,7 @@ class Broker
 	{
 		return $this->backend->getFunctions();
 	}
+
 
 	/**
 	 * Returns if the broker contains a file reflection of the given name.
@@ -425,6 +422,7 @@ class Broker
 		return $this->backend->hasFile($fileName);
 	}
 
+
 	/**
 	 * Returns a reflection object of a file.
 	 *
@@ -436,6 +434,7 @@ class Broker
 		return $this->backend->getFile($fileName);
 	}
 
+
 	/**
 	 * Returns all processed files reflections.
 	 *
@@ -445,6 +444,7 @@ class Broker
 	{
 		return $this->backend->getFiles();
 	}
+
 
 	/**
 	 * Returns an array of tokens from a processed file.
@@ -456,6 +456,7 @@ class Broker
 	{
 		return $this->backend->getFileTokens($fileName);
 	}
+
 
 	/**
 	 * Returns a real system path.

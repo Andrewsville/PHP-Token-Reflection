@@ -6,16 +6,17 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Exception;
 
 use ApiGen\TokenReflection\Stream\StreamBase;
+
 
 /**
  * TokenReflection exception raised when working with a token stream.
  */
 class StreamException extends BaseException
 {
+
 	/**
 	 * The property/element does not exist.
 	 *
@@ -44,6 +45,7 @@ class StreamException extends BaseException
 	 */
 	private $stream;
 
+
 	/**
 	 * Constructor.
 	 *
@@ -54,9 +56,9 @@ class StreamException extends BaseException
 	public function __construct(StreamBase $stream, $message, $code)
 	{
 		parent::__construct($message, $code);
-
 		$this->stream = $stream;
 	}
+
 
 	/**
 	 * Returns the reflection element that caused the exception to be raised.
@@ -68,6 +70,7 @@ class StreamException extends BaseException
 		return $this->stream;
 	}
 
+
 	/**
 	 * Returns the processed file name.
 	 *
@@ -77,6 +80,7 @@ class StreamException extends BaseException
 	{
 		return $this->stream->getFileName();
 	}
+
 
 	/**
 	 * Returns an exception description detail.

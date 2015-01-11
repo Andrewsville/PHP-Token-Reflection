@@ -13,11 +13,13 @@ use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ReflectionParameter as InternalReflectionParameter;
 
+
 /**
  * Tokenized function/method parameter reflection.
  */
 class ReflectionParameter extends ReflectionElement implements IReflectionParameter
 {
+
 	/**
 	 * The parameter requires an array as its value.
 	 *
@@ -58,7 +60,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @var array|string
 	 */
-	private $defaultValueDefinition = array();
+	private $defaultValueDefinition = [];
 
 	/**
 	 * Defines a type hint (class name or array) of parameter values.
@@ -93,7 +95,8 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @var boolean
 	 */
-	private $passedByReference = false;
+	private $passedByReference = FALSE;
+
 
 	/**
 	 * Returns the declaring class.
@@ -102,8 +105,9 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function getDeclaringClass()
 	{
-		return null === $this->declaringClassName ? null : $this->getBroker()->getClass($this->declaringClassName);
+		return NULL === $this->declaringClassName ? NULL : $this->getBroker()->getClass($this->declaringClassName);
 	}
+
 
 	/**
 	 * Returns the declaring class name.
@@ -115,6 +119,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return $this->declaringClassName;
 	}
 
+
 	/**
 	 * Returns the declaring function.
 	 *
@@ -122,10 +127,10 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function getDeclaringFunction()
 	{
-		if (null !== $this->declaringClassName) {
+		if (NULL !== $this->declaringClassName) {
 			// Method parameter
 			$class = $this->getBroker()->getClass($this->declaringClassName);
-			if (null !== $class) {
+			if (NULL !== $class) {
 				return $class->getMethod($this->declaringFunctionName);
 			}
 		} else {
@@ -133,6 +138,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			return $this->getBroker()->getFunction($this->declaringFunctionName);
 		}
 	}
+
 
 	/**
 	 * Returns the declaring function name.
@@ -143,6 +149,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	{
 		return $this->declaringFunctionName;
 	}
+
 
 	/**
 	 * Returns the default value.
@@ -156,17 +163,15 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if (!$this->isOptional()) {
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
-
-		if (null === $this->defaultValue) {
+		if (NULL === $this->defaultValue) {
 			if (0 === count($this->defaultValueDefinition)) {
 				throw new Exception\RuntimeException('Property has no default value.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
-
 			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
 		}
-
 		return $this->defaultValue;
 	}
+
 
 	/**
 	 * Returns the part of the source code defining the parameter default value.
@@ -178,6 +183,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return Resolver::getSourceCode($this->defaultValueDefinition);
 	}
 
+
 	/**
 	 * Returns if the default value is defined by a constant.
 	 *
@@ -186,18 +192,17 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function isDefaultValueConstant()
 	{
 		if (!$this->isDefaultValueAvailable() || empty($this->defaultValueDefinition)) {
-			return false;
+			return FALSE;
 		}
-
-		static $expected = array(T_STRING => true, T_NS_SEPARATOR => true, T_DOUBLE_COLON => true);
+		static $expected = [T_STRING => TRUE, T_NS_SEPARATOR => TRUE, T_DOUBLE_COLON => TRUE];
 		foreach ($this->defaultValueDefinition as $token) {
 			if (!isset($expected[$token[0]])) {
-				return false;
+				return FALSE;
 			}
 		}
-
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns the name of the default value constant.
@@ -209,9 +214,9 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if (!$this->isOptional()) {
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
-
-		return $this->isDefaultValueConstant() ? $this->getDefaultValueDefinition() : null;
+		return $this->isDefaultValueConstant() ? $this->getDefaultValueDefinition() : NULL;
 	}
+
 
 	/**
 	 * Retutns if a default value for the parameter is available.
@@ -223,6 +228,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return $this->isOptional();
 	}
 
+
 	/**
 	 * Returns the position within all parameters.
 	 *
@@ -232,6 +238,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	{
 		return $this->position;
 	}
+
 
 	/**
 	 * Returns if the parameter expects an array.
@@ -243,6 +250,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return $this->typeHint === self::ARRAY_TYPE_HINT;
 	}
 
+
 	/**
 	 * Returns if the parameter expects a callback.
 	 *
@@ -253,6 +261,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return $this->typeHint === self::CALLABLE_TYPE_HINT;
 	}
 
+
 	/**
 	 * Returns the original type hint as defined in the source code.
 	 *
@@ -260,8 +269,9 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function getOriginalTypeHint()
 	{
-		return !$this->isArray() && !$this->isCallable() ? ltrim($this->originalTypeHint, '\\') : null;
+		return !$this->isArray() && !$this->isCallable() ? ltrim($this->originalTypeHint, '\\') : NULL;
 	}
+
 
 	/**
 	 * Returns reflection of the required class of the value.
@@ -271,12 +281,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function getClass()
 	{
 		$name = $this->getClassName();
-		if (null === $name) {
-			return null;
+		if (NULL === $name) {
+			return NULL;
 		}
-
 		return $this->getBroker()->getClass($name);
 	}
+
 
 	/**
 	 * Returns the required class name of the value.
@@ -287,33 +297,29 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function getClassName()
 	{
 		if ($this->isArray() || $this->isCallable()) {
-			return null;
+			return NULL;
 		}
-
-		if (null === $this->typeHint && null !== $this->originalTypeHint) {
-			if (null !== $this->declaringClassName) {
+		if (NULL === $this->typeHint && NULL !== $this->originalTypeHint) {
+			if (NULL !== $this->declaringClassName) {
 				$parent = $this->getDeclaringClass();
-				if (null === $parent) {
+				if (NULL === $parent) {
 					throw new Exception\RuntimeException('Could not load class reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			} else {
 				$parent = $this->getDeclaringFunction();
-				if (null === $parent || !$parent->isTokenized()) {
+				if (NULL === $parent || !$parent->isTokenized()) {
 					throw new Exception\RuntimeException('Could not load function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			}
-
 			$lTypeHint = strtolower($this->originalTypeHint);
 			if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
-				if (null === $this->declaringClassName) {
+				if (NULL === $this->declaringClassName) {
 					throw new Exception\RuntimeException('Parameter type hint cannot be "self" nor "parent" when not a method.', Exception\RuntimeException::UNSUPPORTED, $this);
 				}
-
 				if ('parent' === $lTypeHint) {
-					if ($parent->isInterface() || null === $parent->getParentClassName()) {
+					if ($parent->isInterface() || NULL === $parent->getParentClassName()) {
 						throw new Exception\RuntimeException('Class has no parent.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 					}
-
 					$this->typeHint = $parent->getParentClassName();
 				} else {
 					$this->typeHint = $this->declaringClassName;
@@ -322,9 +328,9 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 				$this->typeHint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
 			}
 		}
-
 		return $this->typeHint;
 	}
+
 
 	/**
 	 * Returns if the the parameter allows NULL.
@@ -336,9 +342,9 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if ($this->isArray() || $this->isCallable()) {
 			return 'null' === strtolower($this->getDefaultValueDefinition());
 		}
-
-		return null === $this->originalTypeHint || !empty($this->defaultValueDefinition);
+		return NULL === $this->originalTypeHint || !empty($this->defaultValueDefinition);
 	}
+
 
 	/**
 	 * Returns if the parameter is optional.
@@ -348,12 +354,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 */
 	public function isOptional()
 	{
-		if (null === $this->isOptional) {
+		if (NULL === $this->isOptional) {
 			$this->isOptional = !empty($this->defaultValueDefinition) && $this->haveSiblingsDefalutValues();
 		}
-
 		return $this->isOptional;
 	}
+
 
 	/**
 	 * Returns if all following parameters have a default value definition.
@@ -363,18 +369,17 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	protected function haveSiblingsDefalutValues()
 	{
 		$function = $this->getDeclaringFunction();
-		if (null === $function) {
+		if (NULL === $function) {
 			throw new Exception\RuntimeException('Could not get the declaring function reflection.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
-
 		foreach (array_slice($function->getParameters(), $this->position + 1) as $reflectionParameter) {
-			if (null === $reflectionParameter->getDefaultValueDefinition()) {
-				return false;
+			if (NULL === $reflectionParameter->getDefaultValueDefinition()) {
+				return FALSE;
 			}
 		}
-
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the parameter value is passed by reference.
@@ -386,6 +391,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return $this->passedByReference;
 	}
 
+
 	/**
 	 * Returns if the paramter value can be passed by value.
 	 *
@@ -396,6 +402,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return !$this->isPassedByReference();
 	}
 
+
 	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
@@ -405,6 +412,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	{
 		return str_replace('()', '($' . $this->name . ')', $this->getDeclaringFunction()->getPrettyName());
 	}
+
 
 	/**
 	 * Returns the string representation of the reflection object.
@@ -422,14 +430,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		} else {
 			$hint = '';
 		}
-
 		if (!empty($hint) && $this->allowsNull()) {
 			$hint .= ' or NULL';
 		}
-
 		if ($this->isDefaultValueAvailable()) {
 			$default = ' = ';
-			if (null === $this->getDefaultValue()) {
+			if (NULL === $this->getDefaultValue()) {
 				$default .= 'NULL';
 			} elseif (is_array($this->getDefaultValue())) {
 				$default .= 'Array';
@@ -443,7 +449,6 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		} else {
 			$default = '';
 		}
-
 		return sprintf(
 			'Parameter #%d [ <%s> %s%s$%s%s ]',
 			$this->getPosition(),
@@ -455,6 +460,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		);
 	}
 
+
 	/**
 	 * Exports a reflected object.
 	 *
@@ -465,23 +471,21 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
-	public static function export(Broker $broker, $function, $parameter, $return = false)
+	public static function export(Broker $broker, $function, $parameter, $return = FALSE)
 	{
 		$functionName = $function;
 		$parameterName = $parameter;
-
 		$function = $broker->getFunction($functionName);
-		if (null === $function) {
+		if (NULL === $function) {
 			throw new Exception\RuntimeException(sprintf('Function %s() does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$parameter = $function->getParameter($parameterName);
-
 		if ($return) {
 			return $parameter->__toString();
 		}
-
 		echo $parameter->__toString();
 	}
+
 
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
@@ -493,6 +497,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		return $this->getDeclaringFunction()->getNamespaceAliases();
 	}
 
+
 	/**
 	 * Creates a parameter alias for the given method.
 	 *
@@ -502,12 +507,11 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	public function alias(ReflectionMethod $parent)
 	{
 		$parameter = clone $this;
-
 		$parameter->declaringClassName = $parent->getDeclaringClassName();
 		$parameter->declaringFunctionName = $parent->getName();
-
 		return $parameter;
 	}
+
 
 	/**
 	 * Processes the parent reflection object.
@@ -522,20 +526,17 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if (!$parent instanceof ReflectionFunctionBase) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', Exception\ParseException::INVALID_PARENT);
 		}
-
 		// Declaring function name
 		$this->declaringFunctionName = $parent->getName();
-
 		// Position
 		$this->position = count($parent->getParameters());
-
 		// Declaring class name
 		if ($parent instanceof ReflectionMethod) {
 			$this->declaringClassName = $parent->getDeclaringClassName();
 		}
-
 		return parent::processParent($parent, $tokenStream);
 	}
+
 
 	/**
 	 * Parses reflected element metadata from the token stream.
@@ -553,6 +554,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 			->parseDefaultValue($tokenStream);
 	}
 
+
 	/**
 	 * Parses the type hint.
 	 *
@@ -563,33 +565,29 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	private function parseTypeHint(Stream $tokenStream)
 	{
 		$type = $tokenStream->getType();
-
 		if (T_ARRAY === $type) {
 			$this->typeHint = self::ARRAY_TYPE_HINT;
 			$this->originalTypeHint = self::ARRAY_TYPE_HINT;
-			$tokenStream->skipWhitespaces(true);
+			$tokenStream->skipWhitespaces(TRUE);
 		} elseif (T_CALLABLE === $type) {
 			$this->typeHint = self::CALLABLE_TYPE_HINT;
 			$this->originalTypeHint = self::CALLABLE_TYPE_HINT;
-			$tokenStream->skipWhitespaces(true);
+			$tokenStream->skipWhitespaces(TRUE);
 		} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
 			$className = '';
 			do {
 				$className .= $tokenStream->getTokenValue();
-
-				$tokenStream->skipWhitespaces(true);
+				$tokenStream->skipWhitespaces(TRUE);
 				$type = $tokenStream->getType();
 			} while (T_STRING === $type || T_NS_SEPARATOR === $type);
-
 			if ('' === ltrim($className, '\\')) {
 				throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid class name definition: "%s".', $className), Exception\ParseException::LOGICAL_ERROR);
 			}
-
 			$this->originalTypeHint = $className;
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses if parameter value is passed by reference.
@@ -600,12 +598,12 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	private function parsePassedByReference(Stream $tokenStream)
 	{
 		if ($tokenStream->is('&')) {
-			$this->passedByReference = true;
-			$tokenStream->skipWhitespaces(true);
+			$this->passedByReference = TRUE;
+			$tokenStream->skipWhitespaces(TRUE);
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses the constant name.
@@ -619,13 +617,11 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if (!$tokenStream->is(T_VARIABLE)) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parameter name could not be determined.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
 		$this->name = substr($tokenStream->getTokenValue(), 1);
-
-		$tokenStream->skipWhitespaces(true);
-
+		$tokenStream->skipWhitespaces(TRUE);
 		return $this;
 	}
+
 
 	/**
 	 * Parses the parameter default value.
@@ -637,10 +633,9 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	private function parseDefaultValue(Stream $tokenStream)
 	{
 		if ($tokenStream->is('=')) {
-			$tokenStream->skipWhitespaces(true);
-
+			$tokenStream->skipWhitespaces(TRUE);
 			$level = 0;
-			while (null !== ($type = $tokenStream->getType())) {
+			while (NULL !== ($type = $tokenStream->getType())) {
 				switch ($type) {
 					case ')':
 						if (0 === $level) {
@@ -663,16 +658,13 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 					default:
 						break;
 				}
-
 				$this->defaultValueDefinition[] = $tokenStream->current();
 				$tokenStream->next();
 			}
-
 			if (')' !== $type && ',' !== $type) {
 				throw new Exception\ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ")".', Exception\ParseException::UNEXPECTED_TOKEN);
 			}
 		}
-
 		return $this;
 	}
 }

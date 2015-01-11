@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
@@ -16,12 +15,14 @@ use ApiGen\TokenReflection\Exception;
 
 class ReflectionFile extends ReflectionBase
 {
+
 	/**
 	 * Namespaces list.
 	 *
 	 * @var array
 	 */
-	private $namespaces = array();
+	private $namespaces = [];
+
 
 	/**
 	 * Returns an array of namespaces in the current file.
@@ -33,6 +34,7 @@ class ReflectionFile extends ReflectionBase
 		return $this->namespaces;
 	}
 
+
 	/**
 	 * Returns the string representation of the reflection object.
 	 *
@@ -43,6 +45,7 @@ class ReflectionFile extends ReflectionBase
 		throw new Exception\RuntimeException('Casting to string is not supported.', Exception\RuntimeException::UNSUPPORTED, $this);
 	}
 
+
 	/**
 	 * Exports a reflected object.
 	 *
@@ -51,10 +54,11 @@ class ReflectionFile extends ReflectionBase
 	 * @param boolean $return Return the export instead of outputting it
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the method is called, because it's unsupported.
 	 */
-	public static function export(Broker $broker, $argument, $return = false)
+	public static function export(Broker $broker, $argument, $return = FALSE)
 	{
 		throw new Exception\RuntimeException('Export is not supported.', Exception\RuntimeException::UNSUPPORTED);
 	}
+
 
 	/**
 	 * Outputs the file source code.
@@ -66,6 +70,7 @@ class ReflectionFile extends ReflectionBase
 		return (string) $this->broker->getFileTokens($this->getName());
 	}
 
+
 	/**
 	 * Parses the token substream and prepares namespace reflections from the file.
 	 *
@@ -73,27 +78,23 @@ class ReflectionFile extends ReflectionBase
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionFile
 	 */
-	protected function parseStream(Stream $tokenStream, IReflection $parent = null)
+	protected function parseStream(Stream $tokenStream, IReflection $parent = NULL)
 	{
 		$this->name = $tokenStream->getFileName();
-
 		if (1 >= $tokenStream->count()) {
 			// No PHP content
-			$this->docComment = new ReflectionAnnotation($this, null);
+			$this->docComment = new ReflectionAnnotation($this, NULL);
 			return $this;
 		}
-
-		$docCommentPosition = null;
-
+		$docCommentPosition = NULL;
 		if (!$tokenStream->is(T_OPEN_TAG)) {
 			$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 		} else {
 			$tokenStream->skipWhitespaces();
-
-			while (null !== ($type = $tokenStream->getType())) {
+			while (NULL !== ($type = $tokenStream->getType())) {
 				switch ($type) {
 					case T_DOC_COMMENT:
-						if (null === $docCommentPosition) {
+						if (NULL === $docCommentPosition) {
 							$docCommentPosition = $tokenStream->key();
 						}
 					case T_WHITESPACE:
@@ -114,11 +115,9 @@ class ReflectionFile extends ReflectionBase
 						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 						break 2;
 				}
-
 				$tokenStream->skipWhitespaces();
 			}
-
-			while (null !== ($type = $tokenStream->getType())) {
+			while (NULL !== ($type = $tokenStream->getType())) {
 				if (T_NAMESPACE === $type) {
 					$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
 				} else {
@@ -126,12 +125,10 @@ class ReflectionFile extends ReflectionBase
 				}
 			}
 		}
-
-		if (null !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
-			$docCommentPosition = null;
+		if (NULL !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
+			$docCommentPosition = NULL;
 		}
-		$this->docComment = new ReflectionAnnotation($this, null !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : null);
-
+		$this->docComment = new ReflectionAnnotation($this, NULL !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : NULL);
 		return $this;
 	}
 }

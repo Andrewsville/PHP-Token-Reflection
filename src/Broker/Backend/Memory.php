@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Broker\Backend;
 
 use ApiGen\TokenReflection;
@@ -16,6 +15,7 @@ use ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Dummy;
 
+
 /**
  * Memory broker backend.
  *
@@ -23,19 +23,20 @@ use ApiGen\TokenReflection\Dummy;
  */
 class Memory implements Broker\Backend
 {
+
 	/**
 	 * List of declared class names.
 	 *
 	 * @var array
 	 */
-	private $declaredClasses = array();
+	private $declaredClasses = [];
 
 	/**
 	 * Namespaces storage.
 	 *
 	 * @var array
 	 */
-	private $namespaces = array();
+	private $namespaces = [];
 
 	/**
 	 * All tokenized constants cache.
@@ -63,14 +64,14 @@ class Memory implements Broker\Backend
 	 *
 	 * @var array
 	 */
-	private $tokenStreams = array();
+	private $tokenStreams = [];
 
 	/**
 	 * Processed files storage.
 	 *
 	 * @var array
 	 */
-	private $files = array();
+	private $files = [];
 
 	/**
 	 * Reflection broker.
@@ -86,6 +87,7 @@ class Memory implements Broker\Backend
 	 */
 	private $storingTokenStreams;
 
+
 	/**
 	 * Returns if a file with the given filename has been processed.
 	 *
@@ -96,6 +98,7 @@ class Memory implements Broker\Backend
 	{
 		return isset($this->files[$fileName]);
 	}
+
 
 	/**
 	 * Returns a file reflection.
@@ -109,9 +112,9 @@ class Memory implements Broker\Backend
 		if (!isset($this->files[$fileName])) {
 			throw new Exception\BrokerException($this->getBroker(), sprintf('File "%s" has not been processed.', $fileName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
-
 		return $this->files[$fileName];
 	}
+
 
 	/**
 	 * Returns file reflections.
@@ -123,6 +126,7 @@ class Memory implements Broker\Backend
 		return $this->files;
 	}
 
+
 	/**
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
@@ -133,6 +137,7 @@ class Memory implements Broker\Backend
 	{
 		return isset($this->namespaces[ltrim($namespaceName, '\\')]);
 	}
+
 
 	/**
 	 * Returns a reflection object of the given namespace.
@@ -146,14 +151,13 @@ class Memory implements Broker\Backend
 		if (!isset($this->namespaces[TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME])) {
 			$this->namespaces[TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME] = new TokenReflection\ReflectionNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
 		}
-
 		$namespaceName = ltrim($namespaceName, '\\');
 		if (!isset($this->namespaces[$namespaceName])) {
 			throw new Exception\BrokerException($this->getBroker(), sprintf('Namespace %s does not exist.', $namespaceName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
-
 		return $this->namespaces[$namespaceName];
 	}
+
 
 	/**
 	 * Returns all present namespaces.
@@ -164,6 +168,7 @@ class Memory implements Broker\Backend
 	{
 		return $this->namespaces;
 	}
+
 
 	/**
 	 * Returns if there was such class processed (FQN expected).
@@ -176,19 +181,17 @@ class Memory implements Broker\Backend
 		$className = ltrim($className, '\\');
 		if ($pos = strrpos($className, '\\')) {
 			$namespace = substr($className, 0, $pos);
-
 			if (!isset($this->namespaces[$namespace])) {
-				return false;
+				return FALSE;
 			}
-
 			$namespace = $this->getNamespace($namespace);
 			$className = substr($className, $pos + 1);
 		} else {
 			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
-
 		return $namespace->hasClass($className);
 	}
+
 
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
@@ -201,17 +204,15 @@ class Memory implements Broker\Backend
 		if (empty($this->declaredClasses)) {
 			$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
 		}
-
 		$className = ltrim($className, '\\');
 		try {
 			$ns = $this->getNamespace(
 				($boundary = strrpos($className, '\\'))
-				// Class within a namespace
-				? substr($className, 0, $boundary)
-				// Class without a namespace
-				: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
+					// Class within a namespace
+					? substr($className, 0, $boundary)
+					// Class without a namespace
+					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
-
 			return $ns->getClass($className);
 		} catch (Exception\BaseException $e) {
 			if (isset($this->declaredClasses[$className])) {
@@ -220,10 +221,10 @@ class Memory implements Broker\Backend
 					return $reflection;
 				}
 			}
-
 			return new Dummy\ReflectionClass($className, $this->broker);
 		}
 	}
+
 
 	/**
 	 * Returns all classes from all namespaces.
@@ -233,11 +234,10 @@ class Memory implements Broker\Backend
 	 */
 	public function getClasses($type = self::TOKENIZED_CLASSES)
 	{
-		if (null === $this->allClasses) {
+		if (NULL === $this->allClasses) {
 			$this->allClasses = $this->parseClassLists();
 		}
-
-		$result = array();
+		$result = [];
 		foreach ($this->allClasses as $classType => $classes) {
 			if ($type & $classType) {
 				$result = array_merge($result, $classes);
@@ -245,6 +245,7 @@ class Memory implements Broker\Backend
 		}
 		return $result;
 	}
+
 
 	/**
 	 * Returns if there was such constant processed (FQN expected).
@@ -255,32 +256,28 @@ class Memory implements Broker\Backend
 	public function hasConstant($constantName)
 	{
 		$constantName = ltrim($constantName, '\\');
-
 		if ($pos = strpos($constantName, '::')) {
 			$className = substr($constantName, 0, $pos);
 			$constantName = substr($constantName, $pos + 2);
-
 			if (!$this->hasClass($className)) {
-				return false;
+				return FALSE;
 			}
-
 			$parent = $this->getClass($className);
 		} else {
 			if ($pos = strrpos($constantName, '\\')) {
 				$namespace = substr($constantName, 0, $pos);
 				if (!$this->hasNamespace($namespace)) {
-					return false;
+					return FALSE;
 				}
-
 				$parent = $this->getNamespace($namespace);
 				$constantName = substr($constantName, $pos + 1);
 			} else {
 				$parent = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
 		}
-
 		return $parent->hasConstant($constantName);
 	}
+
 
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
@@ -291,19 +288,16 @@ class Memory implements Broker\Backend
 	 */
 	public function getConstant($constantName)
 	{
-		static $declared = array();
+		static $declared = [];
 		if (empty($declared)) {
 			$declared = get_defined_constants();
 		}
-
 		if ($boundary = strpos($constantName, '::')) {
 			// Class constant
 			$className = substr($constantName, 0, $boundary);
 			$constantName = substr($constantName, $boundary + 2);
-
 			return $this->getClass($className)->getConstantReflection($constantName);
 		}
-
 		try {
 			$constantName = ltrim($constantName, '\\');
 			if ($boundary = strrpos($constantName, '\\')) {
@@ -312,7 +306,6 @@ class Memory implements Broker\Backend
 			} else {
 				$ns = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
-
 			return $ns->getConstant($constantName);
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$constantName])) {
@@ -321,10 +314,10 @@ class Memory implements Broker\Backend
 					return $reflection;
 				}
 			}
-
 			throw new Exception\BrokerException($this->getBroker(), sprintf('Constant %s does not exist.', $constantName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
+
 
 	/**
 	 * Returns all constants from all namespaces.
@@ -333,17 +326,17 @@ class Memory implements Broker\Backend
 	 */
 	public function getConstants()
 	{
-		if (null === $this->allConstants) {
-			$this->allConstants = array();
+		if (NULL === $this->allConstants) {
+			$this->allConstants = [];
 			foreach ($this->namespaces as $namespace) {
 				foreach ($namespace->getConstants() as $constant) {
 					$this->allConstants[$constant->getName()] = $constant;
 				}
 			}
 		}
-
 		return $this->allConstants;
 	}
+
 
 	/**
 	 * Returns if there was such function processed (FQN expected).
@@ -357,17 +350,16 @@ class Memory implements Broker\Backend
 		if ($pos = strrpos($functionName, '\\')) {
 			$namespace = substr($functionName, 0, $pos);
 			if (!isset($this->namespaces[$namespace])) {
-				return false;
+				return FALSE;
 			}
-
 			$namespace = $this->getNamespace($namespace);
 			$functionName = substr($functionName, $pos + 1);
 		} else {
 			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
-
 		return $namespace->hasFunction($functionName);
 	}
+
 
 	/**
 	 * Returns a reflection object of a function (FQN expected).
@@ -378,31 +370,29 @@ class Memory implements Broker\Backend
 	 */
 	public function getFunction($functionName)
 	{
-		static $declared = array();
+		static $declared = [];
 		if (empty($declared)) {
 			$functions = get_defined_functions();
 			$declared = array_flip($functions['internal']);
 		}
-
 		$functionName = ltrim($functionName, '\\');
 		try {
 			$ns = $this->getNamespace(
 				($boundary = strrpos($functionName, '\\'))
-				// Function within a namespace
-				? substr($functionName, 0, $boundary)
-				// Function wihout a namespace
-				: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
+					// Function within a namespace
+					? substr($functionName, 0, $boundary)
+					// Function wihout a namespace
+					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
-
 			return $ns->getFunction($functionName);
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$functionName])) {
 				return new Php\ReflectionFunction($functionName, $this->broker);
 			}
-
 			throw new Exception\BrokerException($this->getBroker(), sprintf('Function %s does not exist.', $functionName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
+
 
 	/**
 	 * Returns all functions from all namespaces.
@@ -411,17 +401,17 @@ class Memory implements Broker\Backend
 	 */
 	public function getFunctions()
 	{
-		if (null === $this->allFunctions) {
-			$this->allFunctions = array();
+		if (NULL === $this->allFunctions) {
+			$this->allFunctions = [];
 			foreach ($this->namespaces as $namespace) {
 				foreach ($namespace->getFunctions() as $function) {
 					$this->allFunctions[$function->getName()] = $function;
 				}
 			}
 		}
-
 		return $this->allFunctions;
 	}
+
 
 	/**
 	 * Returns if the given file was already processed.
@@ -433,6 +423,7 @@ class Memory implements Broker\Backend
 	{
 		return isset($this->tokenStreams[Broker::getRealPath($fileName)]);
 	}
+
 
 	/**
 	 * Returns an array of tokens for a particular file.
@@ -447,9 +438,9 @@ class Memory implements Broker\Backend
 		if (!isset($this->tokenStreams[$realName])) {
 			throw new Exception\BrokerException($this->getBroker(), sprintf('File "%s" was not processed yet.', $fileName), Exception\BrokerException::DOES_NOT_EXIST);
 		}
-
-		return true === $this->tokenStreams[$realName] ? new FileStream($realName) : $this->tokenStreams[$realName];
+		return TRUE === $this->tokenStreams[$realName] ? new FileStream($realName) : $this->tokenStreams[$realName];
 	}
+
 
 	/**
 	 * Adds a file to the backend storage.
@@ -460,18 +451,15 @@ class Memory implements Broker\Backend
 	 */
 	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file)
 	{
-		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : true;
+		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : TRUE;
 		$this->files[$file->getName()] = $file;
-
-		$errors = array();
-
+		$errors = [];
 		foreach ($file->getNamespaces() as $fileNamespace) {
 			try {
 				$namespaceName = $fileNamespace->getName();
 				if (!isset($this->namespaces[$namespaceName])) {
 					$this->namespaces[$namespaceName] = new TokenReflection\ReflectionNamespace($namespaceName, $file->getBroker());
 				}
-
 				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 			} catch (Exception\FileProcessingException $e) {
 				$errors = array_merge($errors, $e->getReasons());
@@ -480,18 +468,16 @@ class Memory implements Broker\Backend
 				die($e->getMessage());
 			}
 		}
-
 		// Reset all-*-cache
-		$this->allClasses = null;
-		$this->allFunctions = null;
-		$this->allConstants = null;
-
+		$this->allClasses = NULL;
+		$this->allFunctions = NULL;
+		$this->allConstants = NULL;
 		if (!empty($errors)) {
 			throw new Exception\FileProcessingException($errors, $file);
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Sets the reflection broker instance.
@@ -505,6 +491,7 @@ class Memory implements Broker\Backend
 		return $this;
 	}
 
+
 	/**
 	 * Returns the reflection broker instance.
 	 *
@@ -514,6 +501,7 @@ class Memory implements Broker\Backend
 	{
 		return $this->broker;
 	}
+
 
 	/**
 	 * Sets if token streams are stored in the backend.
@@ -527,6 +515,7 @@ class Memory implements Broker\Backend
 		return $this;
 	}
 
+
 	/**
 	 * Returns if token streams are stored in the backend.
 	 *
@@ -537,6 +526,7 @@ class Memory implements Broker\Backend
 		return $this->storingTokenStreams;
 	}
 
+
 	/**
 	 * Prepares and returns used class lists.
 	 *
@@ -545,18 +535,16 @@ class Memory implements Broker\Backend
 	protected function parseClassLists()
 	{
 		// Initialize the all-classes-cache
-		$allClasses = array(
-			self::TOKENIZED_CLASSES => array(),
-			self::INTERNAL_CLASSES => array(),
-			self::NONEXISTENT_CLASSES => array()
-		);
-
+		$allClasses = [
+			self::TOKENIZED_CLASSES => [],
+			self::INTERNAL_CLASSES => [],
+			self::NONEXISTENT_CLASSES => []
+		];
 		foreach ($this->namespaces as $namespace) {
 			foreach ($namespace->getClasses() as $class) {
 				$allClasses[self::TOKENIZED_CLASSES][$class->getName()] = $class;
 			}
 		}
-
 		foreach ($allClasses[self::TOKENIZED_CLASSES] as $className => $class) {
 			foreach (array_merge($class->getParentClasses(), $class->getInterfaces()) as $parent) {
 				if ($parent->isInternal()) {
@@ -566,7 +554,6 @@ class Memory implements Broker\Backend
 				}
 			}
 		}
-
 		return $allClasses;
 	}
 }

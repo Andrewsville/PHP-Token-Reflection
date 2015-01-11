@@ -7,12 +7,14 @@ use ApiGen\TokenReflection\Exception\FileProcessingException;
 
 class DuplicitiesTest extends TestCase
 {
+
 	/**
 	 * Element type.
 	 *
 	 * @var string
 	 */
 	protected $type = 'duplicities';
+
 
 	/**
 	 * Tests duplicit constants
@@ -39,6 +41,7 @@ class DuplicitiesTest extends TestCase
 		$this->assertTrue($constant->hasReasons());
 	}
 
+
 	/**
 	 * Tests duplicit functions.
 	 */
@@ -63,6 +66,7 @@ class DuplicitiesTest extends TestCase
 		$this->assertSame($fileName, $function->getFileName());
 		$this->assertTrue($function->hasReasons());
 	}
+
 
 	/**
 	 * Tests duplicit classes.
@@ -89,6 +93,7 @@ class DuplicitiesTest extends TestCase
 		$this->assertTrue($class->hasReasons());
 	}
 
+
 	/**
 	 * Tests duplicities from an another file.
 	 */
@@ -103,26 +108,26 @@ class DuplicitiesTest extends TestCase
 			// Expected
 		}
 
-		static $elements = array(
-			'classes' => array(
+		static $elements = [
+			'classes' => [
 				'duplicitiesConstants',
 				'duplicitiesFunctions',
 				'duplicitiesClasses1',
 				'duplicitiesClasses2'
-			),
-			'functions' => array(
+			],
+			'functions' => [
 				'duplicitiesConstants',
 				'duplicitiesFunctions1',
 				'duplicitiesFunctions2',
 				'duplicitiesClasses'
-			),
-			'constants' => array(
+			],
+			'constants' => [
 				'DUPLICITIES_CONSTANTS_1',
 				'DUPLICITIES_CONSTANTS_2',
 				'DUPLICITIES_FUNCTIONS',
 				'DUPLICITIES_CLASSES'
-			)
-		);
+			]
+		];
 
 		foreach ($elements as $type => $names) {
 			foreach ($names as $name) {

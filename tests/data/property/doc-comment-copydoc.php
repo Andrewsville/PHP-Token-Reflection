@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_PropertyDocCommentCopydoc
 {
+
 	/**
 	 * This is a property.
 	 */
@@ -36,4 +37,5 @@ class TokenReflection_Test_PropertyDocCommentCopydoc
 	 * @copydoc nonexistentClass::$nonexistentProperty
 	 */
 	public $property7;
+
 }

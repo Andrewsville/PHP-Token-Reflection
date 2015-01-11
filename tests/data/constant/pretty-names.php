@@ -6,6 +6,7 @@ namespace ns1 {
 
 	class ConstPrettyNames
 	{
+
 		const INTERNAL = 'internal';
 	}
 
@@ -17,6 +18,7 @@ namespace {
 
 	class ConstPrettyNames
 	{
+
 		const INTERNAL = 'internal';
 	}
 

@@ -9,12 +9,14 @@ use ApiGen\TokenReflection\Stream\StringStream;
 
 class ParseErrorTest extends TestCase
 {
+
 	/**
 	 * Element type.
 	 *
 	 * @var string
 	 */
 	protected $type = 'parseerror';
+
 
 	/**
 	 * Tests an exception thrown when trying to pass an empty token stream.
@@ -26,6 +28,7 @@ class ParseErrorTest extends TestCase
 		$stream = new StringStream('', 'foo.php');
 		new ReflectionClass($stream, $this->getBroker());
 	}
+
 
 	/**
 	 * Tests invalid source code handling.
@@ -39,6 +42,7 @@ class ParseErrorTest extends TestCase
 		$this->performTest($testName);
 	}
 
+
 	/**
 	 * Tests invalid source code handling.
 	 *
@@ -50,6 +54,7 @@ class ParseErrorTest extends TestCase
 	{
 		$this->performTest($testName);
 	}
+
 
 	/**
 	 * Tests invalid source code handling.
@@ -63,6 +68,7 @@ class ParseErrorTest extends TestCase
 		$this->performTest($testName);
 	}
 
+
 	/**
 	 * Tests invalid source code handling.
 	 *
@@ -74,6 +80,7 @@ class ParseErrorTest extends TestCase
 	{
 		$this->performTest($testName);
 	}
+
 
 	/**
 	 * Tests invalid source code handling.
@@ -87,6 +94,7 @@ class ParseErrorTest extends TestCase
 		$this->performTest($testName);
 	}
 
+
 	/**
 	 * Tests invalid source code handling.
 	 *
@@ -99,6 +107,7 @@ class ParseErrorTest extends TestCase
 		$this->performTest($testName);
 	}
 
+
 	/**
 	 * Performs a test.
 	 *
@@ -110,6 +119,7 @@ class ParseErrorTest extends TestCase
 		$broker->processFile($this->getFilePath($testName));
 	}
 
+
 	/**
 	 * Provider for invalid class source code handling tests.
 	 *
@@ -119,6 +129,7 @@ class ParseErrorTest extends TestCase
 	{
 		return $this->prepareTests('invalid-class', 10);
 	}
+
 
 	/**
 	 * Provider for invalid constant source code handling tests.
@@ -130,6 +141,7 @@ class ParseErrorTest extends TestCase
 		return $this->prepareTests('invalid-constant', 4);
 	}
 
+
 	/**
 	 * Provider for invalid file source code handling tests.
 	 *
@@ -139,6 +151,7 @@ class ParseErrorTest extends TestCase
 	{
 		return $this->prepareTests('invalid-file', 7);
 	}
+
 
 	/**
 	 * Provider for invalid function/method source code handling tests.
@@ -150,6 +163,7 @@ class ParseErrorTest extends TestCase
 		return $this->prepareTests('invalid-functionbase', 3);
 	}
 
+
 	/**
 	 * Provider for invalid function/method source code handling tests.
 	 *
@@ -159,6 +173,7 @@ class ParseErrorTest extends TestCase
 	{
 		return $this->prepareTests('invalid-parameter', 3);
 	}
+
 
 	/**
 	 * Provider for invalid function/method source code handling tests.
@@ -170,6 +185,7 @@ class ParseErrorTest extends TestCase
 		return $this->prepareTests('invalid-property', 3);
 	}
 
+
 	/**
 	 * Prepares test names.
 	 *
@@ -179,8 +195,8 @@ class ParseErrorTest extends TestCase
 	 */
 	private function prepareTests($prefix, $count)
 	{
-		return array_map(function($i) use ($prefix) {
-			return array($prefix . '-' . $i);
+		return array_map(function ($i) use ($prefix) {
+			return [$prefix . '-' . $i];
 		}, range(1, $count));
 	}
 }

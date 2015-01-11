@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
@@ -15,6 +14,7 @@ use ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection\Exception;
 use Reflector, ReflectionFunction as InternalReflectionFunction, ReflectionParameter as InternalReflectionParameter;
 
+
 /**
  * Reflection of a not tokenized but defined function.
  *
@@ -22,6 +22,7 @@ use Reflector, ReflectionFunction as InternalReflectionFunction, ReflectionParam
  */
 class ReflectionFunction extends InternalReflectionFunction implements IReflection, TokenReflection\IReflectionFunction
 {
+
 	/**
 	 * Function parameter reflections.
 	 *
@@ -36,6 +37,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	private $broker;
 
+
 	/**
 	 * Constructor.
 	 *
@@ -48,6 +50,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		$this->broker = $broker;
 	}
 
+
 	/**
 	 * Returns the PHP extension reflection.
 	 *
@@ -58,6 +61,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		return ReflectionExtension::create(parent::getExtension(), $this->broker);
 	}
 
+
 	/**
 	 * Checks if there is a particular annotation.
 	 *
@@ -66,8 +70,9 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function hasAnnotation($name)
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a particular annotation value.
@@ -77,8 +82,9 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getAnnotation($name)
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns parsed docblock.
@@ -87,8 +93,9 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getAnnotations()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
@@ -97,8 +104,9 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function isTokenized()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a particular parameter.
@@ -111,12 +119,10 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public function getParameter($parameter)
 	{
 		$parameters = $this->getParameters();
-
 		if (is_numeric($parameter)) {
 			if (!isset($parameters[$parameter])) {
 				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 			}
-
 			return $parameters[$parameter];
 		} else {
 			foreach ($parameters as $reflection) {
@@ -124,10 +130,10 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 					return $reflection;
 				}
 			}
-
 			throw new TokenReflection\Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), TokenReflection\Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
+
 
 	/**
 	 * Returns function parameters.
@@ -136,16 +142,16 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getParameters()
 	{
-		if (null === $this->parameters) {
+		if (NULL === $this->parameters) {
 			$broker = $this->broker;
 			$parent = $this;
-			$this->parameters = array_map(function(InternalReflectionParameter $parameter) use ($broker, $parent) {
+			$this->parameters = array_map(function (InternalReflectionParameter $parameter) use ($broker, $parent) {
 				return ReflectionParameter::create($parameter, $broker, $parent);
 			}, parent::getParameters());
 		}
-
 		return $this->parameters;
 	}
+
 
 	/**
 	 * Returns the reflection broker used by this reflection object.
@@ -157,6 +163,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		return $this->broker;
 	}
 
+
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
@@ -164,8 +171,9 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function getNamespaceAliases()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Magic __get method.
@@ -178,6 +186,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		return TokenReflection\ReflectionElement::get($this, $key);
 	}
 
+
 	/**
 	 * Magic __isset method.
 	 *
@@ -189,6 +198,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
+
 	/**
 	 * Returns the function/method as closure.
 	 *
@@ -198,6 +208,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	{
 		return parent::getClosure();
 	}
+
 
 	/**
 	 * Returns the closure scope class.
@@ -209,6 +220,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		return parent::getClosureScopeClass();
 	}
 
+
 	/**
 	 * Returns this pointer bound to closure.
 	 *
@@ -219,6 +231,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		return parent::getClosureThis();
 	}
 
+
 	/**
 	 * Returns if the function definition is valid.
 	 *
@@ -228,8 +241,9 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	 */
 	public function isValid()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns an element pretty (docblock compatible) name.
@@ -240,6 +254,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	{
 		return $this->getName() . '()';
 	}
+
 
 	/**
 	 * Creates a reflection instance.
@@ -254,7 +269,6 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 		if (!$internalReflection instanceof InternalReflectionFunction) {
 			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
-
 		return $broker->getFunction($internalReflection->getName());
 	}
 }

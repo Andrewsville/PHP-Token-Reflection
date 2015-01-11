@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\ReflectionNamespace;
@@ -9,12 +8,14 @@ use ReflectionClass as InternalReflectionClass;
 
 class ReflectionFileTest extends TestCase
 {
+
 	/**
 	 * Element type.
 	 *
 	 * @var string
 	 */
 	protected $type = 'file';
+
 
 	/**
 	 * Tests file level docblocks.
@@ -35,9 +36,10 @@ class ReflectionFileTest extends TestCase
 		$this->assertTrue($fileReflection->hasAnnotation('author'));
 		$this->assertFalse($fileReflection->hasAnnotation('licence'));
 
-		$this->assertSame(array('package name'), $fileReflection->getAnnotation('package'));
-		$this->assertSame(array('author name'), $fileReflection->getAnnotation('author'));
+		$this->assertSame(['package name'], $fileReflection->getAnnotation('package'));
+		$this->assertSame(['author name'], $fileReflection->getAnnotation('author'));
 	}
+
 
 	/**
 	 * Tests file level docblocks.
@@ -59,6 +61,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertFalse($fileReflection->getDocComment());
 	}
 
+
 	/**
 	 * Tests returning file reflections.
 	 */
@@ -72,6 +75,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertSame($rfl->token->getFileName(), $rfl->token->getFileReflection()->getName());
 		$this->assertSame($this->getBroker()->getFile($fileName), $rfl->token->getFileReflection());
 	}
+
 
 	public function testDeclareNoNamespace()
 	{
@@ -90,6 +94,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertEquals(ReflectionNamespace::NO_NAMESPACE_NAME, $namespaces[0]->getName());
 	}
 
+
 	public function testDeclareNamespace()
 	{
 		$fileName = $this->getFilePath('declareNamespace');
@@ -106,6 +111,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertCount(1, $namespaces);
 		$this->assertEquals('TokenReflection\Test', $namespaces[0]->getName());
 	}
+
 
 	/**
 	 * Tests throwing exceptions when requesting reflections of files that were not processed.

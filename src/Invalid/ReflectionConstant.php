@@ -6,13 +6,13 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\IReflectionConstant;
 use ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection\ReflectionBase;
+
 
 /**
  * Invalid constant reflection.
@@ -21,6 +21,7 @@ use ApiGen\TokenReflection\ReflectionBase;
  */
 class ReflectionConstant extends ReflectionElement implements IReflectionConstant
 {
+
 	/**
 	 * Constant name.
 	 *
@@ -42,6 +43,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	private $broker;
 
+
 	/**
 	 * Constructor.
 	 *
@@ -56,6 +58,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		$this->fileName = $fileName;
 	}
 
+
 	/**
 	 * Returns the name.
 	 *
@@ -66,6 +69,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		return $this->name;
 	}
 
+
 	/**
 	 * Returns the unqualified name (UQN).
 	 *
@@ -74,8 +78,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	public function getShortName()
 	{
 		$pos = strrpos($this->name, '\\');
-		return false === $pos ? $this->name : substr($this->name, $pos + 1);
+		return FALSE === $pos ? $this->name : substr($this->name, $pos + 1);
 	}
+
 
 	/**
 	 * Returns the declaring class reflection.
@@ -84,8 +89,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getDeclaringClass()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the declaring class name.
@@ -94,8 +100,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getDeclaringClassName()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the namespace name.
@@ -105,8 +112,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	public function getNamespaceName()
 	{
 		$pos = strrpos($this->name, '\\');
-		return false === $pos ? '' : substr($this->name, 0, $pos);
+		return FALSE === $pos ? '' : substr($this->name, 0, $pos);
 	}
+
 
 	/**
 	 * Returns if the function/method is defined within a namespace.
@@ -115,8 +123,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function inNamespace()
 	{
-		return false !== strpos($this->name, '\\');
+		return FALSE !== strpos($this->name, '\\');
 	}
+
 
 	/**
 	 * Returns the PHP extension reflection.
@@ -125,8 +134,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getExtension()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the PHP extension name.
@@ -135,8 +145,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getExtensionName()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns the appropriate source code part.
@@ -148,6 +159,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		return '';
 	}
 
+
 	/**
 	 * Returns the start position in the file token stream.
 	 *
@@ -157,6 +169,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	{
 		return -1;
 	}
+
 
 	/**
 	 * Returns the end position in the file token stream.
@@ -168,6 +181,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		return -1;
 	}
 
+
 	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
@@ -177,6 +191,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	{
 		return $this->fileName;
 	}
+
 
 	/**
 	 * Returns a file reflection.
@@ -189,6 +204,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		throw new Exception\BrokerException($this->getBroker(), sprintf('Constant %s was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
 	}
 
+
 	/**
 	 * Returns the definition start line number in the file.
 	 *
@@ -196,8 +212,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getStartLine()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the definition end line number in the file.
@@ -206,8 +223,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getEndLine()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the appropriate docblock definition.
@@ -216,8 +234,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getDocComment()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Checks if there is a particular annotation.
@@ -227,8 +246,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function hasAnnotation($name)
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a particular annotation value.
@@ -238,8 +258,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getAnnotation($name)
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns parsed docblock.
@@ -248,8 +269,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getAnnotations()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns the constant value.
@@ -258,8 +280,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getValue()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the part of the source code defining the constant value.
@@ -268,8 +291,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getValueDefinition()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the originaly provided value definition.
@@ -278,8 +302,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getOriginalValueDefinition()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns if the constant is internal.
@@ -288,8 +313,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function isInternal()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the constant is user defined.
@@ -298,8 +324,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function isUserDefined()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
@@ -308,8 +335,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function isTokenized()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the reflection subject is deprecated.
@@ -318,8 +346,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function isDeprecated()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns an element pretty (docblock compatible) name.
@@ -331,6 +360,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		return $this->name;
 	}
 
+
 	/**
 	 * Returns the string representation of the reflection object.
 	 *
@@ -340,11 +370,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	{
 		return sprintf(
 			"Constant [ %s %s ] { %s }\n",
-			gettype(null),
+			gettype(NULL),
 			$this->getName(),
-			null
+			NULL
 		);
 	}
+
 
 	/**
 	 * Returns the reflection broker used by this reflection object.
@@ -356,6 +387,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		return $this->broker;
 	}
 
+
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
@@ -363,8 +395,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getNamespaceAliases()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns if the constant definition is valid.
@@ -373,8 +406,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function isValid()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Magic __get method.
@@ -386,6 +420,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	{
 		return ReflectionBase::get($this, $key);
 	}
+
 
 	/**
 	 * Magic __isset method.

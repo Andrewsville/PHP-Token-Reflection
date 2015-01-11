@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
@@ -12,12 +11,14 @@ use ApiGen\TokenReflection\Stream\FileStream;
  */
 class StreamTest extends TestCase
 {
+
 	/**
 	 * TestCase type.
 	 *
 	 * @var string
 	 */
 	protected $type = 'parseerror';
+
 
 	/**
 	 * Tests the (im)possibility to unset a token from a token stream.
@@ -30,6 +31,7 @@ class StreamTest extends TestCase
 		unset($stream[666]);
 	}
 
+
 	/**
 	 * Tests the (im)possibility to set a token in a token stream.
 	 *
@@ -38,8 +40,9 @@ class StreamTest extends TestCase
 	public function testSetException()
 	{
 		$stream = $this->getFileStream('invalid-stream');
-		$stream[0] = null;
+		$stream[0] = NULL;
 	}
+
 
 	/**
 	 * Tests an exception thrown when calling findMatchingBracket and the current token is not a bracket.
@@ -50,6 +53,7 @@ class StreamTest extends TestCase
 	{
 		$this->getFileStream('invalid-stream')->findMatchingBracket();
 	}
+
 
 	/**
 	 * Tests an exception thrown when no matching bracket could be found.
@@ -64,6 +68,7 @@ class StreamTest extends TestCase
 		$stream->findMatchingBracket();
 	}
 
+
 	/**
 	 * Tests an exception thrown when calling findMatchingBracket and being beyond the end of the token.
 	 *
@@ -77,6 +82,7 @@ class StreamTest extends TestCase
 		$this->assertFalse($stream->valid());
 		$stream->findMatchingBracket();
 	}
+
 
 	/**
 	 * Tests an exception thrown when trying to load a non existent file.
@@ -93,6 +99,7 @@ class StreamTest extends TestCase
 		new FileStream($file);
 	}
 
+
 	/**
 	 * Tests an exception thrown when trying to load a non existent file.
 	 *
@@ -107,6 +114,7 @@ class StreamTest extends TestCase
 		}
 		new FileStream($file);
 	}
+
 
 	/**
 	 * @param string $name File name

@@ -25,12 +25,12 @@ class ConsistencyTest extends TestCase
 			// Expected
 		}
 
-		$this->assertNotSame(null, @constant('PHP_INT_MAX'));
-		$constants = array(
+		$this->assertNotSame(NULL, @constant('PHP_INT_MAX'));
+		$constants = [
 			'tokenized' => $broker->getConstant('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE'),
 			'internal' => $broker->getConstant('PHP_INT_MAX'),
 			'invalid' => $broker->getConstant('DUPLICITIES_CONSTANTS_1')
-		);
+		];
 
 		// TestCase cross-consistency
 		foreach ($constants as $referenceType => $referenceConstant) {
@@ -53,13 +53,13 @@ class ConsistencyTest extends TestCase
 			// Expected
 		}
 
-		$this->assertFalse(class_exists('Foo\\Bar', true));
-		$classes = array(
+		$this->assertFalse(class_exists('Foo\\Bar', TRUE));
+		$classes = [
 			'tokenized' => $broker->getClass('TokenReflection\\ConsistencyTest'),
 			'internal' => $broker->getClass('Exception'),
 			'dummy' => $broker->getClass('Foo\\Bar'),
 			'invalid' => $broker->getClass('duplicitiesClasses1')
-		);
+		];
 
 		// TestCase consistency with the internal reflection
 		foreach ($classes as $class) {
@@ -88,11 +88,11 @@ class ConsistencyTest extends TestCase
 		}
 
 		$this->assertTrue(function_exists('constant'));
-		$functions = array(
+		$functions = [
 			'tokenized' => $broker->getFunction('TokenReflection\\Test\\functionInNamespace'),
 			'internal' => $broker->getFunction('constant'),
 			'invalid' => $broker->getFunction('duplicitiesFunctions1')
-		);
+		];
 
 		// TestCase consistency with the internal reflection
 		foreach ($functions as $function) {
@@ -116,10 +116,10 @@ class ConsistencyTest extends TestCase
 		$broker->processFile(__DIR__ . '/data/property/lines.php');
 
 		$this->assertTrue(function_exists('constant'));
-		$properties = array(
+		$properties = [
 			'tokenized' => $broker->getClass('TokenReflection_Test_PropertyLines')->getProperty('lines'),
 			'internal' => $broker->getClass('Exception')->getProperty('message')
-		);
+		];
 
 		// TestCase consistency with the internal reflection
 		foreach ($properties as $property) {
@@ -142,10 +142,10 @@ class ConsistencyTest extends TestCase
 		$broker = $this->createBroker();
 		$broker->processFile(__DIR__ . '/data/method/access-level.php');
 
-		$methods = array(
+		$methods = [
 			'tokenized' => $broker->getClass('TokenReflection_Test_MethodAccessLevelParent')->getMethod('privateNoExtended'),
 			'internal' => $broker->getClass('Exception')->getMethod('getMessage')
-		);
+		];
 
 		// TestCase consistency with the internal reflection
 		foreach ($methods as $method) {
@@ -168,10 +168,10 @@ class ConsistencyTest extends TestCase
 		$broker = $this->createBroker();
 		$broker->processFile(__DIR__ . '/data/parameter/optional-false.php');
 
-		$parameters = array(
+		$parameters = [
 			'tokenized' => $broker->getFunction('tokenReflectionParameterOptionalFalse')->getParameter('one'),
 			'internal' => $broker->getFunction('constant')->getParameter('const_name')
-		);
+		];
 
 		// TestCase consistency with the internal reflection
 		foreach ($parameters as $parameter) {
@@ -187,6 +187,7 @@ class ConsistencyTest extends TestCase
 			}
 		}
 	}
+
 
 	/**
 	 * Tests API consistency of two TR reflections.
@@ -220,11 +221,11 @@ class ConsistencyTest extends TestCase
 	 */
 	private function performConsistencyTest(\ReflectionClass $reference, \ReflectionClass $test)
 	{
-		static $skip = array(
-			'*' => array('addReason' => true, 'getReasons' => true, 'hasReasons' => true),
-			'ApiGen\\TokenReflection\\Php\\IReflection' => array('alias' => true, 'getFileReflection' => true, 'getSource' => true, 'getStartPosition' => true, 'getEndPosition' => true),
-			'ApiGen\\TokenReflection\\Php\\ReflectionProperty' => array('setDefaultValue' => true)
-		);
+		static $skip = [
+			'*' => ['addReason' => TRUE, 'getReasons' => TRUE, 'hasReasons' => TRUE],
+			'ApiGen\\TokenReflection\\Php\\IReflection' => ['alias' => TRUE, 'getFileReflection' => TRUE, 'getSource' => TRUE, 'getStartPosition' => TRUE, 'getEndPosition' => TRUE],
+			'ApiGen\\TokenReflection\\Php\\ReflectionProperty' => ['setDefaultValue' => TRUE]
+		];
 
 		$methods = $reference->getMethods(\ReflectionMethod::IS_PUBLIC);
 		foreach ($methods as $method) {

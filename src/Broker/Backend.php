@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen\TokenReflection;
@@ -17,6 +16,7 @@ use ApiGen\TokenReflection;
  */
 interface Backend
 {
+
 	/**
 	 * Identifier of the tokenized classes list.
 	 *
@@ -38,6 +38,7 @@ interface Backend
 	 */
 	const NONEXISTENT_CLASSES = 4;
 
+
 	/**
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
@@ -45,6 +46,7 @@ interface Backend
 	 * @return boolean
 	 */
 	public function hasNamespace($namespaceName);
+
 
 	/**
 	 * Returns a reflection object of the given namespace.
@@ -54,6 +56,7 @@ interface Backend
 	 */
 	public function getNamespace($namespaceName);
 
+
 	/**
 	 * Returns if there was such class processed (FQN expected).
 	 *
@@ -61,6 +64,7 @@ interface Backend
 	 * @return boolean
 	 */
 	public function hasClass($className);
+
 
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
@@ -70,6 +74,7 @@ interface Backend
 	 */
 	public function getClass($className);
 
+
 	/**
 	 * Returns all classes from all namespaces.
 	 *
@@ -77,6 +82,7 @@ interface Backend
 	 * @return array
 	 */
 	public function getClasses($type = Backend::TOKENIZED_CLASSES);
+
 
 	/**
 	 * Returns if there was such constant processed (FQN expected).
@@ -86,6 +92,7 @@ interface Backend
 	 */
 	public function hasConstant($constantName);
 
+
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
@@ -94,12 +101,14 @@ interface Backend
 	 */
 	public function getConstant($constantName);
 
+
 	/**
 	 * Returns all constants from all namespaces.
 	 *
 	 * @return array
 	 */
 	public function getConstants();
+
 
 	/**
 	 * Returns if there was such function processed (FQN expected).
@@ -109,6 +118,7 @@ interface Backend
 	 */
 	public function hasFunction($functionName);
 
+
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
@@ -117,12 +127,14 @@ interface Backend
 	 */
 	public function getFunction($functionName);
 
+
 	/**
 	 * Returns all functions from all namespaces.
 	 *
 	 * @return array
 	 */
 	public function getFunctions();
+
 
 	/**
 	 * Returns if the given file was already processed.
@@ -132,6 +144,7 @@ interface Backend
 	 */
 	public function isFileProcessed($fileName);
 
+
 	/**
 	 * Returns if a file with the given filename has been processed.
 	 *
@@ -139,6 +152,7 @@ interface Backend
 	 * @return boolean
 	 */
 	public function hasFile($fileName);
+
 
 	/**
 	 * Returns a file reflection.
@@ -149,12 +163,14 @@ interface Backend
 	 */
 	public function getFile($fileName);
 
+
 	/**
 	 * Returns file reflections.
 	 *
 	 * @return array
 	 */
 	public function getFiles();
+
 
 	/**
 	 * Returns an array of tokens for a particular file.
@@ -163,6 +179,7 @@ interface Backend
 	 * @return ApiGen\TokenReflection\Stream\StreamBase
 	 */
 	public function getFileTokens($fileName);
+
 
 	/**
 	 * Adds a file to the backend storage.
@@ -173,6 +190,7 @@ interface Backend
 	 */
 	public function addFile(TokenReflection\Stream\StreamBase $tokenStream, TokenReflection\ReflectionFile $file);
 
+
 	/**
 	 * Sets the reflection broker instance.
 	 *
@@ -181,12 +199,14 @@ interface Backend
 	 */
 	public function setBroker(TokenReflection\Broker $broker);
 
+
 	/**
 	 * Returns the reflection broker instance.
 	 *
 	 * @return ApiGen\TokenReflection\Broker $broker Reflection broker
 	 */
 	public function getBroker();
+
 
 	/**
 	 * Sets if token streams are stored in the backend.
@@ -195,6 +215,7 @@ interface Backend
 	 * @return ApiGen\TokenReflection\Broker\Backend
 	 */
 	public function setStoringTokenStreams($store);
+
 
 	/**
 	 * Returns if token streams are stored in the backend.

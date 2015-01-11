@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_ParameterDocCommentInheritanceGrandParent
 {
+
 	/**
 	 * Private method.
 	 *
@@ -15,8 +16,10 @@ class TokenReflection_Test_ParameterDocCommentInheritanceGrandParent
 	}
 }
 
+
 class TokenReflection_Test_ParameterDocCommentInheritanceParent extends TokenReflection_Test_ParameterDocCommentInheritanceGrandParent
 {
+
 	/**
 	 * Protected method.
 	 */
@@ -26,8 +29,10 @@ class TokenReflection_Test_ParameterDocCommentInheritanceParent extends TokenRef
 	}
 }
 
+
 class TokenReflection_Test_ParameterDocCommentInheritance extends TokenReflection_Test_ParameterDocCommentInheritanceParent
 {
+
 	/**
 	 * Public method.
 	 *

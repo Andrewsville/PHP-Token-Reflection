@@ -2,7 +2,9 @@
 
 class TokenReflection_Test_ClassInstances
 {
+
 	protected $private = 0;
+
 
 	public function __construct($private = 0)
 	{
@@ -10,6 +12,8 @@ class TokenReflection_Test_ClassInstances
 	}
 }
 
+
 class TokenReflection_Test_ClassInstancesChild extends TokenReflection_Test_ClassInstances
 {
+
 }

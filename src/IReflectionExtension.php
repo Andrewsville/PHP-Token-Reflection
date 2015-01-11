@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,6 +13,7 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionExtension extends IReflection
 {
+
 	/**
 	 * Returns a class reflection.
 	 *
@@ -22,12 +22,14 @@ interface IReflectionExtension extends IReflection
 	 */
 	public function getClass($name);
 
+
 	/**
 	 * Returns reflections of classes defined by this extension.
 	 *
 	 * @return array
 	 */
 	public function getClasses();
+
 
 	/**
 	 * Returns class names defined by this extension.
@@ -36,6 +38,7 @@ interface IReflectionExtension extends IReflection
 	 */
 	public function getClassNames();
 
+
 	/**
 	 * Returns a constant reflection.
 	 *
@@ -43,6 +46,7 @@ interface IReflectionExtension extends IReflection
 	 * @return ApiGen\TokenReflection\IReflectionConstant
 	 */
 	public function getConstantReflection($name);
+
 
 	/**
 	 * Returns reflections of constants defined by this extension.
@@ -54,6 +58,7 @@ interface IReflectionExtension extends IReflection
 	 */
 	public function getConstantReflections();
 
+
 	/**
 	 * Returns a constant value.
 	 *
@@ -61,6 +66,7 @@ interface IReflectionExtension extends IReflection
 	 * @return mixed|false
 	 */
 	public function getConstant($name);
+
 
 	/**
 	 * Returns values of constants defined by this extension.
@@ -71,6 +77,7 @@ interface IReflectionExtension extends IReflection
 	 */
 	public function getConstants();
 
+
 	/**
 	 * Returns a function reflection.
 	 *
@@ -79,6 +86,7 @@ interface IReflectionExtension extends IReflection
 	 */
 	public function getFunction($name);
 
+
 	/**
 	 * Returns reflections of functions defined by this extension.
 	 *
@@ -86,12 +94,14 @@ interface IReflectionExtension extends IReflection
 	 */
 	public function getFunctions();
 
+
 	/**
 	 * Returns function names defined by this extension.
 	 *
 	 * @return array
 	 */
 	public function getFunctionNames();
+
 
 	/**
 	 * Returns the string representation of the reflection object.

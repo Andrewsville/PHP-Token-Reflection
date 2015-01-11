@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
@@ -21,12 +20,13 @@ use ApiGen\TokenReflection\Stream\StreamBase as Stream;
  */
 abstract class ReflectionBase implements IReflection
 {
+
 	/**
 	 * Class method cache.
 	 *
 	 * @var array
 	 */
-	private static $methodCache = array();
+	private static $methodCache = [];
 
 	/**
 	 * Object name (FQN).
@@ -56,6 +56,7 @@ abstract class ReflectionBase implements IReflection
 	 */
 	private $broker;
 
+
 	/**
 	 * Constructor.
 	 *
@@ -63,12 +64,12 @@ abstract class ReflectionBase implements IReflection
 	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 */
-	public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = null)
+	public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
 		$this->broker = $broker;
-
 		$this->parseStream($tokenStream, $parent);
 	}
+
 
 	/**
 	 * Parses the token substream.
@@ -76,7 +77,8 @@ abstract class ReflectionBase implements IReflection
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 */
-	abstract protected function parseStream(Stream $tokenStream, IReflection $parent = null);
+	abstract protected function parseStream(Stream $tokenStream, IReflection $parent = NULL);
+
 
 	/**
 	 * Returns the name (FQN).
@@ -88,6 +90,7 @@ abstract class ReflectionBase implements IReflection
 		return $this->name;
 	}
 
+
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
@@ -97,6 +100,7 @@ abstract class ReflectionBase implements IReflection
 	{
 		return $this->docComment->getDocComment();
 	}
+
 
 	/**
 	 * Checks if there is a particular annotation.
@@ -109,6 +113,7 @@ abstract class ReflectionBase implements IReflection
 		return $this->docComment->hasAnnotation($name);
 	}
 
+
 	/**
 	 * Returns a particular annotation value.
 	 *
@@ -120,6 +125,7 @@ abstract class ReflectionBase implements IReflection
 		return $this->docComment->getAnnotation($name);
 	}
 
+
 	/**
 	 * Returns all annotations.
 	 *
@@ -129,6 +135,7 @@ abstract class ReflectionBase implements IReflection
 	{
 		return $this->docComment->getAnnotations();
 	}
+
 
 	/**
 	 * Returns the reflection broker used by this reflection object.
@@ -140,6 +147,7 @@ abstract class ReflectionBase implements IReflection
 		return $this->broker;
 	}
 
+
 	/**
 	 * Returns if the reflection object is internal.
 	 *
@@ -149,8 +157,9 @@ abstract class ReflectionBase implements IReflection
 	 */
 	public function isInternal()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the reflection object is user defined.
@@ -161,8 +170,9 @@ abstract class ReflectionBase implements IReflection
 	 */
 	public function isUserDefined()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
@@ -171,8 +181,9 @@ abstract class ReflectionBase implements IReflection
 	 */
 	public function isTokenized()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the reflection subject is deprecated.
@@ -184,12 +195,14 @@ abstract class ReflectionBase implements IReflection
 		return $this->hasAnnotation('deprecated');
 	}
 
+
 	/**
 	 * Returns the appropriate source code part.
 	 *
 	 * @return string
 	 */
 	abstract public function getSource();
+
 
 	/**
 	 * Returns an element pretty (docblock compatible) name.
@@ -200,6 +213,7 @@ abstract class ReflectionBase implements IReflection
 	{
 		return $this->name;
 	}
+
 
 	/**
 	 * Magic __get method.
@@ -212,6 +226,7 @@ abstract class ReflectionBase implements IReflection
 		return self::get($this, $key);
 	}
 
+
 	/**
 	 * Magic __isset method.
 	 *
@@ -222,6 +237,7 @@ abstract class ReflectionBase implements IReflection
 	{
 		return self::exists($this, $key);
 	}
+
 
 	/**
 	 * Magic __get method helper.
@@ -238,7 +254,6 @@ abstract class ReflectionBase implements IReflection
 			if (!isset(self::$methodCache[$className])) {
 				self::$methodCache[$className] = array_flip(get_class_methods($className));
 			}
-
 			$methods = self::$methodCache[$className];
 			$key2 = ucfirst($key);
 			if (isset($methods['get' . $key2])) {
@@ -247,9 +262,9 @@ abstract class ReflectionBase implements IReflection
 				return $object->{'is' . $key2}();
 			}
 		}
-
 		throw new Exception\RuntimeException(sprintf('Cannot read property "%s".', $key), Exception\RuntimeException::DOES_NOT_EXIST);
 	}
+
 
 	/**
 	 * Magic __isset method helper.
@@ -262,9 +277,9 @@ abstract class ReflectionBase implements IReflection
 	{
 		try {
 			self::get($object, $key);
-			return true;
+			return TRUE;
 		} catch (Exception\RuntimeException $e) {
-			return false;
+			return FALSE;
 		}
 	}
 }

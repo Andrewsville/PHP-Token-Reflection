@@ -2,12 +2,12 @@
 
 namespace ApiGen\TokenReflection\Tests;
 
-
 /**
  * TR library source code test.
  */
 class SourceCodeTest extends TestCase
 {
+
 	/**
 	 * Tests if all methods have annotations.
 	 */
@@ -22,17 +22,17 @@ class SourceCodeTest extends TestCase
 		foreach ($classes as $class) {
 			foreach ($class->getMethods() as $method) {
 				if (!$method->isInternal()) {
-					$this->assertNotSame(false, $method->getDocComment(), $method->getPrettyName());
+					$this->assertNotSame(FALSE, $method->getDocComment(), $method->getPrettyName());
 				}
 			}
 			foreach ($class->getProperties() as $property) {
 				if (!$property->isInternal()) {
-					$this->assertNotSame(false, $property->getDocComment(), $property->getPrettyName());
+					$this->assertNotSame(FALSE, $property->getDocComment(), $property->getPrettyName());
 				}
 			}
 			foreach ($class->getConstantReflections() as $constant) {
 				if (!$constant->isInternal()) {
-					$this->assertNotSame(false, $constant->getDocComment(), $constant->getPrettyName());
+					$this->assertNotSame(FALSE, $constant->getDocComment(), $constant->getPrettyName());
 				}
 			}
 		}

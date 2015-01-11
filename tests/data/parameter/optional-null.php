@@ -1,5 +1,5 @@
 <?php
 
-function tokenReflectionParameterOptionalNull($one = null)
+function tokenReflectionParameterOptionalNull($one = NULL)
 {
 }

@@ -2,5 +2,7 @@
 
 class TokenReflection_Test_PropertyTypeArray
 {
-	public $typeArray = array(1 => 1);
+
+	public $typeArray = [1 => 1];
+
 }

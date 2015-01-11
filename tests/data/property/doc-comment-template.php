@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_PropertyDocCommentTemplate
 {
+
 	/**#@+
 	 * Short description.
 	 *

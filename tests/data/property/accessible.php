@@ -2,7 +2,11 @@
 
 class TokenReflection_Test_PropertyAccessible
 {
-	public $public = true;
-	protected $protected = true;
-	private $private = true;
+
+	public $public = TRUE;
+
+	protected $protected = TRUE;
+
+	private $private = TRUE;
+
 }

@@ -8,6 +8,7 @@ use ApiGen\TokenReflection\Php\ReflectionExtension;
 
 class ReflectionExtensionTest extends TestCase
 {
+
 	/**
 	 * @var string
 	 */

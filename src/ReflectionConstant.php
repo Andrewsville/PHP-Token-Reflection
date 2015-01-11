@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
@@ -19,6 +18,7 @@ use ApiGen\TokenReflection\Exception;
  */
 class ReflectionConstant extends ReflectionElement implements IReflectionConstant
 {
+
 	/**
 	 * Name of the declaring class.
 	 *
@@ -45,14 +45,15 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 *
 	 * @var array|string
 	 */
-	private $valueDefinition = array();
+	private $valueDefinition = [];
 
 	/**
 	 * Imported namespace/class aliases.
 	 *
 	 * @var array
 	 */
-	private $aliases = array();
+	private $aliases = [];
+
 
 	/**
 	 * Returns the unqualified name (UQN).
@@ -62,12 +63,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	public function getShortName()
 	{
 		$name = $this->getName();
-		if (null !== $this->namespaceName && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
+		if (NULL !== $this->namespaceName && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$name = substr($name, strlen($this->namespaceName) + 1);
 		}
-
 		return $name;
 	}
+
 
 	/**
 	 * Returns the name of the declaring class.
@@ -79,6 +80,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		return $this->declaringClassName;
 	}
 
+
 	/**
 	 * Returns a reflection of the declaring class.
 	 *
@@ -86,12 +88,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getDeclaringClass()
 	{
-		if (null === $this->declaringClassName) {
-			return null;
+		if (NULL === $this->declaringClassName) {
+			return NULL;
 		}
-
 		return $this->getBroker()->getClass($this->declaringClassName);
 	}
+
 
 	/**
 	 * Returns the namespace name.
@@ -100,8 +102,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getNamespaceName()
 	{
-		return null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
+		return NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
+
 
 	/**
 	 * Returns if the class is defined within a namespace.
@@ -112,6 +115,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	{
 		return '' !== $this->getNamespaceName();
 	}
+
 
 	/**
 	 * Returns the constant value.
@@ -124,9 +128,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			$this->value = Resolver::getValueDefinition($this->valueDefinition, $this);
 			$this->valueDefinition = Resolver::getSourceCode($this->valueDefinition);
 		}
-
 		return $this->value;
 	}
+
 
 	/**
 	 * Returns the constant value definition.
@@ -138,6 +142,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		return is_array($this->valueDefinition) ? Resolver::getSourceCode($this->valueDefinition) : $this->valueDefinition;
 	}
 
+
 	/**
 	 * Returns the originaly provided value definition.
 	 *
@@ -147,6 +152,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	{
 		return $this->valueDefinition;
 	}
+
 
 	/**
 	 * Returns the string representation of the reflection object.
@@ -163,6 +169,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		);
 	}
 
+
 	/**
 	 * Exports a reflected object.
 	 *
@@ -173,14 +180,13 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
-	public static function export(Broker $broker, $class, $constant, $return = false)
+	public static function export(Broker $broker, $class, $constant, $return = FALSE)
 	{
 		$className = is_object($class) ? get_class($class) : $class;
 		$constantName = $constant;
-
-		if (null === $className) {
+		if (NULL === $className) {
 			$constant = $broker->getConstant($constantName);
-			if (null === $constant) {
+			if (NULL === $constant) {
 				throw new Exception\RuntimeException('Constant does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
 			}
 		} else {
@@ -192,13 +198,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			}
 			$constant = $class->getConstantReflection($constantName);
 		}
-
 		if ($return) {
 			return $constant->__toString();
 		}
-
 		echo $constant->__toString();
 	}
+
 
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
@@ -207,8 +212,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getNamespaceAliases()
 	{
-		return null === $this->declaringClassName ? $this->aliases : $this->getDeclaringClass()->getNamespaceAliases();
+		return NULL === $this->declaringClassName ? $this->aliases : $this->getDeclaringClass()->getNamespaceAliases();
 	}
+
 
 	/**
 	 * Returns an element pretty (docblock compatible) name.
@@ -217,8 +223,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getPrettyName()
 	{
-		return null === $this->declaringClassName ? parent::getPrettyName() : sprintf('%s::%s', $this->declaringClassName, $this->name);
+		return NULL === $this->declaringClassName ? parent::getPrettyName() : sprintf('%s::%s', $this->declaringClassName, $this->name);
 	}
+
 
 	/**
 	 * Returns if the constant definition is valid.
@@ -227,8 +234,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function isValid()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Processes the parent reflection object.
@@ -248,9 +256,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		} else {
 			throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), Exception\ParseException::INVALID_PARENT);
 		}
-
 		return parent::processParent($parent, $tokenStream);
 	}
+
 
 	/**
 	 * Find the appropriate docblock.
@@ -265,15 +273,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		while ($position > 0 && !$tokenStream->is(T_CONST, $position)) {
 			$position--;
 		}
-
 		$actual = $tokenStream->key();
-
 		parent::parseDocComment($tokenStream->seek($position), $parent);
-
 		$tokenStream->seek($actual);
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses reflected element metadata from the token stream.
@@ -285,17 +290,16 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
 		if ($tokenStream->is(T_CONST)) {
-			$tokenStream->skipWhitespaces(true);
+			$tokenStream->skipWhitespaces(TRUE);
 		}
-
-		if (false === $this->docComment->getDocComment()) {
+		if (FALSE === $this->docComment->getDocComment()) {
 			parent::parseDocComment($tokenStream, $parent);
 		}
-
 		return $this
 			->parseName($tokenStream)
 			->parseValue($tokenStream, $parent);
 	}
+
 
 	/**
 	 * Parses the constant name.
@@ -309,17 +313,15 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		if (!$tokenStream->is(T_STRING)) {
 			throw new Exception\ParseException($this, $tokenStream, 'The constant name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
 		}
-
-		if (null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
+		if (NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$this->name = $tokenStream->getTokenValue();
 		} else {
 			$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
 		}
-
-		$tokenStream->skipWhitespaces(true);
-
+		$tokenStream->skipWhitespaces(TRUE);
 		return $this;
 	}
+
 
 	/**
 	 * Parses the constant value.
@@ -334,32 +336,29 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		if (!$tokenStream->is('=')) {
 			throw new Exception\ParseException($this, $tokenStream, 'Could not find the definition start.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
-		$tokenStream->skipWhitespaces(true);
-
-		static $acceptedTokens = array(
-			'-' => true,
-			'+' => true,
-			T_STRING => true,
-			T_NS_SEPARATOR => true,
-			T_CONSTANT_ENCAPSED_STRING => true,
-			T_DNUMBER => true,
-			T_LNUMBER => true,
-			T_DOUBLE_COLON => true,
-			T_CLASS_C => true,
-			T_DIR => true,
-			T_FILE => true,
-			T_FUNC_C => true,
-			T_LINE => true,
-			T_METHOD_C => true,
-			T_NS_C => true,
-			T_TRAIT_C => true
-		);
-
-		while (null !== ($type = $tokenStream->getType())) {
+		$tokenStream->skipWhitespaces(TRUE);
+		static $acceptedTokens = [
+			'-' => TRUE,
+			'+' => TRUE,
+			T_STRING => TRUE,
+			T_NS_SEPARATOR => TRUE,
+			T_CONSTANT_ENCAPSED_STRING => TRUE,
+			T_DNUMBER => TRUE,
+			T_LNUMBER => TRUE,
+			T_DOUBLE_COLON => TRUE,
+			T_CLASS_C => TRUE,
+			T_DIR => TRUE,
+			T_FILE => TRUE,
+			T_FUNC_C => TRUE,
+			T_LINE => TRUE,
+			T_METHOD_C => TRUE,
+			T_NS_C => TRUE,
+			T_TRAIT_C => TRUE
+		];
+		while (NULL !== ($type = $tokenStream->getType())) {
 			if (T_START_HEREDOC === $type) {
 				$this->valueDefinition[] = $tokenStream->current();
-				while (null !== $type && T_END_HEREDOC !== $type) {
+				while (NULL !== $type && T_END_HEREDOC !== $type) {
 					$tokenStream->next();
 					$this->valueDefinition[] = $tokenStream->current();
 					$type = $tokenStream->getType();
@@ -368,22 +367,19 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			} elseif (isset($acceptedTokens[$type])) {
 				$this->valueDefinition[] = $tokenStream->current();
 				$tokenStream->next();
-			} elseif ($tokenStream->isWhitespace(true)) {
-				$tokenStream->skipWhitespaces(true);
+			} elseif ($tokenStream->isWhitespace(TRUE)) {
+				$tokenStream->skipWhitespaces(TRUE);
 			} else {
 				break;
 			}
 		}
-
 		if (empty($this->valueDefinition)) {
 			throw new Exception\ParseException($this, $tokenStream, 'Value definition is empty.', Exception\ParseException::LOGICAL_ERROR);
 		}
-
 		$value = $tokenStream->getTokenValue();
-		if (null === $type || (',' !== $value && ';' !== $value)) {
+		if (NULL === $type || (',' !== $value && ';' !== $value)) {
 			throw new Exception\ParseException($this, $tokenStream, 'Invalid value definition.', Exception\ParseException::LOGICAL_ERROR);
 		}
-
 		return $this;
 	}
 }

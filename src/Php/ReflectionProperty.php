@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
@@ -23,6 +22,7 @@ use Reflector, ReflectionProperty as InternalReflectionProperty;
  */
 class ReflectionProperty extends InternalReflectionProperty implements IReflection, TokenReflection\IReflectionProperty
 {
+
 	/**
 	 * Reflection broker.
 	 *
@@ -35,7 +35,8 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 *
 	 * @var boolean
 	 */
-	private $accessible = false;
+	private $accessible = FALSE;
+
 
 	/**
 	 * Constructor.
@@ -50,6 +51,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		$this->broker = $broker;
 	}
 
+
 	/**
 	 * Returns the declaring class reflection.
 	 *
@@ -59,6 +61,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	{
 		return ReflectionClass::create(parent::getDeclaringClass(), $this->broker);
 	}
+
 
 	/**
 	 * Returns the declaring class name.
@@ -70,6 +73,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $this->getDeclaringClass()->getName();
 	}
 
+
 	/**
 	 * Returns the definition start line number in the file.
 	 *
@@ -77,8 +81,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getStartLine()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the definition end line number in the file.
@@ -87,8 +92,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getEndLine()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the appropriate docblock definition.
@@ -97,8 +103,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getDocComment()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Checks if there is a particular annotation.
@@ -108,8 +115,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function hasAnnotation($name)
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a particular annotation value.
@@ -119,8 +127,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getAnnotation($name)
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns parsed docblock.
@@ -129,8 +138,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getAnnotations()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns the property default value.
@@ -143,6 +153,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $values[$this->getName()];
 	}
 
+
 	/**
 	 * Returns the part of the source code defining the property default value.
 	 *
@@ -151,8 +162,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getDefaultValueDefinition()
 	{
 		$value = $this->getDefaultValue();
-		return null === $value ? null : var_export($value, true);
+		return NULL === $value ? NULL : var_export($value, TRUE);
 	}
+
 
 	/**
 	 * Returns if the property is internal.
@@ -164,6 +176,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $this->getDeclaringClass()->isInternal();
 	}
 
+
 	/**
 	 * Returns if the property is user defined.
 	 *
@@ -174,6 +187,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $this->getDeclaringClass()->isUserDefined();
 	}
 
+
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
 	 *
@@ -181,8 +195,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function isTokenized()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the reflection subject is deprecated.
@@ -191,8 +206,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function isDeprecated()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns the reflection broker used by this reflection object.
@@ -204,6 +220,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $this->broker;
 	}
 
+
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
@@ -211,8 +228,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getNamespaceAliases()
 	{
-		return array();
+		return [];
 	}
+
 
 	/**
 	 * Returns the defining trait.
@@ -221,8 +239,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getDeclaringTrait()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the declaring trait name.
@@ -231,8 +250,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public function getDeclaringTraitName()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns if the property is set accessible.
@@ -244,6 +264,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $this->accessible;
 	}
 
+
 	/**
 	 * Sets a property to be accessible or not.
 	 *
@@ -252,9 +273,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function setAccessible($accessible)
 	{
 		$this->accessible = (bool) $accessible;
-
 		parent::setAccessible($accessible);
 	}
+
 
 	/**
 	 * Returns the PHP extension reflection.
@@ -266,6 +287,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $this->getDeclaringClass()->getExtension();
 	}
 
+
 	/**
 	 * Returns the PHP extension name.
 	 *
@@ -274,8 +296,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getExtensionName()
 	{
 		$extension = $this->getExtension();
-		return $extension ? $extension->getName() : false;
+		return $extension ? $extension->getName() : FALSE;
 	}
+
 
 	/**
 	 * Returns the file name the reflection object is defined in.
@@ -287,6 +310,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return $this->getDeclaringClass()->getFileName();
 	}
 
+
 	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
@@ -296,6 +320,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	{
 		return sprintf('%s::$%s', $this->getDeclaringClassName(), $this->getName());
 	}
+
 
 	/**
 	 * Magic __get method.
@@ -308,6 +333,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return TokenReflection\ReflectionElement::get($this, $key);
 	}
 
+
 	/**
 	 * Magic __isset method.
 	 *
@@ -319,6 +345,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
+
 	/**
 	 * Creates a reflection instance.
 	 *
@@ -329,17 +356,14 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
-		static $cache = array();
-
+		static $cache = [];
 		if (!$internalReflection instanceof InternalReflectionProperty) {
 			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', Exception\RuntimeException::INVALID_ARGUMENT);
 		}
-
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
 		if (!isset($cache[$key])) {
 			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $broker);
 		}
-
 		return $cache[$key];
 	}
 }

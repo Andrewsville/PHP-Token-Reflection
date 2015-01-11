@@ -2,12 +2,19 @@
 
 class TokenReflection_Test_PropertyDeclaringClassParent
 {
-	public $parent = true;
-	protected $parentOverlay = true;
+
+	public $parent = TRUE;
+
+	protected $parentOverlay = TRUE;
+
 }
+
 
 class TokenReflection_Test_PropertyDeclaringClass extends TokenReflection_Test_PropertyDeclaringClassParent
 {
-	protected $parentOverlay = false;
-	public $child = true;
+
+	protected $parentOverlay = FALSE;
+
+	public $child = TRUE;
+
 }

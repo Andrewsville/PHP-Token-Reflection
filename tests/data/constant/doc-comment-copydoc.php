@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_ConstantDocCommentCopydoc
 {
+
 	/**
 	 * This is a constant.
 	 */
@@ -28,8 +29,10 @@ class TokenReflection_Test_ConstantDocCommentCopydoc
 	const DOC_COMMENT_COPY_NO = 'doc-comment-copy-no';
 }
 
+
 class TokenReflection_Test_ConstantDocCommentCopydoc2
 {
+
 	/**
 	 * This is another constant.
 	 */

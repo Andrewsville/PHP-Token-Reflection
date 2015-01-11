@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,12 +13,14 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionProperty extends IReflection
 {
+
 	/**
 	 * Returns a reflection of the declaring class.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass
 	 */
 	public function getDeclaringClass();
+
 
 	/**
 	 * Returns the name of the declaring class.
@@ -28,12 +29,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function getDeclaringClassName();
 
+
 	/**
 	 * Returns the definition start line number in the file.
 	 *
 	 * @return integer
 	 */
 	public function getStartLine();
+
 
 	/**
 	 * Returns the definition end line number in the file.
@@ -42,12 +45,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function getEndLine();
 
+
 	/**
 	 * Returns the appropriate docblock definition.
 	 *
 	 * @return string|boolean
 	 */
 	public function getDocComment();
+
 
 	/**
 	 * Returns the property default value.
@@ -56,12 +61,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function getDefaultValue();
 
+
 	/**
 	 * Returns the part of the source code defining the property default value.
 	 *
 	 * @return string
 	 */
 	public function getDefaultValueDefinition();
+
 
 	/**
 	 * Returns the property value for a particular class instance.
@@ -71,12 +78,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function getValue($object);
 
+
 	/**
 	 * Returns property modifiers.
 	 *
 	 * @return integer
 	 */
 	public function getModifiers();
+
 
 	/**
 	 * Returns if the property is private.
@@ -85,12 +94,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function isPrivate();
 
+
 	/**
 	 * Returns if the property is protected.
 	 *
 	 * @return boolean
 	 */
 	public function isProtected();
+
 
 	/**
 	 * Returns if the property is public.
@@ -99,12 +110,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function isPublic();
 
+
 	/**
 	 * Returns if the property is static.
 	 *
 	 * @return boolean
 	 */
 	public function isStatic();
+
 
 	/**
 	 * Returns if the property was defined at compile time.
@@ -113,6 +126,7 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function isDefault();
 
+
 	/**
 	 * Sets a property to be accessible or not.
 	 *
@@ -120,12 +134,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function setAccessible($accessible);
 
+
 	/**
 	 * Returns if the property is set accessible.
 	 *
 	 * @return boolean
 	 */
 	public function isAccessible();
+
 
 	/**
 	 * Sets value of a property for a particular class instance.
@@ -135,12 +151,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function setValue($object, $value);
 
+
 	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string
 	 */
 	public function __toString();
+
 
 	/**
 	 * Returns the defining trait.
@@ -149,12 +167,14 @@ interface IReflectionProperty extends IReflection
 	 */
 	public function getDeclaringTrait();
 
+
 	/**
 	 * Returns the declaring trait name.
 	 *
 	 * @return string|null
 	 */
 	public function getDeclaringTraitName();
+
 
 	/**
 	 * Returns if the property is deprecated.

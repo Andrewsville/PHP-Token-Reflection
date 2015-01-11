@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,12 +13,14 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionClass extends IReflection
 {
+
 	/**
 	 * Returns the unqualified name (UQN).
 	 *
 	 * @return string
 	 */
 	public function getShortName();
+
 
 	/**
 	 * Returns the namespace name.
@@ -28,12 +29,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getNamespaceName();
 
+
 	/**
 	 * Returns if the class is defined within a namespace.
 	 *
 	 * @return boolean
 	 */
 	public function inNamespace();
+
 
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
@@ -42,12 +45,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getNamespaceAliases();
 
+
 	/**
 	 * Returns the PHP extension reflection.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionExtension|null
 	 */
 	public function getExtension();
+
 
 	/**
 	 * Returns the PHP extension name.
@@ -56,12 +61,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getExtensionName();
 
+
 	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string
 	 */
 	public function getFileName();
+
 
 	/**
 	 * Returns the definition start line number in the file.
@@ -70,12 +77,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getStartLine();
 
+
 	/**
 	 * Returns the definition end line number in the file.
 	 *
 	 * @return integer
 	 */
 	public function getEndLine();
+
 
 	/**
 	 * Returns the appropriate docblock definition.
@@ -84,12 +93,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getDocComment();
 
+
 	/**
 	 * Returns modifiers.
 	 *
 	 * @return array
 	 */
 	public function getModifiers();
+
 
 	/**
 	 * Returns if the class is abstract.
@@ -98,12 +109,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function isAbstract();
 
+
 	/**
 	 * Returns if the class is final.
 	 *
 	 * @return boolean
 	 */
 	public function isFinal();
+
 
 	/**
 	 * Returns if the class is an interface.
@@ -112,12 +125,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function isInterface();
 
+
 	/**
 	 * Returns if the class is an exception or its descendant.
 	 *
 	 * @return boolean
 	 */
 	public function isException();
+
 
 	/**
 	 * Returns if objects of this class are cloneable.
@@ -129,6 +144,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function isCloneable();
 
+
 	/**
 	 * Returns if the class is iterateable.
 	 *
@@ -138,6 +154,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function isIterateable();
 
+
 	/**
 	 * Returns if the current class is a subclass of the given class.
 	 *
@@ -146,12 +163,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function isSubclassOf($class);
 
+
 	/**
 	 * Returns the parent class reflection.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionClass|null
 	 */
 	public function getParentClass();
+
 
 	/**
 	 * Returns the parent class name.
@@ -160,6 +179,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getParentClassName();
 
+
 	/**
 	 * Returns the parent classes reflections.
 	 *
@@ -167,12 +187,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getParentClasses();
 
+
 	/**
 	 * Returns the parent classes names.
 	 *
 	 * @return array
 	 */
 	public function getParentClassNameList();
+
 
 	/**
 	 * Returns if the class implements the given interface.
@@ -183,12 +205,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function implementsInterface($interface);
 
+
 	/**
 	 * Returns interface reflections.
 	 *
 	 * @return array
 	 */
 	public function getInterfaces();
+
 
 	/**
 	 * Returns interface names.
@@ -197,12 +221,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getInterfaceNames();
 
+
 	/**
 	 * Returns interface reflections implemented by this class, not its parents.
 	 *
 	 * @return array
 	 */
 	public function getOwnInterfaces();
+
 
 	/**
 	 * Returns names of interfaces implemented by this class, not its parents.
@@ -211,12 +237,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getOwnInterfaceNames();
 
+
 	/**
 	 * Returns the class constructor reflection.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionMethod|null
 	 */
 	public function getConstructor();
+
 
 	/**
 	 * Returns the class desctructor reflection.
@@ -225,6 +253,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getDestructor();
 
+
 	/**
 	 * Returns if the class implements the given method.
 	 *
@@ -232,6 +261,7 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function hasMethod($name);
+
 
 	/**
 	 * Returns a method reflection.
@@ -242,13 +272,15 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getMethod($name);
 
+
 	/**
 	 * Returns method reflections.
 	 *
 	 * @param integer $filter Methods filter
 	 * @return array
 	 */
-	public function getMethods($filter = null);
+	public function getMethods($filter = NULL);
+
 
 	/**
 	 * Returns if the class implements (and not its parents) the given method.
@@ -258,13 +290,15 @@ interface IReflectionClass extends IReflection
 	 */
 	public function hasOwnMethod($name);
 
+
 	/**
 	 * Returns method reflections declared by this class, not its parents.
 	 *
 	 * @param integer $filter Methods filter
 	 * @return array
 	 */
-	public function getOwnMethods($filter = null);
+	public function getOwnMethods($filter = NULL);
+
 
 	/**
 	 * Returns if the class imports the given method from traits.
@@ -274,13 +308,15 @@ interface IReflectionClass extends IReflection
 	 */
 	public function hasTraitMethod($name);
 
+
 	/**
 	 * Returns method reflections imported from traits.
 	 *
 	 * @param integer $filter Methods filter
 	 * @return array
 	 */
-	public function getTraitMethods($filter = null);
+	public function getTraitMethods($filter = NULL);
+
 
 	/**
 	 * Returns if the class defines the given constant.
@@ -289,6 +325,7 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function hasConstant($name);
+
 
 	/**
 	 * Returns a constant value.
@@ -299,6 +336,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getConstant($name);
 
+
 	/**
 	 * Returns a constant reflection.
 	 *
@@ -308,6 +346,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getConstantReflection($name);
 
+
 	/**
 	 * Returns an array of constant values.
 	 *
@@ -315,12 +354,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getConstants();
 
+
 	/**
 	 * Returns constant reflections.
 	 *
 	 * @return array
 	 */
 	public function getConstantReflections();
+
 
 	/**
 	 * Returns if the class (and not its parents) defines the given constant.
@@ -330,12 +371,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function hasOwnConstant($name);
 
+
 	/**
 	 * Returns values of constants declared by this class, not by its parents.
 	 *
 	 * @return array
 	 */
 	public function getOwnConstants();
+
 
 	/**
 	 * Returns constant reflections declared by this class, not by its parents.
@@ -344,6 +387,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getOwnConstantReflections();
 
+
 	/**
 	 * Returns if the class defines the given property.
 	 *
@@ -351,6 +395,7 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function hasProperty($name);
+
 
 	/**
 	 * Return a property reflection.
@@ -361,13 +406,15 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getProperty($name);
 
+
 	/**
 	 * Returns property reflections.
 	 *
 	 * @param integer $filter Properties filter
 	 * @return array
 	 */
-	public function getProperties($filter = null);
+	public function getProperties($filter = NULL);
+
 
 	/**
 	 * Returns if the class (and not its parents) defines the given property.
@@ -377,13 +424,15 @@ interface IReflectionClass extends IReflection
 	 */
 	public function hasOwnProperty($name);
 
+
 	/**
 	 * Returns property reflections declared by this class, not its parents.
 	 *
 	 * @param integer $filter Properties filter
 	 * @return array
 	 */
-	public function getOwnProperties($filter = null);
+	public function getOwnProperties($filter = NULL);
+
 
 	/**
 	 * Returns if the class imports the given property from traits.
@@ -393,13 +442,15 @@ interface IReflectionClass extends IReflection
 	 */
 	public function hasTraitProperty($name);
 
+
 	/**
 	 * Returns property reflections imported from traits.
 	 *
 	 * @param integer $filter Properties filter
 	 * @return array
 	 */
-	public function getTraitProperties($filter = null);
+	public function getTraitProperties($filter = NULL);
+
 
 	/**
 	 * Returns default properties.
@@ -408,12 +459,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getDefaultProperties();
 
+
 	/**
 	 * Returns static properties reflections.
 	 *
 	 * @return array
 	 */
 	public function getStaticProperties();
+
 
 	/**
 	 * Returns a value of a static property.
@@ -424,7 +477,8 @@ interface IReflectionClass extends IReflection
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
 	 */
-	public function getStaticPropertyValue($name, $default = null);
+	public function getStaticPropertyValue($name, $default = NULL);
+
 
 	/**
 	 * Returns reflections of direct subclasses.
@@ -433,12 +487,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getDirectSubclasses();
 
+
 	/**
 	 * Returns names of direct subclasses.
 	 *
 	 * @return array
 	 */
 	public function getDirectSubclassNames();
+
 
 	/**
 	 * Returns reflections of indirect subclasses.
@@ -447,12 +503,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getIndirectSubclasses();
 
+
 	/**
 	 * Returns names of indirect subclasses.
 	 *
 	 * @return array
 	 */
 	public function getIndirectSubclassNames();
+
 
 	/**
 	 * Returns reflections of classes directly implementing this interface.
@@ -461,12 +519,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getDirectImplementers();
 
+
 	/**
 	 * Returns names of classes directly implementing this interface.
 	 *
 	 * @return array
 	 */
 	public function getDirectImplementerNames();
+
 
 	/**
 	 * Returns reflections of classes indirectly implementing this interface.
@@ -475,12 +535,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getIndirectImplementers();
 
+
 	/**
 	 * Returns names of classes indirectly implementing this interface.
 	 *
 	 * @return array
 	 */
 	public function getIndirectImplementerNames();
+
 
 	/**
 	 * Returns if it is possible to create an instance of this class.
@@ -489,12 +551,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function isInstantiable();
 
+
 	/**
 	 * Returns traits used by this class.
 	 *
 	 * @return array
 	 */
 	public function getTraits();
+
 
 	/**
 	 * Returns traits used by this class and not its parents.
@@ -503,12 +567,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getOwnTraits();
 
+
 	/**
 	 * Returns names of used traits.
 	 *
 	 * @return array
 	 */
 	public function getTraitNames();
+
 
 	/**
 	 * Returns names of traits used by this class an not its parents.
@@ -517,12 +583,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function getOwnTraitNames();
 
+
 	/**
 	 * Returns method aliases from traits.
 	 *
 	 * @return array
 	 */
 	public function getTraitAliases();
+
 
 	/**
 	 * Returns if the class uses a particular trait.
@@ -532,12 +600,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function usesTrait($trait);
 
+
 	/**
 	 * Returns if the class is a trait.
 	 *
 	 * @return boolean
 	 */
 	public function isTrait();
+
 
 	/**
 	 * Returns if the given object is an instance of this class.
@@ -548,6 +618,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function isInstance($object);
 
+
 	/**
 	 * Creates a new class instance without using a constructor.
 	 *
@@ -555,6 +626,7 @@ interface IReflectionClass extends IReflection
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
 	 */
 	public function newInstanceWithoutConstructor();
+
 
 	/**
 	 * Creates a new instance using variable number of parameters.
@@ -566,6 +638,7 @@ interface IReflectionClass extends IReflection
 	 */
 	public function newInstance($args);
 
+
 	/**
 	 * Creates a new instance using an array of parameters.
 	 *
@@ -573,7 +646,8 @@ interface IReflectionClass extends IReflection
 	 * @return object
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required class does not exist.
 	 */
-	public function newInstanceArgs(array $args = array());
+	public function newInstanceArgs(array $args = []);
+
 
 	/**
 	 * Sets a static property value.
@@ -585,12 +659,14 @@ interface IReflectionClass extends IReflection
 	 */
 	public function setStaticPropertyValue($name, $value);
 
+
 	/**
 	 * Returns the string representation of the reflection object.
 	 *
 	 * @return string
 	 */
 	public function __toString();
+
 
 	/**
 	 * Returns if the class definition is complete.
@@ -600,6 +676,8 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function isComplete();
+
+
 	/**
 	 * Returns if the class definition is valid.
 	 *
@@ -608,6 +686,7 @@ interface IReflectionClass extends IReflection
 	 * @return boolean
 	 */
 	public function isValid();
+
 
 	/**
 	 * Returns if the class is deprecated.

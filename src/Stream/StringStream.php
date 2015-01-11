@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Stream;
 
 /**
@@ -14,6 +13,7 @@ namespace ApiGen\TokenReflection\Stream;
  */
 class StringStream extends StreamBase
 {
+
 	/**
 	 * Constructor.
 	 *
@@ -25,7 +25,6 @@ class StringStream extends StreamBase
 	public function __construct($source, $fileName)
 	{
 		parent::__construct();
-
 		$this->fileName = $fileName;
 		$this->processSource($source);
 	}

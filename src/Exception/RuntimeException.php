@@ -6,16 +6,17 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Exception;
 
 use ApiGen\TokenReflection\IReflection;
+
 
 /**
  * Runtime exception raised when working with a reflection element.
  */
 class RuntimeException extends BaseException
 {
+
 	/**
 	 * The property/method is not accessible.
 	 *
@@ -30,6 +31,7 @@ class RuntimeException extends BaseException
 	 */
 	private $sender;
 
+
 	/**
 	 * Constructor.
 	 *
@@ -37,12 +39,12 @@ class RuntimeException extends BaseException
 	 * @param integer $code Exception code
 	 * @param ApiGen\TokenReflection\IReflection $sender Reflection element
 	 */
-	public function __construct($message, $code, IReflection $sender = null)
+	public function __construct($message, $code, IReflection $sender = NULL)
 	{
 		parent::__construct($message, $code);
-
 		$this->sender = $sender;
 	}
+
 
 	/**
 	 * Returns the reflection element that caused the exception to be raised.
@@ -54,6 +56,7 @@ class RuntimeException extends BaseException
 		return $this->sender;
 	}
 
+
 	/**
 	 * Returns an exception description detail.
 	 *
@@ -61,6 +64,6 @@ class RuntimeException extends BaseException
 	 */
 	public function getDetail()
 	{
-		return null === $this->sender ? '' : sprintf('Thrown when working with "%s".', $this->sender->getPrettyName());
+		return NULL === $this->sender ? '' : sprintf('Thrown when working with "%s".', $this->sender->getPrettyName());
 	}
 }

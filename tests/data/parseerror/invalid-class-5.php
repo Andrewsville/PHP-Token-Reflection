@@ -2,6 +2,10 @@
 
 class TokenReflection_Test_ParseInvalidClass15
 {
-	use Trait1 && Trait2;
+
+	use Trait1
+
+
+&& Trait2;
 
 }

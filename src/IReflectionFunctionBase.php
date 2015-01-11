@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,12 +13,14 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflectionFunctionBase extends IReflection
 {
+
 	/**
 	 * Returns the namespace name.
 	 *
 	 * @return string
 	 */
 	public function getNamespaceName();
+
 
 	/**
 	 * Returns if the function/method is defined within a namespace.
@@ -28,12 +29,14 @@ interface IReflectionFunctionBase extends IReflection
 	 */
 	public function inNamespace();
 
+
 	/**
 	 * Returns the PHP extension reflection.
 	 *
 	 * @return ApiGen\TokenReflection\IReflectionExtension|null
 	 */
 	public function getExtension();
+
 
 	/**
 	 * Returns the PHP extension name.
@@ -42,12 +45,14 @@ interface IReflectionFunctionBase extends IReflection
 	 */
 	public function getExtensionName();
 
+
 	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string
 	 */
 	public function getFileName();
+
 
 	/**
 	 * Returns the definition start line number in the file.
@@ -56,12 +61,14 @@ interface IReflectionFunctionBase extends IReflection
 	 */
 	public function getStartLine();
 
+
 	/**
 	 * Returns the definition end line number in the file.
 	 *
 	 * @return integer
 	 */
 	public function getEndLine();
+
 
 	/**
 	 * Returns the appropriate docblock definition.
@@ -70,12 +77,14 @@ interface IReflectionFunctionBase extends IReflection
 	 */
 	public function getDocComment();
 
+
 	/**
 	 * Returns if the function/method is a closure.
 	 *
 	 * @return boolean
 	 */
 	public function isClosure();
+
 
 	/**
 	 * Returns if the function/method is deprecated.
@@ -84,12 +93,14 @@ interface IReflectionFunctionBase extends IReflection
 	 */
 	public function isDeprecated();
 
+
 	/**
 	 * Returns if the function/method returns its value as reference.
 	 *
 	 * @return boolean
 	 */
 	public function returnsReference();
+
 
 	/**
 	 * Returns a function/method parameter.
@@ -99,12 +110,14 @@ interface IReflectionFunctionBase extends IReflection
 	 */
 	public function getParameter($parameter);
 
+
 	/**
 	 * Returns function/method parameters.
 	 *
 	 * @return array
 	 */
 	public function getParameters();
+
 
 	/**
 	 * Returns the number of parameters.
@@ -113,12 +126,14 @@ interface IReflectionFunctionBase extends IReflection
 	 */
 	public function getNumberOfParameters();
 
+
 	/**
 	 * Returns the number of required parameters.
 	 *
 	 * @return integer
 	 */
 	public function getNumberOfRequiredParameters();
+
 
 	/**
 	 * Returns static variables.

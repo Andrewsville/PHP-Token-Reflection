@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 /**
@@ -14,12 +13,14 @@ namespace ApiGen\TokenReflection;
  */
 interface IReflection
 {
+
 	/**
 	 * Returns the name (FQN).
 	 *
 	 * @return string
 	 */
 	public function getName();
+
 
 	/**
 	 * Returns if the reflection object is internal.
@@ -28,12 +29,14 @@ interface IReflection
 	 */
 	public function isInternal();
 
+
 	/**
 	 * Returns if the reflection object is user defined.
 	 *
 	 * @return boolean
 	 */
 	public function isUserDefined();
+
 
 	/**
 	 * Returns if the current reflection comes from a tokenized source.
@@ -42,12 +45,14 @@ interface IReflection
 	 */
 	public function isTokenized();
 
+
 	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
 	 * @return ApiGen\TokenReflection\Broker
 	 */
 	public function getBroker();
+
 
 	/**
 	 * Magic __get method.
@@ -57,6 +62,7 @@ interface IReflection
 	 */
 	public function __get($key);
 
+
 	/**
 	 * Magic __isset method.
 	 *
@@ -64,6 +70,7 @@ interface IReflection
 	 * @return boolean
 	 */
 	public function __isset($key);
+
 
 	/**
 	 * Returns an element pretty (docblock compatible) name.

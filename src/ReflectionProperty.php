@@ -6,18 +6,19 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ReflectionProperty as InternalReflectionProperty, ReflectionClass as InternalReflectionClass;
 
+
 /**
  * Tokenized class property reflection.
  */
 class ReflectionProperty extends ReflectionElement implements IReflectionProperty
 {
+
 	/**
 	 * Access level of this property has changed from the original implementation.
 	 *
@@ -47,7 +48,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 *
 	 * @var boolean
 	 */
-	private $modifiersComplete = false;
+	private $modifiersComplete = FALSE;
 
 	/**
 	 * Property default value.
@@ -61,14 +62,14 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 *
 	 * @var array|string
 	 */
-	private $defaultValueDefinition = array();
+	private $defaultValueDefinition = [];
 
 	/**
 	 * Determined if the property value is accessible.
 	 *
 	 * @var boolean
 	 */
-	private $accessible = false;
+	private $accessible = FALSE;
 
 	/**
 	 * Declaring trait name.
@@ -76,6 +77,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 * @var string
 	 */
 	private $declaringTraitName;
+
 
 	/**
 	 * Returns a reflection of the declaring class.
@@ -87,6 +89,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		return $this->getBroker()->getClass($this->declaringClassName);
 	}
 
+
 	/**
 	 * Returns the name of the declaring class.
 	 *
@@ -96,6 +99,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		return $this->declaringClassName;
 	}
+
 
 	/**
 	 * Returns the property default value.
@@ -108,9 +112,9 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
 			$this->defaultValueDefinition = Resolver::getSourceCode($this->defaultValueDefinition);
 		}
-
 		return $this->defaultValue;
 	}
+
 
 	/**
 	 * Returns the part of the source code defining the property default value.
@@ -121,6 +125,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		return is_array($this->defaultValueDefinition) ? Resolver::getSourceCode($this->defaultValueDefinition) : $this->defaultValueDefinition;
 	}
+
 
 	/**
 	 * Returns the property value for a particular class instance.
@@ -135,22 +140,19 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		if (!$declaringClass->isInstance($object)) {
 			throw new Exception\RuntimeException('The given class is not an instance or subclass of the current class.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
-
 		if ($this->isPublic()) {
 			return $object->{$this->name};
 		} elseif ($this->isAccessible()) {
 			$refClass = new InternalReflectionClass($object);
 			$refProperty = $refClass->getProperty($this->name);
-
-			$refProperty->setAccessible(true);
+			$refProperty->setAccessible(TRUE);
 			$value = $refProperty->getValue($object);
-			$refProperty->setAccessible(false);
-
+			$refProperty->setAccessible(FALSE);
 			return $value;
 		}
-
 		throw new Exception\RuntimeException('Only public and accessible properties can return their values.', Exception\RuntimeException::NOT_ACCESSBILE, $this);
 	}
+
 
 	/**
 	 * Returns if the property was created at compile time.
@@ -161,8 +163,9 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	public function isDefault()
 	{
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns property modifiers.
@@ -171,22 +174,20 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	public function getModifiers()
 	{
-		if (false === $this->modifiersComplete) {
+		if (FALSE === $this->modifiersComplete) {
 			$declaringClass = $this->getDeclaringClass();
 			$declaringClassParent = $declaringClass->getParentClass();
-
 			if ($declaringClassParent && $declaringClassParent->hasProperty($this->name)) {
 				$property = $declaringClassParent->getProperty($this->name);
 				if (($this->isPublic() && !$property->isPublic()) || ($this->isProtected() && $property->isPrivate())) {
 					$this->modifiers |= self::ACCESS_LEVEL_CHANGED;
 				}
 			}
-
 			$this->modifiersComplete = ($this->modifiers & self::ACCESS_LEVEL_CHANGED) || $declaringClass->isComplete();
 		}
-
 		return $this->modifiers;
 	}
+
 
 	/**
 	 * Returns if the property is private.
@@ -198,6 +199,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		return (bool) ($this->modifiers & InternalReflectionProperty::IS_PRIVATE);
 	}
 
+
 	/**
 	 * Returns if the property is protected.
 	 *
@@ -207,6 +209,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		return (bool) ($this->modifiers & InternalReflectionProperty::IS_PROTECTED);
 	}
+
 
 	/**
 	 * Returns if the property is public.
@@ -218,6 +221,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		return (bool) ($this->modifiers & InternalReflectionProperty::IS_PUBLIC);
 	}
 
+
 	/**
 	 * Returns if the poperty is static.
 	 *
@@ -227,6 +231,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		return (bool) ($this->modifiers & InternalReflectionProperty::IS_STATIC);
 	}
+
 
 	/**
 	 * Returns the string representation of the reflection object.
@@ -246,6 +251,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		);
 	}
 
+
 	/**
 	 * Exports a reflected object.
 	 *
@@ -256,11 +262,10 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
-	public static function export(Broker $broker, $class, $property, $return = false)
+	public static function export(Broker $broker, $class, $property, $return = FALSE)
 	{
 		$className = is_object($class) ? get_class($class) : $class;
 		$propertyName = $property;
-
 		$class = $broker->getClass($className);
 		if ($class instanceof Invalid\ReflectionClass) {
 			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
@@ -268,13 +273,12 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
 		}
 		$property = $class->getProperty($propertyName);
-
 		if ($return) {
 			return $property->__toString();
 		}
-
 		echo $property->__toString();
 	}
+
 
 	/**
 	 * Returns if the property is set accessible.
@@ -286,6 +290,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		return $this->accessible;
 	}
 
+
 	/**
 	 * Sets a property to be accessible or not.
 	 *
@@ -296,6 +301,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		$this->accessible = (bool) $accessible;
 	}
 
+
 	/**
 	 * Sets the property default value.
 	 *
@@ -304,8 +310,9 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	public function setDefaultValue($value)
 	{
 		$this->defaultValue = $value;
-		$this->defaultValueDefinition = var_export($value, true);
+		$this->defaultValueDefinition = var_export($value, TRUE);
 	}
+
 
 	/**
 	 * Sets value of a property for a particular class instance.
@@ -320,17 +327,14 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		if (!$declaringClass->isInstance($object)) {
 			throw new Exception\RuntimeException('Instance of or subclass expected.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
-
 		if ($this->isPublic()) {
 			$object->{$this->name} = $value;
 		} elseif ($this->isAccessible()) {
 			$refClass = new InternalReflectionClass($object);
 			$refProperty = $refClass->getProperty($this->name);
-
-			$refProperty->setAccessible(true);
+			$refProperty->setAccessible(TRUE);
 			$refProperty->setValue($object, $value);
-			$refProperty->setAccessible(false);
-
+			$refProperty->setAccessible(FALSE);
 			if ($this->isStatic()) {
 				$this->setDefaultValue($value);
 			}
@@ -338,6 +342,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			throw new Exception\RuntimeException('Only public and accessible properties can be set.', Exception\RuntimeException::NOT_ACCESSBILE, $this);
 		}
 	}
+
 
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
@@ -348,6 +353,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		return $this->getDeclaringClass()->getNamespaceAliases();
 	}
+
 
 	/**
 	 * Creates a property alias for the given class.
@@ -362,6 +368,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		return $property;
 	}
 
+
 	/**
 	 * Returns the defining trait.
 	 *
@@ -369,8 +376,9 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	public function getDeclaringTrait()
 	{
-		return null === $this->declaringTraitName ? null : $this->getBroker()->getClass($this->declaringTraitName);
+		return NULL === $this->declaringTraitName ? NULL : $this->getBroker()->getClass($this->declaringTraitName);
 	}
+
 
 	/**
 	 * Returns the declaring trait name.
@@ -382,6 +390,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		return $this->declaringTraitName;
 	}
 
+
 	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
@@ -391,6 +400,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	{
 		return sprintf('%s::$%s', $this->declaringClassName ?: $this->declaringTraitName, $this->name);
 	}
+
 
 	/**
 	 * Processes the parent reflection object.
@@ -405,13 +415,13 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		if (!$parent instanceof ReflectionClass) {
 			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', Exception\ParseException::INVALID_PARENT);
 		}
-
 		$this->declaringClassName = $parent->getName();
 		if ($parent->isTrait()) {
 			$this->declaringTraitName = $parent->getName();
 		}
 		return parent::processParent($parent, $tokenStream);
 	}
+
 
 	/**
 	 * Parses reflected element metadata from the token stream.
@@ -423,14 +433,13 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
 		$this->parseModifiers($tokenStream, $parent);
-
-		if (false === $this->docComment->getDocComment()) {
+		if (FALSE === $this->docComment->getDocComment()) {
 			$this->parseDocComment($tokenStream, $parent);
 		}
-
 		return $this->parseName($tokenStream)
 			->parseDefaultValue($tokenStream);
 	}
+
 
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
@@ -442,7 +451,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	private function parseModifiers(Stream $tokenStream, ReflectionClass $class)
 	{
-		while (true) {
+		while (TRUE) {
 			switch ($tokenStream->getType()) {
 				case T_PUBLIC:
 				case T_VAR:
@@ -460,10 +469,8 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 				default:
 					break 2;
 			}
-
-			$tokenStream->skipWhitespaces(true);
+			$tokenStream->skipWhitespaces(TRUE);
 		}
-
 		if (InternalReflectionProperty::IS_STATIC === $this->modifiers) {
 			$this->modifiers |= InternalReflectionProperty::IS_PUBLIC;
 		} elseif (0 === $this->modifiers) {
@@ -471,7 +478,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			if (empty($parentProperties)) {
 				throw new Exception\ParseException($this, $tokenStream, 'No access level defined and no previous defining class property present.', Exception\ParseException::LOGICAL_ERROR);
 			}
-
 			$sibling = array_pop($parentProperties);
 			if ($sibling->isPublic()) {
 				$this->modifiers = InternalReflectionProperty::IS_PUBLIC;
@@ -482,14 +488,13 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			} else {
 				throw new Exception\ParseException($this, $tokenStream, sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
-
 			if ($sibling->isStatic()) {
 				$this->modifiers |= InternalReflectionProperty::IS_STATIC;
 			}
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses the property name.
@@ -503,13 +508,11 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		if (!$tokenStream->is(T_VARIABLE)) {
 			throw new Exception\ParseException($this, $tokenStream, 'The property name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
 		}
-
 		$this->name = substr($tokenStream->getTokenValue(), 1);
-
-		$tokenStream->skipWhitespaces(true);
-
+		$tokenStream->skipWhitespaces(TRUE);
 		return $this;
 	}
+
 
 	/**
 	 * Parses the propety default value.
@@ -521,18 +524,15 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	private function parseDefaultValue(Stream $tokenStream)
 	{
 		$type = $tokenStream->getType();
-
 		if (';' === $type || ',' === $type) {
 			// No default value
 			return $this;
 		}
-
 		if ('=' === $type) {
-			$tokenStream->skipWhitespaces(true);
+			$tokenStream->skipWhitespaces(TRUE);
 		}
-
 		$level = 0;
-		while (null !== ($type = $tokenStream->getType())) {
+		while (NULL !== ($type = $tokenStream->getType())) {
 			switch ($type) {
 				case ',':
 					if (0 !== $level) {
@@ -553,15 +553,12 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 				default:
 					break;
 			}
-
 			$this->defaultValueDefinition[] = $tokenStream->current();
 			$tokenStream->next();
 		}
-
 		if (',' !== $type && ';' !== $type) {
 			throw new Exception\ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ";".', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
 		return $this;
 	}
 }

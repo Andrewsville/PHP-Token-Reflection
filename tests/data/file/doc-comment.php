@@ -6,6 +6,7 @@
  * @author author name
  */
 
+
 /**
  * TokenReflection_Test_FileDocComment.
  *
@@ -15,4 +16,5 @@
  */
 class TokenReflection_Test_FileDocComment
 {
+
 }

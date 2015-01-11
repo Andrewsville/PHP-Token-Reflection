@@ -6,16 +6,17 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection\Exception;
 
 use RuntimeException;
+
 
 /**
  * Base TokenReflection exception.
  */
 abstract class BaseException extends RuntimeException
 {
+
 	/**
 	 * The property/element does not exist.
 	 *
@@ -51,12 +52,14 @@ abstract class BaseException extends RuntimeException
 	 */
 	const ALREADY_EXISTS = 5;
 
+
 	/**
 	 * Returns an exception description detail.
 	 *
 	 * @return string
 	 */
 	public abstract function getDetail();
+
 
 	/**
 	 * Returns an exception description as string.
@@ -66,7 +69,6 @@ abstract class BaseException extends RuntimeException
 	final public function getOutput()
 	{
 		$detail = $this->getDetail();
-
 		return sprintf(
 			"exception '%s'%s in %s on line %d\n%s\nStack trace:\n%s",
 			get_class($this),
@@ -78,6 +80,7 @@ abstract class BaseException extends RuntimeException
 		);
 	}
 
+
 	/**
 	 * Returns the exception details as string.
 	 *
@@ -86,11 +89,9 @@ abstract class BaseException extends RuntimeException
 	final public function __toString()
 	{
 		$output = '';
-
 		if ($ex = $this->getPrevious()) {
 			$output .= (string) $ex . "\n\nNext ";
 		}
-
 		return $output . $this->getOutput() . "\n";
 	}
 }

@@ -6,17 +6,18 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+
 
 /**
  * Base abstract class for tokenized function and method.
  */
 abstract class ReflectionFunctionBase extends ReflectionElement implements IReflectionFunctionBase
 {
+
 	/**
 	 * Function/method namespace name.
 	 *
@@ -29,28 +30,29 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 *
 	 * @var boolean
 	 */
-	private $returnsReference = false;
+	private $returnsReference = FALSE;
 
 	/**
 	 * Parameters.
 	 *
 	 * @var array
 	 */
-	protected $parameters = array();
+	protected $parameters = [];
 
 	/**
 	 * Static variables defined within the function/method.
 	 *
 	 * @var array
 	 */
-	private $staticVariables = array();
+	private $staticVariables = [];
 
 	/**
 	 * Definitions of static variables defined within the function/method.
 	 *
 	 * @var array
 	 */
-	private $staticVariablesDefinition = array();
+	private $staticVariablesDefinition = [];
+
 
 	/**
 	 * Returns the name (FQN).
@@ -59,12 +61,12 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	public function getName()
 	{
-		if (null !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName) {
+		if (NULL !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName) {
 			return $this->namespaceName . '\\' . $this->name;
 		}
-
 		return $this->name;
 	}
+
 
 	/**
 	 * Returns the unqualified name (UQN).
@@ -76,6 +78,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		return $this->name;
 	}
 
+
 	/**
 	 * Returns the namespace name.
 	 *
@@ -83,8 +86,9 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	public function getNamespaceName()
 	{
-		return null === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
+		return NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
+
 
 	/**
 	 * Returns if the function/method is defined within a namespace.
@@ -96,6 +100,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		return '' !== $this->getNamespaceName();
 	}
 
+
 	/**
 	 * Returns if the function/method is a closure.
 	 *
@@ -103,8 +108,9 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	public function isClosure()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns this pointer bound to closure.
@@ -113,8 +119,9 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	public function getClosureThis()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the closure scope class.
@@ -123,8 +130,9 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 */
 	public function getClosureScopeClass()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns if the function/method returns its value as reference.
@@ -135,6 +143,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	{
 		return $this->returnsReference;
 	}
+
 
 	/**
 	 * Returns a particular function/method parameter.
@@ -157,10 +166,10 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 					return $reflection;
 				}
 			}
-
 			throw new Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
+
 
 	/**
 	 * Returns parameters.
@@ -172,6 +181,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		return $this->parameters;
 	}
 
+
 	/**
 	 * Returns the number of parameters.
 	 *
@@ -182,6 +192,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		return count($this->parameters);
 	}
 
+
 	/**
 	 * Returns the number of required parameters.
 	 *
@@ -190,13 +201,14 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	public function getNumberOfRequiredParameters()
 	{
 		$count = 0;
-		array_walk($this->parameters, function(ReflectionParameter $parameter) use (&$count) {
+		array_walk($this->parameters, function (ReflectionParameter $parameter) use (&$count) {
 			if (!$parameter->isOptional()) {
 				$count++;
 			}
 		});
 		return $count;
 	}
+
 
 	/**
 	 * Returns static variables.
@@ -210,9 +222,9 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 				$this->staticVariables[$variableName] = Resolver::getValueDefinition($variableDefinition, $this);
 			}
 		}
-
 		return $this->staticVariables;
 	}
+
 
 	/**
 	 * Returns an element pretty (docblock compatible) name.
@@ -224,6 +236,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		return $this->name . '()';
 	}
 
+
 	/**
 	 * Creates aliases to parameters.
 	 *
@@ -234,11 +247,11 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		if (!$this instanceof ReflectionMethod) {
 			throw new Exception\RuntimeException('Only method parameters can be aliased.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
-
 		foreach ($this->parameters as $index => $parameter) {
 			$this->parameters[$index] = $parameter->alias($this);
 		}
 	}
+
 
 	/**
 	 * Parses if the function/method returns its value as reference.
@@ -252,20 +265,17 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		if (!$tokenStream->is(T_FUNCTION)) {
 			throw new Exception\ParseException($this, $tokenStream, 'Could not find the function keyword.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
-		$tokenStream->skipWhitespaces(true);
-
+		$tokenStream->skipWhitespaces(TRUE);
 		$type = $tokenStream->getType();
-
 		if ('&' === $type) {
-			$this->returnsReference = true;
-			$tokenStream->skipWhitespaces(true);
+			$this->returnsReference = TRUE;
+			$tokenStream->skipWhitespaces(TRUE);
 		} elseif (T_STRING !== $type) {
 			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses the function/method name.
@@ -277,11 +287,10 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	final protected function parseName(Stream $tokenStream)
 	{
 		$this->name = $tokenStream->getTokenValue();
-
-		$tokenStream->skipWhitespaces(true);
-
+		$tokenStream->skipWhitespaces(TRUE);
 		return $this;
 	}
+
 
 	/**
 	 * Parses child reflection objects from the token stream.
@@ -297,6 +306,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 			->parseStaticVariables($tokenStream);
 	}
 
+
 	/**
 	 * Parses function/method parameters.
 	 *
@@ -309,28 +319,22 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		if (!$tokenStream->is('(')) {
 			throw new Exception\ParseException($this, $tokenStream, 'Could find the start token.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
-		static $accepted = array(T_NS_SEPARATOR => true, T_STRING => true, T_ARRAY => true, T_CALLABLE => true, T_VARIABLE => true, '&' => true);
-
-		$tokenStream->skipWhitespaces(true);
-
-		while (null !== ($type = $tokenStream->getType()) && ')' !== $type) {
+		static $accepted = [T_NS_SEPARATOR => TRUE, T_STRING => TRUE, T_ARRAY => TRUE, T_CALLABLE => TRUE, T_VARIABLE => TRUE, '&' => TRUE];
+		$tokenStream->skipWhitespaces(TRUE);
+		while (NULL !== ($type = $tokenStream->getType()) && ')' !== $type) {
 			if (isset($accepted[$type])) {
 				$parameter = new ReflectionParameter($tokenStream, $this->getBroker(), $this);
 				$this->parameters[] = $parameter;
 			}
-
 			if ($tokenStream->is(')')) {
 				break;
 			}
-
-			$tokenStream->skipWhitespaces(true);
+			$tokenStream->skipWhitespaces(TRUE);
 		}
-
 		$tokenStream->skipWhitespaces();
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses static variables.
@@ -344,24 +348,21 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		$type = $tokenStream->getType();
 		if ('{' === $type) {
 			if ($this->getBroker()->isOptionSet(Broker::OPTION_PARSE_FUNCTION_BODY)) {
-				$tokenStream->skipWhitespaces(true);
-
+				$tokenStream->skipWhitespaces(TRUE);
 				while ('}' !== ($type = $tokenStream->getType())) {
 					switch ($type) {
 						case T_STATIC:
-							$type = $tokenStream->skipWhitespaces(true)->getType();
+							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							if (T_VARIABLE !== $type) {
 								// Late static binding
 								break;
 							}
-
 							while (T_VARIABLE === $type) {
 								$variableName = $tokenStream->getTokenValue();
-								$variableDefinition = array();
-
-								$type = $tokenStream->skipWhitespaces(true)->getType();
+								$variableDefinition = [];
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 								if ('=' === $type) {
-									$type = $tokenStream->skipWhitespaces(true)->getType();
+									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 									$level = 0;
 									while ($tokenStream->valid()) {
 										switch ($type) {
@@ -385,38 +386,33 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 											default:
 												break;
 										}
-
 										$variableDefinition[] = $tokenStream->current();
-										$type = $tokenStream->skipWhitespaces(true)->getType();
+										$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 									}
-
 									if (!$tokenStream->valid()) {
 										throw new Exception\ParseException($this, $tokenStream, 'Invalid end of token stream.', Exception\ParseException::READ_BEYOND_EOS);
 									}
 								}
-
 								$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
-
 								if (',' === $type) {
-									$type = $tokenStream->skipWhitespaces(true)->getType();
+									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 								} else {
 									break;
 								}
 							}
-
 							break;
 						case T_FUNCTION:
 							// Anonymous function -> skip to its end
 							if (!$tokenStream->find('{')) {
 								throw new Exception\ParseException($this, $tokenStream, 'Could not find beginning of the anonymous function.', Exception\ParseException::UNEXPECTED_TOKEN);
 							}
-							// Break missing intentionally
+						// Break missing intentionally
 						case '{':
 						case '[':
 						case '(':
 						case T_CURLY_OPEN:
 						case T_DOLLAR_OPEN_CURLY_BRACES:
-							$tokenStream->findMatchingBracket()->skipWhitespaces(true);
+							$tokenStream->findMatchingBracket()->skipWhitespaces(TRUE);
 							break;
 						default:
 							$tokenStream->skipWhitespaces();
@@ -429,7 +425,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		} elseif (';' !== $type) {
 			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
 		return $this;
 	}
 }

@@ -6,7 +6,6 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
@@ -14,11 +13,13 @@ use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ReflectionClass as InternalReflectionClass, ReflectionProperty as InternalReflectionProperty, ReflectionMethod as InternalReflectionMethod;
 
+
 /**
  * Tokenized class reflection.
  */
 class ReflectionClass extends ReflectionElement implements IReflectionClass
 {
+
 	/**
 	 * Modifier for determining if the reflected object is an interface.
 	 *
@@ -79,7 +80,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @var boolean
 	 */
-	private $modifiersComplete = false;
+	private $modifiersComplete = FALSE;
 
 	/**
 	 * Parent class name.
@@ -93,14 +94,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @var array
 	 */
-	private $interfaces = array();
+	private $interfaces = [];
 
 	/**
 	 * Used trait names.
 	 *
 	 * @var array
 	 */
-	private $traits = array();
+	private $traits = [];
 
 	/**
 	 * Aliases used at trait methods.
@@ -109,7 +110,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @var array
 	 */
-	private $traitAliases = array();
+	private $traitAliases = [];
 
 	/**
 	 * Trait importing rules.
@@ -117,47 +118,48 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * Format:
 	 * [<trait>::]<method> => array(
 	 *    array(<new-name>, [<access-level>])|null
-	 * 	  [, ...]
+	 *      [, ...]
 	 * )
 	 *
 	 * @var array
 	 */
-	private $traitImports = array();
+	private $traitImports = [];
 
 	/**
 	 * Stores if the class definition is complete.
 	 *
 	 * @var array
 	 */
-	private $methods = array();
+	private $methods = [];
 
 	/**
 	 * Constant reflections.
 	 *
 	 * @var array
 	 */
-	private $constants = array();
+	private $constants = [];
 
 	/**
 	 * Properties reflections.
 	 *
 	 * @var array
 	 */
-	private $properties = array();
+	private $properties = [];
 
 	/**
 	 * Stores if the class definition is complete.
 	 *
 	 * @var boolean
 	 */
-	private $definitionComplete = false;
+	private $definitionComplete = FALSE;
 
 	/**
 	 * Imported namespace/class aliases.
 	 *
 	 * @var array
 	 */
-	private $aliases = array();
+	private $aliases = [];
+
 
 	/**
 	 * Returns the unqualified name (UQN).
@@ -170,9 +172,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		if ($this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$name = substr($name, strlen($this->namespaceName) + 1);
 		}
-
 		return $name;
 	}
+
 
 	/**
 	 * Returns the namespace name.
@@ -184,6 +186,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
+
 	/**
 	 * Returns if the class is defined within a namespace.
 	 *
@@ -191,8 +194,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function inNamespace()
 	{
-		return null !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName;
+		return NULL !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName;
 	}
+
 
 	/**
 	 * Returns modifiers.
@@ -201,37 +205,31 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getModifiers()
 	{
-		if (false === $this->modifiersComplete) {
+		if (FALSE === $this->modifiersComplete) {
 			if (($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT) && !($this->modifiers & InternalReflectionClass::IS_IMPLICIT_ABSTRACT)) {
 				foreach ($this->getMethods() as $reflectionMethod) {
 					if ($reflectionMethod->isAbstract()) {
 						$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 					}
 				}
-
 				if (!empty($this->interfaces)) {
 					$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 				}
 			}
-
 			if (!empty($this->interfaces)) {
 				$this->modifiers |= self::IMPLEMENTS_INTERFACES;
 			}
-
 			if ($this->isInterface() && !empty($this->methods)) {
 				$this->modifiers |= InternalReflectionClass::IS_IMPLICIT_ABSTRACT;
 			}
-
 			if (!empty($this->traits)) {
 				$this->modifiers |= self::IMPLEMENTS_TRAITS;
 			}
-
-			$this->modifiersComplete = null === $this->parentClassName || $this->getParentClass()->isComplete();
-
+			$this->modifiersComplete = NULL === $this->parentClassName || $this->getParentClass()->isComplete();
 			if ($this->modifiersComplete) {
 				foreach ($this->getInterfaces() as $interface) {
 					if (!$interface->isComplete()) {
-						$this->modifiersComplete = false;
+						$this->modifiersComplete = FALSE;
 						break;
 					}
 				}
@@ -239,15 +237,15 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			if ($this->modifiersComplete) {
 				foreach ($this->getTraits() as $trait) {
 					if (!$trait->isComplete()) {
-						$this->modifiersComplete = false;
+						$this->modifiersComplete = FALSE;
 						break;
 					}
 				}
 			}
 		}
-
 		return $this->modifiers;
 	}
+
 
 	/**
 	 * Returns if the class is abstract.
@@ -257,13 +255,13 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function isAbstract()
 	{
 		if ($this->modifiers & InternalReflectionClass::IS_EXPLICIT_ABSTRACT) {
-			return true;
+			return TRUE;
 		} elseif ($this->isInterface() && !empty($this->methods)) {
-			return true;
+			return TRUE;
 		}
-
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns if the class is final.
@@ -275,6 +273,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return (bool) ($this->modifiers & InternalReflectionClass::IS_FINAL);
 	}
 
+
 	/**
 	 * Returns if the class is an interface.
 	 *
@@ -284,6 +283,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		return (bool) ($this->modifiers & self::IS_INTERFACE);
 	}
+
 
 	/**
 	 * Returns if the class is an exception or its descendant.
@@ -295,6 +295,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return 'Exception' === $this->name || $this->isSubclassOf('Exception');
 	}
 
+
 	/**
 	 * Returns if it is possible to create an instance of this class.
 	 *
@@ -303,15 +304,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function isInstantiable()
 	{
 		if ($this->isInterface() || $this->isAbstract()) {
-			return false;
+			return FALSE;
 		}
-
-		if (null === ($constructor = $this->getConstructor())) {
-			return true;
+		if (NULL === ($constructor = $this->getConstructor())) {
+			return TRUE;
 		}
-
 		return $constructor->isPublic();
 	}
+
 
 	/**
 	 * Returns if objects of this class are cloneable.
@@ -324,15 +324,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function isCloneable()
 	{
 		if ($this->isInterface() || $this->isAbstract()) {
-			return false;
+			return FALSE;
 		}
-
 		if ($this->hasMethod('__clone')) {
 			return $this->getMethod('__clone')->isPublic();
 		}
-
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the class is iterateable.
@@ -346,6 +345,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		return $this->implementsInterface('Traversable');
 	}
+
 
 	/**
 	 * Returns if the current class is a subclass of the given class.
@@ -363,14 +363,13 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				$class = get_class($class);
 			}
 		}
-
 		if ($class === $this->parentClassName) {
-			return true;
+			return TRUE;
 		}
-
 		$parent = $this->getParentClass();
-		return false === $parent ? false : $parent->isSubclassOf($class);
+		return FALSE === $parent ? FALSE : $parent->isSubclassOf($class);
 	}
+
 
 	/**
 	 * Returns the parent class reflection.
@@ -380,12 +379,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getParentClass()
 	{
 		$className = $this->getParentClassName();
-		if (null === $className) {
-			return false;
+		if (NULL === $className) {
+			return FALSE;
 		}
-
 		return $this->getBroker()->getClass($className);
 	}
+
 
 	/**
 	 * Returns the parent class name.
@@ -397,6 +396,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return $this->parentClassName;
 	}
 
+
 	/**
 	 * Returns the parent classes reflections.
 	 *
@@ -405,12 +405,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getParentClasses()
 	{
 		$parent = $this->getParentClass();
-		if (false === $parent) {
-			return array();
+		if (FALSE === $parent) {
+			return [];
 		}
-
-		return array_merge(array($parent->getName() => $parent), $parent->getParentClasses());
+		return array_merge([$parent->getName() => $parent], $parent->getParentClasses());
 	}
+
 
 	/**
 	 * Returns the parent classes names.
@@ -420,12 +420,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getParentClassNameList()
 	{
 		$parent = $this->getParentClass();
-		if (false === $parent) {
-			return array();
+		if (FALSE === $parent) {
+			return [];
 		}
-
-		return array_merge(array($parent->getName()), $parent->getParentClassNameList());
+		return array_merge([$parent->getName()], $parent->getParentClassNameList());
 	}
+
 
 	/**
 	 * Returns if the class implements the given interface.
@@ -440,18 +440,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			if (!$interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
 				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
-
 			if (!$interface->isInterface()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
-
 			$interfaceName = $interface->getName();
 		} else {
 			$interfaceName = $interface;
 		}
-
 		return in_array($interfaceName, $this->getInterfaceNames());
 	}
+
 
 	/**
 	 * Returns interface reflections.
@@ -462,14 +460,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		$interfaceNames = $this->getInterfaceNames();
 		if (empty($interfaceNames)) {
-			return array();
+			return [];
 		}
-
 		$broker = $this->getBroker();
-		return array_combine($interfaceNames, array_map(function($interfaceName) use ($broker) {
+		return array_combine($interfaceNames, array_map(function ($interfaceName) use ($broker) {
 			return $broker->getClass($interfaceName);
 		}, $interfaceNames));
 	}
+
 
 	/**
 	 * Returns interface names.
@@ -479,17 +477,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getInterfaceNames()
 	{
 		$parentClass = $this->getParentClass();
-
-		$names = false !== $parentClass ? array_reverse(array_flip($parentClass->getInterfaceNames())) : array();
+		$names = FALSE !== $parentClass ? array_reverse(array_flip($parentClass->getInterfaceNames())) : [];
 		foreach ($this->interfaces as $interfaceName) {
-			$names[$interfaceName] = true;
+			$names[$interfaceName] = TRUE;
 			foreach (array_reverse($this->getBroker()->getClass($interfaceName)->getInterfaceNames()) as $parentInterfaceName) {
-				$names[$parentInterfaceName] = true;
+				$names[$parentInterfaceName] = TRUE;
 			}
 		}
-
 		return array_keys($names);
 	}
+
 
 	/**
 	 * Returns reflections of interfaces implemented by this class, not its parents.
@@ -500,14 +497,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		$interfaceNames = $this->getOwnInterfaceNames();
 		if (empty($interfaceNames)) {
-			return array();
+			return [];
 		}
-
 		$broker = $this->getBroker();
-		return array_combine($interfaceNames, array_map(function($interfaceName) use ($broker) {
+		return array_combine($interfaceNames, array_map(function ($interfaceName) use ($broker) {
 			return $broker->getClass($interfaceName);
 		}, $interfaceNames));
 	}
+
 
 	/**
 	 * Returns names of interfaces implemented by this class, not its parents.
@@ -518,6 +515,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		return $this->interfaces;
 	}
+
 
 	/**
 	 * Returns the class constructor reflection.
@@ -531,9 +529,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				return $method;
 			}
 		}
-
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the class destructor reflection.
@@ -547,9 +545,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				return $method;
 			}
 		}
-
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns if the class implements the given method.
@@ -561,12 +559,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		foreach ($this->getMethods() as $method) {
 			if ($name === $method->getName()) {
-				return true;
+				return TRUE;
 			}
 		}
-
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a method reflection.
@@ -580,15 +578,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		if (isset($this->methods[$name])) {
 			return $this->methods[$name];
 		}
-
 		foreach ($this->getMethods() as $method) {
 			if ($name === $method->getName()) {
 				return $method;
 			}
 		}
-
 		throw new Exception\RuntimeException(sprintf('There is no method "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
+
 
 	/**
 	 * Returns method reflections.
@@ -596,39 +593,36 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param integer $filter Methods filter
 	 * @return array
 	 */
-	public function getMethods($filter = null)
+	public function getMethods($filter = NULL)
 	{
 		$methods = $this->methods;
-
 		foreach ($this->getTraitMethods() as $traitMethod) {
 			if (!isset($methods[$traitMethod->getName()])) {
 				$methods[$traitMethod->getName()] = $traitMethod;
 			}
 		}
-
-		if (null !== $this->parentClassName) {
-			foreach ($this->getParentClass()->getMethods(null) as $parentMethod) {
+		if (NULL !== $this->parentClassName) {
+			foreach ($this->getParentClass()->getMethods(NULL) as $parentMethod) {
 				if (!isset($methods[$parentMethod->getName()])) {
 					$methods[$parentMethod->getName()] = $parentMethod;
 				}
 			}
 		}
 		foreach ($this->getOwnInterfaces() as $interface) {
-			foreach ($interface->getMethods(null) as $parentMethod) {
+			foreach ($interface->getMethods(NULL) as $parentMethod) {
 				if (!isset($methods[$parentMethod->getName()])) {
 					$methods[$parentMethod->getName()] = $parentMethod;
 				}
 			}
 		}
-
-		if (null !== $filter) {
-			$methods = array_filter($methods, function(IReflectionMethod $method) use ($filter) {
+		if (NULL !== $filter) {
+			$methods = array_filter($methods, function (IReflectionMethod $method) use ($filter) {
 				return $method->is($filter);
 			});
 		}
-
 		return array_values($methods);
 	}
+
 
 	/**
 	 * Returns if the class implements (and not its parents) the given method.
@@ -641,24 +635,24 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return isset($this->methods[$name]);
 	}
 
+
 	/**
 	 * Returns reflections of methods declared by this class, not its parents.
 	 *
 	 * @param integer $filter Methods filter
 	 * @return array
 	 */
-	public function getOwnMethods($filter = null)
+	public function getOwnMethods($filter = NULL)
 	{
 		$methods = $this->methods;
-
-		if (null !== $filter) {
-			$methods = array_filter($methods, function(ReflectionMethod $method) use ($filter) {
+		if (NULL !== $filter) {
+			$methods = array_filter($methods, function (ReflectionMethod $method) use ($filter) {
 				return $method->is($filter);
 			});
 		}
-
 		return array_values($methods);
 	}
+
 
 	/**
 	 * Returns if the class imports the given method from traits.
@@ -669,17 +663,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function hasTraitMethod($name)
 	{
 		if (isset($this->methods[$name])) {
-			return false;
+			return FALSE;
 		}
-
 		foreach ($this->getOwnTraits() as $trait) {
 			if ($trait->hasMethod($name)) {
-				return true;
+				return TRUE;
 			}
 		}
-
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns reflections of method imported from traits.
@@ -688,62 +681,53 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @return array
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If trait method was already imported.
 	 */
-	public function getTraitMethods($filter = null)
+	public function getTraitMethods($filter = NULL)
 	{
-		$methods = array();
-
+		$methods = [];
 		foreach ($this->getOwnTraits() as $trait) {
 			$traitName = $trait->getName();
-			foreach ($trait->getMethods(null) as $traitMethod) {
+			foreach ($trait->getMethods(NULL) as $traitMethod) {
 				$methodName = $traitMethod->getName();
-
-				$imports = array();
+				$imports = [];
 				if (isset($this->traitImports[$traitName . '::' . $methodName])) {
 					$imports = $this->traitImports[$traitName . '::' . $methodName];
 				}
 				if (isset($this->traitImports[$methodName])) {
 					$imports = empty($imports) ? $this->traitImports[$methodName] : array_merge($imports, $this->traitImports[$methodName]);
 				}
-
 				foreach ($imports as $import) {
-					if (null !== $import) {
+					if (NULL !== $import) {
 						list($newName, $accessLevel) = $import;
-
 						if ('' === $newName) {
 							$newName = $methodName;
-							$imports[] = null;
+							$imports[] = NULL;
 						}
-
 						if (!isset($this->methods[$newName])) {
 							if (isset($methods[$newName])) {
 								throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $newName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 							}
-
 							$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
 						}
 					}
 				}
-
-				if (!in_array(null, $imports)) {
+				if (!in_array(NULL, $imports)) {
 					if (!isset($this->methods[$methodName])) {
 						if (isset($methods[$methodName])) {
 							throw new Exception\RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName), Exception\RuntimeException::ALREADY_EXISTS, $this);
 						}
-
 						$methods[$methodName] = $traitMethod->alias($this);
 					}
 				}
 			}
 		}
-
-		if (null !== $filter) {
-			$methods = array_filter($methods, function(IReflectionMethod $method) use ($filter) {
+		if (NULL !== $filter) {
+			$methods = array_filter($methods, function (IReflectionMethod $method) use ($filter) {
 				return (bool) ($method->getModifiers() & $filter);
 			});
 		}
-
 		return array_values($methods);
 	}
+
 
 	/**
 	 * Returns if the class defines the given constant.
@@ -754,17 +738,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function hasConstant($name)
 	{
 		if (isset($this->constants[$name])) {
-			return true;
+			return TRUE;
 		}
-
 		foreach ($this->getConstantReflections() as $constant) {
 			if ($name === $constant->getName()) {
-				return true;
+				return TRUE;
 			}
 		}
-
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns a constant value.
@@ -777,9 +760,10 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		try {
 			return $this->getConstantReflection($name)->getValue();
 		} catch (Exception\BaseException $e) {
-			return false;
+			return FALSE;
 		}
 	}
+
 
 	/**
 	 * Returns a constant reflection.
@@ -793,15 +777,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		if (isset($this->constants[$name])) {
 			return $this->constants[$name];
 		}
-
 		foreach ($this->getConstantReflections() as $constant) {
 			if ($name === $constant->getName()) {
 				return $constant;
 			}
 		}
-
 		throw new Exception\RuntimeException(sprintf('There is no constant "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
+
 
 	/**
 	 * Returns constant values.
@@ -810,12 +793,13 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getConstants()
 	{
-		$constants = array();
+		$constants = [];
 		foreach ($this->getConstantReflections() as $constant) {
 			$constants[$constant->getName()] = $constant->getValue();
 		}
 		return $constants;
 	}
+
 
 	/**
 	 * Returns constant reflections.
@@ -824,21 +808,20 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getConstantReflections()
 	{
-		if (null === $this->parentClassName && empty($this->interfaces)) {
+		if (NULL === $this->parentClassName && empty($this->interfaces)) {
 			return array_values($this->constants);
 		} else {
 			$reflections = array_values($this->constants);
-
-			if (null !== $this->parentClassName) {
+			if (NULL !== $this->parentClassName) {
 				$reflections = array_merge($reflections, $this->getParentClass()->getConstantReflections());
 			}
 			foreach ($this->getOwnInterfaces() as $interface) {
 				$reflections = array_merge($reflections, $interface->getConstantReflections());
 			}
-
 			return $reflections;
 		}
 	}
+
 
 	/**
 	 * Returns if the class (and not its parents) defines the given constant.
@@ -851,6 +834,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return isset($this->constants[$name]);
 	}
 
+
 	/**
 	 * Returns constants declared by this class, not by its parents.
 	 *
@@ -858,10 +842,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getOwnConstants()
 	{
-		return array_map(function(ReflectionConstant $constant) {
+		return array_map(function (ReflectionConstant $constant) {
 			return $constant->getValue();
 		}, $this->constants);
 	}
+
 
 	/**
 	 * Returns reflections of constants declared by this class, not by its parents.
@@ -873,6 +858,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return array_values($this->constants);
 	}
 
+
 	/**
 	 * Returns if the class defines the given property.
 	 *
@@ -883,12 +869,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		foreach ($this->getProperties() as $property) {
 			if ($name === $property->getName()) {
-				return true;
+				return TRUE;
 			}
 		}
-
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Return a property reflection.
@@ -902,15 +888,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		if (isset($this->properties[$name])) {
 			return $this->properties[$name];
 		}
-
 		foreach ($this->getProperties() as $property) {
 			if ($name === $property->getName()) {
 				return $property;
 			}
 		}
-
 		throw new Exception\RuntimeException(sprintf('There is no property "%s".', $name, $this->name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
+
 
 	/**
 	 * Returns property reflections.
@@ -918,32 +903,29 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param integer $filter Properties filter
 	 * @return array
 	 */
-	public function getProperties($filter = null)
+	public function getProperties($filter = NULL)
 	{
 		$properties = $this->properties;
-
-		foreach ($this->getTraitProperties(null) as $traitProperty) {
+		foreach ($this->getTraitProperties(NULL) as $traitProperty) {
 			if (!isset($properties[$traitProperty->getName()])) {
 				$properties[$traitProperty->getName()] = $traitProperty->alias($this);
 			}
 		}
-
-		if (null !== $this->parentClassName) {
-			foreach ($this->getParentClass()->getProperties(null) as $parentProperty) {
+		if (NULL !== $this->parentClassName) {
+			foreach ($this->getParentClass()->getProperties(NULL) as $parentProperty) {
 				if (!isset($properties[$parentProperty->getName()])) {
 					$properties[$parentProperty->getName()] = $parentProperty;
 				}
 			}
 		}
-
-		if (null !== $filter) {
-			$properties = array_filter($properties, function(IReflectionProperty $property) use ($filter) {
+		if (NULL !== $filter) {
+			$properties = array_filter($properties, function (IReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
-
 		return array_values($properties);
 	}
+
 
 	/**
 	 * Returns if the class (and not its parents) defines the given property.
@@ -956,24 +938,24 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return isset($this->properties[$name]);
 	}
 
+
 	/**
 	 * Returns reflections of properties declared by this class, not its parents.
 	 *
 	 * @param integer $filter Properties filter
 	 * @return array
 	 */
-	public function getOwnProperties($filter = null)
+	public function getOwnProperties($filter = NULL)
 	{
 		$properties = $this->properties;
-
-		if (null !== $filter) {
-			$properties = array_filter($properties, function(ReflectionProperty $property) use ($filter) {
+		if (NULL !== $filter) {
+			$properties = array_filter($properties, function (ReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
-
 		return array_values($properties);
 	}
+
 
 	/**
 	 * Returns if the class imports the given property from traits.
@@ -984,17 +966,16 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function hasTraitProperty($name)
 	{
 		if (isset($this->properties[$name])) {
-			return false;
+			return FALSE;
 		}
-
 		foreach ($this->getOwnTraits() as $trait) {
 			if ($trait->hasProperty($name)) {
-				return true;
+				return TRUE;
 			}
 		}
-
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns reflections of properties imported from traits.
@@ -1002,26 +983,24 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param integer $filter Properties filter
 	 * @return array
 	 */
-	public function getTraitProperties($filter = null)
+	public function getTraitProperties($filter = NULL)
 	{
-		$properties = array();
-
+		$properties = [];
 		foreach ($this->getOwnTraits() as $trait) {
-			foreach ($trait->getProperties(null) as $traitProperty) {
+			foreach ($trait->getProperties(NULL) as $traitProperty) {
 				if (!isset($this->properties[$traitProperty->getName()]) && !isset($properties[$traitProperty->getName()])) {
 					$properties[$traitProperty->getName()] = $traitProperty->alias($this);
 				}
 			}
 		}
-
-		if (null !== $filter) {
-			$properties = array_filter($properties, function(IReflectionProperty $property) use ($filter) {
+		if (NULL !== $filter) {
+			$properties = array_filter($properties, function (IReflectionProperty $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
-
 		return array_values($properties);
 	}
+
 
 	/**
 	 * Returns default properties.
@@ -1030,11 +1009,10 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getDefaultProperties()
 	{
-		static $accessLevels = array(InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PROTECTED, InternalReflectionProperty::IS_PRIVATE);
-
-		$defaults = array();
+		static $accessLevels = [InternalReflectionProperty::IS_PUBLIC, InternalReflectionProperty::IS_PROTECTED, InternalReflectionProperty::IS_PRIVATE];
+		$defaults = [];
 		$properties = $this->getProperties();
-		foreach (array(true, false) as $static) {
+		foreach ([TRUE, FALSE] as $static) {
 			foreach ($properties as $property) {
 				foreach ($accessLevels as $level) {
 					if ($property->isStatic() === $static && ($property->getModifiers() & $level)) {
@@ -1043,9 +1021,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				}
 			}
 		}
-
 		return $defaults;
 	}
+
 
 	/**
 	 * Returns static properties reflections.
@@ -1054,15 +1032,15 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function getStaticProperties()
 	{
-		$defaults = array();
+		$defaults = [];
 		foreach ($this->getProperties(InternalReflectionProperty::IS_STATIC) as $property) {
 			if ($property instanceof ReflectionProperty) {
 				$defaults[$property->getName()] = $property->getDefaultValue();
 			}
 		}
-
 		return $defaults;
 	}
+
 
 	/**
 	 * Returns a value of a static property.
@@ -1073,18 +1051,17 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
 	 */
-	public function getStaticPropertyValue($name, $default = null)
+	public function getStaticPropertyValue($name, $default = NULL)
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
 			if (!$property->isPublic() && !$property->isAccessible()) {
 				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
 			}
-
 			return $property->getDefaultValue();
 		}
-
 		throw new Exception\RuntimeException(sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
+
 
 	/**
 	 * Returns traits used by this class.
@@ -1095,14 +1072,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		$traitNames = $this->getTraitNames();
 		if (empty($traitNames)) {
-			return array();
+			return [];
 		}
-
 		$broker = $this->getBroker();
-		return array_combine($traitNames, array_map(function($traitName) use ($broker) {
+		return array_combine($traitNames, array_map(function ($traitName) use ($broker) {
 			return $broker->getClass($traitName);
 		}, $traitNames));
 	}
+
 
 	/**
 	 * Returns traits used by this class and not its parents.
@@ -1113,14 +1090,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		$ownTraitNames = $this->getOwnTraitNames();
 		if (empty($ownTraitNames)) {
-			return array();
+			return [];
 		}
-
 		$broker = $this->getBroker();
-		return array_combine($ownTraitNames, array_map(function($traitName) use ($broker) {
+		return array_combine($ownTraitNames, array_map(function ($traitName) use ($broker) {
 			return $broker->getClass($traitName);
 		}, $ownTraitNames));
 	}
+
 
 	/**
 	 * Returns names of used traits.
@@ -1130,14 +1107,13 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getTraitNames()
 	{
 		$parentClass = $this->getParentClass();
-
-		$names = $parentClass ? $parentClass->getTraitNames() : array();
+		$names = $parentClass ? $parentClass->getTraitNames() : [];
 		foreach ($this->traits as $traitName) {
 			$names[] = $traitName;
 		}
-
 		return array_unique($names);
 	}
+
 
 	/**
 	 * Returns names of traits used by this class an not its parents.
@@ -1149,6 +1125,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return $this->traits;
 	}
 
+
 	/**
 	 * Returns method aliases from traits.
 	 *
@@ -1158,6 +1135,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		return $this->traitAliases;
 	}
+
 
 	/**
 	 * Returns if the class is a trait.
@@ -1169,6 +1147,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return self::IS_TRAIT === $this->type;
 	}
 
+
 	/**
 	 * Returns if the class definition is valid.
 	 *
@@ -1176,24 +1155,22 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function isValid()
 	{
-		if (null !== $this->parentClassName && !$this->getParentClass()->isValid()) {
-			return false;
+		if (NULL !== $this->parentClassName && !$this->getParentClass()->isValid()) {
+			return FALSE;
 		}
-
 		foreach ($this->getInterfaces() as $interface) {
 			if (!$interface->isValid()) {
-				return false;
+				return FALSE;
 			}
 		}
-
 		foreach ($this->getTraits() as $trait) {
 			if (!$trait->isValid()) {
-				return false;
+				return FALSE;
 			}
 		}
-
-		return true;
+		return TRUE;
 	}
+
 
 	/**
 	 * Returns if the class uses a particular trait.
@@ -1208,9 +1185,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			if (!$trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
 				throw new Exception\RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
-
 			$traitName = $trait->getName();
-
 			if (!$trait->isTrait()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
@@ -1219,12 +1194,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			if (!$reflection->isTrait()) {
 				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 			}
-
 			$traitName = $trait;
 		}
-
 		return in_array($traitName, $this->getTraitNames());
 	}
+
 
 	/**
 	 * Returns reflections of direct subclasses.
@@ -1234,14 +1208,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getDirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
+		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
-				return false;
+				return FALSE;
 			}
-
-			return null === $class->getParentClassName() || !$class->getParentClass()->isSubClassOf($that);
+			return NULL === $class->getParentClassName() || !$class->getParentClass()->isSubClassOf($that);
 		});
 	}
+
 
 	/**
 	 * Returns names of direct subclasses.
@@ -1253,6 +1227,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return array_keys($this->getDirectSubclasses());
 	}
 
+
 	/**
 	 * Returns reflections of indirect subclasses.
 	 *
@@ -1261,14 +1236,14 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getIndirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
+		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
 			if (!$class->isSubclassOf($that)) {
-				return false;
+				return FALSE;
 			}
-
-			return null !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($that);
+			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($that);
 		});
 	}
+
 
 	/**
 	 * Returns names of indirect subclasses.
@@ -1280,6 +1255,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return array_keys($this->getIndirectSubclasses());
 	}
 
+
 	/**
 	 * Returns reflections of classes directly implementing this interface.
 	 *
@@ -1288,18 +1264,17 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getDirectImplementers()
 	{
 		if (!$this->isInterface()) {
-			return array();
+			return [];
 		}
-
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
+		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
 			if ($class->isInterface() || !$class->implementsInterface($that)) {
-				return false;
+				return FALSE;
 			}
-
-			return null === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($that);
+			return NULL === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($that);
 		});
 	}
+
 
 	/**
 	 * Returns names of classes directly implementing this interface.
@@ -1311,6 +1286,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return array_keys($this->getDirectImplementers());
 	}
 
+
 	/**
 	 * Returns reflections of classes indirectly implementing this interface.
 	 *
@@ -1319,18 +1295,17 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function getIndirectImplementers()
 	{
 		if (!$this->isInterface()) {
-			return array();
+			return [];
 		}
-
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function(ReflectionClass $class) use ($that) {
+		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
 			if ($class->isInterface() || !$class->implementsInterface($that)) {
-				return false;
+				return FALSE;
 			}
-
-			return null !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($that);
+			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($that);
 		});
 	}
+
 
 	/**
 	 * Returns names of classes indirectly implementing this interface.
@@ -1341,6 +1316,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		return array_keys($this->getIndirectImplementers());
 	}
+
 
 	/**
 	 * Returns if the given object is an instance of this class.
@@ -1354,9 +1330,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		if (!is_object($object)) {
 			throw new Exception\RuntimeException(sprintf('Parameter must be an object, "%s" provided.', gettype($object)), Exception\RuntimeException::INVALID_ARGUMENT, $this);
 		}
-
 		return $this->name === get_class($object) || is_subclass_of($object, $this->getName());
 	}
+
 
 	/**
 	 * Creates a new class instance without using a constructor.
@@ -1366,13 +1342,13 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	public function newInstanceWithoutConstructor()
 	{
-		if (!class_exists($this->name, true)) {
+		if (!class_exists($this->name, TRUE)) {
 			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
-
 		$reflection = new ApiGen\TokenReflection\Php\ReflectionClass($this->getName(), $this->getBroker());
 		return $reflection->newInstanceWithoutConstructor();
 	}
+
 
 	/**
 	 * Creates a new instance using variable number of parameters.
@@ -1387,6 +1363,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		return $this->newInstanceArgs(func_get_args());
 	}
 
+
 	/**
 	 * Creates a new instance using an array of parameters.
 	 *
@@ -1394,15 +1371,15 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @return object
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required class does not exist.
 	 */
-	public function newInstanceArgs(array $args = array())
+	public function newInstanceArgs(array $args = [])
 	{
-		if (!class_exists($this->name, true)) {
+		if (!class_exists($this->name, TRUE)) {
 			throw new Exception\RuntimeException('Could not create an instance; class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST, $this);
 		}
-
 		$reflection = new InternalReflectionClass($this->name);
 		return $reflection->newInstanceArgs($args);
 	}
+
 
 	/**
 	 * Sets a static property value.
@@ -1418,13 +1395,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			if (!$property->isPublic() && !$property->isAccessible()) {
 				throw new Exception\RuntimeException(sprintf('Static property "%s" is not accessible.', $name), Exception\RuntimeException::NOT_ACCESSBILE, $this);
 			}
-
 			$property->setDefaultValue($value);
 			return;
 		}
-
 		throw new Exception\RuntimeException(sprintf('There is no static property "%s".', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
 	}
+
 
 	/**
 	 * Returns the string representation of the reflection object.
@@ -1442,7 +1418,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				implode(', ', $interfaceNames)
 			);
 		}
-
 		$buffer = '';
 		$count = 0;
 		foreach ($this->getConstantReflections() as $constant) {
@@ -1450,7 +1425,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			$count++;
 		}
 		$constants = sprintf("\n\n  - Constants [%d] {\n%s  }", $count, $buffer);
-
 		$sBuffer = '';
 		$sCount = 0;
 		$buffer = '';
@@ -1467,7 +1441,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		}
 		$staticProperties = sprintf("\n\n  - Static properties [%d] {\n%s  }", $sCount, $sBuffer);
 		$properties = sprintf("\n\n  - Properties [%d] {\n%s  }", $count, $buffer);
-
 		$sBuffer = '';
 		$sCount = 0;
 		$buffer = '';
@@ -1479,13 +1452,12 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 			// Indent
 			$string = "\n    ";
-
 			$string .= preg_replace('~\n(?!$|\n|\s*\*)~', "\n    ", $method->__toString());
 			// Add inherits
 			if ($method->getDeclaringClassName() !== $this->getName()) {
 				$string = preg_replace(
-					array('~Method [ <[\w:]+~', '~, overwrites[^,]+~'),
-					array('\0, inherits ' . $method->getDeclaringClassName(), ''),
+					['~Method [ <[\w:]+~', '~, overwrites[^,]+~'],
+					['\0, inherits ' . $method->getDeclaringClassName(), ''],
 					$string
 				);
 			}
@@ -1499,7 +1471,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		}
 		$staticMethods = sprintf("\n\n  - Static methods [%d] {\n%s  }", $sCount, ltrim($sBuffer, "\n"));
 		$methods = sprintf("\n\n  - Methods [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
-
 		return sprintf(
 			"%s%s [ <user>%s %s%s%s %s%s%s ] {\n  @@ %s %d-%d%s%s%s%s%s\n}\n",
 			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
@@ -1509,7 +1480,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			$this->isFinal() ? 'final ' : '',
 			$this->isInterface() ? 'interface' : 'class',
 			$this->getName(),
-			null !== $this->getParentClassName() ? ' extends ' . $this->getParentClassName() : '',
+			NULL !== $this->getParentClassName() ? ' extends ' . $this->getParentClassName() : '',
 			$implements,
 			$this->getFileName(),
 			$this->getStartLine(),
@@ -1522,6 +1493,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		);
 	}
 
+
 	/**
 	 * Exports a reflected object.
 	 *
@@ -1531,25 +1503,23 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @return string|null
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
 	 */
-	public static function export(Broker $broker, $className, $return = false)
+	public static function export(Broker $broker, $className, $return = FALSE)
 	{
 		if (is_object($className)) {
 			$className = get_class($className);
 		}
-
 		$class = $broker->getClass($className);
 		if ($class instanceof Invalid\ReflectionClass) {
 			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
 		} elseif ($class instanceof Dummy\ReflectionClass) {
 			throw new Exception\RuntimeException('Class does not exist.', Exception\RuntimeException::DOES_NOT_EXIST);
 		}
-
 		if ($return) {
 			return $class->__toString();
 		}
-
 		echo $class->__toString();
 	}
+
 
 	/**
 	 * Returns if the class definition is complete.
@@ -1559,21 +1529,19 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function isComplete()
 	{
 		if (!$this->definitionComplete) {
-			if (null !== $this->parentClassName && !$this->getParentClass()->isComplete()) {
-				return false;
+			if (NULL !== $this->parentClassName && !$this->getParentClass()->isComplete()) {
+				return FALSE;
 			}
-
 			foreach ($this->getOwnInterfaces() as $interface) {
 				if (!$interface->isComplete()) {
-					return false;
+					return FALSE;
 				}
 			}
-
-			$this->definitionComplete = true;
+			$this->definitionComplete = TRUE;
 		}
-
 		return $this->definitionComplete;
 	}
+
 
 	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
@@ -1584,6 +1552,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	{
 		return $this->aliases;
 	}
+
 
 	/**
 	 * Processes the parent reflection object.
@@ -1598,11 +1567,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		if (!$parent instanceof ReflectionFileNamespace) {
 			throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), Exception\ParseException::INVALID_PARENT);
 		}
-
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
 		return parent::processParent($parent, $tokenStream);
 	}
+
 
 	/**
 	 * Parses reflected element metadata from the token stream.
@@ -1620,6 +1589,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			->parseInterfaces($tokenStream, $parent);
 	}
 
+
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
 	 *
@@ -1628,9 +1598,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	private function parseModifiers(Stream $tokenStream)
 	{
-		while (true) {
+		while (TRUE) {
 			switch ($tokenStream->getType()) {
-				case null:
+				case NULL:
 					break 2;
 				case T_ABSTRACT:
 					$this->modifiers = InternalReflectionClass::IS_EXPLICIT_ABSTRACT;
@@ -1641,25 +1611,24 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				case T_INTERFACE:
 					$this->modifiers = self::IS_INTERFACE;
 					$this->type = self::IS_INTERFACE;
-					$tokenStream->skipWhitespaces(true);
+					$tokenStream->skipWhitespaces(TRUE);
 					break 2;
 				case T_TRAIT:
 					$this->modifiers = self::IS_TRAIT;
 					$this->type = self::IS_TRAIT;
-					$tokenStream->skipWhitespaces(true);
+					$tokenStream->skipWhitespaces(TRUE);
 					break 2;
 				case T_CLASS:
-					$tokenStream->skipWhitespaces(true);
+					$tokenStream->skipWhitespaces(TRUE);
 					break 2;
 				default:
 					break;
 			}
-
-			$tokenStream->skipWhitespaces(true);
+			$tokenStream->skipWhitespaces(TRUE);
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses the class/interface name.
@@ -1673,17 +1642,15 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		if (!$tokenStream->is(T_STRING)) {
 			throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 		}
-
 		if ($this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$this->name = $tokenStream->getTokenValue();
 		} else {
 			$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
 		}
-
-		$tokenStream->skipWhitespaces(true);
-
+		$tokenStream->skipWhitespaces(TRUE);
 		return $this;
 	}
+
 
 	/**
 	 * Parses the parent class.
@@ -1692,17 +1659,15 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
-	private function parseParent(Stream $tokenStream, ReflectionElement $parent = null)
+	private function parseParent(Stream $tokenStream, ReflectionElement $parent = NULL)
 	{
 		if (!$tokenStream->is(T_EXTENDS)) {
 			return $this;
 		}
-
-		while (true) {
-			$tokenStream->skipWhitespaces(true);
-
+		while (TRUE) {
+			$tokenStream->skipWhitespaces(TRUE);
 			$parentClassName = '';
-			while (true) {
+			while (TRUE) {
 				switch ($tokenStream->getType()) {
 					case T_STRING:
 					case T_NS_SEPARATOR:
@@ -1711,27 +1676,22 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 					default:
 						break 2;
 				}
-
-				$tokenStream->skipWhitespaces(true);
+				$tokenStream->skipWhitespaces(TRUE);
 			}
-
 			$parentClassName = Resolver::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
-
 			if ($this->isInterface()) {
 				$this->interfaces[] = $parentClassName;
-
 				if (',' === $tokenStream->getTokenValue()) {
 					continue;
 				}
 			} else {
 				$this->parentClassName = $parentClassName;
 			}
-
 			break;
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses implemented interfaces.
@@ -1741,21 +1701,18 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 * @throws ApiGen\TokenReflection\Exception\ParseException On error while parsing interfaces.
 	 */
-	private function parseInterfaces(Stream $tokenStream, ReflectionElement $parent = null)
+	private function parseInterfaces(Stream $tokenStream, ReflectionElement $parent = NULL)
 	{
 		if (!$tokenStream->is(T_IMPLEMENTS)) {
 			return $this;
 		}
-
 		if ($this->isInterface()) {
 			throw new Exception\ParseException($this, $tokenStream, 'Interfaces cannot implement interfaces.', Exception\ParseException::LOGICAL_ERROR);
 		}
-
-		while (true) {
+		while (TRUE) {
 			$interfaceName = '';
-
-			$tokenStream->skipWhitespaces(true);
-			while (true) {
+			$tokenStream->skipWhitespaces(TRUE);
+			while (TRUE) {
 				switch ($tokenStream->getType()) {
 					case T_STRING:
 					case T_NS_SEPARATOR:
@@ -1764,12 +1721,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 					default:
 						break 2;
 				}
-
-				$tokenStream->skipWhitespaces(true);
+				$tokenStream->skipWhitespaces(TRUE);
 			}
-
 			$this->interfaces[] = Resolver::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
-
 			$type = $tokenStream->getType();
 			if ('{' === $type) {
 				break;
@@ -1777,9 +1731,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found, expected "{" or ";".', Exception\ParseException::UNEXPECTED_TOKEN);
 			}
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses child reflection objects from the token stream.
@@ -1791,9 +1745,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 */
 	protected function parseChildren(Stream $tokenStream, IReflection $parent)
 	{
-		while (true) {
+		while (TRUE) {
 			switch ($type = $tokenStream->getType()) {
-				case null:
+				case NULL:
 					break 2;
 				case T_COMMENT:
 				case T_DOC_COMMENT:
@@ -1813,22 +1767,20 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				case T_STATIC:
 				case T_VAR:
 				case T_VARIABLE:
-					static $searching = array(T_VARIABLE => true, T_FUNCTION => true);
-
+					static $searching = [T_VARIABLE => TRUE, T_FUNCTION => TRUE];
 					if (T_VAR !== $tokenStream->getType()) {
 						$position = $tokenStream->key();
-						while (null !== ($type = $tokenStream->getType($position)) && !isset($searching[$type])) {
+						while (NULL !== ($type = $tokenStream->getType($position)) && !isset($searching[$type])) {
 							$position++;
 						}
 					}
-
 					if (T_VARIABLE === $type || T_VAR === $type) {
 						$property = new ReflectionProperty($tokenStream, $this->getBroker(), $this);
 						$this->properties[$property->getName()] = $property;
 						$tokenStream->next();
 						break;
 					}
-					// Break missing on purpose
+				// Break missing on purpose
 				case T_FINAL:
 				case T_ABSTRACT:
 				case T_FUNCTION:
@@ -1837,34 +1789,30 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 					$tokenStream->next();
 					break;
 				case T_CONST:
-					$tokenStream->skipWhitespaces(true);
+					$tokenStream->skipWhitespaces(TRUE);
 					while ($tokenStream->is(T_STRING)) {
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$this->constants[$constant->getName()] = $constant;
 						if ($tokenStream->is(',')) {
-							$tokenStream->skipWhitespaces(true);
+							$tokenStream->skipWhitespaces(TRUE);
 						} else {
 							$tokenStream->next();
 						}
 					}
 					break;
 				case T_USE:
-					$tokenStream->skipWhitespaces(true);
-
-					while (true) {
+					$tokenStream->skipWhitespaces(TRUE);
+					while (TRUE) {
 						$traitName = '';
 						$type = $tokenStream->getType();
 						while (T_STRING === $type || T_NS_SEPARATOR === $type) {
 							$traitName .= $tokenStream->getTokenValue();
-							$type = $tokenStream->skipWhitespaces(true)->getType();
+							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 						}
-
 						if ('' === trim($traitName, '\\')) {
 							throw new Exception\ParseException($this, $tokenStream, 'An empty trait name found.', Exception\ParseException::LOGICAL_ERROR);
 						}
-
 						$this->traits[] = Resolver::resolveClassFQN($traitName, $this->aliases, $this->namespaceName);
-
 						if (';' === $type) {
 							// End of "use"
 							$tokenStream->skipWhitespaces();
@@ -1877,37 +1825,30 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							// Unexpected token
 							throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found: "%s".', Exception\ParseException::UNEXPECTED_TOKEN);
 						}
-
 						// Aliases definition
-						$type = $tokenStream->skipWhitespaces(true)->getType();
-						while (true) {
+						$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+						while (TRUE) {
 							if ('}' === $type) {
 								$tokenStream->skipWhitespaces();
 								break 2;
 							}
-
 							$leftSide = '';
-							$rightSide = array('', null);
-							$alias = true;
-
+							$rightSide = ['', NULL];
+							$alias = TRUE;
 							while (T_STRING === $type || T_NS_SEPARATOR === $type || T_DOUBLE_COLON === $type) {
 								$leftSide .= $tokenStream->getTokenValue();
-								$type = $tokenStream->skipWhitespaces(true)->getType();
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							}
-
 							if (T_INSTEADOF === $type) {
-								$alias = false;
+								$alias = FALSE;
 							} elseif (T_AS !== $type) {
 								throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 							}
-
-							$type = $tokenStream->skipWhitespaces(true)->getType();
-
+							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							if (T_PUBLIC === $type || T_PROTECTED === $type || T_PRIVATE === $type) {
 								if (!$alias) {
 									throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 								}
-
 								switch ($type) {
 									case T_PUBLIC:
 										$type = InternalReflectionMethod::IS_PUBLIC;
@@ -1921,32 +1862,26 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 									default:
 										break;
 								}
-
 								$rightSide[1] = $type;
-								$type = $tokenStream->skipWhitespaces(true)->getType();
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							}
-
 							while (T_STRING === $type || (T_NS_SEPARATOR === $type && !$alias)) {
 								$rightSide[0] .= $tokenStream->getTokenValue();
-								$type = $tokenStream->skipWhitespaces(true)->getType();
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							}
-
 							if (empty($leftSide)) {
 								throw new Exception\ParseException($this, $tokenStream, 'An empty method name was found.', Exception\ParseException::LOGICAL_ERROR);
 							}
-
 							if ($alias) {
 								// Alias
 								if ($pos = strpos($leftSide, '::')) {
 									$methodName = substr($leftSide, $pos + 2);
 									$className = Resolver::resolveClassFQN(substr($leftSide, 0, $pos), $this->aliases, $this->namespaceName);
 									$leftSide = $className . '::' . $methodName;
-
 									$this->traitAliases[$rightSide[0]] = $leftSide;
 								} else {
 									$this->traitAliases[$rightSide[0]] = '(null)::' . $leftSide;
 								}
-
 								$this->traitImports[$leftSide][] = $rightSide;
 							} else {
 								// Insteadof
@@ -1955,28 +1890,23 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 								} else {
 									throw new Exception\ParseException($this, $tokenStream, 'A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', Exception\ParseException::UNEXPECTED_TOKEN);
 								}
-
-								$this->traitImports[Resolver::resolveClassFQN($rightSide[0], $this->aliases, $this->namespaceName) . '::' . $methodName][] = null;
+								$this->traitImports[Resolver::resolveClassFQN($rightSide[0], $this->aliases, $this->namespaceName) . '::' . $methodName][] = NULL;
 							}
-
 							if (',' === $type) {
-								$tokenStream->skipWhitespaces(true);
+								$tokenStream->skipWhitespaces(TRUE);
 								continue;
 							} elseif (';' !== $type) {
 								throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
 							}
-
 							$type = $tokenStream->skipWhitespaces()->getType();
 						}
 					}
-
 					break;
 				default:
 					$tokenStream->next();
 					break;
 			}
 		}
-
 		return $this;
 	}
 }

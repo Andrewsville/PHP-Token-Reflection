@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view
  * the file license.md that was distributed with this source code.
  */
-
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+
 
 /**
  * Basic class for reflection elements.
@@ -19,6 +19,7 @@ use ApiGen\TokenReflection\Stream\StreamBase as Stream;
  */
 abstract class ReflectionElement extends ReflectionBase
 {
+
 	/**
 	 * Docblock template start.
 	 *
@@ -38,7 +39,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @var array
 	 */
-	private static $methodCache = array();
+	private static $methodCache = [];
 
 	/**
 	 * Filename with reflection subject definition.
@@ -80,7 +81,8 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @var array
 	 */
-	protected $docblockTemplates = array();
+	protected $docblockTemplates = [];
+
 
 	/**
 	 * Constructor.
@@ -90,14 +92,14 @@ abstract class ReflectionElement extends ReflectionBase
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @throws ApiGen\TokenReflection\Exception\ParseException If an empty token stream was provided
 	 */
-	final public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = null)
+	final public function __construct(Stream $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
 		if (0 === $tokenStream->count()) {
 			throw new Exception\ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', Exception\ParseException::INVALID_ARGUMENT);
 		}
-
 		parent::__construct($tokenStream, $broker, $parent);
 	}
+
 
 	/**
 	 * Parses the token substream.
@@ -105,10 +107,9 @@ abstract class ReflectionElement extends ReflectionBase
 	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 */
-	final protected function parseStream(Stream $tokenStream, IReflection $parent = null)
+	final protected function parseStream(Stream $tokenStream, IReflection $parent = NULL)
 	{
 		$this->fileName = $tokenStream->getFileName();
-
 		$this
 			->processParent($parent, $tokenStream)
 			->parseStartLine($tokenStream)
@@ -117,6 +118,7 @@ abstract class ReflectionElement extends ReflectionBase
 			->parseChildren($tokenStream, $parent)
 			->parseEndLine($tokenStream);
 	}
+
 
 	/**
 	 * Returns the file name the reflection object is defined in.
@@ -127,6 +129,7 @@ abstract class ReflectionElement extends ReflectionBase
 	{
 		return $this->fileName;
 	}
+
 
 	/**
 	 * Returns a file reflection.
@@ -139,6 +142,7 @@ abstract class ReflectionElement extends ReflectionBase
 		return $this->getBroker()->getFile($this->fileName);
 	}
 
+
 	/**
 	 * Returns the definition start line number in the file.
 	 *
@@ -148,6 +152,7 @@ abstract class ReflectionElement extends ReflectionBase
 	{
 		return $this->startLine;
 	}
+
 
 	/**
 	 * Returns the definition end line number in the file.
@@ -159,6 +164,7 @@ abstract class ReflectionElement extends ReflectionBase
 		return $this->endLine;
 	}
 
+
 	/**
 	 * Returns the PHP extension reflection.
 	 *
@@ -168,8 +174,9 @@ abstract class ReflectionElement extends ReflectionBase
 	 */
 	public function getExtension()
 	{
-		return null;
+		return NULL;
 	}
+
 
 	/**
 	 * Returns the PHP extension name.
@@ -180,8 +187,9 @@ abstract class ReflectionElement extends ReflectionBase
 	 */
 	public function getExtensionName()
 	{
-		return false;
+		return FALSE;
 	}
+
 
 	/**
 	 * Returns the appropriate source code part.
@@ -193,6 +201,7 @@ abstract class ReflectionElement extends ReflectionBase
 		return $this->broker->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
 	}
 
+
 	/**
 	 * Returns the start position in the file token stream.
 	 *
@@ -202,6 +211,7 @@ abstract class ReflectionElement extends ReflectionBase
 	{
 		return $this->startPosition;
 	}
+
 
 	/**
 	 * Returns the end position in the file token stream.
@@ -213,6 +223,7 @@ abstract class ReflectionElement extends ReflectionBase
 		return $this->endPosition;
 	}
 
+
 	/**
 	 * Returns the stack of docblock templates.
 	 *
@@ -222,6 +233,7 @@ abstract class ReflectionElement extends ReflectionBase
 	{
 		return $this->docblockTemplates;
 	}
+
 
 	/**
 	 * Processes the parent reflection object.
@@ -236,6 +248,7 @@ abstract class ReflectionElement extends ReflectionBase
 		return $this;
 	}
 
+
 	/**
 	 * Find the appropriate docblock.
 	 *
@@ -249,9 +262,7 @@ abstract class ReflectionElement extends ReflectionBase
 			$this->docComment = new ReflectionAnnotation($this);
 			return $this;
 		}
-
 		$position = $tokenStream->key();
-
 		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
 			$value = $tokenStream->getTokenValue($position - 1);
 			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
@@ -271,17 +282,15 @@ abstract class ReflectionElement extends ReflectionBase
 			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 2));
 			$this->startPosition -= 2;
 		}
-
-		if (null === $this->docComment) {
+		if (NULL === $this->docComment) {
 			$this->docComment = new ReflectionAnnotation($this);
 		}
-
 		if ($parent instanceof ReflectionElement) {
 			$this->docComment->setTemplates($parent->getDocblockTemplates());
 		}
-
 		return $this;
 	}
+
 
 	/**
 	 * Saves the start line number.
@@ -293,11 +302,10 @@ abstract class ReflectionElement extends ReflectionBase
 	{
 		$token = $tokenStream->current();
 		$this->startLine = $token[2];
-
 		$this->startPosition = $tokenStream->key();
-
 		return $this;
 	}
+
 
 	/**
 	 * Saves the end line number.
@@ -309,11 +317,10 @@ abstract class ReflectionElement extends ReflectionBase
 	{
 		$token = $tokenStream->current();
 		$this->endLine = $token[2];
-
 		$this->endPosition = $tokenStream->key();
-
 		return $this;
 	}
+
 
 	/**
 	 * Parses reflected element metadata from the token stream.
@@ -324,6 +331,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 */
 	abstract protected function parse(Stream $tokenStream, IReflection $parent);
 
+
 	/**
 	 * Parses the reflection object name.
 	 *
@@ -331,6 +339,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 * @return ApiGen\TokenReflection\ReflectionElement
 	 */
 	abstract protected function parseName(Stream $tokenStream);
+
 
 	/**
 	 * Parses child reflection objects from the token stream.
