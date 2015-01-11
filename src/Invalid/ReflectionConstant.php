@@ -9,23 +9,19 @@
 
 namespace ApiGen\TokenReflection\Invalid;
 
-use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Behaviors\Annotations;
+use ApiGen\TokenReflection\Exception\BrokerException;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\IReflectionConstant;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\ReflectionBase;
+use ApiGen\TokenReflection\ReflectionFile;
 
 
-/**
- * Invalid constant reflection.
- *
- * The reflected constant is not unique.
- */
-class ReflectionConstant extends ReflectionElement implements IReflectionConstant
+class ReflectionConstant extends ReflectionElement implements IReflectionConstant, Annotations
 {
 
 	/**
-	 * Constant name.
-	 *
 	 * @var string
 	 */
 	private $name;
@@ -57,9 +53,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getName()
 	{
@@ -80,9 +74,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the declaring class reflection.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -91,9 +83,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -102,9 +92,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceName()
 	{
@@ -114,9 +102,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns if the function/method is defined within a namespace.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function inNamespace()
 	{
@@ -193,19 +179,17 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Returns a file reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionFile
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
+	 * @return ReflectionFile
+	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
 	{
-		throw new Exception\BrokerException($this->getBroker(), sprintf('Constant %s was not parsed from a file', $this->getPrettyName()), Exception\BrokerException::UNSUPPORTED);
+		throw new BrokerException($this->getBroker(), sprintf('Constant %s was not parsed from a file', $this->getPrettyName()), BrokerException::UNSUPPORTED);
 	}
 
 
 	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getStartLine()
 	{
@@ -214,9 +198,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getEndLine()
 	{
@@ -225,9 +207,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getDocComment()
 	{
@@ -236,10 +216,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -248,10 +225,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -260,9 +234,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -271,9 +243,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the constant value.
-	 *
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function getValue()
 	{
@@ -282,9 +252,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the part of the source code defining the constant value.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getValueDefinition()
 	{
@@ -304,9 +272,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns if the constant is internal.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInternal()
 	{
@@ -315,9 +281,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns if the constant is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isUserDefined()
 	{
@@ -326,9 +290,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -337,9 +299,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns if the reflection subject is deprecated.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDeprecated()
 	{
@@ -375,9 +335,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -408,10 +366,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
@@ -420,10 +375,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{

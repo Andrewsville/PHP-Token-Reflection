@@ -52,29 +52,6 @@ class ReflectionFunctionTest extends TestCase
 
 
 	/**
-	 * Tests getting of copydoc documentation comment.
-	 */
-	public function testCommentCopydoc()
-	{
-		static $functions = [
-			'tokenReflectionFunctionDocCommentCopydoc' => 'This is a function.',
-			'tokenReflectionFunctionDocCommentCopydoc2' => 'This is a function.',
-			'tokenReflectionFunctionDocCommentCopydoc3' => 'This is a function.',
-			'tokenReflectionFunctionDocCommentCopydoc4' => NULL,
-			'tokenReflectionFunctionDocCommentCopydoc5' => NULL,
-		];
-
-		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath('docCommentCopydoc'));
-
-		foreach ($functions as $functionName => $shortDescription) {
-			$this->assertTrue($broker->hasFunction($functionName), $functionName);
-			$this->assertSame($shortDescription, $broker->getFunction($functionName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $functionName);
-		}
-	}
-
-
-	/**
 	 * Tests getting of static variables.
 	 */
 	public function testStaticVariables()

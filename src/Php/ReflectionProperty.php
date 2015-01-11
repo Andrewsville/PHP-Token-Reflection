@@ -9,19 +9,17 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen;
-use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
-use Reflector, ReflectionProperty as InternalReflectionProperty;
+use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflectionProperty;
+use ApiGen\TokenReflection\ReflectionElement;
+use Reflector;
+use ReflectionProperty as InternalReflectionProperty;
 
 
-/**
- * Reflection of a not tokenized but defined class property.
- *
- * Descendant of the internal reflection with additional features.
- */
-class ReflectionProperty extends InternalReflectionProperty implements IReflection, TokenReflection\IReflectionProperty
+class ReflectionProperty extends InternalReflectionProperty implements IReflection, IReflectionProperty, Annotations
 {
 
 	/**
@@ -38,9 +36,9 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * @param string|\TokenReflection\Php\ReflectionClass|\ReflectionClass $class Defining class
+	 * @param string|ReflectionClass|\ReflectionClass $class Defining class
 	 * @param string $propertyName Property name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param Broker $broker
 	 */
 	public function __construct($class, $propertyName, Broker $broker)
 	{
@@ -50,9 +48,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the declaring class reflection.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -61,9 +57,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -72,9 +66,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getStartLine()
 	{
@@ -83,9 +75,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getEndLine()
 	{
@@ -94,9 +84,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getDocComment()
 	{
@@ -105,10 +93,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -117,10 +102,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -129,9 +111,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -186,9 +166,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -208,9 +186,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -219,9 +195,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -230,9 +204,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the defining trait.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringTrait()
 	{
@@ -241,9 +213,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the declaring trait name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringTraitName()
 	{
@@ -252,9 +222,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns if the property is set accessible.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isAccessible()
 	{
@@ -263,9 +231,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Sets a property to be accessible or not.
-	 *
-	 * @param bool $accessible If the property should be accessible.
+	 * {@inheritdoc}
 	 */
 	public function setAccessible($accessible)
 	{
@@ -275,9 +241,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionExtension
+	 * {@inheritdoc}
 	 */
 	public function getExtension()
 	{
@@ -286,9 +250,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return string|bool
+	 * {@inheritdoc}
 	 */
 	public function getExtensionName()
 	{
@@ -298,9 +260,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns the file name the reflection object is defined in.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getFileName()
 	{
@@ -309,9 +269,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -320,42 +278,34 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 
 
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionClass $internalReflection Internal reflection instance
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker instance
-	 * @return ApiGen\TokenReflection\Php\ReflectionProperty
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+	 * @return ReflectionProperty
+	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		static $cache = [];
 		if ( ! $internalReflection instanceof InternalReflectionProperty) {
-			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
 		if ( ! isset($cache[$key])) {

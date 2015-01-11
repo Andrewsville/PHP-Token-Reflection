@@ -9,19 +9,19 @@
 
 namespace ApiGen\TokenReflection\Invalid;
 
-use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\IReflectionFunction;
-use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflectionFunction;
 use ApiGen\TokenReflection\ReflectionBase;
+use ApiGen\TokenReflection\ReflectionFile;
 
 
-class ReflectionFunction extends ReflectionElement implements IReflectionFunction
+class ReflectionFunction extends ReflectionElement implements IReflectionFunction, Annotations
 {
 
 	/**
-	 * Class name (FQN).
-	 *
 	 * @var string
 	 */
 	private $name;
@@ -53,9 +53,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getName()
 	{
@@ -76,9 +74,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceName()
 	{
@@ -88,9 +84,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns if the class is defined within a namespace.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function inNamespace()
 	{
@@ -99,9 +93,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns if the reflection object is internal.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInternal()
 	{
@@ -110,9 +102,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns if the reflection object is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isUserDefined()
 	{
@@ -121,9 +111,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -132,9 +120,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -154,9 +140,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionExtension|null
+	 * {@inheritdoc}
 	 */
 	public function getExtension()
 	{
@@ -165,9 +149,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return false
+	 * {@inheritdoc}
 	 */
 	public function getExtensionName()
 	{
@@ -176,9 +158,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the file name the reflection object is defined in.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getFileName()
 	{
@@ -189,8 +169,8 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns a file reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionFile
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
+	 * @return ReflectionFile
+	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
 	{
@@ -232,9 +212,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getStartLine()
 	{
@@ -243,9 +221,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getEndLine()
 	{
@@ -254,9 +230,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getDocComment()
 	{
@@ -265,10 +239,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -277,10 +248,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return string|array|null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -289,9 +257,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns all annotations.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -311,9 +277,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns if the function/method is deprecated.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDeprecated()
 	{
@@ -322,9 +286,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns if the function/method returns its value as reference.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function returnsReference()
 	{
@@ -333,24 +295,21 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns a function/method parameter.
-	 *
-	 * @param int|string $parameter Parameter name or position
+	 * {@inheritdoc}
 	 */
 	public function getParameter($parameter)
 	{
 		if (is_numeric($parameter)) {
-			throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+
 		} else {
-			throw new Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
 
 
 	/**
-	 * Returns function/method parameters.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getParameters()
 	{
@@ -359,9 +318,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the number of parameters.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getNumberOfParameters()
 	{
@@ -370,9 +327,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns the number of required parameters.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getNumberOfRequiredParameters()
 	{
@@ -381,9 +336,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * Returns static variables.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getStaticVariables()
 	{
@@ -421,7 +374,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function invokeArgs(array $args)
 	{
-		throw new Exception\RuntimeException('Cannot invoke invalid functions', Exception\RuntimeException::UNSUPPORTED, $this);
+		throw new RuntimeException('Cannot invoke invalid functions', RuntimeException::UNSUPPORTED, $this);
 	}
 
 
@@ -443,7 +396,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	 */
 	public function getClosure()
 	{
-		throw new Exception\RuntimeException('Cannot invoke invalid functions', Exception\RuntimeException::UNSUPPORTED, $this);
+		throw new RuntimeException('Cannot invoke invalid functions', RuntimeException::UNSUPPORTED, $this);
 	}
 
 
@@ -505,8 +458,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
@@ -515,8 +467,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{

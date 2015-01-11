@@ -9,11 +9,12 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 
 
-class ReflectionAnnotation
+class ReflectionAnnotation implements Annotations
 {
 
 	/**
@@ -33,15 +34,6 @@ class ReflectionAnnotation
 	 * @var string
 	 */
 	const LONG_DESCRIPTION = ' long_description';
-
-	/**
-	 * Copydoc recursion stack.
-	 *
-	 * Prevents from infinite loops when using the @copydoc annotation.
-	 *
-	 * @var array
-	 */
-	private static $copydocStack = [];
 
 	/**
 	 * List of applied templates.
@@ -95,8 +87,7 @@ class ReflectionAnnotation
 
 
 	/**
-	 * @param string $annotation Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($annotation)
 	{
@@ -108,8 +99,7 @@ class ReflectionAnnotation
 
 
 	/**
-	 * @param string $annotation
-	 * @return string|array|NULL
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($annotation)
 	{
@@ -121,7 +111,7 @@ class ReflectionAnnotation
 
 
 	/**
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -212,80 +202,11 @@ class ReflectionAnnotation
 		if ($this->reflection instanceof ReflectionElement) {
 			// Merge docblock templates
 			$this->mergeTemplates();
-			// Copy annotations if the @copydoc tag is present.
-			if ( ! empty($this->annotations['copydoc'])) {
-				$this->copyAnnotation();
-			}
 			// Process docblock inheritance for supported reflections
 			if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 				$this->inheritAnnotations();
 			}
 		}
-	}
-
-
-	/**
-	 * Copies annotations if the @copydoc tag is present.
-	 *
-	 * @throws RuntimeException When stuck in an infinite loop when resolving the @copydoc tag.
-	 */
-	private function copyAnnotation()
-	{
-		self::$copydocStack[] = $this->reflection;
-		$broker = $this->reflection->getBroker();
-		$parentNames = $this->annotations['copydoc'];
-		unset($this->annotations['copydoc']);
-		foreach ($parentNames as $parentName) {
-			try {
-				if ($this->reflection instanceof ReflectionClass) {
-					$parent = $broker->getClass($parentName);
-					if ($parent instanceof Dummy\ReflectionClass) {
-						// The class to copy from is not usable
-						return;
-					}
-				} elseif ($this->reflection instanceof ReflectionFunction) {
-					$parent = $broker->getFunction(rtrim($parentName, '()'));
-				} elseif ($this->reflection instanceof ReflectionConstant && NULL === $this->reflection->getDeclaringClassName()) {
-					$parent = $broker->getConstant($parentName);
-				} elseif ($this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty || $this->reflection instanceof ReflectionConstant) {
-					if (FALSE !== strpos($parentName, '::')) {
-						list($className, $parentName) = explode('::', $parentName, 2);
-						$class = $broker->getClass($className);
-					} else {
-						$class = $this->reflection->getDeclaringClass();
-					}
-					if ($class instanceof Dummy\ReflectionClass) {
-						// The source element class is not usable
-						return;
-					}
-					if ($this->reflection instanceof ReflectionMethod) {
-						$parent = $class->getMethod(rtrim($parentName, '()'));
-					} elseif ($this->reflection instanceof ReflectionConstant) {
-						$parent = $class->getConstantReflection($parentName);
-					} else {
-						$parent = $class->getProperty(ltrim($parentName, '$'));
-					}
-				}
-				if ( ! empty($parent)) {
-					// Don't get into an infinite recursion loop
-					if (in_array($parent, self::$copydocStack, TRUE)) {
-						throw new RuntimeException('Infinite loop detected when copying annotations using the @copydoc tag.', RuntimeException::INVALID_ARGUMENT, $this->reflection);
-					}
-					self::$copydocStack[] = $parent;
-					// We can get into an infinite loop here (e.g. when two methods @copydoc from each other)
-					foreach ($parent->getAnnotations() as $name => $value) {
-						// Add annotations that are not already present
-						if (empty($this->annotations[$name])) {
-							$this->annotations[$name] = $value;
-						}
-					}
-					array_pop(self::$copydocStack);
-				}
-			} catch (Exception\BaseException $e) {
-				// Ignoring links to non existent elements, ...
-			}
-		}
-		array_pop(self::$copydocStack);
 	}
 
 

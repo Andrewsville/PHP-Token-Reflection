@@ -9,10 +9,8 @@
 
 namespace ApiGen\TokenReflection;
 
-use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
@@ -21,8 +19,6 @@ class ReflectionFile extends ReflectionBase
 {
 
 	/**
-	 * Namespaces list.
-	 *
 	 * @var array
 	 */
 	private $namespaces = [];
@@ -69,14 +65,14 @@ class ReflectionFile extends ReflectionBase
 	 */
 	public function getSource()
 	{
-		return (string) $this->broker->getFileTokens($this->getName());
+		return (string) $this->getBroker()->getFileTokens($this->getName());
 	}
 
 
 	/**
 	 * Parses the token substream and prepares namespace reflections from the file.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionFile
+	 * @return ReflectionFile
 	 */
 	protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL)
 	{

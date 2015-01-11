@@ -32,7 +32,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the declaring function.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionFunctionBase
+	 * @return IReflectionFunctionBase
 	 */
 	function getDeclaringFunction();
 
@@ -128,7 +128,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns reflection of the required class of the value.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return IReflectionClass|null
 	 */
 	function getClass();
 

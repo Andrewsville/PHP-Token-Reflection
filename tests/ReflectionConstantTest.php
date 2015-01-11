@@ -65,37 +65,6 @@ class ReflectionConstantTest extends TestCase
 
 
 	/**
-	 * Tests getting of copydoc documentation comment.
-	 */
-	public function testCommentCopydoc()
-	{
-		static $constants = ['DOC_COMMENT', 'DOC_COMMENT_COPY', 'DOC_COMMENT_COPY2'];
-
-		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath('docCommentCopydoc'));
-
-		$this->assertTrue($broker->hasClass('TokenReflection_Test_ConstantDocCommentCopydoc'));
-		$reflection = $broker->getClass('TokenReflection_Test_ConstantDocCommentCopydoc');
-		foreach ($constants as $constant) {
-			$this->assertSame('This is a constant.', $reflection->getConstantReflection($constant)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constant);
-		}
-
-		$this->assertSame('This is another constant.', $reflection->getConstantReflection('DOC_COMMENT_COPY_CLASS')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertSame(NULL, $reflection->getConstantReflection('DOC_COMMENT_COPY_NO')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-
-		static $topLevelConstants = [
-			'CONSTANT_DOC_COMMENT_COPYDOC' => 'Comment.',
-			'CONSTANT_DOC_COMMENT_COPYDOC2' => 'Comment.',
-			'CONSTANT_DOC_COMMENT_COPYDOC3' => NULL,
-		];
-		foreach ($topLevelConstants as $constantName => $shortDescription) {
-			$this->assertTrue($broker->hasConstant($constantName), $constantName);
-			$this->assertSame($shortDescription, $broker->getConstant($constantName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $constantName);
-		}
-	}
-
-
-	/**
 	 * Tests different types of constant value.
 	 */
 	public function testTypes()

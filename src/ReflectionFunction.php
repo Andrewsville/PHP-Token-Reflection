@@ -11,10 +11,9 @@ namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
-use ReflectionFunction as InternalReflectionFunction;
 
 
 class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFunction
@@ -29,9 +28,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 
 	/**
-	 * Returns if the function is is disabled via the disable_functions directive.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDisabled()
 	{
@@ -40,9 +37,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function __toString()
 	{
@@ -93,9 +88,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 
 	/**
-	 * Calls the function.
-	 *
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function invoke()
 	{
@@ -104,11 +97,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 
 	/**
-	 * Calls the function.
-	 *
-	 * @param array $args Function parameter values
-	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required function does not exist.
+	 * {@inheritdoc}
 	 */
 	public function invokeArgs(array $args = [])
 	{
@@ -120,9 +109,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -131,9 +118,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 
 
 	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
+	 * {@inheritdoc}
 	 */
 	public function getClosure()
 	{
@@ -172,15 +157,13 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
+	 * @return ReflectionElement
+	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFileNamespace) {
-			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace.', Exception\ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFileNamespace.', ParseException::INVALID_PARENT);
 		}
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
@@ -195,8 +178,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 */
 	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
-		return $this
-			->parseReturnsReference($tokenStream)
+		return $this->parseReturnsReference($tokenStream)
 			->parseName($tokenStream);
 	}
 

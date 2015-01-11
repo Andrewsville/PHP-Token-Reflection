@@ -24,7 +24,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the declaring class name.
 	 *
-	 * @return string|null
+	 * @return string|NULL
 	 */
 	function getDeclaringClassName();
 
@@ -113,7 +113,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the method prototype.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionMethod
+	 * @return IReflectionMethod
 	 */
 	function getPrototype();
 
@@ -166,7 +166,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the original method when importing from a trait.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionMethod|null
+	 * @return IReflectionMethod|null
 	 */
 	function getOriginal();
 
@@ -182,7 +182,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the defining trait.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return IReflectionClass|null
 	 */
 	function getDeclaringTrait();
 

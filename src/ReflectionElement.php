@@ -12,15 +12,10 @@ namespace ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * Basic class for reflection elements.
- *
- * Defines a variety of common methods. All reflections are descendants of this class.
- */
 abstract class ReflectionElement extends ReflectionBase
 {
 
@@ -113,9 +108,7 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns the file name the reflection object is defined in.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getFileName()
 	{
@@ -126,8 +119,8 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * Returns a file reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionFile
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the file is not stored inside the broker
+	 * @return ReflectionFile
+	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
 	{
@@ -136,9 +129,7 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getStartLine()
 	{
@@ -147,9 +138,7 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getEndLine()
 	{
@@ -190,7 +179,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 */
 	public function getSource()
 	{
-		return $this->broker->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
+		return $this->getBroker()->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
 	}
 
 
@@ -232,7 +221,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @return ReflectionElement
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		// To be defined in child classes
 		return $this;
@@ -313,13 +302,13 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @return ReflectionElement
 	 */
-	abstract protected function parse(Stream $tokenStream, IReflection $parent);
+	abstract protected function parse(StreamBase $tokenStream, IReflection $parent);
 
 
 	/**
 	 * @return ReflectionElement
 	 */
-	abstract protected function parseName(Stream $tokenStream);
+	abstract protected function parseName(StreamBase $tokenStream);
 
 
 	/**

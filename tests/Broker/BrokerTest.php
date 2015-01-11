@@ -21,7 +21,7 @@ class BrokerTest extends TestCase
 	{
 		$broker = new Broker(new MemoryBackend);
 		$files = $broker->processDirectory(realpath(__DIR__ . '/../data/class'), TRUE);
-		$this->assertCount(39, $files);
+		$this->assertCount(38, $files);
 	}
 
 

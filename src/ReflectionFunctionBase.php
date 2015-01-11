@@ -13,13 +13,9 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * Base abstract class for tokenized function and method.
- */
 abstract class ReflectionFunctionBase extends ReflectionElement implements IReflectionFunctionBase
 {
 
@@ -65,9 +61,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getName()
 	{
@@ -90,9 +84,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceName()
 	{
@@ -240,9 +232,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{

@@ -9,9 +9,9 @@
 
 namespace ApiGen\TokenReflection;
 
-/**
- * Basic TokenReflection interface.
- */
+use ApiGen\TokenReflection\Broker\Broker;
+
+
 interface IReflection
 {
 
@@ -21,6 +21,14 @@ interface IReflection
 	 * @return string
 	 */
 	function getName();
+
+
+	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	function getPrettyName();
 
 
 	/**
@@ -50,7 +58,7 @@ interface IReflection
 	/**
 	 * Returns the reflection broker used by this reflection object.
 	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * @return Broker
 	 */
 	function getBroker();
 
@@ -71,13 +79,5 @@ interface IReflection
 	 * @return bool
 	 */
 	function __isset($key);
-
-
-	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
-	 */
-	function getPrettyName();
 
 }

@@ -11,14 +11,13 @@ namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionMethod as InternalReflectionMethod, ReflectionClass as InternalReflectionClass;
 
 
-/**
- * Tokenized class method reflection.
- */
 class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMethod
 {
 
@@ -85,36 +84,26 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	const IS_ALLOWED_STATIC = 0x10000;
 
 	/**
-	 * Declaring class name.
-	 *
 	 * @var string
 	 */
 	private $declaringClassName;
 
 	/**
-	 * Method prototype reflection.
-	 *
-	 * @var ApiGen\TokenReflection\IReflectionMethod
+	 * @var IReflectionMethod
 	 */
 	private $prototype;
 
 	/**
-	 * Method modifiers.
-	 *
 	 * @var int
 	 */
 	protected $modifiers = 0;
 
 	/**
-	 * Determined if the method is accessible.
-	 *
 	 * @var bool
 	 */
 	private $accessible = FALSE;
 
 	/**
-	 * Determines if modifiers are complete.
-	 *
 	 * @var bool
 	 */
 	private $modifiersComplete = FALSE;
@@ -122,27 +111,25 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * The original name when importing from a trait.
 	 *
-	 * @var string|null
+	 * @var string|NULL
 	 */
 	private $originalName = NULL;
 
 	/**
 	 * The original method when importing from a trait.
 	 *
-	 * @var ApiGen\TokenReflection\IReflectionMethod|null
+	 * @var IReflectionMethod|NULL
 	 */
 	private $original = NULL;
 
 	/**
 	 * The original modifiers value when importing from a trait.
 	 *
-	 * @var int|null
+	 * @var int|NULL
 	 */
 	private $originalModifiers = NULL;
 
 	/**
-	 * Declaring trait name.
-	 *
 	 * @var string
 	 */
 	private $declaringTraitName;
@@ -151,7 +138,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass|null
+	 * @return ReflectionClass|NULL
 	 */
 	public function getDeclaringClass()
 	{
@@ -324,8 +311,8 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Returns the method prototype.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionMethod
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the method has no prototype.
+	 * @return ReflectionMethod
+	 * @throws RuntimeException If the method has no prototype.
 	 */
 	public function getPrototype()
 	{
@@ -360,9 +347,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -371,9 +356,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function __toString()
 	{
@@ -385,7 +368,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 			$prototype = ', prototype ' . $this->getPrototype()->getDeclaringClassName();
 		} catch (RuntimeException $e) {
 			if ($declaringClassParent && $declaringClassParent->isInternal()) {
-				$internal = 'internal:' . $parentClass->getExtensionName();
+				$internal = 'internal:' . $declaringClassParent->getExtensionName();
 			}
 		}
 		if ($declaringClassParent && $declaringClassParent->hasMethod($this->name)) {
@@ -465,11 +448,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Calls the method on an given instance.
-	 *
-	 * @param object $object Class instance
-	 * @param mixed $args
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function invoke($object, $args)
 	{
@@ -479,12 +458,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Calls the method on an given object.
-	 *
-	 * @param object $object Class instance
-	 * @param array $args Method parameter values
-	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If it is not possible to invoke the method.
+	 * {@inheritdoc}
 	 */
 	public function invokeArgs($object, array $args = [])
 	{
@@ -507,9 +481,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns if the property is set accessible.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isAccessible()
 	{
@@ -518,9 +490,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Sets a method to be accessible or not.
-	 *
-	 * @param bool $accessible
+	 * {@inheritdoc}
 	 */
 	public function setAccessible($accessible)
 	{
@@ -542,9 +512,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -553,10 +521,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @param object $object Object
-	 * @return \Closure
+	 * {@inheritdoc}
 	 */
 	public function getClosure($object)
 	{
@@ -574,11 +539,11 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Creates a method alias of the given name and access level for the given class.
 	 *
-	 * @param ApiGen\TokenReflection\ReflectionClass $parent New parent class
+	 * @param ReflectionClass $parent New parent class
 	 * @param string $name New method name
 	 * @param int $accessLevel New access level
-	 * @return ApiGen\TokenReflection\ReflectionMethod
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid method access level was found.
+	 * @return ReflectionMethod
+	 * @throws RuntimeException If an invalid method access level was found.
 	 */
 	public function alias(ReflectionClass $parent, $name = NULL, $accessLevel = NULL)
 	{
@@ -605,9 +570,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the original name when importing from a trait.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getOriginalName()
 	{
@@ -616,9 +579,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the original method when importing from a trait.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionMethod|null
+	 * {@inheritdoc}
 	 */
 	public function getOriginal()
 	{
@@ -627,9 +588,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the original modifiers value when importing from a trait.
-	 *
-	 * @return int|null
+	 * {@inheritdoc}
 	 */
 	public function getOriginalModifiers()
 	{
@@ -638,9 +597,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the defining trait.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringTrait()
 	{
@@ -649,9 +606,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the declaring trait name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringTraitName()
 	{
@@ -662,15 +617,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
+	 * @return ReflectionElement
+	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionClass) {
-			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', Exception\ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', ParseException::INVALID_PARENT);
 		}
 		$this->declaringClassName = $parent->getName();
 		if ($parent->isTrait()) {
@@ -683,15 +636,12 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionMethod
-	 * @throws ApiGen\TokenReflection\Exception\Parse If the class could not be parsed.
+	 * @return ReflectionMethod
+	 * @throws ParseException If the class could not be parsed.
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
-		return $this
-			->parseBaseModifiers($tokenStream)
+		return $this->parseBaseModifiers($tokenStream)
 			->parseReturnsReference($tokenStream)
 			->parseName($tokenStream)
 			->parseInternalModifiers($parent);
@@ -701,10 +651,9 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Parses base method modifiers (abstract, final, public, ...).
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionMethod
+	 * @return ReflectionMethod
 	 */
-	private function parseBaseModifiers(Stream $tokenStream)
+	private function parseBaseModifiers(StreamBase $tokenStream)
 	{
 		while (TRUE) {
 			switch ($tokenStream->getType()) {
@@ -744,14 +693,12 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * Parses internal PHP method modifiers (abstract, final, public, ...).
 	 *
-	 * @param ApiGen\TokenReflection\ReflectionClass $class Parent class
-	 * @return ApiGen\TokenReflection\ReflectionMethod
+	 * @return ReflectionMethod
 	 */
 	private function parseInternalModifiers(ReflectionClass $class)
 	{
 		$name = strtolower($this->name);
-		// In PHP 5.3.3+ the ctor can be named only __construct in namespaced classes
-		if ('__construct' === $name || (( ! $class->inNamespace() || PHP_VERSION_ID < 50303) && strtolower($class->getShortName()) === $name)) {
+		if ('__construct' === $name || ( ! $class->inNamespace() && strtolower($class->getShortName()) === $name)) {
 			$this->modifiers |= self::IS_CONSTRUCTOR;
 		} elseif ('__destruct' === $name) {
 			$this->modifiers |= self::IS_DESTRUCTOR;

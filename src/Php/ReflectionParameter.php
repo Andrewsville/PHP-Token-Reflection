@@ -9,16 +9,18 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflectionParameter;
+use ApiGen\TokenReflection\ReflectionElement;
 use Reflector;
 use ReflectionParameter as InternalReflectionParameter;
 use ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
 
 
-class ReflectionParameter extends InternalReflectionParameter implements IReflection, TokenReflection\IReflectionParameter
+class ReflectionParameter extends InternalReflectionParameter implements IReflection, IReflectionParameter, Annotations
 {
 
 	/**
@@ -49,9 +51,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the declaring class reflection.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -61,9 +61,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -73,9 +71,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -84,9 +80,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the file name the reflection object is defined in.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getFileName()
 	{
@@ -95,9 +89,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionExtension
+	 * {@inheritdoc}
 	 */
 	public function getExtension()
 	{
@@ -106,9 +98,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return string|bool
+	 * {@inheritdoc}
 	 */
 	public function getExtensionName()
 	{
@@ -118,10 +108,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -130,10 +117,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -142,9 +126,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -153,9 +135,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the declaring function reflection.
-	 *
-	 * @return ReflectionFunction|ReflectionMethod
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringFunction()
 	{
@@ -166,9 +146,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the declaring function name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringFunctionName()
 	{
@@ -178,9 +156,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getStartLine()
 	{
@@ -189,9 +165,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getEndLine()
 	{
@@ -200,9 +174,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getDocComment()
 	{
@@ -211,9 +183,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the part of the source code defining the paramter default value.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDefaultValueDefinition()
 	{
@@ -223,9 +193,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns if the default value is defined by a constant.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDefaultValueConstant()
 	{
@@ -234,9 +202,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the name of the default value constant.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDefaultValueConstantName()
 	{
@@ -248,9 +214,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the original type hint as defined in the source code.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getOriginalTypeHint()
 	{
@@ -259,9 +223,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the required class name of the value.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getClassName()
 	{
@@ -270,9 +232,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns if the parameter is internal.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInternal()
 	{
@@ -281,9 +241,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns if the parameter is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isUserDefined()
 	{
@@ -292,9 +250,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -303,9 +259,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns if the reflection subject is deprecated.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDeprecated()
 	{
@@ -314,9 +268,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -336,9 +288,7 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -356,32 +306,28 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 
 
 	/**
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 
 	/**
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 
 
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionClass $internalReflection Internal reflection instance
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker instance
-	 * @return ApiGen\TokenReflection\Php\ReflectionParameter
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+	 * @return ReflectionParameter
+	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

@@ -11,7 +11,9 @@ namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionClass as InternalReflectionClass;
 
@@ -80,9 +82,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns a reflection of the declaring class.
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -91,9 +91,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -102,9 +100,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns the property default value.
-	 *
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function getDefaultValue()
 	{
@@ -117,9 +113,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns the part of the source code defining the property default value.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getDefaultValueDefinition()
 	{
@@ -128,11 +122,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns the property value for a particular class instance.
-	 *
-	 * @param object $object
-	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If it is not possible to return the property value.
+	 * {@inheritdoc}
 	 */
 	public function getValue($object)
 	{
@@ -155,11 +145,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns if the property was created at compile time.
-	 *
-	 * All properties in the source code are.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDefault()
 	{
@@ -168,7 +154,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getModifiers()
 	{
@@ -188,7 +174,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isPrivate()
 	{
@@ -197,7 +183,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isProtected()
 	{
@@ -206,7 +192,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isPublic()
 	{
@@ -215,7 +201,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isStatic()
 	{
@@ -280,9 +266,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Sets a property to be accessible or not.
-	 *
-	 * @param bool $accessible If the property should be accessible.
+	 * {@inheritdoc}
 	 */
 	public function setAccessible($accessible)
 	{
@@ -303,11 +287,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Sets value of a property for a particular class instance.
-	 *
-	 * @param object $object Class instance
-	 * @param mixed $value Poperty value
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If it is not possible to set the property value.
+	 * {@inheritdoc}
 	 */
 	public function setValue($object, $value)
 	{
@@ -333,9 +313,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -346,8 +324,8 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Creates a property alias for the given class.
 	 *
-	 * @param ApiGen\TokenReflection\ReflectionClass $parent New parent class
-	 * @return ApiGen\TokenReflection\ReflectionProperty
+	 * @param ReflectionClass $parent New parent class
+	 * @return ReflectionProperty
 	 */
 	public function alias(ReflectionClass $parent)
 	{
@@ -360,7 +338,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns the defining trait.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return IReflectionClass|NULL
 	 */
 	public function getDeclaringTrait()
 	{
@@ -380,9 +358,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -393,15 +369,13 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
-	 * @throws ApiGen\TokenReflection\Exception\Parse If an invalid parent reflection object was provided.
+	 * @return ReflectionElement
+	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionClass) {
-			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', Exception\ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', ParseException::INVALID_PARENT);
 		}
 		$this->declaringClassName = $parent->getName();
 		if ($parent->isTrait()) {
@@ -414,9 +388,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionProperty
+	 * @return ReflectionProperty
 	 */
 	protected function parse(Stream $tokenStream, IReflection $parent)
 	{
@@ -432,12 +404,10 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\ReflectionClass $class Defining class
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the modifiers value cannot be determined.
+	 * @return ReflectionClass
+	 * @throws ParseException If the modifiers value cannot be determined.
 	 */
-	private function parseModifiers(Stream $tokenStream, ReflectionClass $class)
+	private function parseModifiers(StreamBase $tokenStream, ReflectionClass $class)
 	{
 		while (TRUE) {
 			switch ($tokenStream->getType()) {
@@ -464,7 +434,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		} elseif (0 === $this->modifiers) {
 			$parentProperties = $class->getOwnProperties();
 			if (empty($parentProperties)) {
-				throw new Exception\ParseException($this, $tokenStream, 'No access level defined and no previous defining class property present.', Exception\ParseException::LOGICAL_ERROR);
+				throw new ParseException($this, $tokenStream, 'No access level defined and no previous defining class property present.', ParseException::LOGICAL_ERROR);
 			}
 			$sibling = array_pop($parentProperties);
 			if ($sibling->isPublic()) {
@@ -474,7 +444,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			} elseif ($sibling->isProtected()) {
 				$this->modifiers = InternalReflectionProperty::IS_PROTECTED;
 			} else {
-				throw new Exception\ParseException($this, $tokenStream, sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
+				throw new ParseException($this, $tokenStream, sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
 			}
 			if ($sibling->isStatic()) {
 				$this->modifiers |= InternalReflectionProperty::IS_STATIC;
@@ -487,14 +457,13 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Parses the property name.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionProperty
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the property name could not be determined.
+	 * @return ReflectionProperty
+	 * @throws ParseException If the property name could not be determined.
 	 */
-	protected function parseName(Stream $tokenStream)
+	protected function parseName(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_VARIABLE)) {
-			throw new Exception\ParseException($this, $tokenStream, 'The property name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
+			throw new ParseException($this, $tokenStream, 'The property name could not be determined.', ParseException::LOGICAL_ERROR);
 		}
 		$this->name = substr($tokenStream->getTokenValue(), 1);
 		$tokenStream->skipWhitespaces(TRUE);
@@ -505,11 +474,10 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Parses the propety default value.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionProperty
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the property default value could not be determined.
+	 * @return ReflectionProperty
+	 * @throws ParseException If the property default value could not be determined.
 	 */
-	private function parseDefaultValue(Stream $tokenStream)
+	private function parseDefaultValue(StreamBase $tokenStream)
 	{
 		$type = $tokenStream->getType();
 		if (';' === $type || ',' === $type) {
@@ -545,7 +513,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 			$tokenStream->next();
 		}
 		if (',' !== $type && ';' !== $type) {
-			throw new Exception\ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ";".', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ";".', ParseException::UNEXPECTED_TOKEN);
 		}
 		return $this;
 	}

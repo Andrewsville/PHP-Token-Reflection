@@ -10,6 +10,9 @@
 namespace ApiGen\TokenReflection;
 
 
+use ApiGen\TokenReflection\Exception\RuntimeException;
+
+
 interface IReflectionClass extends IReflection
 {
 
@@ -48,7 +51,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the PHP extension reflection.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionExtension|null
+	 * @return IReflectionExtension|NULL
 	 */
 	function getExtension();
 
@@ -136,8 +139,6 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if objects of this class are cloneable.
 	 *
-	 * Introduced in PHP 5.4.
-	 *
 	 * @return bool
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
 	 */
@@ -166,7 +167,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return IReflectionClass|NULL
 	 */
 	function getParentClass();
 
@@ -182,7 +183,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the parent classes reflections.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getParentClasses();
 
@@ -190,7 +191,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the parent classes names.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getParentClassNameList();
 
@@ -200,7 +201,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid object was provided as interface.
+	 * @throws RuntimeException If an invalid object was provided as interface.
 	 */
 	function implementsInterface($interface);
 
@@ -208,7 +209,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns interface reflections.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getInterfaces();
 
@@ -216,7 +217,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns interface names.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getInterfaceNames();
 
@@ -224,7 +225,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns interface reflections implemented by this class, not its parents.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getOwnInterfaces();
 
@@ -232,7 +233,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns names of interfaces implemented by this class, not its parents.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getOwnInterfaceNames();
 
@@ -240,15 +241,15 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the class constructor reflection.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionMethod|null
+	 * @return IReflectionMethod|NULL
 	 */
 	function getConstructor();
 
 
 	/**
-	 * Returns the class desctructor reflection.
+	 * Returns the class destructor reflection.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionMethod|null
+	 * @return IReflectionMethod|NULL
 	 */
 	function getDestructor();
 
@@ -266,8 +267,8 @@ interface IReflectionClass extends IReflection
 	 * Returns a method reflection.
 	 *
 	 * @param string $name Method name
-	 * @return ApiGen\TokenReflection\IReflectionMethod
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested method does not exist.
+	 * @return IReflectionMethod
+	 * @throws RuntimeException If the requested method does not exist.
 	 */
 	function getMethod($name);
 
@@ -276,7 +277,7 @@ interface IReflectionClass extends IReflection
 	 * Returns method reflections.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array
+	 * @return array|IReflectionMethod[]
 	 */
 	function getMethods($filter = NULL);
 
@@ -284,7 +285,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class implements (and not its parents) the given method.
 	 *
-	 * @param string $name Method name
+	 * @param string $name
 	 * @return bool
 	 */
 	function hasOwnMethod($name);
@@ -294,7 +295,7 @@ interface IReflectionClass extends IReflection
 	 * Returns method reflections declared by this class, not its parents.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array
+	 * @return array|IReflectionMethod[]
 	 */
 	function getOwnMethods($filter = NULL);
 
@@ -312,7 +313,7 @@ interface IReflectionClass extends IReflection
 	 * Returns method reflections imported from traits.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array
+	 * @return array|IReflectionMethod[]
 	 */
 	function getTraitMethods($filter = NULL);
 
@@ -330,8 +331,8 @@ interface IReflectionClass extends IReflection
 	 * Returns a constant value.
 	 *
 	 * @param string $name Constant name
-	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested constant does not exist.
+	 * @return mixed|IReflectionConstant
+	 * @throws RuntimeException If the requested constant does not exist.
 	 */
 	function getConstant($name);
 
@@ -340,8 +341,8 @@ interface IReflectionClass extends IReflection
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
-	 * @return ApiGen\TokenReflection\IReflectionConstant
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested constant does not exist.
+	 * @return IReflectionConstant
+	 * @throws RuntimeException If the requested constant does not exist.
 	 */
 	function getConstantReflection($name);
 
@@ -349,7 +350,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns an array of constant values.
 	 *
-	 * @return array
+	 * @return array|IReflectionConstant[]
 	 */
 	function getConstants();
 
@@ -357,7 +358,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns constant reflections.
 	 *
-	 * @return array
+	 * @return array|IReflectionConstant[]
 	 */
 	function getConstantReflections();
 
@@ -374,7 +375,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns values of constants declared by this class, not by its parents.
 	 *
-	 * @return array
+	 * @return array|IReflectionConstant[]
 	 */
 	function getOwnConstants();
 
@@ -382,7 +383,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns constant reflections declared by this class, not by its parents.
 	 *
-	 * @return array
+	 * @return array|IReflectionConstant[]
 	 */
 	function getOwnConstantReflections();
 
@@ -400,8 +401,8 @@ interface IReflectionClass extends IReflection
 	 * Return a property reflection.
 	 *
 	 * @param string $name Property name
-	 * @return ApiGen\TokenReflection\ReflectionProperty
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested property does not exist.
+	 * @return ReflectionProperty
+	 * @throws RuntimeException If the requested property does not exist.
 	 */
 	function getProperty($name);
 
@@ -410,7 +411,7 @@ interface IReflectionClass extends IReflection
 	 * Returns property reflections.
 	 *
 	 * @param int $filter Properties filter
-	 * @return array
+	 * @return array|IReflectionProperty[]
 	 */
 	function getProperties($filter = NULL);
 
@@ -428,7 +429,7 @@ interface IReflectionClass extends IReflection
 	 * Returns property reflections declared by this class, not its parents.
 	 *
 	 * @param int $filter Properties filter
-	 * @return array
+	 * @return array|IReflectionProperty[]
 	 */
 	function getOwnProperties($filter = NULL);
 
@@ -446,7 +447,7 @@ interface IReflectionClass extends IReflection
 	 * Returns property reflections imported from traits.
 	 *
 	 * @param int $filter Properties filter
-	 * @return array
+	 * @return array|IReflectionProperty[]
 	 */
 	function getTraitProperties($filter = NULL);
 
@@ -454,7 +455,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns default properties.
 	 *
-	 * @return array
+	 * @return array|IReflectionProperty[]
 	 */
 	function getDefaultProperties();
 
@@ -462,7 +463,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns static properties reflections.
 	 *
-	 * @return array
+	 * @return array|IReflectionProperty[]
 	 */
 	function getStaticProperties();
 
@@ -473,8 +474,8 @@ interface IReflectionClass extends IReflection
 	 * @param string $name Property name
 	 * @param mixed $default Default value
 	 * @return mixed
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
+	 * @throws RuntimeException If the requested static property does not exist.
+	 * @throws RuntimeException If the requested static property is not accessible.
 	 */
 	function getStaticPropertyValue($name, $default = NULL);
 
@@ -482,7 +483,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of direct subclasses.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getDirectSubclasses();
 
@@ -490,7 +491,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns names of direct subclasses.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getDirectSubclassNames();
 
@@ -498,7 +499,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of indirect subclasses.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getIndirectSubclasses();
 
@@ -506,7 +507,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns names of indirect subclasses.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getIndirectSubclassNames();
 
@@ -514,7 +515,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of classes directly implementing this interface.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getDirectImplementers();
 
@@ -522,7 +523,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns names of classes directly implementing this interface.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getDirectImplementerNames();
 
@@ -530,7 +531,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of classes indirectly implementing this interface.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getIndirectImplementers();
 
@@ -538,7 +539,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns names of classes indirectly implementing this interface.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getIndirectImplementerNames();
 
@@ -554,7 +555,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns traits used by this class.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getTraits();
 
@@ -562,7 +563,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns traits used by this class and not its parents.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getOwnTraits();
 
@@ -594,7 +595,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class uses a particular trait.
 	 *
-	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
+	 * @param \ReflectionClass|IReflectionClass|string $trait Trait reflection or name
 	 * @return bool
 	 */
 	function usesTrait($trait);
@@ -613,7 +614,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param object $object Instance
 	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided argument is not an object.
+	 * @throws RuntimeException If the provided argument is not an object.
 	 */
 	function isInstance($object);
 
@@ -622,7 +623,7 @@ interface IReflectionClass extends IReflection
 	 * Creates a new class instance without using a constructor.
 	 *
 	 * @return object
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
+	 * @throws RuntimeException If the class inherits from an internal class.
 	 */
 	function newInstanceWithoutConstructor();
 
@@ -643,7 +644,7 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param array $args Array of constructor parameters
 	 * @return object
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required class does not exist.
+	 * @throws RuntimeException If the required class does not exist.
 	 */
 	function newInstanceArgs(array $args = []);
 
@@ -653,8 +654,8 @@ interface IReflectionClass extends IReflection
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property does not exist.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested static property is not accessible.
+	 * @throws RuntimeException If the requested static property does not exist.
+	 * @throws RuntimeException If the requested static property is not accessible.
 	 */
 	function setStaticPropertyValue($name, $value);
 

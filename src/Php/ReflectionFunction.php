@@ -10,15 +10,18 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
-use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflectionFunction;
+use ApiGen\TokenReflection\ReflectionElement;
 use Reflector;
 use ReflectionFunction as InternalReflectionFunction;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionFunction extends InternalReflectionFunction implements IReflection, TokenReflection\IReflectionFunction
+class ReflectionFunction extends InternalReflectionFunction implements IReflection, IReflectionFunction, Annotations
 {
 
 	/**
@@ -46,9 +49,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionExtension
+	 * {@inheritdoc}
 	 */
 	public function getExtension()
 	{
@@ -57,10 +58,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -69,10 +67,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -81,9 +76,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -92,9 +85,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -103,19 +94,14 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns a particular parameter.
-	 *
-	 * @param int|string $parameter Parameter name or position
-	 * @return ApiGen\TokenReflection\Php\ReflectionParameter
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
+	 * {@inheritdoc}
 	 */
 	public function getParameter($parameter)
 	{
 		$parameters = $this->getParameters();
 		if (is_numeric($parameter)) {
 			if ( ! isset($parameters[$parameter])) {
-				throw new Exception\RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			return $parameters[$parameter];
 		} else {
@@ -124,15 +110,13 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 					return $reflection;
 				}
 			}
-			throw new TokenReflection\Exception\RuntimeException(sprintf('There is no parameter "%s".', $parameter), TokenReflection\Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 		}
 	}
 
 
 	/**
-	 * Returns function parameters.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getParameters()
 	{
@@ -148,9 +132,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -159,9 +141,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -170,59 +150,29 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 
 
 	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
+	 * {@inheritdoc}
 	 */
 	public function getClosure()
 	{
 		return parent::getClosure();
-	}
-
-
-	/**
-	 * Returns the closure scope class.
-	 *
-	 * @return string|null
-	 */
-	public function getClosureScopeClass()
-	{
-		return parent::getClosureScopeClass();
-	}
-
-
-	/**
-	 * Returns this pointer bound to closure.
-	 *
-	 * @return null
-	 */
-	public function getClosureThis()
-	{
-		return parent::getClosureThis();
 	}
 
 
@@ -236,9 +186,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -258,15 +206,13 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionClass $internalReflection Internal reflection instance
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker instance
-	 * @return ApiGen\TokenReflection\Php\ReflectionFunction
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+	 * @return ReflectionFunction
+	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		if ( ! $internalReflection instanceof InternalReflectionFunction) {
-			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		return $broker->getFunction($internalReflection->getName());
 	}

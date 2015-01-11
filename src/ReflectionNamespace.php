@@ -11,11 +11,10 @@ namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\FileProcessingException;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 
 
-/**
- * Tokenized namespace reflection.
- */
 class ReflectionNamespace implements IReflectionNamespace
 {
 
@@ -38,21 +37,21 @@ class ReflectionNamespace implements IReflectionNamespace
 	/**
 	 * List of class reflections.
 	 *
-	 * @var array
+	 * @var array|IReflectionClass[]
 	 */
 	private $classes = [];
 
 	/**
 	 * List of constant reflections.
 	 *
-	 * @var array
+	 * @var array|IReflectionConstant[]
 	 */
 	private $constants = [];
 
 	/**
 	 * List of function reflections.
 	 *
-	 * @var array
+	 * @var array|IReflectionFunction[]
 	 */
 	private $functions = [];
 
@@ -74,9 +73,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns the name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getName()
 	{
@@ -85,11 +82,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns if the namespace is internal.
-	 *
-	 * Always false.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInternal()
 	{
@@ -98,11 +91,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns if the namespace is user defined.
-	 *
-	 * Always true.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isUserDefined()
 	{
@@ -111,9 +100,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -122,10 +109,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns if the namespace contains a class of the given name.
-	 *
-	 * @param string $className Class name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasClass($className)
 	{
@@ -138,11 +122,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Return a class reflection.
-	 *
-	 * @param string $className Class name
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested class reflection does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getClass($className)
 	{
@@ -151,16 +131,14 @@ class ReflectionNamespace implements IReflectionNamespace
 			$className = $this->getName() . '\\' . $className;
 		}
 		if ( ! isset($this->classes[$className])) {
-			throw new Exception\RuntimeException(sprintf('Class "%s" does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('Class "%s" does not exist.', $className), RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return $this->classes[$className];
 	}
 
 
 	/**
-	 * Returns class reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getClasses()
 	{
@@ -169,9 +147,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns class names (FQN).
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getClassNames()
 	{
@@ -180,9 +156,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns class unqualified names (UQN).
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getClassShortNames()
 	{
@@ -193,10 +167,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns if the namespace contains a constant of the given name.
-	 *
-	 * @param string $constantName Constant name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasConstant($constantName)
 	{
@@ -209,11 +180,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns a constant reflection.
-	 *
-	 * @param string $constantName Constant name
-	 * @return ApiGen\TokenReflection\ReflectionConstant
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required constant does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getConstant($constantName)
 	{
@@ -222,16 +189,14 @@ class ReflectionNamespace implements IReflectionNamespace
 			$constantName = $this->getName() . '\\' . $constantName;
 		}
 		if ( ! isset($this->constants[$constantName])) {
-			throw new Exception\RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return $this->constants[$constantName];
 	}
 
 
 	/**
-	 * Returns constant reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getConstants()
 	{
@@ -240,9 +205,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns constant names (FQN).
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getConstantNames()
 	{
@@ -251,9 +214,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns constant unqualified names (UQN).
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getConstantShortNames()
 	{
@@ -264,10 +225,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns if the namespace contains a function of the given name.
-	 *
-	 * @param string $functionName Function name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasFunction($functionName)
 	{
@@ -280,11 +238,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns a function reflection.
-	 *
-	 * @param string $functionName Function name
-	 * @return ApiGen\TokenReflection\ReflectionFunction
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the required function does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getFunction($functionName)
 	{
@@ -293,16 +247,14 @@ class ReflectionNamespace implements IReflectionNamespace
 			$functionName = $this->getName() . '\\' . $functionName;
 		}
 		if ( ! isset($this->functions[$functionName])) {
-			throw new Exception\RuntimeException(sprintf('Function "%s" does not exist.', $functionName), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('Function "%s" does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		return $this->functions[$functionName];
 	}
 
 
 	/**
-	 * Returns function reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getFunctions()
 	{
@@ -311,9 +263,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns function names (FQN).
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getFunctionNames()
 	{
@@ -322,9 +272,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns function unqualified names (UQN).
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getFunctionShortNames()
 	{
@@ -335,9 +283,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -346,9 +292,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function __toString()
 	{
@@ -390,18 +334,18 @@ class ReflectionNamespace implements IReflectionNamespace
 	/**
 	 * Exports a reflected object.
 	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
+	 * @param Broker $broker Broker instance
 	 * @param string $namespace Namespace name
 	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @throws RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $namespace, $return = FALSE)
 	{
 		$namespaceName = $namespace;
 		$namespace = $broker->getNamespace($namespaceName);
 		if (NULL === $namespace) {
-			throw new Exception\RuntimeException(sprintf('Namespace %s does not exist.', $namespaceName), Exception\RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('Namespace %s does not exist.', $namespaceName), RuntimeException::DOES_NOT_EXIST);
 		}
 		if ($return) {
 			return $namespace->__toString();
@@ -413,9 +357,8 @@ class ReflectionNamespace implements IReflectionNamespace
 	/**
 	 * Adds a namespace part from a file.
 	 *
-	 * @param ApiGen\TokenReflection\ReflectionFileNamespace $namespace Namespace part
-	 * @return ApiGen\TokenReflection\ReflectionNamespace
-	 * @throws ApiGen\TokenReflection\Exception\FileProcessingException If one of classes, functions or constants form the namespace are already defined
+	 * @return ReflectionNamespace
+	 * @throws FileProcessingException If one of classes, functions or constants form the namespace are already defined
 	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
@@ -428,9 +371,9 @@ class ReflectionNamespace implements IReflectionNamespace
 				if ( ! $this->classes[$className] instanceof Invalid\ReflectionClass) {
 					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
 				}
-				$error = new Exception\RuntimeException(
+				$error = new RuntimeException(
 					sprintf('Class %s was redeclared (previously declared in file %s).', $className, $this->classes[$className]->getFileName()),
-					Exception\RuntimeException::ALREADY_EXISTS,
+					RuntimeException::ALREADY_EXISTS,
 					$reflection
 				);
 				$errors[] = $error;
@@ -452,9 +395,9 @@ class ReflectionNamespace implements IReflectionNamespace
 				if ( ! $this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
 					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
 				}
-				$error = new Exception\RuntimeException(
+				$error = new RuntimeException(
 					sprintf('Function %s was redeclared (previousy declared in file %s).', $functionName, $this->functions[$functionName]->getFileName()),
-					Exception\RuntimeException::ALREADY_EXISTS,
+					RuntimeException::ALREADY_EXISTS,
 					$reflection
 				);
 				$errors[] = $error;
@@ -476,9 +419,9 @@ class ReflectionNamespace implements IReflectionNamespace
 				if ( ! $this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
 					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
 				}
-				$error = new Exception\RuntimeException(
+				$error = new RuntimeException(
 					sprintf('Constant %s was redeclared (previuosly declared in file %s).', $constantName, $this->constants[$constantName]->getFileName()),
-					Exception\RuntimeException::ALREADY_EXISTS,
+					RuntimeException::ALREADY_EXISTS,
 					$reflection
 				);
 				$errors[] = $error;
@@ -493,7 +436,7 @@ class ReflectionNamespace implements IReflectionNamespace
 			}
 		}
 		if ( ! empty($errors)) {
-			throw new Exception\FileProcessingException($errors, NULL);
+			throw new FileProcessingException($errors, NULL);
 		}
 		return $this;
 	}
@@ -504,18 +447,16 @@ class ReflectionNamespace implements IReflectionNamespace
 	 *
 	 * Impossible for namespaces.
 	 *
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the method is called, because it's unsupported.
+	 * @throws RuntimeException If the method is called, because it's unsupported.
 	 */
 	public function getSource()
 	{
-		throw new Exception\RuntimeException('Cannot export source code of a namespace.', Exception\RuntimeException::UNSUPPORTED, $this);
+		throw new RuntimeException('Cannot export source code of a namespace.', RuntimeException::UNSUPPORTED, $this);
 	}
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker|null
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -524,10 +465,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
@@ -536,10 +474,7 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{

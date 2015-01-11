@@ -24,7 +24,7 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass
+	 * @return IReflectionClass
 	 */
 	function getDeclaringClass();
 

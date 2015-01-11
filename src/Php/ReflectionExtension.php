@@ -9,19 +9,15 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflectionExtension;
+use ApiGen\TokenReflection\ReflectionElement;
 use Reflector, ReflectionExtension as InternalReflectionExtension;
 
 
-/**
- * Reflection of a not tokenized but defined extension.
- *
- * Descendant of the internal reflection with additional features.
- */
-class ReflectionExtension extends InternalReflectionExtension implements IReflection, TokenReflection\IReflectionExtension
+class ReflectionExtension extends InternalReflectionExtension implements IReflection, IReflectionExtension
 {
 
 	/**
@@ -53,7 +49,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 	/**
 	 * @param string $name Extension name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param Broker $broker Reflection broker
 	 */
 	public function __construct($name, Broker $broker)
 	{
@@ -63,9 +59,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns if the constant is internal.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInternal()
 	{
@@ -74,9 +68,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns if the constant is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isUserDefined()
 	{
@@ -85,9 +77,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -96,9 +86,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns if the reflection subject is deprecated.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDeprecated()
 	{
@@ -107,10 +95,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns a class reflection.
-	 *
-	 * @param string $name Class name
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getClass($name)
 	{
@@ -120,9 +105,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns classes defined by this extension.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getClasses()
 	{
@@ -137,10 +120,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns a constant value.
-	 *
-	 * @param string $name Constant name
-	 * @return mixed|false
+	 * {@inheritdoc}
 	 */
 	public function getConstant($name)
 	{
@@ -150,10 +130,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns a constant reflection.
-	 *
-	 * @param string $name Constant name
-	 * @return ApiGen\TokenReflection\IReflectionConstant
+	 * {@inheritdoc}
 	 */
 	public function getConstantReflection($name)
 	{
@@ -163,9 +140,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns reflections of defined constants.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getConstantReflections()
 	{
@@ -180,10 +155,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns a function reflection.
-	 *
-	 * @param string $name Function name
-	 * @return ApiGen\TokenReflection\IReflectionFunction
+	 * {@inheritdoc}
 	 */
 	public function getFunction($name)
 	{
@@ -193,9 +165,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns functions defined by this extension.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getFunctions()
 	{
@@ -210,9 +180,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns names of functions defined by this extension.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getFunctionNames()
 	{
@@ -221,9 +189,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -232,9 +198,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -243,36 +207,28 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 
 
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionClass $internalReflection Internal reflection instance
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker instance
-	 * @return ApiGen\TokenReflection\Php\ReflectionExtension
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+	 * @return ReflectionExtension
+	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

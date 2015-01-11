@@ -9,16 +9,13 @@
 
 namespace ApiGen\TokenReflection;
 
-use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Stream\StreamBase as Stream;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * Tokenized constant reflection.
- */
 class ReflectionConstant extends ReflectionElement implements IReflectionConstant
 {
 
@@ -59,9 +56,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getShortName()
 	{
@@ -74,9 +69,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the name of the declaring class.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -85,9 +78,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns a reflection of the declaring class.
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -99,9 +90,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceName()
 	{
@@ -110,9 +99,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns if the class is defined within a namespace.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function inNamespace()
 	{
@@ -136,9 +123,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the constant value definition.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getValueDefinition()
 	{
@@ -147,9 +132,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the originaly provided value definition.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getOriginalValueDefinition()
 	{
@@ -158,9 +141,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function __toString()
 	{
@@ -209,9 +190,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -220,9 +199,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -244,12 +221,10 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
+	 * @return ReflectionElement
+	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		if ($parent instanceof ReflectionFileNamespace) {
 			$this->namespaceName = $parent->getName();
@@ -257,7 +232,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		} elseif ($parent instanceof ReflectionClass) {
 			$this->declaringClassName = $parent->getName();
 		} else {
-			throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), Exception\ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), ParseException::INVALID_PARENT);
 		}
 		return parent::processParent($parent, $tokenStream);
 	}
@@ -266,11 +241,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Find the appropriate docblock.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection
-	 * @return ApiGen\TokenReflection\ReflectionConstant
+	 * @return ReflectionConstant
 	 */
-	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
+	protected function parseDocComment(StreamBase $tokenStream, IReflection $parent)
 	{
 		$position = $tokenStream->key() - 1;
 		while ($position > 0 && !$tokenStream->is(T_CONST, $position)) {
@@ -286,11 +259,9 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionConstant
+	 * @return ReflectionConstant
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
 		if ($tokenStream->is(T_CONST)) {
 			$tokenStream->skipWhitespaces(TRUE);
@@ -298,8 +269,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 		if (FALSE === $this->docComment->getDocComment()) {
 			parent::parseDocComment($tokenStream, $parent);
 		}
-		return $this
-			->parseName($tokenStream)
+		return $this->parseName($tokenStream)
 			->parseValue($tokenStream, $parent);
 	}
 
@@ -307,14 +277,13 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Parses the constant name.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionConstant
-	 * @throws ApiGen\TokenReflection\Exception\ParseReflection If the constant name could not be determined.
+	 * @return ReflectionConstant
+	 * @throws ParseException If the constant name could not be determined.
 	 */
-	protected function parseName(Stream $tokenStream)
+	protected function parseName(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_STRING)) {
-			throw new Exception\ParseException($this, $tokenStream, 'The constant name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
+			throw new ParseException($this, $tokenStream, 'The constant name could not be determined.', ParseException::LOGICAL_ERROR);
 		}
 		if (NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$this->name = $tokenStream->getTokenValue();
@@ -329,15 +298,13 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Parses the constant value.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionConstant
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the constant value could not be determined.
+	 * @return ReflectionConstant
+	 * @throws ParseException If the constant value could not be determined.
 	 */
-	private function parseValue(Stream $tokenStream, IReflection $parent)
+	private function parseValue(StreamBase $tokenStream, IReflection $parent)
 	{
 		if ( ! $tokenStream->is('=')) {
-			throw new Exception\ParseException($this, $tokenStream, 'Could not find the definition start.', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'Could not find the definition start.', ParseException::UNEXPECTED_TOKEN);
 		}
 		$tokenStream->skipWhitespaces(TRUE);
 		static $acceptedTokens = [
@@ -377,11 +344,11 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			}
 		}
 		if (empty($this->valueDefinition)) {
-			throw new Exception\ParseException($this, $tokenStream, 'Value definition is empty.', Exception\ParseException::LOGICAL_ERROR);
+			throw new ParseException($this, $tokenStream, 'Value definition is empty.', ParseException::LOGICAL_ERROR);
 		}
 		$value = $tokenStream->getTokenValue();
 		if (NULL === $type || (',' !== $value && ';' !== $value)) {
-			throw new Exception\ParseException($this, $tokenStream, 'Invalid value definition.', Exception\ParseException::LOGICAL_ERROR);
+			throw new ParseException($this, $tokenStream, 'Invalid value definition.', ParseException::LOGICAL_ERROR);
 		}
 		return $this;
 	}

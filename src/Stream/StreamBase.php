@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection\Stream;
 
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Exception\StreamException;
 use ArrayAccess;
 use ApiGen\TokenReflection\Exception;
@@ -160,10 +161,10 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Returns the position of the token with the matching bracket.
 	 *
-	 * @return ApiGen\TokenReflection\Stream
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If out of the token stream.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no bracket at the current position.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the matching bracket could not be found.
+	 * @return StreamBase
+	 * @throws RuntimeException If out of the token stream.
+	 * @throws RuntimeException If there is no bracket at the current position.
+	 * @throws RuntimeException If the matching bracket could not be found.
 	 */
 	public function findMatchingBracket()
 	{
@@ -203,8 +204,8 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Skips whitespaces and comments next to the current position.
 	 *
-	 * @param bool $skipDocBlocks Skip docblocks as well
-	 * @return ApiGen\TokenReflection\Stream\StreamBase
+	 * @param bool $skipDocBlocks
+	 * @return StreamBase
 	 */
 	public function skipWhitespaces($skipDocBlocks = FALSE)
 	{
@@ -346,7 +347,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 * Unsupported.
 	 *
 	 * @param int $offset Position
-	 * @throws ApiGen\TokenReflection\Exception\StreamException Unsupported.
+	 * @throws StreamException Unsupported.
 	 */
 	public function offsetUnset($offset)
 	{
@@ -373,7 +374,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 *
 	 * @param int $offset Position
 	 * @param mixed $value Value
-	 * @throws ApiGen\TokenReflection\Exception\StreamException Unsupported.
+	 * @throws StreamException Unsupported.
 	 */
 	public function offsetSet($offset, $value)
 	{
@@ -395,7 +396,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Advances the internal pointer.
 	 *
-	 * @return ApiGen\TokenReflection\Stream
+	 * @return StreamBase
 	 */
 	public function next()
 	{
@@ -407,7 +408,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	/**
 	 * Sets the internal pointer to zero.
 	 *
-	 * @return ApiGen\TokenReflection\Stream
+	 * @return StreamBase
 	 */
 	public function rewind()
 	{

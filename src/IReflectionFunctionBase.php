@@ -32,7 +32,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the PHP extension reflection.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionExtension|null
+	 * @return IReflectionExtension|null
 	 */
 	function getExtension();
 
@@ -113,7 +113,7 @@ interface IReflectionFunctionBase extends IReflection
 	 * Returns a function/method parameter.
 	 *
 	 * @param int|string $parameter Parameter name or position
-	 * @return ApiGen\TokenReflection\IReflectionParameter
+	 * @return IReflectionParameter
 	 */
 	function getParameter($parameter);
 

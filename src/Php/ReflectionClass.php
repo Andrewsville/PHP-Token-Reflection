@@ -9,16 +9,20 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Behaviors\Annotations;
+use ApiGen\TokenReflection\Broker\Backend;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflectionClass;
+use ApiGen\TokenReflection\ReflectionElement;
 use Reflector;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-class ReflectionClass extends InternalReflectionClass implements IReflection, TokenReflection\IReflectionClass
+class ReflectionClass extends InternalReflectionClass implements IReflection, IReflectionClass, Annotations
 {
 
 	/**
@@ -76,10 +80,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -88,10 +89,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -100,9 +98,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -111,9 +107,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class is an exception or its descendant.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isException()
 	{
@@ -140,9 +134,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -162,17 +154,13 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the current class is a subclass of the given class.
-	 *
-	 * @param string|object $class Class name or reflection object
-	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
+	 * {@inheritdoc}
 	 */
 	public function isSubclassOf($class)
 	{
 		if (is_object($class)) {
 			if ( ! $class instanceof InternalReflectionClass && !$class instanceof IReflectionClass) {
-				throw new Exception\RuntimeException('Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$class = $class->getName();
 		}
@@ -181,9 +169,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns parent class reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionClass
+	 * {@inheritdoc}
 	 */
 	public function getParentClass()
 	{
@@ -193,9 +179,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns the parent class name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getParentClassName()
 	{
@@ -205,9 +189,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns the parent classes reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getParentClasses()
 	{
@@ -219,9 +201,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns the parent classes names.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getParentClassNameList()
 	{
@@ -230,26 +210,22 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class implements the given interface.
-	 *
-	 * @param string|object $interface Interface name or reflection object
-	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the provided parameter is not an interface.
+	 * {@inheritdoc}
 	 */
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
 			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
-				throw new Exception\RuntimeException('Parameter must be a string or an instance of class reflection.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface->getName();
 			if ( ! $interface->isInterface()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($interface);
 			if ( ! $reflection->isInterface()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not an interface.', $interface), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface;
 		}
@@ -259,9 +235,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns an array of interface reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getInterfaces()
 	{
@@ -281,9 +255,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns interfaces implemented by this class, not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnInterfaces()
 	{
@@ -293,9 +265,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns names of interfaces implemented by this class, not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnInterfaceNames()
 	{
@@ -304,9 +274,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns class constructor reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getConstructor()
 	{
@@ -315,9 +283,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns class desctructor reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getDestructor()
 	{
@@ -331,11 +297,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns a particular method reflection.
-	 *
-	 * @param string $name Method name
-	 * @return ApiGen\TokenReflection\Php\ReflectionMethod
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested method does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getMethod($name)
 	{
@@ -344,15 +306,12 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 				return $method;
 			}
 		}
-		throw new Exception\RuntimeException(sprintf('Method %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('Method %s does not exist.', $name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
 	/**
-	 * Returns class methods.
-	 *
-	 * @param int $filter Methods filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getMethods($filter = NULL)
 	{
@@ -372,10 +331,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class implements (and not its parents) the given method.
-	 *
-	 * @param string $name Method name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasOwnMethod($name)
 	{
@@ -389,10 +345,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns methods declared by this class, not its parents.
-	 *
-	 * @param int $filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnMethods($filter = NULL)
 	{
@@ -404,11 +357,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class imports the given method from traits.
-	 *
-	 * @param string $name Method name
-	 * @return bool
-	 * @todo Impossible with the current status of reflection
+	 * {@inheritdoc}
 	 */
 	public function hasTraitMethod($name)
 	{
@@ -417,11 +366,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns method reflections imported from traits.
-	 *
-	 * @param int $filter Methods filter
-	 * @return array
-	 * @todo Impossible with the current status of reflection
+	 * {@inheritdoc}
 	 */
 	public function getTraitMethods($filter = NULL)
 	{
@@ -430,25 +375,19 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns a constant reflection.
-	 *
-	 * @param string $name Constant name
-	 * @return ApiGen\TokenReflection\ReflectionConstant
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested constant does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getConstantReflection($name)
 	{
 		if ($this->hasConstant($name)) {
 			return new ReflectionConstant($name, $this->getConstant($name), $this->broker, $this);
 		}
-		throw new Exception\RuntimeException(sprintf('Constant "%s" does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('Constant "%s" does not exist.', $name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
 	/**
-	 * Returns an array of constant reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getConstantReflections()
 	{
@@ -463,10 +402,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class (and not its parents) defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasOwnConstant($name)
 	{
@@ -476,9 +412,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns constants declared by this class, not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnConstants()
 	{
@@ -487,9 +421,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns an array of constant reflections defined by this class and not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnConstantReflections()
 	{
@@ -502,11 +434,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns a particular property reflection.
-	 *
-	 * @param string $name Property name
-	 * @return ApiGen\TokenReflection\Php\ReflectionProperty
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested property does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getProperty($name)
 	{
@@ -515,15 +443,12 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 				return $property;
 			}
 		}
-		throw new Exception\RuntimeException(sprintf('Property %s does not exist.', $name), Exception\RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('Property %s does not exist.', $name), RuntimeException::DOES_NOT_EXIST, $this);
 	}
 
 
 	/**
-	 * Returns class properties.
-	 *
-	 * @param int $filter Properties filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getProperties($filter = NULL)
 	{
@@ -543,10 +468,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class has (and not its parents) the given property.
-	 *
-	 * @param string $name Property name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasOwnProperty($name)
 	{
@@ -560,10 +482,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns properties declared by this class, not its parents.
-	 *
-	 * @param int $filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnProperties($filter = NULL)
 	{
@@ -575,11 +494,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class imports the given property from traits.
-	 *
-	 * @param string $name Property name
-	 * @return bool
-	 * @todo Impossible with the current status of reflection
+	 * {@inheritdoc}
 	 */
 	public function hasTraitProperty($name)
 	{
@@ -588,11 +503,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns property reflections imported from traits.
-	 *
-	 * @param int $filter Properties filter
-	 * @return array
-	 * @todo Impossible with the current status of reflection
+	 * {@inheritdoc}
 	 */
 	public function getTraitProperties($filter = NULL)
 	{
@@ -601,9 +512,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns static properties reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getStaticProperties()
 	{
@@ -612,14 +521,12 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns reflections of direct subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
 			$that
 		) {
 			if ( ! $class->isSubclassOf($that)) {
@@ -631,9 +538,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns names of direct subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectSubclassNames()
 	{
@@ -642,14 +547,12 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns reflections of indirect subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
 			$that
 		) {
 			if ( ! $class->isSubclassOf($that)) {
@@ -661,9 +564,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns names of indirect subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectSubclassNames()
 	{
@@ -672,9 +573,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns reflections of classes directly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectImplementers()
 	{
@@ -682,7 +581,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			return [];
 		}
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
 			$that
 		) {
 			if ( ! $class->implementsInterface($that)) {
@@ -694,9 +593,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns names of classes directly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectImplementerNames()
 	{
@@ -705,9 +602,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns reflections of classes indirectly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectImplementers()
 	{
@@ -715,7 +610,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 			return [];
 		}
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Broker\Backend::INTERNAL_CLASSES | Broker\Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
 			$that
 		) {
 			if ( ! $class->implementsInterface($that)) {
@@ -727,9 +622,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns names of classes indirectly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectImplementerNames()
 	{
@@ -738,11 +631,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class definition is complete.
-	 *
-	 * Internal classes always have the definition complete.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isComplete()
 	{
@@ -751,11 +640,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class definition is valid.
-	 *
-	 * Internal classes are always valid.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isValid()
 	{
@@ -764,9 +649,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -775,9 +658,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -786,33 +667,25 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 
 
 	/**
-	 * Returns traits used by this class and not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnTraits()
 	{
@@ -822,9 +695,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns traits used by this class and not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnTraitNames()
 	{
@@ -833,26 +704,22 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns if the class uses a particular trait.
-	 *
-	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-	 * @return bool
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid parameter was provided.
+	 * {@inheritdoc}
 	 */
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
-			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof TokenReflection\IReflectionClass) {
-				throw new Exception\RuntimeException('Parameter must be a string or an instance of trait reflection.', Exception\RuntimeException::INVALID_ARGUMENT, $this);
+			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
+				throw new RuntimeException('Parameter must be a string or an instance of trait reflection.', RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait->getName();
 			if ( ! $trait->isTrait()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $traitName), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not a trait.', $traitName), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($trait);
 			if ( ! $reflection->isTrait()) {
-				throw new Exception\RuntimeException(sprintf('"%s" is not a trait.', $trait), Exception\RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not a trait.', $trait), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait;
 		}
@@ -861,19 +728,16 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Creates a new class instance without using a constructor.
-	 *
-	 * @return object
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the class inherits from an internal class.
+	 * {@inheritdoc}
 	 */
 	public function newInstanceWithoutConstructor()
 	{
 		if ($this->isInternal()) {
-			throw new Exception\RuntimeException('Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED, $this);
+			throw new RuntimeException('Could not create an instance; only user defined classes can be instantiated.', RuntimeException::UNSUPPORTED, $this);
 		}
 		foreach ($this->getParentClasses() as $parent) {
 			if ($parent->isInternal()) {
-				throw new Exception\RuntimeException('Could not create an instance; only user defined classes can be instantiated.', Exception\RuntimeException::UNSUPPORTED, $this);
+				throw new RuntimeException('Could not create an instance; only user defined classes can be instantiated.', RuntimeException::UNSUPPORTED, $this);
 			}
 		}
 		return parent::newInstanceWithoutConstructor();
@@ -881,9 +745,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -894,15 +756,13 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @param \ReflectionClass $internalReflection Internal reflection instance
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker instance
-	 * @return ApiGen\TokenReflection\Php\ReflectionClass
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+	 * @return ReflectionClass
+	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		if ( ! $internalReflection instanceof InternalReflectionClass) {
-			throw new Exception\RuntimeException('Invalid reflection instance provided, ReflectionClass expected.', Exception\RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionClass expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		return $broker->getClass($internalReflection->getName());
 	}

@@ -20,12 +20,14 @@ interface IReflectionFunction extends IReflectionFunctionBase
 	 */
 	function isDisabled();
 
+
 	/**
 	 * Calls the function.
 	 *
 	 * @return mixed
 	 */
 	 function invoke();
+
 
 	/**
 	 * Calls the function.

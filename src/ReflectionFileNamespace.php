@@ -10,12 +10,11 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Stream\StreamBase as Stream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * Reflection of a namespace parsed from a file.
- */
 class ReflectionFileNamespace extends ReflectionElement
 {
 
@@ -49,9 +48,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * Returns class reflections.
-	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	public function getClasses()
 	{
@@ -60,9 +57,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * Returns constant reflections.
-	 *
-	 * @return array
+	 * @return array|IReflectionConstant[]
 	 */
 	public function getConstants()
 	{
@@ -71,9 +66,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * Returns function reflections.
-	 *
-	 * @return array
+	 * @return array|IReflectionFunction[]
 	 */
 	public function getFunctions()
 	{
@@ -95,15 +88,13 @@ class ReflectionFileNamespace extends ReflectionElement
 	/**
 	 * Processes the parent reflection object.
 	 *
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionElement
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If an invalid parent reflection object was provided.
+	 * @return ReflectionElement
+	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, Stream $tokenStream)
+	protected function processParent(IReflection $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFile) {
-			throw new Exception\ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFile.', Exception\ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFile.', ParseException::INVALID_PARENT);
 		}
 		return parent::processParent($parent, $tokenStream);
 	}
@@ -112,11 +103,9 @@ class ReflectionFileNamespace extends ReflectionElement
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionFileNamespace
+	 * @return ReflectionFileNamespace
 	 */
-	protected function parse(Stream $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
 		return $this->parseName($tokenStream);
 	}
@@ -125,11 +114,9 @@ class ReflectionFileNamespace extends ReflectionElement
 	/**
 	 * Find the appropriate docblock.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection
-	 * @return ApiGen\TokenReflection\ReflectionElement
+	 * @return ReflectionElement
 	 */
-	protected function parseDocComment(Stream $tokenStream, IReflection $parent)
+	protected function parseDocComment(StreamBase $tokenStream, IReflection $parent)
 	{
 		if ( ! $tokenStream->is(T_NAMESPACE)) {
 			$this->docComment = new ReflectionAnnotation($this);
@@ -143,11 +130,10 @@ class ReflectionFileNamespace extends ReflectionElement
 	/**
 	 * Parses the namespace name.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @return ApiGen\TokenReflection\ReflectionFileNamespace
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If the namespace name could not be determined.
+	 * @return ReflectionFileNamespace
+	 * @throws ParseException If the namespace name could not be determined.
 	 */
-	protected function parseName(Stream $tokenStream)
+	protected function parseName(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_NAMESPACE)) {
 			$this->name = ReflectionNamespace::NO_NAMESPACE_NAME;
@@ -176,7 +162,7 @@ class ReflectionFileNamespace extends ReflectionElement
 			$this->name = $name;
 		}
 		if ( ! $tokenStream->is(';') && !$tokenStream->is('{')) {
-			throw new Exception\ParseException($this, $tokenStream, 'Invalid namespace name end, expecting ";" or "{".', Exception\ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException($this, $tokenStream, 'Invalid namespace name end, expecting ";" or "{".', ParseException::UNEXPECTED_TOKEN);
 		}
 		$tokenStream->skipWhitespaces();
 		return $this;
@@ -186,12 +172,10 @@ class ReflectionFileNamespace extends ReflectionElement
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionFileNamespace
-	 * @throws ApiGen\TokenReflection\Exception\ParseException If child elements could not be parsed.
+	 * @return ReflectionFileNamespace
+	 * @throws ParseException If child elements could not be parsed.
 	 */
-	protected function parseChildren(Stream $tokenStream, IReflection $parent)
+	protected function parseChildren(StreamBase $tokenStream, IReflection $parent)
 	{
 		static $skipped = [T_WHITESPACE => TRUE, T_COMMENT => TRUE, T_DOC_COMMENT => TRUE];
 		$depth = 0;
@@ -216,15 +200,15 @@ class ReflectionFileNamespace extends ReflectionElement
 						}
 						$namespaceName = ltrim($namespaceName, '\\');
 						if (empty($namespaceName)) {
-							throw new Exception\ParseException($this, $tokenStream, 'Imported namespace name could not be determined.', Exception\ParseException::LOGICAL_ERROR);
+							throw new ParseException($this, $tokenStream, 'Imported namespace name could not be determined.', ParseException::LOGICAL_ERROR);
 						} elseif ('\\' === substr($namespaceName, -1)) {
-							throw new Exception\ParseException($this, $tokenStream, sprintf('Invalid namespace name "%s".', $namespaceName), Exception\ParseException::LOGICAL_ERROR);
+							throw new ParseException($this, $tokenStream, sprintf('Invalid namespace name "%s".', $namespaceName), ParseException::LOGICAL_ERROR);
 						}
 						if ($tokenStream->is(T_AS)) {
 							// Alias defined
 							$tokenStream->skipWhitespaces(TRUE);
 							if ( ! $tokenStream->is(T_STRING)) {
-								throw new Exception\ParseException($this, $tokenStream, sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), Exception\ParseException::LOGICAL_ERROR);
+								throw new ParseException($this, $tokenStream, sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), ParseException::LOGICAL_ERROR);
 							}
 							$alias = $tokenStream->getTokenValue();
 							$tokenStream->skipWhitespaces(TRUE);
@@ -237,7 +221,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							}
 						}
 						if (isset($this->aliases[$alias])) {
-							throw new Exception\ParseException($this, $tokenStream, sprintf('Namespace alias "%s" already defined.', $alias), Exception\ParseException::LOGICAL_ERROR);
+							throw new ParseException($this, $tokenStream, sprintf('Namespace alias "%s" already defined.', $alias), ParseException::LOGICAL_ERROR);
 						}
 						$this->aliases[$alias] = $namespaceName;
 						$type = $tokenStream->getType();
@@ -248,7 +232,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							// Next namespace in the current "use" definition
 							continue;
 						}
-						throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found.', Exception\ParseException::UNEXPECTED_TOKEN);
+						throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 					}
 				case T_COMMENT:
 				case T_DOC_COMMENT:
@@ -286,11 +270,11 @@ class ReflectionFileNamespace extends ReflectionElement
 							$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
 						}
 						if ( ! $this->classes[$className]->hasReasons()) {
-							$this->classes[$className]->addReason(new Exception\ParseException(
+							$this->classes[$className]->addReason(new ParseException(
 								$this,
 								$tokenStream,
 								sprintf('Class %s is defined multiple times in the file.', $className),
-								Exception\ParseException::ALREADY_EXISTS
+								ParseException::ALREADY_EXISTS
 							));
 						}
 					} else {
@@ -309,11 +293,11 @@ class ReflectionFileNamespace extends ReflectionElement
 								$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
 							}
 							if ( ! $this->constants[$constantName]->hasReasons()) {
-								$this->constants[$constantName]->addReason(new Exception\ParseException(
+								$this->constants[$constantName]->addReason(new ParseException(
 									$this,
 									$tokenStream,
 									sprintf('Constant %s is defined multiple times in the file.', $constantName),
-									Exception\ParseException::ALREADY_EXISTS
+									ParseException::ALREADY_EXISTS
 								));
 							}
 						} else {
@@ -356,11 +340,11 @@ class ReflectionFileNamespace extends ReflectionElement
 							$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
 						}
 						if ( ! $this->functions[$functionName]->hasReasons()) {
-							$this->functions[$functionName]->addReason(new Exception\ParseException(
+							$this->functions[$functionName]->addReason(new ParseException(
 								$this,
 								$tokenStream,
 								sprintf('Function %s is defined multiple times in the file.', $functionName),
-								Exception\ParseException::ALREADY_EXISTS
+								ParseException::ALREADY_EXISTS
 							));
 						}
 					} else {

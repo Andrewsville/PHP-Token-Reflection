@@ -50,29 +50,6 @@ class ReflectionMethodTest extends TestCase
 
 
 	/**
-	 * Tests getting of copydoc documentation comment.
-	 */
-	public function testCommentCopydoc()
-	{
-		static $methods = [
-			'method' => 'This is a method.',
-			'method2' => 'This is a method.',
-			'method3' => 'This is a method.',
-			'method4' => 'This is a method.',
-			'method5' => 'This is a method.',
-			'method6' => NULL,
-			'method7' => NULL
-		];
-
-		$class = $this->getClassTokenReflection('docCommentCopydoc');
-		foreach ($methods as $methodName => $shortDescription) {
-			$this->assertTrue($class->hasMethod($methodName), $methodName);
-			$this->assertSame($shortDescription, $class->getMethod($methodName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $methodName);
-		}
-	}
-
-
-	/**
 	 * Tests getting of inherited documentation comment.
 	 */
 	public function testDocCommentInheritance()
@@ -228,11 +205,7 @@ class ReflectionMethodTest extends TestCase
 		$token = $this->getBroker()->getClass('TokenReflection\Test\MethodNamedConstructor')->getMethod('MethodNamedConstructor');
 
 		$this->assertSame($internal->isConstructor(), $token->isConstructor());
-		if (PHP_VERSION_ID >= 50303) {
-			$this->assertFalse($token->isConstructor());
-		} else {
-			$this->assertTrue($token->isConstructor());
-		}
+		$this->assertFalse($token->isConstructor());
 	}
 
 

@@ -10,16 +10,18 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
-use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\IReflectionMethod;
+use ApiGen\TokenReflection\ReflectionElement;
 use Reflector;
 use ReflectionMethod as InternalReflectionMethod;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionMethod extends InternalReflectionMethod implements IReflection, TokenReflection\IReflectionMethod
+class ReflectionMethod extends InternalReflectionMethod implements IReflection, IReflectionMethod, Annotations
 {
 
 	/**
@@ -55,9 +57,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the declaring class reflection.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -66,9 +66,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -77,9 +75,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -88,10 +84,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -100,10 +93,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -112,9 +102,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -123,9 +111,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -134,9 +120,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the method prototype.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionMethod
+	 * {@inheritdoc}
 	 */
 	public function getPrototype()
 	{
@@ -145,12 +129,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns a particular parameter.
-	 *
-	 * @param int|string $parameter Parameter name or position
-	 * @return ApiGen\TokenReflection\Php\ReflectionParameter
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter of the given name.
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If there is no parameter at the given position.
+	 * {@inheritdoc}
 	 */
 	public function getParameter($parameter)
 	{
@@ -172,9 +151,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns function parameters.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getParameters()
 	{
@@ -190,9 +167,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns if the method is set accessible.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isAccessible()
 	{
@@ -201,28 +176,17 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Sets a method to be accessible or not.
-	 *
-	 * Introduced in PHP 5.3.2. Throws an exception if run on an older version.
-	 *
-	 * @param bool $accessible
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If run on PHP version < 5.3.2.
+	 * {@inheritdoc}
 	 */
 	public function setAccessible($accessible)
 	{
-		if (PHP_VERSION_ID < 50302) {
-			throw new Exception\RuntimeException(sprintf('Method setAccessible was introduced the internal reflection in PHP 5.3.2, you are using %s.', PHP_VERSION), Exception\RuntimeException::UNSUPPORTED, $this);
-		}
 		$this->accessible = $accessible;
 		parent::setAccessible($accessible);
 	}
 
 
 	/**
-	 * Shortcut for isPublic(), ... methods that allows or-ed modifiers.
-	 *
-	 * @param int $filter Filter
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function is($filter = NULL)
 	{
@@ -231,9 +195,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -242,33 +204,25 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 
 
 	/**
-	 * Returns the original name when importing from a trait.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getOriginalName()
 	{
@@ -277,9 +231,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the original method when importing from a trait.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getOriginal()
 	{
@@ -288,9 +240,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the original modifiers value when importing from a trait.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getOriginalModifiers()
 	{
@@ -299,9 +249,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the defining trait.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringTrait()
 	{
@@ -310,9 +258,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns the declaring trait name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringTraitName()
 	{
@@ -321,9 +267,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -341,8 +285,8 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * @return ApiGen\TokenReflection\Php\IReflection
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If an invalid internal reflection object was provided.
+	 * @return IReflection
+	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

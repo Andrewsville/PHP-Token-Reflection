@@ -9,18 +9,19 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection;
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Dummy;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\IReflectionConstant;
+use ApiGen\TokenReflection\ReflectionElement;
+use ApiGen\TokenReflection\ReflectionNamespace;
 use Reflector;
 
 
-/**
- * Reflection of a not tokenized but defined constant.
- */
-class ReflectionConstant implements IReflection, TokenReflection\IReflectionConstant
+class ReflectionConstant implements IReflection, IReflectionConstant, Annotations
 {
 
 	/**
@@ -67,9 +68,9 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * @param string $name Constant name
 	 * @param mixed $value Constant value
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
-	 * @param ApiGen\TokenReflection\Php\ReflectionClass $parent Defining class reflection
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If real parent class could not be determined.
+	 * @param Broker $broker Reflection broker
+	 * @param ReflectionClass $parent Defining class reflection
+	 * @throws RuntimeException If real parent class could not be determined.
 	 */
 	public function __construct($name, $value, Broker $broker, ReflectionClass $parent = NULL)
 	{
@@ -98,7 +99,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 				}
 			}
 			if (NULL === $realParent) {
-				throw new TokenReflection\Exception\RuntimeException('Could not determine constant real parent class.', TokenReflection\Exception\RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException('Could not determine constant real parent class.', RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			$this->declaringClassName = $realParent->getName();
 			$this->userDefined = $realParent->isUserDefined();
@@ -114,9 +115,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getName()
 	{
@@ -125,9 +124,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getShortName()
 	{
@@ -140,9 +137,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the declaring class reflection.
-	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -154,9 +149,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -165,13 +158,11 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 
@@ -187,21 +178,16 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getExtension()
 	{
-		// @todo
 		return NULL;
 	}
 
 
 	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getExtensionName()
 	{
@@ -210,9 +196,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the file name the reflection object is defined in.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getFileName()
 	{
@@ -221,9 +205,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getStartLine()
 	{
@@ -232,9 +214,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getEndLine()
 	{
@@ -243,9 +223,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getDocComment()
 	{
@@ -254,10 +232,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasAnnotation($name)
 	{
@@ -266,10 +241,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -278,9 +250,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns parsed docblock.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getAnnotations()
 	{
@@ -289,9 +259,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the constant value.
-	 *
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function getValue()
 	{
@@ -300,9 +268,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the part of the source code defining the constant value.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getValueDefinition()
 	{
@@ -311,9 +277,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the originaly provided value definition.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getOriginalValueDefinition()
 	{
@@ -322,9 +286,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns if the constant is internal.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInternal()
 	{
@@ -333,9 +295,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns if the constant is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isUserDefined()
 	{
@@ -344,9 +304,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -355,9 +313,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns if the reflection subject is deprecated.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDeprecated()
 	{
@@ -366,9 +322,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -377,9 +331,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function __toString()
 	{
@@ -395,12 +347,12 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	/**
 	 * Exports a reflected object.
 	 *
-	 * @param ApiGen\TokenReflection\Broker $broker Broker instance
-	 * @param string|object|null $class Class name, class instance or null
+	 * @param Broker $broker
+	 * @param string|object|NULL $class Class name, class instance or null
 	 * @param string $constant Constant name
 	 * @param bool $return Return the export instead of outputting it
 	 * @return string|null
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If requested parameter doesn't exist.
+	 * @throws RuntimeException If requested parameter doesn't exist.
 	 */
 	public static function export(Broker $broker, $class, $constant, $return = FALSE)
 	{
@@ -410,14 +362,14 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 			try {
 				$constant = $broker->getConstant($constantName);
 			} catch (Exception\BrokerException $e) {
-				throw new Exception\RuntimeException(sprintf('Constant %s does not exist.', $constantName), Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new RuntimeException(sprintf('Constant %s does not exist.', $constantName), RuntimeException::DOES_NOT_EXIST);
 			}
 		} else {
 			$class = $broker->getClass($className);
 			if ($class instanceof Invalid\ReflectionClass) {
-				throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
+				throw new RuntimeException('Class is invalid.', RuntimeException::UNSUPPORTED);
 			} elseif ($class instanceof Dummy\ReflectionClass) {
-				throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
+				throw new RuntimeException(sprintf('Class %s does not exist.', $className), RuntimeException::DOES_NOT_EXIST);
 			}
 			$constant = $class->getConstantReflection($constantName);
 		}
@@ -429,9 +381,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -440,9 +390,7 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -464,26 +412,20 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 
 
 	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
-		return TokenReflection\ReflectionElement::get($this, $key);
+		return ReflectionElement::get($this, $key);
 	}
 
 
 	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{
-		return TokenReflection\ReflectionElement::exists($this, $key);
+		return ReflectionElement::exists($this, $key);
 	}
 
 
@@ -492,8 +434,6 @@ class ReflectionConstant implements IReflection, TokenReflection\IReflectionCons
 	 *
 	 * Not supported for constants since there is no internal constant reflection.
 	 *
-	 * @param \ReflectionClass $internalReflection Internal reflection instance
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker instance
 	 * @return null
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)

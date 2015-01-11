@@ -413,9 +413,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -424,9 +422,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function __toString()
 	{
@@ -498,9 +494,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{

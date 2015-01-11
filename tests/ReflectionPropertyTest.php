@@ -71,29 +71,6 @@ class ReflectionPropertyTest extends TestCase
 
 
 	/**
-	 * Tests getting of copydoc documentation comment.
-	 */
-	public function testCommentCopydoc()
-	{
-		static $properties = [
-			'property' => 'This is a property.',
-			'property2' => 'This is a property.',
-			'property3' => 'This is a property.',
-			'property4' => 'This is a property.',
-			'property5' => NULL,
-			'property6' => NULL,
-			'property7' => NULL
-		];
-
-		$class = $this->getClassTokenReflection('docCommentCopydoc');
-		foreach ($properties as $propertyName => $shortDescription) {
-			$this->assertTrue($class->hasProperty($propertyName), $propertyName);
-			$this->assertSame($shortDescription, $class->getProperty($propertyName)->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION), $propertyName);
-		}
-	}
-
-
-	/**
 	 * Tests getting of inherited documentation comment.
 	 */
 	public function testDocCommentInheritance()

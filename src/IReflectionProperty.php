@@ -146,7 +146,7 @@ interface IReflectionProperty extends IReflection
 	 * Sets value of a property for a particular class instance.
 	 *
 	 * @param object $object Class instance
-	 * @param mixed $value Poperty value
+	 * @param mixed $value Property value
 	 */
 	function setValue($object, $value);
 
@@ -162,7 +162,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the defining trait.
 	 *
-	 * @return ApiGen\TokenReflection\IReflectionClass|null
+	 * @return IReflectionClass|NULL
 	 */
 	function getDeclaringTrait();
 

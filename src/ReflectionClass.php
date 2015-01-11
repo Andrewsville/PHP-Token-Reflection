@@ -21,9 +21,6 @@ use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-/**
- * Tokenized class reflection.
- */
 class ReflectionClass extends ReflectionElement implements IReflectionClass
 {
 
@@ -169,9 +166,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getShortName()
 	{
@@ -184,9 +179,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceName()
 	{
@@ -195,9 +188,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class is defined within a namespace.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function inNamespace()
 	{
@@ -206,9 +197,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns modifiers.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getModifiers()
 	{
@@ -255,9 +244,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class is abstract.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isAbstract()
 	{
@@ -271,9 +258,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class is final.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isFinal()
 	{
@@ -282,9 +267,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class is an interface.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInterface()
 	{
@@ -293,9 +276,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class is an exception or its descendant.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isException()
 	{
@@ -304,9 +285,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if it is possible to create an instance of this class.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInstantiable()
 	{
@@ -394,9 +373,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns the parent class name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getParentClassName()
 	{
@@ -405,9 +382,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns the parent classes reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getParentClasses()
 	{
@@ -420,9 +395,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns the parent classes names.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getParentClassNameList()
 	{
@@ -435,11 +408,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class implements the given interface.
-	 *
-	 * @param string|object $interface Interface name or reflection object
-	 * @return bool
-	 * @throws RuntimeException If the provided parameter is not an interface.
+	 * {@inheritdoc}
 	 */
 	public function implementsInterface($interface)
 	{
@@ -448,7 +417,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			if ( ! $interface->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), RuntimeException::INVALID_ARGUMENT, $this);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface->getName()), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface->getName();
 		} else {
@@ -459,9 +428,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns interface reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getInterfaces()
 	{
@@ -477,9 +444,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns interface names.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getInterfaceNames()
 	{
@@ -514,9 +479,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns names of interfaces implemented by this class, not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnInterfaceNames()
 	{
@@ -559,7 +522,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns if the class implements the given method.
 	 *
-	 * @param string $name Method name
+	 * @param string $name
 	 * @return bool
 	 */
 	public function hasMethod($name)
@@ -576,7 +539,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns a method reflection.
 	 *
-	 * @param string $name Method name
+	 * @param string $name
 	 * @return ApiGen\TokenReflection\ReflectionMethod
 	 * @throws RuntimeException If the requested method does not exist.
 	 */
@@ -632,10 +595,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class implements (and not its parents) the given method.
-	 *
-	 * @param string $name Method name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasOwnMethod($name)
 	{
@@ -662,10 +622,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class imports the given method from traits.
-	 *
-	 * @param string $name Method name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasTraitMethod($name)
 	{
@@ -737,10 +694,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasConstant($name)
 	{
@@ -809,9 +763,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns constant reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getConstantReflections()
 	{
@@ -831,10 +783,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class (and not its parents) defines the given constant.
-	 *
-	 * @param string $name Constant name.
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasOwnConstant($name)
 	{
@@ -843,9 +792,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns constants declared by this class, not by its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnConstants()
 	{
@@ -856,9 +803,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of constants declared by this class, not by its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnConstantReflections()
 	{
@@ -867,10 +812,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class defines the given property.
-	 *
-	 * @param string $name Property name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasProperty($name)
 	{
@@ -884,11 +826,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Return a property reflection.
-	 *
-	 * @param string $name Property name
-	 * @return ApiGen\TokenReflection\ReflectionProperty
-	 * @throws RuntimeException If the requested property does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getProperty($name)
 	{
@@ -905,10 +843,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns property reflections.
-	 *
-	 * @param int $filter Properties filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getProperties($filter = NULL)
 	{
@@ -935,10 +870,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class (and not its parents) defines the given property.
-	 *
-	 * @param string $name Property name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasOwnProperty($name)
 	{
@@ -947,10 +879,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of properties declared by this class, not its parents.
-	 *
-	 * @param int $filter Properties filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnProperties($filter = NULL)
 	{
@@ -965,10 +894,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class imports the given property from traits.
-	 *
-	 * @param string $name Property name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasTraitProperty($name)
 	{
@@ -985,10 +911,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of properties imported from traits.
-	 *
-	 * @param int $filter Properties filter
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getTraitProperties($filter = NULL)
 	{
@@ -1010,9 +933,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns default properties.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDefaultProperties()
 	{
@@ -1033,9 +954,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns static properties reflections.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getStaticProperties()
 	{
@@ -1050,13 +969,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns a value of a static property.
-	 *
-	 * @param string $name Property name
-	 * @param mixed $default Default value
-	 * @return mixed
-	 * @throws RuntimeException If the requested static property does not exist.
-	 * @throws RuntimeException If the requested static property is not accessible.
+	 * {@inheritdoc}
 	 */
 	public function getStaticPropertyValue($name, $default = NULL)
 	{
@@ -1071,9 +984,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns traits used by this class.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getTraits()
 	{
@@ -1089,9 +1000,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns traits used by this class and not its parents.
-	 *
-	 * @return array|ReflectionClass[]
+	 * {@inheritdoc}
 	 */
 	public function getOwnTraits()
 	{
@@ -1107,9 +1016,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns names of used traits.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getTraitNames()
 	{
@@ -1123,9 +1030,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns names of traits used by this class an not its parents.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getOwnTraitNames()
 	{
@@ -1134,9 +1039,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns method aliases from traits.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getTraitAliases()
 	{
@@ -1145,9 +1048,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class is a trait.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTrait()
 	{
@@ -1180,11 +1081,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class uses a particular trait.
-	 *
-	 * @param \ReflectionClass|\TokenReflection\IReflectionClass|string $trait Trait reflection or name
-	 * @return bool
-	 * @throws RuntimeException If an invalid parameter was provided.
+	 * {@inheritdoc}
 	 */
 	public function usesTrait($trait)
 	{
@@ -1208,9 +1105,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of direct subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectSubclasses()
 	{
@@ -1225,9 +1120,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns names of direct subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectSubclassNames()
 	{
@@ -1236,9 +1129,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of indirect subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectSubclasses()
 	{
@@ -1253,9 +1144,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns names of indirect subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectSubclassNames()
 	{
@@ -1264,9 +1153,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of classes directly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectImplementers()
 	{
@@ -1284,9 +1171,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns names of classes directly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getDirectImplementerNames()
 	{
@@ -1295,9 +1180,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns reflections of classes indirectly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectImplementers()
 	{
@@ -1315,9 +1198,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns names of classes indirectly implementing this interface.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectImplementerNames()
 	{
@@ -1342,10 +1223,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Creates a new class instance without using a constructor.
-	 *
-	 * @return object
-	 * @throws RuntimeException If the class inherits from an internal class.
+	 * {@inheritdoc}
 	 */
 	public function newInstanceWithoutConstructor()
 	{
@@ -1358,12 +1236,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Creates a new instance using variable number of parameters.
-	 *
-	 * Use any number of constructor parameters as function parameters.
-	 *
-	 * @param mixed $args
-	 * @return object
+	 * {@inheritdoc}
 	 */
 	public function newInstance($args)
 	{
@@ -1410,9 +1283,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function __toString()
 	{
@@ -1529,7 +1400,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isComplete()
 	{
@@ -1549,7 +1420,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getNamespaceAliases()
 	{
@@ -1591,10 +1462,9 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Parses class modifiers (abstract, final) and class type (class, interface).
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
-	private function parseModifiers(Stream $tokenStream)
+	private function parseModifiers(StreamBase $tokenStream)
 	{
 		while (TRUE) {
 			switch ($tokenStream->getType()) {
@@ -1694,12 +1564,10 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Parses implemented interfaces.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 * @throws ParseException On error while parsing interfaces.
 	 */
-	private function parseInterfaces(Stream $tokenStream, ReflectionElement $parent = NULL)
+	private function parseInterfaces(StreamBase $tokenStream, ReflectionElement $parent = NULL)
 	{
 		if ( ! $tokenStream->is(T_IMPLEMENTS)) {
 			return $this;
@@ -1736,12 +1604,10 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Parses child reflection objects from the token stream.
 	 *
-	 * @param ApiGen\TokenReflection\Stream\StreamBase $tokenStream Token substream
-	 * @param ApiGen\TokenReflection\IReflection $parent Parent reflection object
-	 * @return ApiGen\TokenReflection\ReflectionClass
+	 * @return ReflectionClass
 	 * @throws ParseException If a parse error was detected.
 	 */
-	protected function parseChildren(Stream $tokenStream, IReflection $parent)
+	protected function parseChildren(StreamBase $tokenStream, IReflection $parent)
 	{
 		while (TRUE) {
 			switch ($type = $tokenStream->getType()) {

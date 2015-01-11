@@ -10,19 +10,14 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen;
+use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\IReflection;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * Basic abstract TokenReflection class.
- *
- * A common ancestor of ReflectionElement and ReflectionFile.
- */
-abstract class ReflectionBase implements IReflection
+abstract class ReflectionBase implements IReflection, Annotations
 {
 
 	/**
@@ -47,13 +42,6 @@ abstract class ReflectionBase implements IReflection
 	protected $docComment;
 
 	/**
-	 * Parsed docblock definition.
-	 *
-	 * @var array
-	 */
-	private $parsedDocComment;
-
-	/**
 	 * @var Broker
 	 */
 	private $broker;
@@ -73,9 +61,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getName()
 	{
@@ -84,9 +70,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return string|bool
+	 * {@inheritdoc}
 	 */
 	public function getDocComment()
 	{
@@ -130,7 +114,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * @return Broker
+	 * {@inheritdoc}
 	 */
 	public function getBroker()
 	{
@@ -139,9 +123,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Always returns false - everything is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isInternal()
 	{
@@ -150,9 +132,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Always returns true - everything is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isUserDefined()
 	{
@@ -161,7 +141,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isTokenized()
 	{
@@ -170,7 +150,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDeprecated()
 	{
@@ -185,9 +165,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getPrettyName()
 	{
@@ -196,8 +174,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * @param string $key Variable name
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	final public function __get($key)
 	{
@@ -206,8 +183,7 @@ abstract class ReflectionBase implements IReflection
 
 
 	/**
-	 * @param string $key Variable name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	final public function __isset($key)
 	{

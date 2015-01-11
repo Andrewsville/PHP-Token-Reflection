@@ -25,8 +25,8 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Return a class reflection.
 	 *
-	 * @param string $className Class name
-	 * @return ApiGen\TokenReflection\IReflectionClass
+	 * @param string $className
+	 * @return IReflectionClass
 	 */
 	function getClass($className);
 
@@ -34,7 +34,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns class reflections.
 	 *
-	 * @return array
+	 * @return array|IReflectionClass[]
 	 */
 	function getClasses();
 
@@ -42,7 +42,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns class names (FQN).
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getClassNames();
 
@@ -50,7 +50,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns class unqualified names (UQN).
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getClassShortNames();
 
@@ -58,7 +58,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns if the namespace contains a constant of the given name.
 	 *
-	 * @param string $constantName Constant name
+	 * @param string $constantName
 	 * @return bool
 	 */
 	function hasConstant($constantName);
@@ -67,8 +67,8 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns a constant reflection.
 	 *
-	 * @param string $constantName Constant name
-	 * @return ApiGen\TokenReflection\IReflectionConstant
+	 * @param string $constantName
+	 * @return IReflectionConstant
 	 */
 	function getConstant($constantName);
 
@@ -76,7 +76,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns constant reflections.
 	 *
-	 * @return array
+	 * @return array|IReflectionConstant[]
 	 */
 	function getConstants();
 
@@ -84,7 +84,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns constant names (FQN).
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getConstantNames();
 
@@ -92,7 +92,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns constant unqualified names (UQN).
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getConstantShortNames();
 
@@ -100,7 +100,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns if the namespace contains a function of the given name.
 	 *
-	 * @param string $functionName Function name
+	 * @param string $functionName
 	 * @return bool
 	 */
 	function hasFunction($functionName);
@@ -109,8 +109,8 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns a function reflection.
 	 *
-	 * @param string $functionName Function name
-	 * @return ApiGen\TokenReflection\IReflectionFunction
+	 * @param string $functionName
+	 * @return IReflectionFunction
 	 */
 	function getFunction($functionName);
 
@@ -118,7 +118,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns function reflections.
 	 *
-	 * @return array
+	 * @return array|IReflectionFunction[]
 	 */
 	function getFunctions();
 
@@ -126,7 +126,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns function names (FQN).
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getFunctionNames();
 
@@ -134,7 +134,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns function unqualified names (UQN).
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	function getFunctionShortNames();
 

@@ -1,31 +1,30 @@
 <?php
 
+/**
+ * This file is part of the ApiGen (http://apigen.org)
+ *
+ * For the full copyright and license information, please view
+ * the file license.md that was distributed with this source code.
+ */
+
 namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection\Exception\BaseException;
 
 
-/**
- * Invalid element reflection.
- *
- * The reflected element is not unique (by its fully qualified name).
- */
 abstract class ReflectionElement
 {
 
 	/**
 	 * Reasons why this element's reflection is invalid.
 	 *
-	 * @var array
+	 * @var BaseException[]
 	 */
 	private $reasons = [];
 
 
 	/**
-	 * Adds a reason why this element's reflection is invalid.
-	 *
-	 * @param ApiGen\TokenReflection\Exception\BaseException $reason Reason
-	 * @return ApiGen\TokenReflection\Invalid\ReflectionElement
+	 * @return $this
 	 */
 	public function addReason(BaseException $reason)
 	{
@@ -35,8 +34,6 @@ abstract class ReflectionElement
 
 
 	/**
-	 * Returns a list of reasons why this element's reflection is invalid.
-	 *
 	 * @return array
 	 */
 	public function getReasons()
@@ -46,13 +43,11 @@ abstract class ReflectionElement
 
 
 	/**
-	 * Returns if there are any known reasons why this element's reflection is invalid.
-	 *
 	 * @return bool
 	 */
 	public function hasReasons()
 	{
-		return !empty($this->reasons);
+		return ! empty($this->reasons);
 	}
 
 }
