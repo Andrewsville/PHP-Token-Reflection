@@ -77,7 +77,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 		foreach ($stream as $position => $token) {
 			if (is_array($token)) {
-				if (/*!NATIVE_TRAITS && */T_STRING === $token[0]) {
+				if (T_STRING === $token[0]) {
 					$lValue = strtolower($token[1]);
 					if ('trait' === $lValue) {
 						$token[0] = T_TRAIT;

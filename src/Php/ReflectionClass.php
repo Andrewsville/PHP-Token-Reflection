@@ -780,15 +780,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		return TokenReflection\ReflectionElement::exists($this, $key);
 	}
 
-//	/**
-//	 * Returns traits used by this class.
-//	 *
-//	 * @return array
-//	 */
-//	public function getTraits()
-//	{
-//		return NATIVE_TRAITS ? parent::getTraits() : array();
-//	}
 
 	/**
 	 * Returns traits used by this class and not its parents.
@@ -797,23 +788,10 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 	 */
 	public function getOwnTraits()
 	{
-//		if (!NATIVE_TRAITS) {
-//			return array();
-//		}
-
 		$parent = $this->getParentClass();
 		return $parent ? array_diff_key($this->getTraits(), $parent->getTraits()) : $this->getTraits();
 	}
 
-//	/**
-//	 * Returns names of used traits.
-//	 *
-//	 * @return array
-//	 */
-//	public function getTraitNames()
-//	{
-//		return NATIVE_TRAITS ? parent::getTraitNames() : array();
-//	}
 
 	/**
 	 * Returns traits used by this class and not its parents.
@@ -825,25 +803,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, To
 		return array_keys($this->getOwnTraits());
 	}
 
-//	/**
-//	 * Returns method aliases from traits.
-//	 *
-//	 * @return array
-//	 */
-//	public function getTraitAliases()
-//	{
-//		return NATIVE_TRAITS ? parent::getTraitAliases() : array();
-//	}
-
-//	/**
-//	 * Returns if the class is a trait.
-//	 *
-//	 * @return boolean
-//	 */
-//	public function isTrait()
-//	{
-//		return NATIVE_TRAITS && parent::isTrait();
-//	}
 
 	/**
 	 * Returns if the class uses a particular trait.
