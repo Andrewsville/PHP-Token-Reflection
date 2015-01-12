@@ -19,14 +19,14 @@ composer require apigen/token-reflection
 
 ## Usage
 
-First, you need to parse source code via [ApiGen\TokenReflection\Broker](src/Broker.php).
+First, you need to parse source code via [ApiGen\TokenReflection\Broker\Broker](src/Broker/Broker.php).
 It walks through the given directories, tokenizes PHP sources and caches reflection objects.
 
 ```php
 <?php
 namespace ApiGen\TokenReflection;
 
-$broker = new Broker(new Broker\Backend\Memory());
+$broker = new Broker(new Broker\Backend\Memory);
 $broker->processDirectory('~/lib/Zend_Framework');
 
 $class = $broker->getClass('Zend_Version'); // instance of ApiGen\TokenReflection\ReflectionClass
@@ -40,7 +40,7 @@ $constant = $broker->getConstant(...);
 
 ## Particular Reflections
 
-All reflection instances are being kept in a [ApiGen\TokenReflection\Broker](src/Broker.php) instance and all reflections know the broker that created them.
+All reflection instances are being kept in a `ApiGen\TokenReflection\Broker\Broker` instance and all reflections know the broker that created them.
 
 There are reflections for file (\*), file-namespace (\*), namespace, class, function/method, constant, property and parameter.
 You will not normally get in touch with those marked with an asterisk but they are used internally.
