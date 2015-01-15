@@ -9,8 +9,10 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Parser\PropertyParser;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionClass as InternalReflectionClass;
@@ -77,6 +79,21 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 * @var string
 	 */
 	private $declaringTraitName;
+
+	/**
+	 * @var PropertyParser
+	 */
+	private $propertyParser;
+
+
+	/**
+	 * @throws ParseException If an empty token stream was provided
+	 */
+	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	{
+		$this->propertyParser = new PropertyParser($tokenStream, $this, $parent);
+		parent::__construct($tokenStream, $broker, $parent);
+	}
 
 
 	/**
@@ -345,129 +362,14 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 */
 	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
-		$this->parseModifiers($tokenStream, $parent);
+		$this->modifiers = $this->propertyParser->parseModifiers();
 		if (FALSE === $this->docComment->getDocComment()) {
 			$this->parseDocComment($tokenStream, $parent);
 		}
-		return $this->parseName($tokenStream)
-			->parseDefaultValue($tokenStream);
-	}
 
+		$this->name = $this->propertyParser->parseName();
+		$this->defaultValueDefinition = $this->propertyParser->parseDefaultValue();
 
-	/**
-	 * Parses class modifiers (abstract, final) and class type (class, interface).
-	 *
-	 * @return ReflectionProperty
-	 * @throws ParseException If the modifiers value cannot be determined.
-	 */
-	private function parseModifiers(StreamBase $tokenStream, ReflectionClass $class)
-	{
-		while (TRUE) {
-			switch ($tokenStream->getType()) {
-				case T_PUBLIC:
-				case T_VAR:
-					$this->modifiers |= InternalReflectionProperty::IS_PUBLIC;
-					break;
-				case T_PROTECTED:
-					$this->modifiers |= InternalReflectionProperty::IS_PROTECTED;
-					break;
-				case T_PRIVATE:
-					$this->modifiers |= InternalReflectionProperty::IS_PRIVATE;
-					break;
-				case T_STATIC:
-					$this->modifiers |= InternalReflectionProperty::IS_STATIC;
-					break;
-				default:
-					break 2;
-			}
-			$tokenStream->skipWhitespaces(TRUE);
-		}
-		if (InternalReflectionProperty::IS_STATIC === $this->modifiers) {
-			$this->modifiers |= InternalReflectionProperty::IS_PUBLIC;
-		} elseif (0 === $this->modifiers) {
-			$parentProperties = $class->getOwnProperties();
-			if (empty($parentProperties)) {
-				throw new ParseException($this, $tokenStream, 'No access level defined and no previous defining class property present.', ParseException::LOGICAL_ERROR);
-			}
-			$sibling = array_pop($parentProperties);
-			if ($sibling->isPublic()) {
-				$this->modifiers = InternalReflectionProperty::IS_PUBLIC;
-			} elseif ($sibling->isPrivate()) {
-				$this->modifiers = InternalReflectionProperty::IS_PRIVATE;
-			} elseif ($sibling->isProtected()) {
-				$this->modifiers = InternalReflectionProperty::IS_PROTECTED;
-			} else {
-				throw new ParseException($this, $tokenStream, sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), Exception\Parse::PARSE_ELEMENT_ERROR);
-			}
-			if ($sibling->isStatic()) {
-				$this->modifiers |= InternalReflectionProperty::IS_STATIC;
-			}
-		}
-		return $this;
-	}
-
-
-	/**
-	 * Parses the property name.
-	 *
-	 * @return ReflectionProperty
-	 * @throws ParseException If the property name could not be determined.
-	 */
-	protected function parseName(StreamBase $tokenStream)
-	{
-		if ( ! $tokenStream->is(T_VARIABLE)) {
-			throw new ParseException($this, $tokenStream, 'The property name could not be determined.', ParseException::LOGICAL_ERROR);
-		}
-		$this->name = substr($tokenStream->getTokenValue(), 1);
-		$tokenStream->skipWhitespaces(TRUE);
-		return $this;
-	}
-
-
-	/**
-	 * Parses the propety default value.
-	 *
-	 * @return ReflectionProperty
-	 * @throws ParseException If the property default value could not be determined.
-	 */
-	private function parseDefaultValue(StreamBase $tokenStream)
-	{
-		$type = $tokenStream->getType();
-		if (';' === $type || ',' === $type) {
-			// No default value
-			return $this;
-		}
-		if ('=' === $type) {
-			$tokenStream->skipWhitespaces(TRUE);
-		}
-		$level = 0;
-		while (NULL !== ($type = $tokenStream->getType())) {
-			switch ($type) {
-				case ',':
-					if (0 !== $level) {
-						break;
-					}
-				case ';':
-					break 2;
-				case ')':
-				case ']':
-				case '}':
-					$level--;
-					break;
-				case '(':
-				case '{':
-				case '[':
-					$level++;
-					break;
-				default:
-					break;
-			}
-			$this->defaultValueDefinition[] = $tokenStream->current();
-			$tokenStream->next();
-		}
-		if (',' !== $type && ';' !== $type) {
-			throw new ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ";".', ParseException::UNEXPECTED_TOKEN);
-		}
 		return $this;
 	}
 

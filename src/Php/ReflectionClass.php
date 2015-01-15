@@ -117,12 +117,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 
 
 	/**
-	 * Returns if objects of this class are cloneable.
-	 *
-	 * Introduced in PHP 5.4.
-	 *
-	 * @return bool
-	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
+	 * {@inheritdoc}
 	 */
 	public function isCloneable()
 	{

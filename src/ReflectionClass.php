@@ -297,12 +297,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if objects of this class are cloneable.
-	 *
-	 * Introduced in PHP 5.4.
-	 *
-	 * @return bool
-	 * @see http://svn.php.net/viewvc/php/php-src/trunk/ext/reflection/php_reflection.c?revision=307971&view=markup#l4059
+	 * {@inheritdoc}
 	 */
 	public function isCloneable()
 	{
@@ -317,12 +312,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 
 
 	/**
-	 * Returns if the class is iterateable.
-	 *
-	 * Returns true if the class implements the Traversable interface.
-	 *
-	 * @return bool
-	 * @todo traits
+	 * {@inheritdoc}
 	 */
 	public function isIterateable()
 	{

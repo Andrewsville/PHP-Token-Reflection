@@ -259,11 +259,6 @@ abstract class ReflectionElement extends ReflectionBase
 	abstract protected function parse(StreamBase $tokenStream, IReflection $parent);
 
 
-	/**
-	 * @return ReflectionElement
-	 */
-	abstract protected function parseName(StreamBase $tokenStream);
-
 
 	/**
 	 * Parses child reflection objects from the token stream.
