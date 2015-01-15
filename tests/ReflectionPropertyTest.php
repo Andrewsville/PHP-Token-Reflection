@@ -104,59 +104,6 @@ class ReflectionPropertyTest extends TestCase
 
 
 	/**
-	 * Tests getting of documentation comment from templates.
-	 */
-	public function testCommentTemplate()
-	{
-		static $expected = [
-			'public1' => [ // Template definition
-				ReflectionAnnotation::SHORT_DESCRIPTION => 'Short description.',
-				ReflectionAnnotation::LONG_DESCRIPTION => 'Long description.',
-				'var' => ['string']
-			],
-			'public2' => [ // No own docblock -> using template
-				ReflectionAnnotation::LONG_DESCRIPTION => 'Long description.',
-				'var' => ['string']
-			],
-			'public3' => [ // Another template to the stack plus using the previuos template
-				ReflectionAnnotation::SHORT_DESCRIPTION => 'Another short description.',
-				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nAnother long description.",
-				'var' => ['array', 'string']
-			],
-			'public4' => [ // Own short description, inheriting the rest from the two templates
-				ReflectionAnnotation::SHORT_DESCRIPTION => 'Own short description.',
-				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nAnother long description.",
-				'var' => ['array', 'string']
-			],
-			// Template end -> remove the second template from the stack
-			'public5' => [
-				ReflectionAnnotation::SHORT_DESCRIPTION => 'Another own short description.',
-				ReflectionAnnotation::LONG_DESCRIPTION => "Long description.\nOwn long description.",
-				'var' => ['int', 'string']
-			],
-			// Template end -> remove the first template from the stack
-			'public6' => [
-				// No annotations
-			],
-			'public7' => [
-				ReflectionAnnotation::SHORT_DESCRIPTION => 'Outside of template.',
-				'var' => ['bool']
-			],
-		];
-
-		$rfl = $this->getClassReflection('docCommentTemplate')->token;
-
-		foreach ($expected as $name => $annotations) {
-			$property = $rfl->getProperty($name);
-			$this->assertSame($annotations, $property->getAnnotations());
-			if (empty($annotations)) {
-				$this->assertFalse($property->getDocComment());
-			}
-		}
-	}
-
-
-	/**
 	 * TestCase property accessibility.
 	 */
 	public function testAccessible()

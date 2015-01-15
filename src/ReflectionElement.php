@@ -19,20 +19,6 @@ abstract class ReflectionElement extends ReflectionBase
 {
 
 	/**
-	 * Docblock template start.
-	 *
-	 * @var string
-	 */
-	const DOCBLOCK_TEMPLATE_START = '/**#@+';
-
-	/**
-	 * Docblock template end.
-	 *
-	 * @var string
-	 */
-	const DOCBLOCK_TEMPLATE_END = '/**#@-*/';
-
-	/**
 	 * Class method cache.
 	 *
 	 * @var array
@@ -73,13 +59,6 @@ abstract class ReflectionElement extends ReflectionBase
 	 * @var int
 	 */
 	private $endPosition;
-
-	/**
-	 * Stack of actual docblock templates.
-	 *
-	 * @var array
-	 */
-	protected $docblockTemplates = [];
 
 
 	/**
@@ -205,17 +184,6 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns the stack of docblock templates.
-	 *
-	 * @return array
-	 */
-	protected function getDocblockTemplates()
-	{
-		return $this->docblockTemplates;
-	}
-
-
-	/**
 	 * Processes the parent reflection object.
 	 *
 	 * @return ReflectionElement
@@ -241,28 +209,15 @@ abstract class ReflectionElement extends ReflectionBase
 		$position = $tokenStream->key();
 		if ($tokenStream->is(T_DOC_COMMENT, $position - 1)) {
 			$value = $tokenStream->getTokenValue($position - 1);
-			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
-				$this->docComment = new ReflectionAnnotation($this, $value);
-				$this->startPosition--;
-			}
+			$this->docComment = new ReflectionAnnotation($this, $value);
+			$this->startPosition--;
 		} elseif ($tokenStream->is(T_DOC_COMMENT, $position - 2)) {
 			$value = $tokenStream->getTokenValue($position - 2);
-			if (self::DOCBLOCK_TEMPLATE_END !== $value) {
-				$this->docComment = new ReflectionAnnotation($this, $value);
-				$this->startPosition -= 2;
-			}
-		} elseif ($tokenStream->is(T_COMMENT, $position - 1) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 1))) {
-			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 1));
-			$this->startPosition--;
-		} elseif ($tokenStream->is(T_COMMENT, $position - 2) && preg_match('~^' . preg_quote(self::DOCBLOCK_TEMPLATE_START, '~') . '~', $tokenStream->getTokenValue($position - 2))) {
-			$this->docComment = new ReflectionAnnotation($this, $tokenStream->getTokenValue($position - 2));
+			$this->docComment = new ReflectionAnnotation($this, $value);
 			$this->startPosition -= 2;
 		}
 		if (NULL === $this->docComment) {
 			$this->docComment = new ReflectionAnnotation($this);
-		}
-		if ($parent instanceof ReflectionElement) {
-			$this->docComment->setTemplates($parent->getDocblockTemplates());
 		}
 		return $this;
 	}

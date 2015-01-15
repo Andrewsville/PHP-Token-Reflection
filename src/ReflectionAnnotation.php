@@ -35,13 +35,6 @@ class ReflectionAnnotation implements Annotations
 	const LONG_DESCRIPTION = ' long_description';
 
 	/**
-	 * List of applied templates.
-	 *
-	 * @var array
-	 */
-	private $templates = [];
-
-	/**
 	 * Parsed annotations.
 	 *
 	 * @var array
@@ -122,32 +115,6 @@ class ReflectionAnnotation implements Annotations
 
 
 	/**
-	 * Sets Docblock templates.
-	 *
-	 * @param array $templates Docblock templates
-	 * @return ReflectionAnnotation
-	 * @throws RuntimeException If an invalid annotation template was provided.
-	 */
-	public function setTemplates(array $templates)
-	{
-		foreach ($templates as $template) {
-			if ( ! $template instanceof ReflectionAnnotation) {
-				throw new RuntimeException(
-					sprintf(
-						'All templates have to be instances of \\TokenReflection\\ReflectionAnnotation; %s given.',
-						is_object($template) ? get_class($template) : gettype($template)
-					),
-					RuntimeException::INVALID_ARGUMENT,
-					$this->reflection
-				);
-			}
-		}
-		$this->templates = $templates;
-		return $this;
-	}
-
-
-	/**
 	 * Parses reflection object documentation.
 	 */
 	private function parse()
@@ -159,8 +126,6 @@ class ReflectionAnnotation implements Annotations
 			$docblock = trim(
 				preg_replace(
 					[
-						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_START, '~') . '~',
-						'~^' . preg_quote(ReflectionElement::DOCBLOCK_TEMPLATE_END, '~') . '$~',
 						'~^/\\*\\*~',
 						'~\\*/$~'
 					],
@@ -199,41 +164,9 @@ class ReflectionAnnotation implements Annotations
 			});
 		}
 		if ($this->reflection instanceof ReflectionElement) {
-			// Merge docblock templates
-			$this->mergeTemplates();
 			// Process docblock inheritance for supported reflections
 			if ($this->reflection instanceof ReflectionClass || $this->reflection instanceof ReflectionMethod || $this->reflection instanceof ReflectionProperty) {
 				$this->inheritAnnotations();
-			}
-		}
-	}
-
-
-	/**
-	 * Merges templates with the current docblock.
-	 */
-	private function mergeTemplates()
-	{
-		foreach ($this->templates as $index => $template) {
-			if (0 === $index && $template->getDocComment() === $this->docComment) {
-				continue;
-			}
-			foreach ($template->getAnnotations() as $name => $value) {
-				if ($name === self::LONG_DESCRIPTION) {
-					// Long description
-					if (isset($this->annotations[self::LONG_DESCRIPTION])) {
-						$this->annotations[self::LONG_DESCRIPTION] = $value . "\n" . $this->annotations[self::LONG_DESCRIPTION];
-					} else {
-						$this->annotations[self::LONG_DESCRIPTION] = $value;
-					}
-				} elseif ($name !== self::SHORT_DESCRIPTION) {
-					// Tags; short description is not inherited
-					if (isset($this->annotations[$name])) {
-						$this->annotations[$name] = array_merge($this->annotations[$name], $value);
-					} else {
-						$this->annotations[$name] = $value;
-					}
-				}
 			}
 		}
 	}
