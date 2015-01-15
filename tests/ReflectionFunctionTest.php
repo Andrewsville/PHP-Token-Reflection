@@ -296,29 +296,6 @@ class ReflectionFunctionTest extends TestCase
 
 
 	/**
-	 * Tests export.
-	 */
-	public function testToString()
-	{
-		$tests = [
-			'lines', 'docComment', 'noComment',
-			'invoke', 'noParameters', 'parameters', 'reference', 'noReference', 'noNamespace', 'userDefined', 'noClosure'
-		];
-		foreach ($tests as $test) {
-			$rfl = $this->getFunctionReflection($test);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			$this->assertSame(InternalReflectionFunction::export($this->getFunctionName($test), TRUE), ReflectionFunction::export($this->getBroker(), $this->getFunctionName($test), TRUE));
-
-			// TestCase loading from a string
-			$rfl = $this->getFunctionReflection($test, TRUE);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-		}
-
-		$this->assertSame(InternalReflectionFunction::export('strpos', TRUE), ReflectionFunction::export($this->getBroker(), 'strpos', TRUE));
-	}
-
-
-	/**
 	 * Tests new PHP 5.4 features.
 	 */
 	public function test54features()

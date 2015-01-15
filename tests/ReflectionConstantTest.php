@@ -109,30 +109,6 @@ class ReflectionConstantTest extends TestCase
 	}
 
 
-	public function testToString()
-	{
-		$tests = [
-			'noNamespace' => "Constant [ string NO_NAMESPACE ] { no-namespace }\n",
-			'typeString' => "Constant [ string TYPE_STRING ] { string }\n",
-			'typeInteger' => "Constant [ integer TYPE_INTEGER ] { 1 }\n",
-			'typeIntegerNegative' => "Constant [ integer TYPE_INTEGER_NEGATIVE ] { -1 }\n",
-			'typeFloat' => "Constant [ double TYPE_FLOAT ] { 1.1 }\n",
-			'typeFloatNegative' => "Constant [ double TYPE_FLOAT_NEGATIVE ] { -1.1 }\n",
-			'typeBoolean' => "Constant [ boolean TYPE_BOOLEAN ] { 1 }\n",
-			'typeNull' => "Constant [ null TYPE_NULL ] {  }\n"
-		];
-		foreach ($tests as $test => $expected) {
-			$this->assertSame($expected, $this->getConstantTokenReflection($test)->__toString());
-			$this->assertSame($expected, ReflectionConstant::export($this->getBroker(), $this->getClassName($test), $this->getConstantName($test), TRUE));
-
-			// TestCase loading from a string
-			$this->assertSame($expected, $this->getConstantTokenReflection($test, TRUE)->__toString());
-		}
-
-		$this->assertSame("Constant [ integer E_NOTICE ] { 8 }\n", ReflectionConstant::export($this->getBroker(), NULL, 'E_NOTICE', TRUE));
-	}
-
-
 	public function testMagicConstants()
 	{
 		$broker = new Broker(new MemoryBackend);
@@ -451,24 +427,6 @@ class ReflectionConstantTest extends TestCase
 	public function testInternalConstantConstructor()
 	{
 		new \ApiGen\TokenReflection\Php\ReflectionConstant('foo', 'bar', $this->getBroker(), new ReflectionClass('Exception', $this->getBroker()));
-	}
-
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalConstantExport1()
-	{
-		\ApiGen\TokenReflection\Php\ReflectionConstant::export($this->getBroker(), NULL, '~non-existent~', TRUE);
-	}
-
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalConstantExport2()
-	{
-		\ApiGen\TokenReflection\Php\ReflectionConstant::export($this->getBroker(), '~non-existent~', '~non-existent~', TRUE);
 	}
 
 

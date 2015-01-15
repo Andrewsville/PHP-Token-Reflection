@@ -142,55 +142,6 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __toString()
-	{
-		return sprintf(
-			"Constant [ %s %s ] { %s }\n",
-			strtolower(gettype($this->getValue())),
-			$this->getName(),
-			$this->getValue()
-		);
-	}
-
-
-	/**
-	 * @param Broker $broker
-	 * @param string|object|NULL $class Class name, class instance or null
-	 * @param string $constant Constant name
-	 * @param bool $return Return the export instead of outputting it
-	 * @return string|null
-	 * @throws RuntimeException If requested parameter doesn't exist.
-	 */
-	public static function export(Broker $broker, $class, $constant, $return = FALSE)
-	{
-		$className = is_object($class) ? get_class($class) : $class;
-		$constantName = $constant;
-		if ($className === NULL) {
-			$constant = $broker->getConstant($constantName);
-			if ($constant === NULL) {
-				throw new RuntimeException('Constant does not exist.', RuntimeException::DOES_NOT_EXIST);
-			}
-
-		} else {
-			$class = $broker->getClass($className);
-			if ($class instanceof Invalid\ReflectionClass) {
-				throw new RuntimeException('Class is invalid.', RuntimeException::UNSUPPORTED);
-
-				} elseif ($class instanceof Dummy\ReflectionClass) {
-				throw new RuntimeException('Class does not exist.', RuntimeException::DOES_NOT_EXIST, $class);
-			}
-			$constant = $class->getConstantReflection($constantName);
-		}
-		if ($return) {
-			return $constant->__toString();
-		}
-		echo $constant->__toString();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getNamespaceAliases()
 	{
 		return NULL === $this->declaringClassName ? $this->aliases : $this->getDeclaringClass()->getNamespaceAliases();

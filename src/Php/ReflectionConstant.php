@@ -333,56 +333,6 @@ class ReflectionConstant implements IReflection, IReflectionConstant, Annotation
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __toString()
-	{
-		return sprintf(
-			"Constant [ %s %s ] { %s }\n",
-			gettype($this->getValue()),
-			$this->getName(),
-			$this->getValue()
-		);
-	}
-
-
-	/**
-	 * Exports a reflected object.
-	 *
-	 * @param Broker $broker
-	 * @param string|object|NULL $class Class name, class instance or null
-	 * @param string $constant Constant name
-	 * @param bool $return Return the export instead of outputting it
-	 * @return string|null
-	 * @throws RuntimeException If requested parameter doesn't exist.
-	 */
-	public static function export(Broker $broker, $class, $constant, $return = FALSE)
-	{
-		$className = is_object($class) ? get_class($class) : $class;
-		$constantName = $constant;
-		if (NULL === $className) {
-			try {
-				$constant = $broker->getConstant($constantName);
-			} catch (Exception\BrokerException $e) {
-				throw new RuntimeException(sprintf('Constant %s does not exist.', $constantName), RuntimeException::DOES_NOT_EXIST);
-			}
-		} else {
-			$class = $broker->getClass($className);
-			if ($class instanceof Invalid\ReflectionClass) {
-				throw new RuntimeException('Class is invalid.', RuntimeException::UNSUPPORTED);
-			} elseif ($class instanceof Dummy\ReflectionClass) {
-				throw new RuntimeException(sprintf('Class %s does not exist.', $className), RuntimeException::DOES_NOT_EXIST);
-			}
-			$constant = $class->getConstantReflection($constantName);
-		}
-		if ($return) {
-			return $constant->__toString();
-		}
-		echo $constant->__toString();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getBroker()
 	{
 		return $this->broker;

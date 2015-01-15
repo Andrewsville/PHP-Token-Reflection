@@ -180,12 +180,4 @@ interface IReflectionParameter extends IReflection
 	 */
 	function canBePassedByValue();
 
-
-	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	function __toString();
-
 }

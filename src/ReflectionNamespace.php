@@ -292,69 +292,6 @@ class ReflectionNamespace implements IReflectionNamespace
 
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function __toString()
-	{
-		$buffer = '';
-		$count = 0;
-		foreach ($this->getClasses() as $class) {
-			$string = "\n    " . trim(str_replace("\n", "\n    ", $class->__toString()), ' ');
-			$string = str_replace("    \n      - Parameters", "\n      - Parameters", $string);
-			$buffer .= $string;
-			$count++;
-		}
-		$classes = sprintf("\n\n  - Classes [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
-		$buffer = '';
-		$count = 0;
-		foreach ($this->getConstants() as $constant) {
-			$buffer .= '    ' . $constant->__toString();
-			$count++;
-		}
-		$constants = sprintf("\n\n  - Constants [%d] {\n%s  }", $count, $buffer);
-		$buffer = '';
-		$count = 0;
-		foreach ($this->getFunctions() as $function) {
-			$string = "\n    " . trim(str_replace("\n", "\n    ", $function->__toString()), ' ');
-			$string = str_replace("    \n      - Parameters", "\n      - Parameters", $string);
-			$buffer .= $string;
-			$count++;
-		}
-		$functions = sprintf("\n\n  - Functions [%d] {\n%s  }", $count, ltrim($buffer, "\n"));
-		return sprintf(
-			"Namespace [ <user> namespace %s ] {  %s%s%s\n}\n",
-			$this->getName(),
-			$classes,
-			$constants,
-			$functions
-		);
-	}
-
-
-	/**
-	 * Exports a reflected object.
-	 *
-	 * @param Broker $broker Broker instance
-	 * @param string $namespace Namespace name
-	 * @param bool $return Return the export instead of outputting it
-	 * @return string|null
-	 * @throws RuntimeException If requested parameter doesn't exist.
-	 */
-	public static function export(Broker $broker, $namespace, $return = FALSE)
-	{
-		$namespaceName = $namespace;
-		$namespace = $broker->getNamespace($namespaceName);
-		if (NULL === $namespace) {
-			throw new RuntimeException(sprintf('Namespace %s does not exist.', $namespaceName), RuntimeException::DOES_NOT_EXIST);
-		}
-		if ($return) {
-			return $namespace->__toString();
-		}
-		echo $namespace->__toString();
-	}
-
-
-	/**
 	 * Adds a namespace part from a file.
 	 *
 	 * @return ReflectionNamespace

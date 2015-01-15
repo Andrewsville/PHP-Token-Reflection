@@ -138,12 +138,4 @@ interface IReflectionNamespace extends IReflection
 	 */
 	function getFunctionShortNames();
 
-
-	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	function __toString();
-
 }

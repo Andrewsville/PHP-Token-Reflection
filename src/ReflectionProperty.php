@@ -209,51 +209,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 
 
 	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return sprintf(
-			"Property [ %s%s%s%s%s\$%s ]\n",
-			$this->isStatic() ? '' : '<default> ',
-			$this->isPublic() ? 'public ' : '',
-			$this->isPrivate() ? 'private ' : '',
-			$this->isProtected() ? 'protected ' : '',
-			$this->isStatic() ? 'static ' : '',
-			$this->getName()
-		);
-	}
-
-
-	/**
-	 * Exports a reflected object.
-	 *
-	 * @param Broker $broker Broker instance
-	 * @param string|object $class Class name or class instance
-	 * @param string $property
-	 * @param bool $return Return the export instead of outputting it
-	 * @return string|NULL
-	 * @throws Exception\RuntimeException If requested parameter doesn't exist.
-	 */
-	public static function export(Broker $broker, $class, $property, $return = FALSE)
-	{
-		$className = is_object($class) ? get_class($class) : $class;
-		$propertyName = $property;
-		$class = $broker->getClass($className);
-		if ($class instanceof Invalid\ReflectionClass) {
-			throw new Exception\RuntimeException('Class is invalid.', Exception\RuntimeException::UNSUPPORTED);
-		} elseif ($class instanceof Dummy\ReflectionClass) {
-			throw new Exception\RuntimeException(sprintf('Class %s does not exist.', $className), Exception\RuntimeException::DOES_NOT_EXIST);
-		}
-		$property = $class->getProperty($propertyName);
-		if ($return) {
-			return $property->__toString();
-		}
-		echo $property->__toString();
-	}
-
-
-	/**
 	 * Returns if the property is set accessible.
 	 *
 	 * @return bool

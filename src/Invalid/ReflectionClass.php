@@ -839,37 +839,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass, Ann
 
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function __toString()
-	{
-		return sprintf(
-			"Class|Interface [ <user> class|interface %s ] {\n  %s%s%s%s%s\n}\n",
-			$this->getName(),
-			"\n\n  - Constants [0] {\n  }",
-			"\n\n  - Static properties [0] {\n  }",
-			"\n\n  - Static methods [0] {\n  }",
-			"\n\n  - Properties [0] {\n  }",
-			"\n\n  - Methods [0] {\n  }"
-		);
-	}
-
-
-	/**
-	 * Exports a reflected object.
-	 *
-	 * @param Broker $broker
-	 * @param string|object $className Class name or class instance
-	 * @param bool $return Return the export instead of outputting it
-	 * @return string|NULL
-	 */
-	public static function export(Broker $broker, $className, $return = FALSE)
-	{
-		return ReflectionClass::export($broker, $className, $return);
-	}
-
-
-	/**
 	 * Outputs the reflection subject source code.
 	 *
 	 * @return string

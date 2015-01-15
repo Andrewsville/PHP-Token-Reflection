@@ -35,29 +35,6 @@ class ReflectionFile extends ReflectionBase
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @throws RuntimeException If the method is called, because it's unsupported.
-	 */
-	public function __toString()
-	{
-		throw new RuntimeException('Casting to string is not supported.', RuntimeException::UNSUPPORTED, $this);
-	}
-
-
-	/**
-	 * @param Broker $broker Broker instance
-	 * @param string $argument Reflection object name
-	 * @param bool $return Return the export instead of outputting it
-	 * @throws RuntimeException If the method is called, because it's unsupported.
-	 */
-	public static function export(Broker $broker, $argument, $return = FALSE)
-	{
-		throw new RuntimeException('Export is not supported.', RuntimeException::UNSUPPORTED);
-	}
-
-
-	/**
 	 * Outputs the file source code.
 	 *
 	 * @return string

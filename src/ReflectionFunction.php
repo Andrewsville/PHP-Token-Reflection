@@ -39,57 +39,6 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __toString()
-	{
-		$parameters = '';
-		if ($this->getNumberOfParameters() > 0) {
-			$buffer = '';
-			foreach ($this->getParameters() as $parameter) {
-				$buffer .= "\n    " . $parameter->__toString();
-			}
-			$parameters = sprintf(
-				"\n\n  - Parameters [%d] {%s\n  }",
-				$this->getNumberOfParameters(),
-				$buffer
-			);
-		}
-		return sprintf(
-			"%sFunction [ <user> function %s%s ] {\n  @@ %s %d - %d%s\n}\n",
-			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
-			$this->returnsReference() ? '&' : '',
-			$this->getName(),
-			$this->getFileName(),
-			$this->getStartLine(),
-			$this->getEndLine(),
-			$parameters
-		);
-	}
-
-
-	/**
-	 * @param Broker $broker
-	 * @param string $function Function name
-	 * @param bool $return Return the export instead of outputting it
-	 * @return string|NULL
-	 * @throws RuntimeException If requested parameter doesn't exist.
-	 */
-	public static function export(Broker $broker, $function, $return = FALSE)
-	{
-		$functionName = $function;
-		$function = $broker->getFunction($functionName);
-		if (NULL === $function) {
-			throw new RuntimeException(sprintf('Function %s() does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST);
-		}
-		if ($return) {
-			return $function->__toString();
-		}
-		echo $function->__toString();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function invoke()
 	{
 		return $this->invokeArgs(func_get_args());

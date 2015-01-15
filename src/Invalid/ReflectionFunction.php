@@ -441,23 +441,6 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 
 
 	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return sprintf(
-			"%sFunction [ <user> function %s%s ] {\n  @@ %s %d - %d\n}\n",
-			$this->getDocComment() ? $this->getDocComment() . "\n" : '',
-			$this->returnsReference() ? '&' : '',
-			$this->getName(),
-			$this->getFileName(),
-			$this->getStartLine(),
-			$this->getEndLine()
-		);
-	}
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function __get($key)

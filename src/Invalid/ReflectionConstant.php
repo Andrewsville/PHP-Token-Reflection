@@ -319,22 +319,6 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return sprintf(
-			"Constant [ %s %s ] { %s }\n",
-			gettype(NULL),
-			$this->getName(),
-			NULL
-		);
-	}
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function getBroker()

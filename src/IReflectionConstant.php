@@ -110,14 +110,6 @@ interface IReflectionConstant extends IReflection
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	function __toString();
-
-
-	/**
 	 * Returns if the constant definition is valid.
 	 *
 	 * That means that the source code is valid and the constant name is unique within parsed files.

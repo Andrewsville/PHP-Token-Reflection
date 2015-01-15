@@ -469,49 +469,6 @@ class ReflectionMethodTest extends TestCase
 
 
 	/**
-	 * Tests export.
-	 */
-	public function testToString()
-	{
-		$tests = [
-			'lines', 'docComment', 'noComment',
-			'prototype', 'noPrototype', 'parameters', 'reference', 'noReference', 'noClosure', 'noNamespace', 'userDefined', 'shadow'
-		];
-		foreach ($tests as $test) {
-			$rfl = $this->getMethodReflection($test);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			$this->assertSame(InternalReflectionMethod::export($this->getClassName($test), $test, TRUE), ReflectionMethod::export($this->getBroker(), $this->getClassName($test), $test, TRUE));
-
-			$rfl = $this->getMethodReflection($test, TRUE);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			$this->assertSame(InternalReflectionMethod::export($this->getClassName($test), $test, TRUE), ReflectionMethod::export($this->getBroker(), $this->getClassName($test), $test, TRUE));
-		}
-
-		$tests = [
-			'constructorDestructor' => ['__construct', '__destruct'],
-			'clone' => ['__clone', 'noClone'],
-			'declaringClass' => ['parent', 'child', 'parentOverlay'],
-			'invoke' => ['publicInvoke', 'protectedInvoke'],
-			'accessLevel' => ['privateExtended', 'privateNoExtended', 'protectedExtended', 'protectedNoExtended'],
-			'modifiers' => ['publicAbstract', 'publicFinal', 'publicStatic', 'publicNoStatic', 'protectedAbstract', 'protectedFinal', 'protectedStatic', 'protectedNoStatic', 'privateFinal', 'privateStatic', 'privateNoStatic']
-		];
-		foreach ($tests as $class => $classTests) {
-			$rfl = $this->getClassReflection($class);
-			$rfl_fromString = $this->getClassReflection($class, TRUE);
-			foreach ($classTests as $method) {
-				// @todo inherits not supported yet
-				$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl->internal->getMethod($method)->__toString()), $rfl->token->getMethod($method)->__toString());
-				$this->assertSame(preg_replace('~, inherits [\w]+~', '', InternalReflectionMethod::export($this->getClassName($class), $method, TRUE)), ReflectionMethod::export($this->getBroker(), $this->getClassName($class), $method, TRUE));
-				$this->assertSame(preg_replace('~, inherits [\w]+~', '', $rfl_fromString->internal->getMethod($method)->__toString()), $rfl_fromString->token->getMethod($method)->__toString());
-			}
-		}
-
-		$this->assertSame(InternalReflectionMethod::export('ReflectionMethod', 'isFinal', TRUE), ReflectionMethod::export($this->getBroker(), 'ReflectionMethod', 'isFinal', TRUE));
-		$this->assertSame(InternalReflectionMethod::export(new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', TRUE), ReflectionMethod::export($this->getBroker(), new InternalReflectionMethod('ReflectionMethod', 'isFinal'), 'isFinal', TRUE));
-	}
-
-
-	/**
 	 * Tests new PHP 5.4 features.
 	 */
 	public function test54features()

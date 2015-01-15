@@ -661,14 +661,6 @@ interface IReflectionClass extends IReflection
 
 
 	/**
-	 * Returns the string representation of the reflection object.
-	 *
-	 * @return string
-	 */
-	function __toString();
-
-
-	/**
 	 * Returns if the class definition is complete.
 	 *
 	 * That means if there are no dummy classes among parents and implemented interfaces.

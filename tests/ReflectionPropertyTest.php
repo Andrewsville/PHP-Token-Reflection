@@ -322,42 +322,6 @@ class ReflectionPropertyTest extends TestCase
 
 
 	/**
-	 * Tests export.
-	 */
-	public function testToString()
-	{
-		$tests = [
-			'lines', 'docComment', 'noComment',
-			'default', 'typeNull', 'typeArray', 'typeString', 'typeInteger', 'typeFloat'
-		];
-		foreach ($tests as $test) {
-			$rfl = $this->getPropertyReflection($test);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			$this->assertSame(InternalReflectionProperty::export($this->getClassName($test), $test, TRUE), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), $this->getClassName($test), $test, TRUE));
-
-			// TestCase loading from a string
-			$rfl = $this->getPropertyReflection($test, TRUE);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-		}
-
-		$rfl = $this->getClassReflection('modifiers');
-		$rfl_fromString = $this->getClassReflection('modifiers');
-		foreach (['public', 'protected', 'private'] as $name) {
-			$internal = $rfl->internal->getProperty($name);
-			$token = $rfl->token->getProperty($name);
-			$this->assertSame($internal->__toString(), $token->__toString());
-			$this->assertSame(InternalReflectionProperty::export($this->getClassName('modifiers'), $name, TRUE), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), $this->getClassName('modifiers'), $name, TRUE));
-
-			// TestCase loading from a string
-			$this->assertSame($internal->__toString(), $rfl_fromString->token->getProperty($name)->__toString());
-		}
-
-		$this->assertSame(InternalReflectionProperty::export('ReflectionProperty', 'name', TRUE), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), 'ReflectionProperty', 'name', TRUE));
-		$this->assertSame(InternalReflectionProperty::export(new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', TRUE), ApiGen\TokenReflection\ReflectionProperty::export($this->getBroker(), new InternalReflectionProperty('ReflectionProperty', 'name'), 'name', TRUE));
-	}
-
-
-	/**
 	 * Tests new PHP 5.4 features.
 	 */
 	public function test54features()

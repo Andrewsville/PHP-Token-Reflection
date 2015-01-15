@@ -1250,38 +1250,6 @@ class ReflectionClassTest extends TestCase
 
 
 	/**
-	 * Tests export.
-	 */
-	public function testToString()
-	{
-		$tests = [
-			'lines', 'docComment', 'noDocComment',
-			'constants', 'noConstants', 'properties', 'noProperties', 'doubleProperties',
-			'publicConstructor', 'privateConstructor', 'publicClone', 'privateClone',
-			'methods', 'noMethods', 'instances', 'abstract', 'abstractImplicit', 'noAbstract', 'final', 'noFinal',
-			'interface', 'noInterface', 'interfaces', 'noInterfaces',
-			'iterator', 'noIterator', 'parent', 'noParent',
-			'userDefined', 'noNamespace',
-		];
-
-		$tests[] = 'traits';
-
-		foreach ($tests as $test) {
-			$rfl = $this->getClassReflection($test);
-			// $this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-			// $this->assertSame(InternalReflectionClass::export($this->getClassName($test), true), ReflectionClass::export($this->getBroker(), $this->getClassName($test), true));
-
-			// TestCase loading from a string
-			$rfl = $this->getClassReflection($test, TRUE);
-			// $this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-		}
-
-		$this->assertSame(InternalReflectionClass::export('ReflectionClass', TRUE), ApiGen\TokenReflection\ReflectionClass::export($this->getBroker(), 'ReflectionClass', TRUE));
-		$this->assertSame(InternalReflectionClass::export(new InternalReflectionClass('ReflectionClass'), TRUE), ApiGen\TokenReflection\ReflectionClass::export($this->getBroker(), new InternalReflectionClass('ReflectionClass'), TRUE));
-	}
-
-
-	/**
 	 * Tests traits support comparing with the internal reflection.
 	 *
 	 * For PHP 5.4+ only.

@@ -229,31 +229,6 @@ class ReflectionParameterTest extends TestCase
 
 
 	/**
-	 * Tests export.
-	 */
-	public function testToString()
-	{
-		$tests = [
-			'declaringFunction', 'reference', 'noReference', 'class', 'noClass', 'array', 'noArray',
-			'nullClass', 'noNullClass', 'nullArray', 'noNullArray', 'noOptional',
-			'optionalNull', 'optionalTrue', 'optionalFalse', 'optionalArray', 'optionalString', 'optionalInteger', 'optionalFloat', 'optionalConstant'
-		];
-		foreach ($tests as $test) {
-			$rfl = $this->getParameterReflection($test);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-
-			$this->assertSame(InternalReflectionParameter::export($this->getFunctionName($test), 0, TRUE), ApiGen\TokenReflection\ReflectionParameter::export($this->getBroker(), $this->getFunctionName($test), 0, TRUE));
-
-			// TestCase loading from a string
-			$rfl = $this->getParameterReflection($test, TRUE);
-			$this->assertSame($rfl->internal->__toString(), $rfl->token->__toString());
-		}
-
-		$this->assertSame(InternalReflectionParameter::export('strpos', 0, TRUE), ApiGen\TokenReflection\ReflectionParameter::export($this->getBroker(), 'strpos', 0, TRUE));
-	}
-
-
-	/**
 	 * Tests getting of inherited documentation comment.
 	 */
 	public function testDocCommentInheritance()
