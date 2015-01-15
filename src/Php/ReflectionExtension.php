@@ -209,7 +209,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return ReflectionElement::get($this, $key);
 	}
@@ -218,7 +218,7 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return ReflectionElement::exists($this, $key);
 	}

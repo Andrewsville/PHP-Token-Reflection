@@ -79,35 +79,27 @@ abstract class ReflectionBase implements IReflection, Annotations
 
 
 	/**
-	 * Checks if there is a particular annotation.
-	 *
-	 * @param string $name Annotation name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	final public function hasAnnotation($name)
+	public function hasAnnotation($name)
 	{
 		return $this->docComment->hasAnnotation($name);
 	}
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return string|array|null
+	 * {@inheritdoc}
 	 */
-	final public function getAnnotation($name)
+	public function getAnnotation($name)
 	{
 		return $this->docComment->getAnnotation($name);
 	}
 
 
 	/**
-	 * Returns all annotations.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
-	final public function getAnnotations()
+	public function getAnnotations()
 	{
 		return $this->docComment->getAnnotations();
 	}
@@ -176,7 +168,7 @@ abstract class ReflectionBase implements IReflection, Annotations
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return self::get($this, $key);
 	}
@@ -185,7 +177,7 @@ abstract class ReflectionBase implements IReflection, Annotations
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return self::exists($this, $key);
 	}
@@ -197,7 +189,7 @@ abstract class ReflectionBase implements IReflection, Annotations
 	 * @return mixed
 	 * @throws RuntimeException If the requested parameter does not exist.
 	 */
-	final public static function get(IReflection $object, $key)
+	public static function get(IReflection $object, $key)
 	{
 		if ( ! empty($key)) {
 			$className = get_class($object);
@@ -221,7 +213,7 @@ abstract class ReflectionBase implements IReflection, Annotations
 	 * @param string $key Variable name
 	 * @return bool
 	 */
-	final public static function exists(IReflection $object, $key)
+	public static function exists(IReflection $object, $key)
 	{
 		try {
 			self::get($object, $key);

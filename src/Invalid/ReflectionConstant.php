@@ -368,7 +368,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return ReflectionBase::get($this, $key);
 	}
@@ -377,7 +377,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return ReflectionBase::exists($this, $key);
 	}

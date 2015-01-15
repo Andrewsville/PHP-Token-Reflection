@@ -64,7 +64,7 @@ abstract class BaseException extends RuntimeException
 	 *
 	 * @return string
 	 */
-	final public function getOutput()
+	public function getOutput()
 	{
 		$detail = $this->getDetail();
 		return sprintf(
@@ -84,7 +84,7 @@ abstract class BaseException extends RuntimeException
 	 *
 	 * @return string
 	 */
-	final public function __toString()
+	public function __toString()
 	{
 		$output = '';
 		if ($ex = $this->getPrevious()) {

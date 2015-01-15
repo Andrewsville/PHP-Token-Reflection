@@ -64,7 +64,7 @@ abstract class ReflectionElement extends ReflectionBase
 	/**
 	 * @throws ParseException If an empty token stream was provided
 	 */
-	final public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
 		if ($tokenStream->count() === 0) {
 			throw new ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
@@ -73,7 +73,7 @@ abstract class ReflectionElement extends ReflectionBase
 	}
 
 
-	final protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL)
+	protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL)
 	{
 		$this->fileName = $tokenStream->getFileName();
 		$this->processParent($parent, $tokenStream)
@@ -228,7 +228,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @return ReflectionElement
 	 */
-	private final function parseStartLine(StreamBase $tokenStream)
+	private function parseStartLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->startLine = $token[2];
@@ -242,7 +242,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @return ReflectionElement
 	 */
-	private final function parseEndLine(StreamBase $tokenStream)
+	private function parseEndLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->endLine = $token[2];

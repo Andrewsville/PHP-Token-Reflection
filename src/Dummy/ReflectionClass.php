@@ -931,7 +931,7 @@ class ReflectionClass implements IReflectionClass
 	 * @param string $key
 	 * @return mixed
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return ReflectionBase::get($this, $key);
 	}
@@ -941,7 +941,7 @@ class ReflectionClass implements IReflectionClass
 	 * @param string $key
 	 * @return bool
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return ReflectionBase::exists($this, $key);
 	}

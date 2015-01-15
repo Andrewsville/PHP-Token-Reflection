@@ -32,7 +32,7 @@ class Resolver
 	 * @param string $namespaceName Context namespace name
 	 * @return string
 	 */
-	final public static function resolveClassFQN($className, array $aliases, $namespaceName = NULL)
+	public static function resolveClassFQN($className, array $aliases, $namespaceName = NULL)
 	{
 		if ($className{0} == '\\') {
 			// FQN
@@ -63,7 +63,7 @@ class Resolver
 	 * @throws RuntimeException If an invalid reflection object was provided.
 	 * @throws RuntimeException If an invalid source code was provided.
 	 */
-	final public static function getValueDefinition(array $tokens, ReflectionElement $reflection)
+	public static function getValueDefinition(array $tokens, ReflectionElement $reflection)
 	{
 		if ($reflection instanceof ReflectionConstant || $reflection instanceof ReflectionFunction) {
 			$namespace = $reflection->getNamespaceName();
@@ -189,7 +189,7 @@ class Resolver
 	 * @param array $tokens Tokens array
 	 * @return array
 	 */
-	final public static function getSourceCode(array $tokens)
+	public static function getSourceCode(array $tokens)
 	{
 		if (empty($tokens)) {
 			return NULL;
@@ -209,7 +209,7 @@ class Resolver
 	 * @param ReflectionElement $reflection Caller reflection
 	 * @return array
 	 */
-	final public static function findConstants(array $tokens, ReflectionElement $reflection)
+	public static function findConstants(array $tokens, ReflectionElement $reflection)
 	{
 		static $accepted = [
 			T_DOUBLE_COLON => TRUE,
@@ -253,7 +253,7 @@ class Resolver
 	 * @param string $source Source code
 	 * @return mixed
 	 */
-	final private static function evaluate($source)
+	private static function evaluate($source)
 	{
 		return eval($source);
 	}

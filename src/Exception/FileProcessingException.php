@@ -12,7 +12,7 @@ namespace ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\ReflectionFile;
 
 
-final class FileProcessingException extends RuntimeException
+class FileProcessingException extends RuntimeException
 {
 
 	/**

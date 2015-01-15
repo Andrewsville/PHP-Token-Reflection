@@ -151,7 +151,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return ReflectionElement::get($this, $key);
 	}
@@ -160,7 +160,7 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return ReflectionElement::exists($this, $key);
 	}

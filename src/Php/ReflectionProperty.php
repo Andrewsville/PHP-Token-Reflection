@@ -279,7 +279,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return ReflectionElement::get($this, $key);
 	}
@@ -288,7 +288,7 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return ReflectionElement::exists($this, $key);
 	}

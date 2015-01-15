@@ -460,7 +460,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return ReflectionBase::get($this, $key);
 	}
@@ -469,7 +469,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return ReflectionBase::exists($this, $key);
 	}

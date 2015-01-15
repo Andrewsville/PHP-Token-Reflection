@@ -941,7 +941,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass, Ann
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __get($key)
+	public function __get($key)
 	{
 		return ReflectionBase::get($this, $key);
 	}
@@ -950,7 +950,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass, Ann
 	/**
 	 * {@inheritdoc}
 	 */
-	final public function __isset($key)
+	public function __isset($key)
 	{
 		return ReflectionBase::exists($this, $key);
 	}
