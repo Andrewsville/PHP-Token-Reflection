@@ -13,6 +13,7 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Parser\FunctionParser;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -26,6 +27,12 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	 */
 	private $aliases = [];
 
+
+	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	{
+		$this->functionParser = new FunctionParser($tokenStream, $this, $parent);
+		parent::__construct($tokenStream, $broker, $parent);
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -119,15 +126,10 @@ class ReflectionFunction extends ReflectionFunctionBase implements IReflectionFu
 	}
 
 
-	/**
-	 * Parses reflected element metadata from the token stream.
-	 *
-	 * @return ReflectionFunction
-	 */
 	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
-		return $this->parseReturnsReference($tokenStream)
-			->parseName($tokenStream);
+		$this->returnsReference = $this->functionParser->parseReturnReference();
+		$this->name = $this->functionParser->parseName();
 	}
 
 }

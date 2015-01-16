@@ -38,8 +38,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	const IS_TRAIT = 0x120;
 
 	/**
-	 * Class implements interfaces.
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l152
 	 *
 	 * @var int
@@ -47,8 +45,6 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	const IMPLEMENTS_INTERFACES = 0x80000;
 
 	/**
-	 * Class implements traits.
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l181
 	 *
 	 * @var int
@@ -56,15 +52,11 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	const IMPLEMENTS_TRAITS = 0x400000;
 
 	/**
-	 * Class namespace name.
-	 *
 	 * @var string
 	 */
 	private $namespaceName;
 
 	/**
-	 * Class modifiers.
-	 *
 	 * @var int
 	 */
 	private $modifiers = 0;

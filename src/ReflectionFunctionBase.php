@@ -30,7 +30,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 *
 	 * @var bool
 	 */
-	private $returnsReference = FALSE;
+	protected $returnsReference = FALSE;
 
 	/**
 	 * Parameters.

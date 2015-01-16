@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Stream\StreamBase;
@@ -100,10 +101,15 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	private $passedByReference = FALSE;
 
 
+	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	{
+
+		parent::__construct($tokenStream, $broker, $parent);
+	}
+
+
 	/**
-	 * Returns the declaring class.
-	 *
-	 * @return ReflectionClass|NULL
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
@@ -112,9 +118,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -123,9 +127,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the declaring function.
-	 *
-	 * @return ReflectionFunctionBase
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringFunction()
 	{
@@ -143,9 +145,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the declaring function name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringFunctionName()
 	{
@@ -154,11 +154,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns the default value.
-	 *
-	 * @return mixed
-	 * @throws RuntimeException If the property is not optional.
-	 * @throws RuntimeException If the property has no default value.
+	 * {@inheritdoc}
 	 */
 	public function getDefaultValue()
 	{
@@ -242,20 +238,15 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 
 
 	/**
-	 * Returns if the parameter expects a callback.
-	 *
-	 * @return bool
-	 */
-	public function isCallable()
+	 * {@inheritdoc}
+	 */	public function isCallable()
 	{
 		return $this->typeHint === self::CALLABLE_TYPE_HINT;
 	}
 
 
 	/**
-	 * Returns the original type hint as defined in the source code.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getOriginalTypeHint()
 	{

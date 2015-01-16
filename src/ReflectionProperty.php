@@ -86,9 +86,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	private $propertyParser;
 
 
-	/**
-	 * @throws ParseException If an empty token stream was provided
-	 */
 	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
 		$this->propertyParser = new PropertyParser($tokenStream, $this, $parent);
@@ -351,7 +348,6 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 		if ($parent->isTrait()) {
 			$this->declaringTraitName = $parent->getName();
 		}
-//		return parent::processParent($parent, $tokenStream);
 	}
 
 

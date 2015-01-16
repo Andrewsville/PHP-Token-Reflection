@@ -9,8 +9,10 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Parser\MethodParser;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionMethod as InternalReflectionMethod;
@@ -40,10 +42,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	const ACCESS_LEVEL_CHANGED = 0x800;
 
 	/**
-	 * Method is constructor.
-	 *
-	 * Legacy constructors are not supported.
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l138
 	 * ZEND_ACC_CTOR
 	 *
@@ -52,8 +50,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	const IS_CONSTRUCTOR = 0x2000;
 
 	/**
-	 * Method is destructor.
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l139
 	 * ZEND_ACC_DTOR
 	 *
@@ -62,8 +58,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	const IS_DESTRUCTOR = 0x4000;
 
 	/**
-	 * Method is __clone().
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l140
 	 * ZEND_ACC_CLONE
 	 *
@@ -72,8 +66,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	const IS_CLONE = 0x8000;
 
 	/**
-	 * Method can be called statically (although not defined static).
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l143
 	 * ZEND_ACC_ALLOW_STATIC
 	 *
@@ -133,6 +125,13 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $declaringTraitName;
 
 
+	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	{
+		$this->methodParser = new MethodParser($tokenStream, $this, $parent);
+		parent::__construct($tokenStream, $broker, $parent);
+	}
+
+
 	/**
 	 * Returns the declaring class reflection.
 	 *
@@ -145,9 +144,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns the declaring class name.
-	 *
-	 * @return string|null
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClassName()
 	{
@@ -156,9 +153,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns method modifiers.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
 	public function getModifiers()
 	{
@@ -192,9 +187,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns if the method is abstract.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isAbstract()
 	{
@@ -203,9 +196,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns if the method is final.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isFinal()
 	{
@@ -214,9 +205,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns if the method is private.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isPrivate()
 	{
@@ -225,9 +214,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns if the method is protected.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isProtected()
 	{
@@ -285,9 +272,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns if the method is a constructor.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isConstructor()
 	{
@@ -296,9 +281,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Returns if the method is a destructor.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isDestructor()
 	{
@@ -521,8 +504,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 
 
 	/**
-	 * Processes the parent reflection object.
-	 *
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
@@ -535,92 +516,15 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		if ($parent->isTrait()) {
 			$this->declaringTraitName = $parent->getName();
 		}
-//		return parent::processParent($parent, $tokenStream);
 	}
 
 
-	/**
-	 * Parses reflected element metadata from the token stream.
-	 *
-	 * @return ReflectionMethod
-	 * @throws ParseException If the class could not be parsed.
-	 */
 	protected function parse(StreamBase $tokenStream, IReflection $parent)
 	{
-		return $this->parseBaseModifiers($tokenStream)
-			->parseReturnsReference($tokenStream)
-			->parseName($tokenStream)
-			->parseInternalModifiers($parent);
-	}
-
-
-	/**
-	 * Parses base method modifiers (abstract, final, public, ...).
-	 *
-	 * @return ReflectionMethod
-	 */
-	private function parseBaseModifiers(StreamBase $tokenStream)
-	{
-		while (TRUE) {
-			switch ($tokenStream->getType()) {
-				case T_ABSTRACT:
-					$this->modifiers |= InternalReflectionMethod::IS_ABSTRACT;
-					break;
-				case T_FINAL:
-					$this->modifiers |= InternalReflectionMethod::IS_FINAL;
-					break;
-				case T_PUBLIC:
-					$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
-					break;
-				case T_PRIVATE:
-					$this->modifiers |= InternalReflectionMethod::IS_PRIVATE;
-					break;
-				case T_PROTECTED:
-					$this->modifiers |= InternalReflectionMethod::IS_PROTECTED;
-					break;
-				case T_STATIC:
-					$this->modifiers |= InternalReflectionMethod::IS_STATIC;
-					break;
-				case T_FUNCTION:
-				case NULL:
-					break 2;
-				default:
-					break;
-			}
-			$tokenStream->skipWhitespaces();
-		}
-		if ( ! ($this->modifiers & (InternalReflectionMethod::IS_PRIVATE | InternalReflectionMethod::IS_PROTECTED))) {
-			$this->modifiers |= InternalReflectionMethod::IS_PUBLIC;
-		}
-		return $this;
-	}
-
-
-	/**
-	 * Parses internal PHP method modifiers (abstract, final, public, ...).
-	 *
-	 * @return ReflectionMethod
-	 */
-	private function parseInternalModifiers(ReflectionClass $class)
-	{
-		$name = strtolower($this->name);
-		if ('__construct' === $name || ( ! $class->inNamespace() && strtolower($class->getShortName()) === $name)) {
-			$this->modifiers |= self::IS_CONSTRUCTOR;
-		} elseif ('__destruct' === $name) {
-			$this->modifiers |= self::IS_DESTRUCTOR;
-		} elseif ('__clone' === $name) {
-			$this->modifiers |= self::IS_CLONE;
-		}
-		if ($class->isInterface()) {
-			$this->modifiers |= InternalReflectionMethod::IS_ABSTRACT;
-		} else {
-			// Can be called statically, see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_API.c?revision=309853&view=markup#l1795
-			static $notAllowed = ['__clone' => TRUE, '__tostring' => TRUE, '__get' => TRUE, '__set' => TRUE, '__isset' => TRUE, '__unset' => TRUE];
-			if ( ! $this->isStatic() && !$this->isConstructor() && !$this->isDestructor() && !isset($notAllowed[$name])) {
-				$this->modifiers |= self::IS_ALLOWED_STATIC;
-			}
-		}
-		return $this;
+		$this->modifiers = $this->methodParser->parseBaseModifiers();
+		$this->returnsReference = $this->methodParser->parseReturnReference();
+		$this->name = $this->methodParser->parseName();
+		$this->modifiers = $this->methodParser->parseInternalModifiers($this->modifiers);
 	}
 
 }
