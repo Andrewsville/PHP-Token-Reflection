@@ -1270,7 +1270,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 		}
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
-		return parent::processParent($parent, $tokenStream);
+//		return parent::processParent($parent, $tokenStream);
 	}
 
 

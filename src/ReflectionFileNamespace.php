@@ -94,7 +94,7 @@ class ReflectionFileNamespace extends ReflectionElement
 		if ( ! $parent instanceof ReflectionFile) {
 			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFile.', ParseException::INVALID_PARENT);
 		}
-		return parent::processParent($parent, $tokenStream);
+//		return parent::processParent($parent, $tokenStream);
 	}
 
 

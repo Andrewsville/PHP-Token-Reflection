@@ -11,7 +11,8 @@
 	"require": {
 		"php": ">=5.4",
 		"nikic/php-parser": "~1.0",
-		"nette/finder": "~2.2"
+		"nette/finder": "~2.2",
+		"ext-tokenizer": "*"
 	},
 	"require-dev": {
 		"zenify/coding-standard": "~3.0"

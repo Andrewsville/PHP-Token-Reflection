@@ -44,20 +44,16 @@ abstract class ReflectionBase implements IReflection, Annotations
 	/**
 	 * @var Broker
 	 */
-	private $broker;
+	protected $broker;
 
 
 	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
 		$this->broker = $broker;
-		$this->parseStream($tokenStream, $parent);
+		if (method_exists($this, 'parseStream')) {
+			$this->parseStream($tokenStream, $parent);
+		}
 	}
-
-
-	/**
-	 * Parses the token substream.
-	 */
-	abstract protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL);
 
 
 	/**

@@ -437,7 +437,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 		if ($parent instanceof ReflectionMethod) {
 			$this->declaringClassName = $parent->getDeclaringClassName();
 		}
-		return parent::processParent($parent, $tokenStream);
+//		return parent::processParent($parent, $tokenStream);
 	}
 
 

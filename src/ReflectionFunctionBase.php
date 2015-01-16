@@ -92,9 +92,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 
 
 	/**
-	 * Returns if the function/method is defined within a namespace.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function inNamespace()
 	{

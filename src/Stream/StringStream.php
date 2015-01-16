@@ -23,7 +23,6 @@ class StringStream extends StreamBase
 	 */
 	public function __construct($source, $fileName)
 	{
-		parent::__construct();
 		$this->fileName = $fileName;
 		$this->processSource($source);
 	}

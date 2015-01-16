@@ -27,7 +27,6 @@ class FileStream extends StreamBase
 	 */
 	public function __construct($fileName)
 	{
-		parent::__construct();
 		$this->fileName = Broker::getRealPath($fileName);
 		if (FALSE === $this->fileName) {
 			throw new StreamException($this, 'File does not exist.', StreamException::DOES_NOT_EXIST);

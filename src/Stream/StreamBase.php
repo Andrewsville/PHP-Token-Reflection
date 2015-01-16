@@ -54,19 +54,6 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 
 
 	/**
-	 * Protected to ensure that the concrete implementation will override it.
-	 *
-	 * @throws StreamException If tokenizer PHP extension is missing.
-	 */
-	protected function __construct()
-	{
-		if ( ! extension_loaded('tokenizer')) {
-			throw new StreamException($this, 'The tokenizer PHP extension is not loaded.', StreamException::PHP_EXT_MISSING);
-		}
-	}
-
-
-	/**
 	 * Extracts tokens from a source code.
 	 *
 	 * @param string $source

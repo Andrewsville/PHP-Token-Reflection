@@ -535,7 +535,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 		if ($parent->isTrait()) {
 			$this->declaringTraitName = $parent->getName();
 		}
-		return parent::processParent($parent, $tokenStream);
+//		return parent::processParent($parent, $tokenStream);
 	}
 
 
