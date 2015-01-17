@@ -1,17 +1,13 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests;
+namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
-use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\Reflection\ReflectionFunction;
+use ApiGen\TokenReflection\Tests\TestCase;
 use ReflectionFunction as InternalReflectionFunction;
 
 
-/**
- * Function test.
- */
 class ReflectionFunctionTest extends TestCase
 {
 

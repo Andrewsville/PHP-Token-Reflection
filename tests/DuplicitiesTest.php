@@ -9,8 +9,6 @@ class DuplicitiesTest extends TestCase
 {
 
 	/**
-	 * Element type.
-	 *
 	 * @var string
 	 */
 	protected $type = 'duplicities';

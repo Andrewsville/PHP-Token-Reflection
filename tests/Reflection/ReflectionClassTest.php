@@ -1,12 +1,13 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests;
+namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Tests\TestCase;
 use ReflectionClass as InternalReflectionClass;
 use TokenReflection_Test_ClassInstances;
 

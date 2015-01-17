@@ -1,9 +1,10 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests;
+namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Php\ReflectionParameter;
+use ApiGen\TokenReflection\Tests\TestCase;
 use ReflectionParameter as InternalReflectionParameter;
 
 

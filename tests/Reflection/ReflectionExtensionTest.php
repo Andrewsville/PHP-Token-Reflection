@@ -1,9 +1,10 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests;
+namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
+use ApiGen\TokenReflection\Tests\TestCase;
 
 
 class ReflectionExtensionTest extends TestCase

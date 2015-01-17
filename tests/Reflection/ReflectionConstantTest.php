@@ -1,13 +1,12 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests;
+namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\Php\ReflectionClass;
-use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\Reflection\ReflectionConstant;
+use ApiGen\TokenReflection\Tests\TestCase;
 
 
 class ReflectionConstantTest extends TestCase

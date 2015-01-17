@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests;
+namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
@@ -8,6 +8,8 @@ use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
 use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
 use ApiGen\TokenReflection\Reflection\ReflectionMethod;
+use ApiGen\TokenReflection\Tests\ApiGen;
+use ApiGen\TokenReflection\Tests\TestCase;
 use ReflectionMethod as InternalReflectionMethod;
 
 
