@@ -105,10 +105,9 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	 */
 	public function getClasses()
 	{
-		if (NULL === $this->classes) {
-			$broker = $this->broker;
-			$this->classes = array_map(function ($className) use ($broker) {
-				return $broker->getClass($className);
+		if ($this->classes === NULL) {
+			$this->classes = array_map(function ($className) {
+				return $this->broker->getClass($className);
 			}, $this->getClassNames());
 		}
 		return $this->classes;
@@ -121,7 +120,7 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	public function getConstant($name)
 	{
 		$constants = $this->getConstants();
-		return isset($constants[$name]) ? $constants[$name] : FALSE;
+		return isset($constants[$name]) ? $constants[$name] : NULL;
 	}
 
 
@@ -140,10 +139,9 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	 */
 	public function getConstantReflections()
 	{
-		if (NULL === $this->constants) {
-			$broker = $this->broker;
-			$this->constants = array_map(function ($constantName) use ($broker) {
-				return $broker->getConstant($constantName);
+		if ($this->constants === NULL) {
+			$this->constants = array_map(function ($constantName) {
+				return $this->broker->getConstant($constantName);
 			}, array_keys($this->getConstants()));
 		}
 		return $this->constants;
@@ -165,13 +163,12 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	 */
 	public function getFunctions()
 	{
-		if (NULL === $this->functions) {
-			$broker = $this->broker;
-			$this->classes = array_map(function ($functionName) use ($broker) {
-				return $broker->getFunction($functionName);
+		if ($this->functions === NULL) {
+			$this->classes = array_map(function ($functionName) {
+				return $this->broker->getFunction($functionName);
 			}, array_keys(parent::getFunctions()));
 		}
-		return $this->functions;
+		return (array) $this->functions;
 	}
 
 
@@ -203,8 +200,6 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 
 
 	/**
-	 * Creates a reflection instance.
-	 *
 	 * @return ReflectionExtension
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
@@ -215,7 +210,7 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		if ( ! isset($cache[$internalReflection->getName()])) {
-			$cache[$internalReflection->getName()] = new self($internalReflection->getName(), $broker);
+			return new self($internalReflection->getName(), $broker);
 		}
 		return $cache[$internalReflection->getName()];
 	}
