@@ -785,41 +785,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	/**
 	 * {@inheritdoc}
 	 */
-	public function newInstanceWithoutConstructor()
-	{
-		if ( ! class_exists($this->name, TRUE)) {
-			throw new RuntimeException('Could not create an instance; class does not exist.', RuntimeException::DOES_NOT_EXIST, $this);
-		}
-		$reflection = new Php\ReflectionClass($this->name, $this->getBroker());
-		return $reflection->newInstanceWithoutConstructor();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function newInstance($args)
-	{
-		return $this->newInstanceArgs(func_get_args());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function newInstanceArgs(array $args = [])
-	{
-		if ( ! class_exists($this->name, TRUE)) {
-			throw new RuntimeException('Could not create an instance of class; class does not exist.', RuntimeException::DOES_NOT_EXIST, $this);
-		}
-		$reflection = new InternalReflectionClass($this->name);
-		return $reflection->newInstanceArgs($args);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function setStaticPropertyValue($name, $value)
 	{
 		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);

@@ -163,20 +163,6 @@ class ReflectionClassTest extends TestCase
 		}
 
 		require_once $this->getFilePath('dummy');
-
-		foreach ($reflections as $className => $reflection) {
-			$instance = $reflection->newInstance(NULL);
-			$this->assertTrue($reflection->isInstance($instance));
-			$this->assertTrue($instance->wasConstrustorCalled());
-
-			$instance = $reflection->newInstanceArgs([]);
-			$this->assertTrue($reflection->isInstance($instance));
-			$this->assertTrue($instance->wasConstrustorCalled());
-
-			$instance = $reflection->newInstanceWithoutConstructor();
-			$this->assertTrue($reflection->isInstance($instance));
-			$this->assertFalse($instance->wasConstrustorCalled());
-		}
 	}
 
 
@@ -276,39 +262,6 @@ class ReflectionClassTest extends TestCase
 	public function testDummyClassIsInstance()
 	{
 		$this->getDummyClassReflection()->isInstance(TRUE);
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to instantiate a non existent class.
-	 *
-	 * @expectedException RuntimeException
-	 */
-	public function testDummyNewInstanceWithoutConstructor()
-	{
-		$this->getDummyClassReflection()->newInstanceWithoutConstructor();
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to instantiate a non existent class.
-	 *
-	 * @expectedException RuntimeException
-	 */
-	public function testDummyNewInstance()
-	{
-		$this->getDummyClassReflection()->newInstance(NULL);
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to instantiate a non existent class.
-	 *
-	 * @expectedException RuntimeException
-	 */
-	public function testDummyNewInstanceArgs()
-	{
-		$this->getDummyClassReflection()->newInstanceArgs();
 	}
 
 
@@ -452,29 +405,6 @@ class ReflectionClassTest extends TestCase
 	public function testInternalClassUsesTrait3()
 	{
 		$this->getInternalClassReflection()->usesTrait('Exception');
-	}
-
-
-	/**
-	 * Tests an exception thrown when it is impossible to create an instance without invoking the constructor.
-	 *
-	 * @expectedException RuntimeException
-	 */
-	public function testInternalClassNewInstanceWithoutConstructor1()
-	{
-		$this->getInternalClassReflection()->newInstanceWithoutConstructor();
-	}
-
-
-	/**
-	 * Tests an exception thrown when it is impossible to create an instance without invoking the constructor.
-	 *
-	 * @expectedException RuntimeException
-	 */
-	public function testInternalClassNewInstanceWithoutConstructor2()
-	{
-		$reflection = new ReflectionClass('ApiGen\TokenReflection\Exception\RuntimeException', $this->getBroker());
-		$reflection->newInstanceWithoutConstructor();
 	}
 
 
@@ -871,11 +801,6 @@ class ReflectionClassTest extends TestCase
 		$this->assertTrue($rfl->token->isInstance(new \TokenReflection_Test_ClassInstancesChild(1)));
 		$this->assertSame($rfl->internal->isInstance(new \Exception()), $rfl->token->isInstance(new \Exception()));
 		$this->assertFalse($rfl->token->isInstance(new \Exception()));
-
-		$this->assertEquals($rfl->internal->newInstance(1), $rfl->token->newInstance(1));
-		$this->assertInstanceOf($this->getClassName('instances'), $rfl->token->newInstance(1));
-		$this->assertEquals($rfl->internal->newInstanceArgs([1]), $rfl->token->newInstanceArgs([1]));
-		$this->assertInstanceOf($this->getClassName('instances'), $rfl->token->newInstanceArgs([1]));
 	}
 
 
@@ -1330,57 +1255,6 @@ class ReflectionClassTest extends TestCase
 			}
 			$this->assertSame($definition[5], count($reflection->getTraitMethods()), $className);
 		}
-	}
-
-
-	/**
-	 * Tests creating class instances without calling the constructor.
-	 */
-	public function testNewInstanceWithoutConstructor()
-	{
-		require_once $this->getFilePath('newInstanceWithoutConstructor');
-		$this->getBroker()->process($this->getFilePath('newInstanceWithoutConstructor'));
-
-		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor1');
-		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token);
-
-		try {
-			$token->newInstanceWithoutConstructor();
-			$this->fail('TokenReflection\Exception\RuntimeException expected.');
-		} catch (\Exception $e) {
-			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
-
-			if ($e->getCode() !== RuntimeException::UNSUPPORTED) {
-				throw $e;
-			}
-		}
-
-		$token = $this->getBroker()->getClass('Exception');
-		$this->assertInstanceOf('ApiGen\TokenReflection\Php\ReflectionClass', $token);
-
-		try {
-			$token->newInstanceWithoutConstructor();
-			$this->fail('ApiGen\TokenReflection\Exception\RuntimeException expected.');
-		} catch (\Exception $e) {
-			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
-
-			if ($e->getCode() !== RuntimeException::UNSUPPORTED) {
-				throw $e;
-			}
-		}
-
-		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
-		$internal = new \ReflectionClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
-		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token);
-
-		$instance = $token->newInstanceWithoutConstructor();
-		$this->assertFalse($instance->check);
-
-		$instance2 = $token->newInstanceArgs();
-		$this->assertTrue($instance2->check);
-
-		// Try the internal reflection
-		$this->assertEquals($internal->newInstanceWithoutConstructor(), $token->newInstanceWithoutConstructor());
 	}
 
 

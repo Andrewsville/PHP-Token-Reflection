@@ -620,36 +620,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 
 
 	/**
-	 * Creates a new class instance without using a constructor.
-	 *
-	 * @return object
-	 * @throws RuntimeException If the class inherits from an internal class.
-	 */
-	function newInstanceWithoutConstructor();
-
-
-	/**
-	 * Creates a new instance using variable number of parameters.
-	 *
-	 * Use any number of constructor parameters as function parameters.
-	 *
-	 * @param mixed $args
-	 * @return object
-	 */
-	function newInstance($args);
-
-
-	/**
-	 * Creates a new instance using an array of parameters.
-	 *
-	 * @param array $args Array of constructor parameters
-	 * @return object
-	 * @throws RuntimeException If the required class does not exist.
-	 */
-	function newInstanceArgs(array $args = []);
-
-
-	/**
 	 * Sets a static property value.
 	 *
 	 * @param string $name Property name

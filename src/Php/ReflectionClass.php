@@ -717,23 +717,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function newInstanceWithoutConstructor()
-	{
-		if ($this->isInternal()) {
-			throw new RuntimeException('Could not create an instance; only user defined classes can be instantiated.', RuntimeException::UNSUPPORTED, $this);
-		}
-		foreach ($this->getParentClasses() as $parent) {
-			if ($parent->isInternal()) {
-				throw new RuntimeException('Could not create an instance; only user defined classes can be instantiated.', RuntimeException::UNSUPPORTED, $this);
-			}
-		}
-		return parent::newInstanceWithoutConstructor();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getPrettyName()
 	{
 		return $this->getName();
