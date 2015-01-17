@@ -112,7 +112,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function isException()
 	{
-		return 'Exception' === $this->getName() || $this->isSubclassOf('Exception');
+		return $this->getName() === 'Exception' || $this->isSubclassOf('Exception');
 	}
 
 
@@ -189,9 +189,8 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getParentClasses()
 	{
-		$broker = $this->broker;
-		return array_map(function ($className) use ($broker) {
-			return $broker->getClass($className);
+		return array_map(function ($className) {
+			return $this->broker->getClass($className);
 		}, $this->getParentClassNameList());
 	}
 
@@ -225,8 +224,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 			}
 			$interfaceName = $interface;
 		}
-		$interfaces = $this->getInterfaces();
-		return isset($interfaces[$interfaceName]);
+		return isset($this->getInterfaces()[$interfaceName]);
 	}
 
 
@@ -235,14 +233,13 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getInterfaces()
 	{
-		if (NULL === $this->interfaces) {
-			$broker = $this->broker;
+		if ($this->interfaces === NULL) {
 			$interfaceNames = $this->getInterfaceNames();
 			if (empty($interfaceNames)) {
 				$this->interfaces = [];
 			} else {
-				$this->interfaces = array_combine($interfaceNames, array_map(function ($interfaceName) use ($broker) {
-					return $broker->getClass($interfaceName);
+				$this->interfaces = array_combine($interfaceNames, array_map(function ($interfaceName) {
+					return $this->broker->getClass($interfaceName);
 				}, $interfaceNames));
 			}
 		}
@@ -307,7 +304,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public function getMethod($name)
 	{
 		foreach ($this->getMethods() as $method) {
-			if ($method->getName() === $name) {
+			if ($name === $method->getName()) {
 				return $method;
 			}
 		}
@@ -320,13 +317,12 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getMethods($filter = NULL)
 	{
-		if (NULL === $this->methods) {
-			$broker = $this->broker;
-			$this->methods = array_map(function (InternalReflectionMethod $method) use ($broker) {
-				return ReflectionMethod::create($method, $broker);
+		if ($this->methods === NULL) {
+			$this->methods = array_map(function (InternalReflectionMethod $method) {
+				return ReflectionMethod::create($method, $this->broker);
 			}, parent::getMethods());
 		}
-		if (NULL === $filter) {
+		if ($filter === NULL) {
 			return $this->methods;
 		}
 		return array_filter($this->methods, function (ReflectionMethod $method) use ($filter) {
@@ -354,9 +350,8 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getOwnMethods($filter = NULL)
 	{
-		$me = $this->getName();
-		return array_filter($this->getMethods($filter), function (ReflectionMethod $method) use ($me) {
-			return $method->getDeclaringClass()->getName() === $me;
+		return array_filter($this->getMethods($filter), function (ReflectionMethod $method) {
+			return $this->getName() === $method->getDeclaringClass()->getName();
 		});
 	}
 
@@ -396,7 +391,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getConstantReflections()
 	{
-		if (NULL === $this->constants) {
+		if ($this->constants === NULL) {
 			$this->constants = [];
 			foreach ($this->getConstants() as $name => $value) {
 				$this->constants[$name] = $this->getConstantReflection($name);
@@ -411,8 +406,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function hasOwnConstant($name)
 	{
-		$constants = $this->getOwnConstants();
-		return isset($constants[$name]);
+		return isset($this->getOwnConstants()[$name]);
 	}
 
 
@@ -457,13 +451,12 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getProperties($filter = NULL)
 	{
-		if (NULL === $this->properties) {
-			$broker = $this->broker;
-			$this->properties = array_map(function (InternalReflectionProperty $property) use ($broker) {
-				return ReflectionProperty::create($property, $broker);
+		if ($this->properties === NULL) {
+			$this->properties = array_map(function (InternalReflectionProperty $property) {
+				return ReflectionProperty::create($property, $this->broker);
 			}, parent::getProperties());
 		}
-		if (NULL === $filter) {
+		if ($filter === NULL) {
 			return $this->properties;
 		}
 		return array_filter($this->properties, function (ReflectionProperty $property) use ($filter) {
@@ -491,9 +484,8 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getOwnProperties($filter = NULL)
 	{
-		$me = $this->getName();
-		return array_filter($this->getProperties($filter), function (ReflectionProperty $property) use ($me) {
-			return $property->getDeclaringClass()->getName() === $me;
+		return array_filter($this->getProperties($filter), function (ReflectionProperty $property) {
+			return $property->getDeclaringClass()->getName() === $this->getName();
 		});
 	}
 
@@ -530,14 +522,11 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getDirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
-			$that
-		) {
-			if ( ! $class->isSubclassOf($that)) {
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
-			return NULL === $class->getParentClassName() || !$class->getParentClass()->isSubClassOf($that);
+			return $class->getParentClassName() === NULL || ! $class->getParentClass()->isSubClassOf($this->name);
 		});
 	}
 
@@ -556,14 +545,11 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getIndirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
-			$that
-		) {
-			if ( ! $class->isSubclassOf($that)) {
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
-			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($that);
+			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($this->name);
 		});
 	}
 
@@ -585,14 +571,11 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
-			$that
-		) {
-			if ( ! $class->implementsInterface($that)) {
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+			if ( ! $class->implementsInterface($this->name)) {
 				return FALSE;
 			}
-			return NULL === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($that);
+			return $class->getParentClassName() === NULL || !$class->getParentClass()->implementsInterface($this->name);
 		});
 	}
 
@@ -614,14 +597,11 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
-			$that
-		) {
-			if ( ! $class->implementsInterface($that)) {
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+			if ( ! $class->implementsInterface($this->name)) {
 				return FALSE;
 			}
-			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($that);
+			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($this->name);
 		});
 	}
 
@@ -676,8 +656,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getOwnTraits()
 	{
-		$parent = $this->getParentClass();
-		return $parent ? array_diff_key($this->getTraits(), $parent->getTraits()) : $this->getTraits();
+		return [];
 	}
 
 
@@ -686,7 +665,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getOwnTraitNames()
 	{
-		return array_keys($this->getOwnTraits());
+		return [];
 	}
 
 
@@ -695,7 +674,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function usesTrait($trait)
 	{
-		// There are no PHP internal traits.
 		return FALSE;
 	}
 
