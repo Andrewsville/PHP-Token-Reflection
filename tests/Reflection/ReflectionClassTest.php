@@ -21,9 +21,6 @@ class ReflectionClassTest extends TestCase
 	protected $type = 'class';
 
 
-	/**
-	 * Tests the dummy class reflection interface.
-	 */
 	public function testDummyClass()
 	{
 		static $classNames = [

@@ -20,7 +20,7 @@ use ReflectionFunction as InternalReflectionFunction;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionFunction extends InternalReflectionFunction implements IReflection, ReflectionFunctionInterface, Annotations
+class ReflectionFunction extends InternalReflectionFunction implements ReflectionInterface, ReflectionFunctionInterface, Annotations
 {
 
 	/**
@@ -145,24 +145,6 @@ class ReflectionFunction extends InternalReflectionFunction implements IReflecti
 	public function getNamespaceAliases()
 	{
 		return [];
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
 	}
 
 

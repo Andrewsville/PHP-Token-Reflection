@@ -23,7 +23,7 @@ use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-class ReflectionClass extends InternalReflectionClass implements IReflection, ReflectionClassInterface, Annotations
+class ReflectionClass extends InternalReflectionClass implements ReflectionInterface, ReflectionClassInterface, Annotations
 {
 
 	/**
@@ -668,24 +668,6 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, Re
 	public function getBroker()
 	{
 		return $this->broker;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
 	}
 
 

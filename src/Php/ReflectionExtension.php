@@ -17,7 +17,7 @@ use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use Reflector, ReflectionExtension as InternalReflectionExtension;
 
 
-class ReflectionExtension extends InternalReflectionExtension implements IReflection, ReflectionExtensionInterface
+class ReflectionExtension extends InternalReflectionExtension implements ReflectionInterface, ReflectionExtensionInterface
 {
 
 	/**
@@ -203,24 +203,6 @@ class ReflectionExtension extends InternalReflectionExtension implements IReflec
 	public function getBroker()
 	{
 		return $this->broker;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
 	}
 
 

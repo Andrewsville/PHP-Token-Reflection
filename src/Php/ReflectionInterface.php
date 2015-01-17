@@ -14,14 +14,11 @@ use ApiGen\TokenReflection\Broker\Broker;
 use Reflector;
 
 
-/**
- * Common interface for all internal reflection classes.
- */
-interface IReflection extends TokenReflection\ReflectionInterface
+interface ReflectionInterface extends TokenReflection\ReflectionInterface
 {
 
 	/**
-	 * @return IReflection
+	 * @return ReflectionInterface
 	 */
 	static function create(Reflector $internalReflection, Broker $broker);
 

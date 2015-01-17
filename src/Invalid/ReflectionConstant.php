@@ -348,22 +348,4 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 		return FALSE;
 	}
 
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionBase::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionBase::exists($this, $key);
-	}
-
 }

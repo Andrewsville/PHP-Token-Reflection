@@ -407,22 +407,4 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 		return $this->broker;
 	}
 
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
-	}
-
 }

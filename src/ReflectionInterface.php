@@ -62,22 +62,4 @@ interface ReflectionInterface
 	 */
 	function getBroker();
 
-
-	/**
-	 * Magic __get method.
-	 *
-	 * @param string $key Variable name
-	 * @return mixed
-	 */
-	function __get($key);
-
-
-	/**
-	 * Magic __isset method.
-	 *
-	 * @param string $key Variable name
-	 * @return bool
-	 */
-	function __isset($key);
-
 }

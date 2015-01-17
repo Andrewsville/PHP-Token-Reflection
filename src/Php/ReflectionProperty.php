@@ -18,7 +18,7 @@ use Reflector;
 use ReflectionProperty as InternalReflectionProperty;
 
 
-class ReflectionProperty extends InternalReflectionProperty implements IReflection, ReflectionPropertyInterface, Annotations
+class ReflectionProperty extends InternalReflectionProperty implements ReflectionInterface, ReflectionPropertyInterface, Annotations
 {
 
 	/**
@@ -273,24 +273,6 @@ class ReflectionProperty extends InternalReflectionProperty implements IReflecti
 	public function getPrettyName()
 	{
 		return sprintf('%s::$%s', $this->getDeclaringClassName(), $this->getName());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
 	}
 
 

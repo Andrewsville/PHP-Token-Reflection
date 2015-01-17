@@ -20,7 +20,7 @@ use ReflectionMethod as InternalReflectionMethod;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionMethod extends InternalReflectionMethod implements IReflection, ReflectionMethodInterface, Annotations
+class ReflectionMethod extends InternalReflectionMethod implements ReflectionInterface, ReflectionMethodInterface, Annotations
 {
 
 	/**
@@ -205,24 +205,6 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getOriginalName()
 	{
 		return NULL;
@@ -284,7 +266,7 @@ class ReflectionMethod extends InternalReflectionMethod implements IReflection, 
 
 
 	/**
-	 * @return IReflection
+	 * @return ReflectionInterface
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)

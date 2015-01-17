@@ -20,7 +20,7 @@ use ReflectionParameter as InternalReflectionParameter;
 use ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
 
 
-class ReflectionParameter extends InternalReflectionParameter implements IReflection, ReflectionParameterInterface, Annotations
+class ReflectionParameter extends InternalReflectionParameter implements ReflectionInterface, ReflectionParameterInterface, Annotations
 {
 
 	/**
@@ -302,24 +302,6 @@ class ReflectionParameter extends InternalReflectionParameter implements IReflec
 	public function isVariadic()
 	{
 		return PHP_VERSION_ID >= 50600 && parent::isVariadic();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
 	}
 
 

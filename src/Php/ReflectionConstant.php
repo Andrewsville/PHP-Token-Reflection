@@ -21,7 +21,7 @@ use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use Reflector;
 
 
-class ReflectionConstant implements IReflection, ReflectionConstantInterface, Annotations
+class ReflectionConstant implements ReflectionInterface, ReflectionConstantInterface, Annotations
 {
 
 	/**
@@ -358,24 +358,6 @@ class ReflectionConstant implements IReflection, ReflectionConstantInterface, An
 	public function isValid()
 	{
 		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($key)
-	{
-		return ReflectionElement::get($this, $key);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($key)
-	{
-		return ReflectionElement::exists($this, $key);
 	}
 
 

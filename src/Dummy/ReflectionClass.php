@@ -9,20 +9,16 @@
 
 namespace ApiGen\TokenReflection\Dummy;
 
-use ApiGen;
-use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\ReflectionClass as PhpReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionBase;
-use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ReflectionClass as InternalReflectionClass;
-use ApiGen\TokenReflection\Exception;
 
 
-/**
- * Dummy class "reflection" of a nonexistent class.
- */
 class ReflectionClass implements ReflectionClassInterface
 {
 
@@ -134,12 +130,12 @@ class ReflectionClass implements ReflectionClassInterface
 
 
 	/**
-	 * @return \ApiGen\TokenReflection\Reflection\ReflectionFile
+	 * @return ReflectionFile
 	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
 	{
-		throw new Exception\BrokerException($this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), Exception\BrokerException::UNSUPPORTED);
+		throw new BrokerException($this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), BrokerException::UNSUPPORTED);
 	}
 
 
@@ -797,7 +793,7 @@ class ReflectionClass implements ReflectionClassInterface
 		if ( ! class_exists($this->name, TRUE)) {
 			throw new RuntimeException('Could not create an instance; class does not exist.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
-		$reflection = new ApiGen\TokenReflection\Php\ReflectionClass($this->name, $this->getBroker());
+		$reflection = new PhpReflectionClass($this->name, $this->getBroker());
 		return $reflection->newInstanceWithoutConstructor();
 	}
 
@@ -893,26 +889,6 @@ class ReflectionClass implements ReflectionClassInterface
 	public function getBroker()
 	{
 		return $this->broker;
-	}
-
-
-	/**
-	 * @param string $key
-	 * @return mixed
-	 */
-	public function __get($key)
-	{
-		return ReflectionBase::get($this, $key);
-	}
-
-
-	/**
-	 * @param string $key
-	 * @return bool
-	 */
-	public function __isset($key)
-	{
-		return ReflectionBase::exists($this, $key);
 	}
 
 }

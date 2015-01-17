@@ -1274,7 +1274,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		}
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
-//		return parent::processParent($parent, $tokenStream);
 	}
 
 
