@@ -285,11 +285,9 @@ class ReflectionParameterTest extends TestCase
 			$this->assertSame($constantName, $tokenParameter->getDefaultValueConstantName(), $parameter->getName());
 			$this->assertSame($value, $tokenParameter->getDefaultValue(), $parameter->getName());
 
-			if (PHP_VERSION_ID >= 50406) {
-				$this->assertSame($parameter->isDefaultValueConstant(), $tokenParameter->isDefaultValueConstant(), $parameter->getName());
-				$this->assertSame($parameter->getDefaultValueConstantName(), $tokenParameter->getDefaultValueConstantName(), $parameter->getName());
-				$this->assertSame($parameter->getDefaultValue(), $tokenParameter->getDefaultValue(), $parameter->getName());
-			}
+			$this->assertSame($parameter->isDefaultValueConstant(), $tokenParameter->isDefaultValueConstant(), $parameter->getName());
+			$this->assertSame($parameter->getDefaultValueConstantName(), $tokenParameter->getDefaultValueConstantName(), $parameter->getName());
+			$this->assertSame($parameter->getDefaultValue(), $tokenParameter->getDefaultValue(), $parameter->getName());
 		}
 	}
 

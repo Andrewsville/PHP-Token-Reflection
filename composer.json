@@ -9,7 +9,7 @@
 		{ "name": "Jaroslav Hanslík", "homepage": "https://github.com/kukulich" }
 	],
 	"require": {
-		"php": ">=5.4",
+		"php": ">=5.4.6",
 		"nikic/php-parser": "~1.0",
 		"nette/finder": "~2.2",
 		"ext-tokenizer": "*",

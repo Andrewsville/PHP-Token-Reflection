@@ -94,14 +94,6 @@ interface ReflectionParameterInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns if the default value is defined by a constant.
-	 *
-	 * @return bool
-	 */
-	function isDefaultValueConstant();
-
-
-	/**
 	 * Returns the name of the default value constant.
 	 *
 	 * @return string

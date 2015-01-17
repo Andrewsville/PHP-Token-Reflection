@@ -71,10 +71,21 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
+	/**
+	 * @expectedException \ReflectionException
+	 */
 	public function testDefaultValue()
 	{
-		$this->assertFalse($this->internalReflectionParameter->isDefaultValueConstant());
-		$this->assertNull($this->internalReflectionParameter->getDefaultValueConstantName());
+		$this->internalReflectionParameter->getDefaultValueConstantName();
+	}
+
+
+	/**
+	 * @expectedException \ReflectionException
+	 */
+	public function testIsDefaultValue()
+	{
+		$this->internalReflectionParameter->isDefaultValueConstant();
 	}
 
 

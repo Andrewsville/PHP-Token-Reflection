@@ -24,8 +24,6 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 {
 
 	/**
-	 * Determined if the parameter (along with the function/method) is user defined.
-	 *
 	 * @var bool
 	 */
 	private $userDefined;
@@ -194,21 +192,12 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	/**
 	 * {@inheritdoc}
 	 */
-	public function isDefaultValueConstant()
-	{
-		return PHP_VERSION_ID >= 50406 && parent::isDefaultValueAvailable();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getDefaultValueConstantName()
 	{
 		if ( ! $this->isOptional()) {
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
-		return $this->isDefaultValueConstant() ? parent::getDefaultValueConstantName() : NULL;
+		return parent::isDefaultValueConstant() ? parent::getDefaultValueConstantName() : NULL;
 	}
 
 
