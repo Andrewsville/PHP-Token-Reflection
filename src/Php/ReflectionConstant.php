@@ -66,10 +66,10 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 
 
 	/**
-	 * @param string $name Constant name
-	 * @param mixed $value Constant value
-	 * @param Broker $broker Reflection broker
-	 * @param ReflectionClass $parent Defining class reflection
+	 * @param string $name
+	 * @param mixed $value
+	 * @param Broker $broker
+	 * @param ReflectionClass $parent
 	 * @throws RuntimeException If real parent class could not be determined.
 	 */
 	public function __construct($name, $value, Broker $broker, ReflectionClass $parent = NULL)

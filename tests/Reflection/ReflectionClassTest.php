@@ -6,7 +6,6 @@ use ApiGen;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionClass;
-use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
 use ApiGen\TokenReflection\Tests\TestCase;
 use ReflectionClass as InternalReflectionClass;
 use TokenReflection_Test_ClassInstances;
@@ -166,25 +165,17 @@ class ReflectionClassTest extends TestCase
 	}
 
 
-	/**
-	 * Tests an exception thrown when providing an invalid object.
-	 *
-	 * @expectedException RuntimeException
-	 */
 	public function testDummyClassImplementsInterface1()
 	{
-		$this->getDummyClassReflection()->implementsInterface(new \Exception());
+		$this->assertFalse($this->getDummyClassReflection()->implementsInterface('...'));
 	}
 
 
-	/**
-	 * Tests an exception thrown when providing an invalid object.
-	 *
-	 * @expectedException RuntimeException
-	 */
 	public function testDummyClassImplementsInterface2()
 	{
-		$this->getDummyClassReflection()->implementsInterface($this->getBroker()->getClass('Exception'));
+		$this->assertFalse(
+			$this->getDummyClassReflection()->implementsInterface($this->getBroker()->getClass('Exception'))
+		);
 	}
 
 
@@ -375,36 +366,11 @@ class ReflectionClassTest extends TestCase
 	}
 
 
-	/**
-	 * Tests an exception thrown when providing an invalid object.
-	 *
-	 * @expectedException RuntimeException
-	 */
 	public function testInternalClassUsesTrait1()
 	{
-		$this->getInternalClassReflection()->usesTrait(new \Exception());
-	}
-
-
-	/**
-	 * Tests an exception thrown when providing an invalid object.
-	 *
-	 * @expectedException RuntimeException
-	 */
-	public function testInternalClassUsesTrait2()
-	{
-		$this->getInternalClassReflection()->usesTrait($this->getBroker()->getClass('Exception'));
-	}
-
-
-	/**
-	 * Tests an exception thrown when providing an invalid class name.
-	 *
-	 * @expectedException RuntimeException
-	 */
-	public function testInternalClassUsesTrait3()
-	{
-		$this->getInternalClassReflection()->usesTrait('Exception');
+		$this->assertFalse($this->getInternalClassReflection()->usesTrait(new \Exception()));
+		$this->assertFalse($this->getInternalClassReflection()->usesTrait($this->getBroker()->getClass('Exception')));
+		$this->assertFalse($this->getInternalClassReflection()->usesTrait('Exception'));
 	}
 
 

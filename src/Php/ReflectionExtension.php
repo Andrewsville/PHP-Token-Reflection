@@ -12,8 +12,10 @@ namespace ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionExtensionInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
 use Reflector, ReflectionExtension as InternalReflectionExtension;
 
 
@@ -21,23 +23,17 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 {
 
 	/**
-	 * Defined classes.
-	 *
-	 * @var array
+	 * @var array|ReflectionClassInterface[]
 	 */
 	private $classes;
 
 	/**
-	 * Defined constants.
-	 *
-	 * @var array
+	 * @var array|ReflectionConstantInterface[]
 	 */
 	private $constants;
 
 	/**
-	 * Defined functions.
-	 *
-	 * @var array
+	 * @var array|ReflectionFunctionInterface[]
 	 */
 	private $functions;
 
@@ -48,8 +44,8 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 
 
 	/**
-	 * @param string $name Extension name
-	 * @param Broker $broker Reflection broker
+	 * @param string $name
+	 * @param Broker $broker
 	 */
 	public function __construct($name, Broker $broker)
 	{

@@ -25,7 +25,7 @@ class ReflectionClass implements ReflectionClassInterface
 	private $broker;
 
 	/**
-	 * Class name (FQN).
+	 * FQN class name.
 	 *
 	 * @var string
 	 */
@@ -67,7 +67,7 @@ class ReflectionClass implements ReflectionClassInterface
 	public function getShortName()
 	{
 		$pos = strrpos($this->name, '\\');
-		return FALSE === $pos ? $this->name : substr($this->name, $pos + 1);
+		return $pos === FALSE ? $this->name : substr($this->name, $pos + 1);
 	}
 
 
@@ -77,7 +77,7 @@ class ReflectionClass implements ReflectionClassInterface
 	public function getNamespaceName()
 	{
 		$pos = strrpos($this->name, '\\');
-		return FALSE === $pos ? '' : substr($this->name, 0, $pos);
+		return $pos === FALSE ? '' : substr($this->name, 0, $pos);
 	}
 
 
@@ -86,7 +86,7 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function inNamespace()
 	{
-		return FALSE !== strrpos($this->name, '\\');
+		return strrpos($this->name, '\\') !== FALSE;
 	}
 
 
@@ -132,7 +132,9 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function getFileReflection()
 	{
-		throw new BrokerException($this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), BrokerException::UNSUPPORTED);
+		throw new BrokerException(
+			$this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), BrokerException::UNSUPPORTED
+		);
 	}
 
 
@@ -173,10 +175,7 @@ class ReflectionClass implements ReflectionClassInterface
 
 
 	/**
-	 * Returns a particular annotation value.
-	 *
-	 * @param string $name Annotation name
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getAnnotation($name)
 	{
@@ -405,16 +404,6 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function implementsInterface($interface)
 	{
-		if (is_object($interface)) {
-			if ( ! $interface instanceof ReflectionClassInterface) {
-				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT, $this);
-			}
-			$interfaceName = $interface->getName();
-			if ( ! $interface->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), RuntimeException::INVALID_ARGUMENT, $this);
-			}
-		}
-		// Only validation, always returns false
 		return FALSE;
 	}
 

@@ -695,22 +695,8 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function usesTrait($trait)
 	{
-		if (is_object($trait)) {
-			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof ReflectionClassInterface) {
-				throw new RuntimeException('Parameter must be a string or an instance of trait reflection.', RuntimeException::INVALID_ARGUMENT, $this);
-			}
-			$traitName = $trait->getName();
-			if ( ! $trait->isTrait()) {
-				throw new RuntimeException(sprintf('"%s" is not a trait.', $traitName), RuntimeException::INVALID_ARGUMENT, $this);
-			}
-		} else {
-			$reflection = $this->getBroker()->getClass($trait);
-			if ( ! $reflection->isTrait()) {
-				throw new RuntimeException(sprintf('"%s" is not a trait.', $trait), RuntimeException::INVALID_ARGUMENT, $this);
-			}
-			$traitName = $trait;
-		}
-		return in_array($traitName, $this->getTraitNames());
+		// There are no PHP internal traits.
+		return FALSE;
 	}
 
 
