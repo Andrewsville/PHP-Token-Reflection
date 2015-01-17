@@ -299,12 +299,10 @@ class ReflectionFunction extends ReflectionElement implements ReflectionFunction
 	 */
 	public function getParameter($parameter)
 	{
-		if (is_numeric($parameter)) {
-			throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
-
-		} else {
-			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
-		}
+		throw new RuntimeException(
+			sprintf('There is no parameter with name or position "%s".', $parameter),
+			RuntimeException::DOES_NOT_EXIST, $this
+		);
 	}
 
 
