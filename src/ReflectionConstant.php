@@ -72,7 +72,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	public function getShortName()
 	{
 		$name = $this->getName();
-		if (NULL !== $this->namespaceName && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
+		if ($this->namespaceName !== NULL && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$name = substr($name, strlen($this->namespaceName) + 1);
 		}
 		return $name;
@@ -105,7 +105,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 */
 	public function getNamespaceName()
 	{
-		return NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
+		return $this->namespaceName === NULL || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 

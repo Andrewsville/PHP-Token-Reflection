@@ -12,7 +12,6 @@ namespace ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\ReflectionBase;
 use ApiGen\TokenReflection\ReflectionClass;
-use ApiGen\TokenReflection\ReflectionElement;
 use ApiGen\TokenReflection\ReflectionMethod;
 use ApiGen\TokenReflection\ReflectionParameter;
 use ApiGen\TokenReflection\ReflectionProperty;
