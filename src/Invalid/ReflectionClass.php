@@ -13,11 +13,8 @@ use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\ReflectionClassInterface;
-use ApiGen\TokenReflection\Php;
-use ApiGen\TokenReflection\Reflection\ReflectionBase;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
-use ReflectionClass as InternalReflectionClass;
+use ApiGen\TokenReflection\ReflectionClassInterface;
 
 
 class ReflectionClass extends ReflectionElement implements ReflectionClassInterface, Annotations
@@ -138,7 +135,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 
 
 	/**
-	 * @return \ApiGen\TokenReflection\Reflection\ReflectionFile
+	 * @return ReflectionFile
 	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()

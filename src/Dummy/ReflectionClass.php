@@ -12,11 +12,8 @@ namespace ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Php\ReflectionClass as PhpReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\ReflectionClassInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionBase;
-use ReflectionClass as InternalReflectionClass;
 
 
 class ReflectionClass implements ReflectionClassInterface
