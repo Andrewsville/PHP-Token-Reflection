@@ -413,16 +413,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function implementsInterface($interface)
 	{
-		if (is_object($interface)) {
-			if ( ! $interface instanceof ReflectionClassInterface) {
-				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT, $this);
-			}
-			$interfaceName = $interface->getName();
-			if ( ! $interface->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), RuntimeException::INVALID_ARGUMENT, $this);
-			}
-		}
-		// Only validation, always returns false
 		return FALSE;
 	}
 
@@ -736,9 +726,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 
 
 	/**
-	 * Returns names of indirect subclasses.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getIndirectSubclassNames()
 	{
