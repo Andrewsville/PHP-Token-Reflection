@@ -9,67 +9,23 @@
 
 namespace ApiGen\TokenReflection\Invalid;
 
-use ApiGen\TokenReflection\Behaviors\Annotations;
-use ApiGen\TokenReflection\Exception\BrokerException;
-use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Reflection\ReflectionBase;
-use ApiGen\TokenReflection\Reflection\ReflectionFile;
 
 
-class ReflectionConstant extends ReflectionElement implements ReflectionConstantInterface, Annotations
+class ReflectionConstant extends ReflectionElement implements ReflectionConstantInterface
 {
 
 	/**
-	 * @var string
-	 */
-	private $name;
-
-	/**
-	 * Original definition file name.
-	 *
-	 * @var string
-	 */
-	private $fileName;
-
-	/**
-	 * @var Broker
-	 */
-	private $broker;
-
-
-	/**
-	 * @param string $name Constant name
-	 * @param string $fileName Original definiton file name
-	 * @param ApiGen\TokenReflection\Broker $broker Reflection broker
+	 * @param string $name
+	 * @param string $fileName
+	 * @param Broker $broker
 	 */
 	public function __construct($name, $fileName, Broker $broker)
 	{
 		$this->name = $name;
 		$this->broker = $broker;
 		$this->fileName = $fileName;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-
-	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
-	 */
-	public function getShortName()
-	{
-		$pos = strrpos($this->name, '\\');
-		return FALSE === $pos ? $this->name : substr($this->name, $pos + 1);
 	}
 
 
@@ -94,157 +50,6 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getNamespaceName()
-	{
-		$pos = strrpos($this->name, '\\');
-		return FALSE === $pos ? '' : substr($this->name, 0, $pos);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function inNamespace()
-	{
-		return FALSE !== strpos($this->name, '\\');
-	}
-
-
-	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return null
-	 */
-	public function getExtension()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return bool
-	 */
-	public function getExtensionName()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return '';
-	}
-
-
-	/**
-	 * Returns the start position in the file token stream.
-	 *
-	 * @return int
-	 */
-	public function getStartPosition()
-	{
-		return -1;
-	}
-
-
-	/**
-	 * Returns the end position in the file token stream.
-	 *
-	 * @return int
-	 */
-	public function getEndPosition()
-	{
-		return -1;
-	}
-
-
-	/**
-	 * Returns the file name the reflection object is defined in.
-	 *
-	 * @return null
-	 */
-	public function getFileName()
-	{
-		return $this->fileName;
-	}
-
-
-	/**
-	 * Returns a file reflection.
-	 *
-	 * @return ReflectionFile
-	 * @throws RuntimeException If the file is not stored inside the broker
-	 */
-	public function getFileReflection()
-	{
-		throw new BrokerException($this->getBroker(), sprintf('Constant %s was not parsed from a file', $this->getPrettyName()), BrokerException::UNSUPPORTED);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getStartLine()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getEndLine()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getDocComment()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function hasAnnotation($name)
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getAnnotation($name)
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getAnnotations()
-	{
-		return [];
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getValue()
 	{
 		return NULL;
@@ -261,49 +66,13 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 
 
 	/**
-	 * Returns the originaly provided value definition.
+	 * Returns the originally provided value definition.
 	 *
 	 * @return string
 	 */
 	public function getOriginalValueDefinition()
 	{
 		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isInternal()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isUserDefined()
-	{
-		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isTokenized()
-	{
-		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isDeprecated()
-	{
-		return FALSE;
 	}
 
 
@@ -321,31 +90,9 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
-	{
-		return $this->broker;
-	}
-
-
-	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
-	 */
 	public function getNamespaceAliases()
 	{
 		return [];
-	}
-
-
-	/**
-	 * Returns if the constant definition is valid.
-	 *
-	 * @return bool
-	 */
-	public function isValid()
-	{
-		return FALSE;
 	}
 
 }

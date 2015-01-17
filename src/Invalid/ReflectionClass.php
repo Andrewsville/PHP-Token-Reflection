@@ -9,38 +9,17 @@
 
 namespace ApiGen\TokenReflection\Invalid;
 
-use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 
 
-class ReflectionClass extends ReflectionElement implements ReflectionClassInterface, Annotations
+class ReflectionClass extends ReflectionElement implements ReflectionClassInterface
 {
 
 	/**
-	 * @var string
-	 */
-	private $name;
-
-	/**
-	 * Original definition file name.
-	 *
-	 * @var string
-	 */
-	private $fileName;
-
-	/**
-	 * @var Broker
-	 */
-	private $broker;
-
-
-	/**
 	 * @param string $className
-	 * @param string $fileName Original definition file name
+	 * @param string $fileName
 	 * @param Broker $broker
 	 */
 	public function __construct($className, $fileName, Broker $broker)
@@ -48,15 +27,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		$this->name = ltrim($className, '\\');
 		$this->fileName = $fileName;
 		$this->broker = $broker;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName()
-	{
-		return $this->name;
 	}
 
 
@@ -72,127 +42,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getShortName()
-	{
-		$pos = strrpos($this->name, '\\');
-		return FALSE === $pos ? $this->name : substr($this->name, $pos + 1);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getNamespaceName()
-	{
-		$pos = strrpos($this->name, '\\');
-		return FALSE === $pos ? '' : substr($this->name, 0, $pos);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function inNamespace()
-	{
-		return FALSE !== strrpos($this->name, '\\');
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getNamespaceAliases()
-	{
-		return [];
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtension()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtensionName()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getFileName()
-	{
-		return $this->fileName;
-	}
-
-
-	/**
-	 * @return ReflectionFile
-	 * @throws RuntimeException If the file is not stored inside the broker
-	 */
-	public function getFileReflection()
-	{
-		throw new BrokerException($this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), BrokerException::UNSUPPORTED);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getStartLine()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getEndLine()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getDocComment()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function hasAnnotation($name)
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getAnnotation($name)
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getAnnotations()
 	{
 		return [];
 	}
@@ -330,33 +180,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	public function isIterateable()
 	{
 		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isInternal()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isUserDefined()
-	{
-		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isTokenized()
-	{
-		return TRUE;
 	}
 
 
@@ -789,71 +612,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 
 
 	/**
-	 * Outputs the reflection subject source code.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return '';
-	}
-
-
-	/**
-	 * Returns the start position in the file token stream.
-	 *
-	 * @return int
-	 */
-	public function getStartPosition()
-	{
-		return -1;
-	}
-
-
-	/**
-	 * Returns the end position in the file token stream.
-	 *
-	 * @return int
-	 */
-	public function getEndPosition()
-	{
-		return -1;
-	}
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function isComplete()
 	{
 		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isValid()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isDeprecated()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
 	}
 
 }
