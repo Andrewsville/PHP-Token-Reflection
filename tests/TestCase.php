@@ -5,6 +5,7 @@ namespace ApiGen\TokenReflection\Tests;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\ReflectionClassInterface;
 use PHPUnit_Framework_TestCase;
 
 
@@ -12,8 +13,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 {
 
 	/**
-	 * Element type.
-	 *
 	 * @var string
 	 */
 	protected $type;
@@ -123,8 +122,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns internal property reflection.
-	 *
 	 * @param string $test
 	 * @return \ReflectionProperty
 	 */
@@ -135,8 +132,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns internal function reflection.
-	 *
 	 * @param string $test
 	 * @return \ReflectionFunction
 	 */
@@ -148,8 +143,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns internal parameter reflection.
-	 *
 	 * @param string $test
 	 * @return \ReflectionParameter
 	 */
@@ -167,7 +160,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 *
 	 * @param string $test
 	 * @param bool $fromString
-	 * @return ApiGen\TokenReflection\ReflectionClass
+	 * @return ReflectionClassInterface
 	 */
 	protected function getClassTokenReflection($test, $fromString = FALSE)
 	{

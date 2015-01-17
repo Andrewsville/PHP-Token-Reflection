@@ -6,6 +6,8 @@ use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\Php\ReflectionClass;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\Tests\TestCase;
 
 
@@ -20,11 +22,9 @@ class ReflectionConstantTest extends TestCase
 	protected $type = 'constant';
 
 
-	/**
-	 * Tests getting of start and end line.
-	 */
 	public function testLines()
 	{
+		/** @var ReflectionConstantInterface $token */
 		$token = $this->getConstantTokenReflection('lines');
 
 		$this->assertSame(6, $token->getStartLine());
@@ -32,9 +32,6 @@ class ReflectionConstantTest extends TestCase
 	}
 
 
-	/**
-	 * Tests getting of documentation comment.
-	 */
 	public function testComment()
 	{
 		$rfl = $this->getClassReflection('docComment');
@@ -48,9 +45,6 @@ class ReflectionConstantTest extends TestCase
 	}
 
 
-	/**
-	 * Tests heredoc defined value.
-	 */
 	public function testHeredoc()
 	{
 		$rfl = $this->getClassReflection('heredoc');
@@ -78,9 +72,6 @@ class ReflectionConstantTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if constant is defined in namespace or in class.
-	 */
 	public function testInNamespace()
 	{
 		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
@@ -96,6 +87,7 @@ class ReflectionConstantTest extends TestCase
 		$this->assertNull($token->getDeclaringClassName());
 		$this->assertNull($token->getDeclaringClass());
 
+		/** @var ReflectionConstantInterface $token */
 		$token = $this->getConstantTokenReflection('noNamespace');
 
 		$this->assertFalse($token->inNamespace());

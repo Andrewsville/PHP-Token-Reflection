@@ -522,7 +522,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getDirectSubclasses()
 	{
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+		return array_filter($this->getInternalTokenizedClasses(), function (ReflectionClassInterface $class) {
 			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
@@ -545,7 +545,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getIndirectSubclasses()
 	{
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+		return array_filter($this->getInternalTokenizedClasses(), function (ReflectionClassInterface $class) {
 			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
@@ -571,7 +571,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+		return array_filter($this->getInternalTokenizedClasses(), function (ReflectionClassInterface $class) {
 			if ( ! $class->implementsInterface($this->name)) {
 				return FALSE;
 			}
@@ -597,7 +597,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) {
+		return array_filter($this->getInternalTokenizedClasses(), function (ReflectionClassInterface $class) {
 			if ( ! $class->implementsInterface($this->name)) {
 				return FALSE;
 			}
@@ -688,9 +688,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
-	 * Creates a reflection instance.
-	 *
-	 * @return \ApiGen\TokenReflection\Reflection\ReflectionClass|NULL
+	 * @return ApiGen\TokenReflection\Reflection\ReflectionClass|NULL
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
@@ -699,6 +697,15 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionClass expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		return $broker->getClass($internalReflection->getName());
+	}
+
+
+	/**
+	 * @return ApiGen\TokenReflection\ReflectionClassInterface[]|array
+	 */
+	private function getInternalTokenizedClasses()
+	{
+		return $this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES);
 	}
 
 }

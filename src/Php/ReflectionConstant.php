@@ -25,36 +25,26 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 {
 
 	/**
-	 * Constant name.
-	 *
 	 * @var string
 	 */
 	private $name;
 
 	/**
-	 * Name of the declaring class.
-	 *
 	 * @var string
 	 */
 	private $declaringClassName;
 
 	/**
-	 * Constant namespace name.
-	 *
 	 * @var string
 	 */
 	private $namespaceName;
 
 	/**
-	 * Constant value.
-	 *
 	 * @var mixed
 	 */
 	private $value;
 
 	/**
-	 * Determined if the constant is user defined.
-	 *
 	 * @var bool
 	 */
 	private $userDefined;
@@ -77,12 +67,12 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 		$this->name = $name;
 		$this->value = $value;
 		$this->broker = $broker;
-		if (NULL !== $parent) {
+		if ($parent !== NULL) {
 			$realParent = NULL;
 			if (array_key_exists($name, $parent->getOwnConstants())) {
 				$realParent = $parent;
 			}
-			if (NULL === $realParent) {
+			if ($realParent === NULL) {
 				foreach ($parent->getParentClasses() as $grandParent) {
 					if (array_key_exists($name, $grandParent->getOwnConstants())) {
 						$realParent = $grandParent;
@@ -90,7 +80,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 					}
 				}
 			}
-			if (NULL === $realParent) {
+			if ($realParent === NULL) {
 				foreach ($parent->getInterfaces() as $interface) {
 					if (array_key_exists($name, $interface->getOwnConstants())) {
 						$realParent = $interface;
@@ -98,14 +88,16 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 					}
 				}
 			}
-			if (NULL === $realParent) {
+			if ($realParent === NULL) {
 				throw new RuntimeException('Could not determine constant real parent class.', RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			$this->declaringClassName = $realParent->getName();
 			$this->userDefined = $realParent->isUserDefined();
+
 		} else {
 			if ( ! array_key_exists($name, get_defined_constants(FALSE))) {
 				$this->userDefined = TRUE;
+
 			} else {
 				$declared = get_defined_constants(TRUE);
 				$this->userDefined = array_key_exists($name, $declared['user']);
@@ -129,7 +121,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	public function getShortName()
 	{
 		$name = $this->getName();
-		if (NULL !== $this->namespaceName && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
+		if ($this->namespaceName !== NULL && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$name = substr($name, strlen($this->namespaceName) + 1);
 		}
 		return $name;
@@ -141,7 +133,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	 */
 	public function getDeclaringClass()
 	{
-		if (NULL === $this->declaringClassName) {
+		if ($this->declaringClassName === NULL) {
 			return NULL;
 		}
 		return $this->getBroker()->getClass($this->declaringClassName);
@@ -162,18 +154,16 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	 */
 	public function getNamespaceName()
 	{
-		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
+		return $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : (string) $this->namespaceName;
 	}
 
 
 	/**
-	 * Returns if the function/method is defined within a namespace.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function inNamespace()
 	{
-		return '' !== $this->getNamespaceName();
+		return $this->getNamespaceName() !== '';
 	}
 
 
@@ -326,7 +316,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	 */
 	public function getPrettyName()
 	{
-		return NULL === $this->declaringClassName ? $this->name : sprintf('%s::%s', $this->declaringClassName, $this->name);
+		return $this->declaringClassName === NULL ? $this->name : sprintf('%s::%s', $this->declaringClassName, $this->name);
 	}
 
 
@@ -349,11 +339,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 
 
 	/**
-	 * Returns if the constant definition is valid.
-	 *
-	 * Internal constants are always valid.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function isValid()
 	{
@@ -362,11 +348,9 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 
 
 	/**
-	 * Creates a reflection instance.
-	 *
 	 * Not supported for constants since there is no internal constant reflection.
 	 *
-	 * @return null
+	 * @return NULL
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{

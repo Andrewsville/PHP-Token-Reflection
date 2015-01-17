@@ -322,8 +322,8 @@ class Broker
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
-	 * @param string $className CLass bame
-	 * @return ApiGen\TokenReflection\ReflectionClass|null
+	 * @param string $className
+	 * @return ReflectionClassInterface|NULL
 	 */
 	public function getClass($className)
 	{
