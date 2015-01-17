@@ -4,6 +4,7 @@ namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
+use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
 use ApiGen\TokenReflection\ReflectionAnnotation;
 use ApiGen\TokenReflection\ReflectionMethod;
@@ -66,17 +67,17 @@ class ReflectionMethodTest extends TestCase
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_MethodDocCommentInheritance');
 
 		$this->assertSame($parent->token->getMethod('method1')->getAnnotations(), $rfl->token->getMethod('method1')->getAnnotations());
-		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getMethod('method1')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertSame('Protected1 long. Private1 long.', $rfl->token->getMethod('method1')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getMethod('method1')->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
+		$this->assertSame('Protected1 long. Private1 long.', $rfl->token->getMethod('method1')->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 
 		$this->assertSame($parent->token->getMethod('method2')->getAnnotations(), $rfl->token->getMethod('method2')->getAnnotations());
 		$this->assertSame($grandParent->token->getMethod('method2')->getAnnotations(), $rfl->token->getMethod('method2')->getAnnotations());
 
-		$this->assertSame('Public3 Protected3  short.', $rfl->token->getMethod('method3')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertNull($rfl->token->getMethod('method3')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame('Public3 Protected3  short.', $rfl->token->getMethod('method3')->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
+		$this->assertNull($rfl->token->getMethod('method3')->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 
 		$this->assertSame([], $rfl->token->getMethod('method4')->getAnnotations());
-		$this->assertNull($rfl->token->getMethod('method4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertNull($rfl->token->getMethod('method4')->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 
 		$this->assertSame($grandParent->token->getMethod('method1')->getAnnotation('throws'), $parent->token->getMethod('method1')->getAnnotation('throws'));
 		$this->assertSame($grandParent->token->getMethod('method1')->getAnnotation('throws'), $rfl->token->getMethod('method1')->getAnnotation('throws'));

@@ -4,6 +4,7 @@ namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\ReflectionAnnotation;
 use ReflectionClass as InternalReflectionClass;
@@ -80,8 +81,8 @@ class ReflectionClassTest extends TestCase
 
 			$this->assertFalse($class->getDocComment());
 			$this->assertSame([], $class->getAnnotations());
-			$this->assertFalse($class->hasAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-			$this->assertNull($class->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
+			$this->assertFalse($class->hasAnnotation(AnnotationParser::SHORT_DESCRIPTION));
+			$this->assertNull($class->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
 
 			$this->assertSame(0, $class->getModifiers());
 
@@ -1127,8 +1128,8 @@ class ReflectionClassTest extends TestCase
 		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
-		$this->assertSame('My Short description.', $rfl->token->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertSame('Long description. Phew, that was long.', $rfl->token->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame('My Short description.', $rfl->token->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
+		$this->assertSame('Long description. Phew, that was long.', $rfl->token->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');

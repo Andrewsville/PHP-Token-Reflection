@@ -20,13 +20,6 @@ abstract class ReflectionElement extends ReflectionBase
 {
 
 	/**
-	 * Class method cache.
-	 *
-	 * @var array
-	 */
-	private static $methodCache = [];
-
-	/**
 	 * Filename with reflection subject definition.
 	 *
 	 * @var string
@@ -67,18 +60,17 @@ abstract class ReflectionElement extends ReflectionBase
 	private $elementParser;
 
 
-	/**
-	 * @throws ParseException If an empty token stream was provided
-	 */
 	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
 	{
 		if ($tokenStream->count() === 0) {
 			throw new ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
 		}
-		$this->elementParser = new ElementParser($tokenStream, $this, $parent);
 
+		$this->elementParser = new ElementParser($tokenStream, $this, $parent);
 		$this->broker = $broker;
-		$this->parseStream($tokenStream, $parent);
+		if (method_exists($this, 'parseStream')) {
+			$this->parseStream($tokenStream, $parent);
+		}
 	}
 
 
@@ -203,42 +195,25 @@ abstract class ReflectionElement extends ReflectionBase
 	}
 
 
-	/**
-	 * Find the appropriate docblock.
-	 *
-	 * @return ReflectionElement
-	 */
 	protected function parseDocComment(StreamBase $tokenStream, IReflection $parent)
 	{
 		list($this->docComment, $this->startPosition) = $this->elementParser->parseDocComment($this->startPosition);
 	}
 
 
-	/**
-	 * Saves the start line number.
-	 *
-	 * @return ReflectionElement
-	 */
 	private function parseStartLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->startLine = $token[2];
 		$this->startPosition = $tokenStream->key();
-		return $this;
 	}
 
 
-	/**
-	 * Saves the end line number.
-	 *
-	 * @return ReflectionElement
-	 */
 	private function parseEndLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->endLine = $token[2];
 		$this->endPosition = $tokenStream->key();
-		return $this;
 	}
 
 }

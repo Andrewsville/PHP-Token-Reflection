@@ -3,6 +3,7 @@
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
+use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionProperty;
 use ApiGen\TokenReflection\ReflectionAnnotation;
 use ReflectionProperty as InternalReflectionProperty;
@@ -88,17 +89,17 @@ class ReflectionPropertyTest extends TestCase
 		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyDocCommentInheritance');
 
 		$this->assertSame($parent->token->getProperty('param1')->getAnnotations(), $rfl->token->getProperty('param1')->getAnnotations());
-		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getProperty('param1')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertSame('Protected1 long. Private1 long.', $rfl->token->getProperty('param1')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getProperty('param1')->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
+		$this->assertSame('Protected1 long. Private1 long.', $rfl->token->getProperty('param1')->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 
 		$this->assertSame($parent->token->getProperty('param2')->getAnnotations(), $rfl->token->getProperty('param2')->getAnnotations());
 		$this->assertSame($grandParent->token->getProperty('param2')->getAnnotations(), $rfl->token->getProperty('param2')->getAnnotations());
 
-		$this->assertSame('Public3 Protected3  short.', $rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertNull($rfl->token->getProperty('param3')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame('Public3 Protected3  short.', $rfl->token->getProperty('param3')->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
+		$this->assertNull($rfl->token->getProperty('param3')->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 
-		$this->assertSame('Protected4 short.', $rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::SHORT_DESCRIPTION));
-		$this->assertNull($rfl->token->getProperty('param4')->getAnnotation(ReflectionAnnotation::LONG_DESCRIPTION));
+		$this->assertSame('Protected4 short.', $rfl->token->getProperty('param4')->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
+		$this->assertNull($rfl->token->getProperty('param4')->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 		$this->assertSame(['bool'], $rfl->token->getProperty('param4')->getAnnotation('var'));
 	}
 

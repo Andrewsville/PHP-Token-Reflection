@@ -19,8 +19,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 {
 
 	/**
-	 * Function/method namespace name.
-	 *
 	 * @var string
 	 */
 	protected $namespaceName;
@@ -33,22 +31,16 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	protected $returnsReference = FALSE;
 
 	/**
-	 * Parameters.
-	 *
-	 * @var array
+	 * @var array|IReflectionParameter[]
 	 */
 	protected $parameters = [];
 
 	/**
-	 * Static variables defined within the function/method.
-	 *
 	 * @var array
 	 */
 	private $staticVariables = [];
 
 	/**
-	 * Definitions of static variables defined within the function/method.
-	 *
 	 * @var array
 	 */
 	private $staticVariablesDefinition = [];
@@ -252,42 +244,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 		}
 	}
 
-
-	/**
-	 * Parses if the function/method returns its value as reference.
-	 *
-	 * @return ReflectionFunctionBase
-	 * @throws ParseException If could not be determined if the function\method returns its value by reference.
-	 */
-	protected function parseReturnsReference(StreamBase $tokenStream)
-	{
-		if ( ! $tokenStream->is(T_FUNCTION)) {
-			throw new ParseException($this, $tokenStream, 'Could not find the function keyword.', ParseException::UNEXPECTED_TOKEN);
-		}
-		$tokenStream->skipWhitespaces(TRUE);
-		$type = $tokenStream->getType();
-		if ('&' === $type) {
-			$this->returnsReference = TRUE;
-			$tokenStream->skipWhitespaces(TRUE);
-		} elseif (T_STRING !== $type) {
-			throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
-		}
-		return $this;
-	}
-
-
-	/**
-	 * Parses the function/method name.
-	 *
-	 * @return ReflectionMethod
-	 * @throws ParseException If the class name could not be determined.
-	 */
-	protected function parseName(StreamBase $tokenStream)
-	{
-		$this->name = $tokenStream->getTokenValue();
-		$tokenStream->skipWhitespaces(TRUE);
-		return $this;
-	}
 
 
 	/**
