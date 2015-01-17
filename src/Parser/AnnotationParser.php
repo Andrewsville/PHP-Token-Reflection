@@ -10,11 +10,11 @@
 namespace ApiGen\TokenReflection\Parser;
 
 use ApiGen\TokenReflection\Behaviors\Annotations;
-use ApiGen\TokenReflection\ReflectionBase;
-use ApiGen\TokenReflection\ReflectionClass;
-use ApiGen\TokenReflection\ReflectionMethod;
-use ApiGen\TokenReflection\ReflectionParameter;
-use ApiGen\TokenReflection\ReflectionProperty;
+use ApiGen\TokenReflection\Reflection\ReflectionBase;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
+use ApiGen\TokenReflection\Reflection\ReflectionParameter;
+use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 
 
 class AnnotationParser
@@ -44,7 +44,7 @@ class AnnotationParser
 	const LONG_DESCRIPTION = ' long_description';
 
 	/**
-	 * @var ReflectionBase|ReflectionClass|ReflectionMethod|ReflectionParameter
+	 * @var \ApiGen\TokenReflection\Reflection\ReflectionBase|ReflectionClass|ReflectionMethod|ReflectionParameter
 	 */
 	private $reflection;
 
@@ -198,7 +198,7 @@ class AnnotationParser
 
 
 	/**
-	 * @return array|ReflectionClass[]|ReflectionMethod[]|ReflectionProperty[]
+	 * @return array|\ApiGen\TokenReflection\Reflection\ReflectionClass[]|ReflectionMethod[]|ReflectionProperty[]
 	 */
 	private function getParentDefinitions()
 	{
@@ -219,7 +219,7 @@ class AnnotationParser
 
 		} elseif ($this->reflection instanceof ReflectionMethod) {
 			$name = $this->reflection->getName();
-			/** @var ReflectionClass $parent */
+			/** @var \ApiGen\TokenReflection\Reflection\ReflectionClass $parent */
 			foreach ($parents as $parent) {
 				if ($parent->hasMethod($name)) {
 					$parentDefinitions[] = $parent->getMethod($name);

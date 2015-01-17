@@ -12,13 +12,13 @@ namespace ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\IReflectionConstant;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\ReflectionBase;
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionBase;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 
 
-class ReflectionConstant extends ReflectionElement implements IReflectionConstant, Annotations
+class ReflectionConstant extends ReflectionElement implements ReflectionConstantInterface, Annotations
 {
 
 	/**

@@ -6,8 +6,8 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
-use ApiGen\TokenReflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\ReflectionMethod;
+use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
 use ReflectionMethod as InternalReflectionMethod;
 
 
@@ -224,7 +224,7 @@ class ReflectionMethodTest extends TestCase
 			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_MethodDeclaringClass' . $class, $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_MethodDeclaringClass' . $class, $token->getDeclaringClassName());
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token->getDeclaringClass());
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}
 
@@ -360,7 +360,7 @@ class ReflectionMethodTest extends TestCase
 		$tokenParameters = $rfl->token->getParameters();
 		for ($i = 0; $i < count($internalParameters); $i++) {
 			$this->assertSame($internalParameters[$i]->getName(), $tokenParameters[$i]->getName());
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionParameter', $tokenParameters[$i]);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionParameter', $tokenParameters[$i]);
 		}
 
 		$rfl = $this->getMethodReflection('noParameters');
@@ -453,7 +453,7 @@ class ReflectionMethodTest extends TestCase
 		$rfl = $this->getMethodReflection('prototype');
 		$this->assertSame($rfl->internal->getPrototype()->getName(), $rfl->internal->getPrototype()->getName());
 		$this->assertSame($rfl->internal->getPrototype()->getDeclaringClass()->getName(), $rfl->internal->getPrototype()->getDeclaringClass()->getName());
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $rfl->token->getPrototype());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $rfl->token->getPrototype());
 
 		$rfl = $this->getMethodReflection('noPrototype');
 

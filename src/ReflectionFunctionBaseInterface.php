@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionFunctionBase extends IReflection
+interface ReflectionFunctionBaseInterface extends ReflectionInterface
 {
 
 	/**
@@ -32,7 +32,7 @@ interface IReflectionFunctionBase extends IReflection
 	/**
 	 * Returns the PHP extension reflection.
 	 *
-	 * @return IReflectionExtension|null
+	 * @return ReflectionExtensionInterface|null
 	 */
 	function getExtension();
 
@@ -113,7 +113,7 @@ interface IReflectionFunctionBase extends IReflection
 	 * Returns a function/method parameter.
 	 *
 	 * @param int|string $parameter Parameter name or position
-	 * @return IReflectionParameter
+	 * @return ReflectionParameterInterface
 	 */
 	function getParameter($parameter);
 

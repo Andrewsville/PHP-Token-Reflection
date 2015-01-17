@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionFunction extends IReflectionFunctionBase
+interface ReflectionFunctionInterface extends ReflectionFunctionBaseInterface
 {
 
 	/**

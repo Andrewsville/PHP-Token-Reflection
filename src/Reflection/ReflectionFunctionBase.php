@@ -7,15 +7,23 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionFunctionBaseInterface;
+use ApiGen\TokenReflection\ReflectionParameterInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
+use ApiGen\TokenReflection\Reflection\ReflectionParameter;
+use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-abstract class ReflectionFunctionBase extends ReflectionElement implements IReflectionFunctionBase
+abstract class ReflectionFunctionBase extends ReflectionElement implements ReflectionFunctionBaseInterface
 {
 
 	/**
@@ -31,7 +39,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	protected $returnsReference = FALSE;
 
 	/**
-	 * @var array|IReflectionParameter[]
+	 * @var array|ReflectionParameterInterface[]
 	 */
 	protected $parameters = [];
 
@@ -251,7 +259,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements IRefl
 	 *
 	 * @return ReflectionElement
 	 */
-	protected function parseChildren(StreamBase $tokenStream, IReflection $parent)
+	protected function parseChildren(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		return $this->parseParameters($tokenStream)
 			->parseStaticVariables($tokenStream);

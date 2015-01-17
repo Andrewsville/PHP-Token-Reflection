@@ -17,7 +17,7 @@ use Reflector;
 /**
  * Common interface for all internal reflection classes.
  */
-interface IReflection extends TokenReflection\IReflection
+interface IReflection extends TokenReflection\ReflectionInterface
 {
 
 	/**

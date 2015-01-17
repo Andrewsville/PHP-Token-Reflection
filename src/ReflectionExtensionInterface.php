@@ -10,14 +10,14 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionExtension extends IReflection
+interface ReflectionExtensionInterface extends ReflectionInterface
 {
 
 	/**
 	 * Returns a class reflection.
 	 *
 	 * @param string $name
-	 * @return IReflectionClass|NULL
+	 * @return ReflectionClassInterface|NULL
 	 */
 	function getClass($name);
 

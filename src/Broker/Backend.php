@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen;
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -56,7 +56,7 @@ interface Backend
 	 * Returns a reflection object of the given namespace.
 	 *
 	 * @param string $namespaceName Namespace name
-	 * @return ApiGen\TokenReflection\IReflectionNamespace|NULL
+	 * @return ApiGen\TokenReflection\ReflectionNamespaceInterface|NULL
 	 */
 	function getNamespace($namespaceName);
 
@@ -80,7 +80,7 @@ interface Backend
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
 	 * @param string $className CLass bame
-	 * @return ApiGen\TokenReflection\IReflectionClass|NULL
+	 * @return ApiGen\TokenReflection\ReflectionClassInterface|NULL
 	 */
 	function getClass($className);
 
@@ -107,7 +107,7 @@ interface Backend
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
 	 * @param string $constantName Constant name
-	 * @return ApiGen\TokenReflection\IReflectionConstant|NULL
+	 * @return ApiGen\TokenReflection\ReflectionConstantInterface|NULL
 	 */
 	function getConstant($constantName);
 
@@ -133,7 +133,7 @@ interface Backend
 	 * Returns a reflection object of a function (FQN expected).
 	 *
 	 * @param string $functionName Function name
-	 * @return ApiGen\TokenReflection\IReflectionFunction|NULL
+	 * @return ApiGen\TokenReflection\ReflectionFunctionInterface|NULL
 	 */
 	function getFunction($functionName);
 
@@ -168,7 +168,7 @@ interface Backend
 	 * Returns a file reflection.
 	 *
 	 * @param string $fileName File name
-	 * @return ReflectionFile
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested file has not been processed
 	 */
 	function getFile($fileName);

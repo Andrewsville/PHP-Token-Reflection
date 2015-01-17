@@ -13,9 +13,9 @@ use ApiGen;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\IReflectionClass;
-use ApiGen\TokenReflection\ReflectionBase;
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionBase;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ReflectionClass as InternalReflectionClass;
 use ApiGen\TokenReflection\Exception;
 
@@ -23,7 +23,7 @@ use ApiGen\TokenReflection\Exception;
 /**
  * Dummy class "reflection" of a nonexistent class.
  */
-class ReflectionClass implements IReflectionClass
+class ReflectionClass implements ReflectionClassInterface
 {
 
 	/**
@@ -134,7 +134,7 @@ class ReflectionClass implements IReflectionClass
 
 
 	/**
-	 * @return ReflectionFile
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionFile
 	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
@@ -413,7 +413,7 @@ class ReflectionClass implements IReflectionClass
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
-			if ( ! $interface instanceof IReflectionClass) {
+			if ( ! $interface instanceof ReflectionClassInterface) {
 				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface->getName();

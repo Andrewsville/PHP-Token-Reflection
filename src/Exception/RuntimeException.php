@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Exception;
 
-use ApiGen\TokenReflection\IReflection;
+use ApiGen\TokenReflection\ReflectionInterface;
 
 
 /**
@@ -28,7 +28,7 @@ class RuntimeException extends BaseException
 	/**
 	 * The reflection element that caused this exception to be raised.
 	 *
-	 * @var IReflection
+	 * @var ReflectionInterface
 	 */
 	private $sender;
 
@@ -36,9 +36,9 @@ class RuntimeException extends BaseException
 	/**
 	 * @param string $message Exception message
 	 * @param int $code Exception code
-	 * @param IReflection $sender Reflection element
+	 * @param ReflectionInterface $sender Reflection element
 	 */
-	public function __construct($message, $code, IReflection $sender = NULL)
+	public function __construct($message, $code, ReflectionInterface $sender = NULL)
 	{
 		parent::__construct($message, $code);
 		$this->sender = $sender;
@@ -48,7 +48,7 @@ class RuntimeException extends BaseException
 	/**
 	 * Returns the reflection element that caused the exception to be raised.
 	 *
-	 * @return IReflection
+	 * @return ReflectionInterface
 	 */
 	public function getSender()
 	{

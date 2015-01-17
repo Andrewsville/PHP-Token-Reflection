@@ -7,18 +7,23 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionMethodInterface;
 use ApiGen\TokenReflection\Parser\MethodParser;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionFunctionBase;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMethod
+class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMethodInterface
 {
 
 	/**
@@ -79,7 +84,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $declaringClassName;
 
 	/**
-	 * @var IReflectionMethod
+	 * @var ReflectionMethodInterface
 	 */
 	private $prototype;
 
@@ -108,7 +113,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	/**
 	 * The original method when importing from a trait.
 	 *
-	 * @var IReflectionMethod|NULL
+	 * @var ReflectionMethodInterface|NULL
 	 */
 	private $original = NULL;
 
@@ -125,7 +130,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	private $declaringTraitName;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
 	{
 		$this->methodParser = new MethodParser($tokenStream, $this, $parent);
 		parent::__construct($tokenStream, $broker, $parent);
@@ -507,7 +512,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, StreamBase $tokenStream)
+	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionClass) {
 			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', ParseException::INVALID_PARENT);
@@ -519,7 +524,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements IReflectionMeth
 	}
 
 
-	protected function parse(StreamBase $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		$this->modifiers = $this->methodParser->parseBaseModifiers();
 		$this->returnsReference = $this->methodParser->parseReturnReference();

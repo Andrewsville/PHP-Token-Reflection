@@ -12,7 +12,7 @@ namespace ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Broker\Broker;
 
 
-interface IReflection
+interface ReflectionInterface
 {
 
 	/**

@@ -3,7 +3,7 @@
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
-use ApiGen\TokenReflection\ReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
 use ApiGen\TokenReflection\Stream\StringStream;
 
 

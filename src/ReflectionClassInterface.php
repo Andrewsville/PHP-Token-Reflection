@@ -9,11 +9,11 @@
 
 namespace ApiGen\TokenReflection;
 
-
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 
 
-interface IReflectionClass extends IReflection
+interface ReflectionClassInterface extends ReflectionInterface
 {
 
 	/**
@@ -51,7 +51,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the PHP extension reflection.
 	 *
-	 * @return IReflectionExtension|NULL
+	 * @return ReflectionExtensionInterface|NULL
 	 */
 	function getExtension();
 
@@ -167,7 +167,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return IReflectionClass|NULL
+	 * @return ReflectionClassInterface|NULL
 	 */
 	function getParentClass();
 
@@ -183,7 +183,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the parent classes reflections.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getParentClasses();
 
@@ -209,7 +209,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns interface reflections.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getInterfaces();
 
@@ -225,7 +225,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns interface reflections implemented by this class, not its parents.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getOwnInterfaces();
 
@@ -241,7 +241,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the class constructor reflection.
 	 *
-	 * @return IReflectionMethod|NULL
+	 * @return ReflectionMethodInterface|NULL
 	 */
 	function getConstructor();
 
@@ -249,7 +249,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns the class destructor reflection.
 	 *
-	 * @return IReflectionMethod|NULL
+	 * @return ReflectionMethodInterface|NULL
 	 */
 	function getDestructor();
 
@@ -267,7 +267,7 @@ interface IReflectionClass extends IReflection
 	 * Returns a method reflection.
 	 *
 	 * @param string $name Method name
-	 * @return IReflectionMethod
+	 * @return ReflectionMethodInterface
 	 * @throws RuntimeException If the requested method does not exist.
 	 */
 	function getMethod($name);
@@ -277,7 +277,7 @@ interface IReflectionClass extends IReflection
 	 * Returns method reflections.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array|IReflectionMethod[]
+	 * @return array|ReflectionMethodInterface[]
 	 */
 	function getMethods($filter = NULL);
 
@@ -295,7 +295,7 @@ interface IReflectionClass extends IReflection
 	 * Returns method reflections declared by this class, not its parents.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array|IReflectionMethod[]
+	 * @return array|ReflectionMethodInterface[]
 	 */
 	function getOwnMethods($filter = NULL);
 
@@ -313,7 +313,7 @@ interface IReflectionClass extends IReflection
 	 * Returns method reflections imported from traits.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array|IReflectionMethod[]
+	 * @return array|ReflectionMethodInterface[]
 	 */
 	function getTraitMethods($filter = NULL);
 
@@ -331,7 +331,7 @@ interface IReflectionClass extends IReflection
 	 * Returns a constant value.
 	 *
 	 * @param string $name Constant name
-	 * @return mixed|IReflectionConstant
+	 * @return mixed|ReflectionConstantInterface
 	 * @throws RuntimeException If the requested constant does not exist.
 	 */
 	function getConstant($name);
@@ -341,7 +341,7 @@ interface IReflectionClass extends IReflection
 	 * Returns a constant reflection.
 	 *
 	 * @param string $name Constant name
-	 * @return IReflectionConstant
+	 * @return ReflectionConstantInterface
 	 * @throws RuntimeException If the requested constant does not exist.
 	 */
 	function getConstantReflection($name);
@@ -350,7 +350,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns an array of constant values.
 	 *
-	 * @return array|IReflectionConstant[]
+	 * @return array|ReflectionConstantInterface[]
 	 */
 	function getConstants();
 
@@ -358,7 +358,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns constant reflections.
 	 *
-	 * @return array|IReflectionConstant[]
+	 * @return array|ReflectionConstantInterface[]
 	 */
 	function getConstantReflections();
 
@@ -375,7 +375,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns values of constants declared by this class, not by its parents.
 	 *
-	 * @return array|IReflectionConstant[]
+	 * @return array|ReflectionConstantInterface[]
 	 */
 	function getOwnConstants();
 
@@ -383,7 +383,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns constant reflections declared by this class, not by its parents.
 	 *
-	 * @return array|IReflectionConstant[]
+	 * @return array|ReflectionConstantInterface[]
 	 */
 	function getOwnConstantReflections();
 
@@ -411,7 +411,7 @@ interface IReflectionClass extends IReflection
 	 * Returns property reflections.
 	 *
 	 * @param int $filter Properties filter
-	 * @return array|IReflectionProperty[]
+	 * @return array|ReflectionPropertyInterface[]
 	 */
 	function getProperties($filter = NULL);
 
@@ -429,7 +429,7 @@ interface IReflectionClass extends IReflection
 	 * Returns property reflections declared by this class, not its parents.
 	 *
 	 * @param int $filter Properties filter
-	 * @return array|IReflectionProperty[]
+	 * @return array|ReflectionPropertyInterface[]
 	 */
 	function getOwnProperties($filter = NULL);
 
@@ -447,7 +447,7 @@ interface IReflectionClass extends IReflection
 	 * Returns property reflections imported from traits.
 	 *
 	 * @param int $filter Properties filter
-	 * @return array|IReflectionProperty[]
+	 * @return array|ReflectionPropertyInterface[]
 	 */
 	function getTraitProperties($filter = NULL);
 
@@ -455,7 +455,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns default properties.
 	 *
-	 * @return array|IReflectionProperty[]
+	 * @return array|ReflectionPropertyInterface[]
 	 */
 	function getDefaultProperties();
 
@@ -463,7 +463,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns static properties reflections.
 	 *
-	 * @return array|IReflectionProperty[]
+	 * @return array|ReflectionPropertyInterface[]
 	 */
 	function getStaticProperties();
 
@@ -483,7 +483,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of direct subclasses.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getDirectSubclasses();
 
@@ -491,7 +491,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns names of direct subclasses.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getDirectSubclassNames();
 
@@ -499,7 +499,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of indirect subclasses.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getIndirectSubclasses();
 
@@ -515,7 +515,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of classes directly implementing this interface.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getDirectImplementers();
 
@@ -531,7 +531,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns reflections of classes indirectly implementing this interface.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getIndirectImplementers();
 
@@ -555,7 +555,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns traits used by this class.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getTraits();
 
@@ -563,7 +563,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns traits used by this class and not its parents.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getOwnTraits();
 
@@ -595,7 +595,7 @@ interface IReflectionClass extends IReflection
 	/**
 	 * Returns if the class uses a particular trait.
 	 *
-	 * @param \ReflectionClass|IReflectionClass|string $trait Trait reflection or name
+	 * @param \ReflectionClass|ReflectionClassInterface|string $trait Trait reflection or name
 	 * @return bool
 	 */
 	function usesTrait($trait);

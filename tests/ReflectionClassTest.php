@@ -6,7 +6,7 @@ use ApiGen;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionClass;
-use ApiGen\TokenReflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
 use ReflectionClass as InternalReflectionClass;
 use TokenReflection_Test_ClassInstances;
 
@@ -515,7 +515,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame(['STRING' => 'string', 'int' => 1, 'FLOAT' => 1.1, 'bool' => TRUE], $rfl->token->getOwnConstants());
 		$this->assertSame(range(0, 3), array_keys($rfl->token->getOwnConstantReflections()));
 		foreach ($rfl->token->getOwnConstantReflections() as $constant) {
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionConstant', $constant);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionConstant', $constant);
 		}
 
 		$rfl = $this->getClassReflection('noConstants');
@@ -551,10 +551,10 @@ class ReflectionClassTest extends TestCase
 		foreach ($this->getFilterCombinations($filters) as $filter) {
 			$this->assertSame(array_keys($rfl->internal->getProperties($filter)), array_keys($rfl->token->getProperties($filter)));
 			foreach ($rfl->token->getProperties($filter) as $property) {
-				$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $property);
+				$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionProperty', $property);
 			}
 			foreach ($rfl->token->getOwnProperties($filter) as $property) {
-				$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $property);
+				$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionProperty', $property);
 			}
 		}
 
@@ -569,7 +569,7 @@ class ReflectionClassTest extends TestCase
 			$this->assertSame($rfl->internal->hasProperty($property), $rfl->token->hasProperty($property));
 			$this->assertTrue($rfl->token->hasProperty($property));
 
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $rfl->token->getProperty($property));
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionProperty', $rfl->token->getProperty($property));
 		}
 
 		$properties = ['public', 'publicStatic', 'private', 'privateStatic'];
@@ -690,10 +690,10 @@ class ReflectionClassTest extends TestCase
 		foreach ($this->getFilterCombinations($filters) as $filter) {
 			$this->assertSame(array_keys($rfl->internal->getProperties($filter)), array_keys($rfl->token->getProperties($filter)), $filter);
 			foreach ($rfl->token->getProperties($filter) as $property) {
-				$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $property);
+				$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionProperty', $property);
 			}
 			foreach ($rfl->token->getOwnProperties($filter) as $property) {
-				$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $property);
+				$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionProperty', $property);
 			}
 		}
 
@@ -708,7 +708,7 @@ class ReflectionClassTest extends TestCase
 			$this->assertSame($rfl->internal->hasProperty($property), $rfl->token->hasProperty($property));
 			$this->assertTrue($rfl->token->hasProperty($property));
 
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionProperty', $rfl->token->getProperty($property));
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionProperty', $rfl->token->getProperty($property));
 		}
 	}
 
@@ -783,10 +783,10 @@ class ReflectionClassTest extends TestCase
 		foreach ($this->getFilterCombinations($filters) as $filter) {
 			$this->assertSame(array_keys($rfl->internal->getMethods($filter)), array_keys($rfl->token->getMethods($filter)));
 			foreach ($rfl->token->getMethods($filter) as $method) {
-				$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $method);
+				$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $method);
 			}
 			foreach ($rfl->token->getOwnMethods($filter) as $method) {
-				$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $method);
+				$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $method);
 			}
 		}
 
@@ -795,7 +795,7 @@ class ReflectionClassTest extends TestCase
 			$this->assertSame($rfl->internal->hasMethod($method), $rfl->token->hasMethod($method));
 			$this->assertTrue($rfl->token->hasMethod($method));
 
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $rfl->token->getMethod($method));
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $rfl->token->getMethod($method));
 		}
 
 		$methods = ['__construct', '__destruct', 'publicFinalFunction', 'publicStaticFunction', 'privateStaticFunction', 'publicFunction', 'privateFunction'];
@@ -807,8 +807,8 @@ class ReflectionClassTest extends TestCase
 			$this->assertFalse($rfl->token->hasOwnMethod($method));
 		}
 
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $rfl->token->getConstructor());
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $rfl->token->getDestructor());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $rfl->token->getConstructor());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $rfl->token->getDestructor());
 
 		$this->assertFalse($rfl->token->hasMethod('nonExistent'));
 		try {
@@ -1024,12 +1024,12 @@ class ReflectionClassTest extends TestCase
 			$this->assertSame($rfl->internal->isSubclassOf($parent), $rfl->token->isSubclassOf($parent));
 			$this->assertFalse($rfl->token->isSubclassOf($parent));
 		}
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $rfl->token->getParentClass());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $rfl->token->getParentClass());
 		$this->assertSame('TokenReflection_Test_ClassGrandParent', $rfl->token->getParentClassName());
 
 		$this->assertSame(3, count($rfl->token->getParentClasses()));
 		foreach ($rfl->token->getParentClasses() as $class) {
-			$this->assertInstanceOf('ApiGen\TokenReflection\IReflectionClass', $class);
+			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClassInterface', $class);
 		}
 		$this->assertSame(['TokenReflection_Test_ClassGrandParent', 'TokenReflection_Test_ClassGrandGrandParent', 'ReflectionClass'], $rfl->token->getParentClassNameList());
 
@@ -1344,7 +1344,7 @@ class ReflectionClassTest extends TestCase
 		$this->getBroker()->process($this->getFilePath('newInstanceWithoutConstructor'));
 
 		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor1');
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token);
 
 		try {
 			$token->newInstanceWithoutConstructor();
@@ -1373,7 +1373,7 @@ class ReflectionClassTest extends TestCase
 
 		$token = $this->getBroker()->getClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
 		$internal = new \ReflectionClass('TokenReflection_Test_NewInstanceWithoutConstructor2');
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token);
 
 		$instance = $token->newInstanceWithoutConstructor();
 		$this->assertFalse($instance->check);

@@ -9,10 +9,10 @@
 
 namespace ApiGen\TokenReflection\Parser;
 
-use ApiGen\TokenReflection\IReflection;
-use ApiGen\TokenReflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\ReflectionElement;
-use ApiGen\TokenReflection\ReflectionParameter;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionParameter;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -25,7 +25,7 @@ class ElementParser
 	private $tokenStream;
 
 	/**
-	 * @var IReflection
+	 * @var ReflectionInterface
 	 */
 	private $parent;
 
@@ -35,7 +35,7 @@ class ElementParser
 	private $reflectionElement;
 
 
-	public function __construct(StreamBase $tokenStream, ReflectionElement $reflectionElement, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, ReflectionElement $reflectionElement, ReflectionInterface $parent = NULL)
 	{
 		$this->reflectionElement = $reflectionElement;
 		$this->tokenStream = $tokenStream;

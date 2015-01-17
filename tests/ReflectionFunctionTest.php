@@ -4,8 +4,8 @@ namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
-use ApiGen\TokenReflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\ReflectionFunction;
+use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Reflection\ReflectionFunction;
 use ReflectionFunction as InternalReflectionFunction;
 
 
@@ -269,7 +269,7 @@ class ReflectionFunctionTest extends TestCase
 		$tokenParameters = $rfl->token->getParameters();
 		for ($i = 0; $i < count($internalParameters); $i++) {
 			$this->assertSame($internalParameters[$i]->getName(), $tokenParameters[$i]->getName());
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionParameter', $tokenParameters[$i]);
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionParameter', $tokenParameters[$i]);
 		}
 
 		$rfl = $this->getFunctionReflection('noParameters');

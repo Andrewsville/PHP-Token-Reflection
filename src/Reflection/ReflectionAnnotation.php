@@ -7,10 +7,11 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
+use ApiGen\TokenReflection\Reflection\ReflectionBase;
 
 
 class ReflectionAnnotation implements Annotations

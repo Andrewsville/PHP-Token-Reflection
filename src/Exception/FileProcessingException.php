@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Exception;
 
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 
 
 class FileProcessingException extends RuntimeException
@@ -23,7 +23,7 @@ class FileProcessingException extends RuntimeException
 
 	/**
 	 * @param array $reasons
-	 * @param ReflectionFile $sender
+	 * @param \ApiGen\TokenReflection\Reflection\ReflectionFile $sender
 	 */
 	public function __construct(array $reasons, ReflectionFile $sender = NULL)
 	{

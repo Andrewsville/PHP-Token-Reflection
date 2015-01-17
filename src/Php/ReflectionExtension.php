@@ -12,12 +12,12 @@ namespace ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\IReflectionExtension;
-use ApiGen\TokenReflection\ReflectionElement;
+use ApiGen\TokenReflection\ReflectionExtensionInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use Reflector, ReflectionExtension as InternalReflectionExtension;
 
 
-class ReflectionExtension extends InternalReflectionExtension implements IReflection, IReflectionExtension
+class ReflectionExtension extends InternalReflectionExtension implements IReflection, ReflectionExtensionInterface
 {
 
 	/**

@@ -15,13 +15,13 @@ use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\IReflectionConstant;
-use ApiGen\TokenReflection\ReflectionElement;
-use ApiGen\TokenReflection\ReflectionNamespace;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use Reflector;
 
 
-class ReflectionConstant implements IReflection, IReflectionConstant, Annotations
+class ReflectionConstant implements IReflection, ReflectionConstantInterface, Annotations
 {
 
 	/**

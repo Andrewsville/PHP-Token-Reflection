@@ -29,7 +29,7 @@ namespace ApiGen\TokenReflection;
 $broker = new Broker(new Broker\Backend\Memory);
 $broker->processDirectory('~/lib/Zend_Framework');
 
-$class = $broker->getClass('Zend_Version'); // instance of ApiGen\TokenReflection\ReflectionClass
+$class = $broker->getClass('Zend_Version'); // instance of ApiGen\TokenReflection\Reflection\ReflectionClass
 $class = $broker->getClass('Exception');    // instance of ApiGen\TokenReflection\Php\ReflectionClass
 $class = $broker->getClass('Nonexistent');  // instance of ApiGen\TokenReflection\Dummy\ReflectionClass
 

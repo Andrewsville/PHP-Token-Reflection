@@ -5,7 +5,7 @@ namespace ApiGen\TokenReflection\Tests;
 use ApiGen;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionProperty;
-use ApiGen\TokenReflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
 use ReflectionProperty as InternalReflectionProperty;
 
 
@@ -41,7 +41,7 @@ class ReflectionPropertyTest extends TestCase
 		$propertyName = 'docComment';
 		$this->assertTrue($rfl->token->hasProperty($propertyName));
 
-		/** @var ApiGen\TokenReflection\ReflectionProperty */
+		/** @var \ApiGen\TokenReflection\Reflection\ReflectionProperty */
 		$tokenProperty = $rfl->token->getProperty($propertyName);
 		$this->assertTrue($tokenProperty->hasAnnotation('var'));
 		$this->assertSame(["String It is a string\n   and this comment has multiple\n   lines."], $tokenProperty->getAnnotation('var'));
@@ -187,7 +187,7 @@ class ReflectionPropertyTest extends TestCase
 			$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' . $class, $token->getDeclaringClass()->getName());
 			$this->assertSame('TokenReflection_Test_PropertyDeclaringClass' . $class, $token->getDeclaringClassName());
-			$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token->getDeclaringClass());
+			$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token->getDeclaringClass());
 		}
 	}
 

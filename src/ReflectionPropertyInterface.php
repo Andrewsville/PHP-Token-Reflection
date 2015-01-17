@@ -10,13 +10,13 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionProperty extends IReflection
+interface ReflectionPropertyInterface extends ReflectionInterface
 {
 
 	/**
 	 * Returns a reflection of the declaring class.
 	 *
-	 * @return IReflectionClass
+	 * @return ReflectionClassInterface
 	 */
 	function getDeclaringClass();
 
@@ -154,7 +154,7 @@ interface IReflectionProperty extends IReflection
 	/**
 	 * Returns the defining trait.
 	 *
-	 * @return IReflectionClass|NULL
+	 * @return ReflectionClassInterface|NULL
 	 */
 	function getDeclaringTrait();
 

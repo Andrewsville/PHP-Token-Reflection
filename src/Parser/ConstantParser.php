@@ -10,11 +10,11 @@
 namespace ApiGen\TokenReflection\Parser;
 
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\IReflection;
-use ApiGen\TokenReflection\IReflectionClass;
-use ApiGen\TokenReflection\IReflectionConstant;
-use ApiGen\TokenReflection\IReflectionProperty;
-use ApiGen\TokenReflection\ReflectionNamespace;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
+use ApiGen\TokenReflection\ReflectionPropertyInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -27,17 +27,17 @@ class ConstantParser
 	private $tokenStream;
 
 	/**
-	 * @var IReflectionConstant
+	 * @var ReflectionConstantInterface
 	 */
 	private $reflectionConstant;
 
 	/**
-	 * @var IReflection|IReflectionClass
+	 * @var ReflectionInterface|ReflectionClassInterface
 	 */
 	private $parent;
 
 
-	public function __construct(StreamBase $tokenStream, IReflectionConstant $reflectionConstant, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, ReflectionConstantInterface $reflectionConstant, ReflectionInterface $parent = NULL)
 	{
 		$this->tokenStream = $tokenStream;
 		$this->reflectionConstant = $reflectionConstant;

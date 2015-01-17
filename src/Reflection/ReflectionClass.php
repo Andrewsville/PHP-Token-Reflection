@@ -7,18 +7,30 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen;
+use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionMethodInterface;
+use ApiGen\TokenReflection\ReflectionPropertyInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionConstant;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
+use ApiGen\TokenReflection\Reflection\ReflectionProperty;
+use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-class ReflectionClass extends ReflectionElement implements IReflectionClass
+class ReflectionClass extends ReflectionElement implements ReflectionClassInterface
 {
 
 	/**
@@ -322,7 +334,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function isSubclassOf($class)
 	{
 		if (is_object($class)) {
-			if ($class instanceof InternalReflectionClass || $class instanceof IReflectionClass) {
+			if ($class instanceof InternalReflectionClass || $class instanceof ReflectionClassInterface) {
 				$class = $class->getName();
 			} else {
 				$class = get_class($class);
@@ -392,7 +404,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
-			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
+			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof ReflectionClassInterface) {
 				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			if ( ! $interface->isInterface()) {
@@ -469,7 +481,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns the class constructor reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionMethod|null
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionMethod|null
 	 */
 	public function getConstructor()
 	{
@@ -485,7 +497,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	/**
 	 * Returns the class destructor reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionMethod|null
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionMethod|null
 	 */
 	public function getDestructor()
 	{
@@ -555,7 +567,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 		}
 		if (NULL !== $filter) {
-			$methods = array_filter($methods, function (IReflectionMethod $method) use ($filter) {
+			$methods = array_filter($methods, function (ReflectionMethodInterface $method) use ($filter) {
 				return $method->is($filter);
 			});
 		}
@@ -647,7 +659,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 		}
 		if (NULL !== $filter) {
-			$methods = array_filter($methods, function (IReflectionMethod $method) use ($filter) {
+			$methods = array_filter($methods, function (ReflectionMethodInterface $method) use ($filter) {
 				return (bool) ($method->getModifiers() & $filter);
 			});
 		}
@@ -814,7 +826,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 		}
 		if (NULL !== $filter) {
-			$properties = array_filter($properties, function (IReflectionProperty $property) use ($filter) {
+			$properties = array_filter($properties, function (ReflectionPropertyInterface $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
@@ -877,7 +889,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 			}
 		}
 		if (NULL !== $filter) {
-			$properties = array_filter($properties, function (IReflectionProperty $property) use ($filter) {
+			$properties = array_filter($properties, function (ReflectionPropertyInterface $property) use ($filter) {
 				return (bool) ($property->getModifiers() & $filter);
 			});
 		}
@@ -1037,7 +1049,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
-			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
+			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof ReflectionClassInterface) {
 				throw new RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait->getName();
@@ -1255,7 +1267,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 * @throws ParseException On invalid parent reflection provided
 	 */
-	protected function processParent(IReflection $parent, StreamBase $tokenStream)
+	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFileNamespace) {
 			throw new ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), ParseException::INVALID_PARENT);
@@ -1271,7 +1283,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 *
 	 * @return ApiGen\TokenReflection\ReflectionClass
 	 */
-	protected function parse(StreamBase $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		return $this->parseModifiers($tokenStream)
 			->parseName($tokenStream)
@@ -1425,7 +1437,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 	 * @return ReflectionClass
 	 * @throws ParseException If a parse error was detected.
 	 */
-	protected function parseChildren(StreamBase $tokenStream, IReflection $parent)
+	protected function parseChildren(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		while (TRUE) {
 			switch ($type = $tokenStream->getType()) {

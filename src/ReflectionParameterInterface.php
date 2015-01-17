@@ -10,13 +10,13 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionParameter extends IReflection
+interface ReflectionParameterInterface extends ReflectionInterface
 {
 
 	/**
 	 * Returns the declaring class.
 	 *
-	 * @return IReflectionClass|NULL
+	 * @return ReflectionClassInterface|NULL
 	 */
 	function getDeclaringClass();
 
@@ -32,7 +32,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns the declaring function.
 	 *
-	 * @return IReflectionFunctionBase
+	 * @return ReflectionFunctionBaseInterface
 	 */
 	function getDeclaringFunction();
 
@@ -128,7 +128,7 @@ interface IReflectionParameter extends IReflection
 	/**
 	 * Returns reflection of the required class of the value.
 	 *
-	 * @return IReflectionClass|null
+	 * @return ReflectionClassInterface|null
 	 */
 	function getClass();
 

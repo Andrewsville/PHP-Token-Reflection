@@ -4,7 +4,7 @@ namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
 use ApiGen\TokenReflection\Exception\FileProcessingException;
-use ApiGen\TokenReflection\IReflection;
+use ApiGen\TokenReflection\ReflectionInterface;
 
 
 /**
@@ -192,10 +192,10 @@ class ConsistencyTest extends TestCase
 	/**
 	 * Tests API consistency of two TR reflections.
 	 *
-	 * @param IReflection $reference Reference reflection
-	 * @param IReflection $token Tested reflection
+	 * @param ReflectionInterface $reference Reference reflection
+	 * @param ReflectionInterface $token Tested reflection
 	 */
-	private function crossConsistencyTest(IReflection $reference, IReflection $token)
+	private function crossConsistencyTest(ReflectionInterface $reference, ReflectionInterface $token)
 	{
 		$this->performConsistencyTest(new \ReflectionClass($reference), new \ReflectionClass($token));
 	}
@@ -205,9 +205,9 @@ class ConsistencyTest extends TestCase
 	 * Tests API consistency of an internal reflection and TR.
 	 *
 	 * @param \Reflector $reference Reference reflection
-	 * @param IReflection $token Tested reflection
+	 * @param ReflectionInterface $token Tested reflection
 	 */
-	private function internalConsistencyTest(\Reflector $reference, IReflection $token)
+	private function internalConsistencyTest(\Reflector $reference, ReflectionInterface $token)
 	{
 		$this->performConsistencyTest(new \ReflectionClass($reference), new \ReflectionClass($token));
 	}

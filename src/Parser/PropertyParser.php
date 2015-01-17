@@ -10,9 +10,9 @@
 namespace ApiGen\TokenReflection\Parser;
 
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\IReflection;
-use ApiGen\TokenReflection\IReflectionClass;
-use ApiGen\TokenReflection\IReflectionProperty;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionProperty as InternalReflectionProperty;
 
@@ -26,17 +26,17 @@ class PropertyParser
 	private $tokenStream;
 
 	/**
-	 * @var IReflectionProperty
+	 * @var ReflectionPropertyInterface
 	 */
 	private $reflectionProperty;
 
 	/**
-	 * @var IReflection|IReflectionClass
+	 * @var ReflectionInterface|ReflectionClassInterface
 	 */
 	private $parent;
 
 
-	public function __construct(StreamBase $tokenStream, IReflectionProperty $reflectionProperty, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, ReflectionPropertyInterface $reflectionProperty, ReflectionInterface $parent = NULL)
 	{
 		$this->tokenStream = $tokenStream;
 		$this->reflectionProperty = $reflectionProperty;

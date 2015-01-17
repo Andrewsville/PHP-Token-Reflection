@@ -13,12 +13,12 @@ use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\IReflectionFunction;
-use ApiGen\TokenReflection\ReflectionBase;
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionBase;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 
 
-class ReflectionFunction extends ReflectionElement implements IReflectionFunction, Annotations
+class ReflectionFunction extends ReflectionElement implements ReflectionFunctionInterface, Annotations
 {
 
 	/**
@@ -169,7 +169,7 @@ class ReflectionFunction extends ReflectionElement implements IReflectionFunctio
 	/**
 	 * Returns a file reflection.
 	 *
-	 * @return ReflectionFile
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionFile
 	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()

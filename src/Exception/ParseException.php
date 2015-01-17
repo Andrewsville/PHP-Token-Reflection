@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection\Exception;
 
 use ApiGen\TokenReflection\Stream\StreamBase;
-use ApiGen\TokenReflection\IReflection;
+use ApiGen\TokenReflection\ReflectionInterface;
 
 
 class ParseException extends StreamException
@@ -81,12 +81,12 @@ class ParseException extends StreamException
 
 
 	/**
-	 * @param IReflection $sender Reflection element
+	 * @param ReflectionInterface $sender Reflection element
 	 * @param StreamBase $tokenStream Token stream
 	 * @param string $message Exception message
 	 * @param int $code Exception code
 	 */
-	public function __construct(IReflection $sender, StreamBase $tokenStream, $message, $code)
+	public function __construct(ReflectionInterface $sender, StreamBase $tokenStream, $message, $code)
 	{
 		parent::__construct($tokenStream, $message, $code);
 		$this->sender = $sender;

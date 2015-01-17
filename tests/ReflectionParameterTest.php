@@ -171,7 +171,7 @@ class ReflectionParameterTest extends TestCase
 		$this->assertSame($rfl->internal->getClass()->getName(), $rfl->token->getClass()->getName());
 		$this->assertSame('Exception', $rfl->token->getClass()->getName());
 		$this->assertSame('Exception', $rfl->token->getClassName());
-		$this->assertInstanceOf('ApiGen\TokenReflection\IReflectionClass', $rfl->token->getClass());
+		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClassInterface', $rfl->token->getClass());
 
 		$rfl = $this->getParameterReflection('noClass');
 		$this->assertSame($rfl->internal->getClass(), $rfl->token->getClass());
@@ -204,7 +204,7 @@ class ReflectionParameterTest extends TestCase
 		$this->assertSame($rfl->internal->getDeclaringFunction()->getName(), $rfl->token->getDeclaringFunction()->getName());
 		$this->assertSame($this->getFunctionName('declaringFunction'), $rfl->token->getDeclaringFunction()->getName());
 		$this->assertSame($this->getFunctionName('declaringFunction'), $rfl->token->getDeclaringFunctionName());
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFunction', $rfl->token->getDeclaringFunction());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFunction', $rfl->token->getDeclaringFunction());
 
 		$this->assertSame($rfl->internal->getDeclaringClass(), $rfl->token->getDeclaringClass());
 		$this->assertNull($rfl->token->getDeclaringClass());
@@ -219,12 +219,12 @@ class ReflectionParameterTest extends TestCase
 		$this->assertSame($internal->getDeclaringFunction()->getName(), $token->getDeclaringFunction()->getName());
 		$this->assertSame($this->getMethodName('declaringMethod'), $token->getDeclaringFunction()->getName());
 		$this->assertSame($this->getMethodName('declaringMethod'), $token->getDeclaringFunctionName());
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionMethod', $token->getDeclaringFunction());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $token->getDeclaringFunction());
 
 		$this->assertSame($internal->getDeclaringClass()->getName(), $token->getDeclaringClass()->getName());
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClass()->getName());
 		$this->assertSame($this->getClassName('declaringMethod'), $token->getDeclaringClassName());
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token->getDeclaringClass());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token->getDeclaringClass());
 	}
 
 

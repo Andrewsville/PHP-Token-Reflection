@@ -13,14 +13,14 @@ use ApiGen;
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\IReflectionMethod;
-use ApiGen\TokenReflection\ReflectionElement;
+use ApiGen\TokenReflection\ReflectionMethodInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use Reflector;
 use ReflectionMethod as InternalReflectionMethod;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionMethod extends InternalReflectionMethod implements IReflection, IReflectionMethod, Annotations
+class ReflectionMethod extends InternalReflectionMethod implements IReflection, ReflectionMethodInterface, Annotations
 {
 
 	/**

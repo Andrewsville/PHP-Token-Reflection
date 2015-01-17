@@ -10,13 +10,13 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionMethod extends IReflectionFunctionBase
+interface ReflectionMethodInterface extends ReflectionFunctionBaseInterface
 {
 
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return IReflectionClass|NULL
+	 * @return ReflectionClassInterface|NULL
 	 */
 	function getDeclaringClass();
 
@@ -113,7 +113,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the method prototype.
 	 *
-	 * @return IReflectionMethod
+	 * @return ReflectionMethodInterface
 	 */
 	function getPrototype();
 
@@ -166,7 +166,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the original method when importing from a trait.
 	 *
-	 * @return IReflectionMethod|null
+	 * @return ReflectionMethodInterface|null
 	 */
 	function getOriginal();
 
@@ -182,7 +182,7 @@ interface IReflectionMethod extends IReflectionFunctionBase
 	/**
 	 * Returns the defining trait.
 	 *
-	 * @return IReflectionClass|null
+	 * @return ReflectionClassInterface|null
 	 */
 	function getDeclaringTrait();
 

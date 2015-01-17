@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Parser;
 
-use ApiGen\TokenReflection\ReflectionMethod;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
 use ReflectionMethod as InternalReflectionMethod;
 
 

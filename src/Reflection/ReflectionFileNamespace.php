@@ -7,9 +7,21 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Invalid;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionConstant;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionFunction;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -46,7 +58,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	public function getClasses()
 	{
@@ -55,7 +67,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * @return array|IReflectionConstant[]
+	 * @return array|ReflectionConstantInterface[]
 	 */
 	public function getConstants()
 	{
@@ -64,7 +76,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * @return array|IReflectionFunction[]
+	 * @return array|ReflectionFunctionInterface[]
 	 */
 	public function getFunctions()
 	{
@@ -89,7 +101,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, StreamBase $tokenStream)
+	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFile) {
 			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFile.', ParseException::INVALID_PARENT);
@@ -103,7 +115,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	 *
 	 * @return ReflectionFileNamespace
 	 */
-	protected function parse(StreamBase $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		return $this->parseName($tokenStream);
 	}
@@ -114,7 +126,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	 *
 	 * @return ReflectionElement
 	 */
-	protected function parseDocComment(StreamBase $tokenStream, IReflection $parent)
+	protected function parseDocComment(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		if ( ! $tokenStream->is(T_NAMESPACE)) {
 			$this->docComment = new ReflectionAnnotation($this);
@@ -173,7 +185,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	 * @return ReflectionFileNamespace
 	 * @throws ParseException If child elements could not be parsed.
 	 */
-	protected function parseChildren(StreamBase $tokenStream, IReflection $parent)
+	protected function parseChildren(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		static $skipped = [T_WHITESPACE => TRUE, T_COMMENT => TRUE, T_DOC_COMMENT => TRUE];
 		$depth = 0;

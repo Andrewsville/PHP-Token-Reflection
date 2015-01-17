@@ -7,15 +7,21 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionParameterInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionFunctionBase;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
+use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-class ReflectionParameter extends ReflectionElement implements IReflectionParameter
+class ReflectionParameter extends ReflectionElement implements ReflectionParameterInterface
 {
 
 	/**
@@ -101,7 +107,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	private $passedByReference = FALSE;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
 	{
 
 		parent::__construct($tokenStream, $broker, $parent);
@@ -415,7 +421,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, StreamBase $tokenStream)
+	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFunctionBase) {
 			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', ParseException::INVALID_PARENT);
@@ -437,7 +443,7 @@ class ReflectionParameter extends ReflectionElement implements IReflectionParame
 	 *
 	 * @return ReflectionParameter
 	 */
-	protected function parse(StreamBase $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		return $this->parseTypeHint($tokenStream)
 			->parsePassedByReference($tokenStream)

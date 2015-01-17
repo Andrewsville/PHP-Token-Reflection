@@ -9,8 +9,14 @@
 
 namespace ApiGen\TokenReflection;
 
-
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Reflection\ReflectionConstant;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionFunction;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
+use ApiGen\TokenReflection\Reflection\ReflectionParameter;
+use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 
 
 class Resolver
@@ -98,52 +104,52 @@ class Resolver
 							$value = dirname($reflection->getFileName());
 							break;
 						case '__FUNCTION__':
-							if ($reflection instanceof IReflectionParameter) {
+							if ($reflection instanceof ReflectionParameterInterface) {
 								$value = $reflection->getDeclaringFunctionName();
-							} elseif ($reflection instanceof IReflectionFunctionBase) {
+							} elseif ($reflection instanceof ReflectionFunctionBaseInterface) {
 								$value = $reflection->getName();
 							}
 							break;
 						case '__CLASS__':
-							if ($reflection instanceof IReflectionConstant || $reflection instanceof IReflectionParameter || $reflection instanceof IReflectionProperty || $reflection instanceof IReflectionMethod) {
+							if ($reflection instanceof ReflectionConstantInterface || $reflection instanceof ReflectionParameterInterface || $reflection instanceof ReflectionPropertyInterface || $reflection instanceof ReflectionMethodInterface) {
 								$value = $reflection->getDeclaringClassName() ?: '';
 							}
 							break;
 						case '__TRAIT__':
-							if ($reflection instanceof IReflectionMethod || $reflection instanceof IReflectionProperty) {
+							if ($reflection instanceof ReflectionMethodInterface || $reflection instanceof ReflectionPropertyInterface) {
 								$value = $reflection->getDeclaringTraitName() ?: '';
-							} elseif ($reflection instanceof IReflectionParameter) {
+							} elseif ($reflection instanceof ReflectionParameterInterface) {
 								$method = $reflection->getDeclaringFunction();
-								if ($method instanceof IReflectionMethod) {
+								if ($method instanceof ReflectionMethodInterface) {
 									$value = $method->getDeclaringTraitName() ?: '';
 								}
 							}
 							break;
 						case '__METHOD__':
-							if ($reflection instanceof IReflectionParameter) {
+							if ($reflection instanceof ReflectionParameterInterface) {
 								if (NULL !== $reflection->getDeclaringClassName()) {
 									$value = $reflection->getDeclaringClassName() . '::' . $reflection->getDeclaringFunctionName();
 								} else {
 									$value = $reflection->getDeclaringFunctionName();
 								}
-							} elseif ($reflection instanceof IReflectionConstant || $reflection instanceof IReflectionProperty) {
+							} elseif ($reflection instanceof ReflectionConstantInterface || $reflection instanceof ReflectionPropertyInterface) {
 								$value = $reflection->getDeclaringClassName() ?: '';
-							} elseif ($reflection instanceof IReflectionMethod) {
+							} elseif ($reflection instanceof ReflectionMethodInterface) {
 								$value = $reflection->getDeclaringClassName() . '::' . $reflection->getName();
-							} elseif ($reflection instanceof IReflectionFunction) {
+							} elseif ($reflection instanceof ReflectionFunctionInterface) {
 								$value = $reflection->getName();
 							}
 							break;
 						case '__NAMESPACE__':
-							if (($reflection instanceof IReflectionConstant && NULL !== $reflection->getDeclaringClassName()) || $reflection instanceof IReflectionProperty) {
+							if (($reflection instanceof ReflectionConstantInterface && NULL !== $reflection->getDeclaringClassName()) || $reflection instanceof ReflectionPropertyInterface) {
 								$value = $reflection->getDeclaringClass()->getNamespaceName();
-							} elseif ($reflection instanceof IReflectionParameter) {
+							} elseif ($reflection instanceof ReflectionParameterInterface) {
 								if (NULL !== $reflection->getDeclaringClassName()) {
 									$value = $reflection->getDeclaringClass()->getNamespaceName();
 								} else {
 									$value = $reflection->getDeclaringFunction()->getNamespaceName();
 								}
-							} elseif ($reflection instanceof IReflectionMethod) {
+							} elseif ($reflection instanceof ReflectionMethodInterface) {
 								$value = $reflection->getDeclaringClass()->getNamespaceName();
 							} else {
 								$value = $reflection->getNamespaceName();

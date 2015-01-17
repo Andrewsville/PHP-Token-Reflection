@@ -15,15 +15,15 @@ use ApiGen\TokenReflection\Broker\Backend;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\IReflectionClass;
-use ApiGen\TokenReflection\ReflectionElement;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use Reflector;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-class ReflectionClass extends InternalReflectionClass implements IReflection, IReflectionClass, Annotations
+class ReflectionClass extends InternalReflectionClass implements IReflection, ReflectionClassInterface, Annotations
 {
 
 	/**
@@ -155,7 +155,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	public function isSubclassOf($class)
 	{
 		if (is_object($class)) {
-			if ( ! $class instanceof InternalReflectionClass && !$class instanceof IReflectionClass) {
+			if ( ! $class instanceof InternalReflectionClass && !$class instanceof ReflectionClassInterface) {
 				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$class = $class->getName();
@@ -211,7 +211,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	public function implementsInterface($interface)
 	{
 		if (is_object($interface)) {
-			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof IReflectionClass) {
+			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof ReflectionClassInterface) {
 				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$interfaceName = $interface->getName();
@@ -531,7 +531,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	public function getDirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->isSubclassOf($that)) {
@@ -557,7 +557,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	public function getIndirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->isSubclassOf($that)) {
@@ -586,7 +586,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 			return [];
 		}
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->implementsInterface($that)) {
@@ -615,7 +615,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 			return [];
 		}
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (IReflectionClass $class) use (
+		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->implementsInterface($that)) {
@@ -714,7 +714,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
-			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof IReflectionClass) {
+			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof ReflectionClassInterface) {
 				throw new RuntimeException('Parameter must be a string or an instance of trait reflection.', RuntimeException::INVALID_ARGUMENT, $this);
 			}
 			$traitName = $trait->getName();
@@ -761,7 +761,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, IR
 	/**
 	 * Creates a reflection instance.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass|NULL
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionClass|NULL
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, Broker $broker)

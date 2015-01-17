@@ -4,7 +4,7 @@ namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use PHPUnit_Framework_TestCase;
 
 

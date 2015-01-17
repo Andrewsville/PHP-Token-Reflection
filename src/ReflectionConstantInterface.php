@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionConstant extends IReflection
+interface ReflectionConstantInterface extends ReflectionInterface
 {
 
 	/**
@@ -24,7 +24,7 @@ interface IReflectionConstant extends IReflection
 	/**
 	 * Returns the declaring class reflection.
 	 *
-	 * @return IReflectionClass
+	 * @return ReflectionClassInterface
 	 */
 	function getDeclaringClass();
 

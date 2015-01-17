@@ -12,9 +12,9 @@ namespace ApiGen\TokenReflection\Broker;
 use ApiGen;
 use ApiGen\TokenReflection\Broker\Backend;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\IReflection;
-use ApiGen\TokenReflection\IReflectionClass;
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Stream\FileStream;
 use ApiGen\TokenReflection\Stream\StringStream;
 use Nette\Utils\Finder;
@@ -147,7 +147,7 @@ class Broker
 	 *
 	 * @param string $source PHP source code
 	 * @param string $fileName Used file name
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
 	 * @return bool|ReflectionFile
 	 */
 	public function processString($source, $fileName, $returnReflectionFile = FALSE)
@@ -163,7 +163,7 @@ class Broker
 			// Clear the cache - leave only tokenized reflections
 			foreach ($this->cache as $type => $cached) {
 				if ( ! empty($cached)) {
-					$this->cache[$type] = array_filter($cached, function (IReflection $reflection) {
+					$this->cache[$type] = array_filter($cached, function (ReflectionInterface $reflection) {
 						return $reflection->isTokenized();
 					});
 				}
@@ -177,7 +177,7 @@ class Broker
 	 * Parses a file and returns the appropriate reflection object.
 	 *
 	 * @param string $fileName Filename
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
 	 * @return bool|ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the file could not be processed.
 	 */
@@ -195,7 +195,7 @@ class Broker
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
 					if ( ! empty($cached)) {
-						$this->cache[$type] = array_filter($cached, function (IReflection $reflection) {
+						$this->cache[$type] = array_filter($cached, function (ReflectionInterface $reflection) {
 							return $reflection->isTokenized();
 						});
 					}
@@ -214,7 +214,7 @@ class Broker
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
 	 * @param string $path
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
 	 * @return bool|ReflectionFile[]|SplFileInfo[]
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory does not exist.
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory could not be processed.
@@ -244,7 +244,7 @@ class Broker
 	 * Process a file or directory.
 	 *
 	 * @param string $path Path
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\ReflectionFile instance(s)
+	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
 	 * @return bool|array|ReflectionFile
 	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the target does not exist.
 	 */
@@ -276,7 +276,7 @@ class Broker
 	 * Returns a reflection object of the given namespace.
 	 *
 	 * @param string $namespaceName Namespace name
-	 * @return ApiGen\TokenReflection\ReflectionNamespace|null
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionNamespace|null
 	 */
 	public function getNamespace($namespaceName)
 	{
@@ -340,7 +340,7 @@ class Broker
 	 * Returns all classes from all namespaces.
 	 *
 	 * @param int $types Returned class types (multiple values may be OR-ed)
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	public function getClasses($types = Backend::TOKENIZED_CLASSES)
 	{
@@ -364,7 +364,7 @@ class Broker
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
 	 * @param string $constantName Constant name
-	 * @return ApiGen\TokenReflection\ReflectionConstant|null
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionConstant|null
 	 */
 	public function getConstant($constantName)
 	{
@@ -406,7 +406,7 @@ class Broker
 	 * Returns a reflection object of a function (FQN expected).
 	 *
 	 * @param string $functionName Function name
-	 * @return ApiGen\TokenReflection\ReflectionFunction|null
+	 * @return \ApiGen\TokenReflection\Reflection\ReflectionFunction|null
 	 */
 	public function getFunction($functionName)
 	{

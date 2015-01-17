@@ -7,12 +7,15 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\Parser\ElementParser;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionBase;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -60,7 +63,7 @@ abstract class ReflectionElement extends ReflectionBase
 	private $elementParser;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
 	{
 		if ($tokenStream->count() === 0) {
 			throw new ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
@@ -74,7 +77,7 @@ abstract class ReflectionElement extends ReflectionBase
 	}
 
 
-	protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL)
+	protected function parseStream(StreamBase $tokenStream, ReflectionInterface $parent = NULL)
 	{
 		$this->fileName = $tokenStream->getFileName();
 
@@ -195,7 +198,7 @@ abstract class ReflectionElement extends ReflectionBase
 	}
 
 
-	protected function parseDocComment(StreamBase $tokenStream, IReflection $parent)
+	protected function parseDocComment(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		list($this->docComment, $this->startPosition) = $this->elementParser->parseDocComment($this->startPosition);
 	}

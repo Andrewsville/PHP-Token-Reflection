@@ -7,8 +7,11 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionBase;
+use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -48,7 +51,7 @@ class ReflectionFile extends ReflectionBase
 	 *
 	 * @return ReflectionFile
 	 */
-	protected function parseStream(StreamBase $tokenStream, IReflection $parent = NULL)
+	protected function parseStream(StreamBase $tokenStream, ReflectionInterface $parent = NULL)
 	{
 		$this->name = $tokenStream->getFileName();
 		if ($tokenStream->count() <= 1) {

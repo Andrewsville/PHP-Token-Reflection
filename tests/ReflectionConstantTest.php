@@ -6,8 +6,8 @@ use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\Php\ReflectionClass;
-use ApiGen\TokenReflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\ReflectionConstant;
+use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
+use ApiGen\TokenReflection\Reflection\ReflectionConstant;
 
 
 class ReflectionConstantTest extends TestCase
@@ -87,7 +87,7 @@ class ReflectionConstantTest extends TestCase
 		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
 		$token = $this->getBroker()->getConstant('TokenReflection\Test\CONSTANT_IN_NAMESPACE');
 
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionConstant', $token);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionConstant', $token);
 		$this->assertSame('constant-in-namespace', $token->getValue());
 
 		$this->assertTrue($token->inNamespace());
@@ -105,7 +105,7 @@ class ReflectionConstantTest extends TestCase
 
 		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClassName());
 		$this->assertSame('TokenReflection_Test_ConstantNoNamespace', $token->getDeclaringClass()->getName());
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionClass', $token->getDeclaringClass());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $token->getDeclaringClass());
 	}
 
 

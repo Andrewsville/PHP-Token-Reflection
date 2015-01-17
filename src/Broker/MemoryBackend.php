@@ -14,7 +14,7 @@ use ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Php;
-use ApiGen\TokenReflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Stream\FileStream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
@@ -147,8 +147,8 @@ class MemoryBackend implements Backend
 	 */
 	public function getNamespace($namespaceName)
 	{
-		if ( ! isset($this->namespaces[TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME])) {
-			$this->namespaces[TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME] = new TokenReflection\ReflectionNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
+		if ( ! isset($this->namespaces[TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME])) {
+			$this->namespaces[TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME] = new TokenReflection\Reflection\ReflectionNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
 		}
 		$namespaceName = ltrim($namespaceName, '\\');
 		if ( ! isset($this->namespaces[$namespaceName])) {
@@ -186,7 +186,7 @@ class MemoryBackend implements Backend
 			$namespace = $this->getNamespace($namespace);
 			$className = substr($className, $pos + 1);
 		} else {
-			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			$namespace = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
 		return $namespace->hasClass($className);
 	}
@@ -210,7 +210,7 @@ class MemoryBackend implements Backend
 					// Class within a namespace
 					? substr($className, 0, $boundary)
 					// Class without a namespace
-					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
+					: TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
 			return $ns->getClass($className);
 		} catch (Exception\BaseException $e) {
@@ -271,7 +271,7 @@ class MemoryBackend implements Backend
 				$parent = $this->getNamespace($namespace);
 				$constantName = substr($constantName, $pos + 1);
 			} else {
-				$parent = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+				$parent = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
 		}
 		return $parent->hasConstant($constantName);
@@ -303,7 +303,7 @@ class MemoryBackend implements Backend
 				$ns = $this->getNamespace(substr($constantName, 0, $boundary));
 				$constantName = substr($constantName, $boundary + 1);
 			} else {
-				$ns = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+				$ns = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
 			return $ns->getConstant($constantName);
 		} catch (Exception\BaseException $e) {
@@ -354,7 +354,7 @@ class MemoryBackend implements Backend
 			$namespace = $this->getNamespace($namespace);
 			$functionName = substr($functionName, $pos + 1);
 		} else {
-			$namespace = $this->getNamespace(TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			$namespace = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
 		return $namespace->hasFunction($functionName);
 	}
@@ -381,7 +381,7 @@ class MemoryBackend implements Backend
 					// Function within a namespace
 					? substr($functionName, 0, $boundary)
 					// Function wihout a namespace
-					: TokenReflection\ReflectionNamespace::NO_NAMESPACE_NAME
+					: TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
 			return $ns->getFunction($functionName);
 		} catch (Exception\BaseException $e) {
@@ -455,7 +455,7 @@ class MemoryBackend implements Backend
 			try {
 				$namespaceName = $fileNamespace->getName();
 				if ( ! isset($this->namespaces[$namespaceName])) {
-					$this->namespaces[$namespaceName] = new TokenReflection\ReflectionNamespace($namespaceName, $file->getBroker());
+					$this->namespaces[$namespaceName] = new TokenReflection\Reflection\ReflectionNamespace($namespaceName, $file->getBroker());
 				}
 				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 			} catch (Exception\FileProcessingException $e) {

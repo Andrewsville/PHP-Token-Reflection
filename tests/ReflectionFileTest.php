@@ -3,7 +3,7 @@
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
-use ApiGen\TokenReflection\ReflectionNamespace;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 
 
 class ReflectionFileTest extends TestCase
@@ -28,7 +28,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
 
@@ -52,7 +52,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
 
@@ -85,7 +85,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
 
@@ -103,7 +103,7 @@ class ReflectionFileTest extends TestCase
 		$this->assertTrue($this->getBroker()->hasFile($fileName));
 
 		$fileReflection = $this->getBroker()->getFile($fileName);
-		$this->assertInstanceOf('ApiGen\TokenReflection\ReflectionFile', $fileReflection);
+		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
 

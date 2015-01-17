@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection;
 
 
-interface IReflectionNamespace extends IReflection
+interface ReflectionNamespaceInterface extends ReflectionInterface
 {
 
 	/**
@@ -26,7 +26,7 @@ interface IReflectionNamespace extends IReflection
 	 * Return a class reflection.
 	 *
 	 * @param string $className
-	 * @return IReflectionClass
+	 * @return ReflectionClassInterface
 	 */
 	function getClass($className);
 
@@ -34,7 +34,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns class reflections.
 	 *
-	 * @return array|IReflectionClass[]
+	 * @return array|ReflectionClassInterface[]
 	 */
 	function getClasses();
 
@@ -68,7 +68,7 @@ interface IReflectionNamespace extends IReflection
 	 * Returns a constant reflection.
 	 *
 	 * @param string $constantName
-	 * @return IReflectionConstant
+	 * @return ReflectionConstantInterface
 	 */
 	function getConstant($constantName);
 
@@ -76,7 +76,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns constant reflections.
 	 *
-	 * @return array|IReflectionConstant[]
+	 * @return array|ReflectionConstantInterface[]
 	 */
 	function getConstants();
 
@@ -110,7 +110,7 @@ interface IReflectionNamespace extends IReflection
 	 * Returns a function reflection.
 	 *
 	 * @param string $functionName
-	 * @return IReflectionFunction
+	 * @return ReflectionFunctionInterface
 	 */
 	function getFunction($functionName);
 
@@ -118,7 +118,7 @@ interface IReflectionNamespace extends IReflection
 	/**
 	 * Returns function reflections.
 	 *
-	 * @return array|IReflectionFunction[]
+	 * @return array|ReflectionFunctionInterface[]
 	 */
 	function getFunctions();
 

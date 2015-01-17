@@ -10,11 +10,11 @@
 namespace ApiGen\TokenReflection\Parser;
 
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\IReflection;
-use ApiGen\TokenReflection\IReflectionClass;
-use ApiGen\TokenReflection\IReflectionFunction;
-use ApiGen\TokenReflection\IReflectionFunctionBase;
-use ApiGen\TokenReflection\IReflectionMethod;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
+use ApiGen\TokenReflection\ReflectionFunctionBaseInterface;
+use ApiGen\TokenReflection\ReflectionMethodInterface;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -27,17 +27,17 @@ abstract class FunctionBaseParser
 	protected $tokenStream;
 
 	/**
-	 * @var IReflectionFunction|IReflectionMethod
+	 * @var ReflectionFunctionInterface|ReflectionMethodInterface
 	 */
 	protected $reflectionFunction;
 
 	/**
-	 * @var IReflection|IReflectionClass
+	 * @var ReflectionInterface|ReflectionClassInterface
 	 */
 	protected $parent;
 
 
-	public function __construct(StreamBase $tokenStream, IReflectionFunctionBase $reflectionFunction, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, ReflectionFunctionBaseInterface $reflectionFunction, ReflectionInterface $parent = NULL)
 	{
 		$this->tokenStream = $tokenStream;
 		$this->reflectionFunction = $reflectionFunction;

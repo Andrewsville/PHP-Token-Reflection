@@ -7,15 +7,22 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\Parser\ConstantParser;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
+use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-class ReflectionConstant extends ReflectionElement implements IReflectionConstant
+class ReflectionConstant extends ReflectionElement implements ReflectionConstantInterface
 {
 
 	/**
@@ -59,7 +66,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	private $constantParser;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
 	{
 		$this->constantParser = new ConstantParser($tokenStream, $this, $parent);
 		parent::__construct($tokenStream, $broker, $parent);
@@ -182,7 +189,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, StreamBase $tokenStream)
+	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ($parent instanceof ReflectionFileNamespace) {
 			$this->namespaceName = $parent->getName();
@@ -200,7 +207,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	 *
 	 * @return ReflectionConstant
 	 */
-	protected function parseDocComment(StreamBase $tokenStream, IReflection $parent)
+	protected function parseDocComment(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		$position = $tokenStream->key() - 1;
 		while ($position > 0 && !$tokenStream->is(T_CONST, $position)) {
@@ -216,7 +223,7 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 	/**
 	 * Parses reflected element metadata from the token stream.
 	 */
-	protected function parse(StreamBase $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		if ($tokenStream->is(T_CONST)) {
 			$tokenStream->skipWhitespaces(TRUE);

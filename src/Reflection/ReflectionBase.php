@@ -7,37 +7,30 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\Annotations;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\Reflection;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-abstract class ReflectionBase implements IReflection, Annotations
+abstract class ReflectionBase implements ReflectionInterface, Annotations
 {
 
 	/**
-	 * Class method cache.
-	 *
-	 * @var array
-	 */
-	private static $methodCache = [];
-
-	/**
-	 * Object name (FQN).
+	 * FQN object name.
 	 *
 	 * @var string
 	 */
 	protected $name;
 
 	/**
-	 * Docblock definition.
-	 *
-	 * @var ApiGen\TokenReflection\ReflectionAnnotation|bool
+	 * @var Reflection\ReflectionAnnotation|bool
 	 */
 	protected $docComment;
 
@@ -46,8 +39,13 @@ abstract class ReflectionBase implements IReflection, Annotations
 	 */
 	protected $broker;
 
+	/**
+	 * @var array
+	 */
+	private static $methodCache = [];
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
 	{
 		$this->broker = $broker;
 		if (method_exists($this, 'parseStream')) {
@@ -180,12 +178,12 @@ abstract class ReflectionBase implements IReflection, Annotations
 
 
 	/**
-	 * @param IReflection $object Reflection object
+	 * @param ReflectionInterface $object Reflection object
 	 * @param string $key Variable name
 	 * @return mixed
 	 * @throws RuntimeException If the requested parameter does not exist.
 	 */
-	public static function get(IReflection $object, $key)
+	public static function get(ReflectionInterface $object, $key)
 	{
 		if ( ! empty($key)) {
 			$className = get_class($object);
@@ -205,11 +203,11 @@ abstract class ReflectionBase implements IReflection, Annotations
 
 
 	/**
-	 * @param IReflection $object Reflection object
+	 * @param ReflectionInterface $object Reflection object
 	 * @param string $key Variable name
 	 * @return bool
 	 */
-	public static function exists(IReflection $object, $key)
+	public static function exists(ReflectionInterface $object, $key)
 	{
 		try {
 			self::get($object, $key);

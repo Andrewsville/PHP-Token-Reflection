@@ -7,18 +7,24 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use ApiGen\TokenReflection\Parser\PropertyParser;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionClass as InternalReflectionClass;
 
 
-class ReflectionProperty extends ReflectionElement implements IReflectionProperty
+class ReflectionProperty extends ReflectionElement implements ReflectionPropertyInterface
 {
 
 	/**
@@ -86,7 +92,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	private $propertyParser;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, IReflection $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
 	{
 		$this->propertyParser = new PropertyParser($tokenStream, $this, $parent);
 		parent::__construct($tokenStream, $broker, $parent);
@@ -305,7 +311,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	/**
 	 * Returns the defining trait.
 	 *
-	 * @return IReflectionClass|NULL
+	 * @return ReflectionClassInterface|NULL
 	 */
 	public function getDeclaringTrait()
 	{
@@ -339,7 +345,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */
-	protected function processParent(IReflection $parent, StreamBase $tokenStream)
+	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionClass) {
 			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', ParseException::INVALID_PARENT);
@@ -356,7 +362,7 @@ class ReflectionProperty extends ReflectionElement implements IReflectionPropert
 	 *
 	 * @return ReflectionProperty
 	 */
-	protected function parse(StreamBase $tokenStream, IReflection $parent)
+	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		$this->modifiers = $this->propertyParser->parseModifiers();
 		if (FALSE === $this->docComment->getDocComment()) {

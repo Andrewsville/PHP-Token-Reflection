@@ -7,15 +7,22 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection;
+namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\FileProcessingException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Invalid;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
+use ApiGen\TokenReflection\ReflectionNamespaceInterface;
+use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
 
 
-class ReflectionNamespace implements IReflectionNamespace
+class ReflectionNamespace implements ReflectionNamespaceInterface
 {
 
 	/**
@@ -37,21 +44,21 @@ class ReflectionNamespace implements IReflectionNamespace
 	/**
 	 * List of class reflections.
 	 *
-	 * @var array|IReflectionClass[]
+	 * @var array|ReflectionClassInterface[]
 	 */
 	private $classes = [];
 
 	/**
 	 * List of constant reflections.
 	 *
-	 * @var array|IReflectionConstant[]
+	 * @var array|ReflectionConstantInterface[]
 	 */
 	private $constants = [];
 
 	/**
 	 * List of function reflections.
 	 *
-	 * @var array|IReflectionFunction[]
+	 * @var array|ReflectionFunctionInterface[]
 	 */
 	private $functions = [];
 
@@ -160,7 +167,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 */
 	public function getClassShortNames()
 	{
-		return array_map(function (IReflectionClass $class) {
+		return array_map(function (ReflectionClassInterface $class) {
 			return $class->getShortName();
 		}, $this->classes);
 	}
@@ -218,7 +225,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 */
 	public function getConstantShortNames()
 	{
-		return array_map(function (IReflectionConstant $constant) {
+		return array_map(function (ReflectionConstantInterface $constant) {
 			return $constant->getShortName();
 		}, $this->constants);
 	}
@@ -276,7 +283,7 @@ class ReflectionNamespace implements IReflectionNamespace
 	 */
 	public function getFunctionShortNames()
 	{
-		return array_map(function (IReflectionFunction $function) {
+		return array_map(function (ReflectionFunctionInterface $function) {
 			return $function->getShortName();
 		}, $this->functions);
 	}
