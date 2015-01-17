@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection\Behaviors\Annotations;
+use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
@@ -18,7 +18,7 @@ use Reflector;
 use ReflectionProperty as InternalReflectionProperty;
 
 
-class ReflectionProperty extends InternalReflectionProperty implements ReflectionInterface, ReflectionPropertyInterface, Annotations
+class ReflectionProperty extends InternalReflectionProperty implements ReflectionInterface, ReflectionPropertyInterface, AnnotationsInterface
 {
 
 	/**

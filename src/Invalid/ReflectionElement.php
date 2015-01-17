@@ -9,7 +9,9 @@
 
 namespace ApiGen\TokenReflection\Invalid;
 
-use ApiGen\TokenReflection\Behaviors\Annotations;
+use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
+use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\BaseException;
 use ApiGen\TokenReflection\Exception\BrokerException;
@@ -17,7 +19,7 @@ use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 
 
-abstract class ReflectionElement implements Annotations
+abstract class ReflectionElement implements AnnotationsInterface, SourceInterface, ExtensionInterface
 {
 
 	/**
@@ -112,9 +114,7 @@ abstract class ReflectionElement implements Annotations
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getExtension()
 	{
@@ -123,9 +123,7 @@ abstract class ReflectionElement implements Annotations
 
 
 	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getExtensionName()
 	{
@@ -287,9 +285,7 @@ abstract class ReflectionElement implements Annotations
 
 
 	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getSource()
 	{

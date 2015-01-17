@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection\Behaviors\Annotations;
+use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Invalid;
@@ -21,7 +21,7 @@ use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use Reflector;
 
 
-class ReflectionConstant implements ReflectionInterface, ReflectionConstantInterface, Annotations
+class ReflectionConstant implements ReflectionInterface, ReflectionConstantInterface, AnnotationsInterface
 {
 
 	/**

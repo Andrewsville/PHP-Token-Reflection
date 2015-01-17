@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection\Behaviors;
 
 
-interface Annotations
+interface AnnotationsInterface
 {
 
 	/**

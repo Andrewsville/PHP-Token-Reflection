@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen;
-use ApiGen\TokenReflection\Behaviors\Annotations;
+use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
@@ -19,7 +19,7 @@ use ApiGen\TokenReflection\Reflection;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-abstract class ReflectionBase implements ReflectionInterface, Annotations
+abstract class ReflectionBase implements ReflectionInterface, AnnotationsInterface
 {
 
 	/**

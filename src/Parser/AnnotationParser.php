@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Parser;
 
-use ApiGen\TokenReflection\Behaviors\Annotations;
+use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionBase;
 use ApiGen\TokenReflection\Reflection\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionMethod;
@@ -233,7 +233,7 @@ class AnnotationParser
 
 
 	/**
-	 * @param array|Annotations[] $parentDefinitions
+	 * @param array|AnnotationsInterface[] $parentDefinitions
 	 * @param array $annotations
 	 * @return array
 	 */
@@ -258,7 +258,7 @@ class AnnotationParser
 
 
 	/**
-	 * @param array|Annotations[] $parentDefinitions
+	 * @param array|AnnotationsInterface[] $parentDefinitions
 	 * @param array $annotations
 	 * @return array
 	 */
@@ -283,7 +283,7 @@ class AnnotationParser
 
 
 	/**
-	 * @param array|Annotations[] $parentDefinitions
+	 * @param array|AnnotationsInterface[] $parentDefinitions
 	 * @param array $annotations
 	 * @return array
 	 */
@@ -303,7 +303,7 @@ class AnnotationParser
 
 
 	/**
-	 * @param array|Annotations[] $parentDefinitions
+	 * @param array|AnnotationsInterface[] $parentDefinitions
 	 * @param array $annotations
 	 * @return array
 	 */
