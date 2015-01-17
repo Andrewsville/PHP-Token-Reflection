@@ -187,8 +187,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	 */
 	public function getDefaultValueDefinition()
 	{
-		$value = $this->getDefaultValue();
-		return NULL === $value ? NULL : var_export($value, TRUE);
+		return $this->getDefaultValue() === NULL ? NULL : var_export($this->getDefaultValue(), TRUE);
 	}
 
 
@@ -209,7 +208,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 		if ( ! $this->isOptional()) {
 			throw new Exception\RuntimeException('Property is not optional.', Exception\RuntimeException::UNSUPPORTED, $this);
 		}
-		return $this->isDefaultValueConstant() ? parent::getDefaultValueConstantName : NULL;
+		return $this->isDefaultValueConstant() ? parent::getDefaultValueConstantName() : NULL;
 	}
 
 
@@ -218,7 +217,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	 */
 	public function getOriginalTypeHint()
 	{
-		return !$this->isArray() && !$this->isCallable() ? $this->getClass() : NULL;
+		return ! $this->isArray() && !$this->isCallable() ? $this->getClass() : NULL;
 	}
 
 
@@ -236,7 +235,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	 */
 	public function isInternal()
 	{
-		return !$this->userDefined;
+		return ! $this->userDefined;
 	}
 
 

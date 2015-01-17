@@ -12,16 +12,11 @@ class ReflectionParameterTest extends TestCase
 {
 
 	/**
-	 * Element type.
-	 *
 	 * @var string
 	 */
 	protected $type = 'parameter';
 
 
-	/**
-	 * Tests getting of parameter position.
-	 */
 	public function testPosition()
 	{
 		$rfl = $this->getFunctionReflection('position');
@@ -37,9 +32,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if parameter allows null.
-	 */
 	public function testAllowsNull()
 	{
 		foreach (['Class', 'Array'] as $type) {
@@ -54,9 +46,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if parameters is optional.
-	 */
 	public function testOptional()
 	{
 		$types = ['null' => NULL, 'true' => TRUE, 'false' => FALSE, 'array' => [], 'string' => 'string', 'integer' => 1, 'float' => 1.1, 'constant' => E_NOTICE];
@@ -90,9 +79,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests handling of invalid definitions of optional parameters.
-	 */
 	public function testInvalidOptions()
 	{
 		$fileName = $this->getFilePath('invalid-optionals');
@@ -133,9 +119,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if parameter has array type hint.
-	 */
 	public function testArray()
 	{
 		$rfl = $this->getParameterReflection('array');
@@ -148,9 +131,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if parameter has callback type hint.
-	 */
 	public function testCallable()
 	{
 		$rfl = $this->getParameterReflection('callable');
@@ -163,9 +143,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if parameter has class type hint.
-	 */
 	public function testClass()
 	{
 		$rfl = $this->getParameterReflection('class');
@@ -181,9 +158,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if parameter is passed by reference.
-	 */
 	public function testReference()
 	{
 		$rfl = $this->getParameterReflection('reference');
@@ -196,9 +170,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests getting of declaring method or function.
-	 */
 	public function testDeclaring()
 	{
 		$rfl = $this->getParameterReflection('declaringFunction');
@@ -229,9 +200,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests getting of inherited documentation comment.
-	 */
 	public function testDocCommentInheritance()
 	{
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
@@ -254,9 +222,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests new PHP 5.4 features.
-	 */
 	public function test54features()
 	{
 		$rfl = $this->getFunctionReflection('54features');
@@ -270,8 +235,6 @@ class ReflectionParameterTest extends TestCase
 
 
 	/**
-	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
-	 *
 	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
 	public function testInternalParameterReflectionCreate()
@@ -280,9 +243,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * Tests various constant (mis)definitions.
-	 */
 	public function testValueDefinitions()
 	{
 		$rfl = $this->getClassReflection('valueDefinitions');

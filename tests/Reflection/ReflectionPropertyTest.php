@@ -13,8 +13,6 @@ class ReflectionPropertyTest extends TestCase
 {
 
 	/**
-	 * Element type.
-	 *
 	 * @var string
 	 */
 	protected $type = 'property';
