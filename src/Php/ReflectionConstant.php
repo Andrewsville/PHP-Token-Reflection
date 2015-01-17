@@ -269,15 +269,6 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getOriginalValueDefinition()
-	{
-		return token_get_all($this->getValueDefinition());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function isInternal()
 	{
 		return !$this->userDefined;

@@ -104,7 +104,6 @@ class ReflectionConstantTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertNull($this->reflectionConstant->getValue());
 		$this->assertNull($this->reflectionConstant->getValueDefinition());
-		$this->assertNull($this->reflectionConstant->getOriginalValueDefinition());
 	}
 
 

@@ -152,15 +152,6 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getOriginalValueDefinition()
-	{
-		return $this->valueDefinition;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getNamespaceAliases()
 	{
 		return NULL === $this->declaringClassName ? $this->aliases : $this->getDeclaringClass()->getNamespaceAliases();

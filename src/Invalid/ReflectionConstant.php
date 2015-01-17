@@ -66,17 +66,6 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 
 
 	/**
-	 * Returns the originally provided value definition.
-	 *
-	 * @return string
-	 */
-	public function getOriginalValueDefinition()
-	{
-		return NULL;
-	}
-
-
-	/**
 	 * Returns an element pretty (docblock compatible) name.
 	 *
 	 * @return string

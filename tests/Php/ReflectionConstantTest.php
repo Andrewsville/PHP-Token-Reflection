@@ -83,7 +83,6 @@ class ReflectionConstantTest extends TestCase
 	{
 		$this->assertSame('/', $this->internalReflectionConstant->getValue());
 		$this->assertSame("'/'", $this->internalReflectionConstant->getValueDefinition());
-		$this->assertSame([[312, "'/'", 1]], $this->internalReflectionConstant->getOriginalValueDefinition());
 	}
 
 
