@@ -127,43 +127,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if method is a closure.
-	 */
-	public function testClosure()
-	{
-		$rfl = $this->getMethodReflection('noClosure');
-		$this->assertSame($rfl->internal->isClosure(), $rfl->token->isClosure());
-		$this->assertFalse($rfl->token->isClosure());
-	}
-
-
-	/**
-	 * Tests closure related methods.
-	 */
-	public function testClosures()
-	{
-		$rfl = $this->getMethodReflection('closures');
-		$internal = $rfl->internal;
-		$token = $rfl->token;
-
-		$className = $this->getClassName('closures');
-		$class = new $className;
-
-		$internalClosure = $internal->getClosure($class);
-		$tokenClosure = $token->getClosure($class);
-
-		static $results = [1 => 1, 2 => 4, 3 => 9, 100 => 10000];
-		foreach ($results as $param => $result) {
-			$this->assertSame($result, $internalClosure($param));
-			$this->assertSame($result, $tokenClosure($param));
-		}
-
-		$this->assertSame($internal->getClosureThis(), $token->getClosureThis());
-		$this->assertSame($internal->getClosureScopeClass(), $token->getClosureScopeClass());
-	}
-
-
 	public function testDeprecated()
 	{
 		$rfl = $this->getMethodReflection('noDeprecated');
@@ -372,78 +335,6 @@ class ReflectionMethodTest extends TestCase
 		$this->assertSame(0, $rfl->token->getNumberOfRequiredParameters());
 		$this->assertSame($rfl->internal->getParameters(), $rfl->token->getParameters());
 		$this->assertSame([], $rfl->token->getParameters());
-	}
-
-
-	/**
-	 * Tests method invoking.
-	 */
-	public function testInvoke()
-	{
-		$rfl = $this->getClassReflection('invoke');
-
-		$className = $this->getClassName('invoke');
-		$object = new $className();
-
-		$internal = $rfl->internal->getMethod('publicInvoke');
-		$token = $rfl->token->getMethod('publicInvoke');
-
-		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
-		$this->assertSame(3, $token->invoke($object, 1, 2));
-		$this->assertSame($internal->invokeArgs($object, [1, 2]), $token->invokeArgs($object, [1, 2]));
-		$this->assertSame(3, $token->invokeArgs($object, [1, 2]));
-
-		$this->assertSame($internal->setAccessible(FALSE), $token->setAccessible(FALSE));
-		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
-
-		try {
-			$token->invoke(new \Exception(), 1, 2);
-			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
-		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
-			throw $e;
-		} catch (\Exception $e) {
-			// Correctly thrown exception
-			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
-		}
-
-		try {
-			$token->invokeArgs(new \Exception(), [1, 2]);
-			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
-		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
-			throw $e;
-		} catch (\Exception $e) {
-			// Correctly thrown exception
-			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
-		}
-
-		$internal = $rfl->internal->getMethod('protectedInvoke');
-		$token = $rfl->token->getMethod('protectedInvoke');
-
-		try {
-			$token->invoke($object, 1, 2);
-			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
-		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
-			throw $e;
-		} catch (\Exception $e) {
-			// Correctly thrown exception
-			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
-		}
-
-		try {
-			$token->invokeArgs($object, [1, 2]);
-			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
-		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
-			throw $e;
-		} catch (\Exception $e) {
-			// Correctly thrown exception
-			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
-		}
-
-		$this->assertSame($internal->setAccessible(TRUE), $token->setAccessible(TRUE));
-		$this->assertSame($internal->invoke($object, 1, 2), $token->invoke($object, 1, 2));
-		$this->assertSame(3, $token->invoke($object, 1, 2));
-		$this->assertSame($internal->invokeArgs($object, [1, 2]), $token->invokeArgs($object, [1, 2]));
-		$this->assertSame(3, $token->invokeArgs($object, [1, 2]));
 	}
 
 

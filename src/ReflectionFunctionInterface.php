@@ -22,31 +22,6 @@ interface ReflectionFunctionInterface extends ReflectionFunctionBaseInterface
 
 
 	/**
-	 * Calls the function.
-	 *
-	 * @return mixed
-	 */
-	 function invoke();
-
-
-	/**
-	 * Calls the function.
-	 *
-	 * @param array $args Function parameter values
-	 * @return mixed
-	 */
-	function invokeArgs(array $args);
-
-
-	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
-	 */
-	function getClosure();
-
-
-	/**
 	 * Returns if the function definition is valid.
 	 *
 	 * That means that the source code is valid and the function name is unique within parsed files.

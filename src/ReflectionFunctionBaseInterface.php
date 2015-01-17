@@ -78,14 +78,6 @@ interface ReflectionFunctionBaseInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns if the function/method is a closure.
-	 *
-	 * @return bool
-	 */
-	function isClosure();
-
-
-	/**
 	 * Return if the function/method is variadic.
 	 *
 	 * @return bool

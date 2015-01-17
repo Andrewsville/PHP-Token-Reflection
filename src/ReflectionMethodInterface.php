@@ -119,40 +119,11 @@ interface ReflectionMethodInterface extends ReflectionFunctionBaseInterface
 
 
 	/**
-	 * Calls the method on an given instance.
-	 *
-	 * @param object $object Class instance
-	 * @param mixed $args
-	 * @return mixed
-	 */
-	function invoke($object, $args);
-
-
-	/**
-	 * Calls the method on an given object.
-	 *
-	 * @param object $object Class instance
-	 * @param array $args Method parameter values
-	 * @return mixed
-	 */
-	function invokeArgs($object, array $args);
-
-
-	/**
 	 * Sets a method to be accessible or not.
 	 *
 	 * @param bool $accessible If the method should be accessible.
 	 */
 	function setAccessible($accessible);
-
-
-	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @param object $object Object
-	 * @return \Closure
-	 */
-	function getClosure($object);
 
 
 	/**

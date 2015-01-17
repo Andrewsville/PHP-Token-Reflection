@@ -101,39 +101,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 
 
 	/**
-	 * Returns if the function/method is a closure.
-	 *
-	 * @return bool
-	 */
-	public function isClosure()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * Returns this pointer bound to closure.
-	 *
-	 * @return null
-	 */
-	public function getClosureThis()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * Returns the closure scope class.
-	 *
-	 * @return string|null
-	 */
-	public function getClosureScopeClass()
-	{
-		return NULL;
-	}
-
-
-	/**
 	 * @return bool
 	 */
 	public function returnsReference()

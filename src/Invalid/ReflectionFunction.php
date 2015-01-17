@@ -266,17 +266,6 @@ class ReflectionFunction extends ReflectionElement implements ReflectionFunction
 
 
 	/**
-	 * Returns if the function/method is a closure.
-	 *
-	 * @return bool
-	 */
-	public function isClosure()
-	{
-		return FALSE;
-	}
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function isDeprecated()
@@ -354,29 +343,6 @@ class ReflectionFunction extends ReflectionElement implements ReflectionFunction
 
 
 	/**
-	 * Calls the function.
-	 *
-	 * @return mixed
-	 */
-	public function invoke()
-	{
-		return $this->invokeArgs([]);
-	}
-
-
-	/**
-	 * Calls the function.
-	 *
-	 * @param array $args Function parameter values
-	 * @return mixed
-	 */
-	public function invokeArgs(array $args)
-	{
-		throw new RuntimeException('Cannot invoke invalid functions', RuntimeException::UNSUPPORTED, $this);
-	}
-
-
-	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array
@@ -384,39 +350,6 @@ class ReflectionFunction extends ReflectionElement implements ReflectionFunction
 	public function getNamespaceAliases()
 	{
 		return [];
-	}
-
-
-	/**
-	 * Returns the function/method as closure.
-	 *
-	 * @return \Closure
-	 */
-	public function getClosure()
-	{
-		throw new RuntimeException('Cannot invoke invalid functions', RuntimeException::UNSUPPORTED, $this);
-	}
-
-
-	/**
-	 * Returns the closure scope class.
-	 *
-	 * @return null
-	 */
-	public function getClosureScopeClass()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * Returns this pointer bound to closure.
-	 *
-	 * @return null
-	 */
-	public function getClosureThis()
-	{
-		return NULL;
 	}
 
 

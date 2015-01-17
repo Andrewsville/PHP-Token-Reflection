@@ -344,39 +344,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	/**
 	 * {@inheritdoc}
 	 */
-	public function invoke($object, $args)
-	{
-		$params = func_get_args();
-		return $this->invokeArgs(array_shift($params), $params);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function invokeArgs($object, array $args = [])
-	{
-		$declaringClass = $this->getDeclaringClass();
-		if ( ! $declaringClass->isInstance($object)) {
-			throw new RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), RuntimeException::INVALID_ARGUMENT, $this);
-		}
-		if ($this->isPublic()) {
-			return call_user_func_array([$object, $this->getName()], $args);
-		} elseif ($this->isAccessible()) {
-			$refClass = new InternalReflectionClass($object);
-			$refMethod = $refClass->getMethod($this->name);
-			$refMethod->setAccessible(TRUE);
-			$value = $refMethod->invokeArgs($object, $args);
-			$refMethod->setAccessible(FALSE);
-			return $value;
-		}
-		throw new RuntimeException('Only public methods can be invoked.', RuntimeException::NOT_ACCESSBILE, $this);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function isAccessible()
 	{
 		return $this->accessible;
@@ -411,22 +378,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	public function getNamespaceAliases()
 	{
 		return $this->getDeclaringClass()->getNamespaceAliases();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getClosure($object)
-	{
-		$declaringClass = $this->getDeclaringClass();
-		if ( ! $declaringClass->isInstance($object)) {
-			throw new RuntimeException(sprintf('Expected instance of or subclass of "%s".', $this->declaringClassName), RuntimeException::INVALID_ARGUMENT, $this);
-		}
-		$that = $this;
-		return function () use ($object, $that) {
-			return $that->invokeArgs($object, func_get_args());
-		};
 	}
 
 

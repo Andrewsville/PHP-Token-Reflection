@@ -95,7 +95,6 @@ class ReflectionFunctionTest extends PHPUnit_Framework_TestCase
 
 	public function testModifiers()
 	{
-		$this->assertFalse($this->reflectionFunction->isClosure());
 		$this->assertFalse($this->reflectionFunction->isInternal());
 	}
 
@@ -132,40 +131,6 @@ class ReflectionFunctionTest extends PHPUnit_Framework_TestCase
 	public function testIsDisabled()
 	{
 		$this->assertFalse($this->reflectionFunction->isDisabled());
-	}
-
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInvoke()
-	{
-		$this->reflectionFunction->invoke();
-	}
-
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInvokeArgs()
-	{
-		$this->reflectionFunction->invokeArgs([]);
-	}
-
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testGetClosure()
-	{
-		$this->reflectionFunction->getClosure();
-	}
-
-
-	public function testClosure()
-	{
-		$this->assertNull($this->reflectionFunction->getClosureScopeClass());
-		$this->assertNull($this->reflectionFunction->getClosureThis());
 	}
 
 

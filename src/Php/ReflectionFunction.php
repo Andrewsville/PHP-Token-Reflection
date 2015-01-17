@@ -151,15 +151,6 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getClosure()
-	{
-		return parent::getClosure();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function isValid()
 	{
 		return TRUE;

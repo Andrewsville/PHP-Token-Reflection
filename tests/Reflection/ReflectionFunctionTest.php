@@ -72,78 +72,6 @@ class ReflectionFunctionTest extends TestCase
 
 
 	/**
-	 * Tests if function is a closure.
-	 */
-	public function testClosure()
-	{
-		$rfl = $this->getFunctionReflection('noClosure');
-		$this->assertSame($rfl->internal->isClosure(), $rfl->token->isClosure());
-		$this->assertFalse($rfl->token->isClosure());
-	}
-
-
-	/**
-	 * Tests returning a closure of the function.
-	 */
-	public function testGetClosure()
-	{
-		$broker = $this->getBroker();
-		$broker->processFile($this->getFilePath('getClosure'));
-		require_once $this->getFilePath('getClosure');
-
-		$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure1');
-
-		$function = $broker->getFunction('tokenReflectionFunctionGetClosure1');
-
-		$this->assertNull($function->getClosureScopeClass());
-		if (isset($internal)) {
-			$this->assertNull($internal->getClosureScopeClass());
-		}
-
-		$closure = $function->getClosure();
-		$this->assertInstanceOf('Closure', $closure);
-
-		static $data1 = [1 => 1, 4 => 2, 9 => 3];
-		foreach ($data1 as $result => $input) {
-			$this->assertSame($result, $closure($input));
-
-			if (isset($internal)) {
-				$internalClosure = $internal->getClosure();
-				$this->assertSame($result, $internalClosure($input));
-			}
-		}
-
-		$internal = new \ReflectionFunction('tokenReflectionFunctionGetClosure2');
-
-		$function = $broker->getFunction('tokenReflectionFunctionGetClosure2');
-
-		$this->assertNull($function->getClosureScopeClass());
-		if (isset($internal)) {
-			$this->assertNull($internal->getClosureScopeClass());
-		}
-
-		$closure = $function->getClosure();
-		$this->assertInstanceOf('Closure', $closure);
-
-		static $data2 = [-1 => 1, -2 => 2, -3 => 3];
-		foreach ($data2 as $result => $input) {
-			$this->assertSame($result, $closure($input));
-
-			if (isset($internal)) {
-				$internalClosure = $internal->getClosure();
-				$this->assertSame($result, $internalClosure($input));
-			}
-		}
-
-		static $data3 = [-1 => [2, -.5], 1 => [-100, -.01], 8 => [2, 4]];
-		foreach ($data3 as $result => $input) {
-			list($a, $b) = $input;
-			$this->assertEquals($result, $closure($a, $b));
-		}
-	}
-
-
-	/**
 	 * Tests if function is deprecated.
 	 */
 	public function testDeprecated()
@@ -275,19 +203,6 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame(0, $rfl->token->getNumberOfRequiredParameters());
 		$this->assertSame($rfl->internal->getParameters(), $rfl->token->getParameters());
 		$this->assertSame([], $rfl->token->getParameters());
-	}
-
-
-	/**
-	 * Tests function invoking.
-	 */
-	public function testInvoke()
-	{
-		$rfl = $this->getFunctionReflection('invoke');
-		$this->assertSame($rfl->internal->invoke(1, 2), $rfl->token->invoke(1, 2));
-		$this->assertSame(3, $rfl->token->invoke(1, 2));
-		$this->assertSame($rfl->internal->invokeArgs([1, 2]), $rfl->token->invokeArgs([1, 2]));
-		$this->assertSame(3, $rfl->token->invokeArgs([1, 2]));
 	}
 
 
