@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\Annotations;
-use ApiGen\TokenReflection\Broker\Backend;
+use ApiGen\TokenReflection\Broker\BackendInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
@@ -531,7 +531,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, Re
 	public function getDirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->isSubclassOf($that)) {
@@ -557,7 +557,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, Re
 	public function getIndirectSubclasses()
 	{
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->isSubclassOf($that)) {
@@ -586,7 +586,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, Re
 			return [];
 		}
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->implementsInterface($that)) {
@@ -615,7 +615,7 @@ class ReflectionClass extends InternalReflectionClass implements IReflection, Re
 			return [];
 		}
 		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(Backend::INTERNAL_CLASSES | Backend::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
+		return array_filter($this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES), function (ReflectionClassInterface $class) use (
 			$that
 		) {
 			if ( ! $class->implementsInterface($that)) {

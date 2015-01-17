@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen;
-use ApiGen\TokenReflection\Broker\Backend;
+use ApiGen\TokenReflection\Broker\BackendInterface;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -81,7 +81,7 @@ class Broker
 	/**
 	 * Namespace/class backend.
 	 *
-	 * @var Backend
+	 * @var BackendInterface
 	 */
 	private $backend;
 
@@ -101,10 +101,10 @@ class Broker
 
 
 	/**
-	 * @param Backend $backend Broker backend instance
+	 * @param BackendInterface $backend Broker backend instance
 	 * @param int $options Broker/parsing options
 	 */
-	public function __construct(Backend $backend, $options = self::OPTION_DEFAULT)
+	public function __construct(BackendInterface $backend, $options = self::OPTION_DEFAULT)
 	{
 		$this->cache = [
 			self::CACHE_NAMESPACE => [],
@@ -342,7 +342,7 @@ class Broker
 	 * @param int $types Returned class types (multiple values may be OR-ed)
 	 * @return array|ReflectionClassInterface[]
 	 */
-	public function getClasses($types = Backend::TOKENIZED_CLASSES)
+	public function getClasses($types = BackendInterface::TOKENIZED_CLASSES)
 	{
 		return $this->backend->getClasses($types);
 	}

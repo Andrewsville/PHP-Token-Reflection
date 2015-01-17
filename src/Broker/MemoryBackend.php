@@ -22,7 +22,7 @@ use ApiGen\TokenReflection\Stream\StreamBase;
 /**
  * Stores parsed reflection objects in memory.
  */
-class MemoryBackend implements Backend
+class MemoryBackend implements BackendInterface
 {
 
 	/**
@@ -502,7 +502,7 @@ class MemoryBackend implements Backend
 	 * Sets if token streams are stored in the backend.
 	 *
 	 * @param bool $store
-	 * @return Backend
+	 * @return BackendInterface
 	 */
 	public function setStoringTokenStreams($store)
 	{
