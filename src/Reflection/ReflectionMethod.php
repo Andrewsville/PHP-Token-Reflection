@@ -295,44 +295,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 
 
 	/**
-	 * Returns the method prototype.
-	 *
-	 * @return ReflectionMethod
-	 * @throws RuntimeException If the method has no prototype.
-	 */
-	public function getPrototype()
-	{
-		if (NULL === $this->prototype) {
-			$prototype = NULL;
-			$declaring = $this->getDeclaringClass();
-			if (($parent = $declaring->getParentClass()) && $parent->hasMethod($this->name)) {
-				$method = $parent->getMethod($this->name);
-				if ( ! $method->isPrivate()) {
-					try {
-						$prototype = $method->getPrototype();
-					} catch (RuntimeException $e) {
-						$prototype = $method;
-					}
-				}
-			}
-			if (NULL === $prototype) {
-				foreach ($declaring->getOwnInterfaces() as $interface) {
-					if ($interface->hasMethod($this->name)) {
-						$prototype = $interface->getMethod($this->name);
-						break;
-					}
-				}
-			}
-			$this->prototype = $prototype ?: ($this->isComplete() ? FALSE : NULL);
-		}
-		if (empty($this->prototype)) {
-			throw new RuntimeException('Method has no prototype.', RuntimeException::DOES_NOT_EXIST, $this);
-		}
-		return $this->prototype;
-	}
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function getPrettyName()

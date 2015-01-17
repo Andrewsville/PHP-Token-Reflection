@@ -14,7 +14,6 @@ use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use Reflector;
 use ReflectionMethod as InternalReflectionMethod;
 use ReflectionParameter as InternalReflectionParameter;
@@ -24,8 +23,6 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 {
 
 	/**
-	 * Function parameter reflections.
-	 *
 	 * @var array
 	 */
 	private $parameters;
@@ -121,15 +118,6 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getPrototype()
-	{
-		return self::create(parent::getPrototype(), $this->broker);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getParameter($parameter)
 	{
 		$parameters = $this->getParameters();
@@ -138,6 +126,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			return $parameters[$parameter];
+
 		} else {
 			foreach ($parameters as $reflection) {
 				if ($reflection->getName() === $parameter) {
@@ -154,11 +143,9 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	 */
 	public function getParameters()
 	{
-		if (NULL === $this->parameters) {
-			$broker = $this->broker;
-			$parent = $this;
-			$this->parameters = array_map(function (InternalReflectionParameter $parameter) use ($broker, $parent) {
-				return ReflectionParameter::create($parameter, $broker, $parent);
+		if ($this->parameters === NULL) {
+			$this->parameters = array_map(function (InternalReflectionParameter $parameter) {
+				return ReflectionParameter::create($parameter, $this->broker, $this);
 			}, parent::getParameters());
 		}
 		return $this->parameters;
@@ -189,7 +176,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	 */
 	public function is($filter = NULL)
 	{
-		return NULL === $filter || ($this->getModifiers() & $filter);
+		return $filter === NULL || ($this->getModifiers() & $filter);
 	}
 
 

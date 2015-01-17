@@ -71,9 +71,6 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if function is deprecated.
-	 */
 	public function testDeprecated()
 	{
 		$rfl = $this->getFunctionReflection('noDeprecated');
@@ -82,9 +79,6 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if function is disabled.
-	 */
 	public function testDisabled()
 	{
 		$rfl = $this->getFunctionReflection('noDisabled');
@@ -93,9 +87,6 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if function is user defined or internal.
-	 */
 	public function testUserDefined()
 	{
 		$rfl = $this->getFunctionReflection('userDefined');
@@ -113,18 +104,12 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertFalse($rfl->token->getExtensionName());
 
 		$rfl = new \stdClass();
-		$rfl->internal = new InternalReflectionFunction('get_class');
 		$rfl->token = $this->getBroker()->getFunction('get_class');
-
-		$this->assertSame($rfl->internal->isUserDefined(), $rfl->token->isUserDefined());
 		$this->assertFalse($rfl->token->isUserDefined());
-		$this->assertSame($rfl->internal->getFileName(), $rfl->token->getFileName());
 		$this->assertFalse($rfl->token->getFileName());
-		$this->assertSame($rfl->internal->isInternal(), $rfl->token->isInternal());
 		$this->assertTrue($rfl->token->isInternal());
 
 		$this->assertInstanceOf('ApiGen\TokenReflection\Php\ReflectionExtension', $rfl->token->getExtension());
-		$this->assertSame($rfl->internal->getExtensionName(), $rfl->token->getExtensionName());
 		$this->assertSame('Core', $rfl->token->getExtensionName());
 	}
 
@@ -233,39 +218,6 @@ class ReflectionFunctionTest extends TestCase
 	public function testInternalFunctionReflectionCreate()
 	{
 		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to get a non-existent parameter.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalFunctionGetParameter1()
-	{
-		$this->getInternalFunctionReflection()->getParameter('~non-existent~');
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to get a non-existent parameter.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalFunctionGetParameter2()
-	{
-		$this->getInternalFunctionReflection()->getParameter(999);
-	}
-
-
-	/**
-	 * Returns an internal function reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionFunction
-	 */
-	private function getInternalFunctionReflection()
-	{
-		return $this->getBroker()->getFunction('create_function');
 	}
 
 }

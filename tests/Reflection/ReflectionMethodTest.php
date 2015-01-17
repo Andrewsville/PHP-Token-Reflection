@@ -339,30 +339,6 @@ class ReflectionMethodTest extends TestCase
 
 
 	/**
-	 * Tests if method has a prototype.
-	 */
-	public function testPrototype()
-	{
-		$rfl = $this->getMethodReflection('prototype');
-		$this->assertSame($rfl->internal->getPrototype()->getName(), $rfl->internal->getPrototype()->getName());
-		$this->assertSame($rfl->internal->getPrototype()->getDeclaringClass()->getName(), $rfl->internal->getPrototype()->getDeclaringClass()->getName());
-		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionMethod', $rfl->token->getPrototype());
-
-		$rfl = $this->getMethodReflection('noPrototype');
-
-		try {
-			$rfl->token->getPrototype();
-			$this->fail('Expected exception TokenReflection\Exception\RuntimeException.');
-		} catch (\PHPUnit_Framework_AssertionFailedError $e) {
-			throw $e;
-		} catch (\Exception $e) {
-			// Correctly thrown exception
-			$this->assertInstanceOf('ApiGen\TokenReflection\Exception\RuntimeException', $e);
-		}
-	}
-
-
-	/**
 	 * Tests new PHP 5.4 features.
 	 */
 	public function test54features()
@@ -389,39 +365,6 @@ class ReflectionMethodTest extends TestCase
 	public function testInternalMethodReflectionCreate()
 	{
 		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to get a non-existent parameter.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalMethodGetParameter1()
-	{
-		$this->getInternalMethodReflection()->getParameter('~non-existent~');
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to get a non-existent parameter.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalMethodGetParameter2()
-	{
-		$this->getInternalMethodReflection()->getParameter(999);
-	}
-
-
-	/**
-	 * Returns an internal method reflection.
-	 *
-	 * @return ApiGen\TokenReflection\Php\ReflectionMethod
-	 */
-	private function getInternalMethodReflection()
-	{
-		return $this->getBroker()->getClass('Exception')->getConstructor();
 	}
 
 }

@@ -111,14 +111,6 @@ interface ReflectionMethodInterface extends ReflectionFunctionBaseInterface
 
 
 	/**
-	 * Returns the method prototype.
-	 *
-	 * @return ReflectionMethodInterface
-	 */
-	function getPrototype();
-
-
-	/**
 	 * Sets a method to be accessible or not.
 	 *
 	 * @param bool $accessible If the method should be accessible.
