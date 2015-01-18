@@ -16,7 +16,7 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionClassInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
 use Reflector;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionProperty as InternalReflectionProperty;
@@ -375,6 +375,29 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function hasConstant($name)
+	{
+		return isset($this->getConstants()[$name]);
+	}
+
+
+	/**
+	 * @param string $name
+	 * @return ReflectionConstantInterface|NULL
+	 */
+	public function getConstant($name)
+	{
+		if ($this->hasConstant($name)) {
+			return $this->getConstants()[$name];
+		}
+		return NULL;
+	}
+
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function getConstantReflection($name)
@@ -505,6 +528,17 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public function getTraitProperties($filter = NULL)
 	{
 		return [];
+	}
+
+
+	/**
+	 * @param string $name
+	 * @param NULL $default
+	 * @return mixed
+	 */
+	public function getStaticPropertyValue($name, $default = NULL)
+	{
+		return parent::getStaticPropertyValue($name, $default );
 	}
 
 
