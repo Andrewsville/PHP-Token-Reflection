@@ -127,7 +127,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	{
 		$className = $this->getFqnElementName($className);
 		if ( ! isset($this->classes[$className])) {
-			throw new RuntimeException(sprintf('Class "%s" does not exist.', $className), RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('Class "%s" does not exist.', $className), RuntimeException::DOES_NOT_EXIST);
 		}
 		return $this->classes[$className];
 	}
@@ -179,7 +179,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	{
 		$constantName = $this->getFqnElementName($constantName);
 		if ( ! isset($this->constants[$constantName])) {
-			throw new RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), RuntimeException::DOES_NOT_EXIST);
 		}
 		return $this->constants[$constantName];
 	}
@@ -231,7 +231,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	{
 		$functionName = $this->getFqnElementName($functionName);
 		if ( ! isset($this->functions[$functionName])) {
-			throw new RuntimeException(sprintf('Function "%s" does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('Function "%s" does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST);
 		}
 		return $this->functions[$functionName];
 	}
@@ -328,7 +328,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 
 	public function getSource()
 	{
-		throw new RuntimeException('Cannot export source code of a namespace.', RuntimeException::UNSUPPORTED, $this);
+		throw new RuntimeException('Cannot export source code of a namespace.', RuntimeException::UNSUPPORTED);
 	}
 
 
@@ -382,8 +382,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 		$elementType = $this->getElementType($element);
 		$error = new RuntimeException(
 			sprintf('%s %s was redeclared (previously declared in file %s).', ucfirst($elementType), $elementName, $element->getFileName()),
-			RuntimeException::ALREADY_EXISTS,
-			$reflection
+			RuntimeException::ALREADY_EXISTS
 		);
 		$this->errors[] = $error;
 		$elements[$elementName]->addReason($error);

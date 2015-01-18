@@ -13,9 +13,6 @@ use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\StreamException;
 
 
-/**
- * Token stream iterator created from a file.
- */
 class FileStream extends StreamBase
 {
 
@@ -28,12 +25,12 @@ class FileStream extends StreamBase
 	public function __construct($fileName)
 	{
 		$this->fileName = Broker::getRealPath($fileName);
-		if (FALSE === $this->fileName) {
-			throw new StreamException($this, 'File does not exist.', StreamException::DOES_NOT_EXIST);
+		if ($this->fileName === FALSE) {
+			throw new StreamException('File does not exist.', StreamException::DOES_NOT_EXIST);
 		}
 		$contents = @file_get_contents($this->fileName);
-		if (FALSE === $contents) {
-			throw new StreamException($this, 'File is not readable.', StreamException::NOT_READABLE);
+		if ($contents === FALSE) {
+			throw new StreamException('File is not readable.', StreamException::NOT_READABLE);
 		}
 		$this->processSource($contents);
 	}

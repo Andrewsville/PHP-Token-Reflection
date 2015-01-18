@@ -89,7 +89,7 @@ abstract class ReflectionElement implements AnnotationsInterface, SourceInterfac
 	/**
 	 * {@inheritdoc}
 	 */
-	public function addReason(BaseException $reason)
+	public function addReason($reason)
 	{
 		$this->reasons[] = $reason;
 	}
@@ -138,7 +138,6 @@ abstract class ReflectionElement implements AnnotationsInterface, SourceInterfac
 	public function getFileReflection()
 	{
 		throw new BrokerException(
-			$this->getBroker(),
 			sprintf('Constant %s was not parsed from a file', $this->getName()),
 			BrokerException::UNSUPPORTED
 		);

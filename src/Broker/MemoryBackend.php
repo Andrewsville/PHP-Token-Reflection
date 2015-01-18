@@ -19,9 +19,6 @@ use ApiGen\TokenReflection\Stream\FileStream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * Stores parsed reflection objects in memory.
- */
 class MemoryBackend implements BackendInterface
 {
 
@@ -109,7 +106,7 @@ class MemoryBackend implements BackendInterface
 	public function getFile($fileName)
 	{
 		if ( ! isset($this->files[$fileName])) {
-			throw new BrokerException($this->getBroker(), sprintf('File "%s" has not been processed.', $fileName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('File "%s" has not been processed.', $fileName), BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->files[$fileName];
 	}
@@ -152,7 +149,7 @@ class MemoryBackend implements BackendInterface
 		}
 		$namespaceName = ltrim($namespaceName, '\\');
 		if ( ! isset($this->namespaces[$namespaceName])) {
-			throw new BrokerException($this->getBroker(), sprintf('Namespace %s does not exist.', $namespaceName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('Namespace %s does not exist.', $namespaceName), BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->namespaces[$namespaceName];
 	}
@@ -313,7 +310,7 @@ class MemoryBackend implements BackendInterface
 					return $reflection;
 				}
 			}
-			throw new BrokerException($this->getBroker(), sprintf('Constant %s does not exist.', $constantName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('Constant %s does not exist.', $constantName), BrokerException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -388,7 +385,7 @@ class MemoryBackend implements BackendInterface
 			if (isset($declared[$functionName])) {
 				return new Php\ReflectionFunction($functionName, $this->broker);
 			}
-			throw new BrokerException($this->getBroker(), sprintf('Function %s does not exist.', $functionName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('Function %s does not exist.', $functionName), BrokerException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -435,7 +432,7 @@ class MemoryBackend implements BackendInterface
 	{
 		$realName = Broker::getRealPath($fileName);
 		if ( ! isset($this->tokenStreams[$realName])) {
-			throw new BrokerException($this->getBroker(), sprintf('File "%s" was not processed yet.', $fileName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('File "%s" was not processed yet.', $fileName), BrokerException::DOES_NOT_EXIST);
 		}
 		return TRUE === $this->tokenStreams[$realName] ? new FileStream($realName) : $this->tokenStreams[$realName];
 	}

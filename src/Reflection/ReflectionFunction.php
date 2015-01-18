@@ -34,6 +34,7 @@ class ReflectionFunction extends ReflectionFunctionBase implements ReflectionFun
 		parent::__construct($tokenStream, $broker, $parent);
 	}
 
+
 	/**
 	 * {@inheritdoc}
 	 */

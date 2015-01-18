@@ -9,19 +9,13 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
+use ApiGen\TokenReflection\Behaviors\ReasonsInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\Reflection\ReflectionClass;
-use ApiGen\TokenReflection\Reflection\ReflectionConstant;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use ApiGen\TokenReflection\Reflection\ReflectionFile;
-use ApiGen\TokenReflection\Reflection\ReflectionFunction;
-use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -29,36 +23,28 @@ class ReflectionFileNamespace extends ReflectionElement
 {
 
 	/**
-	 * List of class reflections.
-	 *
-	 * @var array
+	 * @var ReflectionClassInterface[]|ReasonsInterface[]
 	 */
 	private $classes = [];
 
 	/**
-	 * List of constant reflections.
-	 *
-	 * @var array
+	 * @var ReflectionConstantInterface[]|ReasonsInterface[]
 	 */
 	private $constants = [];
 
 	/**
-	 * List of function reflections.
-	 *
-	 * @var array
+	 * @var ReflectionFunctionInterface[]|ReasonsInterface[]
 	 */
 	private $functions = [];
 
 	/**
-	 * Namespace aliases.
-	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private $aliases = [];
 
 
 	/**
-	 * @return array|ReflectionClassInterface[]
+	 * @return ReflectionClassInterface[]
 	 */
 	public function getClasses()
 	{
@@ -67,7 +53,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * @return array|ReflectionConstantInterface[]
+	 * @return ReflectionConstantInterface[]
 	 */
 	public function getConstants()
 	{
@@ -76,7 +62,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * @return array|ReflectionFunctionInterface[]
+	 * @return ReflectionFunctionInterface[]
 	 */
 	public function getFunctions()
 	{
@@ -104,9 +90,8 @@ class ReflectionFileNamespace extends ReflectionElement
 	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFile) {
-			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFile.', ParseException::INVALID_PARENT);
+			throw new ParseException('The parent object has to be an instance of TokenReflection\ReflectionFile.', ParseException::INVALID_PARENT);
 		}
-//		return parent::processParent($parent, $tokenStream);
 	}
 
 
@@ -172,7 +157,7 @@ class ReflectionFileNamespace extends ReflectionElement
 			$this->name = $name;
 		}
 		if ( ! $tokenStream->is(';') && !$tokenStream->is('{')) {
-			throw new ParseException($this, $tokenStream, 'Invalid namespace name end, expecting ";" or "{".', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Invalid namespace name end, expecting ";" or "{".', ParseException::UNEXPECTED_TOKEN);
 		}
 		$tokenStream->skipWhitespaces();
 		return $this;
@@ -210,15 +195,15 @@ class ReflectionFileNamespace extends ReflectionElement
 						}
 						$namespaceName = ltrim($namespaceName, '\\');
 						if (empty($namespaceName)) {
-							throw new ParseException($this, $tokenStream, 'Imported namespace name could not be determined.', ParseException::LOGICAL_ERROR);
+							throw new ParseException('Imported namespace name could not be determined.', ParseException::LOGICAL_ERROR);
 						} elseif ('\\' === substr($namespaceName, -1)) {
-							throw new ParseException($this, $tokenStream, sprintf('Invalid namespace name "%s".', $namespaceName), ParseException::LOGICAL_ERROR);
+							throw new ParseException(sprintf('Invalid namespace name "%s".', $namespaceName), ParseException::LOGICAL_ERROR);
 						}
 						if ($tokenStream->is(T_AS)) {
 							// Alias defined
 							$tokenStream->skipWhitespaces(TRUE);
 							if ( ! $tokenStream->is(T_STRING)) {
-								throw new ParseException($this, $tokenStream, sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), ParseException::LOGICAL_ERROR);
+								throw new ParseException(sprintf('The imported namespace "%s" seems aliased but the alias name could not be determined.', $namespaceName), ParseException::LOGICAL_ERROR);
 							}
 							$alias = $tokenStream->getTokenValue();
 							$tokenStream->skipWhitespaces(TRUE);
@@ -231,7 +216,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							}
 						}
 						if (isset($this->aliases[$alias])) {
-							throw new ParseException($this, $tokenStream, sprintf('Namespace alias "%s" already defined.', $alias), ParseException::LOGICAL_ERROR);
+							throw new ParseException(sprintf('Namespace alias "%s" already defined.', $alias), ParseException::LOGICAL_ERROR);
 						}
 						$this->aliases[$alias] = $namespaceName;
 						$type = $tokenStream->getType();
@@ -242,7 +227,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							// Next namespace in the current "use" definition
 							continue;
 						}
-						throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+						throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 					}
 				case T_COMMENT:
 				case T_DOC_COMMENT:
@@ -274,12 +259,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
 						}
 						if ( ! $this->classes[$className]->hasReasons()) {
-							$this->classes[$className]->addReason(new ParseException(
-								$this,
-								$tokenStream,
-								sprintf('Class %s is defined multiple times in the file.', $className),
-								ParseException::ALREADY_EXISTS
-							));
+							$this->classes[$className]->addReason(sprintf('Class %s is defined multiple times in the file.', $className));
 						}
 					} else {
 						$this->classes[$className] = $class;
@@ -297,12 +277,7 @@ class ReflectionFileNamespace extends ReflectionElement
 								$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
 							}
 							if ( ! $this->constants[$constantName]->hasReasons()) {
-								$this->constants[$constantName]->addReason(new ParseException(
-									$this,
-									$tokenStream,
-									sprintf('Constant %s is defined multiple times in the file.', $constantName),
-									ParseException::ALREADY_EXISTS
-								));
+								$this->constants[$constantName]->addReason(sprintf('Constant %s is defined multiple times in the file.', $constantName));
 							}
 						} else {
 							$this->constants[$constantName] = $constant;
@@ -344,12 +319,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
 						}
 						if ( ! $this->functions[$functionName]->hasReasons()) {
-							$this->functions[$functionName]->addReason(new ParseException(
-								$this,
-								$tokenStream,
-								sprintf('Function %s is defined multiple times in the file.', $functionName),
-								ParseException::ALREADY_EXISTS
-							));
+							$this->functions[$functionName]->addReason(sprintf('Function %s is defined multiple times in the file.', $functionName));
 						}
 					} else {
 						$this->functions[$functionName] = $function;

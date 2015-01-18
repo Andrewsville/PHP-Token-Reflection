@@ -18,9 +18,6 @@ use SeekableIterator;
 use Serializable;
 
 
-/**
- * Token stream iterator base class.
- */
 abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, Serializable
 {
 
@@ -32,8 +29,6 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	protected $fileName = 'unknown';
 
 	/**
-	 * Tokens storage.
-	 *
 	 * @var array
 	 */
 	private $tokens = [];
@@ -163,12 +158,12 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			T_DOLLAR_OPEN_CURLY_BRACES => '}'
 		];
 		if ( ! $this->valid()) {
-			throw new StreamException($this, 'Out of token stream.', StreamException::READ_BEYOND_EOS);
+			throw new StreamException('Out of token stream.', StreamException::READ_BEYOND_EOS);
 		}
 		$position = $this->position;
 		$bracket = $this->tokens[$this->position][0];
 		if ( ! isset($brackets[$bracket])) {
-			throw new StreamException($this, sprintf('There is no usable bracket at position "%d".', $position), StreamException::DOES_NOT_EXIST);
+			throw new StreamException(sprintf('There is no usable bracket at position "%d".', $position), StreamException::DOES_NOT_EXIST);
 		}
 		$searching = $brackets[$bracket];
 		$level = 0;
@@ -184,7 +179,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			}
 			$this->position++;
 		}
-		throw new StreamException($this, sprintf('Could not find the end bracket "%s" of the bracket at position "%d".', $searching, $position), StreamException::DOES_NOT_EXIST);
+		throw new StreamException(sprintf('Could not find the end bracket "%s" of the bracket at position "%d".', $searching, $position), StreamException::DOES_NOT_EXIST);
 	}
 
 
@@ -304,10 +299,10 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	{
 		$data = @unserialize($serialized);
 		if ($data === FALSE) {
-			throw new StreamException($this, 'Could not deserialize the serialized data.', StreamException::SERIALIZATION_ERROR);
+			throw new StreamException('Could not deserialize the serialized data.', StreamException::SERIALIZATION_ERROR);
 		}
 		if (count($data) !== 2 || ! is_string($data[0]) || ! is_array($data[1])) {
-			throw new StreamException($this, 'Invalid serialization data.', StreamException::SERIALIZATION_ERROR);
+			throw new StreamException('Invalid serialization data.', StreamException::SERIALIZATION_ERROR);
 		}
 		$this->fileName = $data[0];
 		$this->tokens = $data[1];
@@ -338,7 +333,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new StreamException($this, 'Removing of tokens from the stream is not supported.', StreamException::UNSUPPORTED);
+		throw new StreamException('Removing of tokens from the stream is not supported.', StreamException::UNSUPPORTED);
 	}
 
 
@@ -365,7 +360,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new StreamException($this, 'Setting token values is not supported.', StreamException::UNSUPPORTED);
+		throw new StreamException('Setting token values is not supported.', StreamException::UNSUPPORTED);
 	}
 
 

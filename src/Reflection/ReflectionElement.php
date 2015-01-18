@@ -66,7 +66,7 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
 	{
 		if ($tokenStream->count() === 0) {
-			throw new ParseException($this, $tokenStream, 'Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
+			throw new ParseException('Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
 		}
 
 		$this->elementParser = new ElementParser($tokenStream, $this, $parent);
@@ -196,16 +196,14 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 
 	protected function parseStartLine(StreamBase $tokenStream)
 	{
-		$token = $tokenStream->current();
-		$this->startLine = $token[2];
+		$this->startLine = $tokenStream->current()[2];
 		$this->startPosition = $tokenStream->key();
 	}
 
 
 	protected function parseEndLine(StreamBase $tokenStream)
 	{
-		$token = $tokenStream->current();
-		$this->endLine = $token[2];
+		$this->endLine = $tokenStream->current()[2];
 		$this->endPosition = $tokenStream->key();
 	}
 

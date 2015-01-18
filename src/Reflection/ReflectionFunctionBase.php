@@ -216,13 +216,6 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	}
 
 
-//	protected function parseChildren(StreamBase $tokenStream, ReflectionInterface $parent)
-//	{
-//		$this->parseParameters($tokenStream);
-//		$this->parseStaticVariables($tokenStream);
-//	}
-
-
 	/**
 	 * Parses function/method parameters.
 	 *
@@ -232,7 +225,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	protected function parseParameters(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is('(')) {
-			throw new ParseException($this, $tokenStream, 'Could find the start token.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Could find the start token.', ParseException::UNEXPECTED_TOKEN);
 		}
 		static $accepted = [T_NS_SEPARATOR => TRUE, T_STRING => TRUE, T_ARRAY => TRUE, T_CALLABLE => TRUE, T_VARIABLE => TRUE, '&' => TRUE];
 		if (PHP_VERSION_ID >= 50600 && ! isset($accepted[T_ELLIPSIS])) {
@@ -306,7 +299,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 										$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 									}
 									if ( ! $tokenStream->valid()) {
-										throw new ParseException($this, $tokenStream, 'Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
+										throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
 									}
 								}
 								$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
@@ -320,7 +313,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 						case T_FUNCTION:
 							// Anonymous function -> skip to its end
 							if ( ! $tokenStream->find('{')) {
-								throw new ParseException($this, $tokenStream, 'Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
+								throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
 							}
 						// Break missing intentionally
 						case '{':
@@ -339,7 +332,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 				$tokenStream->findMatchingBracket();
 			}
 		} elseif (';' !== $type) {
-			throw new ParseException($this, $tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}
 		return $this;
 	}

@@ -52,7 +52,7 @@ class ConstantParser
 	public function parseName($namespace)
 	{
 		if ( ! $this->tokenStream->is(T_STRING)) {
-			throw new ParseException($this->reflectionConstant, $this->tokenStream, 'The constant name could not be determined.', ParseException::LOGICAL_ERROR);
+			throw new ParseException('The constant name could not be determined.', ParseException::LOGICAL_ERROR);
 		}
 
 		if ($namespace === NULL || $namespace === ReflectionNamespace::NO_NAMESPACE_NAME) {
@@ -73,7 +73,7 @@ class ConstantParser
 		$valueDefinition = [];
 
 		if ( ! $this->tokenStream->is('=')) {
-			throw new ParseException($this->reflectionConstant, $this->tokenStream, 'Could not find the definition start.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Could not find the definition start.', ParseException::UNEXPECTED_TOKEN);
 		}
 
 		$this->tokenStream->skipWhitespaces(TRUE);
@@ -119,11 +119,11 @@ class ConstantParser
 			}
 		}
 		if (empty($valueDefinition)) {
-			throw new ParseException($this->reflectionConstant, $this->tokenStream, 'Value definition is empty.', ParseException::LOGICAL_ERROR);
+			throw new ParseException('Value definition is empty.', ParseException::LOGICAL_ERROR);
 		}
 		$value = $this->tokenStream->getTokenValue();
 		if (NULL === $type || (',' !== $value && ';' !== $value)) {
-			throw new ParseException($this->reflectionConstant, $this->tokenStream, 'Invalid value definition.', ParseException::LOGICAL_ERROR);
+			throw new ParseException('Invalid value definition.', ParseException::LOGICAL_ERROR);
 		}
 
 		return $valueDefinition;

@@ -134,7 +134,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 			$refProperty->setAccessible(FALSE);
 			return $value;
 		}
-		throw new RuntimeException('Only public and accessible properties can return their values.', RuntimeException::NOT_ACCESSBILE, $this);
+		throw new RuntimeException('Only public and accessible properties can return their values.', RuntimeException::NOT_ACCESSIBLE);
 	}
 
 
@@ -240,7 +240,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if ( ! $declaringClass->isInstance($object)) {
-			throw new RuntimeException('Instance of or subclass expected.', RuntimeException::INVALID_ARGUMENT, $this);
+			throw new RuntimeException('Instance of or subclass expected.', RuntimeException::INVALID_ARGUMENT);
 		}
 		if ($this->isPublic()) {
 			$object->{$this->name} = $value;
@@ -254,7 +254,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 				$this->setDefaultValue($value);
 			}
 		} else {
-			throw new RuntimeException('Only public and accessible properties can be set.', RuntimeException::NOT_ACCESSBILE, $this);
+			throw new RuntimeException('Only public and accessible properties can be set.', RuntimeException::NOT_ACCESSIBLE);
 		}
 	}
 
@@ -308,7 +308,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	}
 
 
-	private function parse(StreamBase $tokenStream, ReflectionClass $parent)
+	private function parse(StreamBase $tokenStream, ReflectionClass $parent = NULL)
 	{
 		$propertyParser = new PropertyParser($tokenStream, $this, $parent);
 		$elementParser = new ElementParser($tokenStream, $this, $parent);

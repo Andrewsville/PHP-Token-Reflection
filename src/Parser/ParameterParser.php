@@ -50,7 +50,7 @@ class ParameterParser
 	public function parseName()
 	{
 		if ( ! $this->tokenStream->is(T_VARIABLE)) {
-			throw new ParseException($this->reflectionParameter, $this->tokenStream, 'The parameter name could not be determined.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('The parameter name could not be determined.', ParseException::UNEXPECTED_TOKEN);
 		}
 		$name = substr($this->tokenStream->getTokenValue(), 1);
 		$this->tokenStream->skipWhitespaces(TRUE);
@@ -99,7 +99,7 @@ class ParameterParser
 			} while ($type === T_STRING || $type === T_NS_SEPARATOR);
 
 			if (ltrim($className, '\\') === '') {
-				throw new ParseException($this->reflectionParameter, $this->tokenStream, sprintf('Invalid class name definition: "%s".', $className), ParseException::LOGICAL_ERROR);
+				throw new ParseException(sprintf('Invalid class name definition: "%s".', $className), ParseException::LOGICAL_ERROR);
 			}
 
 			$originalTypeHint = $className;
@@ -159,7 +159,7 @@ class ParameterParser
 				$this->tokenStream->next();
 			}
 			if ($type !== ')' && $type !== ',') {
-				throw new ParseException($this->reflectionParameter, $this->tokenStream, 'The property default value is not terminated properly. Expected "," or ")".', ParseException::UNEXPECTED_TOKEN);
+				throw new ParseException('The property default value is not terminated properly. Expected "," or ")".', ParseException::UNEXPECTED_TOKEN);
 			}
 		}
 

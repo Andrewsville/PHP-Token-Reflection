@@ -9,8 +9,6 @@
 
 namespace ApiGen\TokenReflection\Exception;
 
-use ApiGen\TokenReflection\ReflectionInterface;
-
 
 /**
  * Runtime exception raised when working with a reflection element.
@@ -23,47 +21,6 @@ class RuntimeException extends BaseException
 	 *
 	 * @var int
 	 */
-	const NOT_ACCESSBILE = 3002;
-
-	/**
-	 * The reflection element that caused this exception to be raised.
-	 *
-	 * @var ReflectionInterface
-	 */
-	private $sender;
-
-
-	/**
-	 * @param string $message Exception message
-	 * @param int $code Exception code
-	 * @param ReflectionInterface $sender Reflection element
-	 */
-	public function __construct($message, $code, ReflectionInterface $sender = NULL)
-	{
-		parent::__construct($message, $code);
-		$this->sender = $sender;
-	}
-
-
-	/**
-	 * Returns the reflection element that caused the exception to be raised.
-	 *
-	 * @return ReflectionInterface
-	 */
-	public function getSender()
-	{
-		return $this->sender;
-	}
-
-
-	/**
-	 * Returns an exception description detail.
-	 *
-	 * @return string
-	 */
-	public function getDetail()
-	{
-		return NULL === $this->sender ? '' : sprintf('Thrown when working with "%s".', $this->sender->getPrettyName());
-	}
+	const NOT_ACCESSIBLE = 3002;
 
 }

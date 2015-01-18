@@ -89,7 +89,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 				}
 			}
 			if ($realParent === NULL) {
-				throw new RuntimeException('Could not determine constant real parent class.', RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException('Could not determine constant real parent class.', RuntimeException::DOES_NOT_EXIST);
 			}
 			$this->declaringClassName = $realParent->getName();
 			$this->userDefined = $realParent->isUserDefined();

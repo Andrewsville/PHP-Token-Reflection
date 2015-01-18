@@ -205,7 +205,7 @@ class Broker
 		} catch (Exception\ParseException $e) {
 			throw $e;
 		} catch (Exception\StreamException $e) {
-			throw new Exception\BrokerException($this, 'Could not process the file.', 0, $e);
+			throw new Exception\BrokerException('Could not process the file.', 0, $e);
 		}
 	}
 
@@ -223,7 +223,7 @@ class Broker
 	{
 		$realPath = realpath($path);
 		if ( ! is_dir($realPath)) {
-			throw new Exception\BrokerException($this, 'File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+			throw new Exception\BrokerException('File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
 		}
 		try {
 			$result = [];
@@ -235,7 +235,7 @@ class Broker
 		} catch (Exception\ParseException $e) {
 			throw $e;
 		} catch (Exception\StreamException $e) {
-			throw new Exception\BrokerException($this, 'Could not process the directory.', 0, $e);
+			throw new Exception\BrokerException('Could not process the directory.', 0, $e);
 		}
 	}
 
@@ -255,7 +255,7 @@ class Broker
 		} elseif (is_file($path)) {
 			return $this->processFile($path, $returnReflectionFile);
 		} else {
-			throw new Exception\BrokerException($this, 'The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+			throw new Exception\BrokerException('The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
 		}
 	}
 

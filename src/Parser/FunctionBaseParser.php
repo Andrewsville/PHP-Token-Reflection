@@ -66,7 +66,7 @@ abstract class FunctionBaseParser
 	{
 		$returnsReference = FALSE;
 		if ( ! $this->tokenStream->is(T_FUNCTION)) {
-			throw new ParseException($this->reflectionFunction, $this->tokenStream, 'Could not find the function keyword.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Could not find the function keyword.', ParseException::UNEXPECTED_TOKEN);
 		}
 		$this->tokenStream->skipWhitespaces(TRUE);
 		$type = $this->tokenStream->getType();
@@ -75,7 +75,7 @@ abstract class FunctionBaseParser
 			$this->tokenStream->skipWhitespaces(TRUE);
 
 		} elseif ($type !== T_STRING) {
-			throw new ParseException($this->reflectionFunction, $this->tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}
 		return $returnsReference;
 	}
@@ -87,7 +87,7 @@ abstract class FunctionBaseParser
 	public function parseParameters()
 	{
 		if ( ! $this->tokenStream->is('(')) {
-			throw new ParseException($this->reflectionFunction, $this->tokenStream, 'Could find the start token.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Could find the start token.', ParseException::UNEXPECTED_TOKEN);
 		}
 
 		static $accepted = [T_NS_SEPARATOR => TRUE, T_STRING => TRUE, T_ARRAY => TRUE, T_CALLABLE => TRUE, T_VARIABLE => TRUE, '&' => TRUE];
@@ -166,7 +166,7 @@ abstract class FunctionBaseParser
 										$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
 									}
 									if ( ! $this->tokenStream->valid()) {
-										throw new ParseException($this->reflectionFunction, $this->tokenStream, 'Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
+										throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
 									}
 								}
 								$staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
@@ -180,7 +180,7 @@ abstract class FunctionBaseParser
 						case T_FUNCTION:
 							// Anonymous function -> skip to its end
 							if ( ! $this->tokenStream->find('{')) {
-								throw new ParseException($this->reflectionFunction, $this->tokenStream, 'Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
+								throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
 							}
 							// Break missing intentionally
 						case '{':
@@ -201,7 +201,7 @@ abstract class FunctionBaseParser
 			}
 
 		} elseif ($type !== ';') {
-			throw new ParseException($this->reflectionFunction, $this->tokenStream, 'Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}
 		return $staticVariablesDefinition;
 	}

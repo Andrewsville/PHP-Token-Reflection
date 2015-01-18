@@ -52,7 +52,7 @@ class PropertyParser
 	public function parseName()
 	{
 		if ( ! $this->tokenStream->is(T_VARIABLE)) {
-			throw new ParseException($this->reflectionProperty, $this->tokenStream, 'The property name could not be determined.', ParseException::LOGICAL_ERROR);
+			throw new ParseException('The property name could not be determined.', ParseException::LOGICAL_ERROR);
 		}
 		$name = substr($this->tokenStream->getTokenValue(), 1);
 		$this->tokenStream->skipWhitespaces(TRUE);
@@ -100,7 +100,7 @@ class PropertyParser
 			$this->tokenStream->next();
 		}
 		if (',' !== $type && ';' !== $type) {
-			throw new ParseException($this->reflectionProperty, $this->tokenStream, 'The property default value is not terminated properly. Expected "," or ";".', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('The property default value is not terminated properly. Expected "," or ";".', ParseException::UNEXPECTED_TOKEN);
 		}
 		return $defaultValueDefinition;
 	}
@@ -138,7 +138,7 @@ class PropertyParser
 		} elseif (0 === $modifiers) {
 			$parentProperties = $this->parent->getOwnProperties();
 			if (empty($parentProperties)) {
-				throw new ParseException($this->reflectionProperty, $this->tokenStream, 'No access level defined and no previous defining class property present.', ParseException::LOGICAL_ERROR);
+				throw new ParseException('No access level defined and no previous defining class property present.', ParseException::LOGICAL_ERROR);
 			}
 			$sibling = array_pop($parentProperties);
 			if ($sibling->isPublic()) {
@@ -148,7 +148,7 @@ class PropertyParser
 			} elseif ($sibling->isProtected()) {
 				$modifiers = InternalReflectionProperty::IS_PROTECTED;
 			} else {
-				throw new ParseException($this->reflectionProperty, $this->tokenStream, sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), NULL);
+				throw new ParseException(sprintf('Property sibling "%s" has no access level defined.', $sibling->getName()), NULL);
 			}
 			if ($sibling->isStatic()) {
 				$modifiers |= InternalReflectionProperty::IS_STATIC;

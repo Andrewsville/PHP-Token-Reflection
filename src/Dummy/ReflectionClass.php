@@ -133,7 +133,7 @@ class ReflectionClass implements ReflectionClassInterface
 	public function getFileReflection()
 	{
 		throw new BrokerException(
-			$this->getBroker(), sprintf('Class was not parsed from a file', $this->getName()), BrokerException::UNSUPPORTED
+			sprintf('Class was not parsed from a file', $this->getName()), BrokerException::UNSUPPORTED
 		);
 	}
 
@@ -476,7 +476,7 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function getMethod($name)
 	{
-		throw new RuntimeException(sprintf('There is no method "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no method "%s".', $name), RuntimeException::DOES_NOT_EXIST);
 	}
 
 
@@ -539,7 +539,7 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function getConstant($name)
 	{
-		throw new RuntimeException(sprintf('There is no constant "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no constant "%s".', $name), RuntimeException::DOES_NOT_EXIST);
 	}
 
 
@@ -548,7 +548,7 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function getConstantReflection($name)
 	{
-		throw new RuntimeException(sprintf('There is no constant "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no constant "%s".', $name), RuntimeException::DOES_NOT_EXIST);
 	}
 
 
@@ -629,7 +629,7 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function getProperty($name)
 	{
-		throw new RuntimeException(sprintf('There is no property "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no property "%s".', $name), RuntimeException::DOES_NOT_EXIST);
 	}
 
 
@@ -683,7 +683,7 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function getStaticPropertyValue($name, $default = NULL)
 	{
-		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST);
 	}
 
 
@@ -765,7 +765,7 @@ class ReflectionClass implements ReflectionClassInterface
 	public function isInstance($object)
 	{
 		if ( ! is_object($object)) {
-			throw new RuntimeException(sprintf('Parameter must be a class instance, "%s" provided.', gettype($object)), RuntimeException::INVALID_ARGUMENT, $this);
+			throw new RuntimeException(sprintf('Parameter must be a class instance, "%s" provided.', gettype($object)), RuntimeException::INVALID_ARGUMENT);
 		}
 		return $this->name === get_class($object) || is_subclass_of($object, $this->name);
 	}
@@ -776,7 +776,7 @@ class ReflectionClass implements ReflectionClassInterface
 	 */
 	public function setStaticPropertyValue($name, $value)
 	{
-		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST, $this);
+		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST);
 	}
 
 

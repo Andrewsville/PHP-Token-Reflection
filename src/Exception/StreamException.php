@@ -9,8 +9,6 @@
 
 namespace ApiGen\TokenReflection\Exception;
 
-use ApiGen\TokenReflection\Stream\StreamBase;
-
 
 class StreamException extends BaseException
 {
@@ -35,57 +33,5 @@ class StreamException extends BaseException
 	 * @var int
 	 */
 	const SERIALIZATION_ERROR = 1003;
-
-	/**
-	 * The token stream that caused this exception to be raised.
-	 *
-	 * @var ApiGen\TokenReflection\Stream\StreamBase
-	 */
-	private $stream;
-
-
-	/**
-	 * @param StreamBase $stream Reflection element
-	 * @param string $message Exception message
-	 * @param int $code Exception code
-	 */
-	public function __construct(StreamBase $stream, $message, $code)
-	{
-		parent::__construct($message, $code);
-		$this->stream = $stream;
-	}
-
-
-	/**
-	 * Returns the reflection element that caused the exception to be raised.
-	 *
-	 * @return ApiGen\TokenReflection\Stream\StreamBase
-	 */
-	public function getStream()
-	{
-		return $this->stream;
-	}
-
-
-	/**
-	 * Returns the processed file name.
-	 *
-	 * @return string
-	 */
-	public function getFileName()
-	{
-		return $this->stream->getFileName();
-	}
-
-
-	/**
-	 * Returns an exception description detail.
-	 *
-	 * @return string
-	 */
-	public function getDetail()
-	{
-		return sprintf('Thrown when working with file "%s" token stream.', $this->getFileName());
-	}
 
 }

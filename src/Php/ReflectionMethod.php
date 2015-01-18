@@ -123,7 +123,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 		$parameters = $this->getParameters();
 		if (is_numeric($parameter)) {
 			if ( ! isset($parameters[$parameter])) {
-				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST);
 			}
 			return $parameters[$parameter];
 
@@ -133,7 +133,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 					return $reflection;
 				}
 			}
-			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST);
 		}
 	}
 
@@ -145,7 +145,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	{
 		if ($this->parameters === NULL) {
 			$this->parameters = array_map(function (InternalReflectionParameter $parameter) {
-				return ReflectionParameter::create($parameter, $this->broker, $this);
+				return ReflectionParameter::create($parameter, $this->broker);
 			}, parent::getParameters());
 		}
 		return $this->parameters;

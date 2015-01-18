@@ -15,7 +15,10 @@ use ApiGen\TokenReflection\Exception\BaseException;
 interface ReasonsInterface
 {
 
-	function addReason(BaseException $reason);
+	/**
+	 * @param string $reason
+	 */
+	function addReason($reason);
 
 
 	/**

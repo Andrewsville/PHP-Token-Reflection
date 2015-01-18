@@ -58,7 +58,7 @@ class ReflectionFunction extends ReflectionElement implements ReflectionFunction
 	{
 		throw new RuntimeException(
 			sprintf('There is no parameter with name or position "%s".', $parameter),
-			RuntimeException::DOES_NOT_EXIST, $this
+			RuntimeException::DOES_NOT_EXIST
 		);
 	}
 
