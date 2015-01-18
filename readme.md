@@ -16,6 +16,15 @@ This library emulates the PHP reflection model using the tokenized PHP source an
 composer require apigen/token-reflection
 ```
 
+### Nette Extension
+
+If you use [Nette](http://nette.org), you can register extension in your `config.neon`:
+
+```yaml
+extensions:
+	- ApiGen\TokenReflection\DI\TokenReflectionExtension
+```
+
 
 ## Usage
 

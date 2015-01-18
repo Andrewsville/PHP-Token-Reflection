@@ -10,13 +10,18 @@
 	],
 	"require": {
 		"php": ">=5.4.6",
-		"nikic/php-parser": "~1.0",
+		"nikic/php-parser": "~1.1",
 		"nette/finder": "~2.2",
-		"ext-tokenizer": "*",
-		"mockery/mockery": "0.9.*"
+		"mockery/mockery": "0.9.*",
+		"nette/di": "~2.2"
 	},
 	"require-dev": {
-		"zenify/coding-standard": "~3.0"
+		"zenify/coding-standard": "~3.0",
+		"nette/bootstrap": "~2.2",
+		"latte/latte": "~2.2",
+		"nette/application": "~2.2",
+		"nette/mail": "~2.2",
+		"nette/safe-stream": "~2.2"
 	},
 	"autoload": {
 		"psr-4": {
