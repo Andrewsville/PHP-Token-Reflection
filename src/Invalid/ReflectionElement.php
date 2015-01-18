@@ -11,6 +11,7 @@ namespace ApiGen\TokenReflection\Invalid;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
+use ApiGen\TokenReflection\Behaviors\ReasonsInterface;
 use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\BaseException;
@@ -19,7 +20,7 @@ use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 
 
-abstract class ReflectionElement implements AnnotationsInterface, SourceInterface, ExtensionInterface
+abstract class ReflectionElement implements AnnotationsInterface, SourceInterface, ExtensionInterface, ReasonsInterface
 {
 
 	/**
@@ -86,17 +87,16 @@ abstract class ReflectionElement implements AnnotationsInterface, SourceInterfac
 
 
 	/**
-	 * @return $this
+	 * {@inheritdoc}
 	 */
 	public function addReason(BaseException $reason)
 	{
 		$this->reasons[] = $reason;
-		return $this;
 	}
 
 
 	/**
-	 * @return array
+	 * {@inheritdoc}
 	 */
 	public function getReasons()
 	{
@@ -105,7 +105,7 @@ abstract class ReflectionElement implements AnnotationsInterface, SourceInterfac
 
 
 	/**
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasReasons()
 	{

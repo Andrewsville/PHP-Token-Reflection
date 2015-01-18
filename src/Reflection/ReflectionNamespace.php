@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
+use ApiGen\TokenReflection\Behaviors\ReasonsInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\FileProcessingException;
@@ -17,9 +18,8 @@ use ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
+use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionNamespaceInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
 
 
 class ReflectionNamespace implements ReflectionNamespaceInterface
@@ -28,37 +28,27 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	/**
 	 * The name of the pseudo-namespace meaning there is no namespace.
 	 *
-	 * This name is chosen so that no real namespace could ever have it.
-	 *
 	 * @var string
 	 */
 	const NO_NAMESPACE_NAME = 'no-namespace';
 
 	/**
-	 * Namespace name.
-	 *
 	 * @var string
 	 */
 	private $name;
 
 	/**
-	 * List of class reflections.
-	 *
-	 * @var array|ReflectionClassInterface[]
+	 * @var ReflectionClassInterface[]|ReasonsInterface[]
 	 */
 	private $classes = [];
 
 	/**
-	 * List of constant reflections.
-	 *
-	 * @var array|ReflectionConstantInterface[]
+	 * @var ReflectionConstantInterface[]|ReasonsInterface[]
 	 */
 	private $constants = [];
 
 	/**
-	 * List of function reflections.
-	 *
-	 * @var array|ReflectionFunctionInterface[]
+	 * @var ReflectionFunctionInterface[]|ReasonsInterface[]
 	 */
 	private $functions = [];
 
@@ -66,6 +56,11 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 * @var Broker
 	 */
 	private $broker;
+
+	/**
+	 * @var array
+	 */
+	private $errors = [];
 
 
 	/**
@@ -120,10 +115,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 */
 	public function hasClass($className)
 	{
-		$className = ltrim($className, '\\');
-		if (FALSE === strpos($className, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$className = $this->getName() . '\\' . $className;
-		}
+		$className = $this->getFqnElementName($className);
 		return isset($this->classes[$className]);
 	}
 
@@ -133,10 +125,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 */
 	public function getClass($className)
 	{
-		$className = ltrim($className, '\\');
-		if (FALSE === strpos($className, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$className = $this->getName() . '\\' . $className;
-		}
+		$className = $this->getFqnElementName($className);
 		if ( ! isset($this->classes[$className])) {
 			throw new RuntimeException(sprintf('Class "%s" does not exist.', $className), RuntimeException::DOES_NOT_EXIST, $this);
 		}
@@ -178,10 +167,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 */
 	public function hasConstant($constantName)
 	{
-		$constantName = ltrim($constantName, '\\');
-		if (FALSE === strpos($constantName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$constantName = $this->getName() . '\\' . $constantName;
-		}
+		$constantName = $this->getFqnElementName($constantName);
 		return isset($this->constants[$constantName]);
 	}
 
@@ -191,10 +177,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 */
 	public function getConstant($constantName)
 	{
-		$constantName = ltrim($constantName, '\\');
-		if (FALSE === strpos($constantName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$constantName = $this->getName() . '\\' . $constantName;
-		}
+		$constantName = $this->getFqnElementName($constantName);
 		if ( ! isset($this->constants[$constantName])) {
 			throw new RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), RuntimeException::DOES_NOT_EXIST, $this);
 		}
@@ -236,10 +219,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 */
 	public function hasFunction($functionName)
 	{
-		$functionName = ltrim($functionName, '\\');
-		if (FALSE === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$functionName = $this->getName() . '\\' . $functionName;
-		}
+		$functionName = $this->getFqnElementName($functionName);
 		return isset($this->functions[$functionName]);
 	}
 
@@ -249,10 +229,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 */
 	public function getFunction($functionName)
 	{
-		$functionName = ltrim($functionName, '\\');
-		if (FALSE === strpos($functionName, '\\') && self::NO_NAMESPACE_NAME !== $this->getName()) {
-			$functionName = $this->getName() . '\\' . $functionName;
-		}
+		$functionName = $this->getFqnElementName($functionName);
 		if ( ! isset($this->functions[$functionName])) {
 			throw new RuntimeException(sprintf('Function "%s" does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST, $this);
 		}
@@ -299,100 +276,56 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 
 
 	/**
-	 * Adds a namespace part from a file.
-	 *
 	 * @return ReflectionNamespace
 	 * @throws FileProcessingException If one of classes, functions or constants form the namespace are already defined
 	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
-		$errors = [];
+		$this->errors = [];
 		foreach ($namespace->getClasses() as $className => $reflection) {
 			if ($reflection instanceof Invalid\ReflectionClass) {
-				$errors = array_merge($errors, $reflection->getReasons());
+				$this->errors = array_merge($this->errors, $reflection->getReasons());
 			}
 			if (isset($this->classes[$className])) {
-				if ( ! $this->classes[$className] instanceof Invalid\ReflectionClass) {
-					$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
-				}
-				$error = new RuntimeException(
-					sprintf('Class %s was redeclared (previously declared in file %s).', $className, $this->classes[$className]->getFileName()),
-					RuntimeException::ALREADY_EXISTS,
-					$reflection
-				);
-				$errors[] = $error;
-				$this->classes[$className]->addReason($error);
-				if ($reflection instanceof Invalid\ReflectionClass) {
-					foreach ($reflection->getReasons() as $reason) {
-						$this->classes[$className]->addReason($reason);
-					}
-				}
+				$this->classes = $this->turnReflectionToInvalid($this->classes, $className, $reflection);
+
 			} else {
 				$this->classes[$className] = $reflection;
 			}
 		}
+
 		foreach ($namespace->getFunctions() as $functionName => $reflection) {
 			if ($reflection instanceof Invalid\ReflectionFunction) {
-				$errors = array_merge($errors, $reflection->getReasons());
+				$this->errors = array_merge($this->errors, $reflection->getReasons());
 			}
 			if (isset($this->functions[$functionName])) {
-				if ( ! $this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
-					$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
-				}
-				$error = new RuntimeException(
-					sprintf('Function %s was redeclared (previousy declared in file %s).', $functionName, $this->functions[$functionName]->getFileName()),
-					RuntimeException::ALREADY_EXISTS,
-					$reflection
-				);
-				$errors[] = $error;
-				$this->functions[$functionName]->addReason($error);
-				if ($reflection instanceof Invalid\ReflectionFunction) {
-					foreach ($reflection->getReasons() as $reason) {
-						$this->functions[$functionName]->addReason($reason);
-					}
-				}
+				$this->functions = $this->turnReflectionToInvalid($this->functions, $functionName, $reflection);
+
 			} else {
 				$this->functions[$functionName] = $reflection;
 			}
 		}
+
 		foreach ($namespace->getConstants() as $constantName => $reflection) {
 			if ($reflection instanceof Invalid\ReflectionConstant) {
-				$errors = array_merge($errors, $reflection->getReasons());
+				$this->errors = array_merge($this->errors, $reflection->getReasons());
 			}
 			if (isset($this->constants[$constantName])) {
-				if ( ! $this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
-					$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
-				}
-				$error = new RuntimeException(
-					sprintf('Constant %s was redeclared (previuosly declared in file %s).', $constantName, $this->constants[$constantName]->getFileName()),
-					RuntimeException::ALREADY_EXISTS,
-					$reflection
-				);
-				$errors[] = $error;
-				$this->constants[$constantName]->addReason($error);
-				if ($reflection instanceof Invalid\ReflectionConstant) {
-					foreach ($reflection->getReasons() as $reason) {
-						$this->constants[$constantName]->addReason($reason);
-					}
-				}
+				$this->constants = $this->turnReflectionToInvalid($this->constants, $constantName, $reflection);
+
 			} else {
 				$this->constants[$constantName] = $reflection;
 			}
 		}
-		if ( ! empty($errors)) {
-			throw new FileProcessingException($errors, NULL);
+
+		if ( ! empty($this->errors)) {
+			throw new FileProcessingException($this->errors, NULL);
 		}
+
 		return $this;
 	}
 
 
-	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * Impossible for namespaces.
-	 *
-	 * @throws RuntimeException If the method is called, because it's unsupported.
-	 */
 	public function getSource()
 	{
 		throw new RuntimeException('Cannot export source code of a namespace.', RuntimeException::UNSUPPORTED, $this);
@@ -405,6 +338,81 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	public function getBroker()
 	{
 		return $this->broker;
+	}
+
+
+	/**
+	 * @param string $elementName
+	 * @return string
+	 */
+	private function getFqnElementName($elementName)
+	{
+		$elementName = ltrim($elementName, '\\');
+		if (strpos($elementName, '\\') === FALSE && $this->getName() !== self::NO_NAMESPACE_NAME) {
+			$elementName = $this->getName() . '\\' . $elementName;
+		}
+		return $elementName;
+	}
+
+
+	/**
+	 * @param ReflectionClass[]|ReflectionFunction[]|ReflectionConstant[]|ReasonsInterface[] $elements
+	 * @param string $elementName
+	 * @param ReflectionElement|Invalid\ReflectionElement $reflection
+	 * @return ReflectionClass[]|ReflectionConstant[]|ReflectionFunction[]
+	 */
+	private function turnReflectionToInvalid($elements, $elementName, $reflection)
+	{
+		$element = $elements[$elementName];
+
+		// convert element to invalid if not yet
+		if ( ! $element instanceof Invalid\ReflectionElement) {
+			if ($element instanceof ReflectionClass) {
+				$elements[$elementName] = new Invalid\ReflectionClass($elementName, $element->getFileName(), $this->getBroker());
+
+			} elseif ($element instanceof ReflectionFunction) {
+				$elements[$elementName] = new Invalid\ReflectionFunction($elementName, $element->getFileName(), $this->getBroker());
+
+			} elseif ($element instanceof ReflectionConstant) {
+				$elements[$elementName] = new Invalid\ReflectionConstant($elementName, $element->getFileName(), $this->getBroker());
+			}
+		}
+
+		// and new reason
+		$elementType = $this->getElementType($element);
+		$error = new RuntimeException(
+			sprintf('%s %s was redeclared (previously declared in file %s).', ucfirst($elementType), $elementName, $element->getFileName()),
+			RuntimeException::ALREADY_EXISTS,
+			$reflection
+		);
+		$this->errors[] = $error;
+		$elements[$elementName]->addReason($error);
+
+		// move old reasons
+		if ($reflection instanceof Invalid\ReflectionElement) {
+			foreach ($reflection->getReasons() as $reason) {
+				$elements[$elementName]->addReason($reason);
+			}
+		}
+
+		return $elements;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	private function getElementType(ReflectionInterface $element)
+	{
+		if ($element instanceof ReflectionClassInterface) {
+			return 'class';
+
+		} elseif ($element instanceof ReflectionConstantInterface) {
+			return 'constant';
+
+		} elseif ($element instanceof ReflectionFunctionInterface) {
+			return 'function';
+		}
 	}
 
 }

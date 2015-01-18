@@ -321,8 +321,8 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 			$this->declaringTraitName = $parent->getName();
 		}
 
-		$this->startLine = $tokenStream->current()[2];
-		$this->startPosition = $tokenStream->key();
+		$this->startLine = $elementParser->parseLineNumber();
+		$this->startPosition = $elementParser->parsePosition();
 
 		list($this->docComment, $this->startPosition) = $elementParser->parseDocComment($this->startPosition);
 
@@ -334,8 +334,9 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 
 		$this->name = $propertyParser->parseName();
 		$this->defaultValueDefinition = $propertyParser->parseDefaultValue();
-		$this->endLine = $tokenStream->current()[2];
-		$this->endPosition = $tokenStream->key();
+
+		$this->endLine = $elementParser->parseLineNumber();
+		$this->endPosition = $elementParser->parsePosition();
 	}
 
 }
