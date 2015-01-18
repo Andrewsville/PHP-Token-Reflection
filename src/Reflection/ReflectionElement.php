@@ -9,17 +9,17 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
+use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\Parser\ElementParser;
-use ApiGen\TokenReflection\Reflection\ReflectionFile;
-use ApiGen\TokenReflection\Reflection\ReflectionBase;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-abstract class ReflectionElement extends ReflectionBase
+abstract class ReflectionElement extends ReflectionBase implements SourceInterface, ExtensionInterface
 {
 
 	/**
@@ -27,21 +27,26 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @var string
 	 */
-	private $fileName;
+	protected $fileName;
+
+	/**
+	 * @var ElementParser
+	 */
+	protected $elementParser;
 
 	/**
 	 * Start line in the file.
 	 *
 	 * @var int
 	 */
-	private $startLine;
+	protected $startLine;
 
 	/**
 	 * End line in the file.
 	 *
 	 * @var int
 	 */
-	private $endLine;
+	protected $endLine;
 
 	/**
 	 * Start position in the file token stream.
@@ -55,12 +60,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 *
 	 * @var int
 	 */
-	private $endPosition;
-
-	/**
-	 * @var ElementParser
-	 */
-	private $elementParser;
+	protected $endPosition;
 
 
 	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
@@ -79,6 +79,9 @@ abstract class ReflectionElement extends ReflectionBase
 
 	protected function parseStream(StreamBase $tokenStream, ReflectionInterface $parent = NULL)
 	{
+		if ($this->elementParser === NULL) {
+			return;
+		}
 		$this->fileName = $tokenStream->getFileName();
 
 		if (method_exists($this, 'processParent')) {
@@ -140,11 +143,7 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * Alwyas returns null - everything is user defined.
-	 *
-	 * @return null
+	 * {@inheritdoc}
 	 */
 	public function getExtension()
 	{
@@ -153,11 +152,7 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns the PHP extension name.
-	 *
-	 * Alwyas returns false - everything is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function getExtensionName()
 	{
@@ -166,9 +161,7 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns the appropriate source code part.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getSource()
 	{
@@ -200,11 +193,14 @@ abstract class ReflectionElement extends ReflectionBase
 
 	protected function parseDocComment(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
+		if ($this->elementParser === NULL) {
+			return;
+		}
 		list($this->docComment, $this->startPosition) = $this->elementParser->parseDocComment($this->startPosition);
 	}
 
 
-	private function parseStartLine(StreamBase $tokenStream)
+	protected function parseStartLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->startLine = $token[2];
@@ -212,7 +208,7 @@ abstract class ReflectionElement extends ReflectionBase
 	}
 
 
-	private function parseEndLine(StreamBase $tokenStream)
+	protected function parseEndLine(StreamBase $tokenStream)
 	{
 		$token = $tokenStream->current();
 		$this->endLine = $token[2];

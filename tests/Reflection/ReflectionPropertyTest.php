@@ -21,7 +21,6 @@ class ReflectionPropertyTest extends TestCase
 	public function testLines()
 	{
 		$token = $this->getPropertyTokenReflection('lines');
-
 		$this->assertSame(6, $token->getStartLine());
 		$this->assertSame(6, $token->getEndLine());
 	}
@@ -31,7 +30,7 @@ class ReflectionPropertyTest extends TestCase
 	{
 		$rfl = $this->getClassReflection('docComment');
 		foreach ($rfl->internal->getProperties() as $property) {
-			$this->assertFalse(FALSE === $property->getDocComment(), $property->getName());
+			$this->assertFalse($property->getDocComment() === FALSE, $property->getName());
 			$this->assertTrue($rfl->token->hasProperty($property->getName()), $property->getName());
 			$this->assertSame($property->getDocComment(), $rfl->token->getProperty($property->getName())->getDocComment(), $property->getName());
 		}

@@ -64,6 +64,7 @@ class ElementParser
 			$docComment = new ReflectionAnnotation($this->reflectionElement, $value);
 			$startPosition -= 2;
 		}
+
 		if ($docComment === NULL) {
 			$docComment = new ReflectionAnnotation($this->reflectionElement);
 		}

@@ -12,12 +12,11 @@ namespace ApiGen\TokenReflection\Reflection;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Parser\ElementParser;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use ApiGen\TokenReflection\Parser\PropertyParser;
-use ApiGen\TokenReflection\Reflection\ReflectionClass;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionProperty as InternalReflectionProperty;
@@ -28,8 +27,6 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 {
 
 	/**
-	 * Access level of this property has changed from the original implementation.
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l134
 	 * ZEND_ACC_CHANGED
 	 *
@@ -38,64 +35,45 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	const ACCESS_LEVEL_CHANGED = 0x800;
 
 	/**
-	 * Name of the declaring class.
-	 *
 	 * @var string
 	 */
 	private $declaringClassName;
 
 	/**
-	 * Property modifiers.
-	 *
 	 * @var int
 	 */
 	private $modifiers = 0;
 
 	/**
-	 * Determines if modifiers are complete.
-	 *
 	 * @var bool
 	 */
 	private $modifiersComplete = FALSE;
 
 	/**
-	 * Property default value.
-	 *
 	 * @var mixed
 	 */
 	private $defaultValue;
 
 	/**
-	 * Property default value definition (part of the source code).
-	 *
 	 * @var array|string
 	 */
 	private $defaultValueDefinition = [];
 
 	/**
-	 * Determined if the property value is accessible.
-	 *
 	 * @var bool
 	 */
 	private $accessible = FALSE;
 
 	/**
-	 * Declaring trait name.
-	 *
 	 * @var string
 	 */
 	private $declaringTraitName;
 
-	/**
-	 * @var PropertyParser
-	 */
-	private $propertyParser;
 
-
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionClass $parent = NULL)
 	{
-		$this->propertyParser = new PropertyParser($tokenStream, $this, $parent);
-		parent::__construct($tokenStream, $broker, $parent);
+		$this->broker = $broker;
+		$this->parse($tokenStream, $parent);
 	}
 
 
@@ -248,8 +226,6 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 
 
 	/**
-	 * Sets the property default value.
-	 *
 	 * @param mixed $value
 	 */
 	public function setDefaultValue($value)
@@ -297,7 +273,6 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	/**
 	 * Creates a property alias for the given class.
 	 *
-	 * @param ReflectionClass $parent New parent class
 	 * @return ReflectionProperty
 	 */
 	public function alias(ReflectionClass $parent)
@@ -309,20 +284,16 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 
 
 	/**
-	 * Returns the defining trait.
-	 *
 	 * @return ReflectionClassInterface|NULL
 	 */
 	public function getDeclaringTrait()
 	{
-		return NULL === $this->declaringTraitName ? NULL : $this->getBroker()->getClass($this->declaringTraitName);
+		return $this->declaringTraitName === NULL ? NULL : $this->getBroker()->getClass($this->declaringTraitName);
 	}
 
 
 	/**
-	 * Returns the declaring trait name.
-	 *
-	 * @return string|null
+	 * @return string|NULL
 	 */
 	public function getDeclaringTraitName()
 	{
@@ -339,40 +310,32 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	}
 
 
-	/**
-	 * Processes the parent reflection object.
-	 *
-	 * @return ReflectionElement
-	 * @throws ParseException If an invalid parent reflection object was provided.
-	 */
-	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
+	private function parse(StreamBase $tokenStream, ReflectionClass $parent)
 	{
-		if ( ! $parent instanceof ReflectionClass) {
-			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', ParseException::INVALID_PARENT);
-		}
+		$propertyParser = new PropertyParser($tokenStream, $this, $parent);
+		$elementParser = new ElementParser($tokenStream, $this, $parent);
+
+		$this->fileName = $tokenStream->getFileName();
 		$this->declaringClassName = $parent->getName();
 		if ($parent->isTrait()) {
 			$this->declaringTraitName = $parent->getName();
 		}
-	}
 
+		$this->startLine = $tokenStream->current()[2];
+		$this->startPosition = $tokenStream->key();
 
-	/**
-	 * Parses reflected element metadata from the token stream.
-	 *
-	 * @return ReflectionProperty
-	 */
-	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
-	{
-		$this->modifiers = $this->propertyParser->parseModifiers();
-		if (FALSE === $this->docComment->getDocComment()) {
-			$this->parseDocComment($tokenStream, $parent);
+		list($this->docComment, $this->startPosition) = $elementParser->parseDocComment($this->startPosition);
+
+		$this->modifiers = $propertyParser->parseModifiers();
+
+		if ($this->docComment->getDocComment() === FALSE) {
+			list($this->docComment, $this->startPosition) = $elementParser->parseDocComment($this->startPosition);
 		}
 
-		$this->name = $this->propertyParser->parseName();
-		$this->defaultValueDefinition = $this->propertyParser->parseDefaultValue();
-
-		return $this;
+		$this->name = $propertyParser->parseName();
+		$this->defaultValueDefinition = $propertyParser->parseDefaultValue();
+		$this->endLine = $tokenStream->current()[2];
+		$this->endPosition = $tokenStream->key();
 	}
 
 }

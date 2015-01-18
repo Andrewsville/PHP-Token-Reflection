@@ -4,8 +4,19 @@ namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
+use ApiGen\TokenReflection\Reflection\ReflectionConstant;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionFunction;
+use ApiGen\TokenReflection\Reflection\ReflectionMethod;
+use ApiGen\TokenReflection\Reflection\ReflectionParameter;
+use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
+use ApiGen\TokenReflection\ReflectionMethodInterface;
+use ApiGen\TokenReflection\ReflectionParameterInterface;
+use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use PHPUnit_Framework_TestCase;
 
 
@@ -156,11 +167,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns tokenized class reflection.
-	 *
 	 * @param string $test
 	 * @param bool $fromString
-	 * @return ReflectionClassInterface
+	 * @return ReflectionClass
 	 */
 	protected function getClassTokenReflection($test, $fromString = FALSE)
 	{
@@ -176,50 +185,45 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns tokenized method reflection.
-	 *
 	 * @param string $test
 	 * @param bool $fromString
-	 * @return ApiGen\TokenReflection\ReflectionMethod
+	 * @return ReflectionMethod
 	 */
 	protected function getMethodTokenReflection($test, $fromString = FALSE)
 	{
-		return $this->getClassTokenReflection($test, $fromString)->getMethod($this->getMethodName($test));
+		return $this->getClassTokenReflection($test, $fromString)
+			->getMethod($this->getMethodName($test));
 	}
 
 
 	/**
-	 * Returns tokenized property reflection.
-	 *
 	 * @param string $test
 	 * @param bool $fromString
-	 * @return ApiGen\TokenReflection\ReflectionProperty
+	 * @return ReflectionProperty
 	 */
 	protected function getPropertyTokenReflection($test, $fromString = FALSE)
 	{
-		return $this->getClassTokenReflection($test, $fromString)->getProperty($this->getPropertyName($test));
+		return $this->getClassTokenReflection($test, $fromString)
+			->getProperty($this->getPropertyName($test));
 	}
 
 
 	/**
-	 * Returns tokenized constant reflection.
-	 *
 	 * @param string $test
 	 * @param bool $fromString
-	 * @return ApiGen\TokenReflection\ReflectionConstant
+	 * @return ReflectionConstant
 	 */
 	protected function getConstantTokenReflection($test, $fromString = FALSE)
 	{
-		return $this->getClassTokenReflection($test, $fromString)->getConstantReflection($this->getConstantName($test));
+		return $this->getClassTokenReflection($test, $fromString)
+			->getConstantReflection($this->getConstantName($test));
 	}
 
 
 	/**
-	 * Returns tokenized function reflection.
-	 *
 	 * @param string $test
 	 * @param bool $fromString
-	 * @return ApiGen\TokenReflection\ReflectionFunction
+	 * @return ReflectionFunction
 	 */
 	protected function getFunctionTokenReflection($test, $fromString = FALSE)
 	{
@@ -235,11 +239,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns tokenized parameter reflection.
-	 *
 	 * @param string $test
 	 * @param bool $fromString
-	 * @return ApiGen\TokenReflection\ReflectionParameter
+	 * @return ReflectionParameter
 	 */
 	protected function getParameterTokenReflection($test, $fromString = FALSE)
 	{
@@ -256,8 +258,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns test file path.
-	 *
 	 * @param string $test
 	 * @return string
 	 */
@@ -271,8 +271,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns test class name.
-	 *
 	 * @param string $test
 	 * @return string
 	 */
@@ -283,8 +281,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns test method name.
-	 *
 	 * @param string $test
 	 * @return string
 	 */
@@ -295,8 +291,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns test property name.
-	 *
 	 * @param string $test
 	 * @return string
 	 */
@@ -307,8 +301,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns test constant name.
-	 *
 	 * @param string $test
 	 * @return string
 	 */
@@ -321,8 +313,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * Returns test function name.
-	 *
 	 * @param string $test
 	 * @return string
 	 */
@@ -339,7 +329,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	{
 		static $broker = NULL;
 		if (NULL === $broker) {
-			$broker = $this->createBroker();
+			$broker = new Broker(new MemoryBackend);
 		}
 		return $broker;
 	}
@@ -367,15 +357,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 		}
 
 		return $combinations;
-	}
-
-
-	/**
-	 * @return Broker
-	 */
-	private function createBroker()
-	{
-		return new Broker(new MemoryBackend);
 	}
 
 }

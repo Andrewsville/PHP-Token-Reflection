@@ -44,7 +44,7 @@ class AnnotationParser
 	const LONG_DESCRIPTION = ' long_description';
 
 	/**
-	 * @var \ApiGen\TokenReflection\Reflection\ReflectionBase|ReflectionClass|ReflectionMethod|ReflectionParameter
+	 * @var ReflectionBase|ReflectionClass|ReflectionMethod|ReflectionParameter
 	 */
 	private $reflection;
 

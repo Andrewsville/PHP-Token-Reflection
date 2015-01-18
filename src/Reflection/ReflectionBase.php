@@ -9,11 +9,8 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\Reflection;
 use ApiGen\TokenReflection\Stream\StreamBase;
@@ -38,11 +35,6 @@ abstract class ReflectionBase implements ReflectionInterface, AnnotationsInterfa
 	 * @var Broker
 	 */
 	protected $broker;
-
-	/**
-	 * @var array
-	 */
-	private static $methodCache = [];
 
 
 	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
