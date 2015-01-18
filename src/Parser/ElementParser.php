@@ -72,4 +72,22 @@ class ElementParser
 		return [$docComment, $startPosition];
 	}
 
+
+	/**
+	 * @return int
+	 */
+	public function parseLineNumber()
+	{
+		return $this->tokenStream->current()[2];
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function parsePosition()
+	{
+		return $this->tokenStream->key();
+	}
+
 }

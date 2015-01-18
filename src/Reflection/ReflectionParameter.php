@@ -10,13 +10,10 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\Parser\ElementParser;
+use ApiGen\TokenReflection\Parser\ParameterParser;
 use ApiGen\TokenReflection\ReflectionParameterInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use ApiGen\TokenReflection\Reflection\ReflectionFunctionBase;
-use ApiGen\TokenReflection\Reflection\ReflectionMethod;
 use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
@@ -107,10 +104,10 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	private $passedByReference = FALSE;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionFunctionBase $parent = NULL)
 	{
-
-		parent::__construct($tokenStream, $broker, $parent);
+		$this->broker = $broker;
+		$this->parse($tokenStream, $parent);
 	}
 
 
@@ -119,7 +116,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	 */
 	public function getDeclaringClass()
 	{
-		return NULL === $this->declaringClassName ? NULL : $this->getBroker()->getClass($this->declaringClassName);
+		return $this->declaringClassName === NULL ? NULL : $this->getBroker()->getClass($this->declaringClassName);
 	}
 
 
@@ -137,10 +134,10 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	 */
 	public function getDeclaringFunction()
 	{
-		if (NULL !== $this->declaringClassName) {
+		if ($this->declaringClassName !== NULL) {
 			// Method parameter
 			$class = $this->getBroker()->getClass($this->declaringClassName);
-			if (NULL !== $class) {
+			if ($class !== NULL) {
 				return $class->getMethod($this->declaringFunctionName);
 			}
 		} else {
@@ -167,8 +164,8 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 		if ( ! $this->isOptional()) {
 			throw new RuntimeException('Property is not optional.', RuntimeException::UNSUPPORTED, $this);
 		}
-		if (NULL === $this->defaultValue) {
-			if (0 === count($this->defaultValueDefinition)) {
+		if ($this->defaultValue === NULL) {
+			if (count($this->defaultValueDefinition) === 0) {
 				throw new RuntimeException('Property has no default value.', RuntimeException::DOES_NOT_EXIST, $this);
 			}
 			$this->defaultValue = Resolver::getValueDefinition($this->defaultValueDefinition, $this);
@@ -245,7 +242,8 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 
 	/**
 	 * {@inheritdoc}
-	 */	public function isCallable()
+	 */
+	public function isCallable()
 	{
 		return $this->typeHint === self::CALLABLE_TYPE_HINT;
 	}
@@ -266,7 +264,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	public function getClass()
 	{
 		$name = $this->getClassName();
-		if (NULL === $name) {
+		if ($name === NULL) {
 			return NULL;
 		}
 		return $this->getBroker()->getClass($name);
@@ -281,31 +279,34 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 		if ($this->isArray() || $this->isCallable()) {
 			return NULL;
 		}
-		if (NULL === $this->typeHint && NULL !== $this->originalTypeHint) {
-			if (NULL !== $this->declaringClassName) {
+		if ($this->typeHint === NULL && NULL !== $this->originalTypeHint) {
+			if ($this->declaringClassName !== NULL) {
 				$parent = $this->getDeclaringClass();
-				if (NULL === $parent) {
+				if ($parent === NULL) {
 					throw new RuntimeException('Could not load class reflection.', RuntimeException::DOES_NOT_EXIST, $this);
 				}
+
 			} else {
 				$parent = $this->getDeclaringFunction();
-				if (NULL === $parent || !$parent->isTokenized()) {
+				if ($parent === NULL || ! $parent->isTokenized()) {
 					throw new RuntimeException('Could not load function reflection.', RuntimeException::DOES_NOT_EXIST, $this);
 				}
 			}
 			$lTypeHint = strtolower($this->originalTypeHint);
-			if ('parent' === $lTypeHint || 'self' === $lTypeHint) {
+			if ($lTypeHint === 'parent' || $lTypeHint === 'self') {
 				if (NULL === $this->declaringClassName) {
 					throw new RuntimeException('Parameter type hint cannot be "self" nor "parent" when not a method.', RuntimeException::UNSUPPORTED, $this);
 				}
-				if ('parent' === $lTypeHint) {
-					if ($parent->isInterface() || NULL === $parent->getParentClassName()) {
+				if ($lTypeHint === 'parent') {
+					if ($parent->isInterface() || $parent->getParentClassName() === NULL) {
 						throw new RuntimeException('Class has no parent.', RuntimeException::DOES_NOT_EXIST, $this);
 					}
 					$this->typeHint = $parent->getParentClassName();
+
 				} else {
 					$this->typeHint = $this->declaringClassName;
 				}
+
 			} else {
 				$this->typeHint = ltrim(Resolver::resolveClassFQN($this->originalTypeHint, $parent->getNamespaceAliases(), $parent->getNamespaceName()), '\\');
 			}
@@ -322,7 +323,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 		if ($this->isArray() || $this->isCallable()) {
 			return strtolower($this->getDefaultValueDefinition()) === 'null';
 		}
-		return $this->originalTypeHint === NULL || !empty($this->defaultValueDefinition);
+		return $this->originalTypeHint === NULL || ! empty($this->defaultValueDefinition);
 	}
 
 
@@ -331,7 +332,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	 */
 	public function isOptional()
 	{
-		if (NULL === $this->isOptional) {
+		if ($this->isOptional === NULL) {
 			$this->isOptional = !empty($this->defaultValueDefinition) && $this->haveSiblingsDefaultValues();
 		}
 		return $this->isOptional;
@@ -355,11 +356,11 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	protected function haveSiblingsDefaultValues()
 	{
 		$function = $this->getDeclaringFunction();
-		if (NULL === $function) {
+		if ($function === NULL) {
 			throw new RuntimeException('Could not get the declaring function reflection.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
 		foreach (array_slice($function->getParameters(), $this->position + 1) as $reflectionParameter) {
-			if (NULL === $reflectionParameter->getDefaultValueDefinition()) {
+			if ($reflectionParameter->getDefaultValueDefinition() === NULL) {
 				return FALSE;
 			}
 		}
@@ -381,7 +382,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	 */
 	public function canBePassedByValue()
 	{
-		return !$this->isPassedByReference();
+		return ! $this->isPassedByReference();
 	}
 
 
@@ -417,158 +418,33 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	}
 
 
-	/**
-	 * @return ReflectionElement
-	 * @throws ParseException If an invalid parent reflection object was provided.
-	 */
-	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
+	private function parse(StreamBase $tokenStream, ReflectionFunctionBase $parent)
 	{
-		if ( ! $parent instanceof ReflectionFunctionBase) {
-			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionFunctionBase.', ParseException::INVALID_PARENT);
-		}
-		// Declaring function name
+		$elementParser = new ElementParser($tokenStream, $this, $parent);
+		$parameterParser = new ParameterParser($tokenStream, $this, $parent);
+
+		$this->fileName = $tokenStream->getFileName();
+
 		$this->declaringFunctionName = $parent->getName();
-		// Position
 		$this->position = count($parent->getParameters());
-		// Declaring class name
 		if ($parent instanceof ReflectionMethod) {
 			$this->declaringClassName = $parent->getDeclaringClassName();
 		}
-//		return parent::processParent($parent, $tokenStream);
-	}
 
+		$this->startLine = $elementParser->parseLineNumber();
+		$this->startPosition = $elementParser->parsePosition();
 
-	/**
-	 * Parses reflected element metadata from the token stream.
-	 *
-	 * @return ReflectionParameter
-	 */
-	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
-	{
-		return $this->parseTypeHint($tokenStream)
-			->parsePassedByReference($tokenStream)
-			->parseIsVariadic($tokenStream)
-			->parseName($tokenStream)
-			->parseDefaultValue($tokenStream);
-	}
+		list($this->docComment, $this->startPosition) = $elementParser->parseDocComment($this->startPosition);
+		list($this->typeHint, $this->originalTypeHint) = $parameterParser->parseTypeHint();
 
+		$this->passedByReference = $parameterParser->parsePassedByReference();
 
-	/**
-	 * @return ReflectionParameter
-	 * @throws ParseException If the type hint class name could not be determined.
-	 */
-	private function parseTypeHint(StreamBase $tokenStream)
-	{
-		$type = $tokenStream->getType();
-		if (T_ARRAY === $type) {
-			$this->typeHint = self::ARRAY_TYPE_HINT;
-			$this->originalTypeHint = self::ARRAY_TYPE_HINT;
-			$tokenStream->skipWhitespaces(TRUE);
-		} elseif (T_CALLABLE === $type) {
-			$this->typeHint = self::CALLABLE_TYPE_HINT;
-			$this->originalTypeHint = self::CALLABLE_TYPE_HINT;
-			$tokenStream->skipWhitespaces(TRUE);
-		} elseif (T_STRING === $type || T_NS_SEPARATOR === $type) {
-			$className = '';
-			do {
-				$className .= $tokenStream->getTokenValue();
-				$tokenStream->skipWhitespaces(TRUE);
-				$type = $tokenStream->getType();
-			} while (T_STRING === $type || T_NS_SEPARATOR === $type);
-			if ('' === ltrim($className, '\\')) {
-				throw new ParseException($this, $tokenStream, sprintf('Invalid class name definition: "%s".', $className), ParseException::LOGICAL_ERROR);
-			}
-			$this->originalTypeHint = $className;
-		}
-		return $this;
-	}
+		$this->isVariadic = $parameterParser->parseIsVariadic();
+		$this->name = $parameterParser->parseName();
+		$this->defaultValueDefinition = $parameterParser->parseDefaultValue();
 
-
-	/**
-	 * @return ReflectionParameter
-	 */
-	private function parsePassedByReference(StreamBase $tokenStream)
-	{
-		if ($tokenStream->is('&')) {
-			$this->passedByReference = TRUE;
-			$tokenStream->skipWhitespaces(TRUE);
-		}
-		return $this;
-	}
-
-
-	/**
-	 * @return ReflectionParameter
-	 */
-	private function parseIsVariadic(StreamBase $tokenStream)
-	{
-		if (PHP_VERSION_ID >= 50600 && $tokenStream->is(T_ELLIPSIS)) {
-			$this->isVariadic = TRUE;
-			$tokenStream->skipWhitespaces(TRUE);
-		}
-		return $this;
-	}
-
-
-	/**
-	 * Parses the constant name.
-	 *
-	 * @return ReflectionParameter
-	 * @throws ParseException If the parameter name could not be determined.
-	 */
-	protected function parseName(StreamBase $tokenStream)
-	{
-		if ( ! $tokenStream->is(T_VARIABLE)) {
-			throw new ParseException($this, $tokenStream, 'The parameter name could not be determined.', ParseException::UNEXPECTED_TOKEN);
-		}
-		$this->name = substr($tokenStream->getTokenValue(), 1);
-		$tokenStream->skipWhitespaces(TRUE);
-		return $this;
-	}
-
-
-	/**
-	 * Parses the parameter default value.
-	 *
-	 * @return ReflectionParameter
-	 * @throws ParseException If the default value could not be determined.
-	 */
-	private function parseDefaultValue(StreamBase $tokenStream)
-	{
-		if ($tokenStream->is('=')) {
-			$tokenStream->skipWhitespaces(TRUE);
-			$level = 0;
-			while (NULL !== ($type = $tokenStream->getType())) {
-				switch ($type) {
-					case ')':
-						if (0 === $level) {
-							break 2;
-						}
-					case '}':
-					case ']':
-						$level--;
-						break;
-					case '(':
-					case '{':
-					case '[':
-						$level++;
-						break;
-					case ',':
-						if (0 === $level) {
-							break 2;
-						}
-						break;
-					default:
-						break;
-				}
-				$this->defaultValueDefinition[] = $tokenStream->current();
-				$tokenStream->next();
-			}
-			if (')' !== $type && ',' !== $type) {
-				throw new ParseException($this, $tokenStream, 'The property default value is not terminated properly. Expected "," or ")".', ParseException::UNEXPECTED_TOKEN);
-			}
-		}
-		return $this;
+		$this->endLine = $elementParser->parseLineNumber();
+		$this->endPosition = $elementParser->parsePosition();
 	}
 
 }

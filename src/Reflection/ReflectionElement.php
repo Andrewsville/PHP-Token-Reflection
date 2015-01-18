@@ -79,9 +79,6 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 
 	protected function parseStream(StreamBase $tokenStream, ReflectionInterface $parent = NULL)
 	{
-		if ($this->elementParser === NULL) {
-			return;
-		}
 		$this->fileName = $tokenStream->getFileName();
 
 		if (method_exists($this, 'processParent')) {
@@ -193,9 +190,6 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 
 	protected function parseDocComment(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
-		if ($this->elementParser === NULL) {
-			return;
-		}
 		list($this->docComment, $this->startPosition) = $this->elementParser->parseDocComment($this->startPosition);
 	}
 
