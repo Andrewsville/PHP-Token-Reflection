@@ -11,7 +11,6 @@ namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
-use ApiGen\TokenReflection\Reflection\ReflectionBase;
 
 
 class ReflectionAnnotation implements AnnotationsInterface

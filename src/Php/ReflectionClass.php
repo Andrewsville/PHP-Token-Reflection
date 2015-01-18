@@ -532,9 +532,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
-	 * @param string $name
-	 * @param NULL $default
-	 * @return mixed
+	 * {@inheritdoc}
 	 */
 	public function getStaticPropertyValue($name, $default = NULL)
 	{

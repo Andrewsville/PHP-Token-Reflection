@@ -10,19 +10,16 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Parser\ClassParser;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionConstant;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
-use ApiGen\TokenReflection\Reflection\ReflectionMethod;
-use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
-use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use ReflectionClass as InternalReflectionClass;
@@ -34,31 +31,21 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 {
 
 	/**
-	 * Modifier for determining if the reflected object is an interface.
-	 *
 	 * @var int
-	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l122
 	 */
 	const IS_INTERFACE = 0x80;
 
 	/**
-	 * Modifier for determining if the reflected object is a trait.
-	 *
 	 * @var int
-	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l150
 	 */
 	const IS_TRAIT = 0x120;
 
 	/**
-	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l152
-	 *
 	 * @var int
 	 */
 	const IMPLEMENTS_INTERFACES = 0x80000;
 
 	/**
-	 * @see http://svn.php.net/viewvc/php/php-src/trunk/Zend/zend_compile.h?revision=306938&view=markup#l181
-	 *
 	 * @var int
 	 */
 	const IMPLEMENTS_TRAITS = 0x400000;
@@ -81,15 +68,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	private $type = 0;
 
 	/**
-	 * Determines if modifiers are complete.
-	 *
 	 * @var bool
 	 */
 	private $modifiersComplete = FALSE;
 
 	/**
-	 * Parent class name.
-	 *
 	 * @var string
 	 */
 	private $parentClassName;
@@ -97,13 +80,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	/**
 	 * Implemented interface names.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private $interfaces = [];
 
 	/**
-	 * Used trait names.
-	 *
 	 * @var array
 	 */
 	private $traits = [];
@@ -131,23 +112,17 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	private $traitImports = [];
 
 	/**
-	 * Stores if the class definition is complete.
-	 *
-	 * @var array
+	 * @var ReflectionMethodInterface[]
 	 */
 	private $methods = [];
 
 	/**
-	 * Constant reflections.
-	 *
-	 * @var array
+	 * @var ReflectionConstantInterface[]
 	 */
 	private $constants = [];
 
 	/**
-	 * Properties reflections.
-	 *
-	 * @var array
+	 * @var ReflectionPropertyInterface[]
 	 */
 	private $properties = [];
 
@@ -164,6 +139,38 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 * @var array
 	 */
 	private $aliases = [];
+
+	/**
+	 * @var ClassParser
+	 */
+	private $classParser;
+
+
+	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	{
+		$this->classParser = new ClassParser($tokenStream, $this, $parent);
+
+		$this->broker = $broker;
+		parent::__construct($tokenStream, $broker, $parent);
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getAliases()
+	{
+		return $this->aliases;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	public function getTraitImports()
+	{
+		return $this->traitImports;
+	}
 
 
 	/**
@@ -1226,12 +1233,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	}
 
 
-	/**
-	 * Processes the parent reflection object.
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ParseException On invalid parent reflection provided
-	 */
 	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFileNamespace) {
@@ -1242,65 +1243,21 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	}
 
 
-	/**
-	 * Parses reflected element metadata from the token stream.
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 */
 	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
-		return $this->parseModifiers($tokenStream)
-			->parseName($tokenStream)
-			->parseParent($tokenStream, $parent)
-			->parseInterfaces($tokenStream, $parent);
+		$classParser = new ClassParser($tokenStream, $this, $parent);
+		list ($this->modifiers, $this->type) = $classParser->parseModifiers();
+
+		$this->fileName = $tokenStream->getFileName();
+
+		$this->parseName($tokenStream);
+
+		$this->parseParent($tokenStream, $parent);
+
+		$this->parseInterfaces($tokenStream, $parent);
 	}
 
 
-	/**
-	 * Parses class modifiers (abstract, final) and class type (class, interface).
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 */
-	private function parseModifiers(StreamBase $tokenStream)
-	{
-		while (TRUE) {
-			switch ($tokenStream->getType()) {
-				case NULL:
-					break 2;
-				case T_ABSTRACT:
-					$this->modifiers = InternalReflectionClass::IS_EXPLICIT_ABSTRACT;
-					break;
-				case T_FINAL:
-					$this->modifiers = InternalReflectionClass::IS_FINAL;
-					break;
-				case T_INTERFACE:
-					$this->modifiers = self::IS_INTERFACE;
-					$this->type = self::IS_INTERFACE;
-					$tokenStream->skipWhitespaces(TRUE);
-					break 2;
-				case T_TRAIT:
-					$this->modifiers = self::IS_TRAIT;
-					$this->type = self::IS_TRAIT;
-					$tokenStream->skipWhitespaces(TRUE);
-					break 2;
-				case T_CLASS:
-					$tokenStream->skipWhitespaces(TRUE);
-					break 2;
-				default:
-					break;
-			}
-			$tokenStream->skipWhitespaces(TRUE);
-		}
-		return $this;
-	}
-
-
-	/**
-	 * Parses the class/interface name.
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ParseException If the class name could not be determined.
-	 */
 	protected function parseName(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_STRING)) {
@@ -1312,15 +1269,9 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			$this->name = $this->namespaceName . '\\' . $tokenStream->getTokenValue();
 		}
 		$tokenStream->skipWhitespaces(TRUE);
-		return $this;
 	}
 
 
-	/**
-	 * Parses the parent class.
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 */
 	private function parseParent(StreamBase $tokenStream, ReflectionElement $parent = NULL)
 	{
 		if ( ! $tokenStream->is(T_EXTENDS)) {
@@ -1343,7 +1294,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			$parentClassName = Resolver::resolveClassFQN($parentClassName, $this->aliases, $this->namespaceName);
 			if ($this->isInterface()) {
 				$this->interfaces[] = $parentClassName;
-				if (',' === $tokenStream->getTokenValue()) {
+				if ($tokenStream->getTokenValue() === ',') {
 					continue;
 				}
 			} else {
@@ -1351,16 +1302,9 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			}
 			break;
 		}
-		return $this;
 	}
 
 
-	/**
-	 * Parses implemented interfaces.
-	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass
-	 * @throws ParseException On error while parsing interfaces.
-	 */
 	private function parseInterfaces(StreamBase $tokenStream, ReflectionElement $parent = NULL)
 	{
 		if ( ! $tokenStream->is(T_IMPLEMENTS)) {
@@ -1385,22 +1329,16 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			}
 			$this->interfaces[] = Resolver::resolveClassFQN($interfaceName, $this->aliases, $this->namespaceName);
 			$type = $tokenStream->getType();
-			if ('{' === $type) {
+			if ($type === '{') {
 				break;
-			} elseif (',' !== $type) {
+
+			} elseif ($type !== ',') {
 				throw new ParseException($this, $tokenStream, 'Unexpected token found, expected "{" or ";".', ParseException::UNEXPECTED_TOKEN);
 			}
 		}
-		return $this;
 	}
 
 
-	/**
-	 * Parses child reflection objects from the token stream.
-	 *
-	 * @return ReflectionClass
-	 * @throws ParseException If a parse error was detected.
-	 */
 	protected function parseChildren(StreamBase $tokenStream, ReflectionInterface $parent)
 	{
 		while (TRUE) {
@@ -1409,7 +1347,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 					break 2;
 				case T_COMMENT:
 				case T_DOC_COMMENT:
-					$docblock = $tokenStream->getTokenValue();
 					$tokenStream->next();
 					break;
 				case '}':
@@ -1560,7 +1497,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 					break;
 			}
 		}
-		return $this;
 	}
 
 }
