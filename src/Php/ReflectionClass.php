@@ -403,7 +403,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public function getConstantReflection($name)
 	{
 		if ($this->hasConstant($name)) {
-			return new ReflectionConstant($name, $this->getConstant($name), $this->broker);
+			return new ReflectionConstant($name, $this->getConstant($name), $this->broker, $this);
 		}
 		throw new RuntimeException(sprintf('Constant "%s" does not exist.', $name), RuntimeException::DOES_NOT_EXIST);
 	}
