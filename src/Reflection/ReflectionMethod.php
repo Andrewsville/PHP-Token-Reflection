@@ -10,16 +10,11 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
 use ApiGen\TokenReflection\Parser\MethodParser;
-use ApiGen\TokenReflection\Reflection\ReflectionClass;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use ApiGen\TokenReflection\Reflection\ReflectionFunctionBase;
 use ApiGen\TokenReflection\Stream\StreamBase;
-use ReflectionClass as InternalReflectionClass;
 use ReflectionMethod as InternalReflectionMethod;
 
 
@@ -27,8 +22,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 {
 
 	/**
-	 * An implemented abstract method.
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l114
 	 * ZEND_ACC_IMPLICIT_PUBLIC
 	 *
@@ -37,8 +30,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	const IS_IMPLEMENTED_ABSTRACT = 0x08;
 
 	/**
-	 * Access level of this method has changed from the original implementation.
-	 *
 	 * @see http://svn.php.net/viewvc/php/php-src/branches/PHP_5_3/Zend/zend_compile.h?revision=306939&view=markup#l134
 	 * ZEND_ACC_CHANGED
 	 *
@@ -82,11 +73,6 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	 * @var string
 	 */
 	private $declaringClassName;
-
-	/**
-	 * @var ReflectionMethodInterface
-	 */
-	private $prototype;
 
 	/**
 	 * @var int
@@ -138,13 +124,11 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 
 
 	/**
-	 * Returns the declaring class reflection.
-	 *
-	 * @return ReflectionClass|NULL
+	 * {@inheritdoc}
 	 */
 	public function getDeclaringClass()
 	{
-		return NULL === $this->declaringClassName ? NULL : $this->getBroker()->getClass($this->declaringClassName);
+		return $this->declaringClassName === NULL ? NULL : $this->getBroker()->getClass($this->declaringClassName);
 	}
 
 
@@ -165,7 +149,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 		if ( ! $this->modifiersComplete && !($this->modifiers & (self::ACCESS_LEVEL_CHANGED | self::IS_IMPLEMENTED_ABSTRACT))) {
 			$declaringClass = $this->getDeclaringClass();
 			$parentClass = $declaringClass->getParentClass();
-			if (FALSE !== $parentClass && $parentClass->hasMethod($this->name)) {
+			if ($parentClass !== FALSE && $parentClass->hasMethod($this->name)) {
 				$parentClassMethod = $parentClass->getMethod($this->name);
 				// Access level changed
 				if (($this->isPublic() || $this->isProtected()) && $parentClassMethod->is(self::ACCESS_LEVEL_CHANGED | InternalReflectionMethod::IS_PRIVATE)) {
@@ -175,6 +159,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 				if ($parentClassMethod->isAbstract() && !$this->isAbstract()) {
 					$this->modifiers |= self::IS_IMPLEMENTED_ABSTRACT;
 				}
+
 			} else {
 				// Check if it is an implementation of an interface method
 				foreach ($declaringClass->getInterfaces() as $interface) {
@@ -357,11 +342,12 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 		static $possibleLevels = [InternalReflectionMethod::IS_PUBLIC => TRUE, InternalReflectionMethod::IS_PROTECTED => TRUE, InternalReflectionMethod::IS_PRIVATE => TRUE];
 		$method = clone $this;
 		$method->declaringClassName = $parent->getName();
-		if (NULL !== $name) {
+		if ($name !== NULL) {
 			$method->originalName = $this->name;
 			$method->name = $name;
 		}
-		if (NULL !== $accessLevel) {
+
+		if ($accessLevel !== NULL) {
 			if ( ! isset($possibleLevels[$accessLevel])) {
 				throw new RuntimeException(sprintf('Invalid method access level: "%s".', $accessLevel), RuntimeException::INVALID_ARGUMENT, $this);
 			}
@@ -408,7 +394,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	 */
 	public function getDeclaringTrait()
 	{
-		return NULL === $this->declaringTraitName ? NULL : $this->getBroker()->getClass($this->declaringTraitName);
+		return $this->declaringTraitName === NULL ? NULL : $this->getBroker()->getClass($this->declaringTraitName);
 	}
 
 
@@ -421,28 +407,20 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	}
 
 
-	/**
-	 * @return ReflectionElement
-	 * @throws ParseException If an invalid parent reflection object was provided.
-	 */
-	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
+	protected function parse(StreamBase $tokenStream, ReflectionClass $parent)
 	{
-		if ( ! $parent instanceof ReflectionClass) {
-			throw new ParseException($this, $tokenStream, 'The parent object has to be an instance of TokenReflection\ReflectionClass.', ParseException::INVALID_PARENT);
-		}
 		$this->declaringClassName = $parent->getName();
 		if ($parent->isTrait()) {
 			$this->declaringTraitName = $parent->getName();
 		}
-	}
 
-
-	protected function parse(StreamBase $tokenStream, ReflectionInterface $parent)
-	{
 		$this->modifiers = $this->methodParser->parseBaseModifiers();
 		$this->returnsReference = $this->methodParser->parseReturnReference();
 		$this->name = $this->methodParser->parseName();
 		$this->modifiers = $this->methodParser->parseInternalModifiers($this->modifiers);
+
+		$this->parseParameters($tokenStream);
+		$this->parseStaticVariables($tokenStream);
 	}
 
 }

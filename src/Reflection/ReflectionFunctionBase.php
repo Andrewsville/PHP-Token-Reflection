@@ -15,10 +15,6 @@ use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionFunctionBaseInterface;
 use ApiGen\TokenReflection\ReflectionParameterInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use ApiGen\TokenReflection\Reflection\ReflectionMethod;
-use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
-use ApiGen\TokenReflection\Reflection\ReflectionParameter;
 use ApiGen\TokenReflection\Resolver;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
@@ -46,12 +42,12 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	/**
 	 * @var array
 	 */
-	private $staticVariables = [];
+	protected $staticVariables = [];
 
 	/**
 	 * @var array
 	 */
-	private $staticVariablesDefinition = [];
+	protected $staticVariablesDefinition = [];
 
 	/**
 	 * @var bool|NULL
@@ -220,17 +216,11 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	}
 
 
-
-	/**
-	 * Parses child reflection objects from the token stream.
-	 *
-	 * @return ReflectionElement
-	 */
-	protected function parseChildren(StreamBase $tokenStream, ReflectionInterface $parent)
-	{
-		return $this->parseParameters($tokenStream)
-			->parseStaticVariables($tokenStream);
-	}
+//	protected function parseChildren(StreamBase $tokenStream, ReflectionInterface $parent)
+//	{
+//		$this->parseParameters($tokenStream);
+//		$this->parseStaticVariables($tokenStream);
+//	}
 
 
 	/**

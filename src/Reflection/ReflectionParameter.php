@@ -85,8 +85,6 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	private $position;
 
 	/**
-	 * Determines if the parameter is optional.
-	 *
 	 * @var bool
 	 */
 	private $isOptional;
@@ -97,8 +95,6 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	private $isVariadic = FALSE;
 
 	/**
-	 * Determines if the value is passed by reference.
-	 *
 	 * @var bool
 	 */
 	private $passedByReference = FALSE;
@@ -359,6 +355,8 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 		if ($function === NULL) {
 			throw new RuntimeException('Could not get the declaring function reflection.', RuntimeException::DOES_NOT_EXIST, $this);
 		}
+
+		/** @var ReflectionParameter $reflectionParameter */
 		foreach (array_slice($function->getParameters(), $this->position + 1) as $reflectionParameter) {
 			if ($reflectionParameter->getDefaultValueDefinition() === NULL) {
 				return FALSE;
@@ -441,6 +439,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 
 		$this->isVariadic = $parameterParser->parseIsVariadic();
 		$this->name = $parameterParser->parseName();
+
 		$this->defaultValueDefinition = $parameterParser->parseDefaultValue();
 
 		$this->endLine = $elementParser->parseLineNumber();

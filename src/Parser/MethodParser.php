@@ -67,13 +67,17 @@ class MethodParser extends FunctionBaseParser
 		$name = strtolower($this->reflectionFunction->getName());
 		if ('__construct' === $name || ( ! $class->inNamespace() && strtolower($class->getShortName()) === $name)) {
 			$modifiers |= ReflectionMethod::IS_CONSTRUCTOR;
+
 		} elseif ('__destruct' === $name) {
 			$modifiers |= ReflectionMethod::IS_DESTRUCTOR;
+
 		} elseif ('__clone' === $name) {
 			$modifiers |= ReflectionMethod::IS_CLONE;
 		}
+
 		if ($class->isInterface()) {
 			$modifiers |= InternalReflectionMethod::IS_ABSTRACT;
+
 		} else {
 			static $notAllowed = ['__clone' => TRUE, '__tostring' => TRUE, '__get' => TRUE, '__set' => TRUE, '__isset' => TRUE, '__unset' => TRUE];
 			if ( ! $this->reflectionFunction->isStatic() && !$this->reflectionFunction->isConstructor() && !$this->reflectionFunction->isDestructor() && !isset($notAllowed[$name])) {

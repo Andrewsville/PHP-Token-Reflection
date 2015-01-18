@@ -2,31 +2,23 @@
 
 namespace ApiGen\TokenReflection\Tests\Reflection;
 
+use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryBackend;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
-use ApiGen\TokenReflection\Reflection\ReflectionAnnotation;
-use ApiGen\TokenReflection\Reflection\ReflectionMethod;
-use ApiGen\TokenReflection\Tests\ApiGen;
 use ApiGen\TokenReflection\Tests\TestCase;
-use ReflectionMethod as InternalReflectionMethod;
 
 
 class ReflectionMethodTest extends TestCase
 {
 
 	/**
-	 * Element type.
-	 *
 	 * @var string
 	 */
 	protected $type = 'method';
 
 
-	/**
-	 * Tests getting of start and end line.
-	 */
 	public function testLines()
 	{
 		$rfl = $this->getMethodReflection('lines');
@@ -37,9 +29,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	/**
-	 * Tests getting of documentation comment.
-	 */
 	public function testComment()
 	{
 		$rfl = $this->getMethodReflection('docComment');
@@ -175,9 +164,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	/**
-	 * Tests getting of declaring class.
-	 */
 	public function testDeclaringClass()
 	{
 		$rfl = $this->getClassReflection('declaringClass');
@@ -194,9 +180,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	/**
-	 * Tests all method modifiers.
-	 */
 	public function testModifiers()
 	{
 		static $classes = [
@@ -223,9 +206,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	/**
-	 * Tests if method is user defined or internal.
-	 */
 	public function testUserDefined()
 	{
 		$rfl = $this->getMethodReflection('userDefined');
@@ -309,9 +289,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	/**
-	 * Tests getting of method parameters.
-	 */
 	public function testParameters()
 	{
 		$rfl = $this->getMethodReflection('parameters');
@@ -338,9 +315,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	/**
-	 * Tests new PHP 5.4 features.
-	 */
 	public function test54features()
 	{
 		$rfl = $this->getMethodReflection('features54');
