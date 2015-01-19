@@ -10,12 +10,13 @@
 namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
 use ApiGen\TokenReflection\ReflectionNamespaceInterface;
 use ApiGen\TokenReflection\Stream\FileStream;
 use ApiGen\TokenReflection\Stream\StreamBase;
@@ -32,30 +33,24 @@ class MemoryBackend implements BackendInterface
 	private $declaredClasses = [];
 
 	/**
-	 * Namespaces storage.
-	 *
-	 * @var array
+	 * @var array|ReflectionNamespaceInterface[]
 	 */
 	private $namespaces = [];
 
 	/**
-	 * All tokenized constants cache.
-	 *
-	 * @var array
+	 * @var array|ReflectionConstantInterface[]
 	 */
 	private $allConstants;
 
 	/**
-	 * All tokenized classes cache.
-	 *
-	 * @var array
+	 * @var array|ReflectionClassInterface[]
 	 */
 	private $allClasses;
 
 	/**
 	 * All tokenized functions cache.
 	 *
-	 * @var array
+	 * @var array|ReflectionFunctionInterface[]
 	 */
 	private $allFunctions;
 
@@ -192,7 +187,7 @@ class MemoryBackend implements BackendInterface
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
 	 * @param string $className
-	 * @return ReflectionClassInterface
+	 * @return ReflectionClassInterface|NULL
 	 */
 	public function getClass($className)
 	{
@@ -216,10 +211,8 @@ class MemoryBackend implements BackendInterface
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
-
-			} else {
-				throw new BrokerException(sprintf('Class %s was not parsed', $className));
 			}
+			return NULL;
 		}
 	}
 
@@ -232,7 +225,7 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function getClasses($type = self::TOKENIZED_CLASSES)
 	{
-		if (NULL === $this->allClasses) {
+		if ($this->allClasses === NULL) {
 			$this->allClasses = $this->parseClassLists();
 		}
 		$result = [];
@@ -324,7 +317,7 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function getConstants()
 	{
-		if (NULL === $this->allConstants) {
+		if ($this->allConstants === NULL) {
 			$this->allConstants = [];
 			foreach ($this->namespaces as $namespace) {
 				foreach ($namespace->getConstants() as $constant) {
@@ -399,7 +392,7 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function getFunctions()
 	{
-		if (NULL === $this->allFunctions) {
+		if ($this->allFunctions === NULL) {
 			$this->allFunctions = [];
 			foreach ($this->namespaces as $namespace) {
 				foreach ($namespace->getFunctions() as $function) {
@@ -436,7 +429,7 @@ class MemoryBackend implements BackendInterface
 		if ( ! isset($this->tokenStreams[$realName])) {
 			throw new BrokerException(sprintf('File "%s" was not processed yet.', $fileName), BrokerException::DOES_NOT_EXIST);
 		}
-		return TRUE === $this->tokenStreams[$realName] ? new FileStream($realName) : $this->tokenStreams[$realName];
+		return $this->tokenStreams[$realName] === TRUE ? new FileStream($realName) : $this->tokenStreams[$realName];
 	}
 
 

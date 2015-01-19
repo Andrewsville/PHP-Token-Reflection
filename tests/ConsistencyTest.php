@@ -76,12 +76,9 @@ class ConsistencyTest extends TestCase
 	}
 
 
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
-	 */
 	public function testGetNonexistingClass()
 	{
-		$this->getBroker()->getClass('Foo\\Bar');
+		$this->assertNull($this->getBroker()->getClass('Foo\\Bar'));
 	}
 
 

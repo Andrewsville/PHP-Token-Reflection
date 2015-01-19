@@ -178,8 +178,8 @@ class Broker
 	 * Parses a file and returns the appropriate reflection object.
 	 *
 	 * @param string $fileName Filename
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
-	 * @return bool|ReflectionFile
+	 * @param bool $returnReflectionFile
+	 * @return bool|ReflectionFile[]
 	 * @throws BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName, $returnReflectionFile = FALSE)
@@ -196,8 +196,11 @@ class Broker
 				// Clear the cache - leave only tokenized reflections
 				foreach ($this->cache as $type => $cached) {
 					if ( ! empty($cached)) {
-						$this->cache[$type] = array_filter($cached, function (ReflectionInterface $reflection) {
-							return $reflection->isTokenized();
+						$this->cache[$type] = array_filter($cached, function (ReflectionInterface $reflection = NULL) {
+							if ($reflection) {
+								return $reflection->isTokenized();
+							}
+							return FALSE;
 						});
 					}
 				}
