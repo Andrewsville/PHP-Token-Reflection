@@ -193,7 +193,7 @@ class ReflectionMethodTest extends TestCase
 		];
 
 		require_once $this->getFilePath('modifiers');
-		$this->getBroker()->process($this->getFilePath('modifiers'));
+		$this->getBroker()->processFile($this->getFilePath('modifiers'));
 
 		foreach ($classes as $className) {
 			$token = $this->getBroker()->getClass($className);

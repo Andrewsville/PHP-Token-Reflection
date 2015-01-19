@@ -103,7 +103,7 @@ class ReflectionConstantTest extends TestCase
 	public function testMagicConstants()
 	{
 		$broker = new Broker(new MemoryBackend);
-		$broker->process($this->getFilePath('magic'));
+		$broker->processFile($this->getFilePath('magic'));
 
 		require_once($this->getFilePath('magic'));
 
@@ -241,7 +241,7 @@ class ReflectionConstantTest extends TestCase
 	public function testMagicConstants54()
 	{
 		$broker = new Broker(new MemoryBackend);
-		$broker->process($this->getFilePath('magic54'));
+		$broker->processFile($this->getFilePath('magic54'));
 
 		require_once($this->getFilePath('magic54'));
 
@@ -454,7 +454,7 @@ class ReflectionConstantTest extends TestCase
 	public function testInterfaces()
 	{
 		$broker = new Broker(new MemoryBackend);
-		$broker->process($this->getFilePath('interfaces'));
+		$broker->processFile($this->getFilePath('interfaces'));
 
 		$class1 = $broker->getClass('TokenReflection_Test_ConstantInterfaceClass');
 		$this->assertTrue($class1->hasConstant('FIRST'));

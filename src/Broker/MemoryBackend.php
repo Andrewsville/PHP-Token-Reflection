@@ -412,7 +412,7 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function isFileProcessed($fileName)
 	{
-		return isset($this->tokenStreams[Broker::getRealPath($fileName)]);
+		return isset($this->tokenStreams[realpath($fileName)]);
 	}
 
 
@@ -425,7 +425,7 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function getFileTokens($fileName)
 	{
-		$realName = Broker::getRealPath($fileName);
+		$realName = realpath($fileName);
 		if ( ! isset($this->tokenStreams[$realName])) {
 			throw new BrokerException(sprintf('File "%s" was not processed yet.', $fileName), BrokerException::DOES_NOT_EXIST);
 		}

@@ -9,22 +9,18 @@
 
 namespace ApiGen\TokenReflection\Broker;
 
-use ApiGen;
-use ApiGen\TokenReflection\Broker\BackendInterface;
-use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
+use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Exception\StreamException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Stream\FileStream;
-use ApiGen\TokenReflection\Stream\StringStream;
+use ApiGen\TokenReflection\Stream\StreamBase;
 use Nette\Utils\Finder;
 use SplFileInfo;
 
 
-/**
- * Parses files and directories and stores their structure.
- */
 class Broker
 {
 
@@ -102,7 +98,7 @@ class Broker
 
 
 	/**
-	 * @param BackendInterface $backend Broker backend instance
+	 * @param BackendInterface $backend
 	 * @param int $options Broker/parsing options
 	 */
 	public function __construct(BackendInterface $backend, $options = self::OPTION_DEFAULT)
@@ -114,15 +110,12 @@ class Broker
 			self::CACHE_FUNCTION => []
 		];
 		$this->options = $options;
-		$this->backend = $backend
-			->setBroker($this)
+		$this->backend = $backend->setBroker($this)
 			->setStoringTokenStreams((bool) ($options & self::OPTION_SAVE_TOKEN_STREAM));
 	}
 
 
 	/**
-	 * Returns broker/parser options.
-	 *
 	 * @return int
 	 */
 	public function getOptions()
@@ -132,9 +125,7 @@ class Broker
 
 
 	/**
-	 * Returns if a particular option setting is set.
-	 *
-	 * @param int $option Option setting
+	 * @param int $option
 	 * @return bool
 	 */
 	public function isOptionSet($option)
@@ -144,49 +135,18 @@ class Broker
 
 
 	/**
-	 * Parses a string with the PHP source code using the given file name and returns the appropriate reflection object.
-	 *
-	 * @param string $source PHP source code
-	 * @param string $fileName Used file name
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
-	 * @return bool|ReflectionFile
-	 */
-	public function processString($source, $fileName, $returnReflectionFile = FALSE)
-	{
-		if ($this->backend->isFileProcessed($fileName)) {
-			$tokens = $this->backend->getFileTokens($fileName);
-		} else {
-			$tokens = new StringStream($source, $fileName);
-		}
-		$reflectionFile = new ReflectionFile($tokens, $this);
-		if ( ! $this->backend->isFileProcessed($fileName)) {
-			$this->backend->addFile($tokens, $reflectionFile);
-			// Clear the cache - leave only tokenized reflections
-			foreach ($this->cache as $type => $cached) {
-				if ( ! empty($cached)) {
-					$this->cache[$type] = array_filter($cached, function (ReflectionInterface $reflection) {
-						return $reflection->isTokenized();
-					});
-				}
-			}
-		}
-		return $returnReflectionFile ? $reflectionFile : TRUE;
-	}
-
-
-	/**
 	 * Parses a file and returns the appropriate reflection object.
 	 *
 	 * @param string $fileName Filename
-	 * @param bool $returnReflectionFile
-	 * @return bool|ReflectionFile[]
+	 * @return bool|ReflectionFile
 	 * @throws BrokerException If the file could not be processed.
 	 */
-	public function processFile($fileName, $returnReflectionFile = FALSE)
+	public function processFile($fileName)
 	{
 		try {
 			if ($this->backend->isFileProcessed($fileName)) {
 				$tokens = $this->backend->getFileTokens($fileName);
+
 			} else {
 				$tokens = new FileStream($fileName);
 			}
@@ -205,11 +165,13 @@ class Broker
 					}
 				}
 			}
-			return $returnReflectionFile ? $reflectionFile : TRUE;
-		} catch (Exception\ParseException $e) {
+			return $reflectionFile;
+
+		} catch (ParseException $e) {
 			throw $e;
-		} catch (Exception\StreamException $e) {
-			throw new BrokerException('Could not process the file.', 0, $e);
+
+		} catch (StreamException $e) {
+			throw new BrokerException(sprintf('Could not process %s file.', $fileName));
 		}
 	}
 
@@ -217,49 +179,27 @@ class Broker
 	/**
 	 * Processes recursively a directory and returns an array of file reflection objects.
 	 *
-	 * @param string $path
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
-	 * @return bool|ReflectionFile[]|SplFileInfo[]
-	 * @throws BrokerException If the given directory does not exist.
-	 * @throws BrokerException If the given directory could not be processed.
+	 * @param string|ReflectionFile[] $path
 	 */
-	public function processDirectory($path, $returnReflectionFile = FALSE)
+	public function processDirectory($path)
 	{
 		$realPath = realpath($path);
 		if ( ! is_dir($realPath)) {
-			throw new BrokerException('File does not exist.', BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('Directory %s does not exist.', $path), BrokerException::DOES_NOT_EXIST);
 		}
 		try {
 			$result = [];
 			foreach (Finder::findFiles('*')->in($realPath) as $entry) {
 				/** @var SplFileInfo $entry */
-				$result[$entry->getPathName()] = $this->processFile($entry->getPathName(), $returnReflectionFile);
+				$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
 			}
-			return $returnReflectionFile ? $result : TRUE;
-		} catch (Exception\ParseException $e) {
+			return $result;
+
+		} catch (ParseException $e) {
 			throw $e;
-		} catch (Exception\StreamException $e) {
-			throw new BrokerException('Could not process the directory.', 0, $e);
-		}
-	}
 
-
-	/**
-	 * Process a file or directory.
-	 *
-	 * @param string $path Path
-	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
-	 * @return bool|array|ReflectionFile
-	 * @throws BrokerException If the target does not exist.
-	 */
-	public function process($path, $returnReflectionFile = FALSE)
-	{
-		if (is_dir($path)) {
-			return $this->processDirectory($path, [], $returnReflectionFile);
-		} elseif (is_file($path)) {
-			return $this->processFile($path, $returnReflectionFile);
-		} else {
-			throw new BrokerException('The given directory/file does not exist.', BrokerException::DOES_NOT_EXIST);
+		} catch (StreamException $e) {
+			throw new BrokerException(sprintf('Could not process %s directory.', $realPath));
 		}
 	}
 
@@ -289,7 +229,7 @@ class Broker
 			return $this->cache[self::CACHE_NAMESPACE][$namespaceName];
 		}
 		$namespace = $this->backend->getNamespace($namespaceName);
-		if (NULL !== $namespace) {
+		if ($namespace !== NULL) {
 			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespace;
 		}
 		return $namespace;
@@ -426,9 +366,7 @@ class Broker
 
 
 	/**
-	 * Returns all functions from all namespaces.
-	 *
-	 * @return array
+	 * @return array|ReflectionFunction[]
 	 */
 	public function getFunctions()
 	{
@@ -439,7 +377,7 @@ class Broker
 	/**
 	 * Returns if the broker contains a file reflection of the given name.
 	 *
-	 * @param string $fileName File name
+	 * @param string $fileName
 	 * @return bool
 	 */
 	public function hasFile($fileName)
@@ -451,8 +389,8 @@ class Broker
 	/**
 	 * Returns a reflection object of a file.
 	 *
-	 * @param string $fileName File name
-	 * @return ReflectionFile|null
+	 * @param string $fileName
+	 * @return ReflectionFile|NULL
 	 */
 	public function getFile($fileName)
 	{
@@ -463,7 +401,7 @@ class Broker
 	/**
 	 * Returns all processed files reflections.
 	 *
-	 * @return array
+	 * @return array|ReflectionFile[]
 	 */
 	public function getFiles()
 	{
@@ -474,24 +412,12 @@ class Broker
 	/**
 	 * Returns an array of tokens from a processed file.
 	 *
-	 * @param string $fileName File name
-	 * @return ApiGen\TokenReflection\Stream\StreamBase|null
+	 * @param string $fileName
+	 * @return StreamBase|NULL
 	 */
 	public function getFileTokens($fileName)
 	{
 		return $this->backend->getFileTokens($fileName);
-	}
-
-
-	/**
-	 * Returns a real system path.
-	 *
-	 * @param string $path Source path
-	 * @return string|bool
-	 */
-	public static function getRealPath($path)
-	{
-		return realpath($path);
 	}
 
 }

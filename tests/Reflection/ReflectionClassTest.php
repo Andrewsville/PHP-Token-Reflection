@@ -290,7 +290,7 @@ class ReflectionClassTest extends TestCase
 		];
 
 		require_once $this->getFilePath('modifiers');
-		$this->getBroker()->process($this->getFilePath('modifiers'));
+		$this->getBroker()->processFile($this->getFilePath('modifiers'));
 
 		foreach ($classes as $className) {
 			$token = $this->getBroker()->getClass($className);
@@ -792,7 +792,7 @@ class ReflectionClassTest extends TestCase
 		];
 
 		require_once $this->getFilePath('traits');
-		$this->getBroker()->process($this->getFilePath('traits'));
+		$this->getBroker()->processFile($this->getFilePath('traits'));
 
 		foreach ($classes as $className) {
 			$token = $this->getBroker()->getClass($className);
@@ -825,7 +825,7 @@ class ReflectionClassTest extends TestCase
 			'TokenReflection_Test_ClassTraits4' => [FALSE, [], ['TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'], ['TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'], 2, 1]
 		];
 
-		$this->getBroker()->process($this->getFilePath('traits'));
+		$this->getBroker()->processFile($this->getFilePath('traits'));
 		foreach ($expected as $className => $definition) {
 			$reflection = $this->getBroker()->getClass($className);
 

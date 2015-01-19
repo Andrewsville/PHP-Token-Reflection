@@ -56,14 +56,4 @@ class BrokerTest extends TestCase
 		$this->getBroker()->processDirectory($file);
 	}
 
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
-	 */
-	public function testProcessingError()
-	{
-		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
-		$this->getBroker()->process($file);
-	}
-
 }
