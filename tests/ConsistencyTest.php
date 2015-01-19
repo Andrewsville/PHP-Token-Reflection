@@ -55,9 +55,8 @@ class ConsistencyTest extends TestCase
 
 		$this->assertFalse(class_exists('Foo\\Bar', TRUE));
 		$classes = [
-			'tokenized' => $broker->getClass('TokenReflection\\ConsistencyTest'),
+			'tokenized' => $broker->getClass('ApiGen\\TokenReflection\\Tests\\ConsistencyTest'),
 			'internal' => $broker->getClass('Exception'),
-			'dummy' => $broker->getClass('Foo\\Bar'),
 			'invalid' => $broker->getClass('duplicitiesClasses1')
 		];
 
@@ -74,6 +73,15 @@ class ConsistencyTest extends TestCase
 				}
 			}
 		}
+	}
+
+
+	/**
+	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 */
+	public function testGetNonexistingClass()
+	{
+		$this->getBroker()->getClass('Foo\\Bar');
 	}
 
 

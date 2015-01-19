@@ -12,6 +12,7 @@ namespace ApiGen\TokenReflection\Broker;
 use ApiGen;
 use ApiGen\TokenReflection\Broker\BackendInterface;
 use ApiGen\TokenReflection\Exception;
+use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
@@ -179,7 +180,7 @@ class Broker
 	 * @param string $fileName Filename
 	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
 	 * @return bool|ReflectionFile
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the file could not be processed.
+	 * @throws BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName, $returnReflectionFile = FALSE)
 	{
@@ -205,7 +206,7 @@ class Broker
 		} catch (Exception\ParseException $e) {
 			throw $e;
 		} catch (Exception\StreamException $e) {
-			throw new Exception\BrokerException('Could not process the file.', 0, $e);
+			throw new BrokerException('Could not process the file.', 0, $e);
 		}
 	}
 
@@ -216,14 +217,14 @@ class Broker
 	 * @param string $path
 	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
 	 * @return bool|ReflectionFile[]|SplFileInfo[]
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory does not exist.
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the given directory could not be processed.
+	 * @throws BrokerException If the given directory does not exist.
+	 * @throws BrokerException If the given directory could not be processed.
 	 */
 	public function processDirectory($path, $returnReflectionFile = FALSE)
 	{
 		$realPath = realpath($path);
 		if ( ! is_dir($realPath)) {
-			throw new Exception\BrokerException('File does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException('File does not exist.', BrokerException::DOES_NOT_EXIST);
 		}
 		try {
 			$result = [];
@@ -235,7 +236,7 @@ class Broker
 		} catch (Exception\ParseException $e) {
 			throw $e;
 		} catch (Exception\StreamException $e) {
-			throw new Exception\BrokerException('Could not process the directory.', 0, $e);
+			throw new BrokerException('Could not process the directory.', 0, $e);
 		}
 	}
 
@@ -246,7 +247,7 @@ class Broker
 	 * @param string $path Path
 	 * @param bool $returnReflectionFile Returns the appropriate ApiGen\TokenReflection\Reflection\ReflectionFile instance(s)
 	 * @return bool|array|ReflectionFile
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the target does not exist.
+	 * @throws BrokerException If the target does not exist.
 	 */
 	public function process($path, $returnReflectionFile = FALSE)
 	{
@@ -255,7 +256,7 @@ class Broker
 		} elseif (is_file($path)) {
 			return $this->processFile($path, $returnReflectionFile);
 		} else {
-			throw new Exception\BrokerException('The given directory/file does not exist.', Exception\BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException('The given directory/file does not exist.', BrokerException::DOES_NOT_EXIST);
 		}
 	}
 

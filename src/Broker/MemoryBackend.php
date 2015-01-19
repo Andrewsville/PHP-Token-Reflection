@@ -15,6 +15,8 @@ use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\ReflectionClassInterface;
+use ApiGen\TokenReflection\ReflectionNamespaceInterface;
 use ApiGen\TokenReflection\Stream\FileStream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
@@ -126,7 +128,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
-	 * @param string $namespaceName Namespace name
+	 * @param string $namespaceName
 	 * @return bool
 	 */
 	public function hasNamespace($namespaceName)
@@ -138,9 +140,8 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns a reflection object of the given namespace.
 	 *
-	 * @param string $namespaceName Namespace name
-	 * @return ApiGen\TokenReflection\IReflectionNamespace
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the requested namespace does not exist.
+	 * @param string $namespaceName
+	 * @return ReflectionNamespaceInterface
 	 */
 	public function getNamespace($namespaceName)
 	{
@@ -156,9 +157,7 @@ class MemoryBackend implements BackendInterface
 
 
 	/**
-	 * Returns all present namespaces.
-	 *
-	 * @return array
+	 * @return array|ReflectionNamespaceInterface[]
 	 */
 	public function getNamespaces()
 	{
@@ -169,7 +168,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns if there was such class processed (FQN expected).
 	 *
-	 * @param string $className Class name
+	 * @param string $className
 	 * @return bool
 	 */
 	public function hasClass($className)
@@ -192,8 +191,8 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
-	 * @param string $className CLass bame
-	 * @return ApiGen\TokenReflection\IReflectionClass
+	 * @param string $className
+	 * @return ReflectionClassInterface
 	 */
 	public function getClass($className)
 	{
@@ -210,14 +209,17 @@ class MemoryBackend implements BackendInterface
 					: TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME
 			);
 			return $ns->getClass($className);
+
 		} catch (Exception\BaseException $e) {
 			if (isset($this->declaredClasses[$className])) {
 				$reflection = new Php\ReflectionClass($className, $this->broker);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
+
+			} else {
+				throw new BrokerException(sprintf('Class %s was not parsed', $className));
 			}
-			return new Dummy\ReflectionClass($className, $this->broker);
 		}
 	}
 
