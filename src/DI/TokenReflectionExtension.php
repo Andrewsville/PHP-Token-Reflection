@@ -30,6 +30,37 @@ class TokenReflectionExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('emulativeLexer'))
 			->setClass('PhpParser\Lexer\Emulative');
+
+		$builder->addDefinition($this->prefix('resolver'))
+			->setClass('ApiGen\TokenReflection\Resolver');
+
+		$builder->addDefinition($this->prefix('docBlockParser'))
+			->setClass('ApiGen\TokenReflection\PhpParser\DocBlockParser');
+
+		$this->setupFactories();
+	}
+
+
+	private function setupFactories()
+	{
+		$builder = $this->getContainerBuilder();
+
+		$builder->addDefinition($this->prefix('classReflectionFactory'))
+			->setClass('ApiGen\TokenReflection\Factory\ClassReflectionFactory');
+
+		$builder->addDefinition($this->prefix('constantReflectionFactory'))
+			->setClass('ApiGen\TokenReflection\Factory\ConstantReflectionFactory');
+
+		$builder->addDefinition($this->prefix('functionReflectionFactory'))
+			->setClass('ApiGen\TokenReflection\Factory\FunctionReflectionFactory');
+
+		// method
+
+		// parameter
+
+		// property
+
+		// ... that's it?
 	}
 
 }
