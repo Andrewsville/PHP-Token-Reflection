@@ -72,7 +72,6 @@ It's our addition to the reflection model. It can return name, value and how it 
 When you ask the Broker for an internal element e.g. `Zip` or `Phar`, it returns a `ApiGen\TokenReflection\Php\Reflection*` that encapsulates the internal reflection functionality and adds our features.
 
 
-## Dealing with Duplicated Names - `ApiGen\TokenReflection\Invalid\*`
+### Dealing with Duplicated Names
 
-When the library encounters a duplicate element, it converts the previously created reflection into an `ApiGen\TokenReflection\Invalid\Reflection*` instance.
-Then it throws an exception. When you catch this exception and continue to work with the Broker instance, the duplicate elements will have only one reflection.
+In case of duplicated names, last found item is used. 

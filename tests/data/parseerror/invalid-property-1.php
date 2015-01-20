@@ -1,8 +1,0 @@
-<?php
-
-class foo
-{
-
-$property;
-
-}

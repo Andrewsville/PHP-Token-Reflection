@@ -254,16 +254,7 @@ class ReflectionFileNamespace extends ReflectionElement
 					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
 					$firstChild = $firstChild ?: $class;
 					$className = $class->getName();
-					if (isset($this->classes[$className])) {
-						if ( ! $this->classes[$className] instanceof Invalid\ReflectionClass) {
-							$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
-						}
-						if ( ! $this->classes[$className]->hasReasons()) {
-							$this->classes[$className]->addReason(sprintf('Class %s is defined multiple times in the file.', $className));
-						}
-					} else {
-						$this->classes[$className] = $class;
-					}
+					$this->classes[$className] = $class;
 					$tokenStream->next();
 					break;
 				case T_CONST:
@@ -272,16 +263,7 @@ class ReflectionFileNamespace extends ReflectionElement
 						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
 						$firstChild = $firstChild ?: $constant;
 						$constantName = $constant->getName();
-						if (isset($this->constants[$constantName])) {
-							if ( ! $this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
-								$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
-							}
-							if ( ! $this->constants[$constantName]->hasReasons()) {
-								$this->constants[$constantName]->addReason(sprintf('Constant %s is defined multiple times in the file.', $constantName));
-							}
-						} else {
-							$this->constants[$constantName] = $constant;
-						}
+						$this->constants[$constantName] = $constant;
 						if ($tokenStream->is(',')) {
 							$tokenStream->skipWhitespaces(TRUE);
 						} else {
@@ -314,16 +296,7 @@ class ReflectionFileNamespace extends ReflectionElement
 					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
 					$firstChild = $firstChild ?: $function;
 					$functionName = $function->getName();
-					if (isset($this->functions[$functionName])) {
-						if ( ! $this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
-							$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
-						}
-						if ( ! $this->functions[$functionName]->hasReasons()) {
-							$this->functions[$functionName]->addReason(sprintf('Function %s is defined multiple times in the file.', $functionName));
-						}
-					} else {
-						$this->functions[$functionName] = $function;
-					}
+					$this->functions[$functionName] = $function;
 					$tokenStream->next();
 					break;
 				default:

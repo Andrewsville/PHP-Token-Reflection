@@ -1031,28 +1031,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	/**
 	 * {@inheritdoc}
 	 */
-	public function isValid()
-	{
-		if (NULL !== $this->parentClassName && !$this->getParentClass()->isValid()) {
-			return FALSE;
-		}
-		foreach ($this->getInterfaces() as $interface) {
-			if ( ! $interface->isValid()) {
-				return FALSE;
-			}
-		}
-		foreach ($this->getTraits() as $trait) {
-			if ( ! $trait->isValid()) {
-				return FALSE;
-			}
-		}
-		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
