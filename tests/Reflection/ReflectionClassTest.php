@@ -582,11 +582,6 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame($rfl->internal->isInternal(), $rfl->token->isInternal());
 		$this->assertFalse($rfl->token->isInternal());
 
-		$this->assertSame($rfl->internal->getExtension(), $rfl->token->getExtension());
-		$this->assertNull($rfl->token->getExtension());
-		$this->assertSame($rfl->internal->getExtensionName(), $rfl->token->getExtensionName());
-		$this->assertFalse($rfl->token->getExtensionName());
-
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('Exception');
 		$rfl->token = $this->getBroker()->getClass('Exception');

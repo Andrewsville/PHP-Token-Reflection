@@ -44,7 +44,6 @@ class ReflectionConstantTest extends TestCase
 		$this->assertFalse($this->internalReflectionConstant->isTokenized());
 		$this->assertFalse($this->internalReflectionConstant->isDeprecated());
 		$this->assertFalse($this->internalReflectionConstant->isUserDefined());
-		$this->assertTrue($this->internalReflectionConstant->isValid());
 
 		$this->assertSame('DIRECTORY_SEPARATOR', $this->internalReflectionConstant->getPrettyName());
 	}

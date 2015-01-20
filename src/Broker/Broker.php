@@ -12,9 +12,13 @@ namespace ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\StreamException;
+use ApiGen\TokenReflection\Reflection\ReflectionConstant;
+use ApiGen\TokenReflection\Reflection\ReflectionFunction;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\ReflectionNamespaceInterface;
 use ApiGen\TokenReflection\Stream\FileStream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 use Nette\Utils\Finder;
@@ -41,36 +45,26 @@ class Broker
 	const OPTION_PARSE_FUNCTION_BODY = 0x0002;
 
 	/**
-	 * Default options.
-	 *
 	 * @var int
 	 */
 	const OPTION_DEFAULT = 0x0003;
 
 	/**
-	 * Cache identifier for namespaces.
-	 *
 	 * @var string
 	 */
 	const CACHE_NAMESPACE = 'namespace';
 
 	/**
-	 * Cache identifier for classes.
-	 *
 	 * @var string
 	 */
 	const CACHE_CLASS = 'class';
 
 	/**
-	 * Cache identifier for constants.
-	 *
 	 * @var string
 	 */
 	const CACHE_CONSTANT = 'constant';
 
 	/**
-	 * Cache identifier for functions.
-	 *
 	 * @var string
 	 */
 	const CACHE_FUNCTION = 'function';
@@ -90,8 +84,6 @@ class Broker
 	private $cache;
 
 	/**
-	 * Broker/parser options.
-	 *
 	 * @var int
 	 */
 	private $options;
@@ -109,9 +101,10 @@ class Broker
 			self::CACHE_CONSTANT => [],
 			self::CACHE_FUNCTION => []
 		];
-		$this->options = $options;
+
 		$this->backend = $backend->setBroker($this)
 			->setStoringTokenStreams((bool) ($options & self::OPTION_SAVE_TOKEN_STREAM));
+		$this->options = $options;
 	}
 
 
@@ -217,10 +210,8 @@ class Broker
 
 
 	/**
-	 * Returns a reflection object of the given namespace.
-	 *
-	 * @param string $namespaceName Namespace name
-	 * @return \ApiGen\TokenReflection\Reflection\ReflectionNamespace|null
+	 * @param string $namespaceName
+	 * @return ReflectionNamespace|NULL
 	 */
 	public function getNamespace($namespaceName)
 	{
@@ -237,14 +228,12 @@ class Broker
 
 
 	/**
-	 * Returns a list of reflection objects for all namespaces.
-	 *
-	 * @return array
+	 * @return array|ReflectionNamespaceInterface[]
 	 */
 	public function getNamespaces()
 	{
 		$namespaces = [];
-		foreach(array_keys($this->backend->getNamespaces()) as $name) {
+		foreach (array_keys($this->backend->getNamespaces()) as $name) {
 			$namespaces[] = $this->getNamespace($name);
 		}
 		return $namespaces;
@@ -264,8 +253,6 @@ class Broker
 
 
 	/**
-	 * Returns a reflection object of the given class (FQN expected).
-	 *
 	 * @param string $className
 	 * @return ReflectionClassInterface|NULL
 	 */
@@ -281,9 +268,7 @@ class Broker
 
 
 	/**
-	 * Returns all classes from all namespaces.
-	 *
-	 * @param int $types Returned class types (multiple values may be OR-ed)
+	 * @param int $types
 	 * @return array|ReflectionClassInterface[]
 	 */
 	public function getClasses($types = BackendInterface::TOKENIZED_CLASSES)
@@ -293,9 +278,7 @@ class Broker
 
 
 	/**
-	 * Returns if the broker contains a constant of the given name.
-	 *
-	 * @param string $constantName Constant name
+	 * @param string $constantName
 	 * @return bool
 	 */
 	public function hasConstant($constantName)
@@ -307,8 +290,8 @@ class Broker
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
-	 * @param string $constantName Constant name
-	 * @return \ApiGen\TokenReflection\Reflection\ReflectionConstant|null
+	 * @param string $constantName
+	 * @return ReflectionConstant|NULL
 	 */
 	public function getConstant($constantName)
 	{
@@ -324,9 +307,7 @@ class Broker
 
 
 	/**
-	 * Returns all constants from all namespaces.
-	 *
-	 * @return array
+	 * @return array|ReflectionConstant[]
 	 */
 	public function getConstants()
 	{
@@ -335,9 +316,7 @@ class Broker
 
 
 	/**
-	 * Returns if the broker contains a function of the given name.
-	 *
-	 * @param string $functionName Function name
+	 * @param string $functionName
 	 * @return bool
 	 */
 	public function hasFunction($functionName)
@@ -349,8 +328,8 @@ class Broker
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
-	 * @param string $functionName Function name
-	 * @return \ApiGen\TokenReflection\Reflection\ReflectionFunction|null
+	 * @param string $functionName
+	 * @return ReflectionFunction|NULL
 	 */
 	public function getFunction($functionName)
 	{
@@ -375,8 +354,6 @@ class Broker
 
 
 	/**
-	 * Returns if the broker contains a file reflection of the given name.
-	 *
 	 * @param string $fileName
 	 * @return bool
 	 */
@@ -387,8 +364,6 @@ class Broker
 
 
 	/**
-	 * Returns a reflection object of a file.
-	 *
 	 * @param string $fileName
 	 * @return ReflectionFile|NULL
 	 */
@@ -399,8 +374,6 @@ class Broker
 
 
 	/**
-	 * Returns all processed files reflections.
-	 *
 	 * @return array|ReflectionFile[]
 	 */
 	public function getFiles()
@@ -410,8 +383,6 @@ class Broker
 
 
 	/**
-	 * Returns an array of tokens from a processed file.
-	 *
 	 * @param string $fileName
 	 * @return StreamBase|NULL
 	 */

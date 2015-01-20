@@ -39,7 +39,6 @@ class ReflectionClassTest extends TestCase
 
 		$this->assertFalse($this->internalReflectionClass->isTokenized());
 		$this->assertFalse($this->internalReflectionClass->isDeprecated());
-		$this->assertTrue($this->internalReflectionClass->isValid());
 		$this->assertTrue($this->internalReflectionClass->isComplete());
 
 		$this->assertSame('Exception', $this->internalReflectionClass->getPrettyName());

@@ -11,6 +11,7 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
@@ -19,7 +20,7 @@ use ReflectionFunction as InternalReflectionFunction;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionFunction extends InternalReflectionFunction implements ReflectionInterface, ReflectionFunctionInterface, AnnotationsInterface
+class ReflectionFunction extends InternalReflectionFunction implements ReflectionInterface, ReflectionFunctionInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**
@@ -143,15 +144,6 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	public function getNamespaceAliases()
 	{
 		return [];
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isValid()
-	{
-		return TRUE;
 	}
 
 

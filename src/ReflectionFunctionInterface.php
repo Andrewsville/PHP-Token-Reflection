@@ -14,24 +14,6 @@ interface ReflectionFunctionInterface extends ReflectionFunctionBaseInterface
 {
 
 	/**
-	 * Returns if the method is is disabled via the disable_functions directive.
-	 *
-	 * @return bool
-	 */
-	function isDisabled();
-
-
-	/**
-	 * Returns if the function definition is valid.
-	 *
-	 * That means that the source code is valid and the function name is unique within parsed files.
-	 *
-	 * @return bool
-	 */
-	function isValid();
-
-
-	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array

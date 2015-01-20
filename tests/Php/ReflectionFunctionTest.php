@@ -41,7 +41,6 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertFalse($this->internalReflectionFunction->isDeprecated());
 		$this->assertFalse($this->internalReflectionFunction->isUserDefined());
 		$this->assertTrue($this->internalReflectionFunction->isInternal());
-		$this->assertTrue($this->internalReflectionFunction->isValid());
 	}
 
 

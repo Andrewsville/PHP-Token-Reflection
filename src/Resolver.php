@@ -40,15 +40,17 @@ class Resolver
 	 */
 	public static function resolveClassFQN($className, array $aliases, $namespaceName = NULL)
 	{
-		if ($className{0} == '\\') {
+		if ($className[0] == '\\') {
 			// FQN
 			return ltrim($className, '\\');
 		}
-		if (FALSE === ($position = strpos($className, '\\'))) {
+
+		if (($position = strpos($className, '\\')) === FALSE) {
 			// Plain class name
 			if (isset($aliases[$className])) {
 				return $aliases[$className];
 			}
+
 		} else {
 			// Namespaced class name
 			$alias = substr($className, 0, $position);
@@ -56,7 +58,8 @@ class Resolver
 				return $aliases[$alias] . '\\' . substr($className, $position + 1);
 			}
 		}
-		return NULL === $namespaceName || '' === $namespaceName || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
+
+		return $namespaceName === NULL || $namespaceName === '' || $namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? $className : $namespaceName . '\\' . $className;
 	}
 
 
@@ -73,13 +76,17 @@ class Resolver
 	{
 		if ($reflection instanceof ReflectionConstant || $reflection instanceof ReflectionFunction) {
 			$namespace = $reflection->getNamespaceName();
+
 		} elseif ($reflection instanceof ReflectionParameter) {
 			$namespace = $reflection->getDeclaringFunction()->getNamespaceName();
+
 		} elseif ($reflection instanceof ReflectionProperty || $reflection instanceof ReflectionMethod) {
 			$namespace = $reflection->getDeclaringClass()->getNamespaceName();
+
 		} else {
 			throw new Exception\RuntimeException('Invalid reflection object given.', Exception\RuntimeException::INVALID_ARGUMENT, $reflection);
 		}
+
 		// Process __LINE__ constants; replace with the line number of the corresponding token
 		foreach ($tokens as $index => $token) {
 			if (T_LINE === $token[0]) {
@@ -190,8 +197,6 @@ class Resolver
 
 
 	/**
-	 * Returns a part of the source code defined by given tokens.
-	 *
 	 * @param array $tokens Tokens array
 	 * @return array
 	 */

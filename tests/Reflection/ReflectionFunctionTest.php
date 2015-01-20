@@ -79,14 +79,6 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	public function testDisabled()
-	{
-		$rfl = $this->getFunctionReflection('noDisabled');
-		$this->assertSame($rfl->internal->isDisabled(), $rfl->token->isDisabled());
-		$this->assertFalse($rfl->token->isDisabled());
-	}
-
-
 	public function testUserDefined()
 	{
 		$rfl = $this->getFunctionReflection('userDefined');
@@ -97,11 +89,6 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($this->getFilePath('userDefined'), $rfl->token->getFileName());
 		$this->assertSame($rfl->internal->isInternal(), $rfl->token->isInternal());
 		$this->assertFalse($rfl->token->isInternal());
-
-		$this->assertSame($rfl->internal->getExtension(), $rfl->token->getExtension());
-		$this->assertNull($rfl->token->getExtension());
-		$this->assertSame($rfl->internal->getExtensionName(), $rfl->token->getExtensionName());
-		$this->assertFalse($rfl->token->getExtensionName());
 
 		$rfl = new \stdClass();
 		$rfl->token = $this->getBroker()->getFunction('get_class');

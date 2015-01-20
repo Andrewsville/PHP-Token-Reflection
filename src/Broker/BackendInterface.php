@@ -203,18 +203,6 @@ interface BackendInterface
 
 
 	/**
-	 * @return BackendInterface
-	 */
-	function setBroker(Broker $broker);
-
-
-	/**
-	 * @return Broker
-	 */
-	function getBroker();
-
-
-	/**
 	 * Sets if token streams are stored in the backend.
 	 *
 	 * @param bool $store

@@ -11,6 +11,7 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
@@ -19,7 +20,7 @@ use ReflectionMethod as InternalReflectionMethod;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionMethod extends InternalReflectionMethod implements ReflectionInterface, ReflectionMethodInterface, AnnotationsInterface
+class ReflectionMethod extends InternalReflectionMethod implements ReflectionInterface, ReflectionMethodInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**

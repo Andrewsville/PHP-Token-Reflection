@@ -168,15 +168,6 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function isValid()
-	{
-		return TRUE;
-	}
-
-
-	/**
 	 * @return ReflectionElement
 	 * @throws ParseException If an invalid parent reflection object was provided.
 	 */

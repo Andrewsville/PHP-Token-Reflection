@@ -330,15 +330,6 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function isValid()
-	{
-		return TRUE;
-	}
-
-
-	/**
 	 * Not supported for constants since there is no internal constant reflection.
 	 *
 	 * @return NULL

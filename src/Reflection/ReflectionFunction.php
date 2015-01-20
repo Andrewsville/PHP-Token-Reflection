@@ -38,15 +38,6 @@ class ReflectionFunction extends ReflectionFunctionBase implements ReflectionFun
 	/**
 	 * {@inheritdoc}
 	 */
-	public function isDisabled()
-	{
-		return $this->hasAnnotation('disabled');
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function invoke()
 	{
 		return $this->invokeArgs(func_get_args());
@@ -71,17 +62,6 @@ class ReflectionFunction extends ReflectionFunctionBase implements ReflectionFun
 	public function getNamespaceAliases()
 	{
 		return $this->aliases;
-	}
-
-
-	/**
-	 * Returns if the function definition is valid.
-	 *
-	 * @return bool
-	 */
-	public function isValid()
-	{
-		return TRUE;
 	}
 
 

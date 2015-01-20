@@ -49,22 +49,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return ReflectionExtensionInterface|NULL
-	 */
-	function getExtension();
-
-
-	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return string|null
-	 */
-	function getExtensionName();
-
-
-	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string
@@ -638,16 +622,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 * @return bool
 	 */
 	function isComplete();
-
-
-	/**
-	 * Returns if the class definition is valid.
-	 *
-	 * That means that the source code is valid and the class name is unique within parsed files.
-	 *
-	 * @return bool
-	 */
-	function isValid();
 
 
 	/**
