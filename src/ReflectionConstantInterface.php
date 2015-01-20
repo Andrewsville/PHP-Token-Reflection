@@ -110,16 +110,6 @@ interface ReflectionConstantInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns if the constant definition is valid.
-	 *
-	 * That means that the source code is valid and the constant name is unique within parsed files.
-	 *
-	 * @return bool
-	 */
-	function isValid();
-
-
-	/**
 	 * Returns if the constant is deprecated.
 	 *
 	 * @return bool

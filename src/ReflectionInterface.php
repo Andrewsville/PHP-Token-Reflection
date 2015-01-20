@@ -54,12 +54,4 @@ interface ReflectionInterface
 	 */
 	function isTokenized();
 
-
-	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return Broker
-	 */
-	function getBroker();
-
 }
