@@ -64,12 +64,14 @@ interface BackendInterface
 	 */
 	function getNamespace($namespaceName);
 
+
 	/**
 	 * Returns all namespaces.
 	 *
 	 * @return array
 	 */
 	function getNamespaces();
+
 
 	/**
 	 * Returns if there was such class processed (FQN expected).
@@ -200,22 +202,5 @@ interface BackendInterface
 	 * @return BackendInterface
 	 */
 	function addFile(StreamBase $tokenStream, ReflectionFile $file);
-
-
-	/**
-	 * Sets if token streams are stored in the backend.
-	 *
-	 * @param bool $store
-	 * @return BackendInterface
-	 */
-	function setStoringTokenStreams($store);
-
-
-	/**
-	 * Returns if token streams are stored in the backend.
-	 *
-	 * @return bool
-	 */
-	function getStoringTokenStreams();
 
 }

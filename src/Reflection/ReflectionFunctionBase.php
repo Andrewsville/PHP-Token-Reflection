@@ -256,81 +256,78 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	{
 		$type = $tokenStream->getType();
 		if ('{' === $type) {
-			if ($this->getBroker()->isOptionSet(Broker::OPTION_PARSE_FUNCTION_BODY)) {
-				$tokenStream->skipWhitespaces(TRUE);
-				while ('}' !== ($type = $tokenStream->getType())) {
-					switch ($type) {
-						case T_STATIC:
+			$tokenStream->skipWhitespaces(TRUE);
+			while ('}' !== ($type = $tokenStream->getType())) {
+				switch ($type) {
+					case T_STATIC:
+						$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+						if (T_VARIABLE !== $type) {
+							// Late static binding
+							break;
+						}
+						while (T_VARIABLE === $type) {
+							$variableName = $tokenStream->getTokenValue();
+							$variableDefinition = [];
 							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-							if (T_VARIABLE !== $type) {
-								// Late static binding
+							if ('=' === $type) {
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+								$level = 0;
+								while ($tokenStream->valid()) {
+									switch ($type) {
+										case '(':
+										case '[':
+										case '{':
+										case T_CURLY_OPEN:
+										case T_DOLLAR_OPEN_CURLY_BRACES:
+											$level++;
+											break;
+										case ')':
+										case ']':
+										case '}':
+											$level--;
+											break;
+										case ';':
+										case ',':
+											if (0 === $level) {
+												break 2;
+											}
+										default:
+											break;
+									}
+									$variableDefinition[] = $tokenStream->current();
+									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+								}
+								if ( ! $tokenStream->valid()) {
+									throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
+								}
+							}
+							$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
+							if (',' === $type) {
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+							} else {
 								break;
 							}
-							while (T_VARIABLE === $type) {
-								$variableName = $tokenStream->getTokenValue();
-								$variableDefinition = [];
-								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-								if ('=' === $type) {
-									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-									$level = 0;
-									while ($tokenStream->valid()) {
-										switch ($type) {
-											case '(':
-											case '[':
-											case '{':
-											case T_CURLY_OPEN:
-											case T_DOLLAR_OPEN_CURLY_BRACES:
-												$level++;
-												break;
-											case ')':
-											case ']':
-											case '}':
-												$level--;
-												break;
-											case ';':
-											case ',':
-												if (0 === $level) {
-													break 2;
-												}
-											default:
-												break;
-										}
-										$variableDefinition[] = $tokenStream->current();
-										$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-									}
-									if ( ! $tokenStream->valid()) {
-										throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
-									}
-								}
-								$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
-								if (',' === $type) {
-									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-								} else {
-									break;
-								}
-							}
-							break;
-						case T_FUNCTION:
-							// Anonymous function -> skip to its end
-							if ( ! $tokenStream->find('{')) {
-								throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
-							}
-						// Break missing intentionally
-						case '{':
-						case '[':
-						case '(':
-						case T_CURLY_OPEN:
-						case T_DOLLAR_OPEN_CURLY_BRACES:
-							$tokenStream->findMatchingBracket()->skipWhitespaces(TRUE);
-							break;
-						default:
-							$tokenStream->skipWhitespaces();
-							break;
-					}
+						}
+						break;
+					case T_FUNCTION:
+						// Anonymous function -> skip to its end
+						if ( ! $tokenStream->find('{')) {
+							throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
+						}
+					// Break missing intentionally
+					case '{':
+					case '[':
+					case '(':
+					case T_CURLY_OPEN:
+					case T_DOLLAR_OPEN_CURLY_BRACES:
+						$tokenStream->findMatchingBracket()->skipWhitespaces(TRUE);
+						break;
+					default:
+						$tokenStream->skipWhitespaces();
+						break;
 				}
-			} else {
-				$tokenStream->findMatchingBracket();
 			}
+
 		} elseif (';' !== $type) {
 			throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}

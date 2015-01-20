@@ -29,27 +29,6 @@ class Broker
 {
 
 	/**
-	 * Turns on saving of parsed token streams.
-	 *
-	 * @var int
-	 */
-	const OPTION_SAVE_TOKEN_STREAM = 0x0001;
-
-	/**
-	 * Turns on parsing function/method body.
-	 *
-	 * This effectively turns on parsing of static variables in functions/methods.
-	 *
-	 * @var int
-	 */
-	const OPTION_PARSE_FUNCTION_BODY = 0x0002;
-
-	/**
-	 * @var int
-	 */
-	const OPTION_DEFAULT = 0x0003;
-
-	/**
 	 * @var string
 	 */
 	const CACHE_NAMESPACE = 'namespace';
@@ -83,17 +62,8 @@ class Broker
 	 */
 	private $cache;
 
-	/**
-	 * @var int
-	 */
-	private $options;
 
-
-	/**
-	 * @param BackendInterface $backend
-	 * @param int $options Broker/parsing options
-	 */
-	public function __construct(BackendInterface $backend, $options = self::OPTION_DEFAULT)
+	public function __construct(BackendInterface $backend)
 	{
 		$this->cache = [
 			self::CACHE_NAMESPACE => [],
@@ -102,28 +72,7 @@ class Broker
 			self::CACHE_FUNCTION => []
 		];
 
-		$this->backend = $backend->setBroker($this)
-			->setStoringTokenStreams((bool) ($options & self::OPTION_SAVE_TOKEN_STREAM));
-		$this->options = $options;
-	}
-
-
-	/**
-	 * @return int
-	 */
-	public function getOptions()
-	{
-		return $this->options;
-	}
-
-
-	/**
-	 * @param int $option
-	 * @return bool
-	 */
-	public function isOptionSet($option)
-	{
-		return (bool) ($this->options & $option);
+		$this->backend = $backend->setBroker($this);
 	}
 
 

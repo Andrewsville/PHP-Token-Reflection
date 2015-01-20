@@ -13,6 +13,7 @@ use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Php;
+use ApiGen\TokenReflection\Reflection\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -440,7 +441,7 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function addFile(StreamBase $tokenStream, ReflectionFile $file)
 	{
-		$this->tokenStreams[$file->getName()] = $this->storingTokenStreams ? $tokenStream : TRUE;
+		$this->tokenStreams[$file->getName()] = $tokenStream;
 		$this->files[$file->getName()] = $file;
 		$errors = [];
 		foreach ($file->getNamespaces() as $fileNamespace) {
@@ -490,28 +491,28 @@ class MemoryBackend implements BackendInterface
 	}
 
 
-	/**
-	 * Sets if token streams are stored in the backend.
-	 *
-	 * @param bool $store
-	 * @return BackendInterface
-	 */
-	public function setStoringTokenStreams($store)
-	{
-		$this->storingTokenStreams = (bool) $store;
-		return $this;
-	}
+//	/**
+//	 * Sets if token streams are stored in the backend.
+//	 *
+//	 * @param bool $store
+//	 * @return BackendInterface
+//	 */
+//	public function setStoringTokenStreams($store)
+//	{
+//		$this->storingTokenStreams = (bool) $store;
+//		return $this;
+//	}
 
 
-	/**
-	 * Returns if token streams are stored in the backend.
-	 *
-	 * @return bool
-	 */
-	public function getStoringTokenStreams()
-	{
-		return $this->storingTokenStreams;
-	}
+//	/**
+//	 * Returns if token streams are stored in the backend.
+//	 *
+//	 * @return bool
+//	 */
+//	public function getStoringTokenStreams()
+//	{
+//		return $this->storingTokenStreams;
+//	}
 
 
 	/**
@@ -522,6 +523,8 @@ class MemoryBackend implements BackendInterface
 	protected function parseClassLists()
 	{
 		// Initialize the all-classes-cache
+
+		/** @var ReflectionClass[][] $allClasses */
 		$allClasses = [
 			self::TOKENIZED_CLASSES => [],
 			self::INTERNAL_CLASSES => [],
