@@ -12,7 +12,7 @@ namespace ApiGen\TokenReflection\Php;
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
-use ApiGen\TokenReflection\Broker\BackendInterface;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
@@ -729,7 +729,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	private function getInternalTokenizedClasses()
 	{
-		return $this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES);
+		return $this->getBroker()->getClasses(StorageInterface::INTERNAL_CLASSES | StorageInterface::TOKENIZED_CLASSES);
 	}
 
 }

@@ -19,10 +19,7 @@ use ApiGen\TokenReflection\ReflectionNamespaceInterface;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-/**
- * Defines methods for storing and retrieving reflection objects.
- */
-interface BackendInterface
+interface StorageInterface
 {
 
 	/**
@@ -97,7 +94,7 @@ interface BackendInterface
 	 * @param int $type Returned class types (multiple values may be OR-ed)
 	 * @return array
 	 */
-	function getClasses($type = BackendInterface::TOKENIZED_CLASSES);
+	function getClasses($type = StorageInterface::TOKENIZED_CLASSES);
 
 
 	/**
@@ -199,7 +196,7 @@ interface BackendInterface
 	/**
 	 * Adds a file to the backend storage.
 	 *
-	 * @return BackendInterface
+	 * @return StorageInterface
 	 */
 	function addFile(StreamBase $tokenStream, ReflectionFile $file);
 

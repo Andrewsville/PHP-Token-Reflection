@@ -38,7 +38,7 @@ class BrokerTest extends TestCase
 
 
 	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\StreamException
 	 */
 	public function testFileProcessingError()
 	{

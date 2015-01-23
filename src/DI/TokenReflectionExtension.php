@@ -22,8 +22,8 @@ class TokenReflectionExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('broker'))
 			->setClass('ApiGen\TokenReflection\Broker\Broker');
 
-		$builder->addDefinition($this->prefix('backend'))
-			->setClass('ApiGen\TokenReflection\Broker\MemoryBackend');
+		$builder->addDefinition($this->prefix('storage'))
+			->setClass('ApiGen\TokenReflection\Broker\MemoryStorage');
 
 		$builder->addDefinition($this->prefix('phpParser'))
 			->setClass('PhpParser\Parser');

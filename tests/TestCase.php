@@ -3,7 +3,7 @@
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\MemoryBackend;
+use ApiGen\TokenReflection\Broker\MemoryStorage;
 use ApiGen\TokenReflection\Reflection\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionConstant;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
@@ -35,7 +35,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getFileTokenReflection($test)
 	{
-		return $this->getBroker()->processFile($this->getFilePath($test), TRUE);
+		return $this->getBroker()->processFile($this->getFilePath($test));
 	}
 
 
@@ -329,7 +329,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	{
 		static $broker = NULL;
 		if (NULL === $broker) {
-			$broker = new Broker(new MemoryBackend);
+			$broker = new Broker(new MemoryStorage);
 		}
 		return $broker;
 	}

@@ -57,11 +57,6 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	 */
 	private $broker;
 
-	/**
-	 * @var array
-	 */
-	private $errors = [];
-
 
 	/**
 	 * @param string $name

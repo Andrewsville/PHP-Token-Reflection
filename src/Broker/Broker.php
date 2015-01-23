@@ -15,6 +15,7 @@ use ApiGen\TokenReflection\Exception\StreamException;
 use ApiGen\TokenReflection\Reflection\ReflectionConstant;
 use ApiGen\TokenReflection\Reflection\ReflectionFunction;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
+use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
@@ -25,45 +26,21 @@ use Nette\Utils\Finder;
 use SplFileInfo;
 
 
-class Broker
+class Broker implements BrokerInterface
 {
 
 	/**
-	 * @var string
-	 */
-	const CACHE_NAMESPACE = 'namespace';
-
-	/**
-	 * @var string
-	 */
-	const CACHE_CLASS = 'class';
-
-	/**
-	 * @var string
-	 */
-	const CACHE_CONSTANT = 'constant';
-
-	/**
-	 * @var string
-	 */
-	const CACHE_FUNCTION = 'function';
-
-	/**
-	 * Namespace/class backend.
-	 *
-	 * @var BackendInterface
+	 * @var StorageInterface
 	 */
 	private $backend;
 
 	/**
-	 * Tokenized reflection objects cache.
-	 *
 	 * @var array
 	 */
 	private $cache;
 
 
-	public function __construct(BackendInterface $backend)
+	public function __construct(StorageInterface $backend)
 	{
 		$this->cache = [
 			self::CACHE_NAMESPACE => [],
@@ -80,7 +57,7 @@ class Broker
 	 * Parses a file and returns the appropriate reflection object.
 	 *
 	 * @param string $fileName Filename
-	 * @return bool|ReflectionFile
+	 * @return ReflectionFile
 	 * @throws BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName)
@@ -111,17 +88,13 @@ class Broker
 
 		} catch (ParseException $e) {
 			throw $e;
-
-		} catch (StreamException $e) {
-			throw new BrokerException(sprintf('Could not process %s file.', $fileName));
 		}
 	}
 
 
 	/**
-	 * Processes recursively a directory and returns an array of file reflection objects.
-	 *
-	 * @param string|ReflectionFile[] $path
+	 * @param string $path
+	 * @return ReflectionFile[]
 	 */
 	public function processDirectory($path)
 	{
@@ -129,6 +102,7 @@ class Broker
 		if ( ! is_dir($realPath)) {
 			throw new BrokerException(sprintf('Directory %s does not exist.', $path), BrokerException::DOES_NOT_EXIST);
 		}
+
 		try {
 			$result = [];
 			foreach (Finder::findFiles('*')->in($realPath) as $entry) {
@@ -139,17 +113,12 @@ class Broker
 
 		} catch (ParseException $e) {
 			throw $e;
-
-		} catch (StreamException $e) {
-			throw new BrokerException(sprintf('Could not process %s directory.', $realPath));
 		}
 	}
 
 
 	/**
-	 * Returns if the broker contains a namespace of the given name.
-	 *
-	 * @param string $namespaceName Namespace name
+	 * @param string $namespaceName
 	 * @return bool
 	 */
 	public function hasNamespace($namespaceName)
@@ -160,7 +129,7 @@ class Broker
 
 	/**
 	 * @param string $namespaceName
-	 * @return ReflectionNamespace|NULL
+	 * @return ReflectionNamespaceInterface|NULL
 	 */
 	public function getNamespace($namespaceName)
 	{
@@ -190,9 +159,7 @@ class Broker
 
 
 	/**
-	 * Returns if the broker contains a class of the given name.
-	 *
-	 * @param string $className Class name
+	 * @param string $className
 	 * @return bool
 	 */
 	public function hasClass($className)
@@ -220,7 +187,7 @@ class Broker
 	 * @param int $types
 	 * @return array|ReflectionClassInterface[]
 	 */
-	public function getClasses($types = BackendInterface::TOKENIZED_CLASSES)
+	public function getClasses($types = StorageInterface::TOKENIZED_CLASSES)
 	{
 		return $this->backend->getClasses($types);
 	}
@@ -256,7 +223,7 @@ class Broker
 
 
 	/**
-	 * @return array|ReflectionConstant[]
+	 * @return ReflectionConstantInterface[]
 	 */
 	public function getConstants()
 	{

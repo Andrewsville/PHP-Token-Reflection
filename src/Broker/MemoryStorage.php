@@ -12,9 +12,12 @@ namespace ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
+use ApiGen\TokenReflection\Exception\FileProcessingException;
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php;
-use ApiGen\TokenReflection\Reflection\ReflectionClass;
+use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
@@ -23,7 +26,7 @@ use ApiGen\TokenReflection\Stream\FileStream;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-class MemoryBackend implements BackendInterface
+class MemoryStorage implements StorageInterface
 {
 
 	/**
@@ -39,7 +42,7 @@ class MemoryBackend implements BackendInterface
 	private $namespaces = [];
 
 	/**
-	 * @var array|ReflectionConstantInterface[]
+	 * @var ReflectionConstantInterface[]
 	 */
 	private $allConstants;
 
@@ -51,7 +54,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * All tokenized functions cache.
 	 *
-	 * @var array|ReflectionFunctionInterface[]
+	 * @var ReflectionFunctionInterface[]
 	 */
 	private $allFunctions;
 
@@ -73,13 +76,6 @@ class MemoryBackend implements BackendInterface
 	 * @var Broker
 	 */
 	private $broker;
-
-	/**
-	 * Determines if token streams are stored within the backend.
-	 *
-	 * @var bool
-	 */
-	private $storingTokenStreams;
 
 
 	/**
@@ -103,7 +99,7 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function getFile($fileName)
 	{
-		if ( ! isset($this->files[$fileName])) {
+		if ( ! $this->hasFile($fileName)) {
 			throw new BrokerException(sprintf('File "%s" has not been processed.', $fileName), BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->files[$fileName];
@@ -141,11 +137,11 @@ class MemoryBackend implements BackendInterface
 	 */
 	public function getNamespace($namespaceName)
 	{
-		if ( ! isset($this->namespaces[TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME])) {
-			$this->namespaces[TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME] = new TokenReflection\Reflection\ReflectionNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
+		if ( ! isset($this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME])) {
+			$this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME] = new ReflectionNamespace(ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
 		}
 		$namespaceName = ltrim($namespaceName, '\\');
-		if ( ! isset($this->namespaces[$namespaceName])) {
+		if ( ! $this->hasNamespace($namespaceName)) {
 			throw new BrokerException(sprintf('Namespace %s does not exist.', $namespaceName), BrokerException::DOES_NOT_EXIST);
 		}
 		return $this->namespaces[$namespaceName];
@@ -153,7 +149,7 @@ class MemoryBackend implements BackendInterface
 
 
 	/**
-	 * @return array|ReflectionNamespaceInterface[]
+	 * @return ReflectionNamespaceInterface[]
 	 */
 	public function getNamespaces()
 	{
@@ -178,7 +174,7 @@ class MemoryBackend implements BackendInterface
 			$namespace = $this->getNamespace($namespace);
 			$className = substr($className, $pos + 1);
 		} else {
-			$namespace = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			$namespace = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
 		return $namespace->hasClass($className);
 	}
@@ -197,18 +193,18 @@ class MemoryBackend implements BackendInterface
 		}
 		$className = ltrim($className, '\\');
 		try {
-			$ns = $this->getNamespace(
+			$namespaceReflection = $this->getNamespace(
 				($boundary = strrpos($className, '\\'))
 					// Class within a namespace
 					? substr($className, 0, $boundary)
 					// Class without a namespace
-					: TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME
+					: ReflectionNamespace::NO_NAMESPACE_NAME
 			);
-			return $ns->getClass($className);
+			return $namespaceReflection->getClass($className);
 
 		} catch (Exception\BaseException $e) {
 			if (isset($this->declaredClasses[$className])) {
-				$reflection = new Php\ReflectionClass($className, $this->broker);
+				$reflection = new ReflectionClass($className, $this->broker);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
@@ -222,7 +218,7 @@ class MemoryBackend implements BackendInterface
 	 * Returns all classes from all namespaces.
 	 *
 	 * @param int $type Returned class types (multiple values may be OR-ed)
-	 * @return array
+	 * @return ReflectionClassInterface[]
 	 */
 	public function getClasses($type = self::TOKENIZED_CLASSES)
 	{
@@ -242,7 +238,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns if there was such constant processed (FQN expected).
 	 *
-	 * @param string $constantName Constant name
+	 * @param string $constantName
 	 * @return bool
 	 */
 	public function hasConstant($constantName)
@@ -255,6 +251,7 @@ class MemoryBackend implements BackendInterface
 				return FALSE;
 			}
 			$parent = $this->getClass($className);
+
 		} else {
 			if ($pos = strrpos($constantName, '\\')) {
 				$namespace = substr($constantName, 0, $pos);
@@ -263,8 +260,9 @@ class MemoryBackend implements BackendInterface
 				}
 				$parent = $this->getNamespace($namespace);
 				$constantName = substr($constantName, $pos + 1);
+
 			} else {
-				$parent = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+				$parent = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
 		}
 		return $parent->hasConstant($constantName);
@@ -295,10 +293,12 @@ class MemoryBackend implements BackendInterface
 			if ($boundary = strrpos($constantName, '\\')) {
 				$ns = $this->getNamespace(substr($constantName, 0, $boundary));
 				$constantName = substr($constantName, $boundary + 1);
+
 			} else {
-				$ns = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+				$ns = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
 			return $ns->getConstant($constantName);
+
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$constantName])) {
 				$reflection = new Php\ReflectionConstant($constantName, $declared[$constantName], $this->broker);
@@ -314,7 +314,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns all constants from all namespaces.
 	 *
-	 * @return array
+	 * @return ReflectionConstantInterface[]
 	 */
 	public function getConstants()
 	{
@@ -333,7 +333,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns if there was such function processed (FQN expected).
 	 *
-	 * @param string $functionName Function name
+	 * @param string $functionName
 	 * @return bool
 	 */
 	public function hasFunction($functionName)
@@ -347,7 +347,7 @@ class MemoryBackend implements BackendInterface
 			$namespace = $this->getNamespace($namespace);
 			$functionName = substr($functionName, $pos + 1);
 		} else {
-			$namespace = $this->getNamespace(TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME);
+			$namespace = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
 		return $namespace->hasFunction($functionName);
 	}
@@ -356,9 +356,9 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
-	 * @param string $functionName Function name
-	 * @return ApiGen\TokenReflection\IReflectionFunction
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested function does not exist.
+	 * @param string $functionName
+	 * @return ReflectionFunctionInterface
+	 * @throws RuntimeException If the requested function does not exist.
 	 */
 	public function getFunction($functionName)
 	{
@@ -369,14 +369,15 @@ class MemoryBackend implements BackendInterface
 		}
 		$functionName = ltrim($functionName, '\\');
 		try {
-			$ns = $this->getNamespace(
+			$namespaceReflection = $this->getNamespace(
 				($boundary = strrpos($functionName, '\\'))
 					// Function within a namespace
 					? substr($functionName, 0, $boundary)
 					// Function wihout a namespace
-					: TokenReflection\Reflection\ReflectionNamespace::NO_NAMESPACE_NAME
+					: ReflectionNamespace::NO_NAMESPACE_NAME
 			);
-			return $ns->getFunction($functionName);
+			return $namespaceReflection->getFunction($functionName);
+
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$functionName])) {
 				return new Php\ReflectionFunction($functionName, $this->broker);
@@ -389,7 +390,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns all functions from all namespaces.
 	 *
-	 * @return array
+	 * @return ReflectionFunctionInterface[]
 	 */
 	public function getFunctions()
 	{
@@ -408,7 +409,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns if the given file was already processed.
 	 *
-	 * @param string $fileName File name
+	 * @param string $fileName
 	 * @return bool
 	 */
 	public function isFileProcessed($fileName)
@@ -420,9 +421,9 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
-	 * @param string $fileName File name
-	 * @return ApiGen\TokenReflection\Stream\StreamBase
-	 * @throws ApiGen\TokenReflection\Exception\BrokerException If the requested file was not processed.
+	 * @param string $fileName
+	 * @return StreamBase
+	 * @throws BrokerException If the requested file was not processed.
 	 */
 	public function getFileTokens($fileName)
 	{
@@ -437,7 +438,7 @@ class MemoryBackend implements BackendInterface
 	/**
 	 * Adds a file to the backend storage.
 	 *
-	 * @return MemoryBackend
+	 * @return MemoryStorage
 	 */
 	public function addFile(StreamBase $tokenStream, ReflectionFile $file)
 	{
@@ -448,11 +449,13 @@ class MemoryBackend implements BackendInterface
 			try {
 				$namespaceName = $fileNamespace->getName();
 				if ( ! isset($this->namespaces[$namespaceName])) {
-					$this->namespaces[$namespaceName] = new TokenReflection\Reflection\ReflectionNamespace($namespaceName, $file->getBroker());
+					$this->namespaces[$namespaceName] = new ReflectionNamespace($namespaceName, $file->getBroker());
 				}
 				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
-			} catch (Exception\FileProcessingException $e) {
+
+			} catch (FileProcessingException $e) {
 				$errors = array_merge($errors, $e->getReasons());
+
 			} catch (\Exception $e) {
 				echo $e->getTraceAsString();
 				die($e->getMessage());
@@ -463,7 +466,7 @@ class MemoryBackend implements BackendInterface
 		$this->allFunctions = NULL;
 		$this->allConstants = NULL;
 		if ( ! empty($errors)) {
-			throw new Exception\FileProcessingException($errors, $file);
+			throw new FileProcessingException($errors, $file);
 		}
 		return $this;
 	}
@@ -471,7 +474,7 @@ class MemoryBackend implements BackendInterface
 
 	/**
 	 * @param Broker $broker
-	 * @return MemoryBackend
+	 * @return MemoryStorage
 	 */
 	public function setBroker(Broker $broker)
 	{
@@ -491,30 +494,6 @@ class MemoryBackend implements BackendInterface
 	}
 
 
-//	/**
-//	 * Sets if token streams are stored in the backend.
-//	 *
-//	 * @param bool $store
-//	 * @return BackendInterface
-//	 */
-//	public function setStoringTokenStreams($store)
-//	{
-//		$this->storingTokenStreams = (bool) $store;
-//		return $this;
-//	}
-
-
-//	/**
-//	 * Returns if token streams are stored in the backend.
-//	 *
-//	 * @return bool
-//	 */
-//	public function getStoringTokenStreams()
-//	{
-//		return $this->storingTokenStreams;
-//	}
-
-
 	/**
 	 * Prepares and returns used class lists.
 	 *
@@ -523,8 +502,7 @@ class MemoryBackend implements BackendInterface
 	protected function parseClassLists()
 	{
 		// Initialize the all-classes-cache
-
-		/** @var ReflectionClass[][] $allClasses */
+		/** @var ReflectionClassInterface[][] $allClasses */
 		$allClasses = [
 			self::TOKENIZED_CLASSES => [],
 			self::INTERNAL_CLASSES => [],

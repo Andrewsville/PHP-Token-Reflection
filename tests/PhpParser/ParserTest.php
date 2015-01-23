@@ -3,7 +3,10 @@
 namespace ApiGen\TokenReflection\Tests\PhpParser;
 
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Factory\ClassReflectionFactory;
+use ApiGen\TokenReflection\Factory\ConstantReflectionFactory;
 use ApiGen\TokenReflection\Factory\FunctionReflectionFactory;
+use ApiGen\TokenReflection\PhpParser\ConstantReflection;
 use ApiGen\TokenReflection\Tests\ContainerFactory;
 use Nette\DI\Container;
 use PhpParser\Node;
@@ -23,10 +26,33 @@ class ParserTest extends PHPUnit_Framework_TestCase
 	 */
 	private $container;
 
+	/**
+	 * @var ClassReflectionFactory
+	 */
+	private $classReflectionFactory;
+
+	/**
+	 * @var ConstantReflectionFactory
+	 */
+	private $constantReflectionFactory;
+
+	/**
+	 * @var FunctionReflectionFactory
+	 */
+	private $functionReflectionFactory;
+
 
 	public function __construct()
 	{
 		$this->container = (new ContainerFactory)->create();
+	}
+
+
+	protected function setUp()
+	{
+		$this->classReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\ClassReflectionFactory');
+		$this->constantReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\ConstantReflectionFactory');
+		$this->functionReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\FunctionReflectionFactory');
 	}
 
 
@@ -54,20 +80,18 @@ class ParserTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @param Stmt[] $nodes
+	 * @param Node $parent
+	 * @param string $file
 	 */
 	private function iterateNodes($nodes, Node $parent = NULL, $file)
 	{
-		$classReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\ClassReflectionFactory');
-
-		/** @var FunctionReflectionFactory $functionReflectionFactory */
-		$functionReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\FunctionReflectionFactory');
-
 		foreach ($nodes as $node) {
 			if ($node instanceof Class_) {
-//				$classReflection = $classReflectionFactory->createFromNode($node);
+				$classReflection = $this->classReflectionFactory->createFromNode($node, $parent, $file);
+				$this->assertSame('SomeClass', $classReflection->getName());
 
 			} elseif ($node instanceof Function_) {
-				$functionReflection = $functionReflectionFactory->createFromNode($node, $parent, $file);
+				$functionReflection = $this->functionReflectionFactory->createFromNode($node, $parent, $file);
 				$this->assertSame('SomeNamespace', $functionReflection->getNamespaceName());
 				$this->assertTrue($functionReflection->inNamespace());
 				$this->assertFalse($functionReflection->returnsReference());
@@ -81,10 +105,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
 				$this->iterateNodes($node->stmts, $node, $file);
 
 			} elseif ($node instanceof Const_) {
-				/** @var FunctionReflectionFactory $functionReflectionFactory */
-				$constantReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\ConstantReflectionFactory');
-				$constantReflection = $constantReflectionFactory->createFromNode($node, $parent, $file);
+				$constantReflection = $this->constantReflectionFactory->createFromNode($node, $parent, $file);
 				$this->assertInstanceOf('ApiGen\TokenReflection\PhpParser\ConstantReflection',  $constantReflection);
+				$this->assertInternalType('string', $constantReflection->getDocComment());
 			}
 		}
 	}

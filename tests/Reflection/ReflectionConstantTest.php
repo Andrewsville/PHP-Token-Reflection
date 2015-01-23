@@ -4,7 +4,7 @@ namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\MemoryBackend;
+use ApiGen\TokenReflection\Broker\MemoryStorage;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -102,7 +102,7 @@ class ReflectionConstantTest extends TestCase
 
 	public function testMagicConstants()
 	{
-		$broker = new Broker(new MemoryBackend);
+		$broker = new Broker(new MemoryStorage);
 		$broker->processFile($this->getFilePath('magic'));
 
 		require_once($this->getFilePath('magic'));
@@ -240,7 +240,7 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testMagicConstants54()
 	{
-		$broker = new Broker(new MemoryBackend);
+		$broker = new Broker(new MemoryStorage);
 		$broker->processFile($this->getFilePath('magic54'));
 
 		require_once($this->getFilePath('magic54'));
@@ -453,7 +453,7 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testInterfaces()
 	{
-		$broker = new Broker(new MemoryBackend);
+		$broker = new Broker(new MemoryStorage);
 		$broker->processFile($this->getFilePath('interfaces'));
 
 		$class1 = $broker->getClass('TokenReflection_Test_ConstantInterfaceClass');
