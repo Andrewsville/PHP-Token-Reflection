@@ -304,7 +304,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	{
 		static $cache = [];
 		if ( ! $internalReflection instanceof InternalReflectionParameter) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionParameter expected.', RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionParameter expected.');
 		}
 		$class = $internalReflection->getDeclaringClass();
 		$function = $internalReflection->getDeclaringFunction();

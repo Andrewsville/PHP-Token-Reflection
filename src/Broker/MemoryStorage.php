@@ -30,14 +30,12 @@ class MemoryStorage implements StorageInterface
 {
 
 	/**
-	 * List of declared class names.
-	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private $declaredClasses = [];
 
 	/**
-	 * @var array|ReflectionNamespaceInterface[]
+	 * @var ReflectionNamespaceInterface[]
 	 */
 	private $namespaces = [];
 
@@ -47,13 +45,11 @@ class MemoryStorage implements StorageInterface
 	private $allConstants;
 
 	/**
-	 * @var array|ReflectionClassInterface[]
+	 * @var ReflectionClassInterface[]
 	 */
 	private $allClasses;
 
 	/**
-	 * All tokenized functions cache.
-	 *
 	 * @var ReflectionFunctionInterface[]
 	 */
 	private $allFunctions;
@@ -81,35 +77,31 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Returns if a file with the given filename has been processed.
 	 *
-	 * @param string $fileName File name
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasFile($fileName)
+	public function hasFile($name)
 	{
-		return isset($this->files[$fileName]);
+		return isset($this->files[$name]);
 	}
 
 
 	/**
-	 * Returns a file reflection.
-	 *
-	 * @param string $fileName File name
+	 * @param string $name
 	 * @return ReflectionFile
 	 * @throws BrokerException If the requested file has not been processed
 	 */
-	public function getFile($fileName)
+	public function getFile($name)
 	{
-		if ( ! $this->hasFile($fileName)) {
-			throw new BrokerException(sprintf('File "%s" has not been processed.', $fileName), BrokerException::DOES_NOT_EXIST);
+		if ( ! $this->hasFile($name)) {
+			throw new BrokerException(sprintf('File "%s" has not been processed.', $name));
 		}
-		return $this->files[$fileName];
+		return $this->files[$name];
 	}
 
 
 	/**
-	 * Returns file reflections.
-	 *
-	 * @return array
+	 * @return ReflectionFile[]
 	 */
 	public function getFiles()
 	{
@@ -120,31 +112,31 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
-	 * @param string $namespaceName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasNamespace($namespaceName)
+	public function hasNamespace($name)
 	{
-		return isset($this->namespaces[ltrim($namespaceName, '\\')]);
+		return isset($this->namespaces[ltrim($name, '\\')]);
 	}
 
 
 	/**
 	 * Returns a reflection object of the given namespace.
 	 *
-	 * @param string $namespaceName
+	 * @param string $name
 	 * @return ReflectionNamespaceInterface
 	 */
-	public function getNamespace($namespaceName)
+	public function getNamespace($name)
 	{
 		if ( ! isset($this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME])) {
 			$this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME] = new ReflectionNamespace(ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
 		}
-		$namespaceName = ltrim($namespaceName, '\\');
-		if ( ! $this->hasNamespace($namespaceName)) {
-			throw new BrokerException(sprintf('Namespace %s does not exist.', $namespaceName), BrokerException::DOES_NOT_EXIST);
+		$name = ltrim($name, '\\');
+		if ( ! $this->hasNamespace($name)) {
+			throw new BrokerException(sprintf('Namespace %s does not exist.', $name));
 		}
-		return $this->namespaces[$namespaceName];
+		return $this->namespaces[$name];
 	}
 
 
@@ -160,51 +152,51 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Returns if there was such class processed (FQN expected).
 	 *
-	 * @param string $className
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasClass($className)
+	public function hasClass($name)
 	{
-		$className = ltrim($className, '\\');
-		if ($pos = strrpos($className, '\\')) {
-			$namespace = substr($className, 0, $pos);
+		$name = ltrim($name, '\\');
+		if ($pos = strrpos($name, '\\')) {
+			$namespace = substr($name, 0, $pos);
 			if ( ! isset($this->namespaces[$namespace])) {
 				return FALSE;
 			}
 			$namespace = $this->getNamespace($namespace);
-			$className = substr($className, $pos + 1);
+			$name = substr($name, $pos + 1);
 		} else {
 			$namespace = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
-		return $namespace->hasClass($className);
+		return $namespace->hasClass($name);
 	}
 
 
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
-	 * @param string $className
+	 * @param string $name
 	 * @return ReflectionClassInterface|NULL
 	 */
-	public function getClass($className)
+	public function getClass($name)
 	{
 		if (empty($this->declaredClasses)) {
 			$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
 		}
-		$className = ltrim($className, '\\');
+		$name = ltrim($name, '\\');
 		try {
 			$namespaceReflection = $this->getNamespace(
-				($boundary = strrpos($className, '\\'))
+				($boundary = strrpos($name, '\\'))
 					// Class within a namespace
-					? substr($className, 0, $boundary)
+					? substr($name, 0, $boundary)
 					// Class without a namespace
 					: ReflectionNamespace::NO_NAMESPACE_NAME
 			);
-			return $namespaceReflection->getClass($className);
+			return $namespaceReflection->getClass($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($this->declaredClasses[$className])) {
-				$reflection = new ReflectionClass($className, $this->broker);
+			if (isset($this->declaredClasses[$name])) {
+				$reflection = new ReflectionClass($name, $this->broker);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
@@ -238,82 +230,80 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Returns if there was such constant processed (FQN expected).
 	 *
-	 * @param string $constantName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasConstant($constantName)
+	public function hasConstant($name)
 	{
-		$constantName = ltrim($constantName, '\\');
-		if ($pos = strpos($constantName, '::')) {
-			$className = substr($constantName, 0, $pos);
-			$constantName = substr($constantName, $pos + 2);
+		$name = ltrim($name, '\\');
+		if ($pos = strpos($name, '::')) {
+			$className = substr($name, 0, $pos);
+			$name = substr($name, $pos + 2);
 			if ( ! $this->hasClass($className)) {
 				return FALSE;
 			}
 			$parent = $this->getClass($className);
 
 		} else {
-			if ($pos = strrpos($constantName, '\\')) {
-				$namespace = substr($constantName, 0, $pos);
+			if ($pos = strrpos($name, '\\')) {
+				$namespace = substr($name, 0, $pos);
 				if ( ! $this->hasNamespace($namespace)) {
 					return FALSE;
 				}
 				$parent = $this->getNamespace($namespace);
-				$constantName = substr($constantName, $pos + 1);
+				$name = substr($name, $pos + 1);
 
 			} else {
 				$parent = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
 		}
-		return $parent->hasConstant($constantName);
+		return $parent->hasConstant($name);
 	}
 
 
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
-	 * @param string $constantName Constant name
-	 * @return ApiGen\TokenReflection\IReflectionConstant
-	 * @throws ApiGen\TokenReflection\Exception\RuntimeException If the requested constant does not exist.
+	 * @param string $name
+	 * @return ReflectionConstantInterface
+	 * @throws RuntimeException If the requested constant does not exist.
 	 */
-	public function getConstant($constantName)
+	public function getConstant($name)
 	{
 		static $declared = [];
 		if (empty($declared)) {
 			$declared = get_defined_constants();
 		}
-		if ($boundary = strpos($constantName, '::')) {
+		if ($boundary = strpos($name, '::')) {
 			// Class constant
-			$className = substr($constantName, 0, $boundary);
-			$constantName = substr($constantName, $boundary + 2);
-			return $this->getClass($className)->getConstantReflection($constantName);
+			$className = substr($name, 0, $boundary);
+			$name = substr($name, $boundary + 2);
+			return $this->getClass($className)->getConstantReflection($name);
 		}
 		try {
-			$constantName = ltrim($constantName, '\\');
-			if ($boundary = strrpos($constantName, '\\')) {
-				$ns = $this->getNamespace(substr($constantName, 0, $boundary));
-				$constantName = substr($constantName, $boundary + 1);
+			$name = ltrim($name, '\\');
+			if ($boundary = strrpos($name, '\\')) {
+				$ns = $this->getNamespace(substr($name, 0, $boundary));
+				$name = substr($name, $boundary + 1);
 
 			} else {
 				$ns = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 			}
-			return $ns->getConstant($constantName);
+			return $ns->getConstant($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($declared[$constantName])) {
-				$reflection = new Php\ReflectionConstant($constantName, $declared[$constantName], $this->broker);
+			if (isset($declared[$name])) {
+				$reflection = new Php\ReflectionConstant($name, $declared[$name], $this->broker);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
 			}
-			throw new BrokerException(sprintf('Constant %s does not exist.', $constantName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('Constant %s does not exist.', $name));
 		}
 	}
 
 
 	/**
-	 * Returns all constants from all namespaces.
-	 *
 	 * @return ReflectionConstantInterface[]
 	 */
 	public function getConstants()
@@ -333,63 +323,61 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Returns if there was such function processed (FQN expected).
 	 *
-	 * @param string $functionName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasFunction($functionName)
+	public function hasFunction($name)
 	{
-		$functionName = ltrim($functionName, '\\');
-		if ($pos = strrpos($functionName, '\\')) {
-			$namespace = substr($functionName, 0, $pos);
+		$name = ltrim($name, '\\');
+		if ($pos = strrpos($name, '\\')) {
+			$namespace = substr($name, 0, $pos);
 			if ( ! isset($this->namespaces[$namespace])) {
 				return FALSE;
 			}
 			$namespace = $this->getNamespace($namespace);
-			$functionName = substr($functionName, $pos + 1);
+			$name = substr($name, $pos + 1);
 		} else {
 			$namespace = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
-		return $namespace->hasFunction($functionName);
+		return $namespace->hasFunction($name);
 	}
 
 
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
-	 * @param string $functionName
+	 * @param string $name
 	 * @return ReflectionFunctionInterface
 	 * @throws RuntimeException If the requested function does not exist.
 	 */
-	public function getFunction($functionName)
+	public function getFunction($name)
 	{
 		static $declared = [];
 		if (empty($declared)) {
 			$functions = get_defined_functions();
 			$declared = array_flip($functions['internal']);
 		}
-		$functionName = ltrim($functionName, '\\');
+		$name = ltrim($name, '\\');
 		try {
 			$namespaceReflection = $this->getNamespace(
-				($boundary = strrpos($functionName, '\\'))
+				($boundary = strrpos($name, '\\'))
 					// Function within a namespace
-					? substr($functionName, 0, $boundary)
+					? substr($name, 0, $boundary)
 					// Function wihout a namespace
 					: ReflectionNamespace::NO_NAMESPACE_NAME
 			);
-			return $namespaceReflection->getFunction($functionName);
+			return $namespaceReflection->getFunction($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($declared[$functionName])) {
-				return new Php\ReflectionFunction($functionName, $this->broker);
+			if (isset($declared[$name])) {
+				return new Php\ReflectionFunction($name, $this->broker);
 			}
-			throw new BrokerException(sprintf('Function %s does not exist.', $functionName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('Function %s does not exist.', $name));
 		}
 	}
 
 
 	/**
-	 * Returns all functions from all namespaces.
-	 *
 	 * @return ReflectionFunctionInterface[]
 	 */
 	public function getFunctions()
@@ -409,27 +397,27 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Returns if the given file was already processed.
 	 *
-	 * @param string $fileName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function isFileProcessed($fileName)
+	public function isFileProcessed($name)
 	{
-		return isset($this->tokenStreams[realpath($fileName)]);
+		return isset($this->tokenStreams[realpath($name)]);
 	}
 
 
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
-	 * @param string $fileName
+	 * @param string $name
 	 * @return StreamBase
 	 * @throws BrokerException If the requested file was not processed.
 	 */
-	public function getFileTokens($fileName)
+	public function getFileTokens($name)
 	{
-		$realName = realpath($fileName);
+		$realName = realpath($name);
 		if ( ! isset($this->tokenStreams[$realName])) {
-			throw new BrokerException(sprintf('File "%s" was not processed yet.', $fileName), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('File "%s" was not processed yet.', $name));
 		}
 		return $this->tokenStreams[$realName] === TRUE ? new FileStream($realName) : $this->tokenStreams[$realName];
 	}
@@ -473,10 +461,10 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * @param Broker $broker
+	 * @param BrokerInterface $broker
 	 * @return MemoryStorage
 	 */
-	public function setBroker(Broker $broker)
+	public function setBroker(BrokerInterface $broker)
 	{
 		$this->broker = $broker;
 		return $this;
@@ -484,9 +472,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns the reflection broker instance.
-	 *
-	 * @return Broker $broker Reflection broker
+	 * @return BrokerInterface $broker
 	 */
 	public function getBroker()
 	{

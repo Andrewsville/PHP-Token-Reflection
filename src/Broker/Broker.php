@@ -11,12 +11,8 @@ namespace ApiGen\TokenReflection\Broker;
 
 use ApiGen\TokenReflection\Exception\BrokerException;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Exception\StreamException;
-use ApiGen\TokenReflection\Reflection\ReflectionConstant;
-use ApiGen\TokenReflection\Reflection\ReflectionFunction;
-use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
-use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\ReflectionFunctionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\ReflectionNamespaceInterface;
@@ -32,57 +28,34 @@ class Broker implements BrokerInterface
 	/**
 	 * @var StorageInterface
 	 */
-	private $backend;
-
-	/**
-	 * @var array
-	 */
-	private $cache;
+	private $storage;
 
 
-	public function __construct(StorageInterface $backend)
+	public function __construct(StorageInterface $storage)
 	{
-		$this->cache = [
-			self::CACHE_NAMESPACE => [],
-			self::CACHE_CLASS => [],
-			self::CACHE_CONSTANT => [],
-			self::CACHE_FUNCTION => []
-		];
-
-		$this->backend = $backend->setBroker($this);
+		$this->storage = $storage->setBroker($this); // todo: remove circular dependency
 	}
 
 
 	/**
 	 * Parses a file and returns the appropriate reflection object.
 	 *
-	 * @param string $fileName Filename
+	 * @param string $fileName
 	 * @return ReflectionFile
 	 * @throws BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName)
 	{
 		try {
-			if ($this->backend->isFileProcessed($fileName)) {
-				$tokens = $this->backend->getFileTokens($fileName);
+			if ($this->storage->isFileProcessed($fileName)) {
+				$tokens = $this->storage->getFileTokens($fileName);
 
 			} else {
 				$tokens = new FileStream($fileName);
 			}
 			$reflectionFile = new ReflectionFile($tokens, $this);
-			if ( ! $this->backend->isFileProcessed($fileName)) {
-				$this->backend->addFile($tokens, $reflectionFile);
-				// Clear the cache - leave only tokenized reflections
-				foreach ($this->cache as $type => $cached) {
-					if ( ! empty($cached)) {
-						$this->cache[$type] = array_filter($cached, function (ReflectionInterface $reflection = NULL) {
-							if ($reflection) {
-								return $reflection->isTokenized();
-							}
-							return FALSE;
-						});
-					}
-				}
+			if ( ! $this->storage->isFileProcessed($fileName)) {
+				$this->storage->addFile($tokens, $reflectionFile);
 			}
 			return $reflectionFile;
 
@@ -100,7 +73,7 @@ class Broker implements BrokerInterface
 	{
 		$realPath = realpath($path);
 		if ( ! is_dir($realPath)) {
-			throw new BrokerException(sprintf('Directory %s does not exist.', $path), BrokerException::DOES_NOT_EXIST);
+			throw new BrokerException(sprintf('Directory %s does not exist.', $path));
 		}
 
 		try {
@@ -118,107 +91,83 @@ class Broker implements BrokerInterface
 
 
 	/**
-	 * @param string $namespaceName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasNamespace($namespaceName)
+	public function hasNamespace($name)
 	{
-		return isset($this->cache[self::CACHE_NAMESPACE][$namespaceName]) || $this->backend->hasNamespace($namespaceName);
+		return $this->storage->hasNamespace($name);
 	}
 
 
 	/**
-	 * @param string $namespaceName
+	 * @param string $name
 	 * @return ReflectionNamespaceInterface|NULL
 	 */
-	public function getNamespace($namespaceName)
+	public function getNamespace($name)
 	{
-		$namespaceName = ltrim($namespaceName, '\\');
-		if (isset($this->cache[self::CACHE_NAMESPACE][$namespaceName])) {
-			return $this->cache[self::CACHE_NAMESPACE][$namespaceName];
-		}
-		$namespace = $this->backend->getNamespace($namespaceName);
-		if ($namespace !== NULL) {
-			$this->cache[self::CACHE_NAMESPACE][$namespaceName] = $namespace;
-		}
-		return $namespace;
+		return $this->storage->getNamespace($name);
 	}
 
 
 	/**
-	 * @return array|ReflectionNamespaceInterface[]
+	 * @return ReflectionNamespaceInterface[]
 	 */
 	public function getNamespaces()
 	{
-		$namespaces = [];
-		foreach (array_keys($this->backend->getNamespaces()) as $name) {
-			$namespaces[] = $this->getNamespace($name);
-		}
-		return $namespaces;
+		return $this->storage->getNamespaces();
 	}
 
 
 	/**
-	 * @param string $className
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasClass($className)
+	public function hasClass($name)
 	{
-		return isset($this->cache[self::CACHE_CLASS][$className]) || $this->backend->hasClass($className);
+		return $this->storage->hasClass($name);
 	}
 
 
 	/**
-	 * @param string $className
-	 * @return ReflectionClassInterface|NULL
+	 * @param string $name
+	 * @return ReflectionClassInterface
 	 */
-	public function getClass($className)
+	public function getClass($name)
 	{
-		$className = ltrim($className, '\\');
-		if (isset($this->cache[self::CACHE_CLASS][$className])) {
-			return $this->cache[self::CACHE_CLASS][$className];
-		}
-		$this->cache[self::CACHE_CLASS][$className] = $this->backend->getClass($className);
-		return $this->cache[self::CACHE_CLASS][$className];
+		return $this->storage->getClass($name);
 	}
 
 
 	/**
 	 * @param int $types
-	 * @return array|ReflectionClassInterface[]
+	 * @return ReflectionClassInterface[]
 	 */
 	public function getClasses($types = StorageInterface::TOKENIZED_CLASSES)
 	{
-		return $this->backend->getClasses($types);
+		return $this->storage->getClasses($types);
 	}
 
 
 	/**
-	 * @param string $constantName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasConstant($constantName)
+	public function hasConstant($name)
 	{
-		return isset($this->cache[self::CACHE_CONSTANT][$constantName]) || $this->backend->hasConstant($constantName);
+		return $this->storage->hasConstant($name);
 	}
 
 
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
-	 * @param string $constantName
-	 * @return ReflectionConstant|NULL
+	 * @param string $name
+	 * @return ReflectionConstantInterface|NULL
 	 */
-	public function getConstant($constantName)
+	public function getConstant($name)
 	{
-		$constantName = ltrim($constantName, '\\');
-		if (isset($this->cache[self::CACHE_CONSTANT][$constantName])) {
-			return $this->cache[self::CACHE_CONSTANT][$constantName];
-		}
-		if ($constant = $this->backend->getConstant($constantName)) {
-			$this->cache[self::CACHE_CONSTANT][$constantName] = $constant;
-		}
-		return $constant;
+		return $this->storage->getConstant($name);
 	}
 
 
@@ -227,74 +176,67 @@ class Broker implements BrokerInterface
 	 */
 	public function getConstants()
 	{
-		return $this->backend->getConstants();
+		return $this->storage->getConstants();
 	}
 
 
 	/**
-	 * @param string $functionName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasFunction($functionName)
+	public function hasFunction($name)
 	{
-		return isset($this->cache[self::CACHE_FUNCTION][$functionName]) || $this->backend->hasFunction($functionName);
+		return $this->storage->hasFunction($name);
 	}
 
 
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
-	 * @param string $functionName
-	 * @return ReflectionFunction|NULL
+	 * @param string $name
+	 * @return ReflectionFunctionInterface|NULL
 	 */
-	public function getFunction($functionName)
+	public function getFunction($name)
 	{
-		$functionName = ltrim($functionName, '\\');
-		if (isset($this->cache[self::CACHE_FUNCTION][$functionName])) {
-			return $this->cache[self::CACHE_FUNCTION][$functionName];
-		}
-		if ($function = $this->backend->getFunction($functionName)) {
-			$this->cache[self::CACHE_FUNCTION][$functionName] = $function;
-		}
-		return $function;
+		return $this->storage->getFunction($name);
 	}
 
 
 	/**
-	 * @return array|ReflectionFunction[]
+	 * @return array|ReflectionFunctionInterface[]
 	 */
 	public function getFunctions()
 	{
-		return $this->backend->getFunctions();
+		return $this->storage->getFunctions();
 	}
 
 
 	/**
-	 * @param string $fileName
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasFile($fileName)
+	public function hasFile($name)
 	{
-		return $this->backend->hasFile($fileName);
+		return $this->storage->hasFile($name);
 	}
 
 
 	/**
-	 * @param string $fileName
+	 * @param string $name
 	 * @return ReflectionFile|NULL
 	 */
-	public function getFile($fileName)
+	public function getFile($name)
 	{
-		return $this->backend->getFile($fileName);
+		return $this->storage->getFile($name);
 	}
 
 
 	/**
-	 * @return array|ReflectionFile[]
+	 * @return ReflectionFile[]
 	 */
 	public function getFiles()
 	{
-		return $this->backend->getFiles();
+		return $this->storage->getFiles();
 	}
 
 
@@ -304,7 +246,7 @@ class Broker implements BrokerInterface
 	 */
 	public function getFileTokens($fileName)
 	{
-		return $this->backend->getFileTokens($fileName);
+		return $this->storage->getFileTokens($fileName);
 	}
 
 }

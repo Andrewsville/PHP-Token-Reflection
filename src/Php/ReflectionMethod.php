@@ -124,7 +124,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 		$parameters = $this->getParameters();
 		if (is_numeric($parameter)) {
 			if ( ! isset($parameters[$parameter])) {
-				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter));
 			}
 			return $parameters[$parameter];
 
@@ -134,7 +134,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 					return $reflection;
 				}
 			}
-			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter));
 		}
 	}
 
@@ -261,7 +261,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	{
 		static $cache = [];
 		if ( ! $internalReflection instanceof InternalReflectionMethod) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionMethod expected.', RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionMethod expected.');
 		}
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
 		if ( ! isset($cache[$key])) {

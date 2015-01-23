@@ -122,7 +122,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if ( ! $declaringClass->isInstance($object)) {
-			throw new RuntimeException('The given class is not an instance or subclass of the current class.', RuntimeException::INVALID_ARGUMENT, $this);
+			throw new RuntimeException('The given class is not an instance or subclass of the current class.');
 		}
 		if ($this->isPublic()) {
 			return $object->{$this->name};
@@ -134,7 +134,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 			$refProperty->setAccessible(FALSE);
 			return $value;
 		}
-		throw new RuntimeException('Only public and accessible properties can return their values.', RuntimeException::NOT_ACCESSIBLE);
+		throw new RuntimeException('Only public and accessible properties can return their values.');
 	}
 
 

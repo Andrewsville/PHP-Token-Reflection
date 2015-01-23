@@ -157,7 +157,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if (is_object($class)) {
 			if ( ! $class instanceof InternalReflectionClass && !$class instanceof ReflectionClassInterface) {
-				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException('Parameter must be a string or an instance of class reflection.');
 			}
 			$class = $class->getName();
 		}
@@ -212,16 +212,16 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if (is_object($interface)) {
 			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof ReflectionClassInterface) {
-				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException('Parameter must be a string or an instance of class reflection.');
 			}
 			$interfaceName = $interface->getName();
 			if ( ! $interface->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName));
 			}
 		} else {
 			$reflection = $this->getBroker()->getClass($interface);
 			if ( ! $reflection->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface));
 			}
 			$interfaceName = $interface;
 		}
@@ -406,7 +406,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 		if ($this->hasConstant($name)) {
 			return new ReflectionConstant($name, $this->getConstant($name), $this->broker, $this);
 		}
-		throw new RuntimeException(sprintf('Constant "%s" does not exist.', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('Constant "%s" does not exist.', $name));
 	}
 
 
@@ -466,7 +466,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 				return $property;
 			}
 		}
-		throw new RuntimeException(sprintf('Property %s does not exist.', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('Property %s does not exist.', $name));
 	}
 
 
@@ -718,7 +718,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public static function create(Reflector $internalReflection, Broker $broker)
 	{
 		if ( ! $internalReflection instanceof InternalReflectionClass) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionClass expected.', RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionClass expected.');
 		}
 		return $broker->getClass($internalReflection->getName());
 	}

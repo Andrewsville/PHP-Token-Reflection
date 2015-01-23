@@ -122,7 +122,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	{
 		$className = $this->getFqnElementName($className);
 		if ( ! $this->hasClass($className)) {
-			throw new RuntimeException(sprintf('Class "%s" does not exist.', $className), RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('Class "%s" does not exist.', $className));
 		}
 		return $this->classes[$className];
 	}
@@ -174,7 +174,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	{
 		$constantName = $this->getFqnElementName($constantName);
 		if ( ! $this->hasConstant($constantName)) {
-			throw new RuntimeException(sprintf('Constant "%s" does not exist.', $constantName), RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('Constant "%s" does not exist.', $constantName));
 		}
 		return $this->constants[$constantName];
 	}
@@ -226,7 +226,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	{
 		$functionName = $this->getFqnElementName($functionName);
 		if ( ! $this->hasFunction($functionName)) {
-			throw new RuntimeException(sprintf('Function "%s" does not exist.', $functionName), RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('Function "%s" does not exist.', $functionName));
 		}
 		return $this->functions[$functionName];
 	}
@@ -293,7 +293,7 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 
 	public function getSource()
 	{
-		throw new RuntimeException('Cannot export source code of a namespace.', RuntimeException::UNSUPPORTED);
+		throw new RuntimeException('Cannot export source code of a namespace.');
 	}
 
 

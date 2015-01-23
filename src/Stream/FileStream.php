@@ -26,11 +26,11 @@ class FileStream extends StreamBase
 	{
 		$this->fileName = realpath($fileName);
 		if ($this->fileName === FALSE) {
-			throw new StreamException('File does not exist.', StreamException::DOES_NOT_EXIST);
+			throw new StreamException('File does not exist.');
 		}
 		$contents = @file_get_contents($this->fileName);
 		if ($contents === FALSE) {
-			throw new StreamException('File is not readable.', StreamException::NOT_READABLE);
+			throw new StreamException('File is not readable.');
 		}
 		$this->processSource($contents);
 	}

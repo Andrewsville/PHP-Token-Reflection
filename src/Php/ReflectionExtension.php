@@ -207,7 +207,7 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	{
 		static $cache = [];
 		if ( ! $internalReflection instanceof InternalReflectionExtension) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.', RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.');
 		}
 		if ( ! isset($cache[$internalReflection->getName()])) {
 			return new self($internalReflection->getName(), $broker);

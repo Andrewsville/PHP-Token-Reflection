@@ -287,7 +287,7 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 	{
 		static $cache = [];
 		if ( ! $internalReflection instanceof InternalReflectionProperty) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.');
 		}
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
 		if ( ! isset($cache[$key])) {
