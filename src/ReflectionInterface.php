@@ -9,8 +9,6 @@
 
 namespace ApiGen\TokenReflection;
 
-use ApiGen\TokenReflection\Broker\Broker;
-
 
 interface ReflectionInterface
 {

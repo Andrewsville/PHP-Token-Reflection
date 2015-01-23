@@ -9,13 +9,12 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
+use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\ReflectionInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionBase;
-use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-class ReflectionFile extends ReflectionBase
+class ReflectionFile extends ReflectionBase implements SourceInterface
 {
 
 	/**

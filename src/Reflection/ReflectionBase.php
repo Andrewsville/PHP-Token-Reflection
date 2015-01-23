@@ -137,12 +137,6 @@ abstract class ReflectionBase implements ReflectionInterface, AnnotationsInterfa
 
 
 	/**
-	 * @return string
-	 */
-	abstract public function getSource();
-
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function getPrettyName()

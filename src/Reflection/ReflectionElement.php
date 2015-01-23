@@ -19,7 +19,7 @@ use ApiGen\TokenReflection\Parser\ElementParser;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-abstract class ReflectionElement extends ReflectionBase implements SourceInterface
+abstract class ReflectionElement extends ReflectionBase
 {
 
 	/**
@@ -136,15 +136,6 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 	public function getEndLine()
 	{
 		return $this->endLine;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSource()
-	{
-		return $this->getBroker()->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
 	}
 
 

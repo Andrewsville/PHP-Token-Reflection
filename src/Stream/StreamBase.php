@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection\Stream;
 
+use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Exception\StreamException;
 use ArrayAccess;
@@ -18,7 +19,7 @@ use SeekableIterator;
 use Serializable;
 
 
-abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, Serializable
+abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, Serializable, SourceInterface
 {
 
 	/**

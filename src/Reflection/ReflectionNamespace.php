@@ -291,12 +291,6 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	}
 
 
-	public function getSource()
-	{
-		throw new RuntimeException('Cannot export source code of a namespace.');
-	}
-
-
 	/**
 	 * {@inheritdoc}
 	 */
