@@ -40,11 +40,11 @@ use ApiGen\TokenReflection\Storage\MemoryStorage;
 
 
 $parser = new Parser(new MemoryStorage);
-$parser->processDirectory('~/lib/Zend_Framework');
+$parser->processDirectory(__DIR__ . '/vendor/doctrine');
 
 $storage = $parser->getStorage();
 
-$class = $storage->getClass('Zend_Version'); // instance of ApiGen\TokenReflection\Reflection\ReflectionClass
+$class = $storage->getClass('Doctrine\ORM\EntityManager'); // instance of ApiGen\TokenReflection\Reflection\ReflectionClass
 $class = $storage->getClass('Exception');    // instance of ApiGen\TokenReflection\Php\ReflectionClass
 
 $function = $storage->getFunction(...);
