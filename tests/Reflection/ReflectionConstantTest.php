@@ -75,8 +75,8 @@ class ReflectionConstantTest extends TestCase
 
 	public function testInNamespace()
 	{
-		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
-		$token = $this->getStorage()->getConstant('TokenReflection\Test\CONSTANT_IN_NAMESPACE');
+		$this->broker->processFile($this->getFilePath('inNamespace'));
+		$token = $this->broker->getStorage()->getConstant('TokenReflection\Test\CONSTANT_IN_NAMESPACE');
 
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionConstant', $token);
 		$this->assertSame('constant-in-namespace', $token->getValue());
@@ -103,7 +103,7 @@ class ReflectionConstantTest extends TestCase
 
 	public function testMagicConstants()
 	{
-		$broker = $this->getBroker();
+		$broker = $this->broker;
 		$broker->processFile($this->getFilePath('magic'));
 
 		require_once($this->getFilePath('magic'));
@@ -111,8 +111,8 @@ class ReflectionConstantTest extends TestCase
 		$internal_constants = get_defined_constants(TRUE);
 		$internal_constants = $internal_constants['user'];
 
-		$token_constants = $this->getStorage()->getConstants();
-		$this->assertSame(15, count($token_constants));
+		$token_constants = $this->broker->getStorage()->getConstants();
+		$this->assertSame(14, count($token_constants));
 
 
 		foreach ($token_constants as $name => $reflection) {
@@ -123,7 +123,7 @@ class ReflectionConstantTest extends TestCase
 			$this->assertSame($internal_constants[$name], $reflection->getValue(), $name);
 		}
 
-		$token_functions = $this->getStorage()->getFunctions();
+		$token_functions = $this->broker->getStorage()->getFunctions();
 //		$this->assertSame(2, count($token_functions));
 		$this->assertSame(2, count($token_functions));
 
@@ -168,7 +168,7 @@ class ReflectionConstantTest extends TestCase
 		foreach ($classes as $class) {
 			$this->assertTrue(class_exists($class, FALSE), $class);
 
-			$token = $this->getStorage()->getClass($class);
+			$token = $this->broker->getStorage()->getClass($class);
 			$internal = new \ReflectionClass($class);
 			$instance = new $class();
 
@@ -246,15 +246,14 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testMagicConstants54()
 	{
-		$broker = $this->getNewBroker();
-		$broker->processFile($this->getFilePath('magic54'));
+		$this->broker->processFile($this->getFilePath('magic54'));
 
 		require_once($this->getFilePath('magic54'));
 
 		$internal_constants = get_defined_constants(TRUE);
 		$internal_constants = $internal_constants['user'];
 
-		$token_constants = $broker->getStorage()->getConstants();
+		$token_constants = $this->broker->getStorage()->getConstants();
 		$this->assertSame(2, count($token_constants));
 
 		foreach ($token_constants as $name => $reflection) {
@@ -262,7 +261,7 @@ class ReflectionConstantTest extends TestCase
 			$this->assertSame($internal_constants[$name], $reflection->getValue(), $name);
 		}
 
-		$token_functions = $this->getStorage()->getFunctions();
+		$token_functions = $this->broker->getStorage()->getFunctions();
 		$this->assertSame(2, count($token_functions));
 
 		foreach ($token_functions as $name => $token_function) {
@@ -310,7 +309,7 @@ class ReflectionConstantTest extends TestCase
 			'ns3\\TokenReflection_Test_ConstantMagic54WithTrait'
 		];
 		foreach ($classes as $class) {
-			$token = $broker->getStorage()->getClass($class);
+			$token = $this->broker->getStorage()->getClass($class);
 			$internal = new \ReflectionClass($class);
 
 			$this->assertSame($internal->isTrait(), $token->isTrait());
@@ -404,13 +403,13 @@ class ReflectionConstantTest extends TestCase
 			'ConstPrettyNames::INTERNAL',
 		];
 
-		$broker = $this->getBroker();
+		$broker = $this->broker;
 		$broker->processFile($this->getFilePath('pretty-names'));
 
 		foreach ($names as $name) {
-			$this->assertTrue($this->getStorage()->hasConstant($name), $name);
+			$this->assertTrue($this->broker->getStorage()->hasConstant($name), $name);
 
-			$rfl = $this->getStorage()->getConstant($name);
+			$rfl = $this->broker->getStorage()->getConstant($name);
 			$this->assertSame($name, $rfl->getPrettyName(), $name);
 		}
 	}
@@ -423,7 +422,7 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testInternalConstantConstructor()
 	{
-		new ReflectionConstant('foo', 'bar', $this->getStorage(), new ReflectionClass('Exception', $this->getStorage()));
+		new ReflectionConstant('foo', 'bar', $this->broker->getStorage(), new ReflectionClass('Exception', $this->broker->getStorage()));
 	}
 
 
@@ -442,13 +441,13 @@ class ReflectionConstantTest extends TestCase
 			'VALUE_DEFINITION7' => TRUE
 		];
 
-		$broker = $this->getBroker();
+		$broker = $this->broker;
 		$broker->processFile($this->getFilePath('valueDefinitions'));
 
 		foreach ($expected as $name => $value) {
-			$this->assertTrue($this->getStorage()->hasConstant($name), $name);
+			$this->assertTrue($this->broker->getStorage()->hasConstant($name), $name);
 
-			$rfl = $this->getStorage()->getConstant($name);
+			$rfl = $this->broker->getStorage()->getConstant($name);
 			$this->assertSame($value, $rfl->getValue(), $name);
 		}
 	}
@@ -459,13 +458,13 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testInterfaces()
 	{
-		$broker = $this->getBroker();
+		$broker = $this->broker;
 		$broker->processFile($this->getFilePath('interfaces'));
 
-		$class1 = $this->getStorage()->getClass('TokenReflection_Test_ConstantInterfaceClass');
+		$class1 = $this->broker->getStorage()->getClass('TokenReflection_Test_ConstantInterfaceClass');
 		$this->assertTrue($class1->hasConstant('FIRST'));
 
-		$class2 = $this->getStorage()->getClass('TokenReflection_Test_ConstantInterfaceClass2');
+		$class2 = $this->broker->getStorage()->getClass('TokenReflection_Test_ConstantInterfaceClass2');
 		$this->assertTrue($class2->hasConstant('FIRST'));
 		$this->assertTrue($class2->hasConstant('SECOND'));
 	}

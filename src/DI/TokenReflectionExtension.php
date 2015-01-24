@@ -34,16 +34,37 @@ class TokenReflectionExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('resolver'))
 			->setClass('ApiGen\TokenReflection\Resolver');
 
-		$builder->addDefinition($this->prefix('docBlockParser'))
-			->setClass('ApiGen\TokenReflection\PhpParser\DocBlockParser');
 
-		$this->setupFactories();
+		$this->setupPhp();
+
+		$this->setupReflections();
+
+
+		$this->setupPhpParser();
 	}
 
 
-	private function setupFactories()
+
+	private function setupPhp()
+	{
+	}
+
+
+	private function setupReflections()
 	{
 		$builder = $this->getContainerBuilder();
+
+		$builder->addDefinition($this->prefix('reflection.classFactory'))
+			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionClassFactory');
+	}
+
+
+	private function setupPhpParser()
+	{
+		$builder = $this->getContainerBuilder();
+
+		$builder->addDefinition($this->prefix('docBlockParser'))
+			->setClass('ApiGen\TokenReflection\PhpParser\DocBlockParser');
 
 		$builder->addDefinition($this->prefix('classReflectionFactory'))
 			->setClass('ApiGen\TokenReflection\Factory\ClassReflectionFactory');
@@ -53,14 +74,6 @@ class TokenReflectionExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('functionReflectionFactory'))
 			->setClass('ApiGen\TokenReflection\Factory\FunctionReflectionFactory');
-
-		// method
-
-		// parameter
-
-		// property
-
-		// ... that's it?
 	}
 
 }

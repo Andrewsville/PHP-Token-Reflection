@@ -91,7 +91,7 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertFalse($rfl->token->isInternal());
 
 		$rfl = new \stdClass();
-		$rfl->token = $this->getStorage()->getFunction('get_class');
+		$rfl->token = $this->broker->getStorage()->getFunction('get_class');
 		$this->assertFalse($rfl->token->isUserDefined());
 		$this->assertFalse($rfl->token->getFileName());
 		$this->assertTrue($rfl->token->isInternal());
@@ -107,11 +107,11 @@ class ReflectionFunctionTest extends TestCase
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
-		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
+		$this->broker->processFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionFunction('TokenReflection\Test\functionInNamespace');
-		$rfl->token = $this->getStorage()->getFunction('TokenReflection\Test\functionInNamespace');
+		$rfl->token = $this->broker->getStorage()->getFunction('TokenReflection\Test\functionInNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
 		$this->assertTrue($rfl->token->inNamespace());

@@ -23,7 +23,8 @@ class ReflectionExtensionTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionExtension = new ReflectionExtension('phar', $this->getStorage());
+		parent::setUp();
+		$this->internalReflectionExtension = new ReflectionExtension('phar', $this->broker->getStorage());
 	}
 
 

@@ -17,7 +17,7 @@ class ReflectionPropertyFactoryTest extends TestCase
 	 */
 	public function testInternalPropertyReflectionCreate()
 	{
-		ReflectionPropertyFactory::create(new \ReflectionClass('Exception'), $this->getStorage());
+		ReflectionPropertyFactory::create(new \ReflectionClass('Exception'), $this->broker->getStorage());
 	}
 
 }

@@ -23,7 +23,8 @@ class ReflectionConstantTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionConstant = $this->getStorage()->getConstant('DIRECTORY_SEPARATOR');
+		parent::setUp();
+		$this->internalReflectionConstant = $this->broker->getStorage()->getConstant('DIRECTORY_SEPARATOR');
 	}
 
 

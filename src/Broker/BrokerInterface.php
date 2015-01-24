@@ -28,4 +28,10 @@ interface BrokerInterface
 	 */
 	function processDirectory($path);
 
+
+	/**
+	 * @return StorageInterface
+	 */
+	function getStorage();
+
 }

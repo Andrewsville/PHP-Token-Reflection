@@ -13,7 +13,7 @@ class ReflectionFunctionFactoryTest extends TestCase
 	{
 		$this->assertInstanceOf(
 			'ApiGen\TokenReflection\Php\ReflectionFunction',
-			ReflectionFunctionFactory::create(new \ReflectionFunction('count'), $this->getStorage())
+			ReflectionFunctionFactory::create(new \ReflectionFunction('count'), $this->broker->getStorage())
 		);
 	}
 

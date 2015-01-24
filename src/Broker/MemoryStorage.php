@@ -16,6 +16,7 @@ use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Php\ReflectionConstant;
 use ApiGen\TokenReflection\Php\ReflectionFunction;
+use ApiGen\TokenReflection\Reflection\Factory\ReflectionClassFactory;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -55,18 +56,25 @@ class MemoryStorage implements StorageInterface
 	private $allFunctions;
 
 	/**
-	 * Token streams storage.
-	 *
 	 * @var array
 	 */
 	private $tokenStreams = [];
 
 	/**
-	 * Processed files storage.
-	 *
 	 * @var array
 	 */
 	private $files = [];
+
+	/**
+	 * @var ReflectionClassFactory
+	 */
+	private $reflectionClassFactory;
+
+
+//	public function __construct(ReflectionClassFactory $reflectionClassFactory)
+//	{
+//		$this->reflectionClassFactory = $reflectionClassFactory;
+//	}
 
 
 	/**

@@ -23,7 +23,8 @@ class ReflectionMethodTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionMethod = $this->getStorage()->getClass('Exception')->getConstructor();
+		parent::setUp();
+		$this->internalReflectionMethod = $this->broker->getStorage()->getClass('Exception')->getConstructor();
 	}
 
 

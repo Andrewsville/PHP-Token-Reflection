@@ -23,7 +23,8 @@ class ReflectionFunctionTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionFunction = new ReflectionFunction('count', $this->getStorage());
+		parent::setUp();
+		$this->internalReflectionFunction = new ReflectionFunction('count', $this->broker->getStorage());
 	}
 
 

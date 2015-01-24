@@ -23,7 +23,8 @@ class ReflectionPropertyTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionProperty = $this->getStorage()->getClass('Exception')->getProperty('message');
+		parent::setUp();
+		$this->internalReflectionProperty = $this->broker->getStorage()->getClass('Exception')->getProperty('message');
 	}
 
 

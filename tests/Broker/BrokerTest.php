@@ -3,18 +3,24 @@
 namespace ApiGen\TokenReflection\Tests\Broker;
 
 use ApiGen;
+use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Tests\ContainerFactory;
-use ApiGen\TokenReflection\Tests\TestCase;
 use Nette\DI\Container;
+use PHPUnit_Framework_TestCase;
 
 
-class BrokerTest extends TestCase
+class BrokerTest extends PHPUnit_Framework_TestCase
 {
 
 	/**
 	 * @var Container
 	 */
 	private $container;
+
+	/**
+	 * @var Broker
+	 */
+	private $broker;
 
 
 	public function __construct()
@@ -23,16 +29,15 @@ class BrokerTest extends TestCase
 	}
 
 
-	public function testEmptyFileProcessing()
+	protected function setUp()
 	{
-		$this->getFileTokenReflection('empty');
+		$this->broker = $this->container->getByType('ApiGen\TokenReflection\Broker\Broker');
 	}
 
 
 	public function testFindFiles()
 	{
-		$broker = $this->container->getByType('ApiGen\TokenReflection\Broker\Broker');
-		$files = $broker->processDirectory(realpath(__DIR__ . '/../data/class'), TRUE);
+		$files = $this->broker->processDirectory(realpath(__DIR__ . '/../data/class'), TRUE);
 		$this->assertCount(37, $files);
 	}
 
@@ -43,7 +48,7 @@ class BrokerTest extends TestCase
 	public function testFileProcessingError()
 	{
 		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
-		$this->getBroker()->processFile($file);
+		$this->broker->processFile($file);
 	}
 
 
@@ -53,7 +58,7 @@ class BrokerTest extends TestCase
 	public function testDirectoryProcessingError()
 	{
 		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~' . DIRECTORY_SEPARATOR . '~#nonexistent#~';
-		$this->getBroker()->processDirectory($file);
+		$this->broker->processDirectory($file);
 	}
 
 }

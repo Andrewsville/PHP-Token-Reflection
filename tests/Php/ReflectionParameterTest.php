@@ -23,7 +23,8 @@ class ReflectionParameterTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionParameter = $this->getStorage()
+		parent::setUp();
+		$this->internalReflectionParameter = $this->broker->getStorage()
 			->getClass('Exception')->getConstructor()->getParameter('message');
 	}
 

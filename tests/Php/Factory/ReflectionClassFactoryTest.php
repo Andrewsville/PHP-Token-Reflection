@@ -15,7 +15,7 @@ class ReflectionClassFactoryTest extends TestCase
 	 */
 	public function testInternalClassReflectionCreate()
 	{
-		ReflectionClassFactory::create(new \ReflectionFunction('create_function'), $this->getStorage());
+		ReflectionClassFactory::create(new \ReflectionFunction('create_function'), $this->broker->getStorage());
 	}
 
 }
