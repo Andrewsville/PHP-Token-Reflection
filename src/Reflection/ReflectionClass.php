@@ -367,7 +367,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if (NULL === $className) {
 			return FALSE;
 		}
-		return $this->getStorage()->getClass($className);
+		return $this->storage->getClass($className);
 	}
 
 
@@ -435,9 +435,8 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if (empty($interfaceNames)) {
 			return [];
 		}
-		$broker = $this->getStorage();
-		return array_combine($interfaceNames, array_map(function ($interfaceName) use ($broker) {
-			return $broker->getClass($interfaceName);
+		return array_combine($interfaceNames, array_map(function ($interfaceName) {
+			return $this->storage->getClass($interfaceName);
 		}, $interfaceNames));
 	}
 
@@ -451,7 +450,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		$names = FALSE !== $parentClass ? array_reverse(array_flip($parentClass->getInterfaceNames())) : [];
 		foreach ($this->interfaces as $interfaceName) {
 			$names[$interfaceName] = TRUE;
-			foreach (array_reverse($this->getStorage()->getClass($interfaceName)->getInterfaceNames()) as $parentInterfaceName) {
+			foreach (array_reverse($this->storage->getClass($interfaceName)->getInterfaceNames()) as $parentInterfaceName) {
 				$names[$parentInterfaceName] = TRUE;
 			}
 		}
@@ -470,9 +469,8 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if (empty($interfaceNames)) {
 			return [];
 		}
-		$broker = $this->getStorage();
-		return array_combine($interfaceNames, array_map(function ($interfaceName) use ($broker) {
-			return $broker->getClass($interfaceName);
+		return array_combine($interfaceNames, array_map(function ($interfaceName) {
+			return $this->storage->getClass($interfaceName);
 		}, $interfaceNames));
 	}
 
@@ -965,9 +963,8 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if (empty($traitNames)) {
 			return [];
 		}
-		$broker = $this->getStorage();
-		return array_combine($traitNames, array_map(function ($traitName) use ($broker) {
-			return $broker->getClass($traitName);
+		return array_combine($traitNames, array_map(function ($traitName) {
+			return $this->storage->getClass($traitName);
 		}, $traitNames));
 	}
 
@@ -981,9 +978,8 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if (empty($ownTraitNames)) {
 			return [];
 		}
-		$broker = $this->getStorage();
-		return array_combine($ownTraitNames, array_map(function ($traitName) use ($broker) {
-			return $broker->getClass($traitName);
+		return array_combine($ownTraitNames, array_map(function ($traitName) {
+			return $this->storage->getClass($traitName);
 		}, $ownTraitNames));
 	}
 
@@ -1043,7 +1039,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				throw new RuntimeException(sprintf('"%s" is not a trait.', $traitName));
 			}
 		} else {
-			$reflection = $this->getStorage()->getClass($trait);
+			$reflection = $this->storage->getClass($trait);
 			if ( ! $reflection->isTrait()) {
 				throw new RuntimeException(sprintf('"%s" is not a trait.', $trait));
 			}
@@ -1058,12 +1054,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getDirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getStorage()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ( ! $class->isSubclassOf($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
-			return NULL === $class->getParentClassName() || !$class->getParentClass()->isSubClassOf($that);
+			return $class->getParentClassName() === NULL || ! $class->getParentClass()->isSubClassOf($this->name);
 		});
 	}
 
@@ -1082,12 +1077,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getIndirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getStorage()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ( ! $class->isSubclassOf($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
-			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($that);
+			return $class->getParentClassName() !== NULL && $class->getParentClass()->isSubClassOf($this->name);
 		});
 	}
 
@@ -1109,12 +1103,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		$that = $this->name;
-		return array_filter($this->getStorage()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ($class->isInterface() || !$class->implementsInterface($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ($class->isInterface() || !$class->implementsInterface($this->name)) {
 				return FALSE;
 			}
-			return NULL === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($that);
+			return NULL === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($this->name);
 		});
 	}
 
@@ -1136,12 +1129,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		$that = $this->name;
-		return array_filter($this->getStorage()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ($class->isInterface() || !$class->implementsInterface($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ($class->isInterface() || !$class->implementsInterface($this->name)) {
 				return FALSE;
 			}
-			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($that);
+			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($this->name);
 		});
 	}
 
@@ -1344,7 +1336,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 						}
 					}
 					if (T_VARIABLE === $type || T_VAR === $type) {
-						$property = new ReflectionProperty($tokenStream, $this->getStorage(), $this);
+						$property = new ReflectionProperty($tokenStream, $this->storage, $this);
 						$this->properties[$property->getName()] = $property;
 						$tokenStream->next();
 						break;
@@ -1353,7 +1345,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				case T_FINAL:
 				case T_ABSTRACT:
 				case T_FUNCTION:
-					$method = new ReflectionMethod($tokenStream, $this->getStorage(), $this);
+					$method = new ReflectionMethod($tokenStream, $this->storage, $this);
 					$this->methods[$method->getName()] = $method;
 					$tokenStream->next();
 					break;
@@ -1463,11 +1455,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 								}
 								$this->traitImports[Resolver::resolveClassFQN($rightSide[0], $this->aliases, $this->namespaceName) . '::' . $methodName][] = NULL;
 							}
-							if (',' === $type) {
+							if ($type === ',') {
 								$tokenStream->skipWhitespaces(TRUE);
 								continue;
-							} elseif (';' !== $type) {
-								throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+
+							} elseif ($type !== ';') {
+								throw new ParseException('Unexpected token found.');
 							}
 							$type = $tokenStream->skipWhitespaces()->getType();
 						}

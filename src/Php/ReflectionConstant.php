@@ -137,7 +137,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 		if ($this->declaringClassName === NULL) {
 			return NULL;
 		}
-		return $this->getStorage()->getClass($this->declaringClassName);
+		return $this->storage->getClass($this->declaringClassName);
 	}
 
 

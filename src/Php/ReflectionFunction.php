@@ -123,7 +123,7 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	{
 		if ($this->parameters === NULL) {
 			$this->parameters = array_map(function (InternalReflectionParameter $parameter) {
-				return ReflectionParameter::create($parameter, $this->storage);
+				return ReflectionParameter::create($parameter, $this->storage, $this);
 			}, parent::getParameters());
 		}
 		return $this->parameters;

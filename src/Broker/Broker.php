@@ -33,6 +33,15 @@ class Broker implements BrokerInterface
 
 
 	/**
+	 * @return StorageInterface
+	 */
+	public function getStorage()
+	{
+		return $this->storage;
+	}
+
+
+	/**
 	 * Parses a file and returns the appropriate reflection object.
 	 *
 	 * @param string $fileName

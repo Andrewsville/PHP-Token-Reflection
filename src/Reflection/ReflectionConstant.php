@@ -101,10 +101,10 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	 */
 	public function getDeclaringClass()
 	{
-		if (NULL === $this->declaringClassName) {
+		if ($this->declaringClassName === NULL) {
 			return NULL;
 		}
-		return $this->getStorage()->getClass($this->declaringClassName);
+		return $this->storage->getClass($this->declaringClassName);
 	}
 
 

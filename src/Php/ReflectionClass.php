@@ -220,7 +220,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 			}
 
 		} else {
-			$reflection = $this->getStorage()->getClass($interface);
+			$reflection = $this->storage->getClass($interface);
 			if ( ! $reflection->isInterface()) {
 				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface));
 			}
@@ -730,7 +730,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	private function getInternalTokenizedClasses()
 	{
-		return $this->getStorage()->getClasses(StorageInterface::INTERNAL_CLASSES | StorageInterface::TOKENIZED_CLASSES);
+		return $this->storage->getClasses(StorageInterface::INTERNAL_CLASSES | StorageInterface::TOKENIZED_CLASSES);
 	}
 
 }

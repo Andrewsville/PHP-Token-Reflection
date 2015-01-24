@@ -3,6 +3,7 @@
 namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\BrokerInterface;
 use ApiGen\TokenReflection\Broker\MemoryStorage;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionClass;
@@ -28,6 +29,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 * @var string
 	 */
 	protected $type;
+
+	/**
+	 * @var BrokerInterface
+	 */
+	protected $broker;
 
 
 	/**
@@ -328,11 +334,19 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getBroker()
 	{
-		static $broker = NULL;
-		if (NULL === $broker) {
-			$broker = new Broker($this->getStorage());
+		if ($this->broker === NULL) {
+			$this->broker = new Broker($this->getStorage());
 		}
-		return $broker;
+		return $this->broker;
+	}
+
+
+	/**
+	 * @return Broker
+	 */
+	protected function getNewBroker()
+	{
+		return new Broker(new MemoryStorage);
 	}
 
 
