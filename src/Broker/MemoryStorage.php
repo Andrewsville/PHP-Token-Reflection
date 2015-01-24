@@ -430,17 +430,11 @@ class MemoryStorage implements StorageInterface
 		$this->tokenStreams[$file->getName()] = $tokenStream;
 		$this->files[$file->getName()] = $file;
 		foreach ($file->getNamespaces() as $fileNamespace) {
-			try {
-				$namespaceName = $fileNamespace->getName();
-				if ( ! isset($this->namespaces[$namespaceName])) {
-					$this->namespaces[$namespaceName] = new ReflectionNamespace($namespaceName, $file->getStorage());
-				}
-				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
-
-			} catch (\Exception $e) {
-				echo $e->getTraceAsString();
-				die($e->getMessage());
+			$namespaceName = $fileNamespace->getName();
+			if ( ! isset($this->namespaces[$namespaceName])) {
+				$this->namespaces[$namespaceName] = new ReflectionNamespace($namespaceName, $file->getStorage());
 			}
+			$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 		}
 		// Reset all-*-cache
 		$this->allClasses = NULL;

@@ -42,30 +42,22 @@ class Broker implements BrokerInterface
 
 
 	/**
-	 * Parses a file and returns the appropriate reflection object.
-	 *
 	 * @param string $fileName
 	 * @return ReflectionFile
-	 * @throws BrokerException If the file could not be processed.
 	 */
 	public function processFile($fileName)
 	{
-		try {
-			if ($this->storage->isFileProcessed($fileName)) {
-				$tokens = $this->storage->getFileTokens($fileName);
-
-			} else {
-				$tokens = new FileStream($fileName);
-			}
+		if ($this->storage->isFileProcessed($fileName)) {
+			$tokens = $this->storage->getFileTokens($fileName);
 			$reflectionFile = new ReflectionFile($tokens, $this->storage);
-			if ( ! $this->storage->isFileProcessed($fileName)) {
-				$this->storage->addFile($tokens, $reflectionFile);
-			}
-			return $reflectionFile;
 
-		} catch (ParseException $e) {
-			throw $e;
+		} else {
+			$tokens = new FileStream($fileName);
+			$reflectionFile = new ReflectionFile($tokens, $this->storage);
+			$this->storage->addFile($tokens, $reflectionFile);
 		}
+
+		return $reflectionFile;
 	}
 
 
@@ -80,17 +72,12 @@ class Broker implements BrokerInterface
 			throw new BrokerException(sprintf('Directory %s does not exist.', $path));
 		}
 
-		try {
-			$result = [];
-			foreach (Finder::findFiles('*')->in($realPath) as $entry) {
-				/** @var SplFileInfo $entry */
-				$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
-			}
-			return $result;
-
-		} catch (ParseException $e) {
-			throw $e;
+		$result = [];
+		foreach (Finder::findFiles('*')->in($realPath) as $entry) {
+			/** @var SplFileInfo $entry */
+			$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
 		}
+		return $result;
 	}
 
 }
