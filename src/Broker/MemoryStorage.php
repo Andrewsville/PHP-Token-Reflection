@@ -12,10 +12,10 @@ namespace ApiGen\TokenReflection\Broker;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\BrokerException;
-use ApiGen\TokenReflection\Exception\FileProcessingException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Php\ReflectionClass;
+use ApiGen\TokenReflection\Php\ReflectionConstant;
+use ApiGen\TokenReflection\Php\ReflectionFunction;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -67,11 +67,6 @@ class MemoryStorage implements StorageInterface
 	 * @var array
 	 */
 	private $files = [];
-
-	/**
-	 * @var Broker
-	 */
-	private $broker;
 
 
 	/**
@@ -294,7 +289,7 @@ class MemoryStorage implements StorageInterface
 
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$name])) {
-				$reflection = new Php\ReflectionConstant($name, $declared[$name], $this);
+				$reflection = new ReflectionConstant($name, $declared[$name], $this);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
@@ -372,7 +367,7 @@ class MemoryStorage implements StorageInterface
 
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$name])) {
-				return new Php\ReflectionFunction($name, $this);
+				return new ReflectionFunction($name, $this);
 			}
 			throw new BrokerException(sprintf('Function %s does not exist.', $name));
 		}
@@ -428,13 +423,12 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Adds a file to the backend storage.
 	 *
-	 * @return MemoryStorage
+	 * @return StorageInterface
 	 */
 	public function addFile(StreamBase $tokenStream, ReflectionFile $file)
 	{
 		$this->tokenStreams[$file->getName()] = $tokenStream;
 		$this->files[$file->getName()] = $file;
-		$errors = [];
 		foreach ($file->getNamespaces() as $fileNamespace) {
 			try {
 				$namespaceName = $fileNamespace->getName();
@@ -442,9 +436,6 @@ class MemoryStorage implements StorageInterface
 					$this->namespaces[$namespaceName] = new ReflectionNamespace($namespaceName, $file->getStorage());
 				}
 				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
-
-			} catch (FileProcessingException $e) {
-				$errors = array_merge($errors, $e->getReasons());
 
 			} catch (\Exception $e) {
 				echo $e->getTraceAsString();
@@ -455,30 +446,7 @@ class MemoryStorage implements StorageInterface
 		$this->allClasses = NULL;
 		$this->allFunctions = NULL;
 		$this->allConstants = NULL;
-		if ( ! empty($errors)) {
-			throw new FileProcessingException($errors, $file);
-		}
 		return $this;
-	}
-
-
-	/**
-	 * @param BrokerInterface $broker
-	 * @return MemoryStorage
-	 */
-	public function setBroker(BrokerInterface $broker)
-	{
-		$this->broker = $broker;
-		return $this;
-	}
-
-
-	/**
-	 * @return BrokerInterface $broker
-	 */
-	public function getBroker()
-	{
-		return $this->broker;
 	}
 
 
@@ -505,6 +473,7 @@ class MemoryStorage implements StorageInterface
 			foreach (array_merge($class->getParentClasses(), $class->getInterfaces()) as $parent) {
 				if ($parent->isInternal()) {
 					$allClasses[self::INTERNAL_CLASSES][$parent->getName()] = $parent;
+
 				} elseif ( ! $parent->isTokenized()) {
 					$allClasses[self::NONEXISTENT_CLASSES][$parent->getName()] = $parent;
 				}

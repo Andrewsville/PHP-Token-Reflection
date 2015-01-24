@@ -13,12 +13,9 @@ use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
 use ApiGen\TokenReflection\Php\Factory\ReflectionFunctionFactory;
-use ApiGen\TokenReflection\Php\Factory\ReflectionParameterFactory;
 use ApiGen\TokenReflection\ReflectionParameterInterface;
-use Reflector;
 use ReflectionParameter as InternalReflectionParameter;
 use ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
 

@@ -17,7 +17,7 @@ interface BrokerInterface
 
 	/**
 	 * @param string $name
-	 * @return ReflectionFile[]
+	 * @return ReflectionFile
 	 */
 	function processFile($name);
 

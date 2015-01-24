@@ -13,9 +13,7 @@ use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
-use ApiGen\TokenReflection\Php\Factory\ReflectionPropertyFactory;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
-use Reflector;
 use ReflectionProperty as InternalReflectionProperty;
 
 
