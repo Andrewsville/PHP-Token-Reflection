@@ -54,11 +54,14 @@ class TokenReflectionExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('reflection.classFactory'))
-			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionClassFactory');
+		$builder->addDefinition($this->prefix('reflection.fileFactory'))
+			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionFileFactory');
 
 		$builder->addDefinition($this->prefix('reflection.namespaceFactory'))
 			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionNamespaceFactory');
+
+		$builder->addDefinition($this->prefix('reflection.classFactory'))
+			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionClassFactory');
 	}
 
 

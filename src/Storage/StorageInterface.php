@@ -158,13 +158,7 @@ interface StorageInterface
 	function getFunctions();
 
 
-	/**
-	 * Returns if the given file was already processed.
-	 *
-	 * @param string $name
-	 * @return bool
-	 */
-	function isFileProcessed($name);
+	function addFile(ReflectionFile $file);
 
 
 	/**
@@ -177,8 +171,6 @@ interface StorageInterface
 
 
 	/**
-	 * Returns a file reflection.
-	 *
 	 * @param string $name
 	 * @return ReflectionFile
 	 */
@@ -186,16 +178,8 @@ interface StorageInterface
 
 
 	/**
-	 * Returns file reflections.
-	 *
-	 * @return array
+	 * @return ReflectionFile[]
 	 */
 	function getFiles();
-
-
-	/**
-	 * Adds a file to the backend storage.
-	 */
-	function addFile(StreamBase $tokenStream, ReflectionFile $file);
 
 }

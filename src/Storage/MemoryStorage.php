@@ -57,11 +57,6 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * @var array
 	 */
-	private $tokenStreams = [];
-
-	/**
-	 * @var array
-	 */
 	private $files = [];
 
 
@@ -396,22 +391,10 @@ class MemoryStorage implements StorageInterface
 	}
 
 
-	/**
-	 * Returns if the given file was already processed.
-	 *
-	 * @param string $name
-	 * @return bool
-	 */
-	public function isFileProcessed($name)
+	public function addFile(ReflectionFile $file)
 	{
-		return isset($this->tokenStreams[realpath($name)]);
-	}
-
-
-	public function addFile(StreamBase $tokenStream, ReflectionFile $file)
-	{
-		$this->tokenStreams[$file->getName()] = $tokenStream;
 		$this->files[$file->getName()] = $file;
+
 		foreach ($file->getNamespaces() as $fileNamespace) {
 			$namespaceName = $fileNamespace->getName();
 			if ( ! isset($this->namespaces[$namespaceName])) {
@@ -419,6 +402,7 @@ class MemoryStorage implements StorageInterface
 			}
 			$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 		}
+
 		// Reset all-*-cache
 		$this->allClasses = NULL;
 		$this->allFunctions = NULL;

@@ -18,9 +18,6 @@ class ReflectionFileTest extends TestCase
 	protected $type = 'file';
 
 
-	/**
-	 * Tests file level docblocks.
-	 */
 	public function testDocComment()
 	{
 		$fileName = $this->getFilePath('docComment');
@@ -42,9 +39,6 @@ class ReflectionFileTest extends TestCase
 	}
 
 
-	/**
-	 * Tests file level docblocks.
-	 */
 	public function testNoDocComment()
 	{
 		$fileName = $this->getFilePath('noDocComment');
@@ -63,9 +57,6 @@ class ReflectionFileTest extends TestCase
 	}
 
 
-	/**
-	 * Tests returning file reflections.
-	 */
 	public function testReturningFileReflection()
 	{
 		$fileName = $this->getFilePath('docComment');

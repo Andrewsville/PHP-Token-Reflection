@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception\BrokerException;
+use ApiGen\TokenReflection\Reflection\Factory\ReflectionFileFactory;
 use ApiGen\TokenReflection\Reflection\Factory\ReflectionNamespaceFactory;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
@@ -27,23 +28,23 @@ class Parser implements ParserInterface
 	 */
 	private $storage;
 
+	/**
+	 * @var ReflectionFileFactory
+	 */
+	private $reflectionFileFactory;
 
-	public function __construct(StorageInterface $storage, ReflectionNamespaceFactory $reflectionNamespaceFactory)
-	{
+
+	public function __construct(
+		StorageInterface $storage,
+		ReflectionNamespaceFactory $reflectionNamespaceFactory,
+		ReflectionFileFactory $reflectionFileFactory
+	) {
 		$this->storage = $storage;
 		$this->storage->addNamespace(
 			ReflectionNamespace::NO_NAMESPACE_NAME,
 			$reflectionNamespaceFactory->create(ReflectionNamespace::NO_NAMESPACE_NAME)
 		);
-	}
-
-
-	/**
-	 * @return StorageInterface
-	 */
-	public function getStorage()
-	{
-		return $this->storage;
+		$this->reflectionFileFactory = $reflectionFileFactory;
 	}
 
 
@@ -53,9 +54,8 @@ class Parser implements ParserInterface
 	 */
 	public function processFile($name)
 	{
-		$tokens = new FileStream($name);
-		$reflectionFile = new ReflectionFile($tokens, $this->storage);
-		$this->storage->addFile($tokens, $reflectionFile);
+		$reflectionFile = $this->reflectionFileFactory->create($name);
+		$this->storage->addFile($reflectionFile);
 		return $reflectionFile;
 	}
 
@@ -77,6 +77,15 @@ class Parser implements ParserInterface
 			$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
 		}
 		return $result;
+	}
+
+
+	/**
+	 * @return StorageInterface
+	 */
+	public function getStorage()
+	{
+		return $this->storage;
 	}
 
 }
