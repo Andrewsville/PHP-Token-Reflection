@@ -18,7 +18,7 @@ use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use Reflector;
 
 
-class ReflectionConstant implements ReflectionInterface, ReflectionConstantInterface, AnnotationsInterface
+class ReflectionConstant implements ReflectionConstantInterface, AnnotationsInterface
 {
 
 	/**

@@ -17,7 +17,7 @@ use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use ReflectionProperty as InternalReflectionProperty;
 
 
-class ReflectionProperty extends InternalReflectionProperty implements ReflectionInterface, ReflectionPropertyInterface, AnnotationsInterface, ExtensionInterface
+class ReflectionProperty extends InternalReflectionProperty implements ReflectionPropertyInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**

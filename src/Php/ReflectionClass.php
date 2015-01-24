@@ -27,7 +27,7 @@ use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-class ReflectionClass extends InternalReflectionClass implements ReflectionInterface, ReflectionClassInterface, AnnotationsInterface, ExtensionInterface
+class ReflectionClass extends InternalReflectionClass implements ReflectionClassInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**

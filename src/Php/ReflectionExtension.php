@@ -20,7 +20,7 @@ use Reflector;
 use ReflectionExtension as InternalReflectionExtension;
 
 
-class ReflectionExtension extends InternalReflectionExtension implements ReflectionInterface, ReflectionExtensionInterface
+class ReflectionExtension extends InternalReflectionExtension implements ReflectionExtensionInterface
 {
 
 	/**

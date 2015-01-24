@@ -20,7 +20,7 @@ use ReflectionParameter as InternalReflectionParameter;
 use ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
 
 
-class ReflectionParameter extends InternalReflectionParameter implements ReflectionInterface, ReflectionParameterInterface, AnnotationsInterface, ExtensionInterface
+class ReflectionParameter extends InternalReflectionParameter implements ReflectionParameterInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**

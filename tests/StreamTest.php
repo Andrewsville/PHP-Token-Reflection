@@ -6,9 +6,6 @@ use ApiGen;
 use ApiGen\TokenReflection\Stream\FileStream;
 
 
-/**
- * Stream test.
- */
 class StreamTest extends TestCase
 {
 

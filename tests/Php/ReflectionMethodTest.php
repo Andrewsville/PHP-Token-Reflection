@@ -89,12 +89,6 @@ class ReflectionMethodTest extends TestCase
 	}
 
 
-	public function testGetStorage()
-	{
-		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\StorageInterface', $this->internalReflectionMethod->getStorage());
-	}
-
-
 	/**
 	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
 	 */
@@ -110,6 +104,15 @@ class ReflectionMethodTest extends TestCase
 	public function testInternalMethodGetParameter2()
 	{
 		$this->internalReflectionMethod->getParameter(999);
+	}
+
+
+	public function testGetStorage()
+	{
+		$this->assertInstanceOf(
+			'ApiGen\TokenReflection\Broker\StorageInterface',
+			$this->internalReflectionMethod->getStorage()
+		);
 	}
 
 }

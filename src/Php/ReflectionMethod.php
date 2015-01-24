@@ -22,7 +22,7 @@ use ReflectionMethod as InternalReflectionMethod;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionMethod extends InternalReflectionMethod implements ReflectionInterface, ReflectionMethodInterface, AnnotationsInterface, ExtensionInterface
+class ReflectionMethod extends InternalReflectionMethod implements ReflectionMethodInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**

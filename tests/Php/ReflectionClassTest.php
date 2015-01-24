@@ -6,6 +6,7 @@ use ApiGen;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Tests\TestCase;
+use Mockery;
 
 
 class ReflectionClassTest extends TestCase
@@ -115,6 +116,7 @@ class ReflectionClassTest extends TestCase
 	public function testStaticProperties()
 	{
 		$this->assertCount(0, $this->internalReflectionClass->getStaticProperties());
+		$this->assertSame('two', $this->internalReflectionClass->getStaticPropertyValue('one', 'two'));
 	}
 
 
@@ -145,12 +147,18 @@ class ReflectionClassTest extends TestCase
 	}
 
 
+	public function testInternalClassIsSubclassOf()
+	{
+		$classReflectionMock = Mockery::mock('ApiGen\TokenReflection\Reflection\ReflectionClass');
+		$classReflectionMock->shouldReceive('getName')->andReturn('SomeClass');
+		$this->internalReflectionClass->isSubclassOf($classReflectionMock);
+	}
+
+
 	/**
-	 * Tests an exception thrown when providing an invalid object.
-	 *
 	 * @expectedException RuntimeException
 	 */
-	public function testInternalClassIsSubclassOf()
+	public function testInternalClassIsSubclassOfInvalidObject()
 	{
 		$this->internalReflectionClass->isSubclassOf(new \Exception());
 	}
@@ -198,6 +206,15 @@ class ReflectionClassTest extends TestCase
 	public function testGetExtension()
 	{
 		$this->assertInstanceOf('ApiGen\TokenReflection\Php\ReflectionExtension', $this->internalReflectionClass->getExtension());
+	}
+
+
+	public function testGetStorage()
+	{
+		$this->assertInstanceOf(
+			'ApiGen\TokenReflection\Broker\StorageInterface',
+			$this->internalReflectionClass->getStorage()
+		);
 	}
 
 }

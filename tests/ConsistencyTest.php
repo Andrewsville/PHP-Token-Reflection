@@ -228,7 +228,6 @@ class ConsistencyTest extends TestCase
 	{
 		static $skip = [
 			'*' => ['addReason' => TRUE, 'getReasons' => TRUE, 'hasReasons' => TRUE],
-			'ApiGen\\TokenReflection\\Php\\ReflectionInterface' => ['alias' => TRUE, 'getFileReflection' => TRUE, 'getSource' => TRUE, 'getStartPosition' => TRUE, 'getEndPosition' => TRUE],
 			'ApiGen\\TokenReflection\\Php\\ReflectionProperty' => ['setDefaultValue' => TRUE]
 		];
 
