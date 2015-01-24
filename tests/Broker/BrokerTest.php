@@ -3,7 +3,7 @@
 namespace ApiGen\TokenReflection\Tests\Broker;
 
 use ApiGen;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Tests\ContainerFactory;
 use Nette\DI\Container;
 use PHPUnit_Framework_TestCase;
@@ -18,7 +18,7 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 	private $container;
 
 	/**
-	 * @var Broker
+	 * @var Parser
 	 */
 	private $broker;
 
@@ -31,7 +31,7 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->broker = $this->container->getByType('ApiGen\TokenReflection\Broker\Broker');
+		$this->broker = $this->container->getByType('ApiGen\TokenReflection\Parser');
 	}
 
 

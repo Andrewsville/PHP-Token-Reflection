@@ -7,7 +7,7 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection\Broker;
+namespace ApiGen\TokenReflection\Storage;
 
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Exception;
@@ -16,7 +16,6 @@ use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Php\ReflectionConstant;
 use ApiGen\TokenReflection\Php\ReflectionFunction;
-use ApiGen\TokenReflection\Reflection\Factory\ReflectionClassFactory;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -65,16 +64,11 @@ class MemoryStorage implements StorageInterface
 	 */
 	private $files = [];
 
-	/**
-	 * @var ReflectionClassFactory
-	 */
-	private $reflectionClassFactory;
 
-
-//	public function __construct(ReflectionClassFactory $reflectionClassFactory)
-//	{
-//		$this->reflectionClassFactory = $reflectionClassFactory;
-//	}
+	public function __construct()
+	{
+		$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
+	}
 
 
 	/**
@@ -92,7 +86,6 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * @param string $name
 	 * @return ReflectionFile
-	 * @throws BrokerException If the requested file has not been processed
 	 */
 	public function getFile($name)
 	{
@@ -109,6 +102,16 @@ class MemoryStorage implements StorageInterface
 	public function getFiles()
 	{
 		return $this->files;
+	}
+
+
+	/**
+	 * @param string $name
+	 * @param ReflectionNamespace $reflectionNamespace
+	 */
+	public function addNamespace($name, ReflectionNamespace $reflectionNamespace)
+	{
+		$this->namespaces[$name] = $reflectionNamespace;
 	}
 
 
@@ -132,9 +135,6 @@ class MemoryStorage implements StorageInterface
 	 */
 	public function getNamespace($name)
 	{
-		if ( ! isset($this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME])) {
-			$this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME] = new ReflectionNamespace(ReflectionNamespace::NO_NAMESPACE_NAME, $this);
-		}
 		$name = ltrim($name, '\\');
 		if ( ! $this->hasNamespace($name)) {
 			throw new BrokerException(sprintf('Namespace %s does not exist.', $name));
@@ -184,9 +184,6 @@ class MemoryStorage implements StorageInterface
 	 */
 	public function getClass($name)
 	{
-		if (empty($this->declaredClasses)) {
-			$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
-		}
 		$name = ltrim($name, '\\');
 		try {
 			$namespaceReflection = $this->getNamespace(
@@ -428,11 +425,6 @@ class MemoryStorage implements StorageInterface
 	}
 
 
-	/**
-	 * Adds a file to the backend storage.
-	 *
-	 * @return StorageInterface
-	 */
 	public function addFile(StreamBase $tokenStream, ReflectionFile $file)
 	{
 		$this->tokenStreams[$file->getName()] = $tokenStream;
@@ -448,7 +440,6 @@ class MemoryStorage implements StorageInterface
 		$this->allClasses = NULL;
 		$this->allFunctions = NULL;
 		$this->allConstants = NULL;
-		return $this;
 	}
 
 

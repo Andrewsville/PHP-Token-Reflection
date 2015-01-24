@@ -24,7 +24,7 @@ class ReflectionFunctionTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->internalReflectionFunction = new ReflectionFunction('count', $this->broker->getStorage());
+		$this->internalReflectionFunction = new ReflectionFunction('count', $this->parser->getStorage());
 	}
 
 
@@ -78,7 +78,7 @@ class ReflectionFunctionTest extends TestCase
 	public function testGetStorage()
 	{
 		$this->assertInstanceOf(
-			'ApiGen\TokenReflection\Broker\StorageInterface',
+			'ApiGen\TokenReflection\Storage\StorageInterface',
 			$this->internalReflectionFunction->getStorage()
 		);
 	}

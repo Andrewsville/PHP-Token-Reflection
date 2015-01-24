@@ -18,7 +18,7 @@ composer require apigen/token-reflection
 
 ### Nette Extension
 
-If you use [Nette](http://nette.org), you can register extension in your `config.neon`:
+Register extension in your `config.neon` (requires [Nette DI](http://nette.org)).
 
 ```yaml
 extensions:
@@ -28,22 +28,27 @@ extensions:
 
 ## Usage
 
-First, you need to parse source code with [ApiGen\TokenReflection\Broker\Broker](src/Broker/Broker.php).
-It walks through the given directories, tokenizes PHP sources and caches reflection objects.
+First, you need to parse source code with [ApiGen\TokenReflection\Parser](src/Parser.php).
+It walks through the given directories, tokenizes PHP sources and saves reflection objects to storage.
 
 ```php
 <?php
+
 namespace ApiGen\TokenReflection;
 
-$broker = new Broker(new Broker\Backend\Memory);
-$broker->processDirectory('~/lib/Zend_Framework');
+use ApiGen\TokenReflection\Storage\MemoryStorage;
 
-$class = $broker->getClass('Zend_Version'); // instance of ApiGen\TokenReflection\Reflection\ReflectionClass
-$class = $broker->getClass('Exception');    // instance of ApiGen\TokenReflection\Php\ReflectionClass
-$class = $broker->getClass('Nonexistent');  // instance of ApiGen\TokenReflection\Dummy\ReflectionClass
 
-$function = $broker->getFunction(...);
-$constant = $broker->getConstant(...);
+$parser = new Parser(new MemoryStorage);
+$parser->processDirectory('~/lib/Zend_Framework');
+
+$storage = $parser->getStorage();
+
+$class = $storage->getClass('Zend_Version'); // instance of ApiGen\TokenReflection\Reflection\ReflectionClass
+$class = $storage->getClass('Exception');    // instance of ApiGen\TokenReflection\Php\ReflectionClass
+
+$function = $storage->getFunction(...);
+$constant = $storage->getConstant(...);
 ```
 
 

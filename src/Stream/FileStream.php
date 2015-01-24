@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Stream;
 
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Exception\StreamException;
 
 

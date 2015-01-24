@@ -9,8 +9,7 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Behaviors\ReasonsInterface;
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -34,17 +33,17 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	private $name;
 
 	/**
-	 * @var ReflectionClassInterface[]|ReasonsInterface[]
+	 * @var ReflectionClassInterface[]
 	 */
 	private $classes = [];
 
 	/**
-	 * @var ReflectionConstantInterface[]|ReasonsInterface[]
+	 * @var ReflectionConstantInterface[]
 	 */
 	private $constants = [];
 
 	/**
-	 * @var ReflectionFunctionInterface[]|ReasonsInterface[]
+	 * @var ReflectionFunctionInterface[]
 	 */
 	private $functions = [];
 

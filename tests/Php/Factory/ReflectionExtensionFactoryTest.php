@@ -14,7 +14,7 @@ class ReflectionExtensionFactoryTest extends TestCase
 	{
 		$this->assertInstanceOf(
 			'ApiGen\TokenReflection\Php\ReflectionExtension',
-			ReflectionExtensionFactory::create(new \ReflectionExtension('phar'), $this->broker->getStorage())
+			ReflectionExtensionFactory::create(new \ReflectionExtension('phar'), $this->parser->getStorage())
 		);
 	}
 
@@ -26,7 +26,7 @@ class ReflectionExtensionFactoryTest extends TestCase
 	 */
 	public function testInternalExtensionReflectionCreate()
 	{
-		ReflectionExtensionFactory::create(new \ReflectionFunction('create_function'), $this->broker->getStorage());
+		ReflectionExtensionFactory::create(new \ReflectionFunction('create_function'), $this->parser->getStorage());
 	}
 
 
@@ -37,7 +37,7 @@ class ReflectionExtensionFactoryTest extends TestCase
 	 */
 	public function testInternalFunctionReflectionCreate()
 	{
-		ReflectionExtensionFactory::create(new \ReflectionClass('Exception'), $this->broker->getStorage());
+		ReflectionExtensionFactory::create(new \ReflectionClass('Exception'), $this->parser->getStorage());
 	}
 
 }

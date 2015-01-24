@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Php\Factory;
 
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use Reflector;

@@ -7,12 +7,13 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection\Broker;
+namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 
 
-interface BrokerInterface
+interface ParserInterface
 {
 
 	/**

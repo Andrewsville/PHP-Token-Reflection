@@ -7,17 +7,19 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection\Broker;
+namespace ApiGen\TokenReflection;
 
 use ApiGen\TokenReflection\Exception\BrokerException;
-use ApiGen\TokenReflection\Exception\ParseException;
+use ApiGen\TokenReflection\Reflection\Factory\ReflectionNamespaceFactory;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Stream\FileStream;
 use Nette\Utils\Finder;
 use SplFileInfo;
 
 
-class Broker implements BrokerInterface
+class Parser implements ParserInterface
 {
 
 	/**
@@ -26,9 +28,13 @@ class Broker implements BrokerInterface
 	private $storage;
 
 
-	public function __construct(StorageInterface $storage)
+	public function __construct(StorageInterface $storage, ReflectionNamespaceFactory $reflectionNamespaceFactory)
 	{
 		$this->storage = $storage;
+		$this->storage->addNamespace(
+			ReflectionNamespace::NO_NAMESPACE_NAME,
+			$reflectionNamespaceFactory->create(ReflectionNamespace::NO_NAMESPACE_NAME)
+		);
 	}
 
 

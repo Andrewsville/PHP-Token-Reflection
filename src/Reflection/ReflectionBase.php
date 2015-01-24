@@ -10,8 +10,8 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\Reflection;
 use ApiGen\TokenReflection\Stream\StreamBase;

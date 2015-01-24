@@ -2,23 +2,14 @@
 
 namespace ApiGen\TokenReflection\Tests;
 
-use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\BrokerInterface;
-use ApiGen\TokenReflection\Broker\MemoryStorage;
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\ParserInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionConstant;
-use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Reflection\ReflectionFunction;
 use ApiGen\TokenReflection\Reflection\ReflectionMethod;
 use ApiGen\TokenReflection\Reflection\ReflectionParameter;
 use ApiGen\TokenReflection\Reflection\ReflectionProperty;
-use ApiGen\TokenReflection\ReflectionClassInterface;
-use ApiGen\TokenReflection\ReflectionConstantInterface;
-use ApiGen\TokenReflection\ReflectionFunctionInterface;
-use ApiGen\TokenReflection\ReflectionMethodInterface;
-use ApiGen\TokenReflection\ReflectionParameterInterface;
-use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use Nette\DI\Container;
 use PHPUnit_Framework_TestCase;
 
@@ -37,9 +28,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	private $container;
 
 	/**
-	 * @var BrokerInterface
+	 * @var ParserInterface
 	 */
-	protected $broker;
+	protected $parser;
 
 
 	public function __construct()
@@ -50,7 +41,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->broker = $this->container->getByType('ApiGen\TokenReflection\Broker\Broker');
+		$this->parser = $this->container->getByType('ApiGen\TokenReflection\Parser');
 	}
 
 
@@ -183,8 +174,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getClassTokenReflection($test)
 	{
-		$this->broker->processFile($this->getFilePath($test));
-		return $this->broker->getStorage()->getClass($this->getClassName($test));
+		$this->parser->processFile($this->getFilePath($test));
+		return $this->parser->getStorage()->getClass($this->getClassName($test));
 	}
 
 
@@ -228,8 +219,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getFunctionTokenReflection($test)
 	{
-		$this->broker->processFile($this->getFilePath($test));
-		return $this->broker->getStorage()->getFunction($this->getFunctionName($test));
+		$this->parser->processFile($this->getFilePath($test));
+		return $this->parser->getStorage()->getFunction($this->getFunctionName($test));
 	}
 
 
@@ -239,8 +230,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getParameterTokenReflection($test)
 	{
-		$this->broker->processFile($this->getFilePath($test));
-		$parameters = $this->broker->getStorage()->getFunction($this->getFunctionName($test))->getParameters();
+		$this->parser->processFile($this->getFilePath($test));
+		$parameters = $this->parser->getStorage()->getFunction($this->getFunctionName($test))->getParameters();
 		return $parameters[0];
 	}
 

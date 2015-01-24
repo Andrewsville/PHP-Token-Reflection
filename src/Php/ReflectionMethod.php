@@ -12,8 +12,8 @@ namespace ApiGen\TokenReflection\Php;
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
-use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
 use ApiGen\TokenReflection\Php\Factory\ReflectionParameterFactory;
@@ -31,7 +31,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionMet
 	private $parameters;
 
 	/**
-	 * @var Broker
+	 * @var Parser
 	 */
 	private $storage;
 

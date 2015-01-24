@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\ReflectionConstantInterface;

@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\PhpParser;
 
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -923,14 +923,4 @@ class ClassReflection implements ReflectionClassInterface
 		// TODO: Implement isTokenized() method.
 	}
 
-
-	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return Broker
-	 */
-	function getBroker()
-	{
-		// TODO: Implement getBroker() method.
-	}
 }

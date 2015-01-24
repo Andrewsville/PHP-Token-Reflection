@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use ReflectionProperty as InternalReflectionProperty;

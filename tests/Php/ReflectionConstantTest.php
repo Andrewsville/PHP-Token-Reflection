@@ -24,7 +24,7 @@ class ReflectionConstantTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->internalReflectionConstant = $this->broker->getStorage()->getConstant('DIRECTORY_SEPARATOR');
+		$this->internalReflectionConstant = $this->parser->getStorage()->getConstant('DIRECTORY_SEPARATOR');
 	}
 
 
@@ -89,7 +89,7 @@ class ReflectionConstantTest extends TestCase
 	public function testGetStorage()
 	{
 		$this->assertInstanceOf(
-			'ApiGen\TokenReflection\Broker\StorageInterface',
+			'ApiGen\TokenReflection\Storage\StorageInterface',
 			$this->internalReflectionConstant->getStorage()
 		);
 	}

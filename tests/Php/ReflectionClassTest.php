@@ -26,7 +26,7 @@ class ReflectionClassTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->internalReflectionClass = $this->broker->getStorage()->getClass('Exception');
+		$this->internalReflectionClass = $this->parser->getStorage()->getClass('Exception');
 	}
 
 
@@ -179,7 +179,7 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testInternalClassImplementsInterface2()
 	{
-		$this->internalReflectionClass->implementsInterface($this->broker->getStorage()->getClass('Exception'));
+		$this->internalReflectionClass->implementsInterface($this->parser->getStorage()->getClass('Exception'));
 	}
 
 
@@ -195,7 +195,7 @@ class ReflectionClassTest extends TestCase
 	public function testTraits()
 	{
 		$this->assertFalse($this->internalReflectionClass->usesTrait(new \Exception()));
-		$this->assertFalse($this->internalReflectionClass->usesTrait($this->broker->getStorage()->getClass('Exception')));
+		$this->assertFalse($this->internalReflectionClass->usesTrait($this->parser->getStorage()->getClass('Exception')));
 		$this->assertFalse($this->internalReflectionClass->usesTrait('Exception'));
 
 		$this->assertSame([], $this->internalReflectionClass->getOwnTraits());
@@ -213,7 +213,7 @@ class ReflectionClassTest extends TestCase
 	public function testGetStorage()
 	{
 		$this->assertInstanceOf(
-			'ApiGen\TokenReflection\Broker\StorageInterface',
+			'ApiGen\TokenReflection\Storage\StorageInterface',
 			$this->internalReflectionClass->getStorage()
 		);
 	}

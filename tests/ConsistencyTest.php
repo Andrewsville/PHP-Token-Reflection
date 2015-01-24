@@ -17,14 +17,14 @@ class ConsistencyTest extends TestCase
 
 	public function testConstantReflectionConsistency()
 	{
-		$this->broker->processFile(__DIR__ . '/data/constant/in-namespace.php');
+		$this->parser->processFile(__DIR__ . '/data/constant/in-namespace.php');
 		try {
-			$this->broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->processFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
-		$storage = $this->broker->getStorage();
+		$storage = $this->parser->getStorage();
 		$this->assertNotSame(NULL, @constant('PHP_INT_MAX'));
 		$constants = [
 			'tokenized' => $storage->getConstant('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE'),
@@ -45,14 +45,14 @@ class ConsistencyTest extends TestCase
 
 	public function testClassReflectionConsistency()
 	{
-		$this->broker->processFile(__FILE__);
+		$this->parser->processFile(__FILE__);
 		try {
-			$this->broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->processFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
-		$storage = $this->broker->getStorage();
+		$storage = $this->parser->getStorage();
 		$this->assertFalse(class_exists('Foo\\Bar', TRUE));
 		$classes = [
 			'tokenized' => $storage->getClass('ApiGen\\TokenReflection\\Tests\\ConsistencyTest'),
@@ -76,22 +76,22 @@ class ConsistencyTest extends TestCase
 	}
 
 
-	public function testGetNonexistingClass()
+	public function testGetNonExistingClass()
 	{
-		$this->assertNull($this->broker->getStorage()->getClass('Foo\\Bar'));
+		$this->assertNull($this->parser->getStorage()->getClass('Foo\\Bar'));
 	}
 
 
 	public function testFunctionReflectionConsistency()
 	{
-		$this->broker->processFile(__DIR__ . '/data/function/in-namespace.php');
+		$this->parser->processFile(__DIR__ . '/data/function/in-namespace.php');
 		try {
-			$this->broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->processFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
-		$storage = $this->broker->getStorage();
+		$storage = $this->parser->getStorage();
 		$this->assertTrue(function_exists('constant'));
 		$functions = [
 			'tokenized' => $storage->getFunction('TokenReflection\\Test\\functionInNamespace'),
@@ -117,10 +117,10 @@ class ConsistencyTest extends TestCase
 
 	public function testPropertyReflectionConsistency()
 	{
-		$this->broker->processFile(__DIR__ . '/data/property/lines.php');
+		$this->parser->processFile(__DIR__ . '/data/property/lines.php');
 
 		$this->assertTrue(function_exists('constant'));
-		$storage = $this->broker->getStorage();
+		$storage = $this->parser->getStorage();
 		$properties = [
 			'tokenized' => $storage->getClass('TokenReflection_Test_PropertyLines')->getProperty('lines'),
 			'internal' => $storage->getClass('Exception')->getProperty('message')
@@ -144,9 +144,9 @@ class ConsistencyTest extends TestCase
 
 	public function testMethodReflectionConsistency()
 	{
-		$this->broker->processFile(__DIR__ . '/data/method/access-level.php');
+		$this->parser->processFile(__DIR__ . '/data/method/access-level.php');
 
-		$storage = $this->broker->getStorage();
+		$storage = $this->parser->getStorage();
 		$methods = [
 			'tokenized' => $storage->getClass('TokenReflection_Test_MethodAccessLevelParent')->getMethod('privateNoExtended'),
 			'internal' => $storage->getClass('Exception')->getMethod('getMessage')
@@ -170,9 +170,9 @@ class ConsistencyTest extends TestCase
 
 	public function testParameterReflectionConsistency()
 	{
-		$this->broker->processFile(__DIR__ . '/data/parameter/optional-false.php');
+		$this->parser->processFile(__DIR__ . '/data/parameter/optional-false.php');
 
-		$storage = $this->broker->getStorage();
+		$storage = $this->parser->getStorage();
 		$parameters = [
 			'tokenized' => $storage->getFunction('tokenReflectionParameterOptionalFalse')->getParameter('one'),
 			'internal' => $storage->getFunction('constant')->getParameter('const_name')

@@ -7,11 +7,12 @@
  * the file license.md that was distributed with this source code.
  */
 
-namespace ApiGen\TokenReflection\Broker;
+namespace ApiGen\TokenReflection\Storage;
 
 use ApiGen;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
@@ -45,21 +46,29 @@ interface StorageInterface
 
 
 	/**
+	 * Adds new namespace reflection
+	 * @param string $name
+	 * @param ReflectionNamespace $reflectionNamespace
+	 */
+	function addNamespace($name, ReflectionNamespace $reflectionNamespace);
+
+
+	/**
 	 * Returns if there was such namespace processed (FQN expected).
 	 *
-	 * @param string $namespaceName
+	 * @param string $name
 	 * @return bool
 	 */
-	function hasNamespace($namespaceName);
+	function hasNamespace($name);
 
 
 	/**
 	 * Returns a reflection object of the given namespace.
 	 *
-	 * @param string $namespaceName
+	 * @param string $name
 	 * @return ReflectionNamespaceInterface|NULL
 	 */
-	function getNamespace($namespaceName);
+	function getNamespace($name);
 
 
 	/**
@@ -73,19 +82,19 @@ interface StorageInterface
 	/**
 	 * Returns if there was such class processed (FQN expected).
 	 *
-	 * @param string $className
+	 * @param string $name
 	 * @return bool
 	 */
-	function hasClass($className);
+	function hasClass($name);
 
 
 	/**
 	 * Returns a reflection object of the given class (FQN expected).
 	 *
-	 * @param string $className
+	 * @param string $name
 	 * @return ReflectionClassInterface|NULL
 	 */
-	function getClass($className);
+	function getClass($name);
 
 
 	/**
@@ -109,10 +118,10 @@ interface StorageInterface
 	/**
 	 * Returns a reflection object of a constant (FQN expected).
 	 *
-	 * @param string $constantName
+	 * @param string $name
 	 * @return ReflectionConstantInterface|NULL
 	 */
-	function getConstant($constantName);
+	function getConstant($name);
 
 
 	/**
@@ -126,19 +135,19 @@ interface StorageInterface
 	/**
 	 * Returns if there was such function processed (FQN expected).
 	 *
-	 * @param string $functionName
+	 * @param string $name
 	 * @return bool
 	 */
-	function hasFunction($functionName);
+	function hasFunction($name);
 
 
 	/**
 	 * Returns a reflection object of a function (FQN expected).
 	 *
-	 * @param string $functionName
+	 * @param string $name
 	 * @return ReflectionFunctionInterface|NULL
 	 */
-	function getFunction($functionName);
+	function getFunction($name);
 
 
 	/**
@@ -152,28 +161,28 @@ interface StorageInterface
 	/**
 	 * Returns if the given file was already processed.
 	 *
-	 * @param string $fileName
+	 * @param string $name
 	 * @return bool
 	 */
-	function isFileProcessed($fileName);
+	function isFileProcessed($name);
 
 
 	/**
 	 * Returns if a file with the given filename has been processed.
 	 *
-	 * @param string $fileName
+	 * @param string $name
 	 * @return bool
 	 */
-	function hasFile($fileName);
+	function hasFile($name);
 
 
 	/**
 	 * Returns a file reflection.
 	 *
-	 * @param string $fileName
+	 * @param string $name
 	 * @return ReflectionFile
 	 */
-	function getFile($fileName);
+	function getFile($name);
 
 
 	/**
@@ -187,16 +196,14 @@ interface StorageInterface
 	/**
 	 * Returns an array of tokens for a particular file.
 	 *
-	 * @param string $fileName
+	 * @param string $name
 	 * @return StreamBase
 	 */
-	function getFileTokens($fileName);
+	function getFileTokens($name);
 
 
 	/**
 	 * Adds a file to the backend storage.
-	 *
-	 * @return StorageInterface
 	 */
 	function addFile(StreamBase $tokenStream, ReflectionFile $file);
 

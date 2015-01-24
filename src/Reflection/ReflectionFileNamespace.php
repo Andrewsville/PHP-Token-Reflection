@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Behaviors\ReasonsInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -23,17 +21,17 @@ class ReflectionFileNamespace extends ReflectionElement
 {
 
 	/**
-	 * @var ReflectionClassInterface[]|ReasonsInterface[]
+	 * @var ReflectionClassInterface[]
 	 */
 	private $classes = [];
 
 	/**
-	 * @var ReflectionConstantInterface[]|ReasonsInterface[]
+	 * @var ReflectionConstantInterface[]
 	 */
 	private $constants = [];
 
 	/**
-	 * @var ReflectionFunctionInterface[]|ReasonsInterface[]
+	 * @var ReflectionFunctionInterface[]
 	 */
 	private $functions = [];
 
@@ -90,7 +88,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFile) {
-			throw new ParseException('The parent object has to be an instance of TokenReflection\ReflectionFile.', ParseException::INVALID_PARENT);
+			throw new ParseException('The parent object has to be an instance of TokenReflection\ReflectionFile.');
 		}
 	}
 
@@ -123,10 +121,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * Parses the namespace name.
-	 *
 	 * @return ReflectionFileNamespace
-	 * @throws ParseException If the namespace name could not be determined.
 	 */
 	protected function parseName(StreamBase $tokenStream)
 	{
@@ -157,7 +152,7 @@ class ReflectionFileNamespace extends ReflectionElement
 			$this->name = $name;
 		}
 		if ( ! $tokenStream->is(';') && !$tokenStream->is('{')) {
-			throw new ParseException('Invalid namespace name end, expecting ";" or "{".', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Invalid namespace name end, expecting ";" or "{".');
 		}
 		$tokenStream->skipWhitespaces();
 		return $this;

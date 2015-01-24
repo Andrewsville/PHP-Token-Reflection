@@ -2,7 +2,7 @@
 
 namespace ApiGen\TokenReflection\Tests\PhpParser;
 
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Factory\ClassReflectionFactory;
 use ApiGen\TokenReflection\Factory\ConstantReflectionFactory;
 use ApiGen\TokenReflection\Factory\FunctionReflectionFactory;
@@ -58,8 +58,8 @@ class ParserTest extends PHPUnit_Framework_TestCase
 
 	public function testParsing()
 	{
-//		/** @var Broker $broker */
-//		$broker = $this->container->getByType('ApiGen\TokenReflection\Broker\Broker');
+//		/** @var Parser $broker */
+//		$broker = $this->container->getByType('ApiGen\TokenReflection\Parser\Parser');
 //		$broker->processFile(__DIR__ . '/doubleClass.php');
 //
 //		$classes = $broker->getClasses();

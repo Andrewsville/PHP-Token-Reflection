@@ -24,11 +24,11 @@ class ReflectionFileTest extends TestCase
 	public function testDocComment()
 	{
 		$fileName = $this->getFilePath('docComment');
-		$this->broker->processFile($fileName);
+		$this->parser->processFile($fileName);
 
-		$this->assertTrue($this->broker->getStorage()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->broker->getStorage()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
@@ -48,11 +48,11 @@ class ReflectionFileTest extends TestCase
 	public function testNoDocComment()
 	{
 		$fileName = $this->getFilePath('noDocComment');
-		$this->broker->processFile($fileName);
+		$this->parser->processFile($fileName);
 
-		$this->assertTrue($this->broker->getStorage()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->broker->getStorage()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
@@ -71,21 +71,21 @@ class ReflectionFileTest extends TestCase
 		$fileName = $this->getFilePath('docComment');
 		$rfl = $this->getClassReflection('docComment');
 
-		$this->assertTrue($this->broker->getStorage()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
 		$this->assertSame($rfl->token->getFileName(), $rfl->token->getFileReflection()->getName());
-		$this->assertSame($this->broker->getStorage()->getFile($fileName), $rfl->token->getFileReflection());
+		$this->assertSame($this->parser->getStorage()->getFile($fileName), $rfl->token->getFileReflection());
 	}
 
 
 	public function testDeclareNoNamespace()
 	{
 		$fileName = $this->getFilePath('declareNoNamespace');
-		$this->broker->processFile($fileName);
+		$this->parser->processFile($fileName);
 
-		$this->assertTrue($this->broker->getStorage()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->broker->getStorage()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
@@ -99,11 +99,11 @@ class ReflectionFileTest extends TestCase
 	public function testDeclareNamespace()
 	{
 		$fileName = $this->getFilePath('declareNamespace');
-		$this->broker->processFile($fileName);
+		$this->parser->processFile($fileName);
 
-		$this->assertTrue($this->broker->getStorage()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->broker->getStorage()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
@@ -121,16 +121,16 @@ class ReflectionFileTest extends TestCase
 	 */
 	public function testExceptionReturningFileReflection()
 	{
-		$this->assertFalse($this->broker->getStorage()->hasFile('#non~Existent#'));
-		$this->broker->getStorage()->getFile('#non~Existent#');
+		$this->assertFalse($this->parser->getStorage()->hasFile('#non~Existent#'));
+		$this->parser->getStorage()->getFile('#non~Existent#');
 	}
 
 
 	public function testGetSource()
 	{
 		$fileName = $this->getFilePath('docComment');
-		$this->broker->processFile($fileName);
-		$fileReflection = $this->broker->getStorage()->getFile($fileName);
+		$this->parser->processFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 
 		$expectedSource = <<<SOURCE
 <?php

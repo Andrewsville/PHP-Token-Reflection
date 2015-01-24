@@ -3,8 +3,8 @@
 namespace ApiGen\TokenReflection\Tests\Broker;
 
 use ApiGen;
-use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\StorageInterface;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Tests\ContainerFactory;
 use Nette\DI\Container;
 use PHPUnit_Framework_TestCase;
@@ -32,10 +32,10 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		/** @var Broker $broker */
-		$broker = $this->container->getByType('ApiGen\TokenReflection\Broker\Broker');
+		/** @var Parser $broker */
+		$broker = $this->container->getByType('ApiGen\TokenReflection\Parser');
 		$broker->processDirectory(realpath(__DIR__ . '/../data/class'));
-		$this->storage = $this->container->getByType('ApiGen\TokenReflection\Broker\StorageInterface');
+		$this->storage = $this->container->getByType('ApiGen\TokenReflection\Storage\StorageInterface');
 	}
 
 
