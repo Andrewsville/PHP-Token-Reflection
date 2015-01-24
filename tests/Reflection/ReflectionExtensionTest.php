@@ -22,7 +22,7 @@ class ReflectionExtensionTest extends TestCase
 	 */
 	public function testInternalExtensionReflectionCreate()
 	{
-		ReflectionExtension::create(new \ReflectionFunction('create_function'), $this->getBroker());
+		ReflectionExtension::create(new \ReflectionFunction('create_function'), $this->getStorage());
 	}
 
 }

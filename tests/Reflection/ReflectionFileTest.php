@@ -26,9 +26,9 @@ class ReflectionFileTest extends TestCase
 		$fileName = $this->getFilePath('docComment');
 		$this->getBroker()->processFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
@@ -50,9 +50,9 @@ class ReflectionFileTest extends TestCase
 		$fileName = $this->getFilePath('noDocComment');
 		$this->getBroker()->processFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
@@ -71,10 +71,10 @@ class ReflectionFileTest extends TestCase
 		$fileName = $this->getFilePath('docComment');
 		$rfl = $this->getClassReflection('docComment');
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->getStorage()->hasFile($fileName));
 
 		$this->assertSame($rfl->token->getFileName(), $rfl->token->getFileReflection()->getName());
-		$this->assertSame($this->getBroker()->getFile($fileName), $rfl->token->getFileReflection());
+		$this->assertSame($this->getStorage()->getFile($fileName), $rfl->token->getFileReflection());
 	}
 
 
@@ -83,9 +83,9 @@ class ReflectionFileTest extends TestCase
 		$fileName = $this->getFilePath('declareNoNamespace');
 		$this->getBroker()->processFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
@@ -101,9 +101,9 @@ class ReflectionFileTest extends TestCase
 		$fileName = $this->getFilePath('declareNamespace');
 		$this->getBroker()->processFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
@@ -123,8 +123,8 @@ class ReflectionFileTest extends TestCase
 	{
 		$broker = $this->getBroker();
 
-		$this->assertFalse($broker->hasFile('#non~Existent#'));
-		$broker->getFile('#non~Existent#');
+		$this->assertFalse($this->getStorage()->hasFile('#non~Existent#'));
+		$this->getStorage()->getFile('#non~Existent#');
 	}
 
 
@@ -132,7 +132,7 @@ class ReflectionFileTest extends TestCase
 	{
 		$fileName = $this->getFilePath('docComment');
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->getStorage()->getFile($fileName);
 
 		$expectedSource = <<<SOURCE
 <?php

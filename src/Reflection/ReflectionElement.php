@@ -12,6 +12,7 @@ namespace ApiGen\TokenReflection\Reflection;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
@@ -63,14 +64,14 @@ abstract class ReflectionElement extends ReflectionBase
 	protected $endPosition;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		if ($tokenStream->count() === 0) {
-			throw new ParseException('Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
+			throw new ParseException('Reflection token stream must not be empty.');
 		}
 
 		$this->elementParser = new ElementParser($tokenStream, $this, $parent);
-		$this->broker = $broker;
+		$this->storage = $storage;
 		if (method_exists($this, 'parseStream')) {
 			$this->parseStream($tokenStream, $parent);
 		}
@@ -117,7 +118,7 @@ abstract class ReflectionElement extends ReflectionBase
 	 */
 	public function getFileReflection()
 	{
-		return $this->getBroker()->getFile($this->fileName);
+		return $this->storage->getFile($this->fileName);
 	}
 
 

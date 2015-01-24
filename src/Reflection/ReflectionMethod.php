@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
@@ -116,10 +117,10 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	private $declaringTraitName;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		$this->methodParser = new MethodParser($tokenStream, $this, $parent);
-		parent::__construct($tokenStream, $broker, $parent);
+		parent::__construct($tokenStream, $storage, $parent);
 	}
 
 
@@ -128,7 +129,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	 */
 	public function getDeclaringClass()
 	{
-		return $this->declaringClassName === NULL ? NULL : $this->getBroker()->getClass($this->declaringClassName);
+		return $this->declaringClassName === NULL ? NULL : $this->storage->getClass($this->declaringClassName);
 	}
 
 
@@ -394,7 +395,7 @@ class ReflectionMethod extends ReflectionFunctionBase implements ReflectionMetho
 	 */
 	public function getDeclaringTrait()
 	{
-		return $this->declaringTraitName === NULL ? NULL : $this->getBroker()->getClass($this->declaringTraitName);
+		return $this->declaringTraitName === NULL ? NULL : $this->storage->getClass($this->declaringTraitName);
 	}
 
 

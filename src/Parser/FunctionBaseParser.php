@@ -101,7 +101,7 @@ abstract class FunctionBaseParser
 
 		while (($type = $this->tokenStream->getType()) !== NULL && $type !== ')') {
 			if (isset($accepted[$type])) {
-				$parameters[] = new ReflectionParameter($this->tokenStream, $this->reflectionFunction->getBroker(), $this->reflectionFunction);
+				$parameters[] = new ReflectionParameter($this->tokenStream, $this->reflectionFunction->getStorage(), $this->reflectionFunction);
 			}
 			if ($this->tokenStream->is(')')) {
 				break;

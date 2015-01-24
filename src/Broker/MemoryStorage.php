@@ -130,7 +130,7 @@ class MemoryStorage implements StorageInterface
 	public function getNamespace($name)
 	{
 		if ( ! isset($this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME])) {
-			$this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME] = new ReflectionNamespace(ReflectionNamespace::NO_NAMESPACE_NAME, $this->broker);
+			$this->namespaces[ReflectionNamespace::NO_NAMESPACE_NAME] = new ReflectionNamespace(ReflectionNamespace::NO_NAMESPACE_NAME, $this);
 		}
 		$name = ltrim($name, '\\');
 		if ( ! $this->hasNamespace($name)) {
@@ -165,6 +165,7 @@ class MemoryStorage implements StorageInterface
 			}
 			$namespace = $this->getNamespace($namespace);
 			$name = substr($name, $pos + 1);
+
 		} else {
 			$namespace = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
@@ -196,7 +197,7 @@ class MemoryStorage implements StorageInterface
 
 		} catch (Exception\BaseException $e) {
 			if (isset($this->declaredClasses[$name])) {
-				$reflection = new ReflectionClass($name, $this->broker);
+				$reflection = new ReflectionClass($name, $this);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
@@ -293,7 +294,7 @@ class MemoryStorage implements StorageInterface
 
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$name])) {
-				$reflection = new Php\ReflectionConstant($name, $declared[$name], $this->broker);
+				$reflection = new Php\ReflectionConstant($name, $declared[$name], $this);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
@@ -336,6 +337,7 @@ class MemoryStorage implements StorageInterface
 			}
 			$namespace = $this->getNamespace($namespace);
 			$name = substr($name, $pos + 1);
+
 		} else {
 			$namespace = $this->getNamespace(ReflectionNamespace::NO_NAMESPACE_NAME);
 		}
@@ -370,7 +372,7 @@ class MemoryStorage implements StorageInterface
 
 		} catch (Exception\BaseException $e) {
 			if (isset($declared[$name])) {
-				return new Php\ReflectionFunction($name, $this->broker);
+				return new Php\ReflectionFunction($name, $this);
 			}
 			throw new BrokerException(sprintf('Function %s does not exist.', $name));
 		}
@@ -437,7 +439,7 @@ class MemoryStorage implements StorageInterface
 			try {
 				$namespaceName = $fileNamespace->getName();
 				if ( ! isset($this->namespaces[$namespaceName])) {
-					$this->namespaces[$namespaceName] = new ReflectionNamespace($namespaceName, $file->getBroker());
+					$this->namespaces[$namespaceName] = new ReflectionNamespace($namespaceName, $file->getStorage());
 				}
 				$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
 

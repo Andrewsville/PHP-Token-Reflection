@@ -13,6 +13,7 @@ use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
 use Reflector;
@@ -31,7 +32,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	/**
 	 * @var Broker
 	 */
-	private $broker;
+	private $storage;
 
 	/**
 	 * Is the property accessible despite its access level.
@@ -44,12 +45,12 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	/**
 	 * @param string|ReflectionClass|\ReflectionClass $class Defining class
 	 * @param string $methodName
-	 * @param Broker $broker
+	 * @param StorageInterface $storage
 	 */
-	public function __construct($class, $methodName, Broker $broker)
+	public function __construct($class, $methodName, StorageInterface $storage)
 	{
 		parent::__construct($class, $methodName);
-		$this->broker = $broker;
+		$this->storage = $storage;
 	}
 
 
@@ -58,7 +59,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	 */
 	public function getDeclaringClass()
 	{
-		return ReflectionClass::create(parent::getDeclaringClass(), $this->broker);
+		return ReflectionClass::create(parent::getDeclaringClass(), $this->storage);
 	}
 
 
@@ -146,7 +147,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	{
 		if ($this->parameters === NULL) {
 			$this->parameters = array_map(function (InternalReflectionParameter $parameter) {
-				return ReflectionParameter::create($parameter, $this->broker);
+				return ReflectionParameter::create($parameter, $this->storage);
 			}, parent::getParameters());
 		}
 		return $this->parameters;
@@ -184,9 +185,9 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -257,7 +258,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	 * @return ReflectionInterface
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
+	public static function create(Reflector $internalReflection, StorageInterface $storage)
 	{
 		static $cache = [];
 		if ( ! $internalReflection instanceof InternalReflectionMethod) {
@@ -265,7 +266,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 		}
 		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
 		if ( ! isset($cache[$key])) {
-			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $broker);
+			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $storage);
 		}
 		return $cache[$key];
 	}

@@ -27,9 +27,9 @@ class ConsistencyTest extends TestCase
 
 		$this->assertNotSame(NULL, @constant('PHP_INT_MAX'));
 		$constants = [
-			'tokenized' => $broker->getConstant('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE'),
-			'internal' => $broker->getConstant('PHP_INT_MAX'),
-			'invalid' => $broker->getConstant('DUPLICITIES_CONSTANTS_1')
+			'tokenized' => $this->getStorage()->getConstant('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE'),
+			'internal' => $this->getStorage()->getConstant('PHP_INT_MAX'),
+			'invalid' => $this->getStorage()->getConstant('DUPLICITIES_CONSTANTS_1')
 		];
 
 		// TestCase cross-consistency
@@ -55,9 +55,9 @@ class ConsistencyTest extends TestCase
 
 		$this->assertFalse(class_exists('Foo\\Bar', TRUE));
 		$classes = [
-			'tokenized' => $broker->getClass('ApiGen\\TokenReflection\\Tests\\ConsistencyTest'),
-			'internal' => $broker->getClass('Exception'),
-			'invalid' => $broker->getClass('duplicitiesClasses1')
+			'tokenized' => $this->getStorage()->getClass('ApiGen\\TokenReflection\\Tests\\ConsistencyTest'),
+			'internal' => $this->getStorage()->getClass('Exception'),
+			'invalid' => $this->getStorage()->getClass('duplicitiesClasses1')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -78,7 +78,7 @@ class ConsistencyTest extends TestCase
 
 	public function testGetNonexistingClass()
 	{
-		$this->assertNull($this->getBroker()->getClass('Foo\\Bar'));
+		$this->assertNull($this->getStorage()->getClass('Foo\\Bar'));
 	}
 
 
@@ -94,9 +94,9 @@ class ConsistencyTest extends TestCase
 
 		$this->assertTrue(function_exists('constant'));
 		$functions = [
-			'tokenized' => $broker->getFunction('TokenReflection\\Test\\functionInNamespace'),
-			'internal' => $broker->getFunction('constant'),
-			'invalid' => $broker->getFunction('duplicitiesFunctions1')
+			'tokenized' => $this->getStorage()->getFunction('TokenReflection\\Test\\functionInNamespace'),
+			'internal' => $this->getStorage()->getFunction('constant'),
+			'invalid' => $this->getStorage()->getFunction('duplicitiesFunctions1')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -122,8 +122,8 @@ class ConsistencyTest extends TestCase
 
 		$this->assertTrue(function_exists('constant'));
 		$properties = [
-			'tokenized' => $broker->getClass('TokenReflection_Test_PropertyLines')->getProperty('lines'),
-			'internal' => $broker->getClass('Exception')->getProperty('message')
+			'tokenized' => $this->getStorage()->getClass('TokenReflection_Test_PropertyLines')->getProperty('lines'),
+			'internal' => $this->getStorage()->getClass('Exception')->getProperty('message')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -148,8 +148,8 @@ class ConsistencyTest extends TestCase
 		$broker->processFile(__DIR__ . '/data/method/access-level.php');
 
 		$methods = [
-			'tokenized' => $broker->getClass('TokenReflection_Test_MethodAccessLevelParent')->getMethod('privateNoExtended'),
-			'internal' => $broker->getClass('Exception')->getMethod('getMessage')
+			'tokenized' => $this->getStorage()->getClass('TokenReflection_Test_MethodAccessLevelParent')->getMethod('privateNoExtended'),
+			'internal' => $this->getStorage()->getClass('Exception')->getMethod('getMessage')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -174,8 +174,8 @@ class ConsistencyTest extends TestCase
 		$broker->processFile(__DIR__ . '/data/parameter/optional-false.php');
 
 		$parameters = [
-			'tokenized' => $broker->getFunction('tokenReflectionParameterOptionalFalse')->getParameter('one'),
-			'internal' => $broker->getFunction('constant')->getParameter('const_name')
+			'tokenized' => $this->getStorage()->getFunction('tokenReflectionParameterOptionalFalse')->getParameter('one'),
+			'internal' => $this->getStorage()->getFunction('constant')->getParameter('const_name')
 		];
 
 		// TestCase consistency with the internal reflection

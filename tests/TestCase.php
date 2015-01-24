@@ -4,6 +4,7 @@ namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryStorage;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionConstant;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
@@ -180,7 +181,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 		} else {
 			$broker->processFile($this->getFilePath($test));
 		}
-		return $broker->getClass($this->getClassName($test));
+		return $this->getStorage()->getClass($this->getClassName($test));
 	}
 
 
@@ -234,7 +235,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 		} else {
 			$broker->processFile($this->getFilePath($test));
 		}
-		return $broker->getFunction($this->getFunctionName($test));
+		return $this->getStorage()->getFunction($this->getFunctionName($test));
 	}
 
 
@@ -252,7 +253,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 		} else {
 			$broker->processFile($this->getFilePath($test));
 		}
-		$parameters = $broker->getFunction($this->getFunctionName($test))->getParameters();
+		$parameters = $this->getStorage()->getFunction($this->getFunctionName($test))->getParameters();
 		return $parameters[0];
 	}
 
@@ -329,9 +330,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	{
 		static $broker = NULL;
 		if (NULL === $broker) {
-			$broker = new Broker(new MemoryStorage);
+			$broker = new Broker($this->getStorage());
 		}
 		return $broker;
+	}
+
+
+	/**
+	 * @return StorageInterface
+	 */
+	protected function getStorage()
+	{
+		static $storage = NULL;
+		if ($storage === NULL) {
+			$storage = new MemoryStorage;
+		}
+		return $storage;
 	}
 
 

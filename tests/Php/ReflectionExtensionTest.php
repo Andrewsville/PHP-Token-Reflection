@@ -23,7 +23,7 @@ class ReflectionExtensionTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionExtension = new ReflectionExtension('phar', $this->getBroker());
+		$this->internalReflectionExtension = new ReflectionExtension('phar', $this->getStorage());
 	}
 
 
@@ -67,9 +67,9 @@ class ReflectionExtensionTest extends TestCase
 	}
 
 
-	public function testGetBroker()
+	public function testGetStorage()
 	{
-		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\Broker', $this->internalReflectionExtension->getBroker());
+		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\StorageInterface', $this->internalReflectionExtension->getStorage());
 	}
 
 
@@ -77,7 +77,7 @@ class ReflectionExtensionTest extends TestCase
 	{
 		$this->assertInstanceOf(
 			'ApiGen\TokenReflection\Php\ReflectionExtension',
-			ReflectionExtension::create(new \ReflectionExtension('phar'), $this->getBroker())
+			ReflectionExtension::create(new \ReflectionExtension('phar'), $this->getStorage())
 		);
 	}
 

@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
@@ -28,10 +29,10 @@ class ReflectionFunction extends ReflectionFunctionBase implements ReflectionFun
 	private $aliases = [];
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		$this->functionParser = new FunctionParser($tokenStream, $this, $parent);
-		parent::__construct($tokenStream, $broker, $parent);
+		parent::__construct($tokenStream, $storage, $parent);
 	}
 
 

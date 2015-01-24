@@ -77,13 +77,13 @@ class ReflectionPropertyTest extends TestCase
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
-		$grandParent->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyDocCommentInheritanceGrandParent');
+		$grandParent->token = $this->getStorage()->getClass('TokenReflection_Test_PropertyDocCommentInheritanceGrandParent');
 
 		$parent = new \stdClass();
-		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyDocCommentInheritanceParent');
+		$parent->token = $this->getStorage()->getClass('TokenReflection_Test_PropertyDocCommentInheritanceParent');
 
 		$rfl = new \stdClass();
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_PropertyDocCommentInheritance');
+		$rfl->token = $this->getStorage()->getClass('TokenReflection_Test_PropertyDocCommentInheritance');
 
 		$this->assertSame($parent->token->getProperty('param1')->getAnnotations(), $rfl->token->getProperty('param1')->getAnnotations());
 		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getProperty('param1')->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
@@ -214,7 +214,7 @@ class ReflectionPropertyTest extends TestCase
 		$this->assertSame('default', $property->getDefaultValue());
 		$this->assertSame('TokenReflection_Test_PropertyDefault::DEFAULT_VALUE', $property->getDefaultValueDefinition());
 
-		$class = $this->getBroker()->getClass('TokenReflection_Test_PropertyDefault2');
+		$class = $this->getStorage()->getClass('TokenReflection_Test_PropertyDefault2');
 
 		$this->assertTrue($class->hasProperty('default4'));
 		$property = $class->getProperty('default4');
@@ -352,7 +352,7 @@ class ReflectionPropertyTest extends TestCase
 	 */
 	public function testInternalPropertyReflectionCreate()
 	{
-		ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getBroker());
+		ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getStorage());
 	}
 
 

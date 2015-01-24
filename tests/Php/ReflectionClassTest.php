@@ -24,7 +24,7 @@ class ReflectionClassTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionClass = $this->getBroker()->getClass('Exception');
+		$this->internalReflectionClass = $this->getStorage()->getClass('Exception');
 	}
 
 
@@ -170,7 +170,7 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testInternalClassImplementsInterface2()
 	{
-		$this->internalReflectionClass->implementsInterface($this->getBroker()->getClass('Exception'));
+		$this->internalReflectionClass->implementsInterface($this->getStorage()->getClass('Exception'));
 	}
 
 
@@ -186,7 +186,7 @@ class ReflectionClassTest extends TestCase
 	public function testTraits()
 	{
 		$this->assertFalse($this->internalReflectionClass->usesTrait(new \Exception()));
-		$this->assertFalse($this->internalReflectionClass->usesTrait($this->getBroker()->getClass('Exception')));
+		$this->assertFalse($this->internalReflectionClass->usesTrait($this->getStorage()->getClass('Exception')));
 		$this->assertFalse($this->internalReflectionClass->usesTrait('Exception'));
 
 		$this->assertSame([], $this->internalReflectionClass->getOwnTraits());
@@ -206,7 +206,7 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testInternalClassReflectionCreate()
 	{
-		ReflectionClass::create(new \ReflectionFunction('create_function'), $this->getBroker());
+		ReflectionClass::create(new \ReflectionFunction('create_function'), $this->getStorage());
 	}
 
 }

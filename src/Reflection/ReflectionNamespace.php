@@ -11,14 +11,12 @@ namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Behaviors\ReasonsInterface;
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Exception\FileProcessingException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
-use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionNamespaceInterface;
 
 
@@ -53,19 +51,19 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	private $functions = [];
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	private $broker;
+	private $storage;
 
 
 	/**
 	 * @param string $name
-	 * @param Broker $broker
+	 * @param StorageInterface $storage
 	 */
-	public function __construct($name, Broker $broker)
+	public function __construct($name, StorageInterface $storage)
 	{
 		$this->name = $name;
-		$this->broker = $broker;
+		$this->storage = $storage;
 	}
 
 
@@ -294,9 +292,9 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 

@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -38,19 +39,19 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	private $functions;
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	private $broker;
+	private $storage;
 
 
 	/**
 	 * @param string $name
 	 * @param Broker $broker
 	 */
-	public function __construct($name, Broker $broker)
+	public function __construct($name, StorageInterface $storage)
 	{
 		parent::__construct($name);
-		$this->broker = $broker;
+		$this->storage = $storage;
 	}
 
 
@@ -107,7 +108,7 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	{
 		if ($this->classes === NULL) {
 			$this->classes = array_map(function ($className) {
-				return $this->broker->getClass($className);
+				return $this->storage->getClass($className);
 			}, $this->getClassNames());
 		}
 		return $this->classes;
@@ -141,7 +142,7 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	{
 		if ($this->constants === NULL) {
 			$this->constants = array_map(function ($constantName) {
-				return $this->broker->getConstant($constantName);
+				return $this->storage->getConstant($constantName);
 			}, array_keys($this->getConstants()));
 		}
 		return $this->constants;
@@ -165,7 +166,7 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	{
 		if ($this->functions === NULL) {
 			$this->classes = array_map(function ($functionName) {
-				return $this->broker->getFunction($functionName);
+				return $this->storage->getFunction($functionName);
 			}, array_keys(parent::getFunctions()));
 		}
 		return (array) $this->functions;
@@ -193,9 +194,9 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -203,14 +204,14 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	 * @return ReflectionExtension
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
+	public static function create(Reflector $internalReflection, StorageInterface $storage)
 	{
 		static $cache = [];
 		if ( ! $internalReflection instanceof InternalReflectionExtension) {
 			throw new RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.');
 		}
 		if ( ! isset($cache[$internalReflection->getName()])) {
-			return new self($internalReflection->getName(), $broker);
+			return new self($internalReflection->getName(), $storage);
 		}
 		return $cache[$internalReflection->getName()];
 	}

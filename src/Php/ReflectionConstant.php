@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Invalid;
@@ -50,23 +51,23 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	private $userDefined;
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	private $broker;
+	private $storage;
 
 
 	/**
 	 * @param string $name
 	 * @param mixed $value
-	 * @param Broker $broker
+	 * @param StorageInterface $storage
 	 * @param ReflectionClass $parent
 	 * @throws RuntimeException If real parent class could not be determined.
 	 */
-	public function __construct($name, $value, Broker $broker, ReflectionClass $parent = NULL)
+	public function __construct($name, $value, StorageInterface $storage, ReflectionClass $parent = NULL)
 	{
 		$this->name = $name;
 		$this->value = $value;
-		$this->broker = $broker;
+		$this->storage = $storage;
 		if ($parent !== NULL) {
 			$realParent = NULL;
 			if (array_key_exists($name, $parent->getOwnConstants())) {
@@ -136,7 +137,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 		if ($this->declaringClassName === NULL) {
 			return NULL;
 		}
-		return $this->getBroker()->getClass($this->declaringClassName);
+		return $this->getStorage()->getClass($this->declaringClassName);
 	}
 
 
@@ -314,9 +315,9 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -334,7 +335,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	 *
 	 * @return NULL
 	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
+	public static function create(Reflector $internalReflection, StorageInterface $storage)
 	{
 		return NULL;
 	}

@@ -84,7 +84,7 @@ class Resolver
 			$namespace = $reflection->getDeclaringClass()->getNamespaceName();
 
 		} else {
-			throw new Exception\RuntimeException('Invalid reflection object given.', Exception\RuntimeException::INVALID_ARGUMENT, $reflection);
+			throw new Exception\RuntimeException('Invalid reflection object given.');
 		}
 
 		// Process __LINE__ constants; replace with the line number of the corresponding token
@@ -166,12 +166,14 @@ class Resolver
 							if (0 === stripos($constant, 'self::') || 0 === stripos($constant, 'parent::')) {
 								// Handle self:: and parent:: definitions
 								if ($reflection instanceof ReflectionConstant && NULL === $reflection->getDeclaringClassName()) {
-									throw new Exception\RuntimeException('Top level constants cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
+									throw new Exception\RuntimeException('Top level constants cannot use self:: and parent:: references.');
 								} elseif ($reflection instanceof ReflectionParameter && NULL === $reflection->getDeclaringClassName()) {
-									throw new Exception\RuntimeException('Function parameters cannot use self:: and parent:: references.', Exception\RuntimeException::UNSUPPORTED, $reflection);
+									throw new Exception\RuntimeException('Function parameters cannot use self:: and parent:: references.');
 								}
-								if (0 === stripos($constant, 'self::')) {
+
+								if (stripos($constant, 'self::') === 0) {
 									$className = $reflection->getDeclaringClassName();
+
 								} else {
 									$declaringClass = $reflection->getDeclaringClass();
 									$className = $declaringClass->getParentClassName() ?: self::CONSTANT_NOT_FOUND;
@@ -183,9 +185,10 @@ class Resolver
 									$constantName = str_repeat('\\', $cnt) . $constantName;
 								}
 							}
-							$constantReflection = $reflection->getBroker()->getConstant($constantName);
+							$constantReflection = $reflection->getStorage()->getConstant($constantName);
 							$value = $constantReflection->getValue();
 					}
+
 				} catch (Exception\RuntimeException $e) {
 					$value = self::CONSTANT_NOT_FOUND;
 				}

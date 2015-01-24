@@ -88,7 +88,7 @@ class ReflectionParameterTest extends TestCase
 
 		require_once $fileName;
 
-		$token = $broker->getFunction('tokenReflectionParameterInvalidOptionals');
+		$token = $this->getStorage()->getFunction('tokenReflectionParameterInvalidOptionals');
 		$internal = new \ReflectionFunction('tokenReflectionParameterInvalidOptionals');
 
 		static $params = [
@@ -205,13 +205,13 @@ class ReflectionParameterTest extends TestCase
 		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
-		$grandParent->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceGrandParent')->getMethod('m');
+		$grandParent->token = $this->getStorage()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceGrandParent')->getMethod('m');
 
 		$parent = new \stdClass();
-		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceParent')->getMethod('m');
+		$parent->token = $this->getStorage()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceParent')->getMethod('m');
 
 		$rfl = new \stdClass();
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritance')->getMethod('m');
+		$rfl->token = $this->getStorage()->getClass('TokenReflection_Test_ParameterDocCommentInheritance')->getMethod('m');
 
 		$this->assertNotNull($grandParent->token);
 		$this->assertNotNull($parent->token);
@@ -239,7 +239,7 @@ class ReflectionParameterTest extends TestCase
 	 */
 	public function testInternalParameterReflectionCreate()
 	{
-		ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getBroker());
+		ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getStorage());
 	}
 
 

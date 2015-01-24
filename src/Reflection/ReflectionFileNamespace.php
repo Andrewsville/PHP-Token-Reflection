@@ -251,7 +251,7 @@ class ReflectionFileNamespace extends ReflectionElement
 				case T_CLASS:
 				case T_TRAIT:
 				case T_INTERFACE:
-					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
+					$class = new ReflectionClass($tokenStream, $this->storage, $this);
 					$firstChild = $firstChild ?: $class;
 					$className = $class->getName();
 					$this->classes[$className] = $class;
@@ -260,7 +260,7 @@ class ReflectionFileNamespace extends ReflectionElement
 				case T_CONST:
 					$tokenStream->skipWhitespaces(TRUE);
 					do {
-						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
+						$constant = new ReflectionConstant($tokenStream, $this->storage, $this);
 						$firstChild = $firstChild ?: $constant;
 						$constantName = $constant->getName();
 						$this->constants[$constantName] = $constant;
@@ -293,7 +293,7 @@ class ReflectionFileNamespace extends ReflectionElement
 							->next();
 						continue;
 					}
-					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
+					$function = new ReflectionFunction($tokenStream, $this->storage, $this);
 					$firstChild = $firstChild ?: $function;
 					$functionName = $function->getName();
 					$this->functions[$functionName] = $function;

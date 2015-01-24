@@ -41,7 +41,7 @@ class ReflectionFile extends ReflectionBase implements SourceInterface
 	 */
 	public function getSource()
 	{
-		return (string) $this->getBroker()->getFileTokens($this->getName());
+		return (string) $this->storage->getFileTokens($this->getName());
 	}
 
 
@@ -60,7 +60,7 @@ class ReflectionFile extends ReflectionBase implements SourceInterface
 		}
 		$docCommentPosition = NULL;
 		if ( ! $tokenStream->is(T_OPEN_TAG)) {
-			$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+			$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
 		} else {
 			$tokenStream->skipWhitespaces();
 			while (NULL !== ($type = $tokenStream->getType())) {
@@ -84,14 +84,14 @@ class ReflectionFile extends ReflectionBase implements SourceInterface
 						break 2;
 					default:
 						$docCommentPosition = $docCommentPosition ?: -1;
-						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
 						break 2;
 				}
 				$tokenStream->skipWhitespaces();
 			}
 			while (NULL !== ($type = $tokenStream->getType())) {
 				if (T_NAMESPACE === $type) {
-					$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->broker, $this);
+					$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
 				} else {
 					$tokenStream->skipWhitespaces();
 				}

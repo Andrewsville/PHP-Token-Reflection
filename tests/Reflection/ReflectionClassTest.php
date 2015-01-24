@@ -59,7 +59,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertSame([], $rfl->token->getOwnConstants());
 		$this->assertSame([], $rfl->token->getOwnConstantReflections());
 
-		$token = $this->getBroker()->getClass('RecursiveDirectoryIterator');
+		$token = $this->getStorage()->getClass('RecursiveDirectoryIterator');
 		$this->assertTrue($token->hasConstant('CURRENT_AS_PATHNAME'));
 		$this->assertFalse($token->hasOwnConstant('CURRENT_AS_PATHNAME'));
 		$this->assertSame(0, count($token->getOwnConstants()));
@@ -293,7 +293,7 @@ class ReflectionClassTest extends TestCase
 		$this->getBroker()->processFile($this->getFilePath('modifiers'));
 
 		foreach ($classes as $className) {
-			$token = $this->getBroker()->getClass($className);
+			$token = $this->getStorage()->getClass($className);
 			$internal = new \ReflectionClass($className);
 			$this->assertSame($internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $token->getModifiers(), $className);
 		}
@@ -497,7 +497,7 @@ class ReflectionClassTest extends TestCase
 		$this->assertTrue($rfl->token->implementsInterface('Countable'));
 		$this->assertTrue($rfl->token->implementsInterface(new InternalReflectionClass('Countable')));
 
-		$token = $this->getBroker()->getClass('Iterator');
+		$token = $this->getStorage()->getClass('Iterator');
 		$this->assertSame(['Traversable'], array_keys($token->getInterfaces()));
 		$this->assertSame(['Traversable'], $token->getInterfaceNames());
 		$this->assertSame(['Traversable'], array_keys($token->getOwnInterfaces()));
@@ -541,7 +541,7 @@ class ReflectionClassTest extends TestCase
 		foreach (['TokenReflection_Test_ClassGrandGrandParent', 'TokenReflection_Test_ClassGrandParent'] as $parent) {
 			$this->assertSame($rfl->internal->isSubclassOf($parent), $rfl->token->isSubclassOf($parent));
 			$this->assertTrue($rfl->token->isSubclassOf($parent));
-			$this->assertTrue($rfl->token->isSubclassOf($this->getBroker()->getClass($parent)));
+			$this->assertTrue($rfl->token->isSubclassOf($this->getStorage()->getClass($parent)));
 		}
 		foreach (['TokenReflection_Test_ClassParent', 'Exception', 'DateTime'] as $parent) {
 			$this->assertSame($rfl->internal->isSubclassOf($parent), $rfl->token->isSubclassOf($parent));
@@ -584,7 +584,7 @@ class ReflectionClassTest extends TestCase
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('Exception');
-		$rfl->token = $this->getBroker()->getClass('Exception');
+		$rfl->token = $this->getStorage()->getClass('Exception');
 
 		$this->assertSame($rfl->internal->isUserDefined(), $rfl->token->isUserDefined());
 		$this->assertFalse($rfl->token->isUserDefined());
@@ -639,19 +639,19 @@ class ReflectionClassTest extends TestCase
 
 		$parent = new \stdClass();
 		$parent->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
-		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
+		$parent->token = $this->getStorage()->getClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
 		$this->assertSame($parent->internal->getDocComment(), $parent->token->getDocComment());
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
+		$rfl->token = $this->getStorage()->getClass('TokenReflection_Test_ClassDocCommentInheritanceExplicit');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame('My Short description.', $rfl->token->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
 		$this->assertSame('Long description. Phew, that was long.', $rfl->token->getAnnotation(AnnotationParser::LONG_DESCRIPTION));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
+		$rfl->token = $this->getStorage()->getClass('TokenReflection_Test_ClassDocCommentInheritanceImplicit');
 		$this->assertSame($rfl->internal->getDocComment(), $rfl->token->getDocComment());
 		$this->assertSame($parent->token->getAnnotations(), $rfl->token->getAnnotations());
 	}
@@ -667,7 +667,7 @@ class ReflectionClassTest extends TestCase
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('TokenReflection\Test\ClassInNamespace');
-		$rfl->token = $this->getBroker()->getClass('TokenReflection\Test\ClassInNamespace');
+		$rfl->token = $this->getStorage()->getClass('TokenReflection\Test\ClassInNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
 		$this->assertTrue($rfl->token->inNamespace());
@@ -712,7 +712,7 @@ class ReflectionClassTest extends TestCase
 		$this->getBroker()->processFile($this->getFilePath('traits'));
 
 		foreach ($classes as $className) {
-			$token = $this->getBroker()->getClass($className);
+			$token = $this->getStorage()->getClass($className);
 			$internal = new \ReflectionClass($className);
 
 			$this->assertSame($internal->isTrait(), $token->isTrait(), $className);
@@ -744,7 +744,7 @@ class ReflectionClassTest extends TestCase
 
 		$this->getBroker()->processFile($this->getFilePath('traits'));
 		foreach ($expected as $className => $definition) {
-			$reflection = $this->getBroker()->getClass($className);
+			$reflection = $this->getStorage()->getClass($className);
 
 			$this->assertSame($definition[0], $reflection->isTrait(), $className);
 			$this->assertSame($definition[1], $reflection->getTraitAliases(), $className);
@@ -790,9 +790,9 @@ class ReflectionClassTest extends TestCase
 		$broker->processFile($this->getFilePath('pretty-names'));
 
 		foreach ($names as $name) {
-			$this->assertTrue($broker->hasClass($name), $name);
+			$this->assertTrue($this->getStorage()->hasClass($name), $name);
 
-			$rfl = $broker->getClass($name);
+			$rfl = $this->getStorage()->getClass($name);
 			$this->assertSame($rfl->getName(), $rfl->getPrettyName(), $name);
 		}
 	}

@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Parser\ElementParser;
 use ApiGen\TokenReflection\Parser\ParameterParser;
@@ -100,9 +101,9 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	private $passedByReference = FALSE;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionFunctionBase $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionFunctionBase $parent = NULL)
 	{
-		$this->broker = $broker;
+		$this->storage = $storage;
 		$this->parse($tokenStream, $parent);
 	}
 
@@ -112,7 +113,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	 */
 	public function getDeclaringClass()
 	{
-		return $this->declaringClassName === NULL ? NULL : $this->getBroker()->getClass($this->declaringClassName);
+		return $this->declaringClassName === NULL ? NULL : $this->storage->getClass($this->declaringClassName);
 	}
 
 
@@ -132,13 +133,14 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 	{
 		if ($this->declaringClassName !== NULL) {
 			// Method parameter
-			$class = $this->getBroker()->getClass($this->declaringClassName);
+			$class = $this->storage->getClass($this->declaringClassName);
 			if ($class !== NULL) {
 				return $class->getMethod($this->declaringFunctionName);
 			}
+
 		} else {
 			// Function parameter
-			return $this->getBroker()->getFunction($this->declaringFunctionName);
+			return $this->storage->getFunction($this->declaringFunctionName);
 		}
 	}
 
@@ -263,7 +265,7 @@ class ReflectionParameter extends ReflectionElement implements ReflectionParamet
 		if ($name === NULL) {
 			return NULL;
 		}
-		return $this->getBroker()->getClass($name);
+		return $this->storage->getClass($name);
 	}
 
 

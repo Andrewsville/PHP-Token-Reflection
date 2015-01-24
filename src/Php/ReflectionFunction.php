@@ -13,6 +13,7 @@ use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
 use Reflector;
@@ -33,17 +34,17 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	/**
 	 * @var Broker
 	 */
-	private $broker;
+	private $storage;
 
 
 	/**
 	 * @param string $functionName
-	 * @param Broker $broker
+	 * @param Broker $storage
 	 */
-	public function __construct($functionName, Broker $broker)
+	public function __construct($functionName, StorageInterface $storage)
 	{
 		parent::__construct($functionName);
-		$this->broker = $broker;
+		$this->storage = $storage;
 	}
 
 
@@ -52,7 +53,7 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	 */
 	public function getExtension()
 	{
-		return ReflectionExtension::create(parent::getExtension(), $this->broker);
+		return ReflectionExtension::create(parent::getExtension(), $this->storage);
 	}
 
 
@@ -100,7 +101,7 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 		$parameters = $this->getParameters();
 		if (is_numeric($parameter)) {
 			if ( ! isset($parameters[$parameter])) {
-				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter));
 			}
 			return $parameters[$parameter];
 
@@ -110,7 +111,7 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 					return $reflection;
 				}
 			}
-			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter));
 		}
 	}
 
@@ -122,7 +123,7 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	{
 		if ($this->parameters === NULL) {
 			$this->parameters = array_map(function (InternalReflectionParameter $parameter) {
-				return ReflectionParameter::create($parameter, $this->broker, $this);
+				return ReflectionParameter::create($parameter, $this->storage);
 			}, parent::getParameters());
 		}
 		return $this->parameters;
@@ -132,9 +133,9 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -171,10 +172,10 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	 * @return ReflectionFunction
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
+	public static function create(Reflector $internalReflection, StorageInterface $broker)
 	{
 		if ( ! $internalReflection instanceof InternalReflectionFunction) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.', RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.');
 		}
 		return $broker->getFunction($internalReflection->getName());
 	}

@@ -9,17 +9,17 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use Reflector;
 
 
-interface ReflectionInterface extends TokenReflection\ReflectionInterface
+interface ReflectionInterface extends ApiGen\TokenReflection\ReflectionInterface
 {
 
 	/**
 	 * @return ReflectionInterface
 	 */
-	static function create(Reflector $internalReflection, Broker $broker);
+	static function create(Reflector $internalReflection, StorageInterface $storage);
 
 }

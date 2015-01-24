@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -66,10 +67,10 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	private $constantParser;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		$this->constantParser = new ConstantParser($tokenStream, $this, $parent);
-		parent::__construct($tokenStream, $broker, $parent);
+		parent::__construct($tokenStream, $storage, $parent);
 	}
 
 
@@ -103,7 +104,7 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 		if (NULL === $this->declaringClassName) {
 			return NULL;
 		}
-		return $this->getBroker()->getClass($this->declaringClassName);
+		return $this->getStorage()->getClass($this->declaringClassName);
 	}
 
 

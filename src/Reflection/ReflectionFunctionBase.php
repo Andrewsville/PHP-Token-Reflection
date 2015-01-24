@@ -235,7 +235,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 		$tokenStream->skipWhitespaces(TRUE);
 		while (NULL !== ($type = $tokenStream->getType()) && ')' !== $type) {
 			if (isset($accepted[$type])) {
-				$parameter = new ReflectionParameter($tokenStream, $this->getBroker(), $this);
+				$parameter = new ReflectionParameter($tokenStream, $this->storage, $this);
 				$this->parameters[] = $parameter;
 			}
 			if ($tokenStream->is(')')) {
