@@ -200,13 +200,4 @@ class ReflectionClassTest extends TestCase
 		$this->assertInstanceOf('ApiGen\TokenReflection\Php\ReflectionExtension', $this->internalReflectionClass->getExtension());
 	}
 
-
-	/**
-	 * @expectedException RuntimeException
-	 */
-	public function testInternalClassReflectionCreate()
-	{
-		ReflectionClass::create(new \ReflectionFunction('create_function'), $this->getStorage());
-	}
-
 }

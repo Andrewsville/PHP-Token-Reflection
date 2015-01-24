@@ -234,15 +234,6 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalParameterReflectionCreate()
-	{
-		ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getStorage());
-	}
-
-
 	public function testValueDefinitions()
 	{
 		$rfl = $this->getClassReflection('valueDefinitions');

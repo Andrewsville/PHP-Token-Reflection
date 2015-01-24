@@ -11,13 +11,9 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Broker\StorageInterface;
-use ApiGen\TokenReflection\Dummy;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Invalid;
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use Reflector;
 
@@ -327,17 +323,6 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	public function getNamespaceAliases()
 	{
 		return [];
-	}
-
-
-	/**
-	 * Not supported for constants since there is no internal constant reflection.
-	 *
-	 * @return NULL
-	 */
-	public static function create(Reflector $internalReflection, StorageInterface $storage)
-	{
-		return NULL;
 	}
 
 }

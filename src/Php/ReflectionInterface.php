@@ -17,9 +17,4 @@ use Reflector;
 interface ReflectionInterface extends ApiGen\TokenReflection\ReflectionInterface
 {
 
-	/**
-	 * @return ReflectionInterface
-	 */
-	static function create(Reflector $internalReflection, StorageInterface $storage);
-
 }

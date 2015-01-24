@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionExtensionFactory;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionExtensionInterface;
@@ -197,23 +197,6 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	public function getStorage()
 	{
 		return $this->storage;
-	}
-
-
-	/**
-	 * @return ReflectionExtension
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, StorageInterface $storage)
-	{
-		static $cache = [];
-		if ( ! $internalReflection instanceof InternalReflectionExtension) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionExtension expected.');
-		}
-		if ( ! isset($cache[$internalReflection->getName()])) {
-			return new self($internalReflection->getName(), $storage);
-		}
-		return $cache[$internalReflection->getName()];
 	}
 
 }

@@ -16,6 +16,10 @@ use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionExtensionFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionMethodFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionPropertyFactory;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use Reflector;
@@ -77,7 +81,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getExtension()
 	{
-		return ReflectionExtension::create(parent::getExtension(), $this->storage);
+		return ReflectionExtensionFactory::create(parent::getExtension(), $this->storage);
 	}
 
 
@@ -171,7 +175,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public function getParentClass()
 	{
 		$parent = parent::getParentClass();
-		return $parent ? self::create($parent, $this->storage) : NULL;
+		return $parent ? ReflectionClassFactory::create($parent, $this->storage) : NULL;
 	}
 
 
@@ -273,7 +277,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getConstructor()
 	{
-		return ReflectionMethod::create(parent::getConstructor(), $this->storage);
+		return ReflectionMethodFactory::create(parent::getConstructor(), $this->storage);
 	}
 
 
@@ -321,7 +325,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if ($this->methods === NULL) {
 			$this->methods = array_map(function (InternalReflectionMethod $method) {
-				return ReflectionMethod::create($method, $this->storage);
+				return ReflectionMethodFactory::create($method, $this->storage);
 			}, parent::getMethods());
 		}
 		if ($filter === NULL) {
@@ -478,7 +482,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if ($this->properties === NULL) {
 			$this->properties = array_map(function (InternalReflectionProperty $property) {
-				return ReflectionProperty::create($property, $this->storage);
+				return ReflectionPropertyFactory::create($property, $this->storage);
 			}, parent::getProperties());
 		}
 		if ($filter === NULL) {
@@ -713,20 +717,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
-	 * @return ReflectionClassInterface|NULL
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, StorageInterface $storage)
-	{
-		if ( ! $internalReflection instanceof InternalReflectionClass) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionClass expected.');
-		}
-		return $storage->getClass($internalReflection->getName());
-	}
-
-
-	/**
-	 * @return ApiGen\TokenReflection\ReflectionClassInterface[]|array
+	 * @return ReflectionClassInterface[]
 	 */
 	private function getInternalTokenizedClasses()
 	{

@@ -12,7 +12,8 @@ namespace ApiGen\TokenReflection\Php;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\StorageInterface;
-use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionPropertyFactory;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
 use Reflector;
 use ReflectionProperty as InternalReflectionProperty;
@@ -36,7 +37,7 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 
 	/**
 	 * @param string|ReflectionClass|\ReflectionClass $class Defining class
-	 * @param string $propertyName Property name
+	 * @param string $propertyName
 	 * @param StorageInterface $storage
 	 */
 	public function __construct($class, $propertyName, StorageInterface $storage)
@@ -51,7 +52,7 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 	 */
 	public function getDeclaringClass()
 	{
-		return ReflectionClass::create(parent::getDeclaringClass(), $this->storage);
+		return ReflectionClassFactory::create(parent::getDeclaringClass(), $this->storage);
 	}
 
 
@@ -273,26 +274,6 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 	public function getPrettyName()
 	{
 		return sprintf('%s::$%s', $this->getDeclaringClassName(), $this->getName());
-	}
-
-
-	/**
-	 * Creates a reflection instance.
-	 *
-	 * @return ReflectionProperty
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, StorageInterface $storage)
-	{
-		static $cache = [];
-		if ( ! $internalReflection instanceof InternalReflectionProperty) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.');
-		}
-		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
-		if ( ! isset($cache[$key])) {
-			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $storage);
-		}
-		return $cache[$key];
 	}
 
 }

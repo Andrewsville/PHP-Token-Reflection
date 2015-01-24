@@ -197,14 +197,5 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	/**
-	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalFunctionReflectionCreate()
-	{
-		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getStorage());
-	}
 
 }

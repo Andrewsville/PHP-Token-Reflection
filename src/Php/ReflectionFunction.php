@@ -15,6 +15,9 @@ use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionExtensionFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionFunctionFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionParameterFactory;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
 use Reflector;
 use ReflectionFunction as InternalReflectionFunction;
@@ -53,7 +56,7 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	 */
 	public function getExtension()
 	{
-		return ReflectionExtension::create(parent::getExtension(), $this->storage);
+		return ReflectionExtensionFactory::create(parent::getExtension(), $this->storage);
 	}
 
 
@@ -123,7 +126,7 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	{
 		if ($this->parameters === NULL) {
 			$this->parameters = array_map(function (InternalReflectionParameter $parameter) {
-				return ReflectionParameter::create($parameter, $this->storage, $this);
+				return ReflectionParameterFactory::create($parameter, $this->storage, $this);
 			}, parent::getParameters());
 		}
 		return $this->parameters;
@@ -163,21 +166,6 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 	public function isVariadic()
 	{
 		return PHP_VERSION_ID >= 50600 ? parent::isVariadic() : FALSE;
-	}
-
-
-	/**
-	 * Creates a reflection instance.
-	 *
-	 * @return ReflectionFunction
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, StorageInterface $broker)
-	{
-		if ( ! $internalReflection instanceof InternalReflectionFunction) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionFunction expected.');
-		}
-		return $broker->getFunction($internalReflection->getName());
 	}
 
 }

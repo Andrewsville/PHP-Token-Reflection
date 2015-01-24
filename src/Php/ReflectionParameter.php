@@ -14,6 +14,9 @@ use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionFunctionFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionParameterFactory;
 use ApiGen\TokenReflection\ReflectionParameterInterface;
 use Reflector;
 use ReflectionParameter as InternalReflectionParameter;
@@ -54,7 +57,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	public function getDeclaringClass()
 	{
 		$class = parent::getDeclaringClass();
-		return $class ? ReflectionClass::create($class, $this->storage) : NULL;
+		return $class ? ReflectionClassFactory::create($class, $this->storage) : NULL;
 	}
 
 
@@ -139,7 +142,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	{
 		$class = $this->getDeclaringClass();
 		$function = parent::getDeclaringFunction();
-		return $class ? $class->getMethod($function->getName()) : ReflectionFunction::create($function, $this->storage);
+		return $class ? $class->getMethod($function->getName()) : ReflectionFunctionFactory::create($function, $this->storage);
 	}
 
 
@@ -290,27 +293,6 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	public function isVariadic()
 	{
 		return PHP_VERSION_ID >= 50600 && parent::isVariadic();
-	}
-
-
-	/**
-	 * @return ReflectionParameter
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, StorageInterface $storage)
-	{
-		static $cache = [];
-		if ( ! $internalReflection instanceof InternalReflectionParameter) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionParameter expected.');
-		}
-		$class = $internalReflection->getDeclaringClass();
-		$function = $internalReflection->getDeclaringFunction();
-		$key = $class ? $class->getName() . '::' : '';
-		$key .= $function->getName() . '(' . $internalReflection->getName() . ')';
-		if ( ! isset($cache[$key])) {
-			$cache[$key] = new self($class ? [$class->getName(), $function->getName()] : $function->getName(), $internalReflection->getName(), $storage, $function);
-		}
-		return $cache[$key];
 	}
 
 }

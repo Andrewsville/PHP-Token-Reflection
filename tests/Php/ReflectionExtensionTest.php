@@ -72,13 +72,4 @@ class ReflectionExtensionTest extends TestCase
 		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\StorageInterface', $this->internalReflectionExtension->getStorage());
 	}
 
-
-	public function testCreate()
-	{
-		$this->assertInstanceOf(
-			'ApiGen\TokenReflection\Php\ReflectionExtension',
-			ReflectionExtension::create(new \ReflectionExtension('phar'), $this->getStorage())
-		);
-	}
-
 }

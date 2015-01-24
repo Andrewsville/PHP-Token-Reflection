@@ -79,13 +79,4 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\StorageInterface', $this->internalReflectionFunction->getStorage());
 	}
 
-
-	public function testCreate()
-	{
-		$this->assertInstanceOf(
-			'ApiGen\TokenReflection\Php\ReflectionFunction',
-			ReflectionFunction::create(new \ReflectionFunction('count'), $this->getStorage())
-		);
-	}
-
 }

@@ -6,6 +6,7 @@ use ApiGen;
 use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\MemoryStorage;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
+use ApiGen\TokenReflection\Php\Factory\ReflectionExtensionFactory;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
 use ApiGen\TokenReflection\Tests\TestCase;
 
@@ -317,17 +318,6 @@ class ReflectionMethodTest extends TestCase
 			],
 			$rfl->token->getStaticVariables()
 		);
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalMethodReflectionCreate()
-	{
-		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getStorage());
 	}
 
 }

@@ -9,7 +9,6 @@
 
 namespace ApiGen\TokenReflection;
 
-use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 
 
@@ -185,7 +184,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 *
 	 * @param string|object $interface Interface name or reflection object
 	 * @return bool
-	 * @throws RuntimeException If an invalid object was provided as interface.
 	 */
 	function implementsInterface($interface);
 
@@ -209,7 +207,7 @@ interface ReflectionClassInterface extends ReflectionInterface
 	/**
 	 * Returns interface reflections implemented by this class, not its parents.
 	 *
-	 * @return array|ReflectionClassInterface[]
+	 * @return ReflectionClassInterface[]
 	 */
 	function getOwnInterfaces();
 
@@ -217,7 +215,7 @@ interface ReflectionClassInterface extends ReflectionInterface
 	/**
 	 * Returns names of interfaces implemented by this class, not its parents.
 	 *
-	 * @return array|string[]
+	 * @return string[]
 	 */
 	function getOwnInterfaceNames();
 
@@ -241,7 +239,7 @@ interface ReflectionClassInterface extends ReflectionInterface
 	/**
 	 * Returns if the class implements the given method.
 	 *
-	 * @param string $name Method name
+	 * @param string $name
 	 * @return bool
 	 */
 	function hasMethod($name);
@@ -250,9 +248,8 @@ interface ReflectionClassInterface extends ReflectionInterface
 	/**
 	 * Returns a method reflection.
 	 *
-	 * @param string $name Method name
+	 * @param string $name
 	 * @return ReflectionMethodInterface
-	 * @throws RuntimeException If the requested method does not exist.
 	 */
 	function getMethod($name);
 
@@ -279,7 +276,7 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 * Returns method reflections declared by this class, not its parents.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array|ReflectionMethodInterface[]
+	 * @return ReflectionMethodInterface[]
 	 */
 	function getOwnMethods($filter = NULL);
 
@@ -287,7 +284,7 @@ interface ReflectionClassInterface extends ReflectionInterface
 	/**
 	 * Returns if the class imports the given method from traits.
 	 *
-	 * @param string $name Method name
+	 * @param string $name
 	 * @return bool
 	 */
 	function hasTraitMethod($name);
@@ -297,7 +294,7 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 * Returns method reflections imported from traits.
 	 *
 	 * @param int $filter Methods filter
-	 * @return array|ReflectionMethodInterface[]
+	 * @return ReflectionMethodInterface[]
 	 */
 	function getTraitMethods($filter = NULL);
 
@@ -316,7 +313,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 *
 	 * @param string $name Constant name
 	 * @return mixed|ReflectionConstantInterface
-	 * @throws RuntimeException If the requested constant does not exist.
 	 */
 	function getConstant($name);
 
@@ -326,7 +322,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 *
 	 * @param string $name Constant name
 	 * @return ReflectionConstantInterface
-	 * @throws RuntimeException If the requested constant does not exist.
 	 */
 	function getConstantReflection($name);
 
@@ -384,9 +379,8 @@ interface ReflectionClassInterface extends ReflectionInterface
 	/**
 	 * Return a property reflection.
 	 *
-	 * @param string $name Property name
+	 * @param string $name
 	 * @return ReflectionProperty
-	 * @throws RuntimeException If the requested property does not exist.
 	 */
 	function getProperty($name);
 
@@ -458,8 +452,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 * @param string $name Property name
 	 * @param mixed $default Default value
 	 * @return mixed
-	 * @throws RuntimeException If the requested static property does not exist.
-	 * @throws RuntimeException If the requested static property is not accessible.
 	 */
 	function getStaticPropertyValue($name, $default = NULL);
 
@@ -598,7 +590,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 *
 	 * @param object $object Instance
 	 * @return bool
-	 * @throws RuntimeException If the provided argument is not an object.
 	 */
 	function isInstance($object);
 
@@ -608,8 +599,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 *
 	 * @param string $name Property name
 	 * @param mixed $value Property value
-	 * @throws RuntimeException If the requested static property does not exist.
-	 * @throws RuntimeException If the requested static property is not accessible.
 	 */
 	function setStaticPropertyValue($name, $value);
 

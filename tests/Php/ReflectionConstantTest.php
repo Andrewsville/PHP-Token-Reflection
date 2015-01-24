@@ -90,10 +90,4 @@ class ReflectionConstantTest extends TestCase
 		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\StorageInterface', $this->internalReflectionConstant->getStorage());
 	}
 
-
-	public function testCreate()
-	{
-		$this->assertNull(ReflectionConstant::create(new \ReflectionFunction('strlen'), $this->getStorage()));
-	}
-
 }

@@ -4,6 +4,7 @@ namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
+use ApiGen\TokenReflection\Php\Factory\ReflectionPropertyFactory;
 use ApiGen\TokenReflection\Php\ReflectionProperty;
 use ApiGen\TokenReflection\Tests\TestCase;
 use ReflectionProperty as InternalReflectionProperty;
@@ -342,17 +343,6 @@ class ReflectionPropertyTest extends TestCase
 			$this->assertSame($internal->getValue($class), $token->getValue($class));
 			$this->assertSame($internal->getValue($class), $token->getDefaultValue());
 		}
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalPropertyReflectionCreate()
-	{
-		ReflectionProperty::create(new \ReflectionClass('Exception'), $this->getStorage());
 	}
 
 
