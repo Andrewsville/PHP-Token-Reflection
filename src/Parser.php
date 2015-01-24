@@ -48,21 +48,14 @@ class Parser implements ParserInterface
 
 
 	/**
-	 * @param string $fileName
+	 * @param string $name
 	 * @return ReflectionFile
 	 */
-	public function processFile($fileName)
+	public function processFile($name)
 	{
-		if ($this->storage->isFileProcessed($fileName)) {
-			$tokens = $this->storage->getFileTokens($fileName);
-			$reflectionFile = new ReflectionFile($tokens, $this->storage);
-
-		} else {
-			$tokens = new FileStream($fileName);
-			$reflectionFile = new ReflectionFile($tokens, $this->storage);
-			$this->storage->addFile($tokens, $reflectionFile);
-		}
-
+		$tokens = new FileStream($name);
+		$reflectionFile = new ReflectionFile($tokens, $this->storage);
+		$this->storage->addFile($tokens, $reflectionFile);
 		return $reflectionFile;
 	}
 

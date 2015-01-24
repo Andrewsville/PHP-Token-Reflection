@@ -13,7 +13,6 @@ use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
 use ApiGen\TokenReflection\Storage\StorageInterface;
-use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
@@ -31,7 +30,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 {
 
 	/**
-	 * @var Parser
+	 * @var StorageInterface
 	 */
 	private $storage;
 
@@ -313,7 +312,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 				return $method;
 			}
 		}
-		throw new RuntimeException(sprintf('Method %s does not exist.', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('Method %s does not exist.', $name));
 	}
 
 

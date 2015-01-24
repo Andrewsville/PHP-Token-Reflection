@@ -194,15 +194,6 @@ interface StorageInterface
 
 
 	/**
-	 * Returns an array of tokens for a particular file.
-	 *
-	 * @param string $name
-	 * @return StreamBase
-	 */
-	function getFileTokens($name);
-
-
-	/**
 	 * Adds a file to the backend storage.
 	 */
 	function addFile(StreamBase $tokenStream, ReflectionFile $file);

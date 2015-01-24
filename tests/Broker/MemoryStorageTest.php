@@ -120,7 +120,6 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 	}
 
 
-
 	public function testFunctions()
 	{
 		$this->assertFalse($this->storage->hasFunction('...'));
@@ -134,15 +133,6 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 	public function testGetNonExistingFunction()
 	{
 		$this->storage->getFunction('...');
-	}
-
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
-	 */
-	public function testGetFileTokens()
-	{
-		$this->storage->getFileTokens('...');
 	}
 
 }

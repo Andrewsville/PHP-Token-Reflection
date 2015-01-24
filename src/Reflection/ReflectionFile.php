@@ -9,12 +9,11 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-class ReflectionFile extends ReflectionBase implements SourceInterface
+class ReflectionFile extends ReflectionBase
 {
 
 	/**
@@ -26,7 +25,7 @@ class ReflectionFile extends ReflectionBase implements SourceInterface
 	/**
 	 * Returns an array of namespaces in the current file.
 	 *
-	 * @return array
+	 * @return array|ReflectionFileNamespace[]
 	 */
 	public function getNamespaces()
 	{
@@ -35,20 +34,7 @@ class ReflectionFile extends ReflectionBase implements SourceInterface
 
 
 	/**
-	 * Outputs the file source code.
-	 *
-	 * @return string
-	 */
-	public function getSource()
-	{
-		return (string) $this->storage->getFileTokens($this->getName());
-	}
-
-
-	/**
 	 * Parses the token substream and prepares namespace reflections from the file.
-	 *
-	 * @return ReflectionFile
 	 */
 	protected function parseStream(StreamBase $tokenStream, ReflectionInterface $parent = NULL)
 	{

@@ -408,23 +408,6 @@ class MemoryStorage implements StorageInterface
 	}
 
 
-	/**
-	 * Returns an array of tokens for a particular file.
-	 *
-	 * @param string $name
-	 * @return StreamBase
-	 * @throws BrokerException If the requested file was not processed.
-	 */
-	public function getFileTokens($name)
-	{
-		$realName = realpath($name);
-		if ( ! isset($this->tokenStreams[$realName])) {
-			throw new BrokerException(sprintf('File "%s" was not processed yet.', $name));
-		}
-		return $this->tokenStreams[$realName] === TRUE ? new FileStream($realName) : $this->tokenStreams[$realName];
-	}
-
-
 	public function addFile(StreamBase $tokenStream, ReflectionFile $file)
 	{
 		$this->tokenStreams[$file->getName()] = $tokenStream;
