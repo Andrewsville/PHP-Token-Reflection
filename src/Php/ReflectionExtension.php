@@ -9,7 +9,6 @@
 
 namespace ApiGen\TokenReflection\Php;
 
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
@@ -17,7 +16,8 @@ use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionExtensionInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
-use Reflector, ReflectionExtension as InternalReflectionExtension;
+use Reflector;
+use ReflectionExtension as InternalReflectionExtension;
 
 
 class ReflectionExtension extends InternalReflectionExtension implements ReflectionInterface, ReflectionExtensionInterface
@@ -46,7 +46,7 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 
 	/**
 	 * @param string $name
-	 * @param Broker $broker
+	 * @param StorageInterface $storage
 	 */
 	public function __construct($name, StorageInterface $storage)
 	{

@@ -9,10 +9,8 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionFunctionBaseInterface;
 use ApiGen\TokenReflection\ReflectionParameterInterface;
 use ApiGen\TokenReflection\Resolver;

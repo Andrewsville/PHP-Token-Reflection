@@ -9,11 +9,8 @@
 
 namespace ApiGen\TokenReflection\PhpParser;
 
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\ReflectionExtensionInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
-use ApiGen\TokenReflection\ReflectionParameterInterface;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Param;
 

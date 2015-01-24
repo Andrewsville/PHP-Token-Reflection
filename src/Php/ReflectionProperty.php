@@ -11,11 +11,9 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use Reflector;
 use ReflectionProperty as InternalReflectionProperty;
 

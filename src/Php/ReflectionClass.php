@@ -62,12 +62,12 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
-	 * @param string $className Class name
-	 * @param Broker $storage
+	 * @param string $name
+	 * @param StorageInterface $storage
 	 */
-	public function __construct($className, StorageInterface $storage)
+	public function __construct($name, StorageInterface $storage)
 	{
-		parent::__construct($className);
+		parent::__construct($name);
 		$this->storage = $storage;
 	}
 
@@ -713,7 +713,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
-	 * @return ApiGen\TokenReflection\Reflection\ReflectionClass|NULL
+	 * @return ReflectionClassInterface|NULL
 	 * @throws RuntimeException If an invalid internal reflection object was provided.
 	 */
 	public static function create(Reflector $internalReflection, StorageInterface $storage)

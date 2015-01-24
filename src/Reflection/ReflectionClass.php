@@ -10,7 +10,6 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen;
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Broker\StorageInterface;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;

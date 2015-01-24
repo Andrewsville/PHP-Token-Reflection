@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection\Parser;
 
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Reflection\ReflectionFunctionBase;
 use ApiGen\TokenReflection\Reflection\ReflectionParameter;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;

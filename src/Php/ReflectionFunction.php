@@ -38,12 +38,12 @@ class ReflectionFunction extends InternalReflectionFunction implements Reflectio
 
 
 	/**
-	 * @param string $functionName
-	 * @param Broker $storage
+	 * @param string $name
+	 * @param StorageInterface $storage
 	 */
-	public function __construct($functionName, StorageInterface $storage)
+	public function __construct($name, StorageInterface $storage)
 	{
-		parent::__construct($functionName);
+		parent::__construct($name);
 		$this->storage = $storage;
 	}
 

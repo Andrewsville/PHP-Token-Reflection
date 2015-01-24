@@ -10,7 +10,6 @@
 namespace ApiGen\TokenReflection\Factory;
 
 use ApiGen\TokenReflection\PhpParser\ClassReflection;
-use ApiGen\TokenReflection\ReflectionClassInterface;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 
