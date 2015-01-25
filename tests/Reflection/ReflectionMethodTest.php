@@ -47,7 +47,7 @@ class ReflectionMethodTest extends TestCase
 	 */
 	public function testDocCommentInheritance()
 	{
-		$this->parser->processFile($this->getFilePath('docCommentInheritance'));
+		$this->parser->parseFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
 		$grandParent->token = $this->parser->getStorage()->getClass('TokenReflection_Test_MethodDocCommentInheritanceGrandParent');
@@ -148,7 +148,7 @@ class ReflectionMethodTest extends TestCase
 		$this->assertTrue($token->isConstructor());
 
 		require_once $this->getFilePath('namedConstructorInNamespace');
-		$this->parser->processFile($this->getFilePath('namedConstructorInNamespace'));
+		$this->parser->parseFile($this->getFilePath('namedConstructorInNamespace'));
 
 		$class = new \ReflectionClass('TokenReflection\Test\MethodNamedConstructor');
 		$internal = $class->getMethod('MethodNamedConstructor');
@@ -188,7 +188,7 @@ class ReflectionMethodTest extends TestCase
 		];
 
 		require_once $this->getFilePath('modifiers');
-		$this->parser->processFile($this->getFilePath('modifiers'));
+		$this->parser->parseFile($this->getFilePath('modifiers'));
 
 		foreach ($classes as $className) {
 			$token = $this->parser->getStorage()->getClass($className);
@@ -236,7 +236,7 @@ class ReflectionMethodTest extends TestCase
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
-		$this->parser->processFile($this->getFilePath('inNamespace'));
+		$this->parser->parseFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
 		$class = new \ReflectionClass('TokenReflection\Test\MethodInNamespace');

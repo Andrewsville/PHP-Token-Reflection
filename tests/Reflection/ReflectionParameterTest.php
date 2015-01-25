@@ -84,7 +84,7 @@ class ReflectionParameterTest extends TestCase
 		$fileName = $this->getFilePath('invalid-optionals');
 
 		$broker = $this->parser;
-		$broker->processFile($fileName);
+		$broker->parseFile($fileName);
 
 		require_once $fileName;
 
@@ -202,7 +202,7 @@ class ReflectionParameterTest extends TestCase
 
 	public function testDocCommentInheritance()
 	{
-		$this->parser->processFile($this->getFilePath('docCommentInheritance'));
+		$this->parser->parseFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
 		$grandParent->token = $this->parser->getStorage()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceGrandParent')->getMethod('m');

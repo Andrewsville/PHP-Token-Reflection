@@ -34,7 +34,7 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 	{
 		/** @var Parser $broker */
 		$broker = $this->container->getByType('ApiGen\TokenReflection\Parser');
-		$broker->processDirectory(realpath(__DIR__ . '/../data/class'));
+		$broker->parseDirectory(realpath(__DIR__ . '/../data/class'));
 		$this->storage = $this->container->getByType('ApiGen\TokenReflection\Storage\StorageInterface');
 	}
 
@@ -54,7 +54,7 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\ParserException
 	 */
 	public function testGetNonExistingFile()
 	{
@@ -77,7 +77,7 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\ParserException
 	 */
 	public function getNonExistingNamespace()
 	{
@@ -112,7 +112,7 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\ParserException
 	 */
 	public function testGetNonExistingConstant()
 	{
@@ -128,7 +128,7 @@ class MemoryStorageTest extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\ParserException
 	 */
 	public function testGetNonExistingFunction()
 	{

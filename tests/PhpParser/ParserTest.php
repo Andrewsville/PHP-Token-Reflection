@@ -60,7 +60,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
 	{
 //		/** @var Parser $broker */
 //		$broker = $this->container->getByType('ApiGen\TokenReflection\Parser\Parser');
-//		$broker->processFile(__DIR__ . '/doubleClass.php');
+//		$broker->parseFile(__DIR__ . '/doubleClass.php');
 //
 //		$classes = $broker->getClasses();
 //		$this->assertCount(1, $classes);

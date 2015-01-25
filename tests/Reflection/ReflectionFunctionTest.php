@@ -107,7 +107,7 @@ class ReflectionFunctionTest extends TestCase
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
-		$this->parser->processFile($this->getFilePath('inNamespace'));
+		$this->parser->parseFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionFunction('TokenReflection\Test\functionInNamespace');

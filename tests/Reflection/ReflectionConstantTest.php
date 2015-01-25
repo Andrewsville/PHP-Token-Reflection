@@ -75,7 +75,7 @@ class ReflectionConstantTest extends TestCase
 
 	public function testInNamespace()
 	{
-		$this->parser->processFile($this->getFilePath('inNamespace'));
+		$this->parser->parseFile($this->getFilePath('inNamespace'));
 		$token = $this->parser->getStorage()->getConstant('TokenReflection\Test\CONSTANT_IN_NAMESPACE');
 
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionConstant', $token);
@@ -104,7 +104,7 @@ class ReflectionConstantTest extends TestCase
 	public function testMagicConstants()
 	{
 		$broker = $this->parser;
-		$broker->processFile($this->getFilePath('magic'));
+		$broker->parseFile($this->getFilePath('magic'));
 
 		require_once($this->getFilePath('magic'));
 
@@ -246,7 +246,7 @@ class ReflectionConstantTest extends TestCase
 	 */
 	public function testMagicConstants54()
 	{
-		$this->parser->processFile($this->getFilePath('magic54'));
+		$this->parser->parseFile($this->getFilePath('magic54'));
 
 		require_once($this->getFilePath('magic54'));
 
@@ -404,7 +404,7 @@ class ReflectionConstantTest extends TestCase
 		];
 
 		$broker = $this->parser;
-		$broker->processFile($this->getFilePath('pretty-names'));
+		$broker->parseFile($this->getFilePath('pretty-names'));
 
 		foreach ($names as $name) {
 			$this->assertTrue($this->parser->getStorage()->hasConstant($name), $name);
@@ -442,7 +442,7 @@ class ReflectionConstantTest extends TestCase
 		];
 
 		$broker = $this->parser;
-		$broker->processFile($this->getFilePath('valueDefinitions'));
+		$broker->parseFile($this->getFilePath('valueDefinitions'));
 
 		foreach ($expected as $name => $value) {
 			$this->assertTrue($this->parser->getStorage()->hasConstant($name), $name);
@@ -459,7 +459,7 @@ class ReflectionConstantTest extends TestCase
 	public function testInterfaces()
 	{
 		$broker = $this->parser;
-		$broker->processFile($this->getFilePath('interfaces'));
+		$broker->parseFile($this->getFilePath('interfaces'));
 
 		$class1 = $this->parser->getStorage()->getClass('TokenReflection_Test_ConstantInterfaceClass');
 		$this->assertTrue($class1->hasConstant('FIRST'));

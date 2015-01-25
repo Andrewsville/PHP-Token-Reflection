@@ -290,7 +290,7 @@ class ReflectionClassTest extends TestCase
 		];
 
 		require_once $this->getFilePath('modifiers');
-		$this->parser->processFile($this->getFilePath('modifiers'));
+		$this->parser->parseFile($this->getFilePath('modifiers'));
 
 		foreach ($classes as $className) {
 			$token = $this->parser->getStorage()->getClass($className);
@@ -635,7 +635,7 @@ class ReflectionClassTest extends TestCase
 	public function testDocCommentInheritance()
 	{
 		require_once $this->getFilePath('docCommentInheritance');
-		$this->parser->processFile($this->getFilePath('docCommentInheritance'));
+		$this->parser->parseFile($this->getFilePath('docCommentInheritance'));
 
 		$parent = new \stdClass();
 		$parent->internal = new InternalReflectionClass('TokenReflection_Test_ClassDocCommentInheritanceParent');
@@ -663,7 +663,7 @@ class ReflectionClassTest extends TestCase
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
-		$this->parser->processFile($this->getFilePath('inNamespace'));
+		$this->parser->parseFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionClass('TokenReflection\Test\ClassInNamespace');
@@ -709,7 +709,7 @@ class ReflectionClassTest extends TestCase
 		];
 
 		require_once $this->getFilePath('traits');
-		$this->parser->processFile($this->getFilePath('traits'));
+		$this->parser->parseFile($this->getFilePath('traits'));
 
 		foreach ($classes as $className) {
 			$token = $this->parser->getStorage()->getClass($className);
@@ -742,7 +742,7 @@ class ReflectionClassTest extends TestCase
 			'TokenReflection_Test_ClassTraits4' => [FALSE, [], ['TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'], ['TokenReflection_Test_ClassTraitsTrait3', 'TokenReflection_Test_ClassTraitsTrait4'], 2, 1]
 		];
 
-		$this->parser->processFile($this->getFilePath('traits'));
+		$this->parser->parseFile($this->getFilePath('traits'));
 		foreach ($expected as $className => $definition) {
 			$reflection = $this->parser->getStorage()->getClass($className);
 
@@ -787,7 +787,7 @@ class ReflectionClassTest extends TestCase
 		];
 
 		$broker = $this->parser;
-		$broker->processFile($this->getFilePath('pretty-names'));
+		$broker->parseFile($this->getFilePath('pretty-names'));
 
 		foreach ($names as $name) {
 			$this->assertTrue($this->parser->getStorage()->hasClass($name), $name);

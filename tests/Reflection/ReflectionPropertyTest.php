@@ -75,7 +75,7 @@ class ReflectionPropertyTest extends TestCase
 	public function testDocCommentInheritance()
 	{
 		require_once $this->getFilePath('docCommentInheritance');
-		$this->parser->processFile($this->getFilePath('docCommentInheritance'));
+		$this->parser->parseFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
 		$grandParent->token = $this->parser->getStorage()->getClass('TokenReflection_Test_PropertyDocCommentInheritanceGrandParent');

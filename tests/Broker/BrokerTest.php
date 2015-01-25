@@ -37,7 +37,7 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 
 	public function testFindFiles()
 	{
-		$files = $this->broker->processDirectory(realpath(__DIR__ . '/../data/class'), TRUE);
+		$files = $this->broker->parseDirectory(realpath(__DIR__ . '/../data/class'), TRUE);
 		$this->assertCount(37, $files);
 	}
 
@@ -48,17 +48,17 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 	public function testFileProcessingError()
 	{
 		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
-		$this->broker->processFile($file);
+		$this->broker->parseFile($file);
 	}
 
 
 	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\ParserException
 	 */
 	public function testDirectoryProcessingError()
 	{
 		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~' . DIRECTORY_SEPARATOR . '~#nonexistent#~';
-		$this->broker->processDirectory($file);
+		$this->broker->parseDirectory($file);
 	}
 
 }

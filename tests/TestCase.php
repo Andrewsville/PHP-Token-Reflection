@@ -174,7 +174,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getClassTokenReflection($test)
 	{
-		$this->parser->processFile($this->getFilePath($test));
+		$this->parser->parseFile($this->getFilePath($test));
 		return $this->parser->getStorage()->getClass($this->getClassName($test));
 	}
 
@@ -219,7 +219,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getFunctionTokenReflection($test)
 	{
-		$this->parser->processFile($this->getFilePath($test));
+		$this->parser->parseFile($this->getFilePath($test));
 		return $this->parser->getStorage()->getFunction($this->getFunctionName($test));
 	}
 
@@ -230,7 +230,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected function getParameterTokenReflection($test)
 	{
-		$this->parser->processFile($this->getFilePath($test));
+		$this->parser->parseFile($this->getFilePath($test));
 		$parameters = $this->parser->getStorage()->getFunction($this->getFunctionName($test))->getParameters();
 		return $parameters[0];
 	}

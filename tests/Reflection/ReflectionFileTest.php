@@ -21,7 +21,7 @@ class ReflectionFileTest extends TestCase
 	public function testDocComment()
 	{
 		$fileName = $this->getFilePath('docComment');
-		$this->parser->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
 		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
@@ -42,7 +42,7 @@ class ReflectionFileTest extends TestCase
 	public function testNoDocComment()
 	{
 		$fileName = $this->getFilePath('noDocComment');
-		$this->parser->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
 		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
@@ -72,7 +72,7 @@ class ReflectionFileTest extends TestCase
 	public function testDeclareNoNamespace()
 	{
 		$fileName = $this->getFilePath('declareNoNamespace');
-		$this->parser->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
 		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
@@ -90,7 +90,7 @@ class ReflectionFileTest extends TestCase
 	public function testDeclareNamespace()
 	{
 		$fileName = $this->getFilePath('declareNamespace');
-		$this->parser->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
 		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
@@ -108,7 +108,7 @@ class ReflectionFileTest extends TestCase
 	/**
 	 * Tests throwing exceptions when requesting reflections of files that were not processed.
 	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\ParserException
 	 */
 	public function testExceptionReturningFileReflection()
 	{

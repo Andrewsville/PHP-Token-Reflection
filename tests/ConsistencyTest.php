@@ -17,9 +17,9 @@ class ConsistencyTest extends TestCase
 
 	public function testConstantReflectionConsistency()
 	{
-		$this->parser->processFile(__DIR__ . '/data/constant/in-namespace.php');
+		$this->parser->parseFile(__DIR__ . '/data/constant/in-namespace.php');
 		try {
-			$this->parser->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->parseFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
@@ -45,9 +45,9 @@ class ConsistencyTest extends TestCase
 
 	public function testClassReflectionConsistency()
 	{
-		$this->parser->processFile(__FILE__);
+		$this->parser->parseFile(__FILE__);
 		try {
-			$this->parser->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->parseFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
@@ -84,9 +84,9 @@ class ConsistencyTest extends TestCase
 
 	public function testFunctionReflectionConsistency()
 	{
-		$this->parser->processFile(__DIR__ . '/data/function/in-namespace.php');
+		$this->parser->parseFile(__DIR__ . '/data/function/in-namespace.php');
 		try {
-			$this->parser->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->parseFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
@@ -117,7 +117,7 @@ class ConsistencyTest extends TestCase
 
 	public function testPropertyReflectionConsistency()
 	{
-		$this->parser->processFile(__DIR__ . '/data/property/lines.php');
+		$this->parser->parseFile(__DIR__ . '/data/property/lines.php');
 
 		$this->assertTrue(function_exists('constant'));
 		$storage = $this->parser->getStorage();
@@ -144,7 +144,7 @@ class ConsistencyTest extends TestCase
 
 	public function testMethodReflectionConsistency()
 	{
-		$this->parser->processFile(__DIR__ . '/data/method/access-level.php');
+		$this->parser->parseFile(__DIR__ . '/data/method/access-level.php');
 
 		$storage = $this->parser->getStorage();
 		$methods = [
@@ -170,7 +170,7 @@ class ConsistencyTest extends TestCase
 
 	public function testParameterReflectionConsistency()
 	{
-		$this->parser->processFile(__DIR__ . '/data/parameter/optional-false.php');
+		$this->parser->parseFile(__DIR__ . '/data/parameter/optional-false.php');
 
 		$storage = $this->parser->getStorage();
 		$parameters = [
