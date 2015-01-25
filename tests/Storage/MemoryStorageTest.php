@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests\Broker;
+namespace ApiGen\TokenReflection\Tests\Storage;
 
 use ApiGen;
 use ApiGen\TokenReflection\Parser;

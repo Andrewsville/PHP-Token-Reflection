@@ -61,7 +61,12 @@ class ReflectionFile extends ReflectionBase
 	{
 		$this->name = $tokenStream->getFileName();
 		if ($tokenStream->count() <= 1) {
-			$this->docComment = $this->reflectionAnnotationFactory->create($this, NULL);
+			if ($this->reflectionAnnotationFactory) {
+				$this->docComment = $this->reflectionAnnotationFactory->create($this, NULL);
+
+			} else {
+				$this->docComment = new ReflectionAnnotation($this, NULL);
+			}
 
 		} else {
 			$docCommentPosition = NULL;

@@ -68,15 +68,6 @@ class MemoryStorage implements StorageInterface
 	private $declaredFunctions;
 
 
-	public function __construct()
-	{
-		// possibly optimize to singleton getters
-		$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
-		$this->declaredConstants = get_defined_constants();
-		$this->declaredFunctions = array_flip(get_defined_functions()['internal']);
-	}
-
-
 	/**
 	 * Returns if a file with the given filename has been processed.
 	 *
@@ -202,7 +193,7 @@ class MemoryStorage implements StorageInterface
 			return $namespaceReflection->getClass($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($this->declaredClasses[$name])) {
+			if (isset($this->getDeclaredClasses()[$name])) {
 				$reflection = new ReflectionClass($name, $this);
 				if ($reflection->isInternal()) {
 					return $reflection;
@@ -295,8 +286,8 @@ class MemoryStorage implements StorageInterface
 			return $ns->getConstant($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($this->declaredConstants[$name])) {
-				$reflection = new ReflectionConstant($name, $this->declaredConstants[$name], $this);
+			if (isset($this->getDeclaredConstants()[$name])) {
+				$reflection = new ReflectionConstant($name, $this->getDeclaredConstants()[$name], $this);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
@@ -368,7 +359,7 @@ class MemoryStorage implements StorageInterface
 			return $namespaceReflection->getFunction($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($this->declaredFunctions[$name])) {
+			if (isset($this->getDeclaredFunctions()[$name])) {
 				return new ReflectionFunction($name, $this);
 			}
 			throw new ParserException(sprintf('Function %s does not exist.', $name));
@@ -402,7 +393,7 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * Prepares and returns used class lists.
 	 *
-	 * @return array
+	 * @return ReflectionClassInterface[][]
 	 */
 	protected function parseClassLists()
 	{
@@ -413,13 +404,16 @@ class MemoryStorage implements StorageInterface
 			self::INTERNAL_CLASSES => [],
 			self::NONEXISTENT_CLASSES => []
 		];
+
 		foreach ($this->namespaces as $namespace) {
 			foreach ($namespace->getClasses() as $class) {
 				$allClasses[self::TOKENIZED_CLASSES][$class->getName()] = $class;
 			}
 		}
+
 		foreach ($allClasses[self::TOKENIZED_CLASSES] as $className => $class) {
 			foreach (array_merge($class->getParentClasses(), $class->getInterfaces()) as $parent) {
+				/** @var ReflectionClassInterface $parent */
 				if ($parent->isInternal()) {
 					$allClasses[self::INTERNAL_CLASSES][$parent->getName()] = $parent;
 
@@ -428,7 +422,44 @@ class MemoryStorage implements StorageInterface
 				}
 			}
 		}
+
 		return $allClasses;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	private function getDeclaredClasses()
+	{
+		if ($this->declaredClasses === NULL) {
+			$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
+		}
+		return $this->declaredClasses;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	private function getDeclaredConstants()
+	{
+		if ($this->declaredConstants === NULL) {
+			$this->declaredConstants = get_defined_constants();
+		}
+		return $this->declaredConstants;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	private function getDeclaredFunctions()
+	{
+		if ($this->declaredFunctions === NULL) {
+			$this->declaredFunctions = array_flip(get_defined_functions()['internal']);
+		}
+		return $this->declaredFunctions;
 	}
 
 }

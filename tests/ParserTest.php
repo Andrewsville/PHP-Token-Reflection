@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiGen\TokenReflection\Tests\Broker;
+namespace ApiGen\TokenReflection\Tests;
 
 use ApiGen;
 use ApiGen\TokenReflection\Parser;
@@ -9,7 +9,7 @@ use Nette\DI\Container;
 use PHPUnit_Framework_TestCase;
 
 
-class BrokerTest extends PHPUnit_Framework_TestCase
+class ParserTest extends PHPUnit_Framework_TestCase
 {
 
 	/**
@@ -20,7 +20,7 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @var Parser
 	 */
-	private $broker;
+	private $parser;
 
 
 	public function __construct()
@@ -31,13 +31,13 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->broker = $this->container->getByType('ApiGen\TokenReflection\Parser');
+		$this->parser = $this->container->getByType('ApiGen\TokenReflection\Parser');
 	}
 
 
 	public function testFindFiles()
 	{
-		$files = $this->broker->parseDirectory(realpath(__DIR__ . '/../data/class'), TRUE);
+		$files = $this->parser->parseDirectory(realpath(__DIR__ . '/data/class'));
 		$this->assertCount(37, $files);
 	}
 
@@ -48,7 +48,7 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 	public function testFileProcessingError()
 	{
 		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~';
-		$this->broker->parseFile($file);
+		$this->parser->parseFile($file);
 	}
 
 
@@ -58,7 +58,7 @@ class BrokerTest extends PHPUnit_Framework_TestCase
 	public function testDirectoryProcessingError()
 	{
 		$file = __DIR__ . DIRECTORY_SEPARATOR . '~#nonexistent#~' . DIRECTORY_SEPARATOR . '~#nonexistent#~';
-		$this->broker->parseDirectory($file);
+		$this->parser->parseDirectory($file);
 	}
 
 }

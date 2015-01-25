@@ -69,6 +69,7 @@ class Parser implements ParserInterface
 			/** @var SplFileInfo $entry */
 			$result[$entry->getPathName()] = $this->parseFile($entry->getPathName());
 		}
+
 		return $result;
 	}
 
