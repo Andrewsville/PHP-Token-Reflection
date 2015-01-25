@@ -23,10 +23,25 @@ class ReflectionFileFactory
 	 */
 	private $storage;
 
+	/**
+	 * @var ReflectionAnnotationFactory
+	 */
+	private $reflectionAnnotationFactory;
 
-	public function __construct(StorageInterface $storage)
-	{
+	/**
+	 * @var ReflectionFileNamespaceFactory
+	 */
+	private $reflectionFileNamespaceFactory;
+
+
+	public function __construct(
+		StorageInterface $storage,
+		ReflectionAnnotationFactory $reflectionAnnotationFactory,
+		ReflectionFileNamespaceFactory $reflectionFileNamespaceFactory
+	) {
 		$this->storage = $storage;
+		$this->reflectionAnnotationFactory = $reflectionAnnotationFactory;
+		$this->reflectionFileNamespaceFactory = $reflectionFileNamespaceFactory;
 	}
 
 
@@ -37,7 +52,10 @@ class ReflectionFileFactory
 	public function create($name)
 	{
 		$tokenStream = new FileStream($name);
-		return new ReflectionFile($tokenStream, $this->storage);
+		$reflectionFile = new ReflectionFile($tokenStream, $this->storage);
+		$reflectionFile->setReflectionAnnotationFactory($this->reflectionAnnotationFactory);
+		$reflectionFile->setReflectionFileNamespaceFactory($this->reflectionFileNamespaceFactory);
+		return $reflectionFile;
 	}
 
 }

@@ -34,12 +34,8 @@ class TokenReflectionExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('resolver'))
 			->setClass('ApiGen\TokenReflection\Resolver');
 
-
 		$this->setupPhp();
-
 		$this->setupReflections();
-
-
 		$this->setupPhpParser();
 	}
 
@@ -60,8 +56,11 @@ class TokenReflectionExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('reflection.namespaceFactory'))
 			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionNamespaceFactory');
 
-		$builder->addDefinition($this->prefix('reflection.classFactory'))
-			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionClassFactory');
+		$builder->addDefinition($this->prefix('reflection.fileNamespaceFactory'))
+			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionFileNamespaceFactory');
+
+		$builder->addDefinition($this->prefix('reflection.annotationFactory'))
+			->setClass('ApiGen\TokenReflection\Reflection\Factory\ReflectionAnnotationFactory');
 	}
 
 

@@ -22,8 +22,6 @@ use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
 use ApiGen\TokenReflection\ReflectionNamespaceInterface;
-use ApiGen\TokenReflection\Stream\FileStream;
-use ApiGen\TokenReflection\Stream\StreamBase;
 
 
 class MemoryStorage implements StorageInterface

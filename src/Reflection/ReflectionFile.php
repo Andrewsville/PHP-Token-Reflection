@@ -9,7 +9,8 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\ReflectionInterface;
+use ApiGen\TokenReflection\Reflection\Factory\ReflectionAnnotationFactory;
+use ApiGen\TokenReflection\Reflection\Factory\ReflectionFileNamespaceFactory;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
@@ -17,15 +18,23 @@ class ReflectionFile extends ReflectionBase
 {
 
 	/**
-	 * @var array
+	 * @var ReflectionFileNamespace[]
 	 */
 	private $namespaces = [];
 
+	/**
+	 * @var ReflectionAnnotationFactory
+	 */
+	private $reflectionAnnotationFactory;
 
 	/**
-	 * Returns an array of namespaces in the current file.
-	 *
-	 * @return array|ReflectionFileNamespace[]
+	 * @var ReflectionFileNamespaceFactory
+	 */
+	private $reflectionFileNamespaceFactory;
+
+
+	/**
+	 * @return ReflectionFileNamespace[]
 	 */
 	public function getNamespaces()
 	{
@@ -33,61 +42,98 @@ class ReflectionFile extends ReflectionBase
 	}
 
 
+	public function setReflectionAnnotationFactory(ReflectionAnnotationFactory $reflectionAnnotationFactory)
+	{
+		$this->reflectionAnnotationFactory = $reflectionAnnotationFactory;
+	}
+
+
+	public function setReflectionFileNamespaceFactory(ReflectionFileNamespaceFactory $reflectionFileNamespaceFactory)
+	{
+		$this->reflectionFileNamespaceFactory = $reflectionFileNamespaceFactory;
+	}
+
+
 	/**
 	 * Parses the token substream and prepares namespace reflections from the file.
 	 */
-	protected function parseStream(StreamBase $tokenStream, ReflectionInterface $parent = NULL)
+	protected function parseStream(StreamBase $tokenStream)
 	{
 		$this->name = $tokenStream->getFileName();
 		if ($tokenStream->count() <= 1) {
-			// No PHP content
-			$this->docComment = new ReflectionAnnotation($this, NULL);
-			return $this;
-		}
-		$docCommentPosition = NULL;
-		if ( ! $tokenStream->is(T_OPEN_TAG)) {
-			$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
+			$this->docComment = $this->reflectionAnnotationFactory->create($this, NULL);
+
 		} else {
-			$tokenStream->skipWhitespaces();
-			while (NULL !== ($type = $tokenStream->getType())) {
-				switch ($type) {
-					case T_DOC_COMMENT:
-						if (NULL === $docCommentPosition) {
-							$docCommentPosition = $tokenStream->key();
-						}
-					case T_WHITESPACE:
-					case T_COMMENT:
-						break;
-					case T_DECLARE:
-						// Intentionally twice call of skipWhitespaces()
-						$tokenStream
-							->skipWhitespaces()
-							->findMatchingBracket()
-							->skipWhitespaces();
-						break;
-					case T_NAMESPACE:
-						$docCommentPosition = $docCommentPosition ?: -1;
-						break 2;
-					default:
-						$docCommentPosition = $docCommentPosition ?: -1;
-						$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
-						break 2;
-				}
-				$tokenStream->skipWhitespaces();
-			}
-			while (NULL !== ($type = $tokenStream->getType())) {
-				if (T_NAMESPACE === $type) {
-					$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
+			$docCommentPosition = NULL;
+			if ( ! $tokenStream->is(T_OPEN_TAG)) {
+				if ($this->reflectionFileNamespaceFactory) {
+					$this->namespaces[] = $this->reflectionFileNamespaceFactory->create($tokenStream, $this);
+
 				} else {
+					$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
+				}
+
+			} else {
+				$tokenStream->skipWhitespaces();
+				while (($type = $tokenStream->getType()) !== NULL) {
+					switch ($type) {
+						case T_DOC_COMMENT:
+							if (NULL === $docCommentPosition) {
+								$docCommentPosition = $tokenStream->key();
+							}
+						case T_WHITESPACE:
+						case T_COMMENT:
+							break;
+						case T_DECLARE:
+							// Intentionally twice call of skipWhitespaces()
+							$tokenStream->skipWhitespaces()
+								->findMatchingBracket()
+								->skipWhitespaces();
+							break;
+						case T_NAMESPACE:
+							$docCommentPosition = $docCommentPosition ?: -1;
+							break 2;
+						default:
+							$docCommentPosition = $docCommentPosition ?: -1;
+							if ($this->reflectionFileNamespaceFactory) {
+								$this->namespaces[] = $this->reflectionFileNamespaceFactory->create($tokenStream, $this);
+
+							} else {
+								$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
+							}
+
+							break 2;
+					}
 					$tokenStream->skipWhitespaces();
 				}
+
+				while (($type = $tokenStream->getType()) !== NULL) {
+					if (T_NAMESPACE === $type) {
+						if ($this->reflectionFileNamespaceFactory) {
+							$this->namespaces[] = $this->reflectionFileNamespaceFactory->create($tokenStream, $this);
+
+						} else {
+							$this->namespaces[] = new ReflectionFileNamespace($tokenStream, $this->storage, $this);
+						}
+
+					} else {
+						$tokenStream->skipWhitespaces();
+					}
+				}
+			}
+
+			if ($docCommentPosition !== NULL && ! empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
+				$docCommentPosition = NULL;
+			}
+
+			$docComment = $docCommentPosition !== NULL ? $tokenStream->getTokenValue($docCommentPosition) : NULL;
+			if ($this->reflectionAnnotationFactory) {
+				$this->docComment = $this->reflectionAnnotationFactory->create($this, $docComment);
+
+			} else {
+				$this->docComment = new ReflectionAnnotation($this, $docComment);
 			}
 		}
-		if (NULL !== $docCommentPosition && !empty($this->namespaces) && $docCommentPosition === $this->namespaces[0]->getStartPosition()) {
-			$docCommentPosition = NULL;
-		}
-		$this->docComment = new ReflectionAnnotation($this, NULL !== $docCommentPosition ? $tokenStream->getTokenValue($docCommentPosition) : NULL);
-		return $this;
 	}
 
 }
