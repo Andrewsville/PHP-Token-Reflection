@@ -64,7 +64,6 @@ class ReflectionExtensionTest extends TestCase
 	{
 		$this->assertNull($this->internalReflectionExtension->getFunction('...'));
 		$this->assertSame([], $this->internalReflectionExtension->getFunctions());
-		$this->assertSame([], $this->internalReflectionExtension->getFunctionNames());
 	}
 
 

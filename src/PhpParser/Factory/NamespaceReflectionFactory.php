@@ -9,19 +9,22 @@
 
 namespace ApiGen\TokenReflection\PhpParser\Factory;
 
+use ApiGen\TokenReflection\PhpParser\NamespaceReflection;
 use ApiGen\TokenReflection\ReflectionNamespaceInterface;
+use PhpParser\Node\Stmt\Namespace_;
 
 
-class ReflectionNamespaceFactory
+class NamespaceReflectionFactory
 {
 
 	/**
-	 * @param string $name
 	 * @return ReflectionNamespaceInterface
+	 *
 	 */
-	public function create($name)
+	public function createFromNode(Namespace_ $node)
 	{
-
+		$name = $node->name->parts[0];
+		return new NamespaceReflection($name);
 	}
 
 }

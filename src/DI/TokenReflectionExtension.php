@@ -71,6 +71,9 @@ class TokenReflectionExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('docBlockParser'))
 			->setClass('ApiGen\TokenReflection\PhpParser\DocBlockParser');
 
+		$builder->addDefinition($this->prefix('namespaceReflectionFactory'))
+			->setClass('ApiGen\TokenReflection\PhpParser\Factory\NamespaceReflectionFactory');
+
 		$builder->addDefinition($this->prefix('classReflectionFactory'))
 			->setClass('ApiGen\TokenReflection\Factory\ClassReflectionFactory');
 

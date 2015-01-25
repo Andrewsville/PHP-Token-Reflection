@@ -264,15 +264,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getOwnInterfaceNames()
-	{
-		return array_keys($this->getOwnInterfaces());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getConstructor()
 	{
 		return ReflectionMethodFactory::create(parent::getConstructor(), $this->storage);
@@ -570,15 +561,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDirectSubclassNames()
-	{
-		return array_keys($this->getDirectSubclasses());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getIndirectSubclasses()
 	{
 		return array_filter($this->getInternalTokenizedClasses(), function (ReflectionClassInterface $class) {
@@ -587,15 +569,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 			}
 			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIndirectSubclassNames()
-	{
-		return array_keys($this->getIndirectSubclasses());
 	}
 
 
@@ -619,15 +592,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDirectImplementerNames()
-	{
-		return array_keys($this->getDirectImplementers());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getIndirectImplementers()
 	{
 		if ( ! $this->isInterface()) {
@@ -639,15 +603,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 			}
 			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIndirectImplementerNames()
-	{
-		return array_keys($this->getIndirectImplementers());
 	}
 
 
@@ -682,15 +637,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 	 * {@inheritdoc}
 	 */
 	public function getOwnTraits()
-	{
-		return [];
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getOwnTraitNames()
 	{
 		return [];
 	}

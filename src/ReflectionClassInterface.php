@@ -197,27 +197,11 @@ interface ReflectionClassInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns interface names.
-	 *
-	 * @return array|string[]
-	 */
-	function getInterfaceNames();
-
-
-	/**
 	 * Returns interface reflections implemented by this class, not its parents.
 	 *
 	 * @return ReflectionClassInterface[]
 	 */
 	function getOwnInterfaces();
-
-
-	/**
-	 * Returns names of interfaces implemented by this class, not its parents.
-	 *
-	 * @return string[]
-	 */
-	function getOwnInterfaceNames();
 
 
 	/**
@@ -465,27 +449,11 @@ interface ReflectionClassInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns names of direct subclasses.
-	 *
-	 * @return array|ReflectionClassInterface[]
-	 */
-	function getDirectSubclassNames();
-
-
-	/**
 	 * Returns reflections of indirect subclasses.
 	 *
 	 * @return array|ReflectionClassInterface[]
 	 */
 	function getIndirectSubclasses();
-
-
-	/**
-	 * Returns names of indirect subclasses.
-	 *
-	 * @return array|string[]
-	 */
-	function getIndirectSubclassNames();
 
 
 	/**
@@ -497,27 +465,11 @@ interface ReflectionClassInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns names of classes directly implementing this interface.
-	 *
-	 * @return array|string[]
-	 */
-	function getDirectImplementerNames();
-
-
-	/**
 	 * Returns reflections of classes indirectly implementing this interface.
 	 *
 	 * @return array|ReflectionClassInterface[]
 	 */
 	function getIndirectImplementers();
-
-
-	/**
-	 * Returns names of classes indirectly implementing this interface.
-	 *
-	 * @return array|string[]
-	 */
-	function getIndirectImplementerNames();
 
 
 	/**
@@ -542,22 +494,6 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 * @return array|ReflectionClassInterface[]
 	 */
 	function getOwnTraits();
-
-
-	/**
-	 * Returns names of used traits.
-	 *
-	 * @return array
-	 */
-	function getTraitNames();
-
-
-	/**
-	 * Returns names of traits used by this class an not its parents.
-	 *
-	 * @return array
-	 */
-	function getOwnTraitNames();
 
 
 	/**

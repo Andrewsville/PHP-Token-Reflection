@@ -124,27 +124,21 @@ class ReflectionClassTest extends TestCase
 	public function testSubclasses()
 	{
 		$this->assertSame([], $this->internalReflectionClass->getDirectSubclasses());
-		$this->assertSame([], $this->internalReflectionClass->getDirectSubclassNames());
 		$this->assertSame([], $this->internalReflectionClass->getIndirectSubclasses());
-		$this->assertSame([], $this->internalReflectionClass->getIndirectSubclassNames());
 	}
 
 
 	public function testImplementers()
 	{
 		$this->assertSame([], $this->internalReflectionClass->getDirectImplementers());
-		$this->assertSame([], $this->internalReflectionClass->getDirectImplementerNames());
 		$this->assertSame([], $this->internalReflectionClass->getIndirectImplementers());
-		$this->assertSame([], $this->internalReflectionClass->getIndirectImplementerNames());
 	}
 
 
 	public function testInterfaces()
 	{
 		$this->assertSame([], $this->internalReflectionClass->getInterfaces());
-		$this->assertSame([], $this->internalReflectionClass->getInterfaceNames());
 		$this->assertSame([], $this->internalReflectionClass->getOwnInterfaces());
-		$this->assertSame([], $this->internalReflectionClass->getOwnInterfaceNames());
 	}
 
 
@@ -199,7 +193,6 @@ class ReflectionClassTest extends TestCase
 		$this->assertFalse($this->internalReflectionClass->usesTrait('Exception'));
 
 		$this->assertSame([], $this->internalReflectionClass->getOwnTraits());
-		$this->assertSame([], $this->internalReflectionClass->getOwnTraitNames());
 		$this->assertSame([], $this->internalReflectionClass->getTraitProperties());
 	}
 

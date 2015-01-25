@@ -11,6 +11,7 @@ namespace ApiGen\TokenReflection\PhpParser;
 
 use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -26,46 +27,56 @@ class ClassReflection implements ReflectionClassInterface
 	 */
 	private $name;
 
+	/**
+	 * @var string
+	 */
+	private $namespaceName;
+
 
 	/**
 	 * @param string $name
+	 * @param string $namespaceName
 	 */
-	public function __construct($name)
+	public function __construct($name, $namespaceName)
 	{
 		$this->name = $name;
+		$this->namespaceName = $namespaceName;
 	}
 
 
 	/**
-	 * Returns the unqualified name (UQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
-	function getShortName()
+	public function getShortName()
 	{
-		// TODO: Implement getShortName() method.
+		$name = $this->getName();
+		if ($this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
+			$name = substr($name, strlen($this->namespaceName) + 1);
+		}
+		return $name;
 	}
 
 
 	/**
-	 * Returns the namespace name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
-	function getNamespaceName()
+	public function getNamespaceName()
 	{
-		// TODO: Implement getNamespaceName() method.
+		if ($this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
+			return '';
+
+		} else {
+			return $this->namespaceName;
+		}
 	}
 
 
 	/**
-	 * Returns if the class is defined within a namespace.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function inNamespace()
+	public function inNamespace()
 	{
-		// TODO: Implement inNamespace() method.
+		return (bool) $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME;
 	}
 
 
@@ -285,17 +296,6 @@ class ClassReflection implements ReflectionClassInterface
 
 
 	/**
-	 * Returns interface names.
-	 *
-	 * @return array|string[]
-	 */
-	function getInterfaceNames()
-	{
-		// TODO: Implement getInterfaceNames() method.
-	}
-
-
-	/**
 	 * Returns interface reflections implemented by this class, not its parents.
 	 *
 	 * @return array|ReflectionClassInterface[]
@@ -303,17 +303,6 @@ class ClassReflection implements ReflectionClassInterface
 	function getOwnInterfaces()
 	{
 		// TODO: Implement getOwnInterfaces() method.
-	}
-
-
-	/**
-	 * Returns names of interfaces implemented by this class, not its parents.
-	 *
-	 * @return array|string[]
-	 */
-	function getOwnInterfaceNames()
-	{
-		// TODO: Implement getOwnInterfaceNames() method.
 	}
 
 
@@ -652,17 +641,6 @@ class ClassReflection implements ReflectionClassInterface
 
 
 	/**
-	 * Returns names of direct subclasses.
-	 *
-	 * @return array|ReflectionClassInterface[]
-	 */
-	function getDirectSubclassNames()
-	{
-		// TODO: Implement getDirectSubclassNames() method.
-	}
-
-
-	/**
 	 * Returns reflections of indirect subclasses.
 	 *
 	 * @return array|ReflectionClassInterface[]
@@ -670,17 +648,6 @@ class ClassReflection implements ReflectionClassInterface
 	function getIndirectSubclasses()
 	{
 		// TODO: Implement getIndirectSubclasses() method.
-	}
-
-
-	/**
-	 * Returns names of indirect subclasses.
-	 *
-	 * @return array|string[]
-	 */
-	function getIndirectSubclassNames()
-	{
-		// TODO: Implement getIndirectSubclassNames() method.
 	}
 
 
@@ -696,17 +663,6 @@ class ClassReflection implements ReflectionClassInterface
 
 
 	/**
-	 * Returns names of classes directly implementing this interface.
-	 *
-	 * @return array|string[]
-	 */
-	function getDirectImplementerNames()
-	{
-		// TODO: Implement getDirectImplementerNames() method.
-	}
-
-
-	/**
 	 * Returns reflections of classes indirectly implementing this interface.
 	 *
 	 * @return array|ReflectionClassInterface[]
@@ -714,17 +670,6 @@ class ClassReflection implements ReflectionClassInterface
 	function getIndirectImplementers()
 	{
 		// TODO: Implement getIndirectImplementers() method.
-	}
-
-
-	/**
-	 * Returns names of classes indirectly implementing this interface.
-	 *
-	 * @return array|string[]
-	 */
-	function getIndirectImplementerNames()
-	{
-		// TODO: Implement getIndirectImplementerNames() method.
 	}
 
 
@@ -758,28 +703,6 @@ class ClassReflection implements ReflectionClassInterface
 	function getOwnTraits()
 	{
 		// TODO: Implement getOwnTraits() method.
-	}
-
-
-	/**
-	 * Returns names of used traits.
-	 *
-	 * @return array
-	 */
-	function getTraitNames()
-	{
-		// TODO: Implement getTraitNames() method.
-	}
-
-
-	/**
-	 * Returns names of traits used by this class an not its parents.
-	 *
-	 * @return array
-	 */
-	function getOwnTraitNames()
-	{
-		// TODO: Implement getOwnTraitNames() method.
 	}
 
 

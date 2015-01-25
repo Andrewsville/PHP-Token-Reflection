@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Factory;
 
 use ApiGen\TokenReflection\PhpParser\ClassReflection;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 
@@ -23,8 +24,22 @@ class ClassReflectionFactory implements ClassReflectionFactoryInterface
 	public function createFromNode(Class_ $classNode, Stmt $parentNode = NULL, $file)
 	{
 		return new ClassReflection(
-			$classNode->name
+			$classNode->name,
+			$this->getNamespaceName($parentNode)
 		);
+	}
+
+
+	/**
+	 * @param Stmt $parentNode
+	 * @return string
+	 */
+	private function getNamespaceName(Stmt $parentNode)
+	{
+		if ($parentNode instanceof Stmt\Namespace_) {
+			return $parentNode->name->parts[0];
+		}
+		return ReflectionNamespace::NO_NAMESPACE_NAME;
 	}
 
 }

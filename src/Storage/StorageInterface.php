@@ -80,6 +80,13 @@ interface StorageInterface
 
 
 	/**
+	 * @param string $name
+	 * @param ReflectionClassInterface $reflectionClass
+	 */
+	function addClass($name, ReflectionClassInterface $reflectionClass);
+
+
+	/**
 	 * Returns if there was such class processed (FQN expected).
 	 *
 	 * @param string $name
@@ -107,6 +114,13 @@ interface StorageInterface
 
 
 	/**
+	 * @param string $name
+	 * @param ReflectionConstantInterface $constantReflection
+	 */
+	function addConstant($name, ReflectionConstantInterface $constantReflection);
+
+
+	/**
 	 * Returns if there was such constant processed (FQN expected).
 	 *
 	 * @param string $constantName
@@ -130,6 +144,13 @@ interface StorageInterface
 	 * @return array
 	 */
 	function getConstants();
+
+
+	/**
+	 * @param string $name
+	 * @param ReflectionFunctionInterface $functionReflection
+	 */
+	function addFunction($name, ReflectionFunctionInterface $functionReflection);
 
 
 	/**

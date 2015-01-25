@@ -351,14 +351,14 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			return TRUE;
 		}
 		$parent = $this->getParentClass();
-		return FALSE === $parent ? FALSE : $parent->isSubclassOf($class);
+		return $parent === FALSE ? FALSE : $parent->isSubclassOf($class);
 	}
 
 
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass|bool
+	 * @return ReflectionClassInterface|bool
 	 */
 	public function getParentClass()
 	{
@@ -412,10 +412,10 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	{
 		if (is_object($interface)) {
 			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof ReflectionClassInterface) {
-				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)));
 			}
 			if ( ! $interface->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface->getName()), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface->getName()));
 			}
 			$interfaceName = $interface->getName();
 		} else {
@@ -464,22 +464,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getOwnInterfaces()
 	{
-		$interfaceNames = $this->getOwnInterfaceNames();
-		if (empty($interfaceNames)) {
+		if (empty($this->interfaces)) {
 			return [];
 		}
-		return array_combine($interfaceNames, array_map(function ($interfaceName) {
+		return array_combine($this->interfaces, array_map(function ($interfaceName) {
 			return $this->storage->getClass($interfaceName);
-		}, $interfaceNames));
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getOwnInterfaceNames()
-	{
-		return $this->interfaces;
+		}, $this->interfaces));
 	}
 
 
@@ -958,7 +948,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getTraits()
 	{
-		$traitNames = $this->getTraitNames();
+		$parentClass = $this->getParentClass();
+		$names = $parentClass ? array_keys($parentClass->getTraits()) : [];
+		foreach ($this->traits as $traitName) {
+			$names[] = $traitName;
+		}
+		$traitNames =  array_unique($names);
 		if (empty($traitNames)) {
 			return [];
 		}
@@ -973,36 +968,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getOwnTraits()
 	{
-		$ownTraitNames = $this->getOwnTraitNames();
-		if (empty($ownTraitNames)) {
+		if (empty($this->traits)) {
 			return [];
 		}
-		return array_combine($ownTraitNames, array_map(function ($traitName) {
+		return array_combine($this->traits, array_map(function ($traitName) {
 			return $this->storage->getClass($traitName);
-		}, $ownTraitNames));
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getTraitNames()
-	{
-		$parentClass = $this->getParentClass();
-		$names = $parentClass ? $parentClass->getTraitNames() : [];
-		foreach ($this->traits as $traitName) {
-			$names[] = $traitName;
-		}
-		return array_unique($names);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getOwnTraitNames()
-	{
-		return $this->traits;
+		}, $this->traits));
 	}
 
 
@@ -1044,7 +1015,9 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			}
 			$traitName = $trait;
 		}
-		return in_array($traitName, $this->getTraitNames());
+
+		$traitNames = array_keys($this->traits);
+		return in_array($traitName, $traitNames);
 	}
 
 
@@ -1065,15 +1038,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDirectSubclassNames()
-	{
-		return array_keys($this->getDirectSubclasses());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getIndirectSubclasses()
 	{
 		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
@@ -1082,15 +1046,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			}
 			return $class->getParentClassName() !== NULL && $class->getParentClass()->isSubClassOf($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIndirectSubclassNames()
-	{
-		return array_keys($this->getIndirectSubclasses());
 	}
 
 
@@ -1114,15 +1069,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDirectImplementerNames()
-	{
-		return array_keys($this->getDirectImplementers());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getIndirectImplementers()
 	{
 		if ( ! $this->isInterface()) {
@@ -1134,15 +1080,6 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			}
 			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIndirectImplementerNames()
-	{
-		return array_keys($this->getIndirectImplementers());
 	}
 
 

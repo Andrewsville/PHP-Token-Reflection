@@ -9,7 +9,9 @@
 
 namespace ApiGen\TokenReflection\PhpParser;
 
+use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
+use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
@@ -19,178 +21,151 @@ use ApiGen\TokenReflection\ReflectionNamespaceInterface;
 class NamespaceReflection implements ReflectionNamespaceInterface
 {
 
+	/**
+	 * @var string
+	 */
+	const NAMESPACE_SEP = '\\';
+
+	/**
+	 * @var string
+	 */
+	private $name;
+
+	/**
+	 * @var ReflectionClassInterface[]
+	 */
+	private $classes;
+
+	/**
+	 * @var ReflectionConstantInterface[]
+	 */
+	private $constants;
+
+	/**
+	 * @var ReflectionFunctionInterface[]
+	 */
+	private $functions;
+
+
+	/**
+	 * @param string $name
+	 */
 	public function __construct($name)
 	{
-		dump($name);
-	}
-
-	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
-	 */
-	function getName()
-	{
-		// TODO: Implement getName() method.
+		$this->name = $name;
 	}
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
-	function getPrettyName()
+	public function getName()
 	{
-		// TODO: Implement getPrettyName() method.
+		return $this->name;
 	}
 
 
 	/**
-	 * Returns if the reflection object is internal.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function isInternal()
+	public function getPrettyName()
 	{
-		// TODO: Implement isInternal() method.
+		return $this->getName();
 	}
 
 
 	/**
-	 * Returns if the reflection object is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function isUserDefined()
+	public function isInternal()
 	{
-		// TODO: Implement isUserDefined() method.
+		return FALSE;
 	}
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function isTokenized()
+	public function isUserDefined()
 	{
-		// TODO: Implement isTokenized() method.
+		return TRUE;
 	}
 
 
 	/**
-	 * Returns if the namespace contains a class of the given name.
-	 *
-	 * @param string $className Class name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function hasClass($className)
+	public function isTokenized()
 	{
-		// TODO: Implement hasClass() method.
+		return TRUE;
 	}
 
 
 	/**
-	 * Return a class reflection.
-	 *
-	 * @param string $className
-	 * @return ReflectionClassInterface
+	 * {@inheritdoc}
 	 */
-	function getClass($className)
+	public function hasClass($name)
 	{
-		// TODO: Implement getClass() method.
+		$name = $this->getFqnElementName($name);
+		return isset($this->classes[$name]);
 	}
 
 
 	/**
-	 * Returns class reflections.
-	 *
-	 * @return array|ReflectionClassInterface[]
+	 * {@inheritdoc}
 	 */
-	function getClasses()
+	public function getClass($name)
 	{
-		// TODO: Implement getClasses() method.
+		$name = $this->getFqnElementName($name);
+		if ($this->hasClass($name)) {
+			return $this->classes[$name];
+		}
+
+		throw new RuntimeException("Class '$name' does not exist.");
 	}
 
 
 	/**
-	 * Returns class names (FQN).
-	 *
-	 * @return array|string[]
+	 * {@inheritdoc}
 	 */
-	function getClassNames()
+	public function getClasses()
 	{
-		// TODO: Implement getClassNames() method.
+		return $this->classes;
 	}
 
 
 	/**
-	 * Returns class unqualified names (UQN).
-	 *
-	 * @return array|string[]
+	 * {@inheritdoc}
 	 */
-	function getClassShortNames()
+	public function hasConstant($name)
 	{
-		// TODO: Implement getClassShortNames() method.
+		$name= $this->getFqnElementName($name);
+		return isset($this->constants[$name]);
 	}
 
 
 	/**
-	 * Returns if the namespace contains a constant of the given name.
-	 *
-	 * @param string $constantName
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function hasConstant($constantName)
+	public function getConstant($name)
 	{
-		// TODO: Implement hasConstant() method.
+		$name = $this->getFqnElementName($name);
+		if ($this->hasConstant($name)) {
+			return $this->constants[$name];
+		}
+		throw new RuntimeException("Constant '$name' does not exist.");
 	}
 
 
 	/**
-	 * Returns a constant reflection.
-	 *
-	 * @param string $constantName
-	 * @return ReflectionConstantInterface
+	 * {@inheritdoc}
 	 */
-	function getConstant($constantName)
+	public function getConstants()
 	{
-		// TODO: Implement getConstant() method.
+		return $this->constants;
 	}
 
 
-	/**
-	 * Returns constant reflections.
-	 *
-	 * @return array|ReflectionConstantInterface[]
-	 */
-	function getConstants()
-	{
-		// TODO: Implement getConstants() method.
-	}
-
-
-	/**
-	 * Returns constant names (FQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getConstantNames()
-	{
-		// TODO: Implement getConstantNames() method.
-	}
-
-
-	/**
-	 * Returns constant unqualified names (UQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getConstantShortNames()
-	{
-		// TODO: Implement getConstantShortNames() method.
-	}
 
 
 	/**
@@ -229,32 +204,26 @@ class NamespaceReflection implements ReflectionNamespaceInterface
 
 
 	/**
-	 * Returns function names (FQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getFunctionNames()
-	{
-		// TODO: Implement getFunctionNames() method.
-	}
-
-
-	/**
-	 * Returns function unqualified names (UQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getFunctionShortNames()
-	{
-		// TODO: Implement getFunctionShortNames() method.
-	}
-
-
-	/**
 	 * @return ReflectionNamespaceInterface
 	 */
 	function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
 		// TODO: Implement addFileNamespace() method.
 	}
+
+
+
+	/**
+	 * @param string $elementName
+	 * @return string
+	 */
+	private function getFqnElementName($elementName)
+	{
+		$elementName = ltrim($elementName, self::NAMESPACE_SEP);
+		if (strpos($elementName, self::NAMESPACE_SEP) === FALSE && $this->getName() !== ReflectionNamespace::NO_NAMESPACE_NAME) {
+			$elementName = $this->getName() . self::NAMESPACE_SEP . $elementName;
+		}
+		return $elementName;
+	}
+
 }

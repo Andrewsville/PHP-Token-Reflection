@@ -35,17 +35,17 @@ class MemoryStorage implements StorageInterface
 	/**
 	 * @var ReflectionConstantInterface[]
 	 */
-	private $allConstants;
+	private $constants;
 
 	/**
 	 * @var ReflectionClassInterface[]
 	 */
-	private $allClasses;
+	private $classes;
 
 	/**
 	 * @var ReflectionFunctionInterface[]
 	 */
-	private $allFunctions;
+	private $functions;
 
 	/**
 	 * @var array
@@ -69,10 +69,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns if a file with the given filename has been processed.
-	 *
-	 * @param string $name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasFile($name)
 	{
@@ -81,8 +78,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * @param string $name
-	 * @return ReflectionFile
+	 * {@inheritdoc}
 	 */
 	public function getFile($name)
 	{
@@ -94,7 +90,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * @return ReflectionFile[]
+	 * {@inheritdoc}
 	 */
 	public function getFiles()
 	{
@@ -103,8 +99,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * @param string $name
-	 * @param ReflectionNamespace $reflectionNamespace
+	 * {@inheritdoc}
 	 */
 	public function addNamespace($name, ReflectionNamespace $reflectionNamespace)
 	{
@@ -113,10 +108,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns if there was such namespace processed (FQN expected).
-	 *
-	 * @param string $name
-	 * @return bool
+	 * {@inheritdoc}
 	 */
 	public function hasNamespace($name)
 	{
@@ -125,10 +117,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns a reflection object of the given namespace.
-	 *
-	 * @param string $name
-	 * @return ReflectionNamespaceInterface
+	 * {@inheritdoc}
 	 */
 	public function getNamespace($name)
 	{
@@ -150,10 +139,16 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns if there was such class processed (FQN expected).
-	 *
-	 * @param string $name
-	 * @return bool
+	 * {@inheritdoc}
+	 */
+	public function addClass($name, ReflectionClassInterface $reflectionClass)
+	{
+		$this->classes[$name] = $reflectionClass;
+	}
+
+
+	/**
+	 * {@inheritdoc}
 	 */
 	public function hasClass($name)
 	{
@@ -174,10 +169,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns a reflection object of the given class (FQN expected).
-	 *
-	 * @param string $name
-	 * @return ReflectionClassInterface|NULL
+	 * {@inheritdoc}
 	 */
 	public function getClass($name)
 	{
@@ -205,18 +197,15 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns all classes from all namespaces.
-	 *
-	 * @param int $type Returned class types (multiple values may be OR-ed)
-	 * @return ReflectionClassInterface[]
+	 * {@inheritdoc}
 	 */
 	public function getClasses($type = self::TOKENIZED_CLASSES)
 	{
-		if ($this->allClasses === NULL) {
-			$this->allClasses = $this->parseClassLists();
+		if ($this->classes === NULL) {
+			$this->classes = $this->parseClassLists();
 		}
 		$result = [];
-		foreach ($this->allClasses as $classType => $classes) {
+		foreach ($this->classes as $classType => $classes) {
 			if ($type & $classType) {
 				$result = array_merge($result, $classes);
 			}
@@ -226,10 +215,16 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns if there was such constant processed (FQN expected).
-	 *
-	 * @param string $name
-	 * @return bool
+	 * {@inheritdoc}
+	 */
+	public function addConstant($name, ReflectionConstantInterface $constantReflection)
+	{
+		$this->constants[$name] = $constantReflection;
+	}
+
+
+	/**
+	 * {@inheritdoc}
 	 */
 	public function hasConstant($name)
 	{
@@ -260,11 +255,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns a reflection object of a constant (FQN expected).
-	 *
-	 * @param string $name
-	 * @return ReflectionConstantInterface
-	 * @throws RuntimeException If the requested constant does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getConstant($name)
 	{
@@ -298,27 +289,33 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * @return ReflectionConstantInterface[]
+	 * {@inheritdoc}
 	 */
 	public function getConstants()
 	{
-		if ($this->allConstants === NULL) {
-			$this->allConstants = [];
+		if ($this->constants === NULL) {
+			$this->constants = [];
 			foreach ($this->namespaces as $namespace) {
 				foreach ($namespace->getConstants() as $constant) {
-					$this->allConstants[$constant->getName()] = $constant;
+					$this->constants[$constant->getName()] = $constant;
 				}
 			}
 		}
-		return $this->allConstants;
+		return $this->constants;
 	}
 
 
 	/**
-	 * Returns if there was such function processed (FQN expected).
-	 *
-	 * @param string $name
-	 * @return bool
+	 * {@inheritdoc}
+	 */
+	public function addFunction($name, ReflectionFunctionInterface $reflectionFunction)
+	{
+		$this->functions[$name] = $reflectionFunction;
+	}
+
+
+	/**
+	 * {@inheritdoc}
 	 */
 	public function hasFunction($name)
 	{
@@ -339,11 +336,7 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * Returns a reflection object of a function (FQN expected).
-	 *
-	 * @param string $name
-	 * @return ReflectionFunctionInterface
-	 * @throws RuntimeException If the requested function does not exist.
+	 * {@inheritdoc}
 	 */
 	public function getFunction($name)
 	{
@@ -368,22 +361,25 @@ class MemoryStorage implements StorageInterface
 
 
 	/**
-	 * @return ReflectionFunctionInterface[]
+	 * {@inheritdoc}
 	 */
 	public function getFunctions()
 	{
-		if ($this->allFunctions === NULL) {
-			$this->allFunctions = [];
+		if ($this->functions === NULL) {
+			$this->functions = [];
 			foreach ($this->namespaces as $namespace) {
 				foreach ($namespace->getFunctions() as $function) {
-					$this->allFunctions[$function->getName()] = $function;
+					$this->functions[$function->getName()] = $function;
 				}
 			}
 		}
-		return $this->allFunctions;
+		return $this->functions;
 	}
 
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function addFile(ReflectionFile $file)
 	{
 		$this->files[$file->getName()] = $file;

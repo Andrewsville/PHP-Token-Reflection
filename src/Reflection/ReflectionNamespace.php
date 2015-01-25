@@ -135,26 +135,6 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getClassNames()
-	{
-		return array_keys($this->classes);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getClassShortNames()
-	{
-		return array_map(function (ReflectionClassInterface $class) {
-			return $class->getShortName();
-		}, $this->classes);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function hasConstant($constantName)
 	{
 		$constantName = $this->getFqnElementName($constantName);
@@ -181,26 +161,6 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	public function getConstants()
 	{
 		return $this->constants;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getConstantNames()
-	{
-		return array_keys($this->constants);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getConstantShortNames()
-	{
-		return array_map(function (ReflectionConstantInterface $constant) {
-			return $constant->getShortName();
-		}, $this->constants);
 	}
 
 
@@ -239,35 +199,12 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getFunctionNames()
-	{
-		return array_keys($this->functions);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getFunctionShortNames()
-	{
-		return array_map(function (ReflectionFunctionInterface $function) {
-			return $function->getShortName();
-		}, $this->functions);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getPrettyName()
 	{
 		return $this->name;
 	}
 
 
-	/**
-	 * @return ReflectionNamespace
-	 */
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
 		foreach ($namespace->getClasses() as $className => $reflection) {
@@ -281,8 +218,6 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 		foreach ($namespace->getConstants() as $constantName => $reflection) {
 			$this->constants[$constantName] = $reflection;
 		}
-
-		return $this;
 	}
 
 

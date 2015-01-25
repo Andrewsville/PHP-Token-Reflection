@@ -482,8 +482,6 @@ class ReflectionClassTest extends TestCase
 
 		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
 		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
-		$this->assertSame(['Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'], $rfl->token->getInterfaceNames());
-		$this->assertSame(['Countable', 'ArrayAccess', 'Serializable'], $rfl->token->getOwnInterfaceNames());
 		$this->assertSame(array_keys($rfl->internal->getInterfaces()), array_keys($rfl->token->getInterfaces()));
 		$this->assertSame(['Traversable', 'Iterator', 'Countable', 'ArrayAccess', 'Serializable'], array_keys($rfl->token->getInterfaces()));
 		$this->assertSame(['Countable', 'ArrayAccess', 'Serializable'], array_keys($rfl->token->getOwnInterfaces()));
@@ -499,15 +497,10 @@ class ReflectionClassTest extends TestCase
 
 		$token = $this->parser->getStorage()->getClass('Iterator');
 		$this->assertSame(['Traversable'], array_keys($token->getInterfaces()));
-		$this->assertSame(['Traversable'], $token->getInterfaceNames());
 		$this->assertSame(['Traversable'], array_keys($token->getOwnInterfaces()));
-		$this->assertSame(['Traversable'], $token->getOwnInterfaceNames());
 
 		$rfl = $this->getClassReflection('noInterfaces');
 		$this->assertSame($rfl->internal->getModifiers(), (xdebug_get_code_coverage() ? 16777216 : 0) + $rfl->token->getModifiers());
-		$this->assertSame($rfl->internal->getInterfaceNames(), $rfl->token->getInterfaceNames());
-		$this->assertSame([], $rfl->token->getOwnInterfaceNames());
-		$this->assertSame([], $rfl->token->getInterfaceNames());
 		$this->assertSame($rfl->internal->getInterfaces(), $rfl->token->getInterfaces());
 		$this->assertSame([], $rfl->token->getInterfaces());
 		$this->assertSame([], $rfl->token->getOwnInterfaces());
@@ -717,7 +710,6 @@ class ReflectionClassTest extends TestCase
 
 			$this->assertSame($internal->isTrait(), $token->isTrait(), $className);
 			// $this->assertSame($internal->getTraitAliases(), $token->getTraitAliases(), $className);
-			$this->assertSame($internal->getTraitNames(), $token->getTraitNames(), $className);
 			$this->assertSame(count($internal->getTraits()), count($token->getTraits()), $className);
 			foreach ($internal->getTraits() as $trait) {
 				$this->assertTrue($token->usesTrait($trait->getName()), $className);
@@ -748,13 +740,11 @@ class ReflectionClassTest extends TestCase
 
 			$this->assertSame($definition[0], $reflection->isTrait(), $className);
 			$this->assertSame($definition[1], $reflection->getTraitAliases(), $className);
-			$this->assertSame($definition[2], $reflection->getTraitNames(), $className);
 			$this->assertSame(count($definition[2]), count($reflection->getTraits()), $className);
 			foreach ($definition[2] as $traitName) {
 				$this->assertTrue($reflection->usesTrait($traitName), $className);
 			}
 
-			$this->assertSame($definition[3], $reflection->getOwnTraitNames(), $className);
 			$this->assertSame(count($definition[3]), count($reflection->getOwnTraits()), $className);
 			foreach ($definition[3] as $traitName) {
 				$this->assertTrue($reflection->usesTrait($traitName), $className);

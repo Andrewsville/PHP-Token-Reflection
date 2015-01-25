@@ -6,7 +6,8 @@ use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Factory\ClassReflectionFactory;
 use ApiGen\TokenReflection\Factory\ConstantReflectionFactory;
 use ApiGen\TokenReflection\Factory\FunctionReflectionFactory;
-use ApiGen\TokenReflection\PhpParser\ConstantReflection;
+use ApiGen\TokenReflection\PhpParser\Factory\NamespaceReflectionFactory;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Tests\ContainerFactory;
 use Nette\DI\Container;
 use PhpParser\Node;
@@ -41,6 +42,16 @@ class ParserTest extends PHPUnit_Framework_TestCase
 	 */
 	private $functionReflectionFactory;
 
+	/**
+	 * @var StorageInterface
+	 */
+	private $storage;
+
+	/**
+	 * @var NamespaceReflectionFactory
+	 */
+	private $namespaceReflectionFactory;
+
 
 	public function __construct()
 	{
@@ -53,25 +64,18 @@ class ParserTest extends PHPUnit_Framework_TestCase
 		$this->classReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\ClassReflectionFactory');
 		$this->constantReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\ConstantReflectionFactory');
 		$this->functionReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\Factory\FunctionReflectionFactory');
+		$this->namespaceReflectionFactory = $this->container->getByType('ApiGen\TokenReflection\PhpParser\Factory\NamespaceReflectionFactory');
+		$this->storage = $this->container->getByType('ApiGen\TokenReflection\Storage\StorageInterface');
 	}
 
 
 	public function testParsing()
 	{
-//		/** @var Parser $broker */
-//		$broker = $this->container->getByType('ApiGen\TokenReflection\Parser\Parser');
-//		$broker->parseFile(__DIR__ . '/doubleClass.php');
-//
-//		$classes = $broker->getClasses();
-//		$this->assertCount(1, $classes);
-//		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionClass', $classes['SomeClass']);
-
 		/** @var \PhpParser\Parser $parser */
 		$file = __DIR__ . '/doubleClass.php';
 		$parser = $this->container->getByType('PhpParser\Parser');
 		$parsed = $parser->parse(file_get_contents($file));
 		$this->assertCount(1, $parsed);
-
 
 		// use some factory here!
 		$this->iterateNodes($parsed, NULL, $file);
@@ -89,6 +93,8 @@ class ParserTest extends PHPUnit_Framework_TestCase
 			if ($node instanceof Class_) {
 				$classReflection = $this->classReflectionFactory->createFromNode($node, $parent, $file);
 				$this->assertSame('SomeClass', $classReflection->getName());
+				$this->assertSame('SomeNamespace', $classReflection->getNamespaceName());
+				$this->storage->addClass($classReflection->getName(), $classReflection);
 
 			} elseif ($node instanceof Function_) {
 				$functionReflection = $this->functionReflectionFactory->createFromNode($node, $parent, $file);
@@ -100,14 +106,20 @@ class ParserTest extends PHPUnit_Framework_TestCase
 				$this->assertTrue($functionReflection->isUserDefined());
 				$this->assertSame([], $functionReflection->getNamespaceAliases());
 				$this->assertSame('getSome()', $functionReflection->getPrettyName());
-
-			} elseif ($node instanceof Namespace_) {
-				$this->iterateNodes($node->stmts, $node, $file);
+				$this->assertSame(__DIR__ . '/doubleClass.php', $functionReflection->getFileName());
+				$this->storage->addFunction($functionReflection->getName(), $functionReflection);
 
 			} elseif ($node instanceof Const_) {
 				$constantReflection = $this->constantReflectionFactory->createFromNode($node, $parent, $file);
 				$this->assertInstanceOf('ApiGen\TokenReflection\PhpParser\ConstantReflection',  $constantReflection);
 				$this->assertInternalType('string', $constantReflection->getDocComment());
+				$this->assertSame(__DIR__ . '/doubleClass.php', $constantReflection->getFileName());
+				$this->storage->addConstant($constantReflection->getName(), $constantReflection);
+
+			} elseif ($node instanceof Namespace_) {
+				// create namespace reflection?
+				$namespaceReflection = $this->namespaceReflectionFactory->createFromNode($node);
+				$this->iterateNodes($node->stmts, $node, $file);
 			}
 		}
 	}
