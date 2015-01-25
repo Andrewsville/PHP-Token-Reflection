@@ -30,11 +30,6 @@ class MemoryStorage implements StorageInterface
 {
 
 	/**
-	 * @var string[]
-	 */
-	private $declaredClasses = [];
-
-	/**
 	 * @var ReflectionNamespaceInterface[]
 	 */
 	private $namespaces = [];
@@ -59,10 +54,28 @@ class MemoryStorage implements StorageInterface
 	 */
 	private $files = [];
 
+	/**
+	 * @var string[]
+	 */
+	private $declaredClasses;
+
+	/**
+	 * @var string[]
+	 */
+	private $declaredConstants;
+
+	/**
+	 * @var string[]
+	 */
+	private $declaredFunctions;
+
 
 	public function __construct()
 	{
+		// possibly optimize to singleton getters
 		$this->declaredClasses = array_flip(array_merge(get_declared_classes(), get_declared_interfaces()));
+		$this->declaredConstants = get_defined_constants();
+		$this->declaredFunctions = array_flip(get_defined_functions()['internal']);
 	}
 
 
@@ -266,10 +279,6 @@ class MemoryStorage implements StorageInterface
 	 */
 	public function getConstant($name)
 	{
-		static $declared = [];
-		if (empty($declared)) {
-			$declared = get_defined_constants();
-		}
 		if ($boundary = strpos($name, '::')) {
 			// Class constant
 			$className = substr($name, 0, $boundary);
@@ -288,8 +297,8 @@ class MemoryStorage implements StorageInterface
 			return $ns->getConstant($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($declared[$name])) {
-				$reflection = new ReflectionConstant($name, $declared[$name], $this);
+			if (isset($this->declaredConstants[$name])) {
+				$reflection = new ReflectionConstant($name, $this->declaredConstants[$name], $this);
 				if ($reflection->isInternal()) {
 					return $reflection;
 				}
@@ -349,11 +358,6 @@ class MemoryStorage implements StorageInterface
 	 */
 	public function getFunction($name)
 	{
-		static $declared = [];
-		if (empty($declared)) {
-			$functions = get_defined_functions();
-			$declared = array_flip($functions['internal']);
-		}
 		$name = ltrim($name, '\\');
 		try {
 			$namespaceReflection = $this->getNamespace(
@@ -366,7 +370,7 @@ class MemoryStorage implements StorageInterface
 			return $namespaceReflection->getFunction($name);
 
 		} catch (Exception\BaseException $e) {
-			if (isset($declared[$name])) {
+			if (isset($this->declaredFunctions[$name])) {
 				return new ReflectionFunction($name, $this);
 			}
 			throw new BrokerException(sprintf('Function %s does not exist.', $name));
@@ -394,19 +398,6 @@ class MemoryStorage implements StorageInterface
 	public function addFile(ReflectionFile $file)
 	{
 		$this->files[$file->getName()] = $file;
-
-		foreach ($file->getNamespaces() as $fileNamespace) {
-			$namespaceName = $fileNamespace->getName();
-			if ( ! isset($this->namespaces[$namespaceName])) {
-				$this->namespaces[$namespaceName] = new ReflectionNamespace($namespaceName, $file->getStorage());
-			}
-			$this->namespaces[$namespaceName]->addFileNamespace($fileNamespace);
-		}
-
-		// Reset all-*-cache
-		$this->allClasses = NULL;
-		$this->allFunctions = NULL;
-		$this->allConstants = NULL;
 	}
 
 

@@ -10,6 +10,9 @@
 namespace ApiGen\TokenReflection;
 
 
+use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
+
+
 interface ReflectionNamespaceInterface extends ReflectionInterface
 {
 
@@ -137,5 +140,11 @@ interface ReflectionNamespaceInterface extends ReflectionInterface
 	 * @return array|string[]
 	 */
 	function getFunctionShortNames();
+
+
+	/**
+	 * @return ReflectionNamespaceInterface
+	 */
+	function addFileNamespace(ReflectionFileNamespace $namespace);
 
 }

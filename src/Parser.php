@@ -29,6 +29,11 @@ class Parser implements ParserInterface
 	private $storage;
 
 	/**
+	 * @var ReflectionNamespaceFactory
+	 */
+	private $reflectionNamespaceFactory;
+
+	/**
 	 * @var ReflectionFileFactory
 	 */
 	private $reflectionFileFactory;
@@ -44,6 +49,7 @@ class Parser implements ParserInterface
 			ReflectionNamespace::NO_NAMESPACE_NAME,
 			$reflectionNamespaceFactory->create(ReflectionNamespace::NO_NAMESPACE_NAME)
 		);
+		$this->reflectionNamespaceFactory = $reflectionNamespaceFactory;
 		$this->reflectionFileFactory = $reflectionFileFactory;
 	}
 
@@ -56,6 +62,7 @@ class Parser implements ParserInterface
 	{
 		$reflectionFile = $this->reflectionFileFactory->create($name);
 		$this->storage->addFile($reflectionFile);
+		$this->loadNamespacesFromFile($reflectionFile);
 		return $reflectionFile;
 	}
 
@@ -86,6 +93,18 @@ class Parser implements ParserInterface
 	public function getStorage()
 	{
 		return $this->storage;
+	}
+
+
+	private function loadNamespacesFromFile(ReflectionFile $reflectionFile)
+	{
+		foreach ($reflectionFile->getNamespaces() as $fileNamespace) {
+			$namespaceName = $fileNamespace->getName();
+			if (!$this->storage->hasNamespace($namespaceName)) {
+				$this->storage->addNamespace($namespaceName, $this->reflectionNamespaceFactory->create($namespaceName));
+			}
+			$this->storage->getNamespace($namespaceName)->addFileNamespace($fileNamespace);
+		}
 	}
 
 }
