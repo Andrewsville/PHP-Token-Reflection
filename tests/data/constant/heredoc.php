@@ -2,6 +2,7 @@
 
 class TokenReflection_Test_ConstantHeredoc
 {
+
 	const HEREDOC = <<<EOT
 constant value
 EOT;
@@ -9,4 +10,5 @@ EOT;
 	const NOWDOC = <<<'EOT'
 constant value
 EOT;
+
 }

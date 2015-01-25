@@ -2,5 +2,7 @@
 
 class TokenReflection_Test_PropertyOnlyStatic
 {
-	static $onlyStatic = true;
+
+	static $onlyStatic = TRUE;
+
 }

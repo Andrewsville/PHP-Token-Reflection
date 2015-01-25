@@ -1,29 +1,13 @@
 <?php
-/**
- * PHP Token Reflection
- *
- * Version 1.4.0
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this library in the file LICENSE.md.
- *
- * @author Ondřej Nešpor
- * @author Jaroslav Hanslík
- */
 
-// Class search path
-set_include_path(
-	realpath(__DIR__ . '/..') . PATH_SEPARATOR .   // Library
-	__DIR__ . PATH_SEPARATOR .   // Library tests
-	get_include_path()
-);
+include __DIR__ . '/../vendor/autoload.php';
 
-// Autoload
-spl_autoload_register(function($className) {
-	$file = strtr($className, '\\_', DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR) . '.php';
-	if (!function_exists('stream_resolve_include_path') || false !== stream_resolve_include_path($file)) {
-		@include_once $file;
-	}
+
+$tempDir = __DIR__ . '/temp/' . getmypid();
+define('TEMP_DIR', $tempDir);
+@mkdir($tempDir, 0777, TRUE);
+
+
+register_shutdown_function(function() {
+	Nette\Utils\FileSystem::delete(__DIR__ . '/temp');
 });

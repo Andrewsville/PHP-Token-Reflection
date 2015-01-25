@@ -5,38 +5,43 @@ class duplicitiesClasses1
 
 }
 
+
 function duplicitiesClasses()
 {
 
 }
+
 
 class duplicitiesClasses2
 {
 
 }
 
+
 class duplicitiesClasses1
 {
 
 }
 
-const DUPLICITIES_CLASSES = true;
+const DUPLICITIES_CLASSES = TRUE;
 
-const DUPLICITIES_CONSTANTS_1 = true;
+const DUPLICITIES_CONSTANTS_1 = TRUE;
 
-const DUPLICITIES_CONSTANTS_2 = true;
+const DUPLICITIES_CONSTANTS_2 = TRUE;
 
-const DUPLICITIES_CONSTANTS_1 = true;
+const DUPLICITIES_CONSTANTS_1 = TRUE;
 
 function duplicitiesConstants()
 {
 
 }
 
+
 class duplicitiesConstants
 {
 
 }
+
 
 function duplicitiesFunctions1()
 {
@@ -53,9 +58,10 @@ function duplicitiesFunctions1()
 
 }
 
+
 class duplicitiesFunctions
 {
 
 }
 
-const DUPLICITIES_FUNCTIONS = true;
+const DUPLICITIES_FUNCTIONS = TRUE;

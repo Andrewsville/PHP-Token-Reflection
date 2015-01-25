@@ -2,17 +2,19 @@
 
 class TokenReflection_Test_MethodDocCommentInheritanceGrandParent
 {
+
 	/**
 	 * Private1 short.
 	 *
 	 * Private1 long.
 	 *
-	 * @return integer
+	 * @return int
 	 * @throws Exception
 	 */
 	private function method1()
 	{
 	}
+
 
 	/**
 	 * Private2 short.
@@ -25,17 +27,22 @@ class TokenReflection_Test_MethodDocCommentInheritanceGrandParent
 	{
 	}
 
+
 	private function method3()
 	{
 	}
 
+
 	private function method4()
 	{
 	}
+
 }
+
 
 class TokenReflection_Test_MethodDocCommentInheritanceParent extends TokenReflection_Test_MethodDocCommentInheritanceGrandParent
 {
+
 	/**
 	 * {@inheritdoc} Protected1 short.
 	 *
@@ -47,35 +54,43 @@ class TokenReflection_Test_MethodDocCommentInheritanceParent extends TokenReflec
 	{
 	}
 
+
 	protected function method2()
 	{
 	}
+
 
 	/**
 	 * Protected3 {@inheritdoc} short.
 	 *
 	 * Protected3 long.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function method3()
 	{
 	}
 
+
 	protected function method4()
 	{
 	}
+
 }
+
 
 class TokenReflection_Test_MethodDocCommentInheritance extends TokenReflection_Test_MethodDocCommentInheritanceParent
 {
+
 	public function method1()
 	{
 	}
 
+
 	public function method2()
 	{
 	}
+
 
 	/**
 	 * Public3 {@inheritdoc}
@@ -84,7 +99,9 @@ class TokenReflection_Test_MethodDocCommentInheritance extends TokenReflection_T
 	{
 	}
 
+
 	public function method4()
 	{
 	}
+
 }

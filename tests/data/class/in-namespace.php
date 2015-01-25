@@ -4,4 +4,5 @@ namespace TokenReflection\Test;
 
 class ClassInNamespace
 {
+
 }

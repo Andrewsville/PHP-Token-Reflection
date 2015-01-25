@@ -2,12 +2,13 @@
 
 class TokenReflection_Test_PropertyDocComment
 {
+
 	/**
 	 * This is a property.
 	 *
 	 * @var String It is a string
-	 * 	and this comment has multiple
-	 * 	lines.
+	 *    and this comment has multiple
+	 *    lines.
 	 */
 	public $docComment = 'doc-comment';
 
@@ -17,4 +18,5 @@ class TokenReflection_Test_PropertyDocComment
 
 		/** Remembers current index */
 		$index;
+
 }

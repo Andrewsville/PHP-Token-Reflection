@@ -1,5 +1,5 @@
 <?php
 
-function tokenReflectionParameterOptionalTrue($one = true)
+function tokenReflectionParameterOptionalTrue($one = TRUE)
 {
 }

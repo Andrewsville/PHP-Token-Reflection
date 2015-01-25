@@ -2,12 +2,27 @@
 
 class TokenReflection_Test_PropertyValueDefinitions
 {
-	private $property1 = true;
-	private $property2 = true ;
-	private $property3 = true /** foo */ ;
-	private $property4 = /** foo */ true;
-	private $property5 /** foo */ = true;
-	private $property6 /** foo */ = true /** foo */ ;
-	private $property7 /** foo */ = /** foo */ true /** foo */ ;
-	private /** foo */ $property8 = true;
+
+	private $property1 = TRUE;
+
+	private $property2 = TRUE;
+
+	private $property3 = TRUE/** foo */
+	;
+
+	private $property4 = /** foo */
+		TRUE;
+
+	private $property5 /** foo */ = TRUE;
+
+	private $property6 /** foo */ = TRUE/** foo */
+	;
+
+	private $property7 /** foo */ = /** foo */
+		TRUE/** foo */
+	;
+
+	private /** foo */
+		$property8 = TRUE;
+
 }

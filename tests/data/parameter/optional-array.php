@@ -1,5 +1,5 @@
 <?php
 
-function tokenReflectionParameterOptionalArray($one = array())
+function tokenReflectionParameterOptionalArray($one = [])
 {
 }
