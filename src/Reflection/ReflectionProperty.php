@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Parser\ElementParser;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -68,9 +68,9 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	private $declaringTraitName;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionClass $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionClass $parent = NULL)
 	{
-		$this->broker = $broker;
+		$this->storage = $storage;
 		$this->parse($tokenStream, $parent);
 	}
 
@@ -80,7 +80,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	 */
 	public function getDeclaringClass()
 	{
-		return $this->getBroker()->getClass($this->declaringClassName);
+		return $this->storage->getClass($this->declaringClassName);
 	}
 
 
@@ -122,7 +122,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	{
 		$declaringClass = $this->getDeclaringClass();
 		if ( ! $declaringClass->isInstance($object)) {
-			throw new RuntimeException('The given class is not an instance or subclass of the current class.', RuntimeException::INVALID_ARGUMENT, $this);
+			throw new RuntimeException('The given class is not an instance or subclass of the current class.');
 		}
 		if ($this->isPublic()) {
 			return $object->{$this->name};
@@ -134,7 +134,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 			$refProperty->setAccessible(FALSE);
 			return $value;
 		}
-		throw new RuntimeException('Only public and accessible properties can return their values.', RuntimeException::NOT_ACCESSIBLE);
+		throw new RuntimeException('Only public and accessible properties can return their values.');
 	}
 
 
@@ -286,7 +286,7 @@ class ReflectionProperty extends ReflectionElement implements ReflectionProperty
 	 */
 	public function getDeclaringTrait()
 	{
-		return $this->declaringTraitName === NULL ? NULL : $this->getBroker()->getClass($this->declaringTraitName);
+		return $this->declaringTraitName === NULL ? NULL : $this->storage->getClass($this->declaringTraitName);
 	}
 
 

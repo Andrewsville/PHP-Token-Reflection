@@ -6,6 +6,7 @@ use ApiGen;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Tests\TestCase;
+use Mockery;
 
 
 class ReflectionClassTest extends TestCase
@@ -24,7 +25,8 @@ class ReflectionClassTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionClass = $this->getBroker()->getClass('Exception');
+		parent::setUp();
+		$this->internalReflectionClass = $this->parser->getStorage()->getClass('Exception');
 	}
 
 
@@ -39,7 +41,6 @@ class ReflectionClassTest extends TestCase
 
 		$this->assertFalse($this->internalReflectionClass->isTokenized());
 		$this->assertFalse($this->internalReflectionClass->isDeprecated());
-		$this->assertTrue($this->internalReflectionClass->isValid());
 		$this->assertTrue($this->internalReflectionClass->isComplete());
 
 		$this->assertSame('Exception', $this->internalReflectionClass->getPrettyName());
@@ -116,42 +117,43 @@ class ReflectionClassTest extends TestCase
 	public function testStaticProperties()
 	{
 		$this->assertCount(0, $this->internalReflectionClass->getStaticProperties());
+		$this->assertSame('two', $this->internalReflectionClass->getStaticPropertyValue('one', 'two'));
 	}
 
 
 	public function testSubclasses()
 	{
 		$this->assertSame([], $this->internalReflectionClass->getDirectSubclasses());
-		$this->assertSame([], $this->internalReflectionClass->getDirectSubclassNames());
 		$this->assertSame([], $this->internalReflectionClass->getIndirectSubclasses());
-		$this->assertSame([], $this->internalReflectionClass->getIndirectSubclassNames());
 	}
 
 
 	public function testImplementers()
 	{
 		$this->assertSame([], $this->internalReflectionClass->getDirectImplementers());
-		$this->assertSame([], $this->internalReflectionClass->getDirectImplementerNames());
 		$this->assertSame([], $this->internalReflectionClass->getIndirectImplementers());
-		$this->assertSame([], $this->internalReflectionClass->getIndirectImplementerNames());
 	}
 
 
 	public function testInterfaces()
 	{
 		$this->assertSame([], $this->internalReflectionClass->getInterfaces());
-		$this->assertSame([], $this->internalReflectionClass->getInterfaceNames());
 		$this->assertSame([], $this->internalReflectionClass->getOwnInterfaces());
-		$this->assertSame([], $this->internalReflectionClass->getOwnInterfaceNames());
+	}
+
+
+	public function testInternalClassIsSubclassOf()
+	{
+		$classReflectionMock = Mockery::mock('ApiGen\TokenReflection\Reflection\ReflectionClass');
+		$classReflectionMock->shouldReceive('getName')->andReturn('SomeClass');
+		$this->internalReflectionClass->isSubclassOf($classReflectionMock);
 	}
 
 
 	/**
-	 * Tests an exception thrown when providing an invalid object.
-	 *
 	 * @expectedException RuntimeException
 	 */
-	public function testInternalClassIsSubclassOf()
+	public function testInternalClassIsSubclassOfInvalidObject()
 	{
 		$this->internalReflectionClass->isSubclassOf(new \Exception());
 	}
@@ -171,7 +173,7 @@ class ReflectionClassTest extends TestCase
 	 */
 	public function testInternalClassImplementsInterface2()
 	{
-		$this->internalReflectionClass->implementsInterface($this->getBroker()->getClass('Exception'));
+		$this->internalReflectionClass->implementsInterface($this->parser->getStorage()->getClass('Exception'));
 	}
 
 
@@ -187,11 +189,10 @@ class ReflectionClassTest extends TestCase
 	public function testTraits()
 	{
 		$this->assertFalse($this->internalReflectionClass->usesTrait(new \Exception()));
-		$this->assertFalse($this->internalReflectionClass->usesTrait($this->getBroker()->getClass('Exception')));
+		$this->assertFalse($this->internalReflectionClass->usesTrait($this->parser->getStorage()->getClass('Exception')));
 		$this->assertFalse($this->internalReflectionClass->usesTrait('Exception'));
 
 		$this->assertSame([], $this->internalReflectionClass->getOwnTraits());
-		$this->assertSame([], $this->internalReflectionClass->getOwnTraitNames());
 		$this->assertSame([], $this->internalReflectionClass->getTraitProperties());
 	}
 
@@ -202,12 +203,12 @@ class ReflectionClassTest extends TestCase
 	}
 
 
-	/**
-	 * @expectedException RuntimeException
-	 */
-	public function testInternalClassReflectionCreate()
+	public function testGetStorage()
 	{
-		ReflectionClass::create(new \ReflectionFunction('create_function'), $this->getBroker());
+		$this->assertInstanceOf(
+			'ApiGen\TokenReflection\Storage\StorageInterface',
+			$this->internalReflectionClass->getStorage()
+		);
 	}
 
 }

@@ -23,7 +23,8 @@ class ReflectionFunctionTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionFunction = new ReflectionFunction('count', $this->getBroker());
+		parent::setUp();
+		$this->internalReflectionFunction = new ReflectionFunction('count', $this->parser->getStorage());
 	}
 
 
@@ -41,7 +42,6 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertFalse($this->internalReflectionFunction->isDeprecated());
 		$this->assertFalse($this->internalReflectionFunction->isUserDefined());
 		$this->assertTrue($this->internalReflectionFunction->isInternal());
-		$this->assertTrue($this->internalReflectionFunction->isValid());
 	}
 
 
@@ -75,17 +75,11 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	public function testGetBroker()
-	{
-		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\Broker', $this->internalReflectionFunction->getBroker());
-	}
-
-
-	public function testCreate()
+	public function testGetStorage()
 	{
 		$this->assertInstanceOf(
-			'ApiGen\TokenReflection\Php\ReflectionFunction',
-			ReflectionFunction::create(new \ReflectionFunction('count'), $this->getBroker())
+			'ApiGen\TokenReflection\Storage\StorageInterface',
+			$this->internalReflectionFunction->getStorage()
 		);
 	}
 

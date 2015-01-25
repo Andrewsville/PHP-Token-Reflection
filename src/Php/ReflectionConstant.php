@@ -10,18 +10,15 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Dummy;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\Invalid;
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use Reflector;
 
 
-class ReflectionConstant implements ReflectionInterface, ReflectionConstantInterface, AnnotationsInterface
+class ReflectionConstant implements ReflectionConstantInterface, AnnotationsInterface
 {
 
 	/**
@@ -50,23 +47,23 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	private $userDefined;
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	private $broker;
+	private $storage;
 
 
 	/**
 	 * @param string $name
 	 * @param mixed $value
-	 * @param Broker $broker
+	 * @param StorageInterface $storage
 	 * @param ReflectionClass $parent
 	 * @throws RuntimeException If real parent class could not be determined.
 	 */
-	public function __construct($name, $value, Broker $broker, ReflectionClass $parent = NULL)
+	public function __construct($name, $value, StorageInterface $storage, ReflectionClass $parent = NULL)
 	{
 		$this->name = $name;
 		$this->value = $value;
-		$this->broker = $broker;
+		$this->storage = $storage;
 		if ($parent !== NULL) {
 			$realParent = NULL;
 			if (array_key_exists($name, $parent->getOwnConstants())) {
@@ -89,7 +86,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 				}
 			}
 			if ($realParent === NULL) {
-				throw new RuntimeException('Could not determine constant real parent class.', RuntimeException::DOES_NOT_EXIST);
+				throw new RuntimeException('Could not determine constant real parent class.');
 			}
 			$this->declaringClassName = $realParent->getName();
 			$this->userDefined = $realParent->isUserDefined();
@@ -136,7 +133,7 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 		if ($this->declaringClassName === NULL) {
 			return NULL;
 		}
-		return $this->getBroker()->getClass($this->declaringClassName);
+		return $this->storage->getClass($this->declaringClassName);
 	}
 
 
@@ -314,9 +311,9 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -326,26 +323,6 @@ class ReflectionConstant implements ReflectionInterface, ReflectionConstantInter
 	public function getNamespaceAliases()
 	{
 		return [];
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isValid()
-	{
-		return TRUE;
-	}
-
-
-	/**
-	 * Not supported for constants since there is no internal constant reflection.
-	 *
-	 * @return NULL
-	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
-	{
-		return NULL;
 	}
 
 }

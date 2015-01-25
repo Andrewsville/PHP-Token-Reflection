@@ -9,10 +9,8 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
-use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionFunctionBaseInterface;
 use ApiGen\TokenReflection\ReflectionParameterInterface;
 use ApiGen\TokenReflection\Resolver;
@@ -28,14 +26,12 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	protected $namespaceName;
 
 	/**
-	 * Determines if the function/method returns its value as reference.
-	 *
 	 * @var bool
 	 */
 	protected $returnsReference = FALSE;
 
 	/**
-	 * @var array|ReflectionParameterInterface[]
+	 * @var ReflectionParameterInterface[]
 	 */
 	protected $parameters = [];
 
@@ -60,7 +56,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	 */
 	public function getName()
 	{
-		if (NULL !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName) {
+		if ($this->namespaceName !== NULL && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
 			return $this->namespaceName . '\\' . $this->name;
 		}
 		return $this->name;
@@ -83,7 +79,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	 */
 	public function getNamespaceName()
 	{
-		return NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
+		return $this->namespaceName === NULL || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 
@@ -92,7 +88,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	 */
 	public function inNamespace()
 	{
-		return '' !== $this->getNamespaceName();
+		return $this->getNamespaceName() !== '';
 	}
 
 
@@ -117,7 +113,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	{
 		if (is_numeric($parameter)) {
 			if ( ! isset($this->parameters[$parameter])) {
-				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter));
 			}
 			return $this->parameters[$parameter];
 		} else {
@@ -126,7 +122,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 					return $reflection;
 				}
 			}
-			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter));
 		}
 	}
 
@@ -184,6 +180,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	public function isVariadic()
 	{
 		if ( ! isset($this->isVariadic)) {
+			/** @var ReflectionParameterInterface $lastParameter */
 			$lastParameter = end($this->parameters);
 			$this->isVariadic = $lastParameter && $lastParameter->isVariadic();
 		};
@@ -235,7 +232,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 		$tokenStream->skipWhitespaces(TRUE);
 		while (NULL !== ($type = $tokenStream->getType()) && ')' !== $type) {
 			if (isset($accepted[$type])) {
-				$parameter = new ReflectionParameter($tokenStream, $this->getBroker(), $this);
+				$parameter = new ReflectionParameter($tokenStream, $this->storage, $this);
 				$this->parameters[] = $parameter;
 			}
 			if ($tokenStream->is(')')) {
@@ -256,81 +253,78 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	{
 		$type = $tokenStream->getType();
 		if ('{' === $type) {
-			if ($this->getBroker()->isOptionSet(Broker::OPTION_PARSE_FUNCTION_BODY)) {
-				$tokenStream->skipWhitespaces(TRUE);
-				while ('}' !== ($type = $tokenStream->getType())) {
-					switch ($type) {
-						case T_STATIC:
+			$tokenStream->skipWhitespaces(TRUE);
+			while ('}' !== ($type = $tokenStream->getType())) {
+				switch ($type) {
+					case T_STATIC:
+						$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+						if (T_VARIABLE !== $type) {
+							// Late static binding
+							break;
+						}
+						while (T_VARIABLE === $type) {
+							$variableName = $tokenStream->getTokenValue();
+							$variableDefinition = [];
 							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-							if (T_VARIABLE !== $type) {
-								// Late static binding
+							if ('=' === $type) {
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+								$level = 0;
+								while ($tokenStream->valid()) {
+									switch ($type) {
+										case '(':
+										case '[':
+										case '{':
+										case T_CURLY_OPEN:
+										case T_DOLLAR_OPEN_CURLY_BRACES:
+											$level++;
+											break;
+										case ')':
+										case ']':
+										case '}':
+											$level--;
+											break;
+										case ';':
+										case ',':
+											if (0 === $level) {
+												break 2;
+											}
+										default:
+											break;
+									}
+									$variableDefinition[] = $tokenStream->current();
+									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+								}
+								if ( ! $tokenStream->valid()) {
+									throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
+								}
+							}
+							$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
+							if (',' === $type) {
+								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
+							} else {
 								break;
 							}
-							while (T_VARIABLE === $type) {
-								$variableName = $tokenStream->getTokenValue();
-								$variableDefinition = [];
-								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-								if ('=' === $type) {
-									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-									$level = 0;
-									while ($tokenStream->valid()) {
-										switch ($type) {
-											case '(':
-											case '[':
-											case '{':
-											case T_CURLY_OPEN:
-											case T_DOLLAR_OPEN_CURLY_BRACES:
-												$level++;
-												break;
-											case ')':
-											case ']':
-											case '}':
-												$level--;
-												break;
-											case ';':
-											case ',':
-												if (0 === $level) {
-													break 2;
-												}
-											default:
-												break;
-										}
-										$variableDefinition[] = $tokenStream->current();
-										$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-									}
-									if ( ! $tokenStream->valid()) {
-										throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
-									}
-								}
-								$this->staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
-								if (',' === $type) {
-									$type = $tokenStream->skipWhitespaces(TRUE)->getType();
-								} else {
-									break;
-								}
-							}
-							break;
-						case T_FUNCTION:
-							// Anonymous function -> skip to its end
-							if ( ! $tokenStream->find('{')) {
-								throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
-							}
-						// Break missing intentionally
-						case '{':
-						case '[':
-						case '(':
-						case T_CURLY_OPEN:
-						case T_DOLLAR_OPEN_CURLY_BRACES:
-							$tokenStream->findMatchingBracket()->skipWhitespaces(TRUE);
-							break;
-						default:
-							$tokenStream->skipWhitespaces();
-							break;
-					}
+						}
+						break;
+					case T_FUNCTION:
+						// Anonymous function -> skip to its end
+						if ( ! $tokenStream->find('{')) {
+							throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
+						}
+					// Break missing intentionally
+					case '{':
+					case '[':
+					case '(':
+					case T_CURLY_OPEN:
+					case T_DOLLAR_OPEN_CURLY_BRACES:
+						$tokenStream->findMatchingBracket()->skipWhitespaces(TRUE);
+						break;
+					default:
+						$tokenStream->skipWhitespaces();
+						break;
 				}
-			} else {
-				$tokenStream->findMatchingBracket();
 			}
+
 		} elseif (';' !== $type) {
 			throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
 		}

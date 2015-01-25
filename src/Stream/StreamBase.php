@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection\Stream;
 
+use ApiGen\TokenReflection\Behaviors\SourceInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Exception\StreamException;
 use ArrayAccess;
@@ -18,7 +19,7 @@ use SeekableIterator;
 use Serializable;
 
 
-abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, Serializable
+abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, Serializable, SourceInterface
 {
 
 	/**
@@ -158,12 +159,12 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			T_DOLLAR_OPEN_CURLY_BRACES => '}'
 		];
 		if ( ! $this->valid()) {
-			throw new StreamException('Out of token stream.', StreamException::READ_BEYOND_EOS);
+			throw new StreamException('Out of token stream.');
 		}
 		$position = $this->position;
 		$bracket = $this->tokens[$this->position][0];
 		if ( ! isset($brackets[$bracket])) {
-			throw new StreamException(sprintf('There is no usable bracket at position "%d".', $position), StreamException::DOES_NOT_EXIST);
+			throw new StreamException(sprintf('There is no usable bracket at position "%d".', $position));
 		}
 		$searching = $brackets[$bracket];
 		$level = 0;
@@ -179,7 +180,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 			}
 			$this->position++;
 		}
-		throw new StreamException(sprintf('Could not find the end bracket "%s" of the bracket at position "%d".', $searching, $position), StreamException::DOES_NOT_EXIST);
+		throw new StreamException(sprintf('Could not find the end bracket "%s" of the bracket at position "%d".', $searching, $position));
 	}
 
 
@@ -333,7 +334,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new StreamException('Removing of tokens from the stream is not supported.', StreamException::UNSUPPORTED);
+		throw new StreamException('Removing of tokens from the stream is not supported.');
 	}
 
 
@@ -360,7 +361,7 @@ abstract class StreamBase implements SeekableIterator, Countable, ArrayAccess, S
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new StreamException('Setting token values is not supported.', StreamException::UNSUPPORTED);
+		throw new StreamException('Setting token values is not supported.');
 	}
 
 

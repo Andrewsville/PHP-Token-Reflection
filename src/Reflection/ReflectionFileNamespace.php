@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Behaviors\ReasonsInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Invalid;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -23,17 +21,17 @@ class ReflectionFileNamespace extends ReflectionElement
 {
 
 	/**
-	 * @var ReflectionClassInterface[]|ReasonsInterface[]
+	 * @var ReflectionClassInterface[]
 	 */
 	private $classes = [];
 
 	/**
-	 * @var ReflectionConstantInterface[]|ReasonsInterface[]
+	 * @var ReflectionConstantInterface[]
 	 */
 	private $constants = [];
 
 	/**
-	 * @var ReflectionFunctionInterface[]|ReasonsInterface[]
+	 * @var ReflectionFunctionInterface[]
 	 */
 	private $functions = [];
 
@@ -90,7 +88,7 @@ class ReflectionFileNamespace extends ReflectionElement
 	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFile) {
-			throw new ParseException('The parent object has to be an instance of TokenReflection\ReflectionFile.', ParseException::INVALID_PARENT);
+			throw new ParseException('The parent object has to be an instance of TokenReflection\ReflectionFile.');
 		}
 	}
 
@@ -123,10 +121,7 @@ class ReflectionFileNamespace extends ReflectionElement
 
 
 	/**
-	 * Parses the namespace name.
-	 *
 	 * @return ReflectionFileNamespace
-	 * @throws ParseException If the namespace name could not be determined.
 	 */
 	protected function parseName(StreamBase $tokenStream)
 	{
@@ -157,7 +152,7 @@ class ReflectionFileNamespace extends ReflectionElement
 			$this->name = $name;
 		}
 		if ( ! $tokenStream->is(';') && !$tokenStream->is('{')) {
-			throw new ParseException('Invalid namespace name end, expecting ";" or "{".', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Invalid namespace name end, expecting ";" or "{".');
 		}
 		$tokenStream->skipWhitespaces();
 		return $this;
@@ -251,37 +246,19 @@ class ReflectionFileNamespace extends ReflectionElement
 				case T_CLASS:
 				case T_TRAIT:
 				case T_INTERFACE:
-					$class = new ReflectionClass($tokenStream, $this->getBroker(), $this);
+					$class = new ReflectionClass($tokenStream, $this->storage, $this);
 					$firstChild = $firstChild ?: $class;
 					$className = $class->getName();
-					if (isset($this->classes[$className])) {
-						if ( ! $this->classes[$className] instanceof Invalid\ReflectionClass) {
-							$this->classes[$className] = new Invalid\ReflectionClass($className, $this->classes[$className]->getFileName(), $this->getBroker());
-						}
-						if ( ! $this->classes[$className]->hasReasons()) {
-							$this->classes[$className]->addReason(sprintf('Class %s is defined multiple times in the file.', $className));
-						}
-					} else {
-						$this->classes[$className] = $class;
-					}
+					$this->classes[$className] = $class;
 					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces(TRUE);
 					do {
-						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
+						$constant = new ReflectionConstant($tokenStream, $this->storage, $this);
 						$firstChild = $firstChild ?: $constant;
 						$constantName = $constant->getName();
-						if (isset($this->constants[$constantName])) {
-							if ( ! $this->constants[$constantName] instanceof Invalid\ReflectionConstant) {
-								$this->constants[$constantName] = new Invalid\ReflectionConstant($constantName, $this->constants[$constantName]->getFileName(), $this->getBroker());
-							}
-							if ( ! $this->constants[$constantName]->hasReasons()) {
-								$this->constants[$constantName]->addReason(sprintf('Constant %s is defined multiple times in the file.', $constantName));
-							}
-						} else {
-							$this->constants[$constantName] = $constant;
-						}
+						$this->constants[$constantName] = $constant;
 						if ($tokenStream->is(',')) {
 							$tokenStream->skipWhitespaces(TRUE);
 						} else {
@@ -311,19 +288,10 @@ class ReflectionFileNamespace extends ReflectionElement
 							->next();
 						continue;
 					}
-					$function = new ReflectionFunction($tokenStream, $this->getBroker(), $this);
+					$function = new ReflectionFunction($tokenStream, $this->storage, $this);
 					$firstChild = $firstChild ?: $function;
 					$functionName = $function->getName();
-					if (isset($this->functions[$functionName])) {
-						if ( ! $this->functions[$functionName] instanceof Invalid\ReflectionFunction) {
-							$this->functions[$functionName] = new Invalid\ReflectionFunction($functionName, $this->functions[$functionName]->getFileName(), $this->getBroker());
-						}
-						if ( ! $this->functions[$functionName]->hasReasons()) {
-							$this->functions[$functionName]->addReason(sprintf('Function %s is defined multiple times in the file.', $functionName));
-						}
-					} else {
-						$this->functions[$functionName] = $function;
-					}
+					$this->functions[$functionName] = $function;
 					$tokenStream->next();
 					break;
 				default:

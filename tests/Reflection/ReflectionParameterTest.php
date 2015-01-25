@@ -83,12 +83,12 @@ class ReflectionParameterTest extends TestCase
 	{
 		$fileName = $this->getFilePath('invalid-optionals');
 
-		$broker = $this->getBroker();
-		$broker->processFile($fileName);
+		$broker = $this->parser;
+		$broker->parseFile($fileName);
 
 		require_once $fileName;
 
-		$token = $broker->getFunction('tokenReflectionParameterInvalidOptionals');
+		$token = $this->parser->getStorage()->getFunction('tokenReflectionParameterInvalidOptionals');
 		$internal = new \ReflectionFunction('tokenReflectionParameterInvalidOptionals');
 
 		static $params = [
@@ -202,16 +202,16 @@ class ReflectionParameterTest extends TestCase
 
 	public function testDocCommentInheritance()
 	{
-		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
+		$this->parser->parseFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
-		$grandParent->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceGrandParent')->getMethod('m');
+		$grandParent->token = $this->parser->getStorage()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceGrandParent')->getMethod('m');
 
 		$parent = new \stdClass();
-		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceParent')->getMethod('m');
+		$parent->token = $this->parser->getStorage()->getClass('TokenReflection_Test_ParameterDocCommentInheritanceParent')->getMethod('m');
 
 		$rfl = new \stdClass();
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_ParameterDocCommentInheritance')->getMethod('m');
+		$rfl->token = $this->parser->getStorage()->getClass('TokenReflection_Test_ParameterDocCommentInheritance')->getMethod('m');
 
 		$this->assertNotNull($grandParent->token);
 		$this->assertNotNull($parent->token);
@@ -231,15 +231,6 @@ class ReflectionParameterTest extends TestCase
 			$token = $rfl->token->getParameter($internal->getPosition());
 			$this->assertSame($internal->getDefaultValue(), $token->getDefaultValue());
 		}
-	}
-
-
-	/**
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalParameterReflectionCreate()
-	{
-		ReflectionParameter::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 
 

@@ -6,9 +6,6 @@ use ApiGen;
 use ApiGen\TokenReflection\Stream\FileStream;
 
 
-/**
- * Stream test.
- */
 class StreamTest extends TestCase
 {
 
@@ -55,17 +52,10 @@ class StreamTest extends TestCase
 	}
 
 
-	/**
-	 * Tests an exception thrown when no matching bracket could be found.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\StreamException
-	 */
 	public function testFindMatchingBracketException2()
 	{
 		$stream = $this->getFileStream('invalid-stream');
-		$this->assertInstanceOf('ApiGen\TokenReflection\Stream\FileStream', $stream->find('{'));
-
-		$stream->findMatchingBracket();
+		$this->assertFalse($stream->find('{'));
 	}
 
 

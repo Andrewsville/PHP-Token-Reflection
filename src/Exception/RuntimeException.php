@@ -10,17 +10,7 @@
 namespace ApiGen\TokenReflection\Exception;
 
 
-/**
- * Runtime exception raised when working with a reflection element.
- */
 class RuntimeException extends BaseException
 {
-
-	/**
-	 * The property/method is not accessible.
-	 *
-	 * @var int
-	 */
-	const NOT_ACCESSIBLE = 3002;
 
 }

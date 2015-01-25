@@ -9,6 +9,8 @@
 
 namespace ApiGen\TokenReflection;
 
+use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
+
 
 interface ReflectionNamespaceInterface extends ReflectionInterface
 {
@@ -16,19 +18,19 @@ interface ReflectionNamespaceInterface extends ReflectionInterface
 	/**
 	 * Returns if the namespace contains a class of the given name.
 	 *
-	 * @param string $className Class name
+	 * @param string $name Class name
 	 * @return bool
 	 */
-	function hasClass($className);
+	function hasClass($name);
 
 
 	/**
 	 * Return a class reflection.
 	 *
-	 * @param string $className
+	 * @param string $name
 	 * @return ReflectionClassInterface
 	 */
-	function getClass($className);
+	function getClass($name);
 
 
 	/**
@@ -40,37 +42,21 @@ interface ReflectionNamespaceInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns class names (FQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getClassNames();
-
-
-	/**
-	 * Returns class unqualified names (UQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getClassShortNames();
-
-
-	/**
 	 * Returns if the namespace contains a constant of the given name.
 	 *
-	 * @param string $constantName
+	 * @param string $name
 	 * @return bool
 	 */
-	function hasConstant($constantName);
+	function hasConstant($name);
 
 
 	/**
 	 * Returns a constant reflection.
 	 *
-	 * @param string $constantName
+	 * @param string $name
 	 * @return ReflectionConstantInterface
 	 */
-	function getConstant($constantName);
+	function getConstant($name);
 
 
 	/**
@@ -82,37 +68,21 @@ interface ReflectionNamespaceInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns constant names (FQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getConstantNames();
-
-
-	/**
-	 * Returns constant unqualified names (UQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getConstantShortNames();
-
-
-	/**
 	 * Returns if the namespace contains a function of the given name.
 	 *
-	 * @param string $functionName
+	 * @param string $name
 	 * @return bool
 	 */
-	function hasFunction($functionName);
+	function hasFunction($name);
 
 
 	/**
 	 * Returns a function reflection.
 	 *
-	 * @param string $functionName
+	 * @param string $name
 	 * @return ReflectionFunctionInterface
 	 */
-	function getFunction($functionName);
+	function getFunction($name);
 
 
 	/**
@@ -124,18 +94,8 @@ interface ReflectionNamespaceInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns function names (FQN).
-	 *
-	 * @return array|string[]
+	 * @return ReflectionNamespaceInterface
 	 */
-	function getFunctionNames();
-
-
-	/**
-	 * Returns function unqualified names (UQN).
-	 *
-	 * @return array|string[]
-	 */
-	function getFunctionShortNames();
+	function addFileNamespace(ReflectionFileNamespace $namespace);
 
 }

@@ -9,7 +9,7 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionFunctionInterface;
@@ -28,19 +28,10 @@ class ReflectionFunction extends ReflectionFunctionBase implements ReflectionFun
 	private $aliases = [];
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		$this->functionParser = new FunctionParser($tokenStream, $this, $parent);
-		parent::__construct($tokenStream, $broker, $parent);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isDisabled()
-	{
-		return $this->hasAnnotation('disabled');
+		parent::__construct($tokenStream, $storage, $parent);
 	}
 
 
@@ -71,17 +62,6 @@ class ReflectionFunction extends ReflectionFunctionBase implements ReflectionFun
 	public function getNamespaceAliases()
 	{
 		return $this->aliases;
-	}
-
-
-	/**
-	 * Returns if the function definition is valid.
-	 *
-	 * @return bool
-	 */
-	public function isValid()
-	{
-		return TRUE;
 	}
 
 

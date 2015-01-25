@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection\Parser;
 
-use ApiGen\TokenReflection\Broker\Broker;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Reflection\ReflectionFunctionBase;
 use ApiGen\TokenReflection\Reflection\ReflectionParameter;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionClassInterface;
@@ -101,7 +99,7 @@ abstract class FunctionBaseParser
 
 		while (($type = $this->tokenStream->getType()) !== NULL && $type !== ')') {
 			if (isset($accepted[$type])) {
-				$parameters[] = new ReflectionParameter($this->tokenStream, $this->reflectionFunction->getBroker(), $this->reflectionFunction);
+				$parameters[] = new ReflectionParameter($this->tokenStream, $this->reflectionFunction->getStorage(), $this->reflectionFunction);
 			}
 			if ($this->tokenStream->is(')')) {
 				break;
@@ -123,81 +121,76 @@ abstract class FunctionBaseParser
 
 		$type = $this->tokenStream->getType();
 		if ($type === '{') {
-			if ($this->reflectionFunction->getBroker()->isOptionSet(Broker::OPTION_PARSE_FUNCTION_BODY)) {
-				$this->tokenStream->skipWhitespaces(TRUE);
-				while (($type = $this->tokenStream->getType()) !== '}') {
-					switch ($type) {
-						case T_STATIC:
+			$this->tokenStream->skipWhitespaces(TRUE);
+			while (($type = $this->tokenStream->getType()) !== '}') {
+				switch ($type) {
+					case T_STATIC:
+						$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
+						if ($type !== T_VARIABLE) {
+							// Late static binding
+							break;
+						}
+						while ($type === T_VARIABLE) {
+							$variableName = $this->tokenStream->getTokenValue();
+							$variableDefinition = [];
 							$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
-							if ($type !== T_VARIABLE) {
-								// Late static binding
+							if ($type === '=') {
+								$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
+								$level = 0;
+								while ($this->tokenStream->valid()) {
+									switch ($type) {
+										case '(':
+										case '[':
+										case '{':
+										case T_CURLY_OPEN:
+										case T_DOLLAR_OPEN_CURLY_BRACES:
+											$level++;
+											break;
+										case ')':
+										case ']':
+										case '}':
+											$level--;
+											break;
+										case ';':
+										case ',':
+											if ($level === 0) {
+												break 2;
+											}
+										default:
+											break;
+									}
+									$variableDefinition[] = $this->tokenStream->current();
+									$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
+								}
+								if ( ! $this->tokenStream->valid()) {
+									throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
+								}
+							}
+							$staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
+							if (',' === $type) {
+								$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
+							} else {
 								break;
 							}
-							while ($type === T_VARIABLE) {
-								$variableName = $this->tokenStream->getTokenValue();
-								$variableDefinition = [];
-								$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
-								if ($type === '=') {
-									$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
-									$level = 0;
-									while ($this->tokenStream->valid()) {
-										switch ($type) {
-											case '(':
-											case '[':
-											case '{':
-											case T_CURLY_OPEN:
-											case T_DOLLAR_OPEN_CURLY_BRACES:
-												$level++;
-												break;
-											case ')':
-											case ']':
-											case '}':
-												$level--;
-												break;
-											case ';':
-											case ',':
-												if ($level === 0) {
-													break 2;
-												}
-											default:
-												break;
-										}
-										$variableDefinition[] = $this->tokenStream->current();
-										$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
-									}
-									if ( ! $this->tokenStream->valid()) {
-										throw new ParseException('Invalid end of token stream.', ParseException::READ_BEYOND_EOS);
-									}
-								}
-								$staticVariablesDefinition[substr($variableName, 1)] = $variableDefinition;
-								if (',' === $type) {
-									$type = $this->tokenStream->skipWhitespaces(TRUE)->getType();
-								} else {
-									break;
-								}
-							}
-							break;
-						case T_FUNCTION:
-							// Anonymous function -> skip to its end
-							if ( ! $this->tokenStream->find('{')) {
-								throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
-							}
-							// Break missing intentionally
-						case '{':
-						case '[':
-						case '(':
-						case T_CURLY_OPEN:
-						case T_DOLLAR_OPEN_CURLY_BRACES:
-							$this->tokenStream->findMatchingBracket()->skipWhitespaces(TRUE);
-							break;
-						default:
-							$this->tokenStream->skipWhitespaces();
-							break;
-					}
+						}
+						break;
+					case T_FUNCTION:
+						// Anonymous function -> skip to its end
+						if ( ! $this->tokenStream->find('{')) {
+							throw new ParseException('Could not find beginning of the anonymous function.', ParseException::UNEXPECTED_TOKEN);
+						}
+						// Break missing intentionally
+					case '{':
+					case '[':
+					case '(':
+					case T_CURLY_OPEN:
+					case T_DOLLAR_OPEN_CURLY_BRACES:
+						$this->tokenStream->findMatchingBracket()->skipWhitespaces(TRUE);
+						break;
+					default:
+						$this->tokenStream->skipWhitespaces();
+						break;
 				}
-
-			} else {
-				$this->tokenStream->findMatchingBracket();
 			}
 
 		} elseif ($type !== ';') {

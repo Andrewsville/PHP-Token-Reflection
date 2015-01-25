@@ -3,9 +3,10 @@
 namespace ApiGen\TokenReflection\Tests\Reflection;
 
 use ApiGen;
-use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\MemoryBackend;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\Storage\MemoryStorage;
 use ApiGen\TokenReflection\Parser\AnnotationParser;
+use ApiGen\TokenReflection\Php\Factory\ReflectionExtensionFactory;
 use ApiGen\TokenReflection\Php\ReflectionExtension;
 use ApiGen\TokenReflection\Tests\TestCase;
 
@@ -46,16 +47,16 @@ class ReflectionMethodTest extends TestCase
 	 */
 	public function testDocCommentInheritance()
 	{
-		$this->getBroker()->processFile($this->getFilePath('docCommentInheritance'));
+		$this->parser->parseFile($this->getFilePath('docCommentInheritance'));
 
 		$grandParent = new \stdClass();
-		$grandParent->token = $this->getBroker()->getClass('TokenReflection_Test_MethodDocCommentInheritanceGrandParent');
+		$grandParent->token = $this->parser->getStorage()->getClass('TokenReflection_Test_MethodDocCommentInheritanceGrandParent');
 
 		$parent = new \stdClass();
-		$parent->token = $this->getBroker()->getClass('TokenReflection_Test_MethodDocCommentInheritanceParent');
+		$parent->token = $this->parser->getStorage()->getClass('TokenReflection_Test_MethodDocCommentInheritanceParent');
 
 		$rfl = new \stdClass();
-		$rfl->token = $this->getBroker()->getClass('TokenReflection_Test_MethodDocCommentInheritance');
+		$rfl->token = $this->parser->getStorage()->getClass('TokenReflection_Test_MethodDocCommentInheritance');
 
 		$this->assertSame($parent->token->getMethod('method1')->getAnnotations(), $rfl->token->getMethod('method1')->getAnnotations());
 		$this->assertSame('Private1 short. Protected1 short.', $rfl->token->getMethod('method1')->getAnnotation(AnnotationParser::SHORT_DESCRIPTION));
@@ -107,12 +108,6 @@ class ReflectionMethodTest extends TestCase
 			],
 			$rfl->token->getStaticVariables()
 		);
-
-		// The same test with parsing method bodies turned off
-		$broker = new Broker(new MemoryBackend, Broker::OPTION_DEFAULT & ~Broker::OPTION_PARSE_FUNCTION_BODY);
-		$broker->processFile($this->getFilePath($testName));
-		$reflection = $broker->getClass($this->getClassName($testName))->getMethod($this->getMethodName($testName));
-		$this->assertSame([], $reflection->getStaticVariables());
 	}
 
 
@@ -153,11 +148,11 @@ class ReflectionMethodTest extends TestCase
 		$this->assertTrue($token->isConstructor());
 
 		require_once $this->getFilePath('namedConstructorInNamespace');
-		$this->getBroker()->processFile($this->getFilePath('namedConstructorInNamespace'));
+		$this->parser->parseFile($this->getFilePath('namedConstructorInNamespace'));
 
 		$class = new \ReflectionClass('TokenReflection\Test\MethodNamedConstructor');
 		$internal = $class->getMethod('MethodNamedConstructor');
-		$token = $this->getBroker()->getClass('TokenReflection\Test\MethodNamedConstructor')->getMethod('MethodNamedConstructor');
+		$token = $this->parser->getStorage()->getClass('TokenReflection\Test\MethodNamedConstructor')->getMethod('MethodNamedConstructor');
 
 		$this->assertSame($internal->isConstructor(), $token->isConstructor());
 		$this->assertFalse($token->isConstructor());
@@ -193,10 +188,10 @@ class ReflectionMethodTest extends TestCase
 		];
 
 		require_once $this->getFilePath('modifiers');
-		$this->getBroker()->processFile($this->getFilePath('modifiers'));
+		$this->parser->parseFile($this->getFilePath('modifiers'));
 
 		foreach ($classes as $className) {
-			$token = $this->getBroker()->getClass($className);
+			$token = $this->parser->getStorage()->getClass($className);
 			$internal = new \ReflectionClass($className);
 
 			foreach ($internal->getMethods() as $method) {
@@ -217,15 +212,10 @@ class ReflectionMethodTest extends TestCase
 		$this->assertSame($rfl->internal->isInternal(), $rfl->token->isInternal());
 		$this->assertFalse($rfl->token->isInternal());
 
-		$this->assertSame($rfl->internal->getExtension(), $rfl->token->getExtension());
-		$this->assertNull($rfl->token->getExtension());
-		$this->assertSame($rfl->internal->getExtensionName(), $rfl->token->getExtensionName());
-		$this->assertFalse($rfl->token->getExtensionName());
-
 		$rfl = new \stdClass();
 		$class = new \ReflectionClass('Exception');
 		$rfl->internal = $class->getMethod('getMessage');
-		$rfl->token = $this->getBroker()->getClass('Exception')->getMethod('getMessage');
+		$rfl->token = $this->parser->getStorage()->getClass('Exception')->getMethod('getMessage');
 
 		$this->assertSame($rfl->internal->isUserDefined(), $rfl->token->isUserDefined());
 		$this->assertFalse($rfl->token->isUserDefined());
@@ -246,12 +236,12 @@ class ReflectionMethodTest extends TestCase
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
-		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
+		$this->parser->parseFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
 		$class = new \ReflectionClass('TokenReflection\Test\MethodInNamespace');
 		$rfl->internal = $class->getMethod('inNamespace');
-		$rfl->token = $this->getBroker()->getClass('TokenReflection\Test\MethodInNamespace')->getMethod('inNamespace');
+		$rfl->token = $this->parser->getStorage()->getClass('TokenReflection\Test\MethodInNamespace')->getMethod('inNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
 		$this->assertFalse($rfl->token->inNamespace());
@@ -328,17 +318,6 @@ class ReflectionMethodTest extends TestCase
 			],
 			$rfl->token->getStaticVariables()
 		);
-	}
-
-
-	/**
-	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalMethodReflectionCreate()
-	{
-		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
 	}
 
 }

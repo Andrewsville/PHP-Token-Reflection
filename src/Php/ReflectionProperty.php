@@ -10,21 +10,20 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
+use ApiGen\TokenReflection\Storage\StorageInterface;
+use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use Reflector;
 use ReflectionProperty as InternalReflectionProperty;
 
 
-class ReflectionProperty extends InternalReflectionProperty implements ReflectionInterface, ReflectionPropertyInterface, AnnotationsInterface
+class ReflectionProperty extends InternalReflectionProperty implements ReflectionPropertyInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	private $broker;
+	private $storage;
 
 	/**
 	 * Is the property accessible despite its access level.
@@ -36,13 +35,13 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 
 	/**
 	 * @param string|ReflectionClass|\ReflectionClass $class Defining class
-	 * @param string $propertyName Property name
-	 * @param Broker $broker
+	 * @param string $propertyName
+	 * @param StorageInterface $storage
 	 */
-	public function __construct($class, $propertyName, Broker $broker)
+	public function __construct($class, $propertyName, StorageInterface $storage)
 	{
 		parent::__construct($class, $propertyName);
-		$this->broker = $broker;
+		$this->storage = $storage;
 	}
 
 
@@ -51,7 +50,7 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 	 */
 	public function getDeclaringClass()
 	{
-		return ReflectionClass::create(parent::getDeclaringClass(), $this->broker);
+		return ReflectionClassFactory::create(parent::getDeclaringClass(), $this->storage);
 	}
 
 
@@ -187,9 +186,9 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -273,26 +272,6 @@ class ReflectionProperty extends InternalReflectionProperty implements Reflectio
 	public function getPrettyName()
 	{
 		return sprintf('%s::$%s', $this->getDeclaringClassName(), $this->getName());
-	}
-
-
-	/**
-	 * Creates a reflection instance.
-	 *
-	 * @return ReflectionProperty
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
-	{
-		static $cache = [];
-		if ( ! $internalReflection instanceof InternalReflectionProperty) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionProperty expected.', RuntimeException::INVALID_ARGUMENT);
-		}
-		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
-		if ( ! isset($cache[$key])) {
-			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $broker);
-		}
-		return $cache[$key];
 	}
 
 }

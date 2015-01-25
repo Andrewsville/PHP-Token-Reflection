@@ -17,19 +17,19 @@ class ConsistencyTest extends TestCase
 
 	public function testConstantReflectionConsistency()
 	{
-		$broker = $this->getBroker();
-		$broker->processFile(__DIR__ . '/data/constant/in-namespace.php');
+		$this->parser->parseFile(__DIR__ . '/data/constant/in-namespace.php');
 		try {
-			$broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->parseFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
+		$storage = $this->parser->getStorage();
 		$this->assertNotSame(NULL, @constant('PHP_INT_MAX'));
 		$constants = [
-			'tokenized' => $broker->getConstant('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE'),
-			'internal' => $broker->getConstant('PHP_INT_MAX'),
-			'invalid' => $broker->getConstant('DUPLICITIES_CONSTANTS_1')
+			'tokenized' => $storage->getConstant('TokenReflection\\Test\\CONSTANT_IN_NAMESPACE'),
+			'internal' => $storage->getConstant('PHP_INT_MAX'),
+			'invalid' => $storage->getConstant('DUPLICITIES_CONSTANTS_1')
 		];
 
 		// TestCase cross-consistency
@@ -45,19 +45,19 @@ class ConsistencyTest extends TestCase
 
 	public function testClassReflectionConsistency()
 	{
-		$broker = $this->getBroker();
-		$broker->processFile(__FILE__);
+		$this->parser->parseFile(__FILE__);
 		try {
-			$broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->parseFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
+		$storage = $this->parser->getStorage();
 		$this->assertFalse(class_exists('Foo\\Bar', TRUE));
 		$classes = [
-			'tokenized' => $broker->getClass('ApiGen\\TokenReflection\\Tests\\ConsistencyTest'),
-			'internal' => $broker->getClass('Exception'),
-			'invalid' => $broker->getClass('duplicitiesClasses1')
+			'tokenized' => $storage->getClass('ApiGen\\TokenReflection\\Tests\\ConsistencyTest'),
+			'internal' => $storage->getClass('Exception'),
+			'invalid' => $storage->getClass('duplicitiesClasses1')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -76,27 +76,27 @@ class ConsistencyTest extends TestCase
 	}
 
 
-	public function testGetNonexistingClass()
+	public function testGetNonExistingClass()
 	{
-		$this->assertNull($this->getBroker()->getClass('Foo\\Bar'));
+		$this->assertNull($this->parser->getStorage()->getClass('Foo\\Bar'));
 	}
 
 
 	public function testFunctionReflectionConsistency()
 	{
-		$broker = $this->getBroker();
-		$broker->processFile(__DIR__ . '/data/function/in-namespace.php');
+		$this->parser->parseFile(__DIR__ . '/data/function/in-namespace.php');
 		try {
-			$broker->processFile(__DIR__ . '/data/duplicities/otherfile.php');
+			$this->parser->parseFile(__DIR__ . '/data/duplicities/otherfile.php');
 		} catch (FileProcessingException $e) {
 			// Expected
 		}
 
+		$storage = $this->parser->getStorage();
 		$this->assertTrue(function_exists('constant'));
 		$functions = [
-			'tokenized' => $broker->getFunction('TokenReflection\\Test\\functionInNamespace'),
-			'internal' => $broker->getFunction('constant'),
-			'invalid' => $broker->getFunction('duplicitiesFunctions1')
+			'tokenized' => $storage->getFunction('TokenReflection\\Test\\functionInNamespace'),
+			'internal' => $storage->getFunction('constant'),
+			'invalid' => $storage->getFunction('duplicitiesFunctions1')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -117,13 +117,13 @@ class ConsistencyTest extends TestCase
 
 	public function testPropertyReflectionConsistency()
 	{
-		$broker = $this->getBroker();
-		$broker->processFile(__DIR__ . '/data/property/lines.php');
+		$this->parser->parseFile(__DIR__ . '/data/property/lines.php');
 
 		$this->assertTrue(function_exists('constant'));
+		$storage = $this->parser->getStorage();
 		$properties = [
-			'tokenized' => $broker->getClass('TokenReflection_Test_PropertyLines')->getProperty('lines'),
-			'internal' => $broker->getClass('Exception')->getProperty('message')
+			'tokenized' => $storage->getClass('TokenReflection_Test_PropertyLines')->getProperty('lines'),
+			'internal' => $storage->getClass('Exception')->getProperty('message')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -144,12 +144,12 @@ class ConsistencyTest extends TestCase
 
 	public function testMethodReflectionConsistency()
 	{
-		$broker = $this->getBroker();
-		$broker->processFile(__DIR__ . '/data/method/access-level.php');
+		$this->parser->parseFile(__DIR__ . '/data/method/access-level.php');
 
+		$storage = $this->parser->getStorage();
 		$methods = [
-			'tokenized' => $broker->getClass('TokenReflection_Test_MethodAccessLevelParent')->getMethod('privateNoExtended'),
-			'internal' => $broker->getClass('Exception')->getMethod('getMessage')
+			'tokenized' => $storage->getClass('TokenReflection_Test_MethodAccessLevelParent')->getMethod('privateNoExtended'),
+			'internal' => $storage->getClass('Exception')->getMethod('getMessage')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -170,12 +170,12 @@ class ConsistencyTest extends TestCase
 
 	public function testParameterReflectionConsistency()
 	{
-		$broker = $this->getBroker();
-		$broker->processFile(__DIR__ . '/data/parameter/optional-false.php');
+		$this->parser->parseFile(__DIR__ . '/data/parameter/optional-false.php');
 
+		$storage = $this->parser->getStorage();
 		$parameters = [
-			'tokenized' => $broker->getFunction('tokenReflectionParameterOptionalFalse')->getParameter('one'),
-			'internal' => $broker->getFunction('constant')->getParameter('const_name')
+			'tokenized' => $storage->getFunction('tokenReflectionParameterOptionalFalse')->getParameter('one'),
+			'internal' => $storage->getFunction('constant')->getParameter('const_name')
 		];
 
 		// TestCase consistency with the internal reflection
@@ -228,7 +228,6 @@ class ConsistencyTest extends TestCase
 	{
 		static $skip = [
 			'*' => ['addReason' => TRUE, 'getReasons' => TRUE, 'hasReasons' => TRUE],
-			'ApiGen\\TokenReflection\\Php\\ReflectionInterface' => ['alias' => TRUE, 'getFileReflection' => TRUE, 'getSource' => TRUE, 'getStartPosition' => TRUE, 'getEndPosition' => TRUE],
 			'ApiGen\\TokenReflection\\Php\\ReflectionProperty' => ['setDefaultValue' => TRUE]
 		];
 

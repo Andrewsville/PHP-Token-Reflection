@@ -30,22 +30,6 @@ interface ReflectionFunctionBaseInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns the PHP extension reflection.
-	 *
-	 * @return ReflectionExtensionInterface|null
-	 */
-	function getExtension();
-
-
-	/**
-	 * Returns the PHP extension name.
-	 *
-	 * @return string|null
-	 */
-	function getExtensionName();
-
-
-	/**
 	 * Returns the file name the reflection object is defined in.
 	 *
 	 * @return string

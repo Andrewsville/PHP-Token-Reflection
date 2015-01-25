@@ -23,7 +23,8 @@ class ReflectionParameterTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionParameter = $this->getBroker()
+		parent::setUp();
+		$this->internalReflectionParameter = $this->parser->getStorage()
 			->getClass('Exception')->getConstructor()->getParameter('message');
 	}
 
@@ -132,9 +133,12 @@ class ReflectionParameterTest extends TestCase
 	}
 
 
-	public function testGetBroker()
+	public function testGetStorage()
 	{
-		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\Broker', $this->internalReflectionParameter->getBroker());
+		$this->assertInstanceOf(
+			'ApiGen\TokenReflection\Storage\StorageInterface',
+			$this->internalReflectionParameter->getStorage()
+		);
 	}
 
 }

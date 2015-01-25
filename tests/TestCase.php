@@ -2,21 +2,15 @@
 
 namespace ApiGen\TokenReflection\Tests;
 
-use ApiGen\TokenReflection\Broker\Broker;
-use ApiGen\TokenReflection\Broker\MemoryBackend;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\ParserInterface;
 use ApiGen\TokenReflection\Reflection\ReflectionClass;
 use ApiGen\TokenReflection\Reflection\ReflectionConstant;
-use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Reflection\ReflectionFunction;
 use ApiGen\TokenReflection\Reflection\ReflectionMethod;
 use ApiGen\TokenReflection\Reflection\ReflectionParameter;
 use ApiGen\TokenReflection\Reflection\ReflectionProperty;
-use ApiGen\TokenReflection\ReflectionClassInterface;
-use ApiGen\TokenReflection\ReflectionConstantInterface;
-use ApiGen\TokenReflection\ReflectionFunctionInterface;
-use ApiGen\TokenReflection\ReflectionMethodInterface;
-use ApiGen\TokenReflection\ReflectionParameterInterface;
-use ApiGen\TokenReflection\ReflectionPropertyInterface;
+use Nette\DI\Container;
 use PHPUnit_Framework_TestCase;
 
 
@@ -28,14 +22,26 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 */
 	protected $type;
 
+	/**
+	 * @var Container
+	 */
+	private $container;
 
 	/**
-	 * @param mixed $test
-	 * @return ReflectionFile
+	 * @var ParserInterface
 	 */
-	protected function getFileTokenReflection($test)
+	protected $parser;
+
+
+	public function __construct()
 	{
-		return $this->getBroker()->processFile($this->getFilePath($test), TRUE);
+		$this->container = (new ContainerFactory)->create();
+	}
+
+
+	protected function setUp()
+	{
+		$this->parser = $this->container->getByType('ApiGen\TokenReflection\Parser');
 	}
 
 
@@ -55,56 +61,52 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return \stdClass
 	 */
-	protected function getMethodReflection($test, $fromString = FALSE)
+	protected function getMethodReflection($test)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getMethodInternalReflection($test);
-		$reflection->token = $this->getMethodTokenReflection($test, $fromString);
+		$reflection->token = $this->getMethodTokenReflection($test);
 		return $reflection;
 	}
 
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return \stdClass
 	 */
-	protected function getPropertyReflection($test, $fromString = FALSE)
+	protected function getPropertyReflection($test)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getPropertyInternalReflection($test);
-		$reflection->token = $this->getPropertyTokenReflection($test, $fromString);
+		$reflection->token = $this->getPropertyTokenReflection($test);
 		return $reflection;
 	}
 
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return \stdClass
 	 */
-	protected function getFunctionReflection($test, $fromString = FALSE)
+	protected function getFunctionReflection($test)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getFunctionInternalReflection($test);
-		$reflection->token = $this->getFunctionTokenReflection($test, $fromString);
+		$reflection->token = $this->getFunctionTokenReflection($test);
 		return $reflection;
 	}
 
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return \stdClass
 	 */
-	protected function getParameterReflection($test, $fromString = FALSE)
+	protected function getParameterReflection($test)
 	{
 		$reflection = new \stdClass();
 		$reflection->internal = $this->getParameterInternalReflection($test);
-		$reflection->token = $this->getParameterTokenReflection($test, $fromString);
+		$reflection->token = $this->getParameterTokenReflection($test);
 		return $reflection;
 	}
 
@@ -168,42 +170,33 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return ReflectionClass
 	 */
-	protected function getClassTokenReflection($test, $fromString = FALSE)
+	protected function getClassTokenReflection($test)
 	{
-		$broker = $this->getBroker();
-		if ($fromString) {
-			$source = file_get_contents($fileName = $this->getFilePath($test));
-			$broker->processString($source, $fileName);
-		} else {
-			$broker->processFile($this->getFilePath($test));
-		}
-		return $broker->getClass($this->getClassName($test));
+		$this->parser->parseFile($this->getFilePath($test));
+		return $this->parser->getStorage()->getClass($this->getClassName($test));
 	}
 
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return ReflectionMethod
 	 */
-	protected function getMethodTokenReflection($test, $fromString = FALSE)
+	protected function getMethodTokenReflection($test)
 	{
-		return $this->getClassTokenReflection($test, $fromString)
+		return $this->getClassTokenReflection($test)
 			->getMethod($this->getMethodName($test));
 	}
 
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return ReflectionProperty
 	 */
-	protected function getPropertyTokenReflection($test, $fromString = FALSE)
+	protected function getPropertyTokenReflection($test)
 	{
-		return $this->getClassTokenReflection($test, $fromString)
+		return $this->getClassTokenReflection($test)
 			->getProperty($this->getPropertyName($test));
 	}
 
@@ -213,46 +206,32 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	 * @param bool $fromString
 	 * @return ReflectionConstant
 	 */
-	protected function getConstantTokenReflection($test, $fromString = FALSE)
+	protected function getConstantTokenReflection($test)
 	{
-		return $this->getClassTokenReflection($test, $fromString)
+		return $this->getClassTokenReflection($test)
 			->getConstantReflection($this->getConstantName($test));
 	}
 
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return ReflectionFunction
 	 */
-	protected function getFunctionTokenReflection($test, $fromString = FALSE)
+	protected function getFunctionTokenReflection($test)
 	{
-		$broker = $this->getBroker();
-		if ($fromString) {
-			$source = file_get_contents($fileName = $this->getFilePath($test));
-			$broker->processString($source, $fileName);
-		} else {
-			$broker->processFile($this->getFilePath($test));
-		}
-		return $broker->getFunction($this->getFunctionName($test));
+		$this->parser->parseFile($this->getFilePath($test));
+		return $this->parser->getStorage()->getFunction($this->getFunctionName($test));
 	}
 
 
 	/**
 	 * @param string $test
-	 * @param bool $fromString
 	 * @return ReflectionParameter
 	 */
-	protected function getParameterTokenReflection($test, $fromString = FALSE)
+	protected function getParameterTokenReflection($test)
 	{
-		$broker = $this->getBroker();
-		if ($fromString) {
-			$source = file_get_contents($fileName = $this->getFilePath($test));
-			$broker->processString($source, $fileName);
-		} else {
-			$broker->processFile($this->getFilePath($test));
-		}
-		$parameters = $broker->getFunction($this->getFunctionName($test))->getParameters();
+		$this->parser->parseFile($this->getFilePath($test));
+		$parameters = $this->parser->getStorage()->getFunction($this->getFunctionName($test))->getParameters();
 		return $parameters[0];
 	}
 
@@ -319,19 +298,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 	protected function getFunctionName($test)
 	{
 		return 'tokenReflection' . ucfirst($this->type) . ucfirst($test);
-	}
-
-
-	/**
-	 * @return Broker
-	 */
-	protected function getBroker()
-	{
-		static $broker = NULL;
-		if (NULL === $broker) {
-			$broker = new Broker(new MemoryBackend);
-		}
-		return $broker;
 	}
 
 

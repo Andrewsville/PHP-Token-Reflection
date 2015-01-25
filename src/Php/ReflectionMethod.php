@@ -11,15 +11,18 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionParameterFactory;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
-use Reflector;
 use ReflectionMethod as InternalReflectionMethod;
 use ReflectionParameter as InternalReflectionParameter;
 
 
-class ReflectionMethod extends InternalReflectionMethod implements ReflectionInterface, ReflectionMethodInterface, AnnotationsInterface
+class ReflectionMethod extends InternalReflectionMethod implements ReflectionMethodInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**
@@ -28,9 +31,9 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	private $parameters;
 
 	/**
-	 * @var Broker
+	 * @var Parser
 	 */
-	private $broker;
+	private $storage;
 
 	/**
 	 * Is the property accessible despite its access level.
@@ -43,12 +46,12 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	/**
 	 * @param string|ReflectionClass|\ReflectionClass $class Defining class
 	 * @param string $methodName
-	 * @param Broker $broker
+	 * @param StorageInterface $storage
 	 */
-	public function __construct($class, $methodName, Broker $broker)
+	public function __construct($class, $methodName, StorageInterface $storage)
 	{
 		parent::__construct($class, $methodName);
-		$this->broker = $broker;
+		$this->storage = $storage;
 	}
 
 
@@ -57,7 +60,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	 */
 	public function getDeclaringClass()
 	{
-		return ReflectionClass::create(parent::getDeclaringClass(), $this->broker);
+		return ReflectionClassFactory::create(parent::getDeclaringClass(), $this->storage);
 	}
 
 
@@ -123,7 +126,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 		$parameters = $this->getParameters();
 		if (is_numeric($parameter)) {
 			if ( ! isset($parameters[$parameter])) {
-				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter));
 			}
 			return $parameters[$parameter];
 
@@ -133,7 +136,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 					return $reflection;
 				}
 			}
-			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter));
 		}
 	}
 
@@ -145,7 +148,7 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	{
 		if ($this->parameters === NULL) {
 			$this->parameters = array_map(function (InternalReflectionParameter $parameter) {
-				return ReflectionParameter::create($parameter, $this->broker);
+				return ReflectionParameterFactory::create($parameter, $this->storage);
 			}, parent::getParameters());
 		}
 		return $this->parameters;
@@ -183,9 +186,9 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -249,24 +252,6 @@ class ReflectionMethod extends InternalReflectionMethod implements ReflectionInt
 	public function isVariadic()
 	{
 		return PHP_VERSION_ID >= 50600 ? parent::isVariadic() : FALSE;
-	}
-
-
-	/**
-	 * @return ReflectionInterface
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
-	{
-		static $cache = [];
-		if ( ! $internalReflection instanceof InternalReflectionMethod) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionMethod expected.', RuntimeException::INVALID_ARGUMENT);
-		}
-		$key = $internalReflection->getDeclaringClass()->getName() . '::' . $internalReflection->getName();
-		if ( ! isset($cache[$key])) {
-			$cache[$key] = new self($internalReflection->getDeclaringClass()->getName(), $internalReflection->getName(), $broker);
-		}
-		return $cache[$key];
 	}
 
 }

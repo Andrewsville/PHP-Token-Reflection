@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
@@ -146,12 +146,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	private $classParser;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		$this->classParser = new ClassParser($tokenStream, $this, $parent);
 
-		$this->broker = $broker;
-		parent::__construct($tokenStream, $broker, $parent);
+		$this->storage = $storage;
+		parent::__construct($tokenStream, $storage, $parent);
 	}
 
 
@@ -351,14 +351,14 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			return TRUE;
 		}
 		$parent = $this->getParentClass();
-		return FALSE === $parent ? FALSE : $parent->isSubclassOf($class);
+		return $parent === FALSE ? FALSE : $parent->isSubclassOf($class);
 	}
 
 
 	/**
 	 * Returns the parent class reflection.
 	 *
-	 * @return ApiGen\TokenReflection\ReflectionClass|bool
+	 * @return ReflectionClassInterface|bool
 	 */
 	public function getParentClass()
 	{
@@ -366,7 +366,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if (NULL === $className) {
 			return FALSE;
 		}
-		return $this->getBroker()->getClass($className);
+		return $this->storage->getClass($className);
 	}
 
 
@@ -412,10 +412,10 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	{
 		if (is_object($interface)) {
 			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof ReflectionClassInterface) {
-				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('Parameter must be a string or an instance of class reflection, "%s" provided.', get_class($interface)));
 			}
 			if ( ! $interface->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface->getName()), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface->getName()));
 			}
 			$interfaceName = $interface->getName();
 		} else {
@@ -434,9 +434,8 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if (empty($interfaceNames)) {
 			return [];
 		}
-		$broker = $this->getBroker();
-		return array_combine($interfaceNames, array_map(function ($interfaceName) use ($broker) {
-			return $broker->getClass($interfaceName);
+		return array_combine($interfaceNames, array_map(function ($interfaceName) {
+			return $this->storage->getClass($interfaceName);
 		}, $interfaceNames));
 	}
 
@@ -450,7 +449,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		$names = FALSE !== $parentClass ? array_reverse(array_flip($parentClass->getInterfaceNames())) : [];
 		foreach ($this->interfaces as $interfaceName) {
 			$names[$interfaceName] = TRUE;
-			foreach (array_reverse($this->getBroker()->getClass($interfaceName)->getInterfaceNames()) as $parentInterfaceName) {
+			foreach (array_reverse($this->storage->getClass($interfaceName)->getInterfaceNames()) as $parentInterfaceName) {
 				$names[$parentInterfaceName] = TRUE;
 			}
 		}
@@ -465,23 +464,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getOwnInterfaces()
 	{
-		$interfaceNames = $this->getOwnInterfaceNames();
-		if (empty($interfaceNames)) {
+		if (empty($this->interfaces)) {
 			return [];
 		}
-		$broker = $this->getBroker();
-		return array_combine($interfaceNames, array_map(function ($interfaceName) use ($broker) {
-			return $broker->getClass($interfaceName);
-		}, $interfaceNames));
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getOwnInterfaceNames()
-	{
-		return $this->interfaces;
+		return array_combine($this->interfaces, array_map(function ($interfaceName) {
+			return $this->storage->getClass($interfaceName);
+		}, $this->interfaces));
 	}
 
 
@@ -544,7 +532,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				return $method;
 			}
 		}
-		throw new RuntimeException(sprintf('There is no method "%s".', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('There is no method "%s".', $name));
 	}
 
 
@@ -649,7 +637,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 						}
 						if ( ! isset($this->methods[$newName])) {
 							if (isset($methods[$newName]) && ! $traitMethod->isAbstract()) {
-								throw new RuntimeException(sprintf('Trait method "%s" was already imported.', $newName), RuntimeException::ALREADY_EXISTS);
+								throw new RuntimeException(sprintf('Trait method "%s" was already imported.', $newName));
 							}
 							$methods[$newName] = $traitMethod->alias($this, $newName, $accessLevel);
 						}
@@ -658,7 +646,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				if ( ! in_array(NULL, $imports)) {
 					if ( ! isset($this->methods[$methodName])) {
 						if (isset($methods[$methodName]) && ! $traitMethod->isAbstract()) {
-							throw new RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName), RuntimeException::ALREADY_EXISTS);
+							throw new RuntimeException(sprintf('Trait method "%s" was already imported.', $methodName));
 						}
 						$methods[$methodName] = $traitMethod->alias($this);
 					}
@@ -717,7 +705,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				return $constant;
 			}
 		}
-		throw new RuntimeException(sprintf('There is no constant "%s".', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('There is no constant "%s".', $name));
 	}
 
 
@@ -810,7 +798,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				return $property;
 			}
 		}
-		throw new RuntimeException(sprintf('There is no property "%s".', $name, $this->name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('There is no property "%s".', $name, $this->name));
 	}
 
 
@@ -947,11 +935,11 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
 			if ( ! $property->isPublic() && !$property->isAccessible()) {
-				throw new RuntimeException(sprintf('Static property "%s" is not accessible.', $name), RuntimeException::NOT_ACCESSIBLE);
+				throw new RuntimeException(sprintf('Static property "%s" is not accessible.', $name));
 			}
 			return $property->getDefaultValue();
 		}
-		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('There is no static property "%s".', $name));
 	}
 
 
@@ -960,13 +948,17 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getTraits()
 	{
-		$traitNames = $this->getTraitNames();
+		$parentClass = $this->getParentClass();
+		$names = $parentClass ? array_keys($parentClass->getTraits()) : [];
+		foreach ($this->traits as $traitName) {
+			$names[] = $traitName;
+		}
+		$traitNames =  array_unique($names);
 		if (empty($traitNames)) {
 			return [];
 		}
-		$broker = $this->getBroker();
-		return array_combine($traitNames, array_map(function ($traitName) use ($broker) {
-			return $broker->getClass($traitName);
+		return array_combine($traitNames, array_map(function ($traitName) {
+			return $this->storage->getClass($traitName);
 		}, $traitNames));
 	}
 
@@ -976,37 +968,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getOwnTraits()
 	{
-		$ownTraitNames = $this->getOwnTraitNames();
-		if (empty($ownTraitNames)) {
+		if (empty($this->traits)) {
 			return [];
 		}
-		$broker = $this->getBroker();
-		return array_combine($ownTraitNames, array_map(function ($traitName) use ($broker) {
-			return $broker->getClass($traitName);
-		}, $ownTraitNames));
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getTraitNames()
-	{
-		$parentClass = $this->getParentClass();
-		$names = $parentClass ? $parentClass->getTraitNames() : [];
-		foreach ($this->traits as $traitName) {
-			$names[] = $traitName;
-		}
-		return array_unique($names);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getOwnTraitNames()
-	{
-		return $this->traits;
+		return array_combine($this->traits, array_map(function ($traitName) {
+			return $this->storage->getClass($traitName);
+		}, $this->traits));
 	}
 
 
@@ -1031,46 +998,26 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	/**
 	 * {@inheritdoc}
 	 */
-	public function isValid()
-	{
-		if (NULL !== $this->parentClassName && !$this->getParentClass()->isValid()) {
-			return FALSE;
-		}
-		foreach ($this->getInterfaces() as $interface) {
-			if ( ! $interface->isValid()) {
-				return FALSE;
-			}
-		}
-		foreach ($this->getTraits() as $trait) {
-			if ( ! $trait->isValid()) {
-				return FALSE;
-			}
-		}
-		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function usesTrait($trait)
 	{
 		if (is_object($trait)) {
 			if ( ! $trait instanceof InternalReflectionClass && !$trait instanceof ReflectionClassInterface) {
-				throw new RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('Parameter must be a string or an instance of trait reflection, "%s" provided.', get_class($trait)));
 			}
 			$traitName = $trait->getName();
 			if ( ! $trait->isTrait()) {
-				throw new RuntimeException(sprintf('"%s" is not a trait.', $traitName), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not a trait.', $traitName));
 			}
 		} else {
-			$reflection = $this->getBroker()->getClass($trait);
+			$reflection = $this->storage->getClass($trait);
 			if ( ! $reflection->isTrait()) {
-				throw new RuntimeException(sprintf('"%s" is not a trait.', $trait), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not a trait.', $trait));
 			}
 			$traitName = $trait;
 		}
-		return in_array($traitName, $this->getTraitNames());
+
+		$traitNames = array_keys($this->traits);
+		return in_array($traitName, $traitNames);
 	}
 
 
@@ -1079,22 +1026,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getDirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ( ! $class->isSubclassOf($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
-			return NULL === $class->getParentClassName() || !$class->getParentClass()->isSubClassOf($that);
+			return $class->getParentClassName() === NULL || ! $class->getParentClass()->isSubClassOf($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getDirectSubclassNames()
-	{
-		return array_keys($this->getDirectSubclasses());
 	}
 
 
@@ -1103,22 +1040,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	 */
 	public function getIndirectSubclasses()
 	{
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ( ! $class->isSubclassOf($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ( ! $class->isSubclassOf($this->name)) {
 				return FALSE;
 			}
-			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($that);
+			return $class->getParentClassName() !== NULL && $class->getParentClass()->isSubClassOf($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIndirectSubclassNames()
-	{
-		return array_keys($this->getIndirectSubclasses());
 	}
 
 
@@ -1130,22 +1057,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ($class->isInterface() || !$class->implementsInterface($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ($class->isInterface() || !$class->implementsInterface($this->name)) {
 				return FALSE;
 			}
-			return NULL === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($that);
+			return NULL === $class->getParentClassName() || !$class->getParentClass()->implementsInterface($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getDirectImplementerNames()
-	{
-		return array_keys($this->getDirectImplementers());
 	}
 
 
@@ -1157,22 +1074,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 		if ( ! $this->isInterface()) {
 			return [];
 		}
-		$that = $this->name;
-		return array_filter($this->getBroker()->getClasses(), function (ReflectionClass $class) use ($that) {
-			if ($class->isInterface() || !$class->implementsInterface($that)) {
+		return array_filter($this->storage->getClasses(), function (ReflectionClass $class) {
+			if ($class->isInterface() || !$class->implementsInterface($this->name)) {
 				return FALSE;
 			}
-			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($that);
+			return NULL !== $class->getParentClassName() && $class->getParentClass()->implementsInterface($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIndirectImplementerNames()
-	{
-		return array_keys($this->getIndirectImplementers());
 	}
 
 
@@ -1182,7 +1089,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	public function isInstance($object)
 	{
 		if ( ! is_object($object)) {
-			throw new RuntimeException(sprintf('Parameter must be an object, "%s" provided.', gettype($object)), RuntimeException::INVALID_ARGUMENT);
+			throw new RuntimeException(sprintf('Parameter must be an object, "%s" provided.', gettype($object)));
 		}
 		return $this->name === get_class($object) || is_subclass_of($object, $this->getName());
 	}
@@ -1195,12 +1102,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	{
 		if ($this->hasProperty($name) && ($property = $this->getProperty($name)) && $property->isStatic()) {
 			if ( ! $property->isPublic() && !$property->isAccessible()) {
-				throw new RuntimeException(sprintf('Static property "%s" is not accessible.', $name), RuntimeException::NOT_ACCESSIBLE);
+				throw new RuntimeException(sprintf('Static property "%s" is not accessible.', $name));
 			}
 			$property->setDefaultValue($value);
 			return;
 		}
-		throw new RuntimeException(sprintf('There is no static property "%s".', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('There is no static property "%s".', $name));
 	}
 
 
@@ -1236,7 +1143,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	protected function processParent(ReflectionInterface $parent, StreamBase $tokenStream)
 	{
 		if ( ! $parent instanceof ReflectionFileNamespace) {
-			throw new ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)), ParseException::INVALID_PARENT);
+			throw new ParseException($this, $tokenStream, sprintf('Invalid parent reflection provided: "%s".', get_class($parent)));
 		}
 		$this->namespaceName = $parent->getName();
 		$this->aliases = $parent->getNamespaceAliases();
@@ -1261,7 +1168,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 	protected function parseName(StreamBase $tokenStream)
 	{
 		if ( ! $tokenStream->is(T_STRING)) {
-			throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+			throw new ParseException('Unexpected token found.');
 		}
 		if ($this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME) {
 			$this->name = $tokenStream->getTokenValue();
@@ -1311,7 +1218,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 			return $this;
 		}
 		if ($this->isInterface()) {
-			throw new ParseException('Interfaces cannot implement interfaces.', ParseException::LOGICAL_ERROR);
+			throw new ParseException('Interfaces cannot implement interfaces.');
 		}
 		while (TRUE) {
 			$interfaceName = '';
@@ -1333,7 +1240,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				break;
 
 			} elseif ($type !== ',') {
-				throw new ParseException('Unexpected token found, expected "{" or ";".', ParseException::UNEXPECTED_TOKEN);
+				throw new ParseException('Unexpected token found, expected "{" or ";".');
 			}
 		}
 	}
@@ -1365,7 +1272,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 						}
 					}
 					if (T_VARIABLE === $type || T_VAR === $type) {
-						$property = new ReflectionProperty($tokenStream, $this->getBroker(), $this);
+						$property = new ReflectionProperty($tokenStream, $this->storage, $this);
 						$this->properties[$property->getName()] = $property;
 						$tokenStream->next();
 						break;
@@ -1374,14 +1281,14 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 				case T_FINAL:
 				case T_ABSTRACT:
 				case T_FUNCTION:
-					$method = new ReflectionMethod($tokenStream, $this->getBroker(), $this);
+					$method = new ReflectionMethod($tokenStream, $this->storage, $this);
 					$this->methods[$method->getName()] = $method;
 					$tokenStream->next();
 					break;
 				case T_CONST:
 					$tokenStream->skipWhitespaces(TRUE);
 					while ($tokenStream->is(T_STRING)) {
-						$constant = new ReflectionConstant($tokenStream, $this->getBroker(), $this);
+						$constant = new ReflectionConstant($tokenStream, $this->getStorage(), $this);
 						$this->constants[$constant->getName()] = $constant;
 						if ($tokenStream->is(',')) {
 							$tokenStream->skipWhitespaces(TRUE);
@@ -1400,7 +1307,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 						}
 						if ('' === trim($traitName, '\\')) {
-							throw new ParseException('An empty trait name found.', ParseException::LOGICAL_ERROR);
+							throw new ParseException('An empty trait name found.');
 						}
 						$this->traits[] = Resolver::resolveClassFQN($traitName, $this->aliases, $this->namespaceName);
 						if (';' === $type) {
@@ -1413,7 +1320,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 							continue;
 						} elseif ('{' !== $type) {
 							// Unexpected token
-							throw new ParseException('Unexpected token found: "%s".', ParseException::UNEXPECTED_TOKEN);
+							throw new ParseException('Unexpected token found: "%s".');
 						}
 						// Aliases definition
 						$type = $tokenStream->skipWhitespaces(TRUE)->getType();
@@ -1432,12 +1339,12 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 							if (T_INSTEADOF === $type) {
 								$alias = FALSE;
 							} elseif (T_AS !== $type) {
-								throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+								throw new ParseException('Unexpected token found.');
 							}
 							$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							if (T_PUBLIC === $type || T_PROTECTED === $type || T_PRIVATE === $type) {
 								if ( ! $alias) {
-									throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+									throw new ParseException('Unexpected token found.');
 								}
 								switch ($type) {
 									case T_PUBLIC:
@@ -1460,7 +1367,7 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 								$type = $tokenStream->skipWhitespaces(TRUE)->getType();
 							}
 							if (empty($leftSide)) {
-								throw new ParseException('An empty method name was found.', ParseException::LOGICAL_ERROR);
+								throw new ParseException('An empty method name was found.');
 							}
 							if ($alias) {
 								// Alias
@@ -1473,20 +1380,23 @@ class ReflectionClass extends ReflectionElement implements ReflectionClassInterf
 									$this->traitAliases[$rightSide[0]] = '(null)::' . $leftSide;
 								}
 								$this->traitImports[$leftSide][] = $rightSide;
+
 							} else {
 								// Insteadof
 								if ($pos = strpos($leftSide, '::')) {
 									$methodName = substr($leftSide, $pos + 2);
-								} else {
-									throw new ParseException('A T_DOUBLE_COLON has to be present when using T_INSTEADOF.', ParseException::UNEXPECTED_TOKEN);
+
+									} else {
+									throw new ParseException('A T_DOUBLE_COLON has to be present when using T_INSTEADOF.');
 								}
 								$this->traitImports[Resolver::resolveClassFQN($rightSide[0], $this->aliases, $this->namespaceName) . '::' . $methodName][] = NULL;
 							}
-							if (',' === $type) {
+							if ($type === ',') {
 								$tokenStream->skipWhitespaces(TRUE);
 								continue;
-							} elseif (';' !== $type) {
-								throw new ParseException('Unexpected token found.', ParseException::UNEXPECTED_TOKEN);
+
+							} elseif ($type !== ';') {
+								throw new ParseException('Unexpected token found.');
 							}
 							$type = $tokenStream->skipWhitespaces()->getType();
 						}

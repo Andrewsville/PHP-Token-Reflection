@@ -31,31 +31,12 @@ interface ReflectionExtensionInterface extends ReflectionInterface
 
 
 	/**
-	 * Returns class names defined by this extension.
-	 *
-	 * @return array
-	 */
-	function getClassNames();
-
-
-	/**
 	 * Returns a constant reflection.
 	 *
-	 * @param string $name Constant name
-	 * @return ApiGen\TokenReflection\IReflectionConstant
+	 * @param string $name
+	 * @return ReflectionConstantInterface
 	 */
 	function getConstantReflection($name);
-
-
-	/**
-	 * Returns reflections of constants defined by this extension.
-	 *
-	 * This method has this name just for consistence with the rest of reflection.
-	 *
-	 * @return array
-	 * @see ApiGen\TokenReflection\IReflectionExtension::getConstantReflections()
-	 */
-	function getConstantReflections();
 
 
 	/**
@@ -92,13 +73,5 @@ interface ReflectionExtensionInterface extends ReflectionInterface
 	 * @return array
 	 */
 	function getFunctions();
-
-
-	/**
-	 * Returns function names defined by this extension.
-	 *
-	 * @return array
-	 */
-	function getFunctionNames();
 
 }

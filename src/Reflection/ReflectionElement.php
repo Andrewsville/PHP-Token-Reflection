@@ -9,9 +9,7 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
-use ApiGen\TokenReflection\Behaviors\SourceInterface;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
@@ -19,7 +17,7 @@ use ApiGen\TokenReflection\Parser\ElementParser;
 use ApiGen\TokenReflection\Stream\StreamBase;
 
 
-abstract class ReflectionElement extends ReflectionBase implements SourceInterface, ExtensionInterface
+abstract class ReflectionElement extends ReflectionBase
 {
 
 	/**
@@ -63,14 +61,14 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 	protected $endPosition;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		if ($tokenStream->count() === 0) {
-			throw new ParseException('Reflection token stream must not be empty.', ParseException::INVALID_ARGUMENT);
+			throw new ParseException('Reflection token stream must not be empty.');
 		}
 
 		$this->elementParser = new ElementParser($tokenStream, $this, $parent);
-		$this->broker = $broker;
+		$this->storage = $storage;
 		if (method_exists($this, 'parseStream')) {
 			$this->parseStream($tokenStream, $parent);
 		}
@@ -110,14 +108,11 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 
 
 	/**
-	 * Returns a file reflection.
-	 *
 	 * @return ReflectionFile
-	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
 	{
-		return $this->getBroker()->getFile($this->fileName);
+		return $this->storage->getFile($this->fileName);
 	}
 
 
@@ -136,33 +131,6 @@ abstract class ReflectionElement extends ReflectionBase implements SourceInterfa
 	public function getEndLine()
 	{
 		return $this->endLine;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtension()
-	{
-		return NULL;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtensionName()
-	{
-		return FALSE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSource()
-	{
-		return $this->getBroker()->getFileTokens($this->getFileName())->getSourcePart($this->startPosition, $this->endPosition);
 	}
 
 

@@ -9,7 +9,8 @@
 
 namespace ApiGen\TokenReflection\Reflection;
 
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
@@ -66,10 +67,10 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	private $constantParser;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
 		$this->constantParser = new ConstantParser($tokenStream, $this, $parent);
-		parent::__construct($tokenStream, $broker, $parent);
+		parent::__construct($tokenStream, $storage, $parent);
 	}
 
 
@@ -100,10 +101,10 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	 */
 	public function getDeclaringClass()
 	{
-		if (NULL === $this->declaringClassName) {
+		if ($this->declaringClassName === NULL) {
 			return NULL;
 		}
-		return $this->getBroker()->getClass($this->declaringClassName);
+		return $this->storage->getClass($this->declaringClassName);
 	}
 
 
@@ -164,15 +165,6 @@ class ReflectionConstant extends ReflectionElement implements ReflectionConstant
 	public function getPrettyName()
 	{
 		return $this->declaringClassName === NULL ? parent::getPrettyName() : sprintf('%s::%s', $this->declaringClassName, $this->name);
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isValid()
-	{
-		return TRUE;
 	}
 
 

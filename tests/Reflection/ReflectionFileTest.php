@@ -18,17 +18,14 @@ class ReflectionFileTest extends TestCase
 	protected $type = 'file';
 
 
-	/**
-	 * Tests file level docblocks.
-	 */
 	public function testDocComment()
 	{
 		$fileName = $this->getFilePath('docComment');
-		$this->getBroker()->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
@@ -42,17 +39,14 @@ class ReflectionFileTest extends TestCase
 	}
 
 
-	/**
-	 * Tests file level docblocks.
-	 */
 	public function testNoDocComment()
 	{
 		$fileName = $this->getFilePath('noDocComment');
-		$this->getBroker()->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
@@ -63,29 +57,26 @@ class ReflectionFileTest extends TestCase
 	}
 
 
-	/**
-	 * Tests returning file reflections.
-	 */
 	public function testReturningFileReflection()
 	{
 		$fileName = $this->getFilePath('docComment');
 		$rfl = $this->getClassReflection('docComment');
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
 		$this->assertSame($rfl->token->getFileName(), $rfl->token->getFileReflection()->getName());
-		$this->assertSame($this->getBroker()->getFile($fileName), $rfl->token->getFileReflection());
+		$this->assertSame($this->parser->getStorage()->getFile($fileName), $rfl->token->getFileReflection());
 	}
 
 
 	public function testDeclareNoNamespace()
 	{
 		$fileName = $this->getFilePath('declareNoNamespace');
-		$this->getBroker()->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
@@ -99,11 +90,11 @@ class ReflectionFileTest extends TestCase
 	public function testDeclareNamespace()
 	{
 		$fileName = $this->getFilePath('declareNamespace');
-		$this->getBroker()->processFile($fileName);
+		$this->parser->parseFile($fileName);
 
-		$this->assertTrue($this->getBroker()->hasFile($fileName));
+		$this->assertTrue($this->parser->getStorage()->hasFile($fileName));
 
-		$fileReflection = $this->getBroker()->getFile($fileName);
+		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
 		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
@@ -117,48 +108,12 @@ class ReflectionFileTest extends TestCase
 	/**
 	 * Tests throwing exceptions when requesting reflections of files that were not processed.
 	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\BrokerException
+	 * @expectedException ApiGen\TokenReflection\Exception\ParserException
 	 */
 	public function testExceptionReturningFileReflection()
 	{
-		$broker = $this->getBroker();
-
-		$this->assertFalse($broker->hasFile('#non~Existent#'));
-		$broker->getFile('#non~Existent#');
-	}
-
-
-	public function testGetSource()
-	{
-		$fileName = $this->getFilePath('docComment');
-
-		$fileReflection = $this->getBroker()->getFile($fileName);
-
-		$expectedSource = <<<SOURCE
-<?php
-/**
- * This is a file level doccomment.
- *
- * @package package name
- * @author author name
- */
-
-
-/**
- * TokenReflection_Test_FileDocComment.
- *
- * @copyright Copyright (c) 2011
- * @author author
- * @see http://php.net
- */
-class TokenReflection_Test_FileDocComment
-{
-
-}
-
-SOURCE;
-
-		$this->assertSame($expectedSource, $fileReflection->getSource());
+		$this->assertFalse($this->parser->getStorage()->hasFile('#non~Existent#'));
+		$this->parser->getStorage()->getFile('#non~Existent#');
 	}
 
 }

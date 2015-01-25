@@ -9,8 +9,6 @@
 
 namespace ApiGen\TokenReflection;
 
-use ApiGen\TokenReflection\Broker\Broker;
-
 
 interface ReflectionInterface
 {
@@ -53,13 +51,5 @@ interface ReflectionInterface
 	 * @return bool
 	 */
 	function isTokenized();
-
-
-	/**
-	 * Returns the reflection broker used by this reflection object.
-	 *
-	 * @return Broker
-	 */
-	function getBroker();
 
 }

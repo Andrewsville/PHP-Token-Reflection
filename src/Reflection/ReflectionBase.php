@@ -10,7 +10,8 @@
 namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Parser;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\Reflection;
 use ApiGen\TokenReflection\Stream\StreamBase;
@@ -32,14 +33,14 @@ abstract class ReflectionBase implements ReflectionInterface, AnnotationsInterfa
 	protected $docComment;
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	protected $broker;
+	protected $storage;
 
 
-	public function __construct(StreamBase $tokenStream, Broker $broker, ReflectionInterface $parent = NULL)
+	public function __construct(StreamBase $tokenStream, StorageInterface $storage, ReflectionInterface $parent = NULL)
 	{
-		$this->broker = $broker;
+		$this->storage = $storage;
 		if (method_exists($this, 'parseStream')) {
 			$this->parseStream($tokenStream, $parent);
 		}
@@ -94,9 +95,9 @@ abstract class ReflectionBase implements ReflectionInterface, AnnotationsInterfa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -134,12 +135,6 @@ abstract class ReflectionBase implements ReflectionInterface, AnnotationsInterfa
 	{
 		return $this->hasAnnotation('deprecated');
 	}
-
-
-	/**
-	 * @return string
-	 */
-	abstract public function getSource();
 
 
 	/**

@@ -79,14 +79,6 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	public function testDisabled()
-	{
-		$rfl = $this->getFunctionReflection('noDisabled');
-		$this->assertSame($rfl->internal->isDisabled(), $rfl->token->isDisabled());
-		$this->assertFalse($rfl->token->isDisabled());
-	}
-
-
 	public function testUserDefined()
 	{
 		$rfl = $this->getFunctionReflection('userDefined');
@@ -98,13 +90,8 @@ class ReflectionFunctionTest extends TestCase
 		$this->assertSame($rfl->internal->isInternal(), $rfl->token->isInternal());
 		$this->assertFalse($rfl->token->isInternal());
 
-		$this->assertSame($rfl->internal->getExtension(), $rfl->token->getExtension());
-		$this->assertNull($rfl->token->getExtension());
-		$this->assertSame($rfl->internal->getExtensionName(), $rfl->token->getExtensionName());
-		$this->assertFalse($rfl->token->getExtensionName());
-
 		$rfl = new \stdClass();
-		$rfl->token = $this->getBroker()->getFunction('get_class');
+		$rfl->token = $this->parser->getStorage()->getFunction('get_class');
 		$this->assertFalse($rfl->token->isUserDefined());
 		$this->assertFalse($rfl->token->getFileName());
 		$this->assertTrue($rfl->token->isInternal());
@@ -120,11 +107,11 @@ class ReflectionFunctionTest extends TestCase
 	public function testInNamespace()
 	{
 		require_once $this->getFilePath('inNamespace');
-		$this->getBroker()->processFile($this->getFilePath('inNamespace'));
+		$this->parser->parseFile($this->getFilePath('inNamespace'));
 
 		$rfl = new \stdClass();
 		$rfl->internal = new InternalReflectionFunction('TokenReflection\Test\functionInNamespace');
-		$rfl->token = $this->getBroker()->getFunction('TokenReflection\Test\functionInNamespace');
+		$rfl->token = $this->parser->getStorage()->getFunction('TokenReflection\Test\functionInNamespace');
 
 		$this->assertSame($rfl->internal->inNamespace(), $rfl->token->inNamespace());
 		$this->assertTrue($rfl->token->inNamespace());
@@ -210,14 +197,5 @@ class ReflectionFunctionTest extends TestCase
 	}
 
 
-	/**
-	 * Tests an exception thrown when trying to create the reflection from a PHP internal reflection.
-	 *
-	 * @expectedException ApiGen\TokenReflection\Exception\RuntimeException
-	 */
-	public function testInternalFunctionReflectionCreate()
-	{
-		ReflectionExtension::create(new \ReflectionClass('Exception'), $this->getBroker());
-	}
 
 }

@@ -10,17 +10,17 @@
 namespace ApiGen\TokenReflection\Php;
 
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionFunctionFactory;
 use ApiGen\TokenReflection\ReflectionParameterInterface;
-use ApiGen\TokenReflection\Reflection\ReflectionElement;
-use Reflector;
 use ReflectionParameter as InternalReflectionParameter;
 use ReflectionFunctionAbstract as InternalReflectionFunctionAbstract;
 
 
-class ReflectionParameter extends InternalReflectionParameter implements ReflectionInterface, ReflectionParameterInterface, AnnotationsInterface
+class ReflectionParameter extends InternalReflectionParameter implements ReflectionParameterInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**
@@ -29,21 +29,21 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	private $userDefined;
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	private $broker;
+	private $storage;
 
 
 	/**
 	 * @param string|array $function Defining function/method
 	 * @param string $paramName
-	 * @param Broker $broker
+	 * @param StorageInterface $storage
 	 * @param \ReflectionFunctionAbstract $parent Parent reflection object
 	 */
-	public function __construct($function, $paramName, Broker $broker, InternalReflectionFunctionAbstract $parent)
+	public function __construct($function, $paramName, StorageInterface $storage, InternalReflectionFunctionAbstract $parent)
 	{
 		parent::__construct($function, $paramName);
-		$this->broker = $broker;
+		$this->storage = $storage;
 		$this->userDefined = $parent->isUserDefined();
 	}
 
@@ -54,7 +54,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	public function getDeclaringClass()
 	{
 		$class = parent::getDeclaringClass();
-		return $class ? ReflectionClass::create($class, $this->broker) : NULL;
+		return $class ? ReflectionClassFactory::create($class, $this->storage) : NULL;
 	}
 
 
@@ -139,7 +139,7 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	{
 		$class = $this->getDeclaringClass();
 		$function = parent::getDeclaringFunction();
-		return $class ? $class->getMethod($function->getName()) : ReflectionFunction::create($function, $this->broker);
+		return $class ? $class->getMethod($function->getName()) : ReflectionFunctionFactory::create($function, $this->storage);
 	}
 
 
@@ -258,9 +258,9 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -290,29 +290,6 @@ class ReflectionParameter extends InternalReflectionParameter implements Reflect
 	public function isVariadic()
 	{
 		return PHP_VERSION_ID >= 50600 && parent::isVariadic();
-	}
-
-
-	/**
-	 * Creates a reflection instance.
-	 *
-	 * @return ReflectionParameter
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
-	{
-		static $cache = [];
-		if ( ! $internalReflection instanceof InternalReflectionParameter) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionParameter expected.', RuntimeException::INVALID_ARGUMENT);
-		}
-		$class = $internalReflection->getDeclaringClass();
-		$function = $internalReflection->getDeclaringFunction();
-		$key = $class ? $class->getName() . '::' : '';
-		$key .= $function->getName() . '(' . $internalReflection->getName() . ')';
-		if ( ! isset($cache[$key])) {
-			$cache[$key] = new self($class ? [$class->getName(), $function->getName()] : $function->getName(), $internalReflection->getName(), $broker, $function);
-		}
-		return $cache[$key];
 	}
 
 }

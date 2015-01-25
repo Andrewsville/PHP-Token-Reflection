@@ -11,25 +11,28 @@ namespace ApiGen\TokenReflection\Php;
 
 use ApiGen;
 use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
-use ApiGen\TokenReflection\Broker\BackendInterface;
-use ApiGen\TokenReflection\Broker\Broker;
+use ApiGen\TokenReflection\Behaviors\ExtensionInterface;
+use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\RuntimeException;
+use ApiGen\TokenReflection\Php\Factory\ReflectionClassFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionExtensionFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionMethodFactory;
+use ApiGen\TokenReflection\Php\Factory\ReflectionPropertyFactory;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
-use Reflector;
 use ReflectionClass as InternalReflectionClass;
 use ReflectionProperty as InternalReflectionProperty;
 use ReflectionMethod as InternalReflectionMethod;
 
 
-class ReflectionClass extends InternalReflectionClass implements ReflectionInterface, ReflectionClassInterface, AnnotationsInterface
+class ReflectionClass extends InternalReflectionClass implements ReflectionClassInterface, AnnotationsInterface, ExtensionInterface
 {
 
 	/**
-	 * @var Broker
+	 * @var StorageInterface
 	 */
-	private $broker;
+	private $storage;
 
 	/**
 	 * Implemented interface reflections.
@@ -61,13 +64,13 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
-	 * @param string $className Class name
-	 * @param Broker $broker
+	 * @param string $name
+	 * @param StorageInterface $storage
 	 */
-	public function __construct($className, Broker $broker)
+	public function __construct($name, StorageInterface $storage)
 	{
-		parent::__construct($className);
-		$this->broker = $broker;
+		parent::__construct($name);
+		$this->storage = $storage;
 	}
 
 
@@ -76,7 +79,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 */
 	public function getExtension()
 	{
-		return ReflectionExtension::create(parent::getExtension(), $this->broker);
+		return ReflectionExtensionFactory::create(parent::getExtension(), $this->storage);
 	}
 
 
@@ -156,7 +159,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if (is_object($class)) {
 			if ( ! $class instanceof InternalReflectionClass && !$class instanceof ReflectionClassInterface) {
-				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException('Parameter must be a string or an instance of class reflection.');
 			}
 			$class = $class->getName();
 		}
@@ -170,7 +173,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public function getParentClass()
 	{
 		$parent = parent::getParentClass();
-		return $parent ? self::create($parent, $this->broker) : NULL;
+		return $parent ? ReflectionClassFactory::create($parent, $this->storage) : NULL;
 	}
 
 
@@ -190,7 +193,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public function getParentClasses()
 	{
 		return array_map(function ($className) {
-			return $this->broker->getClass($className);
+			return $this->storage->getClass($className);
 		}, $this->getParentClassNameList());
 	}
 
@@ -211,16 +214,17 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if (is_object($interface)) {
 			if ( ! $interface instanceof InternalReflectionClass && !$interface instanceof ReflectionClassInterface) {
-				throw new RuntimeException('Parameter must be a string or an instance of class reflection.', RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException('Parameter must be a string or an instance of class reflection.');
 			}
 			$interfaceName = $interface->getName();
 			if ( ! $interface->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interfaceName));
 			}
+
 		} else {
-			$reflection = $this->getBroker()->getClass($interface);
+			$reflection = $this->storage->getClass($interface);
 			if ( ! $reflection->isInterface()) {
-				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface), RuntimeException::INVALID_ARGUMENT);
+				throw new RuntimeException(sprintf('"%s" is not an interface.', $interface));
 			}
 			$interfaceName = $interface;
 		}
@@ -239,7 +243,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 				$this->interfaces = [];
 			} else {
 				$this->interfaces = array_combine($interfaceNames, array_map(function ($interfaceName) {
-					return $this->broker->getClass($interfaceName);
+					return $this->storage->getClass($interfaceName);
 				}, $interfaceNames));
 			}
 		}
@@ -260,18 +264,9 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getOwnInterfaceNames()
-	{
-		return array_keys($this->getOwnInterfaces());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getConstructor()
 	{
-		return ReflectionMethod::create(parent::getConstructor(), $this->broker);
+		return ReflectionMethodFactory::create(parent::getConstructor(), $this->storage);
 	}
 
 
@@ -308,7 +303,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 				return $method;
 			}
 		}
-		throw new RuntimeException(sprintf('Method %s does not exist.', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('Method %s does not exist.', $name));
 	}
 
 
@@ -319,7 +314,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if ($this->methods === NULL) {
 			$this->methods = array_map(function (InternalReflectionMethod $method) {
-				return ReflectionMethod::create($method, $this->broker);
+				return ReflectionMethodFactory::create($method, $this->storage);
 			}, parent::getMethods());
 		}
 		if ($filter === NULL) {
@@ -403,9 +398,9 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	public function getConstantReflection($name)
 	{
 		if ($this->hasConstant($name)) {
-			return new ReflectionConstant($name, $this->getConstant($name), $this->broker, $this);
+			return new ReflectionConstant($name, $this->getConstant($name), $this->storage, $this);
 		}
-		throw new RuntimeException(sprintf('Constant "%s" does not exist.', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('Constant "%s" does not exist.', $name));
 	}
 
 
@@ -465,7 +460,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 				return $property;
 			}
 		}
-		throw new RuntimeException(sprintf('Property %s does not exist.', $name), RuntimeException::DOES_NOT_EXIST);
+		throw new RuntimeException(sprintf('Property %s does not exist.', $name));
 	}
 
 
@@ -476,7 +471,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	{
 		if ($this->properties === NULL) {
 			$this->properties = array_map(function (InternalReflectionProperty $property) {
-				return ReflectionProperty::create($property, $this->broker);
+				return ReflectionPropertyFactory::create($property, $this->storage);
 			}, parent::getProperties());
 		}
 		if ($filter === NULL) {
@@ -566,15 +561,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDirectSubclassNames()
-	{
-		return array_keys($this->getDirectSubclasses());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getIndirectSubclasses()
 	{
 		return array_filter($this->getInternalTokenizedClasses(), function (ReflectionClassInterface $class) {
@@ -583,15 +569,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 			}
 			return NULL !== $class->getParentClassName() && $class->getParentClass()->isSubClassOf($this->name);
 		});
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIndirectSubclassNames()
-	{
-		return array_keys($this->getIndirectSubclasses());
 	}
 
 
@@ -615,15 +592,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDirectImplementerNames()
-	{
-		return array_keys($this->getDirectImplementers());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getIndirectImplementers()
 	{
 		if ( ! $this->isInterface()) {
@@ -641,25 +609,7 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getIndirectImplementerNames()
-	{
-		return array_keys($this->getIndirectImplementers());
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function isComplete()
-	{
-		return TRUE;
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isValid()
 	{
 		return TRUE;
 	}
@@ -677,9 +627,9 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBroker()
+	public function getStorage()
 	{
-		return $this->broker;
+		return $this->storage;
 	}
 
 
@@ -687,15 +637,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 	 * {@inheritdoc}
 	 */
 	public function getOwnTraits()
-	{
-		return [];
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getOwnTraitNames()
 	{
 		return [];
 	}
@@ -720,24 +661,11 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionInter
 
 
 	/**
-	 * @return ApiGen\TokenReflection\Reflection\ReflectionClass|NULL
-	 * @throws RuntimeException If an invalid internal reflection object was provided.
-	 */
-	public static function create(Reflector $internalReflection, Broker $broker)
-	{
-		if ( ! $internalReflection instanceof InternalReflectionClass) {
-			throw new RuntimeException('Invalid reflection instance provided, ReflectionClass expected.', RuntimeException::INVALID_ARGUMENT);
-		}
-		return $broker->getClass($internalReflection->getName());
-	}
-
-
-	/**
-	 * @return ApiGen\TokenReflection\ReflectionClassInterface[]|array
+	 * @return ReflectionClassInterface[]
 	 */
 	private function getInternalTokenizedClasses()
 	{
-		return $this->getBroker()->getClasses(BackendInterface::INTERNAL_CLASSES | BackendInterface::TOKENIZED_CLASSES);
+		return $this->storage->getClasses(StorageInterface::INTERNAL_CLASSES | StorageInterface::TOKENIZED_CLASSES);
 	}
 
 }

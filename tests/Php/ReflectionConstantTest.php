@@ -23,7 +23,8 @@ class ReflectionConstantTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->internalReflectionConstant = $this->getBroker()->getConstant('DIRECTORY_SEPARATOR');
+		parent::setUp();
+		$this->internalReflectionConstant = $this->parser->getStorage()->getConstant('DIRECTORY_SEPARATOR');
 	}
 
 
@@ -44,7 +45,6 @@ class ReflectionConstantTest extends TestCase
 		$this->assertFalse($this->internalReflectionConstant->isTokenized());
 		$this->assertFalse($this->internalReflectionConstant->isDeprecated());
 		$this->assertFalse($this->internalReflectionConstant->isUserDefined());
-		$this->assertTrue($this->internalReflectionConstant->isValid());
 
 		$this->assertSame('DIRECTORY_SEPARATOR', $this->internalReflectionConstant->getPrettyName());
 	}
@@ -86,15 +86,12 @@ class ReflectionConstantTest extends TestCase
 	}
 
 
-	public function testGetBroker()
+	public function testGetStorage()
 	{
-		$this->assertInstanceOf('ApiGen\TokenReflection\Broker\Broker', $this->internalReflectionConstant->getBroker());
-	}
-
-
-	public function testCreate()
-	{
-		$this->assertNull(ReflectionConstant::create(new \ReflectionFunction('strlen'), $this->getBroker()));
+		$this->assertInstanceOf(
+			'ApiGen\TokenReflection\Storage\StorageInterface',
+			$this->internalReflectionConstant->getStorage()
+		);
 	}
 
 }
