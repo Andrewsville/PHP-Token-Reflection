@@ -9,7 +9,6 @@
 
 namespace ApiGen\TokenReflection;
 
-
 use ApiGen\TokenReflection\Reflection\ReflectionFileNamespace;
 
 

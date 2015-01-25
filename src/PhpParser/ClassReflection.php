@@ -14,7 +14,6 @@ use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Reflection\ReflectionProperty;
 use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
-use ApiGen\TokenReflection\ReflectionExtensionInterface;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
 

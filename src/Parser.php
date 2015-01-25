@@ -9,13 +9,12 @@
 
 namespace ApiGen\TokenReflection;
 
-use ApiGen\TokenReflection\Exception\BrokerException;
+use ApiGen\TokenReflection\Exception\ParserException;
 use ApiGen\TokenReflection\Reflection\Factory\ReflectionFileFactory;
 use ApiGen\TokenReflection\Reflection\Factory\ReflectionNamespaceFactory;
 use ApiGen\TokenReflection\Reflection\ReflectionFile;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use ApiGen\TokenReflection\Storage\StorageInterface;
-use ApiGen\TokenReflection\Stream\FileStream;
 use Nette\Utils\Finder;
 use SplFileInfo;
 
@@ -55,35 +54,35 @@ class Parser implements ParserInterface
 
 
 	/**
-	 * @param string $name
-	 * @return ReflectionFile
-	 */
-	public function processFile($name)
-	{
-		$reflectionFile = $this->reflectionFileFactory->create($name);
-		$this->storage->addFile($reflectionFile);
-		$this->loadNamespacesFromFile($reflectionFile);
-		return $reflectionFile;
-	}
-
-
-	/**
 	 * @param string $path
 	 * @return ReflectionFile[]
 	 */
-	public function processDirectory($path)
+	public function parseDirectory($path)
 	{
 		$realPath = realpath($path);
 		if ( ! is_dir($realPath)) {
-			throw new BrokerException(sprintf('Directory %s does not exist.', $path));
+			throw new ParserException(sprintf('Directory %s does not exist.', $path));
 		}
 
 		$result = [];
 		foreach (Finder::findFiles('*')->in($realPath) as $entry) {
 			/** @var SplFileInfo $entry */
-			$result[$entry->getPathName()] = $this->processFile($entry->getPathName());
+			$result[$entry->getPathName()] = $this->parseFile($entry->getPathName());
 		}
 		return $result;
+	}
+
+
+	/**
+	 * @param string $name
+	 * @return ReflectionFile
+	 */
+	public function parseFile($name)
+	{
+		$reflectionFile = $this->reflectionFileFactory->create($name);
+		$this->storage->addFile($reflectionFile);
+		$this->loadNamespacesFromFile($reflectionFile);
+		return $reflectionFile;
 	}
 
 
@@ -100,7 +99,7 @@ class Parser implements ParserInterface
 	{
 		foreach ($reflectionFile->getNamespaces() as $fileNamespace) {
 			$namespaceName = $fileNamespace->getName();
-			if (!$this->storage->hasNamespace($namespaceName)) {
+			if ( ! $this->storage->hasNamespace($namespaceName)) {
 				$this->storage->addNamespace($namespaceName, $this->reflectionNamespaceFactory->create($namespaceName));
 			}
 			$this->storage->getNamespace($namespaceName)->addFileNamespace($fileNamespace);

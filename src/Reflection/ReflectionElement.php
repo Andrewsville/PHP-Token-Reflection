@@ -108,10 +108,7 @@ abstract class ReflectionElement extends ReflectionBase
 
 
 	/**
-	 * Returns a file reflection.
-	 *
 	 * @return ReflectionFile
-	 * @throws RuntimeException If the file is not stored inside the broker
 	 */
 	public function getFileReflection()
 	{

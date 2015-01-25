@@ -26,14 +26,12 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	protected $namespaceName;
 
 	/**
-	 * Determines if the function/method returns its value as reference.
-	 *
 	 * @var bool
 	 */
 	protected $returnsReference = FALSE;
 
 	/**
-	 * @var array|ReflectionParameterInterface[]
+	 * @var ReflectionParameterInterface[]
 	 */
 	protected $parameters = [];
 
@@ -58,7 +56,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	 */
 	public function getName()
 	{
-		if (NULL !== $this->namespaceName && ReflectionNamespace::NO_NAMESPACE_NAME !== $this->namespaceName) {
+		if ($this->namespaceName !== NULL && $this->namespaceName !== ReflectionNamespace::NO_NAMESPACE_NAME) {
 			return $this->namespaceName . '\\' . $this->name;
 		}
 		return $this->name;
@@ -81,7 +79,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	 */
 	public function getNamespaceName()
 	{
-		return NULL === $this->namespaceName || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
+		return $this->namespaceName === NULL || $this->namespaceName === ReflectionNamespace::NO_NAMESPACE_NAME ? '' : $this->namespaceName;
 	}
 
 
@@ -90,7 +88,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	 */
 	public function inNamespace()
 	{
-		return '' !== $this->getNamespaceName();
+		return $this->getNamespaceName() !== '';
 	}
 
 
@@ -115,7 +113,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	{
 		if (is_numeric($parameter)) {
 			if ( ! isset($this->parameters[$parameter])) {
-				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+				throw new RuntimeException(sprintf('There is no parameter at position "%d".', $parameter));
 			}
 			return $this->parameters[$parameter];
 		} else {
@@ -124,7 +122,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 					return $reflection;
 				}
 			}
-			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter), RuntimeException::DOES_NOT_EXIST, $this);
+			throw new RuntimeException(sprintf('There is no parameter "%s".', $parameter));
 		}
 	}
 
@@ -182,6 +180,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 	public function isVariadic()
 	{
 		if ( ! isset($this->isVariadic)) {
+			/** @var ReflectionParameterInterface $lastParameter */
 			$lastParameter = end($this->parameters);
 			$this->isVariadic = $lastParameter && $lastParameter->isVariadic();
 		};

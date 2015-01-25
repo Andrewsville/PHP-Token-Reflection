@@ -17,17 +17,17 @@ interface ParserInterface
 {
 
 	/**
-	 * @param string $name
-	 * @return ReflectionFile
+	 * @param string $path
+	 * @return ReflectionFile[]
 	 */
-	function processFile($name);
+	function parseDirectory($path);
 
 
 	/**
 	 * @param string $path
-	 * @return ReflectionFile[]
+	 * @return ReflectionFile
 	 */
-	function processDirectory($path);
+	function parseFile($path);
 
 
 	/**

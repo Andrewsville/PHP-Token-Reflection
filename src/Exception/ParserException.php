@@ -10,7 +10,7 @@
 namespace ApiGen\TokenReflection\Exception;
 
 
-class BrokerException extends BaseException
+class ParserException extends BaseException
 {
 
 }

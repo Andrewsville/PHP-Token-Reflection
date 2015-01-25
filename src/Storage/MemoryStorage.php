@@ -11,7 +11,7 @@ namespace ApiGen\TokenReflection\Storage;
 
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Exception;
-use ApiGen\TokenReflection\Exception\BrokerException;
+use ApiGen\TokenReflection\Exception\ParserException;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Php\ReflectionConstant;
@@ -96,7 +96,7 @@ class MemoryStorage implements StorageInterface
 	public function getFile($name)
 	{
 		if ( ! $this->hasFile($name)) {
-			throw new BrokerException(sprintf('File "%s" has not been processed.', $name));
+			throw new ParserException(sprintf('File "%s" has not been processed.', $name));
 		}
 		return $this->files[$name];
 	}
@@ -143,7 +143,7 @@ class MemoryStorage implements StorageInterface
 	{
 		$name = ltrim($name, '\\');
 		if ( ! $this->hasNamespace($name)) {
-			throw new BrokerException(sprintf('Namespace %s does not exist.', $name));
+			throw new ParserException(sprintf('Namespace %s does not exist.', $name));
 		}
 		return $this->namespaces[$name];
 	}
@@ -301,7 +301,7 @@ class MemoryStorage implements StorageInterface
 					return $reflection;
 				}
 			}
-			throw new BrokerException(sprintf('Constant %s does not exist.', $name));
+			throw new ParserException(sprintf('Constant %s does not exist.', $name));
 		}
 	}
 
@@ -371,7 +371,7 @@ class MemoryStorage implements StorageInterface
 			if (isset($this->declaredFunctions[$name])) {
 				return new ReflectionFunction($name, $this);
 			}
-			throw new BrokerException(sprintf('Function %s does not exist.', $name));
+			throw new ParserException(sprintf('Function %s does not exist.', $name));
 		}
 	}
 
