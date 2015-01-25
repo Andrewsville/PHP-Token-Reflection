@@ -11,7 +11,6 @@ namespace ApiGen\TokenReflection\Reflection;
 
 use ApiGen\TokenReflection\Storage\StorageInterface;
 use ApiGen\TokenReflection\Exception\ParseException;
-use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\ReflectionInterface;
 use ApiGen\TokenReflection\Parser\ElementParser;
 use ApiGen\TokenReflection\Stream\StreamBase;
@@ -142,17 +141,6 @@ abstract class ReflectionElement extends ReflectionBase
 	public function getStartPosition()
 	{
 		return $this->startPosition;
-	}
-
-
-	/**
-	 * Returns the end position in the file token stream.
-	 *
-	 * @return int
-	 */
-	public function getEndPosition()
-	{
-		return $this->endPosition;
 	}
 
 

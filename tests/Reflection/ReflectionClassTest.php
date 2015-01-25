@@ -783,7 +783,6 @@ class ReflectionClassTest extends TestCase
 			$this->assertTrue($this->parser->getStorage()->hasClass($name), $name);
 
 			$rfl = $this->parser->getStorage()->getClass($name);
-			$this->assertSame($rfl->getName(), $rfl->getPrettyName(), $name);
 		}
 	}
 

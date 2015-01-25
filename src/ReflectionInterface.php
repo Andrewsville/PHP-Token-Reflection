@@ -22,14 +22,6 @@ interface ReflectionInterface
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
-	 */
-	function getPrettyName();
-
-
-	/**
 	 * Returns if the reflection object is internal.
 	 *
 	 * @return bool

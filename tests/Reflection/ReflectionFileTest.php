@@ -28,7 +28,7 @@ class ReflectionFileTest extends TestCase
 		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
-		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getPrettyName());
+		$this->assertSame($this->getFilePath('docComment'), $fileReflection->getName());
 
 		$this->assertTrue($fileReflection->hasAnnotation('package'));
 		$this->assertTrue($fileReflection->hasAnnotation('author'));
@@ -49,7 +49,7 @@ class ReflectionFileTest extends TestCase
 		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
-		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getPrettyName());
+		$this->assertSame($this->getFilePath('noDocComment'), $fileReflection->getName());
 
 		$this->assertFalse($fileReflection->hasAnnotation('package'));
 		$this->assertFalse($fileReflection->hasAnnotation('author'));
@@ -79,7 +79,7 @@ class ReflectionFileTest extends TestCase
 		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
-		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getPrettyName());
+		$this->assertSame($this->getFilePath('declareNoNamespace'), $fileReflection->getName());
 
 		$namespaces = $fileReflection->getNamespaces();
 		$this->assertCount(1, $namespaces);
@@ -97,7 +97,7 @@ class ReflectionFileTest extends TestCase
 		$fileReflection = $this->parser->getStorage()->getFile($fileName);
 		$this->assertInstanceOf('ApiGen\TokenReflection\Reflection\ReflectionFile', $fileReflection);
 
-		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getPrettyName());
+		$this->assertSame($this->getFilePath('declareNamespace'), $fileReflection->getName());
 
 		$namespaces = $fileReflection->getNamespaces();
 		$this->assertCount(1, $namespaces);

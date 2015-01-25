@@ -136,13 +136,4 @@ abstract class ReflectionBase implements ReflectionInterface, AnnotationsInterfa
 		return $this->hasAnnotation('deprecated');
 	}
 
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getPrettyName()
-	{
-		return $this->name;
-	}
-
 }

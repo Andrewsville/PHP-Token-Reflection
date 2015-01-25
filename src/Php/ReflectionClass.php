@@ -652,15 +652,6 @@ class ReflectionClass extends InternalReflectionClass implements ReflectionClass
 
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function getPrettyName()
-	{
-		return $this->getName();
-	}
-
-
-	/**
 	 * @return ReflectionClassInterface[]
 	 */
 	private function getInternalTokenizedClasses()

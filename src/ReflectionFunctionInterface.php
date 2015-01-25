@@ -14,6 +14,14 @@ interface ReflectionFunctionInterface extends ReflectionFunctionBaseInterface
 {
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	function getPrettyName();
+
+
+	/**
 	 * Returns imported namespaces and aliases from the declaring namespace.
 	 *
 	 * @return array

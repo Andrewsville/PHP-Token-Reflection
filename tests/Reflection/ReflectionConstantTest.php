@@ -410,7 +410,6 @@ class ReflectionConstantTest extends TestCase
 			$this->assertTrue($this->parser->getStorage()->hasConstant($name), $name);
 
 			$rfl = $this->parser->getStorage()->getConstant($name);
-			$this->assertSame($name, $rfl->getPrettyName(), $name);
 		}
 	}
 

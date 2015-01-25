@@ -9,6 +9,7 @@
 
 namespace ApiGen\TokenReflection\PhpParser;
 
+use ApiGen\TokenReflection\Behaviors\AnnotationsInterface;
 use ApiGen\TokenReflection\Parser;
 use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
@@ -17,9 +18,11 @@ use ApiGen\TokenReflection\ReflectionClassInterface;
 use ApiGen\TokenReflection\ReflectionConstantInterface;
 use ApiGen\TokenReflection\ReflectionMethodInterface;
 use ApiGen\TokenReflection\ReflectionPropertyInterface;
+use PhpParser\Comment\Doc;
+use PhpParser\Node\Stmt\Class_;
 
 
-class ClassReflection implements ReflectionClassInterface
+class ClassReflection implements ReflectionClassInterface, AnnotationsInterface
 {
 
 	/**
@@ -32,15 +35,41 @@ class ClassReflection implements ReflectionClassInterface
 	 */
 	private $namespaceName;
 
+	/**
+	 * @var string
+	 */
+	private $fileName;
 
 	/**
-	 * @param string $name
-	 * @param string $namespaceName
+	 * @var array
 	 */
-	public function __construct($name, $namespaceName)
+	private $annotations = [];
+
+	/**
+	 * @var string[]
+	 */
+	private $namespaceAliases = [];
+
+	/**
+	 * @var Class_
+	 */
+	private $classNode;
+
+	/**
+	 * @var DocBlockParser
+	 */
+	private $docBlockParser;
+
+
+	public function __construct($name, $namespaceName, $fileName, $namespaceAliases, $annotations, Class_ $classNode, DocBlockParser $docBlockParser)
 	{
 		$this->name = $name;
 		$this->namespaceName = $namespaceName;
+		$this->fileName = $fileName;
+		$this->annotations = $annotations;
+		$this->namespaceAliases = $namespaceAliases;
+		$this->classNode = $classNode;
+		$this->docBlockParser = $docBlockParser;
 	}
 
 
@@ -81,90 +110,80 @@ class ClassReflection implements ReflectionClassInterface
 
 
 	/**
-	 * Returns imported namespaces and aliases from the declaring namespace.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
-	function getNamespaceAliases()
+	public function getNamespaceAliases()
 	{
-		// TODO: Implement getNamespaceAliases() method.
+		return $this->namespaceAliases;
 	}
 
 
 	/**
-	 * Returns the file name the reflection object is defined in.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
-	function getFileName()
+	public function getFileName()
 	{
-		// TODO: Implement getFileName() method.
+		return $this->fileName;
 	}
 
 
 	/**
-	 * Returns the definition start line number in the file.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
-	function getStartLine()
+	public function getStartLine()
 	{
-		// TODO: Implement getStartLine() method.
+		return $this->classNode->getAttribute('startLine');
 	}
 
 
 	/**
-	 * Returns the definition end line number in the file.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
-	function getEndLine()
+	public function getEndLine()
 	{
-		// TODO: Implement getEndLine() method.
+		return $this->classNode->getAttribute('endLine');
 	}
 
 
 	/**
-	 * Returns the appropriate docblock definition.
-	 *
-	 * @return string|bool
+	 * {@inheritdoc}
 	 */
-	function getDocComment()
+	public function getDocComment()
 	{
-		// TODO: Implement getDocComment() method.
+		/** @var Doc $docComment */
+		$docComment = $this->classNode->hasAttribute('comments') ? $this->classNode->getAttribute('comments')[0] : NULL;
+		if ($docComment) {
+			return $docComment->getText();
+		}
+		return '';
+	}
+
+
+//	/**
+//	 * Returns modifiers.
+//	 *
+//	 * @return array
+//	 */
+//	function getModifiers()
+//	{
+//		// TODO: Implement getModifiers() method.
+//	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function isAbstract()
+	{
+		return $this->classNode->isAbstract();
 	}
 
 
 	/**
-	 * Returns modifiers.
-	 *
-	 * @return array
+	 * {@inheritdoc}
 	 */
-	function getModifiers()
+	public function isFinal()
 	{
-		// TODO: Implement getModifiers() method.
-	}
-
-
-	/**
-	 * Returns if the class is abstract.
-	 *
-	 * @return bool
-	 */
-	function isAbstract()
-	{
-		// TODO: Implement isAbstract() method.
-	}
-
-
-	/**
-	 * Returns if the class is final.
-	 *
-	 * @return bool
-	 */
-	function isFinal()
-	{
-		// TODO: Implement isFinal() method.
+		return $this->classNode->isFinal();
 	}
 
 
@@ -173,9 +192,9 @@ class ClassReflection implements ReflectionClassInterface
 	 *
 	 * @return bool
 	 */
-	function isInterface()
+	public function isInterface()
 	{
-		// TODO: Implement isInterface() method.
+		return FALSE;
 	}
 
 
@@ -184,9 +203,9 @@ class ClassReflection implements ReflectionClassInterface
 	 *
 	 * @return bool
 	 */
-	function isException()
+	public function isException()
 	{
-		// TODO: Implement isException() method.
+		return FALSE;
 	}
 
 
@@ -781,20 +800,16 @@ class ClassReflection implements ReflectionClassInterface
 
 
 	/**
-	 * Returns if the class is deprecated.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function isDeprecated()
+	public function isDeprecated()
 	{
-		// TODO: Implement isDeprecated() method.
+		return $this->hasAnnotation('deprecated');
 	}
 
 
 	/**
-	 * Returns the name (FQN).
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function getName()
 	{
@@ -803,46 +818,59 @@ class ClassReflection implements ReflectionClassInterface
 
 
 	/**
-	 * Returns an element pretty (docblock compatible) name.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
-	function getPrettyName()
+	public function isInternal()
 	{
-		// TODO: Implement getPrettyName() method.
+		return FALSE;
 	}
 
 
 	/**
-	 * Returns if the reflection object is internal.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function isInternal()
+	public function isUserDefined()
 	{
-		// TODO: Implement isInternal() method.
+		return TRUE;
 	}
 
 
 	/**
-	 * Returns if the reflection object is user defined.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function isUserDefined()
+	public function isTokenized()
 	{
-		// TODO: Implement isUserDefined() method.
+		return TRUE;
 	}
 
 
 	/**
-	 * Returns if the current reflection comes from a tokenized source.
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	function isTokenized()
+	public function hasAnnotation($name)
 	{
-		// TODO: Implement isTokenized() method.
+		return isset($this->getAnnotations()[$name]);
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getAnnotation($name)
+	{
+		if ($this->hasAnnotation($name)) {
+			return $this->getAnnotations()[$name];
+		}
+		return NULL;
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getAnnotations()
+	{
+		return $this->docBlockParser->parseToAnnotations($this->getDocComment());
 	}
 
 }

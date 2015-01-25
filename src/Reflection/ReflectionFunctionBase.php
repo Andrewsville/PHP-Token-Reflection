@@ -102,12 +102,8 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 
 
 	/**
-	 * Returns a particular function/method parameter.
-	 *
 	 * @param int|string $parameter Parameter name or position
 	 * @return ReflectionParameter
-	 * @throws RuntimeException If there is no parameter of the given name.
-	 * @throws RuntimeException If there is no parameter at the given position.
 	 */
 	public function getParameter($parameter)
 	{
@@ -128,7 +124,7 @@ abstract class ReflectionFunctionBase extends ReflectionElement implements Refle
 
 
 	/**
-	 * @return array
+	 * @return ReflectionParameterInterface[]
 	 */
 	public function getParameters()
 	{

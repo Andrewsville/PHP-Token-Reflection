@@ -14,6 +14,14 @@ interface ReflectionParameterInterface extends ReflectionInterface
 {
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	function getPrettyName();
+
+
+	/**
 	 * Returns the declaring class.
 	 *
 	 * @return ReflectionClassInterface|NULL

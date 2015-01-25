@@ -12,7 +12,6 @@ namespace ApiGen\TokenReflection\Storage;
 use ApiGen\TokenReflection;
 use ApiGen\TokenReflection\Exception;
 use ApiGen\TokenReflection\Exception\ParserException;
-use ApiGen\TokenReflection\Exception\RuntimeException;
 use ApiGen\TokenReflection\Php\ReflectionClass;
 use ApiGen\TokenReflection\Php\ReflectionConstant;
 use ApiGen\TokenReflection\Php\ReflectionFunction;

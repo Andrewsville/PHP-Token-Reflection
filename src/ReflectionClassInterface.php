@@ -78,13 +78,13 @@ interface ReflectionClassInterface extends ReflectionInterface
 	 */
 	function getDocComment();
 
-
-	/**
-	 * Returns modifiers.
-	 *
-	 * @return array
-	 */
-	function getModifiers();
+//
+//	/**
+//	 * Returns modifiers.
+//	 *
+//	 * @return array
+//	 */
+//	function getModifiers();
 
 
 	/**

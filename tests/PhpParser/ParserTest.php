@@ -94,6 +94,21 @@ class ParserTest extends PHPUnit_Framework_TestCase
 				$classReflection = $this->classReflectionFactory->createFromNode($node, $parent, $file);
 				$this->assertSame('SomeClass', $classReflection->getName());
 				$this->assertSame('SomeNamespace', $classReflection->getNamespaceName());
+				$this->assertSame(__DIR__ . '/doubleClass.php', $classReflection->getFileName());
+				$this->assertSame(23, $classReflection->getStartLine());
+				$this->assertSame(26, $classReflection->getEndLine());
+				$this->assertSame([], $classReflection->getNamespaceAliases());
+
+				$docComment = <<<DOC
+/**
+ * I got some cool annotation as well
+ */
+DOC;
+				$this->assertSame($docComment, $classReflection->getDocComment());
+
+				$this->assertFalse($classReflection->isAbstract());
+				$this->assertFalse($classReflection->isFinal());
+
 				$this->storage->addClass($classReflection->getName(), $classReflection);
 
 			} elseif ($node instanceof Function_) {

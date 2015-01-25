@@ -176,15 +176,6 @@ class ReflectionExtension extends InternalReflectionExtension implements Reflect
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getPrettyName()
-	{
-		return $this->getName();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getStorage()
 	{
 		return $this->storage;

@@ -39,8 +39,6 @@ class ReflectionExtensionTest extends TestCase
 		$this->assertFalse($this->internalReflectionExtension->isDeprecated());
 		$this->assertFalse($this->internalReflectionExtension->isUserDefined());
 		$this->assertTrue($this->internalReflectionExtension->isInternal());
-
-		$this->assertSame('Phar', $this->internalReflectionExtension->getPrettyName());
 	}
 
 

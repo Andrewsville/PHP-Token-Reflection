@@ -14,6 +14,14 @@ interface ReflectionMethodInterface extends ReflectionFunctionBaseInterface
 {
 
 	/**
+	 * Returns an element pretty (docblock compatible) name.
+	 *
+	 * @return string
+	 */
+	function getPrettyName();
+
+
+	/**
 	 * Returns the declaring class reflection.
 	 *
 	 * @return ReflectionClassInterface|NULL

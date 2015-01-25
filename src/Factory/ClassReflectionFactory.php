@@ -10,6 +10,7 @@
 namespace ApiGen\TokenReflection\Factory;
 
 use ApiGen\TokenReflection\PhpParser\ClassReflection;
+use ApiGen\TokenReflection\PhpParser\DocBlockParser;
 use ApiGen\TokenReflection\Reflection\ReflectionNamespace;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -19,19 +20,40 @@ class ClassReflectionFactory implements ClassReflectionFactoryInterface
 {
 
 	/**
+	 * @var DocBlockParser
+	 */
+	private $docBlockParser;
+
+
+	public function __construct(DocBlockParser $docBlockParser)
+	{
+		$this->docBlockParser = $docBlockParser;
+	}
+
+	/**
 	 * @return ClassReflection
 	 */
 	public function createFromNode(Class_ $classNode, Stmt $parentNode = NULL, $file)
 	{
+		// 1. docblock
+		$docComment = $classNode->hasAttribute('comments') ? $classNode->getAttribute('comments')[0] : NULL;
+
+		// 2. get annotations
+		$annotations = $this->docBlockParser->parseToAnnotations($docComment);
+
 		return new ClassReflection(
 			$classNode->name,
-			$this->getNamespaceName($parentNode)
+			$this->getNamespaceName($parentNode),
+			$file,
+			$this->getNamespaceAliases($parentNode),
+			$annotations,
+			$classNode,
+			$this->docBlockParser
 		);
 	}
 
 
 	/**
-	 * @param Stmt $parentNode
 	 * @return string
 	 */
 	private function getNamespaceName(Stmt $parentNode)
@@ -40,6 +62,16 @@ class ClassReflectionFactory implements ClassReflectionFactoryInterface
 			return $parentNode->name->parts[0];
 		}
 		return ReflectionNamespace::NO_NAMESPACE_NAME;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	private function getNamespaceAliases(Stmt $parentNode)
+	{
+		// todo
+		return [];
 	}
 
 }

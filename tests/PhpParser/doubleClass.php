@@ -1,10 +1,10 @@
 <?php
 
-
 namespace SomeNamespace;
 
 
 const MY_VAR = '...';
+
 
 
 /**
@@ -17,6 +17,9 @@ function getSome($one, ...$args)
 }
 
 
+/**
+ * I got some cool annotation as well
+ */
 class SomeClass
 {
 

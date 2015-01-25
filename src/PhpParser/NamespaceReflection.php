@@ -68,15 +68,6 @@ class NamespaceReflection implements ReflectionNamespaceInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getPrettyName()
-	{
-		return $this->getName();
-	}
-
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function isInternal()
 	{
 		return FALSE;

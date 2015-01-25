@@ -196,15 +196,6 @@ class ReflectionNamespace implements ReflectionNamespaceInterface
 	}
 
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getPrettyName()
-	{
-		return $this->name;
-	}
-
-
 	public function addFileNamespace(ReflectionFileNamespace $namespace)
 	{
 		foreach ($namespace->getClasses() as $className => $reflection) {
