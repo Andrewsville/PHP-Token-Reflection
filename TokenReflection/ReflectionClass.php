@@ -1879,7 +1879,7 @@ class ReflectionClass extends ReflectionElement implements IReflectionClass
 							continue;
 						} elseif ('{' !== $type) {
 							// Unexpected token
-							throw new Exception\ParseException($this, $tokenStream, 'Unexpected token found: "%s".', Exception\ParseException::UNEXPECTED_TOKEN);
+							throw new Exception\ParseException($this, $tokenStream, sprintf('Unexpected token found: "%s".', $type), Exception\ParseException::UNEXPECTED_TOKEN);
 						}
 
 						// Aliases definition
