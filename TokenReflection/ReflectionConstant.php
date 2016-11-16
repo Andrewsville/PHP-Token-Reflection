@@ -358,6 +358,12 @@ class ReflectionConstant extends ReflectionElement implements IReflectionConstan
 			T_NS_C => true,
 			T_TRAIT_C => true
 		);
+		
+		if ( floatval(phpversion()) >= 5.6 ) {
+            		$acceptedTokens['['] = true;
+            		$acceptedTokens[']'] = true;
+            		$acceptedTokens[T_DOUBLE_ARROW] = true;
+        	}
 
 		while (null !== ($type = $tokenStream->getType())) {
 			if (T_START_HEREDOC === $type) {
