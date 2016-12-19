@@ -16,7 +16,11 @@
 			"homepage": "https://github.com/kukulich"
 		}
 	],
-
+	
+	"replace": {
+		"andrewsville/php-token-reflection": "1.*"
+	},
+	
 	"require": {
 		"php": ">=5.3.0",
 		"ext-tokenizer": "*"
