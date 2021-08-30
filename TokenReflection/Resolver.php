@@ -37,7 +37,7 @@ class Resolver
 	 */
 	final public static function resolveClassFQN($className, array $aliases, $namespaceName = null)
 	{
-		if ($className{0} == '\\') {
+		if ($className[0] == '\\') {
 			// FQN
 			return ltrim($className, '\\');
 		}
